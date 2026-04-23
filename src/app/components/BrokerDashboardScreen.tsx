@@ -2,6 +2,7 @@ import React from 'react';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { BrokerInquiriesSection } from '@/app/components/BrokerInquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
+import { CalendariosView } from '@/app/components/CalendariosView';
 import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -28,6 +29,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     { id: 'home', label: 'Inicio', icon: 'home' },
     { id: 'listings', label: 'Mis publicaciones', icon: 'list' },
     { id: 'leads', label: 'Consultas / Leads', icon: 'message' },
+    { id: 'calendarios', label: 'Calendarios', icon: 'calendar' },
     { id: 'performance', label: 'Mi rendimiento', icon: 'chart' },
     { id: 'plan', label: 'Plan y facturación', icon: 'card' },
     { id: 'help', label: 'Ayuda', icon: 'help' },
@@ -73,6 +75,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         return (
           <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        );
+      case 'calendar':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         );
       case 'settings':
@@ -166,6 +174,11 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         {currentSection === 'home' && <HomeContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="broker" userId="broker-456" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'leads' && <ConsultasView viewType="broker" />}
+        {currentSection === 'calendarios' && (
+          <div className="flex flex-col" style={{ height: 'calc(100vh - 32px)' }}>
+            <CalendariosView />
+          </div>
+        )}
         {currentSection === 'performance' && <PerformanceContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
