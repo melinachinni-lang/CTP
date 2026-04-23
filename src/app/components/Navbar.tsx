@@ -95,7 +95,7 @@ export function Navbar({
                     onShowPublishModal();
                   }
                 }}
-                className="h-8 bg-[#124854] hover:bg-[#0d3640] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
+                className="h-8 bg-red-600 hover:bg-red-700 text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
               >
                 <span className="hidden sm:inline">Publicar propiedad</span>
                 <span className="sm:hidden">Publicar</span>
@@ -287,7 +287,7 @@ export function Navbar({
                     }
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full bg-[#124854] hover:bg-[#0d3640] text-white py-3 px-4 rounded-[200px] transition-colors"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-[200px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',
