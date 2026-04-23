@@ -1,0 +1,30 @@
+/* Leaflet map styles */
+@import 'leaflet/dist/leaflet.css';
+
+/* Custom marker styles */
+.leaflet-container {
+  font-family: var(--font-body);
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  font-family: var(--font-body);
+}
+
+.leaflet-popup-content {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-sm);
+}
+
+/* Fix for Leaflet controls */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  color: #0A0A0A !important;
+}
+
+.leaflet-control-attribution {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-body);
+}
