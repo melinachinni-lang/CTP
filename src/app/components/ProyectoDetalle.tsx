@@ -1337,6 +1337,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
           email: proyecto.emailVendedor,
           foto: proyecto.imagenVendedor
         }}
+        tipoVendedor={proyecto.tipoVendedor}
       />
 
       {/* Modal de consulta online */}

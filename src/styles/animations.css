@@ -113,3 +113,13 @@
   );
   background-size: 936px 100%;
 }
+
+/* Broker card hover — muestra info extra */
+.broker-card:hover .broker-extra {
+  max-height: 80px;
+  opacity: 1;
+}
+
+.broker-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}

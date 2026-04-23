@@ -2994,6 +2994,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
           email: parcela.inmobiliaria.email,
           foto: parcela.inmobiliaria.logo
         }}
+        tipoVendedor={parcela.inmobiliaria.tipoVendedor}
       />
 
       {/* Modal de consulta online */}
