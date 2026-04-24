@@ -372,7 +372,7 @@ export function ConsultaOnlineModal({
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: '#0047BA' }}
+                  style={{ backgroundColor: '#006B4E' }}
                 >
                   <Video className="w-6 h-6" style={{ color: '#FFFFFF' }} />
                 </div>

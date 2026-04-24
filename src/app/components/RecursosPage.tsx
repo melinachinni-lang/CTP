@@ -90,14 +90,14 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
 
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
-      'Guía de compra': '#0047BA',
-      'Inversión': '#336BCC',
+      'Guía de compra': '#006B4E',
+      'Inversión': '#006B4E',
       'Legal': '#6B6B6B',
-      'Financiamiento': '#0047BA',
-      'Construcción': '#336BCC',
+      'Financiamiento': '#006B4E',
+      'Construcción': '#006B4E',
       'Mercado': '#6B6B6B'
     };
-    return colors[category] || '#0047BA';
+    return colors[category] || '#006B4E';
   };
 
   return (

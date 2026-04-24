@@ -101,7 +101,7 @@ export function AdminEmbudoView() {
                   <div
                     className="rounded-2xl p-6 transition-all"
                     style={{
-                      backgroundColor: isMayorCaida ? 'rgba(0, 71, 186, 0.02)' : 'var(--background)',
+                      backgroundColor: isMayorCaida ? 'rgba(0, 107, 78, 0.02)' : 'var(--background)',
                       border: `1px solid ${isMayorCaida ? 'var(--primary)' : 'var(--border)'}`,
                       boxShadow: isHovered ? '0 4px 8px 0 rgba(0, 0, 0, 0.08)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                       minHeight: '130px'

@@ -2255,7 +2255,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
                     placeholder="Ej: 50000000"
-                    className="w-full h-12 pl-8 pr-4 border-2 border-gray-300 rounded-xl text-base focus:outline-none focus:border-[#0047BA] transition-colors"
+                    className="w-full h-12 pl-8 pr-4 border-2 border-gray-300 rounded-xl text-base focus:outline-none focus:border-[#006B4E] transition-colors"
                     style={{ color: '#0A0A0A' }}
                   />
                 </div>
@@ -2291,7 +2291,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onChange={(e) => setDownPaymentPercent(parseFloat(e.target.value))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                     style={{
-                      background: `linear-gradient(to right, #0047BA 0%, #0047BA ${(downPaymentPercent - 10) / 0.4}%, #e5e7eb ${(downPaymentPercent - 10) / 0.4}%, #e5e7eb 100%)`
+                      background: `linear-gradient(to right, #006B4E 0%, #006B4E ${(downPaymentPercent - 10) / 0.4}%, #e5e7eb ${(downPaymentPercent - 10) / 0.4}%, #e5e7eb 100%)`
                     }}
                   />
                   {budget && (
@@ -2320,7 +2320,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onChange={(e) => setLoanTermYears(parseFloat(e.target.value))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                     style={{
-                      background: `linear-gradient(to right, #0047BA 0%, #0047BA ${(loanTermYears - 5) / 0.25}%, #e5e7eb ${(loanTermYears - 5) / 0.25}%, #e5e7eb 100%)`
+                      background: `linear-gradient(to right, #006B4E 0%, #006B4E ${(loanTermYears - 5) / 0.25}%, #e5e7eb ${(loanTermYears - 5) / 0.25}%, #e5e7eb 100%)`
                     }}
                   />
                 </div>
@@ -2344,7 +2344,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onChange={(e) => setAnnualInterestRate(parseFloat(e.target.value))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                     style={{
-                      background: `linear-gradient(to right, #0047BA 0%, #0047BA ${(annualInterestRate - 3) / 0.05}%, #e5e7eb ${(annualInterestRate - 3) / 0.05}%, #e5e7eb 100%)`
+                      background: `linear-gradient(to right, #006B4E 0%, #006B4E ${(annualInterestRate - 3) / 0.05}%, #e5e7eb ${(annualInterestRate - 3) / 0.05}%, #e5e7eb 100%)`
                     }}
                   />
                 </div>
@@ -2357,7 +2357,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <p className="text-sm font-medium text-gray-600">
                       Cuota mensual aproximada
                     </p>
-                    <p className="text-4xl font-bold" style={{ color: '#0047BA' }}>
+                    <p className="text-4xl font-bold" style={{ color: '#006B4E' }}>
                       {formatCurrency(calculateMonthlyPayment())}
                     </p>
                     <p className="text-xs text-gray-500">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
@@ -670,6 +670,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
   const [isPublicadoPorExpanded, setIsPublicadoPorExpanded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  // Ref para que el useEffect acceda a las imágenes sin depender de `parcela`
+  const imagenesRef = useRef<string[]>([]);
 
   const openLightbox = useCallback((index: number) => {
     setLightboxIndex(index);
@@ -678,19 +680,18 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
 
   const closeLightbox = useCallback(() => setLightboxOpen(false), []);
 
-  const lightboxPrev = useCallback((total: number) =>
-    setLightboxIndex(i => (i === 0 ? total - 1 : i - 1)), []);
+  const lightboxPrev = useCallback(() =>
+    setLightboxIndex(i => (i === 0 ? imagenesRef.current.length - 1 : i - 1)), []);
 
-  const lightboxNext = useCallback((total: number) =>
-    setLightboxIndex(i => (i === total - 1 ? 0 : i + 1)), []);
+  const lightboxNext = useCallback(() =>
+    setLightboxIndex(i => (i === imagenesRef.current.length - 1 ? 0 : i + 1)), []);
 
   useEffect(() => {
     if (!lightboxOpen) return;
-    const total = parcela?.imagenes?.length ?? 0;
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') lightboxPrev(total);
-      if (e.key === 'ArrowRight') lightboxNext(total);
+      if (e.key === 'ArrowLeft') lightboxPrev();
+      if (e.key === 'ArrowRight') lightboxNext();
     };
     window.addEventListener('keydown', handleKey);
     document.body.style.overflow = 'hidden';
@@ -698,7 +699,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
       window.removeEventListener('keydown', handleKey);
       document.body.style.overflow = '';
     };
-  }, [lightboxOpen, parcela, closeLightbox, lightboxPrev, lightboxNext]);
+  }, [lightboxOpen, closeLightbox, lightboxPrev, lightboxNext]);
   const [hoveredParcela, setHoveredParcela] = useState<number | null>(null);
   const [mapZoom, setMapZoom] = useState(1);
   const [parcelaSeleccionadaStock, setParcelaSeleccionadaStock] = useState<string>('');
@@ -716,7 +717,10 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
   
   // Si no se encuentra la parcela, usar la primera por defecto
   const parcela = parcelaData || getParcelaById(1)!;
-  
+
+  // Actualizar ref de imágenes para el lightbox (se lee dentro del useEffect)
+  imagenesRef.current = parcela?.imagenes ?? [];
+
   // Obtener parcelas similares
   const parcelasSimilares = getSimilarParcelas(idToUse).map(p => ({
     id: p.id,
@@ -3792,7 +3796,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
             {parcela.imagenes.length > 1 && (
               <>
                 <button
-                  onClick={() => lightboxPrev(parcela.imagenes.length)}
+                  onClick={() => lightboxPrev()}
                   aria-label="Imagen anterior"
                   className="absolute left-3 w-11 h-11 rounded-full flex items-center justify-center transition-colors"
                   style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}
@@ -3802,7 +3806,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
 
                 {/* Next */}
                 <button
-                  onClick={() => lightboxNext(parcela.imagenes.length)}
+                  onClick={() => lightboxNext()}
                   aria-label="Imagen siguiente"
                   className="absolute right-3 w-11 h-11 rounded-full flex items-center justify-center transition-colors"
                   style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}

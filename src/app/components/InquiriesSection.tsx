@@ -166,7 +166,7 @@ export function InquiriesSection() {
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full"
             style={{ 
               backgroundColor: '#EFF6FF',
-              color: '#0047BA',
+              color: '#006B4E',
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-xs)',
               fontWeight: 'var(--font-weight-medium)'
@@ -354,7 +354,7 @@ export function InquiriesSection() {
                 {/* Indicador de no leído */}
                 <div className="flex-shrink-0 pt-1">
                   {!inquiry.leido && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#0047BA]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#006B4E]" />
                   )}
                   {inquiry.leido && (
                     <div className="w-2.5 h-2.5" />

@@ -3383,7 +3383,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                         setShowMap(false);
                         onNavigate('parcela-detalle', parcela.id);
                       }}
-                      className="text-left p-3 bg-white rounded-xl border border-gray-200 hover:border-[#0047BA] transition-colors"
+                      className="text-left p-3 bg-white rounded-xl border border-gray-200 hover:border-[#006B4E] transition-colors"
                     >
                       <p 
                         className="text-xs mb-1"
@@ -3411,7 +3411,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                           fontFamily: 'Montserrat, sans-serif',
                           fontSize: '13px',
                           fontWeight: 700,
-                          color: '#0047BA'
+                          color: '#006B4E'
                         }}
                       >
                         {parcela.precio}

@@ -3,7 +3,24 @@
     "allow": [
       "Bash(pnpm install *)",
       "Bash(npm install *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npx vite *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"C:\\\\Users\\\\Melina\\\\.claude\\\\projects\\\\C--Users-Melina-Downloads-CTP-WIREFRAMES--Color-palette-\\\\7fb1af6e-9eb5-4bfc-ba26-8a90e2491b17\\\\tool-results\\\\webfetch-1776966967623-aak0ax.bin\" /tmp/design.gz)",
+      "Bash(gunzip -c /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(tar -tf -)",
+      "Bash(tar -xf - -C /tmp/)",
+      "Bash(npx tsc *)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(pnpm exec *)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(taskkill /f /im node.exe)",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue)",
+      "Bash(node -e \"const l = require\\('C:/Users/Melina/Downloads/CTP WIREFRAMES \\(Color palette\\)/node_modules/.pnpm/lucide-react@0.469.0_react@18.3.1/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); console.log\\('Info' in l, 'Edit3' in l, 'LayoutGrid' in l\\);\")",
+      "Bash(node -e \"const l = require\\('C:/Users/Melina/Downloads/CTP WIREFRAMES \\(Color palette\\)/node_modules/.pnpm/lucide-react@0.487.0_react@18.3.1/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); console.log\\('Info:', 'Info' in l, '| Edit3:', 'Edit3' in l, '| LayoutGrid:', 'LayoutGrid' in l, '| List:', 'List' in l\\);\")",
+      "Bash(awk 'NR==719{found=1} !found && /\\\\bparcela\\\\b/ && !/parcelaData|parcelasGeoData|parcelasSimilares|parcelaSimilar|selectedParcela|hoveredParcela|parcelaSeleccionada|clickedParcela|idToUse|getSimilarParcelas|getParcelaById/{print NR\": \"$0}' \"C:\\\\Users\\\\Melina\\\\Downloads\\\\CTP WIREFRAMES \\(Color palette\\)\\\\src\\\\app\\\\components\\\\ParcelaDetalle.tsx\")",
+      "PowerShell(Stop-Process -Force)"
     ]
   }
 }

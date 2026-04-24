@@ -1477,8 +1477,8 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       <tr key={interaccion.id} style={{ borderBottom: index < filteredInteracciones.length - 1 ? '1px solid #F5F5F5' : 'none' }}>
                         <td className="text-center px-6 py-4">
                           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: '#FAFAFA' }}>
-                            {interaccion.tipo === 'Llamada' && <PhoneCall className="w-4 h-4" style={{ color: '#0047BA' }} />}
-                            {interaccion.tipo === 'Email' && <Mail className="w-4 h-4" style={{ color: '#0047BA' }} />}
+                            {interaccion.tipo === 'Llamada' && <PhoneCall className="w-4 h-4" style={{ color: '#006B4E' }} />}
+                            {interaccion.tipo === 'Email' && <Mail className="w-4 h-4" style={{ color: '#006B4E' }} />}
                             {interaccion.tipo === 'WhatsApp' && <MessageSquare className="w-4 h-4" style={{ color: '#16A34A' }} />}
                             <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>{interaccion.tipo}</span>
                           </div>

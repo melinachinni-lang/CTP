@@ -143,7 +143,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                       fontWeight: 'var(--font-weight-semibold)',
                       letterSpacing: '0.01em'
                     }}>
-                      <User className="w-4 h-4" style={{ color: '#0047BA' }} />
+                      <User className="w-4 h-4" style={{ color: '#006B4E' }} />
                       Persona natural
                     </span>
                     
