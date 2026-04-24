@@ -482,8 +482,8 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                   letterSpacing: 'var(--letter-spacing-wide)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#124854';
-                  e.currentTarget.style.color = '#124854';
+                  e.currentTarget.style.borderColor = '#006B4E';
+                  e.currentTarget.style.color = '#006B4E';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = '#DEDEDE';
@@ -510,15 +510,15 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
                       style={{
                         backgroundColor: currentStep > step.number 
-                          ? '#124854' 
+                          ? '#006B4E' 
                           : currentStep === step.number 
                           ? '#FFFFFF' 
                           : '#FAFAFA',
-                        border: currentStep >= step.number ? '2px solid #124854' : '2px solid #DEDEDE',
+                        border: currentStep >= step.number ? '2px solid #006B4E' : '2px solid #DEDEDE',
                         color: currentStep > step.number 
                           ? '#FFFFFF' 
                           : currentStep === step.number 
-                          ? '#124854' 
+                          ? '#006B4E' 
                           : '#C3C3C3',
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
@@ -547,7 +547,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     <div
                       className="flex-1 h-0.5 mx-2 mb-6 transition-colors"
                       style={{
-                        backgroundColor: currentStep > step.number ? '#124854' : '#DEDEDE',
+                        backgroundColor: currentStep > step.number ? '#006B4E' : '#DEDEDE',
                         maxWidth: '40px',
                       }}
                     />
@@ -1036,7 +1036,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           border: fileErrors.mainImage ? '2px dashed #DC2626' : '2px dashed #DEDEDE'
                         }}
                       >
-                        <Upload className="w-8 h-8" style={{ color: '#124854' }} />
+                        <Upload className="w-8 h-8" style={{ color: '#006B4E' }} />
                         <div className="text-center">
                           <p style={{
                             fontFamily: 'var(--font-body)',
@@ -1129,7 +1129,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         border: fileErrors.galleryImages ? '1px solid #DC2626' : '1px solid #DEDEDE'
                       }}
                     >
-                      <Plus className="w-5 h-5" style={{ color: '#124854' }} />
+                      <Plus className="w-5 h-5" style={{ color: '#006B4E' }} />
                       <span style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
@@ -1208,7 +1208,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         }}
                         onMouseEnter={(e) => {
                           if (!fileErrors.brochure) {
-                            e.currentTarget.style.borderColor = '#124854';
+                            e.currentTarget.style.borderColor = '#006B4E';
                             e.currentTarget.style.backgroundColor = '#F9FAFB';
                           }
                         }}
@@ -1230,7 +1230,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-10 h-10 rounded-full flex items-center justify-center"
                             style={{ backgroundColor: '#F0F0F0' }}
                           >
-                            <FileText size={20} style={{ color: '#124854' }} />
+                            <FileText size={20} style={{ color: '#006B4E' }} />
                           </div>
                           <div className="text-center">
                             <p style={{
@@ -1257,7 +1257,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         className="flex items-center justify-between p-4 rounded-lg"
                         style={{
                           backgroundColor: '#F0F9FF',
-                          border: '1px solid #124854'
+                          border: '1px solid #006B4E'
                         }}
                       >
                         <div className="flex items-center gap-3">
@@ -1268,7 +1268,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                               border: '1px solid var(--border)'
                             }}
                           >
-                            <FileText size={20} style={{ color: '#124854' }} />
+                            <FileText size={20} style={{ color: '#006B4E' }} />
                           </div>
                           <div>
                             <p style={{
@@ -1539,7 +1539,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     style={{
                       width: '16px',
                       height: '16px',
-                      accentColor: '#124854',
+                      accentColor: '#006B4E',
                       cursor: 'pointer',
                       flexShrink: 0,
                     }}
@@ -1777,7 +1777,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           border: '1px solid var(--border)'
                         }}
                       >
-                        <Move size={20} style={{ color: '#124854' }} />
+                        <Move size={20} style={{ color: '#006B4E' }} />
                       </div>
                       <input
                         type="url"
@@ -1795,7 +1795,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           color: '#0A0A0A',
                           outline: 'none',
                         }}
-                        onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                        onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                         onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                       />
                     </div>
@@ -1824,7 +1824,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           transition: 'all 0.2s',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#124854';
+                          e.currentTarget.style.borderColor = '#006B4E';
                           e.currentTarget.style.backgroundColor = '#F9FAFB';
                         }}
                         onMouseLeave={(e) => {
@@ -1843,7 +1843,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-12 h-12 rounded-full flex items-center justify-center"
                             style={{ backgroundColor: '#FFFFFF' }}
                           >
-                            <Upload size={24} style={{ color: '#124854' }} />
+                            <Upload size={24} style={{ color: '#006B4E' }} />
                           </div>
                           <div className="text-center">
                             <p style={{
@@ -1933,7 +1933,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             color: '#0A0A0A',
                             outline: 'none',
                           }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                           onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                         />
                       </div>
@@ -1966,7 +1966,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             color: '#0A0A0A',
                             outline: 'none',
                           }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                           onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                         />
                       </div>
@@ -1982,7 +1982,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         backgroundColor: '#FAFAFA'
                       }}
                     >
-                      <MapPin size={48} style={{ color: '#124854', marginBottom: '16px' }} />
+                      <MapPin size={48} style={{ color: '#006B4E', marginBottom: '16px' }} />
                       <p style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-base)',
@@ -2129,7 +2129,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           onChange={(e) => handleInputChange(service.key, e.target.value)}
                           className="w-full"
                           style={{
-                            accentColor: '#124854'
+                            accentColor: '#006B4E'
                           }}
                         />
                         <div className="flex justify-between mt-1">
@@ -2370,7 +2370,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     onClick={handleImportPlots}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
                     style={{
-                      backgroundColor: '#124854',
+                      backgroundColor: '#006B4E',
                       color: '#FFFFFF',
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
@@ -2632,7 +2632,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                                     onClick={() => handleDuplicatePlot(plot.id)}
                                     className="p-1.5 rounded transition-all hover:bg-muted"
                                   >
-                                    <Copy className="w-4 h-4" style={{ color: '#124854' }} />
+                                    <Copy className="w-4 h-4" style={{ color: '#006B4E' }} />
                                   </button>
                                   <button
                                     onClick={() => handleDeletePlot(plot.id)}
@@ -2798,7 +2798,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           border: '2px dashed #DEDEDE'
                         }}
                       >
-                        <ImageIcon className="w-8 h-8" style={{ color: '#124854' }} />
+                        <ImageIcon className="w-8 h-8" style={{ color: '#006B4E' }} />
                         <div className="text-center">
                           <p style={{
                             fontFamily: 'var(--font-body)',
@@ -2863,7 +2863,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         border: '2px dashed #DEDEDE'
                       }}
                     >
-                      <FileText className="w-8 h-8" style={{ color: '#124854' }} />
+                      <FileText className="w-8 h-8" style={{ color: '#006B4E' }} />
                       <div className="text-center">
                         <p style={{
                           fontFamily: 'var(--font-body)',
@@ -2998,7 +2998,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     border: '2px dashed #DEDEDE'
                   }}
                 >
-                  <Upload className="w-5 h-5" style={{ color: '#124854' }} />
+                  <Upload className="w-5 h-5" style={{ color: '#006B4E' }} />
                   <span style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-body-sm)',
@@ -3039,8 +3039,8 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                 }}
                 onMouseEnter={(e) => {
                   if (currentStep !== 1) {
-                    e.currentTarget.style.borderColor = '#124854';
-                    e.currentTarget.style.color = '#124854';
+                    e.currentTarget.style.borderColor = '#006B4E';
+                    e.currentTarget.style.color = '#006B4E';
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -3060,7 +3060,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     onClick={handleNext}
                     className="px-8 py-3 rounded-full transition-all"
                     style={{
-                      backgroundColor: '#124854',
+                      backgroundColor: '#006B4E',
                       color: '#FFFFFF',
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
@@ -3069,7 +3069,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                       letterSpacing: 'var(--letter-spacing-wide)'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0F3A42'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Siguiente
                   </button>
@@ -3088,8 +3088,8 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         letterSpacing: 'var(--letter-spacing-wide)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = '#124854';
-                        e.currentTarget.style.color = '#124854';
+                        e.currentTarget.style.borderColor = '#006B4E';
+                        e.currentTarget.style.color = '#006B4E';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.borderColor = '#DEDEDE';
@@ -3228,7 +3228,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-xs)',
                           fontWeight: 'var(--font-weight-medium)',
-                          color: '#124854'
+                          color: '#006B4E'
                         }}
                       >
                         Proyecto
@@ -3357,7 +3357,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Droplet size={14} style={{ color: '#124854' }} />
+                            <Droplet size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -3374,7 +3374,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Zap size={14} style={{ color: '#124854' }} />
+                            <Zap size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -3391,7 +3391,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Car size={14} style={{ color: '#124854' }} />
+                            <Car size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -3408,7 +3408,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Shield size={14} style={{ color: '#124854' }} />
+                            <Shield size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -3425,7 +3425,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Car size={14} style={{ color: '#124854' }} />
+                            <Car size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',

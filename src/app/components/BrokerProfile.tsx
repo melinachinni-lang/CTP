@@ -82,10 +82,10 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
 
             <div className="flex items-center justify-end gap-3">
               <button
-                style={{ backgroundColor: '#124854' }}
+                style={{ backgroundColor: '#006B4E' }}
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Publicar propiedad
               </button>
@@ -159,9 +159,9 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                   <a
                     href={`tel:${brokerData.telefono}`}
                     className="flex items-center gap-2 px-4 py-2 rounded-full transition-colors"
-                    style={{ backgroundColor: '#124854', color: 'white' }}
+                    style={{ backgroundColor: '#006B4E', color: 'white' }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     <Phone className="w-4 h-4" />
                     Llamar
@@ -204,8 +204,8 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 onClick={() => setActiveTab('sobre')}
                 className="px-6 py-3 text-sm font-medium transition-colors"
                 style={{
-                  color: activeTab === 'sobre' ? '#124854' : '#6B6B6B',
-                  borderBottom: activeTab === 'sobre' ? '2px solid #124854' : 'none'
+                  color: activeTab === 'sobre' ? '#006B4E' : '#6B6B6B',
+                  borderBottom: activeTab === 'sobre' ? '2px solid #006B4E' : 'none'
                 }}
               >
                 Especialidades
@@ -214,8 +214,8 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 onClick={() => setActiveTab('parcelas')}
                 className="px-6 py-3 text-sm font-medium transition-colors"
                 style={{
-                  color: activeTab === 'parcelas' ? '#124854' : '#6B6B6B',
-                  borderBottom: activeTab === 'parcelas' ? '2px solid #124854' : 'none'
+                  color: activeTab === 'parcelas' ? '#006B4E' : '#6B6B6B',
+                  borderBottom: activeTab === 'parcelas' ? '2px solid #006B4E' : 'none'
                 }}
               >
                 Parcelas activas
@@ -224,8 +224,8 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 onClick={() => setActiveTab('testimonios')}
                 className="px-6 py-3 text-sm font-medium transition-colors"
                 style={{
-                  color: activeTab === 'testimonios' ? '#124854' : '#6B6B6B',
-                  borderBottom: activeTab === 'testimonios' ? '2px solid #124854' : 'none'
+                  color: activeTab === 'testimonios' ? '#006B4E' : '#6B6B6B',
+                  borderBottom: activeTab === 'testimonios' ? '2px solid #006B4E' : 'none'
                 }}
               >
                 Testimonios
@@ -239,7 +239,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {brokerData.especialidades.map((esp, index) => (
                   <div key={index} className="bg-white rounded-2xl p-6 shadow-sm">
-                    <div className="mb-4" style={{ color: '#124854' }}>
+                    <div className="mb-4" style={{ color: '#006B4E' }}>
                       {esp.icon}
                     </div>
                     <h4

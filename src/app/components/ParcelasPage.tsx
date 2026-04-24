@@ -795,7 +795,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
 
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-2 lg:gap-3">
-              <button className="h-8 bg-[#124854] hover:bg-[#0d3640] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
+              <button className="h-8 bg-[#006B4E] hover:bg-[#0d3640] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
                 <span className="hidden sm:inline">Publicar propiedad</span>
                 <span className="sm:hidden">Publicar</span>
               </button>
@@ -1007,7 +1007,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                   <div className="h-[20px] hidden md:block"></div>
                   <button 
                     onClick={handleSearch}
-                    className="bg-[#124854] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
+                    className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
                   >
                     Buscar
                   </button>
@@ -1090,7 +1090,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('naturaleza')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('naturaleza')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1102,7 +1102,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('lago-rio')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1114,7 +1114,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('inversion')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('inversion')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1126,7 +1126,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('acceso')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('acceso')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1138,7 +1138,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('servicios')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('servicios')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1172,7 +1172,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                         <h3 
                           className="mb-1.5" 
                           style={{ 
-                            color: '#124854',
+                            color: '#006B4E',
                             fontFamily: 'Montserrat, sans-serif',
                             fontSize: '16px',
                             fontWeight: 600,
@@ -1344,7 +1344,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                       {/* Botón Calcular */}
                       <button 
                         onClick={handleCalculate}
-                        className="w-full bg-[#124854] hover:bg-[#0d3640] text-white py-3 rounded-[200px] transition-colors mt-2"
+                        className="w-full bg-[#006B4E] hover:bg-[#0d3640] text-white py-3 rounded-[200px] transition-colors mt-2"
                         style={{
                           fontFamily: 'Inter, sans-serif',
                           fontSize: '14px',
@@ -1361,7 +1361,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     <h2 
                       className="mb-6" 
                       style={{ 
-                        color: '#124854',
+                        color: '#006B4E',
                         fontFamily: 'Montserrat, sans-serif',
                         fontSize: '18px',
                         fontWeight: 600,
@@ -1587,11 +1587,11 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                         fontFamily: 'Inter, sans-serif',
                         fontSize: '14px',
                         fontWeight: 500,
-                        backgroundColor: '#124854'
+                        backgroundColor: '#006B4E'
                       }}
                       className="w-full mt-8 text-white py-3 rounded-[200px] transition-colors"
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
                       Aplicar filtros
                     </button>
@@ -1710,7 +1710,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                           fontFamily: 'Inter, sans-serif',
                           fontSize: '14px',
                           fontWeight: 500,
-                          backgroundColor: viewMode === 'list' ? '#124854' : '#FFFFFF',
+                          backgroundColor: viewMode === 'list' ? '#006B4E' : '#FFFFFF',
                           color: viewMode === 'list' ? '#FFFFFF' : '#0A0A0A',
                           border: viewMode === 'list' ? 'none' : '2px solid #E5E5E5'
                         }}
@@ -1738,7 +1738,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                           fontFamily: 'Inter, sans-serif',
                           fontSize: '14px',
                           fontWeight: 500,
-                          backgroundColor: viewMode === 'map' ? '#124854' : '#FFFFFF',
+                          backgroundColor: viewMode === 'map' ? '#006B4E' : '#FFFFFF',
                           color: viewMode === 'map' ? '#FFFFFF' : '#0A0A0A',
                           border: viewMode === 'map' ? 'none' : '2px solid #E5E5E5'
                         }}
@@ -1866,11 +1866,11 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                           className="h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm w-full sm:w-auto"
                           style={{ 
                             fontFamily: 'var(--font-body)',
-                            backgroundColor: '#124854',
+                            backgroundColor: '#006B4E',
                             color: '#FFFFFF'
                           }}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
                           Limpiar filtros
                         </button>
@@ -2105,13 +2105,13 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                 {parcela.caracteristicas?.[0]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
-                                    <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{parcela.caracteristicas[0].icon}</div>
+                                    <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[0].icon}</div>
                                     <span className="font-medium">{parcela.caracteristicas[0].text}</span>
                                   </div>
                                 )}
                                 {parcela.caracteristicas?.[1]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
-                                    <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{parcela.caracteristicas[1].icon}</div>
+                                    <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[1].icon}</div>
                                     <span className="font-medium">{parcela.caracteristicas[1].text}</span>
                                   </div>
                                 )}
@@ -2119,13 +2119,13 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                 {parcela.caracteristicas?.[2]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
-                                    <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{parcela.caracteristicas[2].icon}</div>
+                                    <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[2].icon}</div>
                                     <span className="font-medium">{parcela.caracteristicas[2].text}</span>
                                   </div>
                                 )}
                                 {parcela.caracteristicas?.[3]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
-                                    <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{parcela.caracteristicas[3].icon}</div>
+                                    <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[3].icon}</div>
                                     <span className="font-medium">{parcela.caracteristicas[3].text}</span>
                                   </div>
                                 )}
@@ -2162,7 +2162,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                               className="absolute inset-0 rounded-full border-3 border-t-transparent animate-spin"
                               style={{ 
                                 borderWidth: '3px',
-                                borderColor: '#124854',
+                                borderColor: '#006B4E',
                                 borderTopColor: 'transparent'
                               }}
                             />
@@ -2722,7 +2722,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
               <div className="space-y-3">
                 <button 
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="w-full bg-[#124854] hover:bg-[#0d3640] text-white px-6 py-3 rounded-[100px] transition-colors"
+                  className="w-full bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 py-3 rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
@@ -2773,7 +2773,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                       fontFamily: 'Montserrat, sans-serif',
                       fontSize: '18px',
                       fontWeight: 600,
-                      color: '#124854',
+                      color: '#006B4E',
                       lineHeight: '1.3'
                     }}
                   >
@@ -2952,7 +2952,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                   handleCalculate();
                   setIsMobileCalculatorOpen(false);
                 }}
-                className="w-full bg-[#124854] hover:bg-[#0d3640] text-white py-3 rounded-[200px] transition-colors mt-2"
+                className="w-full bg-[#006B4E] hover:bg-[#0d3640] text-white py-3 rounded-[200px] transition-colors mt-2"
                 style={{
                   fontFamily: 'Inter, sans-serif',
                   fontSize: '14px',
@@ -3063,7 +3063,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
               {/* Botones de acción */}
               <div className="space-y-3">
                 <button 
-                  className="w-full bg-[#124854] hover:bg-[#0d3640] text-white py-3 px-4 rounded-[200px] transition-colors"
+                  className="w-full bg-[#006B4E] hover:bg-[#0d3640] text-white py-3 px-4 rounded-[200px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',
@@ -3194,7 +3194,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('naturaleza')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('naturaleza')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -3210,7 +3210,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('lago-rio')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -3226,7 +3226,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('inversion')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('inversion')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -3242,7 +3242,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     onClick={() => toggleBadge('acceso')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('acceso')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -3264,7 +3264,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                     handleSmartSearch();
                     setIsSmartSearchBottomSheetOpen(false);
                   }}
-                  className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',

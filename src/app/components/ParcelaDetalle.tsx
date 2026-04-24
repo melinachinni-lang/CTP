@@ -426,7 +426,7 @@ function GeolocalizacionMap({
                       }}
                       className="flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                       style={{
-                        backgroundColor: '#124854',
+                        backgroundColor: '#006B4E',
                         color: '#FFFFFF',
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
@@ -954,8 +954,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   fontWeight: 'var(--font-weight-regular)',
                   lineHeight: 'var(--line-height-body)'
                 }}>
-                  <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                    <MapPin className="w-5 h-5" style={{ color: '#124854' }} />
+                  <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                    <MapPin className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   {parcela.ubicacion}
                 </p>
@@ -1158,7 +1158,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                 <div className="space-y-6">
                   {/* Dirección */}
                   <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-50">
-                    <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#124854' }} />
+                    <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#006B4E' }} />
                     <div>
                       <p style={{ 
                         fontFamily: 'var(--font-body)',
@@ -1186,7 +1186,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                       <div className="flex flex-col items-center justify-center text-center px-8 py-12 max-w-md">
                         {/* Icono minimalista */}
                         <div className="mb-4" style={{ color: '#525252' }}>
-                          <MapPinOff className="w-12 h-12" strokeWidth={1.5} style={{ color: '#124854' }} />
+                          <MapPinOff className="w-12 h-12" strokeWidth={1.5} style={{ color: '#006B4E' }} />
                         </div>
                         
                         {/* Título */}
@@ -1228,8 +1228,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--font-size-body-sm)',
                               fontWeight: 'var(--font-weight-medium)',
-                              color: parcela.id !== 1 ? '#525252' : (ubicacionTab === '360' ? '#124854' : '#737373'),
-                              borderBottom: ubicacionTab === '360' ? '2px solid #124854' : '2px solid transparent',
+                              color: parcela.id !== 1 ? '#525252' : (ubicacionTab === '360' ? '#006B4E' : '#737373'),
+                              borderBottom: ubicacionTab === '360' ? '2px solid #006B4E' : '2px solid transparent',
                               marginBottom: '-1px',
                               cursor: parcela.id !== 1 ? 'not-allowed' : 'pointer',
                               opacity: parcela.id !== 1 ? 0.6 : 1
@@ -1267,8 +1267,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--font-size-body-sm)',
                               fontWeight: 'var(--font-weight-medium)',
-                              color: ![1, 2].includes(parcela.id) ? '#525252' : (ubicacionTab === 'plano' ? '#124854' : '#737373'),
-                              borderBottom: ubicacionTab === 'plano' ? '2px solid #124854' : '2px solid transparent',
+                              color: ![1, 2].includes(parcela.id) ? '#525252' : (ubicacionTab === 'plano' ? '#006B4E' : '#737373'),
+                              borderBottom: ubicacionTab === 'plano' ? '2px solid #006B4E' : '2px solid transparent',
                               marginBottom: '-1px',
                               cursor: ![1, 2].includes(parcela.id) ? 'not-allowed' : 'pointer',
                               opacity: ![1, 2].includes(parcela.id) ? 0.6 : 1
@@ -1302,8 +1302,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                             fontFamily: 'var(--font-body)',
                             fontSize: 'var(--font-size-body-sm)',
                             fontWeight: 'var(--font-weight-medium)',
-                            color: ubicacionTab === 'mapa' ? '#124854' : '#737373',
-                            borderBottom: ubicacionTab === 'mapa' ? '2px solid #124854' : '2px solid transparent',
+                            color: ubicacionTab === 'mapa' ? '#006B4E' : '#737373',
+                            borderBottom: ubicacionTab === 'mapa' ? '2px solid #006B4E' : '2px solid transparent',
                             marginBottom: '-1px'
                           }}
                         >
@@ -1412,7 +1412,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                               className="w-14 h-14 rounded-full bg-white flex items-center justify-center border border-gray-200 flex-shrink-0"
                               style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                             >
-                              <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{carac.icon}</div>
+                              <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{carac.icon}</div>
                             </div>
                           )}
                           <div className="w-full">
@@ -1460,7 +1460,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                               className="w-14 h-14 rounded-full bg-white flex items-center justify-center border border-gray-200 flex-shrink-0"
                               style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                             >
-                              <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{carac.icon}</div>
+                              <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{carac.icon}</div>
                             </div>
                           )}
                           <div className="w-full">
@@ -1508,7 +1508,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                               className="w-14 h-14 rounded-full bg-white flex items-center justify-center border border-gray-200 flex-shrink-0"
                               style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                             >
-                              <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{carac.icon}</div>
+                              <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{carac.icon}</div>
                             </div>
                           )}
                           <div>
@@ -1566,8 +1566,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   <div className="bg-white rounded-xl border border-gray-200 p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                        <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                          <Navigation className="w-5 h-5" style={{ color: '#124854' }} />
+                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                          <Navigation className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                       </div>
                       <h3 style={{ 
@@ -1628,9 +1628,9 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                           Tipo de acceso
                         </span>
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#124854' }} />
-                          <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#124854' }} />
-                          <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#124854' }} />
+                          <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#006B4E' }} />
+                          <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#006B4E' }} />
+                          <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#006B4E' }} />
                           <div className="flex-1 h-2 bg-gray-100 rounded-full" />
                         </div>
                         <p style={{ 
@@ -1671,8 +1671,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   <div className="bg-white rounded-xl border border-gray-200 p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                        <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                          <ShoppingBag className="w-5 h-5" style={{ color: '#124854' }} />
+                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                          <ShoppingBag className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                       </div>
                       <h3 style={{ 
@@ -1812,8 +1812,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   <div className="bg-white rounded-xl border border-gray-200 p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                        <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                          <TreePine className="w-5 h-5" style={{ color: '#124854' }} />
+                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                          <TreePine className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                       </div>
                       <h3 style={{ 
@@ -1931,8 +1931,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   <div className="bg-white rounded-xl border border-gray-200 p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                        <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                          <TrendingUp className="w-5 h-5" style={{ color: '#124854' }} />
+                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                          <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                       </div>
                       <h3 style={{ 
@@ -2054,8 +2054,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   <div className="bg-white rounded-xl border p-6 md:col-span-2" style={{ borderColor: '#CDD8DE' }}>
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5' }}>
-                        <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                          <TrendingUp className="w-5 h-5" style={{ color: '#124854' }} />
+                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                          <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                       </div>
                       <h3 style={{ 
@@ -2143,17 +2143,17 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                               <Line 
                                 type="monotone" 
                                 dataKey="valor" 
-                                stroke="#124854" 
+                                stroke="#006B4E" 
                                 strokeWidth={2.5}
                                 dot={{ 
-                                  fill: '#124854', 
+                                  fill: '#006B4E', 
                                   strokeWidth: 2, 
                                   r: 5,
                                   stroke: '#FFFFFF'
                                 }}
                                 activeDot={{ 
                                   r: 7,
-                                  fill: '#124854',
+                                  fill: '#006B4E',
                                   stroke: '#FFFFFF',
                                   strokeWidth: 2
                                 }}
@@ -2201,8 +2201,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                       className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-200 flex-shrink-0"
                       style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                     >
-                      <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                        <FileText className="w-5 h-5" style={{ color: '#124854' }} />
+                      <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                        <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
                       </div>
                     </div>
                     <h2 style={{ 
@@ -2542,8 +2542,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                     <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-200 flex-shrink-0"
                       style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                     >
-                      <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                        <Package className="w-5 h-5" style={{ color: '#124854' }} />
+                      <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                        <Package className="w-5 h-5" style={{ color: '#006B4E' }} />
                       </div>
                     </div>
                     <h2 style={{ 
@@ -2714,8 +2714,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                           border: '1px solid #E5E5E0'
                         }}
                       >
-                        <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
-                          <FileBadge className="w-3.5 h-3.5" style={{ color: '#124854' }} />
+                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
+                          <FileBadge className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
                         </div>
                         <span style={{ 
                           fontFamily: 'var(--font-body)',
@@ -2732,7 +2732,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                     <div className="grid grid-cols-2 gap-3 pt-4" style={{ borderTop: '1px solid #CDD8DE' }}>
                       {parcela.destacados.map((item, index) => (
                         <div key={index} className="flex items-center gap-2">
-                          <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>
+                          <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>
                             {item.icon}
                           </div>
                           <span style={{ 
@@ -2752,7 +2752,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                       className="w-full px-6 py-3 rounded-full transition-all hover:opacity-90 flex items-center justify-center gap-2"
                       style={{ 
                         fontFamily: 'var(--font-body)',
-                        backgroundColor: '#124854',
+                        backgroundColor: '#006B4E',
                         color: '#FFFFFF',
                         fontWeight: 'var(--font-weight-semibold)',
                         fontSize: 'var(--font-size-body-base)'
@@ -2774,13 +2774,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                       style={{ 
                         fontFamily: 'var(--font-body)',
                         backgroundColor: '#F5F5F0',
-                        color: '#124854',
+                        color: '#006B4E',
                         fontWeight: 'var(--font-weight-medium)',
                         fontSize: 'var(--font-size-body-base)',
                         border: '1px solid #E5E5E0'
                       }}
                     >
-                      <div className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] [&_circle]:fill-none [&_circle]:stroke-[#124854] [&_rect]:fill-none [&_rect]:stroke-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]">
+                      <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
                         <Download className="w-4 h-4" />
                       </div>
                       Descargar brochure
@@ -3696,7 +3696,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                 onClick={handleConfirmCompra}
                 className="flex-1 px-6 py-3 rounded-lg transition-all"
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-sm)',
                   fontWeight: 'var(--font-weight-medium)',
@@ -3707,7 +3707,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   e.currentTarget.style.backgroundColor = '#0F3A43';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#124854';
+                  e.currentTarget.style.backgroundColor = '#006B4E';
                 }}
               >
                 Continuar

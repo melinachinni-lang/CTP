@@ -840,7 +840,7 @@ export function AdminAnaliticaView() {
                           width: '32px',
                           height: '32px',
                           borderRadius: '8px',
-                          backgroundColor: index < 3 ? '#124854' : '#F5F5F5',
+                          backgroundColor: index < 3 ? '#006B4E' : '#F5F5F5',
                           color: index < 3 ? '#FFFFFF' : '#737373',
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',

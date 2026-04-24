@@ -69,7 +69,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                   className="w-full flex items-center gap-3 px-6 py-3 transition-all"
                   style={{
                     backgroundColor: isActive ? '#CDD8DE' : 'transparent',
-                    color: '#124854',
+                    color: '#006B4E',
                     fontFamily: 'var(--font-body)',
                     fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                     fontSize: 'var(--font-size-body-sm)',
@@ -202,7 +202,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
   // Datos para gráfico donut - tipo de interacción
   const interactionData = [
-    { name: 'Consultas', value: 48, color: '#124854' },
+    { name: 'Consultas', value: 48, color: '#006B4E' },
     { name: 'Guardados', value: 32, color: '#462611' },
     { name: 'Clicks', value: 20, color: '#7D460D' },
   ];
@@ -308,7 +308,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               setTriggerPublishModal(prev => prev + 1);
             }}
             className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#124854',
+            backgroundColor: '#006B4E',
             color: '#FFFFFF',
             borderRadius: '200px',
             fontFamily: 'var(--font-body)',
@@ -318,7 +318,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             lineHeight: 'var(--line-height-ui)'
           }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" />
             Nueva publicación
@@ -332,7 +332,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <FileText className="w-5 h-5" style={{ color: '#124854' }} />
+              <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -374,7 +374,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Eye className="w-5 h-5" style={{ color: '#124854' }} />
+              <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -416,7 +416,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
               <AlertCircle className="w-3 h-3" style={{ color: '#462611' }} />
@@ -458,7 +458,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Heart className="w-5 h-5" style={{ color: '#124854' }} />
+              <Heart className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -551,10 +551,10 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               <Line 
                 type="monotone" 
                 dataKey="views" 
-                stroke="#124854" 
+                stroke="#006B4E" 
                 strokeWidth={3}
-                dot={{ fill: '#124854', r: 4 }}
-                activeDot={{ r: 6, fill: '#124854' }}
+                dot={{ fill: '#006B4E', r: 4 }}
+                activeDot={{ r: 6, fill: '#006B4E' }}
                 name="Visualizaciones"
               />
             </LineChart>
@@ -600,7 +600,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 />
                 <Bar 
                   dataKey="consultas" 
-                  fill="#124854" 
+                  fill="#006B4E" 
                   radius={[8, 8, 0, 0]}
                   name="Consultas"
                 />
@@ -947,7 +947,7 @@ function PerformanceContent() {
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
             <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
               <ArrowUp className="w-4 h-4" style={{ color: '#647E3F' }} />
@@ -995,7 +995,7 @@ function PerformanceContent() {
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
             <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <FileText className="w-5 h-5" style={{ color: '#124854' }} />
+              <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
               <span 
@@ -1042,7 +1042,7 @@ function PerformanceContent() {
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
             <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <CheckCircle className="w-5 h-5" style={{ color: '#124854' }} />
+              <CheckCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
               <ArrowUp className="w-4 h-4" style={{ color: '#647E3F' }} />
@@ -1090,7 +1090,7 @@ function PerformanceContent() {
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
             <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <TrendingUp className="w-5 h-5" style={{ color: '#124854' }} />
+              <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
               <ArrowDown className="w-4 h-4 text-red-600" />
@@ -1160,7 +1160,7 @@ function PerformanceContent() {
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}
                 style={{
-                  backgroundColor: selectedRange === range ? '#124854' : undefined,
+                  backgroundColor: selectedRange === range ? '#006B4E' : undefined,
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
                   fontWeight: 'var(--font-weight-medium)',
@@ -1197,9 +1197,9 @@ function PerformanceContent() {
               <Line 
                 type="monotone" 
                 dataKey="consultas" 
-                stroke="#124854" 
+                stroke="#006B4E" 
                 strokeWidth={3}
-                dot={{ fill: '#124854', r: 5 }}
+                dot={{ fill: '#006B4E', r: 5 }}
                 activeDot={{ r: 7 }}
               />
             </LineChart>
@@ -1506,7 +1506,7 @@ function PlanContent() {
                     </div>
                   ))}
                 </div>
-                <button disabled={isActive} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#124854' : '#FFFFFF', color: isActive ? '#A3A3A3' : isHigher ? '#FFFFFF' : 'var(--foreground)', border: isActive ? '2px solid #E5E5E5' : isHigher ? 'none' : '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: isActive ? 'not-allowed' : 'pointer' }} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#0D3640' : '#FAFAFA'; }} onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#124854' : '#FFFFFF'; }}>{isActive ? 'Plan activo' : isHigher ? 'Mejorar plan' : 'Cambiar a este plan'}</button>
+                <button disabled={isActive} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#006B4E' : '#FFFFFF', color: isActive ? '#A3A3A3' : isHigher ? '#FFFFFF' : 'var(--foreground)', border: isActive ? '2px solid #E5E5E5' : isHigher ? 'none' : '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: isActive ? 'not-allowed' : 'pointer' }} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#0D3640' : '#FAFAFA'; }} onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; }}>{isActive ? 'Plan activo' : isHigher ? 'Mejorar plan' : 'Cambiar a este plan'}</button>
               </div>
             );
           })}
@@ -1550,7 +1550,7 @@ function PlanContent() {
               </div>
             </div>
             <div className="flex gap-3">
-              <button onClick={() => setShowCancelModal(false)} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#124854', color: '#FFFFFF', border: '2px solid #124854', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; e.currentTarget.style.borderColor = '#0D3640'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; e.currentTarget.style.borderColor = '#124854'; }}>Mantener plan</button>
+              <button onClick={() => setShowCancelModal(false)} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: '2px solid #006B4E', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; e.currentTarget.style.borderColor = '#0D3640'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.borderColor = '#006B4E'; }}>Mantener plan</button>
               <button onClick={handleCancelPlan} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#DC2626', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.borderColor = '#DC2626'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#DEDEDE'; }}>Sí, cancelar</button>
             </div>
           </div>

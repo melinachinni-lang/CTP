@@ -180,10 +180,10 @@ export function BudgetCalculator({ onNavigate }: BudgetCalculatorProps) {
         <div className="col-span-2 flex flex-col items-stretch gap-1">
           <button 
             onClick={() => onNavigate('entry')}
-            style={{ backgroundColor: '#124854' }}
+            style={{ backgroundColor: '#006B4E' }}
             className="w-full text-white px-4 py-2 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Buscar
           </button>

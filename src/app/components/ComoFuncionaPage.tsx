@@ -82,7 +82,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       icon: FileText,
       title: 'Publicaciones',
       description: 'Administra tus propiedades y mantenlas actualizadas',
-      color: '#124854',
+      color: '#006B4E',
       lightColor: 'rgba(18, 72, 84, 0.1)',
       detailedInfo: {
         intro: 'Crea y gestiona todas tus publicaciones de parcelas desde un panel centralizado.',
@@ -99,7 +99,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       icon: MessageSquare,
       title: 'Consultas y leads',
       description: 'Todos los interesados organizados en un solo lugar',
-      color: '#124854',
+      color: '#006B4E',
       lightColor: 'rgba(18, 72, 84, 0.1)',
       detailedInfo: {
         intro: 'Centraliza todas las consultas y gestiona cada lead de forma eficiente.',
@@ -116,7 +116,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       icon: BarChart3,
       title: 'Rendimiento',
       description: 'Visualiza métricas clave de tus publicaciones',
-      color: '#124854',
+      color: '#006B4E',
       lightColor: 'rgba(18, 72, 84, 0.1)',
       detailedInfo: {
         intro: 'Analiza el desempeño de tus propiedades con métricas claras y accionables.',
@@ -133,7 +133,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       icon: Users,
       title: 'Equipo y brokers',
       description: 'Invita a tu equipo a colaborar en las ventas',
-      color: '#124854',
+      color: '#006B4E',
       lightColor: 'rgba(18, 72, 84, 0.1)',
       detailedInfo: {
         intro: 'Colabora con tu equipo o brokers externos de forma ordenada y transparente.',
@@ -150,7 +150,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       icon: CreditCard,
       title: 'Planes y pagos',
       description: 'Elige el plan que mejor se ajuste a tu operación',
-      color: '#124854',
+      color: '#006B4E',
       lightColor: 'rgba(18, 72, 84, 0.1)',
       detailedInfo: {
         intro: 'Planes flexibles que crecen con tu negocio, sin sorpresas ni costos ocultos.',
@@ -269,7 +269,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-h2)',
                 fontWeight: 'var(--font-weight-regular)',
-                color: '#124854',
+                color: '#006B4E',
                 lineHeight: 'var(--line-height-heading)',
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
@@ -515,7 +515,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-h2)',
                 fontWeight: 'var(--font-weight-regular)',
-                color: '#124854',
+                color: '#006B4E',
                 lineHeight: 'var(--line-height-heading)',
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
@@ -615,7 +615,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-h2)',
                 fontWeight: 'var(--font-weight-regular)',
-                color: '#124854',
+                color: '#006B4E',
                 lineHeight: 'var(--line-height-heading)',
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
@@ -820,7 +820,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-h2)',
                 fontWeight: 'var(--font-weight-regular)',
-                color: '#124854',
+                color: '#006B4E',
                 lineHeight: 'var(--line-height-heading)',
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
@@ -952,7 +952,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 onClick={() => onNavigate('entry')}
                 style={{
                   boxShadow: '0 2px 8px rgba(18, 72, 84, 0.15)',
-                  backgroundColor: '#124854'
+                  backgroundColor: '#006B4E'
                 }}
                 className="h-12 text-white px-8 text-base leading-[1.5] font-medium rounded-[200px] transition-all duration-200 flex items-center justify-center min-w-[180px]"
                 onMouseEnter={(e) => {
@@ -961,7 +961,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                   e.currentTarget.style.backgroundColor = '#0D3640';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#124854';
+                  e.currentTarget.style.backgroundColor = '#006B4E';
                   e.currentTarget.style.boxShadow = '0 2px 8px rgba(18, 72, 84, 0.15)';
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
@@ -1256,7 +1256,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
             {/* Contenido del modal */}
             <div className="p-8 pt-10">
               {/* Título */}
-              <h2 className="mb-4 pr-8" style={{ color: '#124854', fontSize: 'var(--font-size-h3)' }}>
+              <h2 className="mb-4 pr-8" style={{ color: '#006B4E', fontSize: 'var(--font-size-h3)' }}>
                 Para publicar tu propiedad, necesitas una cuenta
               </h2>
 
@@ -1276,7 +1276,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                       onNavigate('entry');
                     }
                   }}
-                  className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
                   Crear cuenta
                 </button>

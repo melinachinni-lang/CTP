@@ -166,12 +166,12 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 fontFamily: 'var(--font-body)',
                 fontSize: '16px',
                 fontWeight: 'var(--font-weight-medium)',
-                color: '#124854',
+                color: '#006B4E',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
                 padding: '8px 0',
-                borderBottom: '2px solid #124854'
+                borderBottom: '2px solid #006B4E'
               }}
             >
               Parcelas
@@ -189,7 +189,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 padding: '8px 0',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#124854'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#006B4E'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#0A0A0A'}
             >
               Inmobiliarias
@@ -207,7 +207,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 padding: '8px 0',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#124854'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#006B4E'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#0A0A0A'}
             >
               Brokers
@@ -225,7 +225,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 padding: '8px 0',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#124854'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#006B4E'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#0A0A0A'}
             >
               Cómo funciona
@@ -247,7 +247,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 padding: '10px 24px',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#124854'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#006B4E'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#0A0A0A'}
             >
               Ingresar
@@ -259,7 +259,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 fontSize: '16px',
                 fontWeight: 'var(--font-weight-medium)',
                 color: '#FFFFFF',
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 border: 'none',
                 borderRadius: '200px',
                 cursor: 'pointer',
@@ -267,7 +267,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 transition: 'background-color 0.2s'
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Crear cuenta
             </button>
@@ -427,7 +427,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
               style={{
                 width: '100%',
                 padding: '12px',
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
@@ -438,7 +438,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 transition: 'background-color 0.2s'
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Buscar parcelas
             </button>
@@ -614,7 +614,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
             onClick={() => onNavigate('parcelas')}
             style={{
               padding: '12px 32px',
-              backgroundColor: '#124854',
+              backgroundColor: '#006B4E',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '8px',
@@ -625,7 +625,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
               transition: 'background-color 0.2s'
             }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Reintentar
           </button>

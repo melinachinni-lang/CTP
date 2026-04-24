@@ -91,7 +91,7 @@ export const ConsultasCalendar: React.FC<ConsultasCalendarProps> = ({
   const getTipoColor = (tipo: string) => {
     switch (tipo) {
       case 'visita':
-        return '#124854'; // Primary
+        return '#006B4E'; // Primary
       case 'videollamada':
         return '#7D460D'; // Accent
       default:
@@ -336,7 +336,7 @@ export const ConsultasCalendar: React.FC<ConsultasCalendarProps> = ({
         </div>
         <div className="w-px h-4 bg-[#DEDEDE]"></div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#124854]" style={{ borderRadius: '2px' }}></div>
+          <div className="w-3 h-3 bg-[#006B4E]" style={{ borderRadius: '2px' }}></div>
           <span style={{ color: '#6B7280', fontSize: '12px' }}>Visita</span>
         </div>
         <div className="flex items-center gap-2">

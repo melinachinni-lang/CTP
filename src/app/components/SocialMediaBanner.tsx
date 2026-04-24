@@ -140,9 +140,9 @@ export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
                       style={{
                         width: '48px',
                         height: '48px',
-                        backgroundColor: isHovered ? '#0D3640' : '#124854',
+                        backgroundColor: isHovered ? '#0D3640' : '#006B4E',
                         border: '2px solid',
-                        borderColor: isHovered ? '#0D3640' : '#124854',
+                        borderColor: isHovered ? '#0D3640' : '#006B4E',
                         borderRadius: '50%',
                         cursor: 'pointer',
                         transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',

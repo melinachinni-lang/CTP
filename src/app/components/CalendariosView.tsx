@@ -780,7 +780,7 @@ export function CalendariosView() {
                   {createErrors.horario && <p className="text-[12px] text-red-500 mt-1.5">{createErrors.horario}</p>}
                 </div>
                 <div className="flex items-start gap-3 bg-[#eef4fb] border border-[#cfdef0] rounded-[10px] px-3.5 py-3 mb-5">
-                  <Video size={18} className="text-[#2d6cb3] flex-shrink-0 mt-0.5" />
+                  <Video size={18} className="text-[#006B4E] flex-shrink-0 mt-0.5" />
                   <p className="text-[12.5px] text-[#2d4b70] leading-relaxed">Cada consulta agendada en este calendario generará automáticamente un enlace de Google Meet que podrás compartir con el cliente.</p>
                 </div>
               </>
@@ -907,7 +907,7 @@ export function CalendariosView() {
         <ModalOverlay onClose={() => setShowMeetModal(false)}>
           <div className="bg-white rounded-2xl p-8 w-[420px] max-w-[95vw] shadow-2xl">
             <div className="w-[52px] h-[52px] bg-[#eef4fb] rounded-xl flex items-center justify-center mb-4">
-              <Video size={24} className="text-[#2d6cb3]" />
+              <Video size={24} className="text-[#006B4E]" />
             </div>
             <ModalHeader
               title="Videollamada creada"

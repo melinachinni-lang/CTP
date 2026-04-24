@@ -223,7 +223,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                     fontFamily: 'var(--font-heading)',
                     fontSize: 'var(--font-size-h2)',
                     fontWeight: 'var(--font-weight-regular)',
-                    color: '#124854',
+                    color: '#006B4E',
                     lineHeight: 'var(--line-height-heading)',
                     letterSpacing: 'var(--letter-spacing-tight)'
                   }}
@@ -445,7 +445,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-h3)',
                 fontWeight: 'var(--font-weight-medium)',
-                color: '#124854',
+                color: '#006B4E',
                 lineHeight: 'var(--line-height-heading)',
                 letterSpacing: 'var(--letter-spacing-normal)'
               }}
@@ -639,7 +639,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
             {/* Contenido del modal */}
             <div className="p-8 pt-10">
               {/* Título */}
-              <h2 className="mb-4 pr-8" style={{ color: '#124854', fontSize: 'var(--font-size-h3)' }}>
+              <h2 className="mb-4 pr-8" style={{ color: '#006B4E', fontSize: 'var(--font-size-h3)' }}>
                 Para publicar tu propiedad, necesitas una cuenta
               </h2>
 
@@ -659,7 +659,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                       onNavigate('entry');
                     }
                   }}
-                  className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
                   Crear cuenta
                 </button>

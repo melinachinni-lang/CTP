@@ -41,7 +41,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
-    const color = '#124854';
+    const color = '#006B4E';
     const strokeWidth = isActive ? 2.5 : 2;
 
     switch (iconType) {
@@ -133,7 +133,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                     : ''
                 }`}
                 style={{
-                  color: '#124854',
+                  color: '#006B4E',
                   ...(currentSection === item.id
                     ? { backgroundColor: '#CDD8DE' }
                     : { transition: 'background-color 0.2s ease' })
@@ -274,7 +274,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             }}
             className="py-2.5 px-5 flex items-center gap-2 transition-all" 
             style={{ 
-              backgroundColor: canPublish ? '#124854' : '#F5F5F5',
+              backgroundColor: canPublish ? '#006B4E' : '#F5F5F5',
               color: canPublish ? '#FFFFFF' : '#A3A3A3',
               borderRadius: '200px',
               fontFamily: 'var(--font-body)',
@@ -285,7 +285,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               cursor: canPublish ? 'pointer' : 'not-allowed'
             }}
             onMouseEnter={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#0D3640'; }}
-            onMouseLeave={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#124854'; }}
+            onMouseLeave={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" />
             Nueva publicación
@@ -324,7 +324,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <FileText className="w-5 h-5" style={{ color: '#124854' }} />
+              <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-between">
@@ -360,7 +360,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Eye className="w-5 h-5" style={{ color: '#124854' }} />
+              <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -402,7 +402,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
               <AlertCircle className="w-3 h-3" style={{ color: '#462611' }} />
@@ -444,7 +444,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Star className="w-5 h-5" style={{ color: '#124854' }} />
+              <Star className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-between">
@@ -511,10 +511,10 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               <Line 
                 type="monotone" 
                 dataKey="views" 
-                stroke="#124854" 
+                stroke="#006B4E" 
                 strokeWidth={3}
-                dot={{ fill: '#124854', r: 4 }}
-                activeDot={{ r: 6, fill: '#124854' }}
+                dot={{ fill: '#006B4E', r: 4 }}
+                activeDot={{ r: 6, fill: '#006B4E' }}
                 name="Visualizaciones"
               />
             </LineChart>
@@ -1014,11 +1014,11 @@ function ExploreContent() {
             fontWeight: 'var(--font-weight-medium)',
             lineHeight: 'var(--line-height-body)',
             letterSpacing: 'var(--letter-spacing-normal)',
-            backgroundColor: '#124854',
+            backgroundColor: '#006B4E',
             transition: 'background-color 0.3s ease'
           }}
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Buscar parcelas
         </button>
@@ -1308,7 +1308,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
             onClick={() => setShowNewListingFlow(true)}
             className="inline-flex items-center gap-2 px-6 py-3 transition-all"
             style={{
-              backgroundColor: '#124854',
+              backgroundColor: '#006B4E',
               color: '#FFFFFF',
               borderRadius: '200px',
               fontFamily: 'var(--font-body)',
@@ -1323,7 +1323,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
               e.currentTarget.style.backgroundColor = '#0D3640';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#124854';
+              e.currentTarget.style.backgroundColor = '#006B4E';
             }}
           >
             <Plus className="w-4 h-4" />
@@ -1358,7 +1358,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
               <div key={index} className="flex items-start gap-3">
                 <div 
                   className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
-                  style={{ backgroundColor: '#124854' }}
+                  style={{ backgroundColor: '#006B4E' }}
                 />
                 <p style={{
                   fontFamily: 'var(--font-body)',
@@ -1405,7 +1405,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
             onClick={() => setShowNewListingFlow(true)}
             className="inline-flex items-center gap-2 px-5 py-2.5 transition-all"
             style={{
-              backgroundColor: '#124854',
+              backgroundColor: '#006B4E',
               color: '#FFFFFF',
               borderRadius: '200px',
               fontFamily: 'var(--font-body)',
@@ -1420,7 +1420,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
               e.currentTarget.style.backgroundColor = '#0D3640';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#124854';
+              e.currentTarget.style.backgroundColor = '#006B4E';
             }}
           >
             <Plus className="w-4 h-4" />
@@ -1912,11 +1912,11 @@ function SavedContent() {
                     fontSize: '14px',
                     fontWeight: 'var(--font-weight-medium)',
                     lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
                 </button>
@@ -2061,11 +2061,11 @@ function SavedContent() {
                     fontSize: '14px',
                     fontWeight: 'var(--font-weight-medium)',
                     lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
                 </button>
@@ -2210,11 +2210,11 @@ function SavedContent() {
                     fontSize: '14px',
                     fontWeight: 'var(--font-weight-medium)',
                     lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
                 </button>
@@ -2359,11 +2359,11 @@ function SavedContent() {
                     fontSize: '14px',
                     fontWeight: 'var(--font-weight-medium)',
                     lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
                 </button>
@@ -2508,11 +2508,11 @@ function SavedContent() {
                     fontSize: '14px',
                     fontWeight: 'var(--font-weight-medium)',
                     lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
                 </button>
@@ -2559,7 +2559,7 @@ function SavedContent() {
         </p>
         <button 
           style={{
-            backgroundColor: '#124854',
+            backgroundColor: '#006B4E',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-base)',
             fontWeight: 'var(--font-weight-medium)',
@@ -2567,7 +2567,7 @@ function SavedContent() {
           }}
           className="text-white py-3.5 px-8 rounded-[200px] transition-colors"
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Comparar guardadas
         </button>
@@ -3352,7 +3352,7 @@ function CompareContent() {
             <div className="border-r-2 border-gray-200 p-5 space-y-3">
               <button 
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
                   fontWeight: 'var(--font-weight-medium)',
@@ -3360,7 +3360,7 @@ function CompareContent() {
                 }}
                 className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Ver detalles
               </button>
@@ -3380,7 +3380,7 @@ function CompareContent() {
             <div className="border-r-2 border-gray-200 p-5 space-y-3">
               <button 
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
                   fontWeight: 'var(--font-weight-medium)',
@@ -3388,7 +3388,7 @@ function CompareContent() {
                 }}
                 className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Ver detalles
               </button>
@@ -3408,7 +3408,7 @@ function CompareContent() {
             <div className="p-5 space-y-3">
               <button 
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
                   fontWeight: 'var(--font-weight-medium)',
@@ -3416,7 +3416,7 @@ function CompareContent() {
                 }}
                 className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Ver detalles
               </button>
@@ -3529,7 +3529,7 @@ function CompareContent() {
           </button>
           <button 
             style={{
-              backgroundColor: '#124854',
+              backgroundColor: '#006B4E',
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-base)',
               fontWeight: 'var(--font-weight-medium)',
@@ -3537,7 +3537,7 @@ function CompareContent() {
             }}
             className="flex-1 text-white py-3.5 px-8 rounded-[200px] transition-colors"
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Contactar vendedores
           </button>
@@ -4387,7 +4387,7 @@ function PlanContent() {
               </li>
             </ul>
             <button className="py-2.5 px-6 transition-all" style={{ 
-              backgroundColor: '#124854',
+              backgroundColor: '#006B4E',
               color: '#FFFFFF',
               borderRadius: '200px',
               fontFamily: 'var(--font-body)',
@@ -4397,7 +4397,7 @@ function PlanContent() {
               lineHeight: 'var(--line-height-ui)'
             }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Ver planes profesionales
             </button>
@@ -4466,7 +4466,7 @@ function HelpContent() {
         </p>
         <button 
           style={{
-            backgroundColor: '#124854',
+            backgroundColor: '#006B4E',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-base)',
             fontWeight: 'var(--font-weight-medium)',
@@ -4474,7 +4474,7 @@ function HelpContent() {
           }}
           className="w-full text-white py-3.5 px-8 rounded-[200px] transition-colors"
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Iniciar conversación
         </button>

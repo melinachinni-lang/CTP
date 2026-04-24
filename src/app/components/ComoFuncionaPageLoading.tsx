@@ -52,7 +52,7 @@ export function ComoFuncionaPageLoading({ onNavigate, isLoggedIn = false, curren
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
               style={{ 
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 animationDelay: '0ms',
                 animationDuration: '1400ms'
               }}
@@ -60,7 +60,7 @@ export function ComoFuncionaPageLoading({ onNavigate, isLoggedIn = false, curren
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
               style={{ 
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 animationDelay: '200ms',
                 animationDuration: '1400ms'
               }}
@@ -68,7 +68,7 @@ export function ComoFuncionaPageLoading({ onNavigate, isLoggedIn = false, curren
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
               style={{ 
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 animationDelay: '400ms',
                 animationDuration: '1400ms'
               }}

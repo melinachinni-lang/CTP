@@ -178,7 +178,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                         style={{
                           width: '32px',
                           height: '32px',
-                          backgroundColor: currentStep >= step.number ? '#124854' : '#F5F5F5',
+                          backgroundColor: currentStep >= step.number ? '#006B4E' : '#F5F5F5',
                           color: currentStep >= step.number ? '#FFFFFF' : '#737373',
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
@@ -200,7 +200,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                       <div style={{
                         width: '40px',
                         height: '2px',
-                        backgroundColor: currentStep > step.number ? '#124854' : '#DEDEDE',
+                        backgroundColor: currentStep > step.number ? '#006B4E' : '#DEDEDE',
                       }} />
                     )}
                   </React.Fragment>
@@ -308,7 +308,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                           }}
                           onFocus={(e) => {
                             if (!errors[`${plot.id}-code`]) {
-                              e.currentTarget.style.borderColor = '#124854';
+                              e.currentTarget.style.borderColor = '#006B4E';
                             }
                           }}
                           onBlur={(e) => {
@@ -357,7 +357,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                           }}
                           onFocus={(e) => {
                             if (!errors[`${plot.id}-surface`]) {
-                              e.currentTarget.style.borderColor = '#124854';
+                              e.currentTarget.style.borderColor = '#006B4E';
                             }
                           }}
                           onBlur={(e) => {
@@ -406,7 +406,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                           }}
                           onFocus={(e) => {
                             if (!errors[`${plot.id}-price`]) {
-                              e.currentTarget.style.borderColor = '#124854';
+                              e.currentTarget.style.borderColor = '#006B4E';
                             }
                           }}
                           onBlur={(e) => {
@@ -451,7 +451,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                             color: '#0A0A0A',
                             outline: 'none'
                           }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                           onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                         >
                           <option value="available">Disponible</option>
@@ -484,11 +484,11 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                               className="flex items-start gap-3 p-3 rounded-lg transition-all text-left"
                               style={{
                                 backgroundColor: isSelected ? '#E6F1F3' : '#FFFFFF',
-                                border: isSelected ? '2px solid #124854' : '1px solid var(--border)',
+                                border: isSelected ? '2px solid #006B4E' : '1px solid var(--border)',
                               }}
                               onMouseEnter={(e) => {
                                 if (!isSelected) {
-                                  e.currentTarget.style.borderColor = '#124854';
+                                  e.currentTarget.style.borderColor = '#006B4E';
                                   e.currentTarget.style.backgroundColor = '#F5F9FA';
                                 }
                               }}
@@ -501,7 +501,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                             >
                               <div 
                                 className="p-2 rounded-lg flex-shrink-0"
-                                style={{ backgroundColor: isSelected ? '#124854' : '#F5F5F5' }}
+                                style={{ backgroundColor: isSelected ? '#006B4E' : '#F5F5F5' }}
                               >
                                 <Icon size={18} style={{ color: isSelected ? '#FFFFFF' : '#737373' }} />
                               </div>
@@ -539,7 +539,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                 style={{
                   backgroundColor: 'transparent',
                   border: '2px dashed var(--border)',
-                  color: '#124854',
+                  color: '#006B4E',
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-medium)',
@@ -547,7 +547,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                   justifyContent: 'center'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#124854';
+                  e.currentTarget.style.borderColor = '#006B4E';
                   e.currentTarget.style.backgroundColor = '#F5F9FA';
                 }}
                 onMouseLeave={(e) => {
@@ -588,7 +588,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
               {/* Resumen del proyecto */}
               <div className="p-6 rounded-xl" style={{ backgroundColor: '#F5F9FA', border: '1px solid #CDD8DE' }}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 rounded-lg" style={{ backgroundColor: '#124854' }}>
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: '#006B4E' }}>
                     <MapIcon size={24} style={{ color: '#FFFFFF' }} />
                   </div>
                   <div>
@@ -754,7 +754,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                   onClick={handleNext}
                   className="flex items-center gap-2 px-6 py-3 rounded-full transition-all"
                   style={{
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     color: '#FFFFFF',
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-body-sm)',
@@ -762,7 +762,7 @@ export function AddProjectPlotsFlow({ onClose, onSave, projectId, projectName }:
                     letterSpacing: 'var(--letter-spacing-wide)',
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0F3B44'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Continuar
                   <ChevronLeft size={18} style={{ transform: 'rotate(180deg)' }} />

@@ -71,7 +71,7 @@ export function GoogleAccountSelector({ onSelectAccount, onBack }: GoogleAccount
                 {/* Avatar con iniciales */}
                 <div 
                   className="w-12 h-12 rounded-full flex items-center justify-center text-white text-base font-semibold flex-shrink-0"
-                  style={{ backgroundColor: '#124854' }}
+                  style={{ backgroundColor: '#006B4E' }}
                 >
                   {getInitials(account.name)}
                 </div>

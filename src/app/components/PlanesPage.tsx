@@ -113,10 +113,10 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
               ) : (
                 <>
                   <button
-                    style={{ backgroundColor: '#124854' }}
+                    style={{ backgroundColor: '#006B4E' }}
                     className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Publicar propiedad
                   </button>
@@ -169,7 +169,7 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
                 onClick={() => setBillingPeriod('monthly')}
                 className="px-6 py-2 rounded-full text-sm font-medium transition-all"
                 style={{
-                  backgroundColor: billingPeriod === 'monthly' ? '#124854' : '#efefef',
+                  backgroundColor: billingPeriod === 'monthly' ? '#006B4E' : '#efefef',
                   color: billingPeriod === 'monthly' ? 'white' : '#0A0A0A'
                 }}
               >
@@ -179,7 +179,7 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
                 onClick={() => setBillingPeriod('annual')}
                 className="px-6 py-2 rounded-full text-sm font-medium transition-all relative"
                 style={{
-                  backgroundColor: billingPeriod === 'annual' ? '#124854' : '#efefef',
+                  backgroundColor: billingPeriod === 'annual' ? '#006B4E' : '#efefef',
                   color: billingPeriod === 'annual' ? 'white' : '#0A0A0A'
                 }}
               >
@@ -197,13 +197,13 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
               <div
                 key={index}
                 className={`bg-white rounded-3xl p-8 shadow-sm relative transition-all ${
-                  plan.destacado ? 'ring-2 ring-[#124854] scale-105' : ''
+                  plan.destacado ? 'ring-2 ring-[#006B4E] scale-105' : ''
                 }`}
               >
                 {plan.destacado && (
                   <div
                     className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 rounded-full text-sm font-medium"
-                    style={{ backgroundColor: '#124854', color: 'white' }}
+                    style={{ backgroundColor: '#006B4E', color: 'white' }}
                   >
                     Más popular
                   </div>
@@ -265,14 +265,14 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
                 <button
                   className="w-full py-3 rounded-full text-sm font-medium transition-all"
                   style={{
-                    backgroundColor: plan.destacado ? '#124854' : '#efefef',
+                    backgroundColor: plan.destacado ? '#006B4E' : '#efefef',
                     color: plan.destacado ? 'white' : '#0A0A0A'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = plan.destacado ? '#0D3640' : '#dedede';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = plan.destacado ? '#124854' : '#efefef';
+                    e.currentTarget.style.backgroundColor = plan.destacado ? '#006B4E' : '#efefef';
                   }}
                   onClick={() => onNavigate('entry')}
                 >
@@ -301,9 +301,9 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
               </p>
               <button
                 className="px-8 py-3 rounded-full text-sm font-medium transition-all"
-                style={{ backgroundColor: '#124854', color: 'white' }}
+                style={{ backgroundColor: '#006B4E', color: 'white' }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Contactar a ventas
               </button>

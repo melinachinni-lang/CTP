@@ -155,7 +155,7 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
 
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-3">
-              <button className="h-8 bg-[#124854] hover:bg-[#0d3640] text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
+              <button className="h-8 bg-[#006B4E] hover:bg-[#0d3640] text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
                 Publicar propiedad
               </button>
               <button 
@@ -338,7 +338,7 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
 
                   {/* Botón Buscar */}
                   <button 
-                    className="bg-[#124854] hover:bg-[#0d3640] text-white px-8 py-3 rounded-[100px] transition-colors shadow-sm"
+                    className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-8 py-3 rounded-[100px] transition-colors shadow-sm"
                     style={{ 
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-base)',
@@ -492,11 +492,11 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
                         fontWeight: 'var(--font-weight-medium)',
-                        backgroundColor: '#124854',
+                        backgroundColor: '#006B4E',
                         color: '#FFFFFF'
                       }}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
                       Contactar
                     </button>

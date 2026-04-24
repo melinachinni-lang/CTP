@@ -190,10 +190,10 @@ export function ArticuloPage({ onNavigate, articuloId, isLoggedIn = false, curre
               ) : (
                 <>
                   <button
-                    style={{ backgroundColor: '#124854' }}
+                    style={{ backgroundColor: '#006B4E' }}
                     className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Publicar propiedad
                   </button>

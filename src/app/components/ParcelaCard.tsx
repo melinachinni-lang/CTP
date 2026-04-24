@@ -144,7 +144,7 @@ export function ParcelaCard({
                       width: index === currentImageIndex ? '20px' : '6px',
                       height: '6px',
                       borderRadius: '3px',
-                      backgroundColor: index === currentImageIndex ? '#124854' : 'rgba(255, 255, 255, 0.7)',
+                      backgroundColor: index === currentImageIndex ? '#006B4E' : 'rgba(255, 255, 255, 0.7)',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
                     }}
                   />
@@ -164,13 +164,13 @@ export function ParcelaCard({
           <div className="grid grid-cols-2 gap-2">
             {displayCaracteristicas[0] && (
               <div className="flex items-center gap-1.5 text-xs" style={{ color: '#0A0A0A' }}>
-                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{displayCaracteristicas[0].icon}</div>
+                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{displayCaracteristicas[0].icon}</div>
                 <span className="font-medium">{displayCaracteristicas[0].text}</span>
               </div>
             )}
             {displayCaracteristicas[1] && (
               <div className="flex items-center gap-1.5 text-xs" style={{ color: '#0A0A0A' }}>
-                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{displayCaracteristicas[1].icon}</div>
+                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{displayCaracteristicas[1].icon}</div>
                 <span className="font-medium">{displayCaracteristicas[1].text}</span>
               </div>
             )}
@@ -178,13 +178,13 @@ export function ParcelaCard({
           <div className="grid grid-cols-2 gap-2">
             {displayCaracteristicas[2] && (
               <div className="flex items-center gap-1.5 text-xs" style={{ color: '#0A0A0A' }}>
-                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{displayCaracteristicas[2].icon}</div>
+                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{displayCaracteristicas[2].icon}</div>
                 <span className="font-medium">{displayCaracteristicas[2].text}</span>
               </div>
             )}
             {displayCaracteristicas[3] && (
               <div className="flex items-center gap-1.5 text-xs" style={{ color: '#0A0A0A' }}>
-                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>{displayCaracteristicas[3].icon}</div>
+                <div className="[&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{displayCaracteristicas[3].icon}</div>
                 <span className="font-medium">{displayCaracteristicas[3].text}</span>
               </div>
             )}

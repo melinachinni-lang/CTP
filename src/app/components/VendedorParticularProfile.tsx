@@ -30,10 +30,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
           </p>
           <button 
             onClick={() => onNavigate('home')}
-            style={{ backgroundColor: '#124854' }}
+            style={{ backgroundColor: '#006B4E' }}
             className="h-10 text-white px-8 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors inline-flex items-center justify-center"
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Volver al inicio
           </button>
@@ -82,10 +82,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
 
             <div className="flex items-center justify-end gap-3">
               <button 
-                style={{ backgroundColor: '#124854' }}
+                style={{ backgroundColor: '#006B4E' }}
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Publicar propiedad
               </button>
@@ -162,10 +162,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
 
                 <div className="flex gap-3 flex-wrap pt-3">
                   <button 
-                    style={{ backgroundColor: '#124854' }}
+                    style={{ backgroundColor: '#006B4E' }}
                     className="h-10 text-white px-[32px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Contactar
                   </button>
@@ -202,7 +202,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-white rounded-xl border-2 border-border p-6 hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#124854' }}>
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
                           <Clock className="w-6 h-6 text-white" />
                         </div>
                       </div>
@@ -262,7 +262,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                   {/* SOBRE EL VENDEDOR */}
                   <div className="bg-white rounded-xl border border-border p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#124854' }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
                         <User className="w-5 h-5 text-white" />
                       </div>
                       <h3 style={{ 
@@ -286,7 +286,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                   {/* INFORMACIÓN DE CONTACTO - Destacada y accesible */}
                   <div className="bg-input-background rounded-xl border-2 border-border p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#124854' }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
                         <Phone className="w-5 h-5 text-white" />
                       </div>
                       <h3 style={{ 
@@ -342,10 +342,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                           Llamar
                         </button>
                         <button 
-                          style={{ backgroundColor: '#124854' }}
+                          style={{ backgroundColor: '#006B4E' }}
                           className="h-12 text-white px-6 text-sm leading-[1.5] font-semibold rounded-[200px] transition-colors flex items-center justify-center shadow-sm hover:shadow"
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
                           WhatsApp
                         </button>

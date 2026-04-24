@@ -104,7 +104,7 @@ export function ParcelaCardImage({ imagenes, imagen, nombre }: ParcelaCardImageP
                   width: index === currentImageIndex ? '20px' : '6px',
                   height: '6px',
                   borderRadius: '3px',
-                  backgroundColor: index === currentImageIndex ? '#124854' : 'rgba(255, 255, 255, 0.7)',
+                  backgroundColor: index === currentImageIndex ? '#006B4E' : 'rgba(255, 255, 255, 0.7)',
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
                 }}
               />

@@ -443,7 +443,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                     </>
                   ) : (
                     <>
-                      <LinkIcon className="w-5 h-5" style={{ color: '#124854' }} />
+                      <LinkIcon className="w-5 h-5" style={{ color: '#006B4E' }} />
                       <span>Copiar enlace</span>
                     </>
                   )}
@@ -455,7 +455,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 onClick={() => setShowSuccessModal(false)}
                 className="w-full px-6 py-3 transition-all rounded-lg"
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   color: '#FFFFFF',
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
@@ -465,7 +465,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   border: 'none'
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0F3A42'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
               >
                 Cerrar
               </button>
@@ -499,7 +499,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
             onClick={handleNewPublication}
             className="flex items-center gap-2 px-5 py-3 transition-all"
             style={{
-              backgroundColor: '#124854',
+              backgroundColor: '#006B4E',
               color: '#FFFFFF',
               borderRadius: '200px',
               fontFamily: 'var(--font-body)',
@@ -509,7 +509,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               lineHeight: 'var(--line-height-ui)'
             }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-5 h-5" />
             Nueva publicación
@@ -721,7 +721,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               onClick={handleNewPublication}
               className="px-5 py-3 transition-all"
               style={{
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 color: '#FFFFFF',
                 borderRadius: '200px',
                 fontFamily: 'var(--font-body)',
@@ -731,7 +731,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 lineHeight: 'var(--line-height-ui)'
               }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Nueva publicación
             </button>
@@ -834,7 +834,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                                 className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted"
                                 style={{ borderTop: '1px solid var(--border)' }}
                               >
-                                <Plus className="w-4 h-4 flex-shrink-0" style={{ color: '#124854' }} />
+                                <Plus className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
                                 <span style={{
                                   fontFamily: 'var(--font-body)',
                                   fontSize: 'var(--font-size-body-sm)',
@@ -1031,7 +1031,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                       <div className="space-y-3">
                         <div className="flex items-center gap-3">
                           <div className="p-2 rounded-lg" style={{ backgroundColor: '#E6F1F3' }}>
-                            <Building2 className="w-4 h-4" style={{ color: '#124854' }} />
+                            <Building2 className="w-4 h-4" style={{ color: '#006B4E' }} />
                           </div>
                           <div>
                             <div style={{
@@ -1324,7 +1324,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 }}
                 className="flex-1 px-6 py-3 transition-all"
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   color: '#FFFFFF',
                   borderRadius: '200px',
                   fontFamily: 'var(--font-body)',
@@ -1334,7 +1334,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   lineHeight: 'var(--line-height-ui)'
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
               >
                 Copiar link
               </button>
@@ -1408,7 +1408,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   lineHeight: 'var(--line-height-ui)'
                 }}
                 onMouseEnter={(e) => { 
-                  e.currentTarget.style.borderColor = '#124854';
+                  e.currentTarget.style.borderColor = '#006B4E';
                   e.currentTarget.style.backgroundColor = '#F5F9FA';
                 }}
                 onMouseLeave={(e) => { 
@@ -1417,7 +1417,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 }}
               >
                 <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E6F1F3' }}>
-                  <FileText className="w-8 h-8" style={{ color: '#124854' }} />
+                  <FileText className="w-8 h-8" style={{ color: '#006B4E' }} />
                 </div>
                 <div className="text-center">
                   <div style={{
@@ -1456,7 +1456,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   lineHeight: 'var(--line-height-ui)'
                 }}
                 onMouseEnter={(e) => { 
-                  e.currentTarget.style.borderColor = '#124854';
+                  e.currentTarget.style.borderColor = '#006B4E';
                   e.currentTarget.style.backgroundColor = '#F5F9FA';
                 }}
                 onMouseLeave={(e) => { 
@@ -1465,7 +1465,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 }}
               >
                 <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E6F1F3' }}>
-                  <Building2 className="w-8 h-8" style={{ color: '#124854' }} />
+                  <Building2 className="w-8 h-8" style={{ color: '#006B4E' }} />
                 </div>
                 <div className="text-center">
                   <div style={{
@@ -1590,7 +1590,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 }}
                 className="w-full px-6 py-3 transition-all"
                 style={{
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   color: '#FFFFFF',
                   borderRadius: '200px',
                   fontFamily: 'var(--font-body)',
@@ -1601,7 +1601,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   border: 'none'
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0F3A42'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
               >
                 Ver planes
               </button>

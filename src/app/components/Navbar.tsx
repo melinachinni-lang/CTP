@@ -115,7 +115,7 @@ export function Navbar({
                     className="h-8 bg-[#efefef] hover:bg-[#dedede] px-3 rounded-[200px] transition-colors flex items-center gap-2"
                   >
                     {/* Avatar */}
-                    <div className="w-6 h-6 rounded-full bg-[#124854] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
+                    <div className="w-6 h-6 rounded-full bg-[#006B4E] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
                       {userAvatar ? (
                         <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
                       ) : (
@@ -149,7 +149,7 @@ export function Navbar({
                         className="w-full px-4 py-3 text-left text-sm hover:bg-[#F5F5F5] transition-colors flex items-center gap-3"
                         style={{ color: '#0A0A0A' }}
                       >
-                        <User className="w-4 h-4" style={{ color: '#124854' }} />
+                        <User className="w-4 h-4" style={{ color: '#006B4E' }} />
                         <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Mi perfil</span>
                       </button>
                       
@@ -161,7 +161,7 @@ export function Navbar({
                         className="w-full px-4 py-3 text-left text-sm hover:bg-[#F5F5F5] transition-colors flex items-center gap-3"
                         style={{ color: '#0A0A0A' }}
                       >
-                        <Settings className="w-4 h-4" style={{ color: '#124854' }} />
+                        <Settings className="w-4 h-4" style={{ color: '#006B4E' }} />
                         <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Configuración</span>
                       </button>
                       
@@ -325,7 +325,7 @@ export function Navbar({
                         fontWeight: 500
                       }}
                     >
-                      <div className="w-6 h-6 rounded-full bg-[#124854] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
+                      <div className="w-6 h-6 rounded-full bg-[#006B4E] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
                         {userAvatar ? (
                           <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
                         ) : (

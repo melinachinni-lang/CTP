@@ -331,7 +331,7 @@ export const ConsultasView: React.FC<ConsultasViewProps> = ({ viewType = 'person
             onClick={() => setViewMode('calendar')}
             className={`flex items-center gap-2 px-4 py-2 transition-colors ${
               viewMode === 'calendar'
-                ? 'bg-[#124854] text-white'
+                ? 'bg-[#006B4E] text-white'
                 : 'bg-white text-[#0A0A0A] border border-[#DEDEDE] hover:bg-[#F5F5F5]'
             }`}
             style={{ fontSize: '14px', borderRadius: '8px' }}
@@ -343,7 +343,7 @@ export const ConsultasView: React.FC<ConsultasViewProps> = ({ viewType = 'person
             onClick={() => setViewMode('list')}
             className={`flex items-center gap-2 px-4 py-2 transition-colors ${
               viewMode === 'list'
-                ? 'bg-[#124854] text-white'
+                ? 'bg-[#006B4E] text-white'
                 : 'bg-white text-[#0A0A0A] border border-[#DEDEDE] hover:bg-[#F5F5F5]'
             }`}
             style={{ fontSize: '14px', borderRadius: '8px' }}
@@ -381,7 +381,7 @@ export const ConsultasView: React.FC<ConsultasViewProps> = ({ viewType = 'person
               <select
                 value={filtroEstado}
                 onChange={(e) => setFiltroEstado(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#DEDEDE] text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#124854]"
+                className="w-full px-3 py-2 bg-white border border-[#DEDEDE] text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#006B4E]"
                 style={{ fontSize: '14px', borderRadius: '8px' }}
               >
                 <option value="todos">Todos</option>
@@ -399,7 +399,7 @@ export const ConsultasView: React.FC<ConsultasViewProps> = ({ viewType = 'person
               <select
                 value={filtroTipo}
                 onChange={(e) => setFiltroTipo(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#DEDEDE] text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#124854]"
+                className="w-full px-3 py-2 bg-white border border-[#DEDEDE] text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#006B4E]"
                 style={{ fontSize: '14px', borderRadius: '8px' }}
               >
                 <option value="todos">Todos</option>
@@ -417,7 +417,7 @@ export const ConsultasView: React.FC<ConsultasViewProps> = ({ viewType = 'person
               <select
                 value={filtroParcela}
                 onChange={(e) => setFiltroParcela(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#DEDEDE] text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#124854]"
+                className="w-full px-3 py-2 bg-white border border-[#DEDEDE] text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#006B4E]"
                 style={{ fontSize: '14px', borderRadius: '8px' }}
               >
                 <option value="todas">Todas</option>
@@ -453,7 +453,7 @@ export const ConsultasView: React.FC<ConsultasViewProps> = ({ viewType = 'person
                     <div
                       key={consulta.id}
                       onClick={() => handleConsultaClick(consulta)}
-                      className="p-4 border border-[#DEDEDE] cursor-pointer hover:border-[#124854] transition-colors"
+                      className="p-4 border border-[#DEDEDE] cursor-pointer hover:border-[#006B4E] transition-colors"
                       style={{ borderRadius: '8px' }}
                     >
                       <div className="flex items-start justify-between gap-4">

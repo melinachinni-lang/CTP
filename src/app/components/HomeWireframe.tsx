@@ -589,16 +589,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 style={{ 
                   fontFamily: 'var(--font-body)',
                   backgroundColor: 'transparent',
-                  color: '#124854',
-                  borderColor: '#124854'
+                  color: '#006B4E',
+                  borderColor: '#006B4E'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#124854';
+                  e.currentTarget.style.backgroundColor = '#006B4E';
                   e.currentTarget.style.color = '#FFFFFF';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#124854';
+                  e.currentTarget.style.color = '#006B4E';
                 }}
               >
                 Volver al inicio
@@ -610,11 +610,11 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 className="h-12 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm"
                 style={{ 
                   fontFamily: 'var(--font-body)',
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   color: '#FFFFFF'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Reintentar
               </button>
@@ -786,7 +786,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <div className="h-[20px] hidden md:block"></div>
                     <button 
                       onClick={() => onNavigate('parcelas', undefined, selectedValues)}
-                      className="bg-[#124854] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
+                      className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
                     >
                       Buscar
                     </button>
@@ -961,7 +961,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <div className="h-[20px]"></div>
                     <button 
                       onClick={() => onNavigate('parcelas', undefined, selectedValues)}
-                      className="bg-[#124854] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
+                      className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                     >
                       Buscar
                     </button>
@@ -1038,7 +1038,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('naturaleza')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('naturaleza')
-                          ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1050,7 +1050,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('lago-rio')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('lago-rio')
-                          ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1062,7 +1062,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('inversion')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('inversion')
-                          ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1074,7 +1074,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('acceso')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('acceso')
-                          ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1086,7 +1086,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('servicios')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('servicios')
-                          ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1292,9 +1292,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     border: '1px solid #E5E5E5'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#124854';
+                    e.currentTarget.style.backgroundColor = '#006B4E';
                     e.currentTarget.style.color = '#FFFFFF';
-                    e.currentTarget.style.borderColor = '#124854';
+                    e.currentTarget.style.borderColor = '#006B4E';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
@@ -1313,7 +1313,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               {/* Título y subtítulo */}
               <div className="mb-8 md:mb-10 text-center">
-                <h2 className="mb-2 md:mb-3" style={{ color: '#124854' }}>Parcelas destacadas</h2>
+                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Parcelas destacadas</h2>
                 <p className="body-lead text-sm md:text-base" style={{ color: '#0A0A0A' }}>
                   Propiedades seleccionadas con información verificada
                 </p>
@@ -1404,7 +1404,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                           <div className="mb-4">
                             <div className="grid grid-cols-2 gap-x-3 gap-y-2">
                               <div className="flex items-center gap-1.5" style={{ fontSize: 'var(--font-size-xs)', color: '#0A0A0A' }}>
-                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>
+                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>
                                   {parcela.caracteristicas[0].icon}
                                 </div>
                                 <span className="truncate" style={{ fontWeight: 'var(--font-weight-medium)' }}>
@@ -1412,7 +1412,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5" style={{ fontSize: 'var(--font-size-xs)', color: '#0A0A0A' }}>
-                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>
+                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>
                                   {parcela.caracteristicas[1].icon}
                                 </div>
                                 <span className="truncate" style={{ fontWeight: 'var(--font-weight-medium)' }}>
@@ -1420,7 +1420,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5" style={{ fontSize: 'var(--font-size-xs)', color: '#0A0A0A' }}>
-                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>
+                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>
                                   {parcela.caracteristicas[2].icon}
                                 </div>
                                 <span className="truncate" style={{ fontWeight: 'var(--font-weight-medium)' }}>
@@ -1428,7 +1428,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                                 </span>
                               </div>
                               <div className="flex items-center gap-1.5" style={{ fontSize: 'var(--font-size-xs)', color: '#0A0A0A' }}>
-                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#124854] [&_circle]:stroke-[#124854] [&_rect]:fill-[#124854] [&_line]:stroke-[#124854] [&_polyline]:stroke-[#124854]" style={{ color: '#124854' }}>
+                                <div className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&_path]:fill-[#006B4E] [&_circle]:stroke-[#006B4E] [&_rect]:fill-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>
                                   {parcela.caracteristicas[3].icon}
                                 </div>
                                 <span className="truncate" style={{ fontWeight: 'var(--font-weight-medium)' }}>
@@ -1597,7 +1597,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           <section className="py-12 md:py-16 lg:py-20 bg-white relative z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="mb-8 md:mb-10 lg:mb-12">
-                <h2 className="mb-2 md:mb-3" style={{ color: '#124854' }}>Próximos proyectos</h2>
+                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Próximos proyectos</h2>
                 <p className="body-lead text-sm md:text-base" style={{ color: '#0A0A0A' }}>
                   Nuevos desarrollos que estarán disponibles próximamente
                 </p>
@@ -1734,7 +1734,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           <section className="py-12 md:py-16 lg:py-20 bg-white relative z-10">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
               <div className="mb-10 md:mb-12 lg:mb-16 text-center">
-                <h2 className="mb-2 md:mb-3" style={{ color: '#124854' }}>Proceso claro, paso a paso</h2>
+                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Proceso claro, paso a paso</h2>
                 <p className="body-lead max-w-2xl mx-auto text-sm md:text-base" style={{ color: '#0A0A0A' }}>
                   Te acompañamos en cada etapa con información clara y respaldo profesional
                 </p>
@@ -1918,7 +1918,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="mb-8 md:mb-10 lg:mb-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                  <h2 className="mb-2 md:mb-3" style={{ color: '#124854' }}>Recursos y consejos</h2>
+                  <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Recursos y consejos</h2>
                   <p className="body-lead text-sm md:text-base" style={{ color: '#0A0A0A' }}>
                     Información útil para compradores e inversionistas
                   </p>
@@ -2009,7 +2009,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6 md:space-y-8">
               <div className="space-y-3 md:space-y-4">
                 <h2 style={{ 
-                  color: '#124854',
+                  color: '#006B4E',
                   fontFamily: 'var(--font-heading)',
                   fontSize: '24px',
                   fontWeight: 'var(--font-weight-medium)',
@@ -2027,7 +2027,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
                 <button
                   onClick={() => onNavigate('parcelas')}
-                  className="w-full sm:w-auto h-11 md:h-12 bg-[#124854] hover:bg-[#0d3640] text-white px-6 md:px-8 text-sm md:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                  className="w-full sm:w-auto h-11 md:h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 md:px-8 text-sm md:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                 >
                   Explorar parcelas
                 </button>
@@ -2078,9 +2078,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     fontFamily: 'var(--font-body)',
                     lineHeight: 'var(--line-height-ui)'
                   }}>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Parcelas</div>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Inmobiliarias</div>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Blog</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Parcelas</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Inmobiliarias</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Blog</div>
                   </div>
                 </div>
 
@@ -2097,10 +2097,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     fontFamily: 'var(--font-body)',
                     lineHeight: 'var(--line-height-ui)'
                   }}>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Cómo funciona</div>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Publicar propiedad</div>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Planes para inmobiliarias</div>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Para brokers</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Cómo funciona</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Publicar propiedad</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Planes para inmobiliarias</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Para brokers</div>
                   </div>
                 </div>
 
@@ -2117,21 +2117,21 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     fontFamily: 'var(--font-body)',
                     lineHeight: 'var(--line-height-ui)'
                   }}>
-                    <div className="cursor-pointer hover:text-[#124854] transition-colors">Centro de ayuda</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Centro de ayuda</div>
                     <div
-                      className="cursor-pointer hover:text-[#124854] transition-colors"
+                      className="cursor-pointer hover:text-[#006B4E] transition-colors"
                       onClick={() => onNavigate('terminos-condiciones')}
                     >
                       Términos y condiciones
                     </div>
                     <div
-                      className="cursor-pointer hover:text-[#124854] transition-colors"
+                      className="cursor-pointer hover:text-[#006B4E] transition-colors"
                       onClick={() => onNavigate('politica-privacidad')}
                     >
                       Política de privacidad
                     </div>
                     <div
-                      className="cursor-pointer hover:text-[#124854] transition-colors"
+                      className="cursor-pointer hover:text-[#006B4E] transition-colors"
                       onClick={() => setIsContactModalOpen(true)}
                     >
                       Contacto
@@ -2169,7 +2169,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             {/* Contenido del modal */}
             <div className="p-8 pt-10">
               {/* Título */}
-              <h2 className="mb-4 pr-8" style={{ color: '#124854', fontSize: 'var(--font-size-h3)' }}>
+              <h2 className="mb-4 pr-8" style={{ color: '#006B4E', fontSize: 'var(--font-size-h3)' }}>
                 Para publicar tu propiedad, necesitas una cuenta
               </h2>
 
@@ -2189,7 +2189,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onNavigate('entry');
                     }
                   }}
-                  className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
                   Crear cuenta
                 </button>
@@ -2233,7 +2233,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="space-y-8">
               {/* Título */}
               <div>
-                <h2 className="pr-8 mb-2" style={{ color: '#124854' }}>
+                <h2 className="pr-8 mb-2" style={{ color: '#006B4E' }}>
                   Calculadora de presupuesto
                 </h2>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -2373,7 +2373,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   setIsBudgetModalOpen(false);
                   // Los valores ya están guardados en los estados
                 }}
-                className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white px-4 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-4 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
               >
                 Aplicar configuración
               </button>
@@ -2621,7 +2621,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onNavigate('parcelas', undefined, selectedValues);
                     setIsMobileFiltersOpen(false);
                   }}
-                  className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',
@@ -2738,7 +2738,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('naturaleza')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('naturaleza')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2754,7 +2754,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('lago-rio')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2770,7 +2770,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('inversion')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('inversion')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2786,7 +2786,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('acceso')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('acceso')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2802,7 +2802,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('servicios')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('servicios')
-                        ? 'bg-[#124854] text-white border border-[#124854] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2824,7 +2824,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     handleSmartSearch();
                     setIsSmartSearchBottomSheetOpen(false);
                   }}
-                  className="w-full h-12 bg-[#124854] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',
@@ -2948,7 +2948,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
         }
 
         .slick-dots li.slick-active button {
-          background: #124854;
+          background: #006B4E;
           width: 24px;
           border-radius: 4px;
         }
@@ -2981,7 +2981,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="p-8">
               {/* Título */}
               <h2 className="mb-6 pr-8" style={{
-                color: '#124854',
+                color: '#006B4E',
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-h3)',
                 fontWeight: 'var(--font-weight-semibold)'
@@ -2994,7 +2994,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 {/* Email */}
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#F0F9FF] flex items-center justify-center">
-                    <Mail className="w-5 h-5" style={{ color: '#124854' }} />
+                    <Mail className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   <div className="flex-1 pt-1">
                     <p className="text-sm mb-1" style={{
@@ -3021,7 +3021,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 {/* Teléfono / WhatsApp */}
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#F0F9FF] flex items-center justify-center">
-                    <Phone className="w-5 h-5" style={{ color: '#124854' }} />
+                    <Phone className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   <div className="flex-1 pt-1">
                     <p className="text-sm mb-1" style={{
@@ -3050,7 +3050,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 {/* Horario de atención */}
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#F0F9FF] flex items-center justify-center">
-                    <Clock className="w-5 h-5" style={{ color: '#124854' }} />
+                    <Clock className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   <div className="flex-1 pt-1">
                     <p className="text-sm mb-1" style={{

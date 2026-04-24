@@ -184,8 +184,8 @@ export function AdminPublicacionesSection({
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-sm)',
               fontWeight: 'var(--font-weight-medium)',
-              color: activeTab === tab.id ? '#124854' : '#737373',
-              borderBottom: activeTab === tab.id ? '2px solid #124854' : '2px solid transparent',
+              color: activeTab === tab.id ? '#006B4E' : '#737373',
+              borderBottom: activeTab === tab.id ? '2px solid #006B4E' : '2px solid transparent',
               backgroundColor: 'transparent'
             }}
           >
@@ -227,7 +227,7 @@ export function AdminPublicacionesSection({
               onClick={onNewPublicacion}
               className="flex items-center gap-2 px-5 py-3 transition-all"
               style={{
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 color: '#FFFFFF',
                 borderRadius: '200px',
                 fontFamily: 'var(--font-body)',
@@ -241,7 +241,7 @@ export function AdminPublicacionesSection({
                 e.currentTarget.style.backgroundColor = '#0D3640';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#124854';
+                e.currentTarget.style.backgroundColor = '#006B4E';
               }}
             >
               <Plus className="w-5 h-5" />
@@ -326,7 +326,7 @@ export function AdminPublicacionesSection({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
-                          <Eye className="w-4 h-4" style={{ color: '#124854' }} />
+                          <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
                           <span
                             style={{
                               fontFamily: 'var(--font-body)',
@@ -340,7 +340,7 @@ export function AdminPublicacionesSection({
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Eye className="w-4 h-4" style={{ color: '#124854' }} />
+                          <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
                           <span
                             style={{
                               fontFamily: 'var(--font-body)',
@@ -441,7 +441,7 @@ export function AdminPublicacionesSection({
               onClick={onNewPublicacion}
               className="flex items-center gap-2 px-5 py-3 transition-all"
               style={{
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 color: '#FFFFFF',
                 borderRadius: '200px',
                 fontFamily: 'var(--font-body)',
@@ -455,7 +455,7 @@ export function AdminPublicacionesSection({
                 e.currentTarget.style.backgroundColor = '#0D3640';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#124854';
+                e.currentTarget.style.backgroundColor = '#006B4E';
               }}
             >
               <Plus className="w-5 h-5" />
@@ -482,7 +482,7 @@ export function AdminPublicacionesSection({
                         className="w-12 h-12 rounded-xl flex items-center justify-center"
                         style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
                       >
-                        <Building2 className="w-6 h-6" style={{ color: '#124854' }} />
+                        <Building2 className="w-6 h-6" style={{ color: '#006B4E' }} />
                       </div>
                       <div className="flex-1">
                         <h3
@@ -604,7 +604,7 @@ export function AdminPublicacionesSection({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
-                          <Eye className="w-4 h-4" style={{ color: '#124854' }} />
+                          <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
                           <span
                             style={{
                               fontFamily: 'var(--font-body)',
@@ -618,7 +618,7 @@ export function AdminPublicacionesSection({
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Eye className="w-4 h-4" style={{ color: '#124854' }} />
+                          <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
                           <span
                             style={{
                               fontFamily: 'var(--font-body)',

@@ -130,7 +130,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
 
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-2 lg:gap-3">
-              <button className="h-8 bg-[#124854] hover:bg-[#0d3640] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
+              <button className="h-8 bg-[#006B4E] hover:bg-[#0d3640] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
                 <span className="hidden sm:inline">Publicar propiedad</span>
                 <span className="sm:hidden">Publicar</span>
               </button>
@@ -272,7 +272,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
 
                   {/* Botón Buscar - Responsive */}
                   <button 
-                    className="w-full md:w-auto bg-[#124854] hover:bg-[#0d3640] text-white px-6 md:px-8 py-2.5 md:py-3 rounded-[200px] flex items-center justify-center whitespace-nowrap transition-colors text-sm md:text-base"
+                    className="w-full md:w-auto bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 md:px-8 py-2.5 md:py-3 rounded-[200px] flex items-center justify-center whitespace-nowrap transition-colors text-sm md:text-base"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 500,
@@ -313,7 +313,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                   <div className="p-4 md:p-5 space-y-3 md:space-y-4 bg-white flex-grow flex flex-col">
                     {/* Nombre */}
                     <div className="space-y-1">
-                      <h3 style={{ color: '#124854', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)' }}>
+                      <h3 style={{ color: '#006B4E', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)' }}>
                         {inmobiliaria.nombre}
                       </h3>
                     </div>
@@ -353,7 +353,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                             e.stopPropagation();
                             handleContactar(inmobiliaria.nombre);
                           }}
-                          className="w-full bg-[#124854] hover:bg-[#0d3640] text-white px-4 py-2.5 rounded-[200px] transition-colors text-sm"
+                          className="w-full bg-[#006B4E] hover:bg-[#0d3640] text-white px-4 py-2.5 rounded-[200px] transition-colors text-sm"
                           style={{
                             fontFamily: 'Inter, sans-serif',
                             fontWeight: 500,
@@ -496,7 +496,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
               {/* Botones de acción */}
               <div className="space-y-3">
                 <button 
-                  className="w-full bg-[#124854] hover:bg-[#0d3640] text-white py-3 px-4 rounded-[200px] transition-colors"
+                  className="w-full bg-[#006B4E] hover:bg-[#0d3640] text-white py-3 px-4 rounded-[200px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',

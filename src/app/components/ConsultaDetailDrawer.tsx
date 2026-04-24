@@ -31,7 +31,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
   const getTipoIcon = () => {
     switch (consulta.tipo) {
       case 'visita':
-        return <MapPin size={20} style={{ color: '#124854' }} />;
+        return <MapPin size={20} style={{ color: '#006B4E' }} />;
       case 'videollamada':
         return <Video size={20} style={{ color: '#7D460D' }} />;
       case 'whatsapp':
@@ -165,7 +165,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           <div className="mb-6 p-4 bg-[#F9FAFB] border border-[#DEDEDE]" style={{ borderRadius: '8px' }}>
             <div className="flex items-start gap-3">
               <div
-                className="w-10 h-10 flex items-center justify-center bg-[#124854] text-white flex-shrink-0"
+                className="w-10 h-10 flex items-center justify-center bg-[#006B4E] text-white flex-shrink-0"
                 style={{ borderRadius: '6px' }}
               >
                 <MapPin size={20} />
@@ -185,7 +185,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           {consulta.fecha && consulta.hora && (
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
-                <Calendar size={18} style={{ color: '#124854' }} />
+                <Calendar size={18} style={{ color: '#006B4E' }} />
                 <h4 style={{ color: '#0A0A0A', fontSize: '14px', fontWeight: 600 }}>
                   Fecha y hora
                 </h4>
@@ -205,7 +205,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           {consulta.fechaContacto && (
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
-                <Clock size={18} style={{ color: '#124854' }} />
+                <Clock size={18} style={{ color: '#006B4E' }} />
                 <h4 style={{ color: '#0A0A0A', fontSize: '14px', fontWeight: 600 }}>
                   Fecha de contacto
                 </h4>
@@ -221,7 +221,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           {/* Usuario */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <User size={18} style={{ color: '#124854' }} />
+              <User size={18} style={{ color: '#006B4E' }} />
               <h4 style={{ color: '#0A0A0A', fontSize: '14px', fontWeight: 600 }}>
                 Información del usuario
               </h4>
@@ -237,7 +237,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
                 <Mail size={16} style={{ color: '#6B7280' }} />
                 <a
                   href={`mailto:${consulta.usuario.email}`}
-                  style={{ color: '#124854', fontSize: '14px' }}
+                  style={{ color: '#006B4E', fontSize: '14px' }}
                   className="hover:underline"
                 >
                   {consulta.usuario.email}
@@ -248,7 +248,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
                   <Phone size={16} style={{ color: '#6B7280' }} />
                   <a
                     href={`tel:${consulta.usuario.telefono}`}
-                    style={{ color: '#124854', fontSize: '14px' }}
+                    style={{ color: '#006B4E', fontSize: '14px' }}
                     className="hover:underline"
                   >
                     {consulta.usuario.telefono}
@@ -262,7 +262,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           {consulta.notas && (
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
-                <FileText size={18} style={{ color: '#124854' }} />
+                <FileText size={18} style={{ color: '#006B4E' }} />
                 <h4 style={{ color: '#0A0A0A', fontSize: '14px', fontWeight: 600 }}>
                   Notas
                 </h4>
@@ -279,14 +279,14 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           {viewType === 'inmobiliaria' && consulta.broker && (
             <div className="mb-6 p-4 bg-[#F9FAFB] border border-[#DEDEDE]" style={{ borderRadius: '8px' }}>
               <div className="flex items-center gap-2 mb-3">
-                <User size={18} style={{ color: '#124854' }} />
+                <User size={18} style={{ color: '#006B4E' }} />
                 <h4 style={{ color: '#0A0A0A', fontSize: '14px', fontWeight: 600 }}>
                   Broker asignado
                 </h4>
               </div>
               <div className="flex items-center gap-3 mb-3">
                 <div
-                  className="w-10 h-10 flex items-center justify-center bg-[#124854] text-white flex-shrink-0"
+                  className="w-10 h-10 flex items-center justify-center bg-[#006B4E] text-white flex-shrink-0"
                   style={{ borderRadius: '50%', fontSize: '14px', fontWeight: 600 }}
                 >
                   {consulta.broker.nombre.charAt(0)}
@@ -302,7 +302,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
                   <Mail size={14} style={{ color: '#6B7280' }} />
                   <a
                     href={`mailto:${consulta.broker.email}`}
-                    style={{ color: '#124854', fontSize: '13px' }}
+                    style={{ color: '#006B4E', fontSize: '13px' }}
                     className="hover:underline"
                   >
                     {consulta.broker.email}
@@ -313,7 +313,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
                     <Phone size={14} style={{ color: '#6B7280' }} />
                     <a
                       href={`tel:${consulta.broker.telefono}`}
-                      style={{ color: '#124854', fontSize: '13px' }}
+                      style={{ color: '#006B4E', fontSize: '13px' }}
                       className="hover:underline"
                     >
                       {consulta.broker.telefono}
@@ -328,7 +328,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
           {viewType === 'broker' && consulta.inmobiliaria && (
             <div className="mb-6 p-4 bg-[#F9FAFB] border border-[#DEDEDE]" style={{ borderRadius: '8px' }}>
               <div className="flex items-center gap-2 mb-3">
-                <svg className="w-5 h-5" fill="none" stroke="#124854" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg className="w-5 h-5" fill="none" stroke="#006B4E" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 <h4 style={{ color: '#0A0A0A', fontSize: '14px', fontWeight: 600 }}>
@@ -372,7 +372,7 @@ export const ConsultaDetailDrawer: React.FC<ConsultaDetailDrawerProps> = ({
 
               <button
                 onClick={() => onReprogramar(consulta.id)}
-                className="w-full px-4 py-3 bg-white text-[#124854] border border-[#124854] hover:bg-[#124854] hover:text-white transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-3 bg-white text-[#006B4E] border border-[#006B4E] hover:bg-[#006B4E] hover:text-white transition-colors flex items-center justify-center gap-2"
                 style={{ fontSize: '14px', fontWeight: 600, borderRadius: '8px' }}
               >
                 <Calendar size={18} />

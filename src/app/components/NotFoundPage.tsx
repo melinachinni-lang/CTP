@@ -42,7 +42,7 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
 
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-3">
-              <button className="h-8 bg-[#124854] hover:bg-[#0d3640] text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
+              <button className="h-8 bg-[#006B4E] hover:bg-[#0d3640] text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
                 Publicar propiedad
               </button>
               <button 
@@ -92,8 +92,8 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
                 <line x1="106" y1="52" x2="94" y2="64" stroke="#1E2116" strokeWidth="3" strokeLinecap="round" />
                 
                 {/* Signo de interrogación decorativo */}
-                <circle cx="135" cy="50" r="12" fill="none" stroke="#124854" strokeWidth="2.5" />
-                <text x="135" y="57" fontSize="18" fontWeight="bold" fill="#124854" textAnchor="middle">?</text>
+                <circle cx="135" cy="50" r="12" fill="none" stroke="#006B4E" strokeWidth="2.5" />
+                <text x="135" y="57" fontSize="18" fontWeight="bold" fill="#006B4E" textAnchor="middle">?</text>
               </svg>
             </div>
           </div>
@@ -102,7 +102,7 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
           <div 
             className="mb-4"
             style={{ 
-              color: '#124854',
+              color: '#006B4E',
               fontFamily: 'var(--font-heading)',
               fontSize: '72px',
               fontWeight: 'var(--font-weight-semibold)',
@@ -156,11 +156,11 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
                 fontSize: 'var(--font-size-body-base)',
                 fontWeight: 'var(--font-weight-medium)',
                 letterSpacing: 'var(--letter-spacing-normal)',
-                backgroundColor: '#124854',
+                backgroundColor: '#006B4E',
                 color: '#FFFFFF'
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Explorar parcelas
             </button>
@@ -175,16 +175,16 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
                 fontWeight: 'var(--font-weight-medium)',
                 letterSpacing: 'var(--letter-spacing-normal)',
                 backgroundColor: 'transparent',
-                color: '#124854',
-                border: '2px solid #124854'
+                color: '#006B4E',
+                border: '2px solid #006B4E'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#124854';
+                e.currentTarget.style.backgroundColor = '#006B4E';
                 e.currentTarget.style.color = '#FFFFFF';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#124854';
+                e.currentTarget.style.color = '#006B4E';
               }}
             >
               Volver al inicio

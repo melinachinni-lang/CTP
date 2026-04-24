@@ -176,7 +176,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                     borderRadius: '50%'
                   }}
                 >
-                  <MessageCircle className="w-6 h-6" style={{ color: '#124854' }} />
+                  <MessageCircle className="w-6 h-6" style={{ color: '#006B4E' }} />
                 </div>
                 <div>
                   <h3
@@ -244,7 +244,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                     borderRadius: '50%'
                   }}
                 >
-                  <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+                  <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
                 </div>
                 <div
                   className="px-5 py-4 rounded-[24px]"
@@ -367,7 +367,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                       borderRadius: '50%'
                     }}
                   >
-                    <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+                    <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   <div
                     className="px-5 py-3 rounded-[24px] flex items-center gap-1"
@@ -426,7 +426,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                         borderRadius: '50%'
                       }}
                     >
-                      <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+                      <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
                     </div>
                     <div
                       className="px-5 py-4 rounded-[24px]"
@@ -523,7 +523,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                             borderRadius: '50%'
                           }}
                         >
-                          <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+                          <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                         <div
                           className="px-5 py-4 rounded-[24px]"
@@ -624,7 +624,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                       borderRadius: '50%'
                     }}
                   >
-                    <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+                    <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   <div
                     className="px-5 py-4 rounded-[24px]"
@@ -689,7 +689,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                       borderRadius: '50%'
                     }}
                   >
-                    <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+                    <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
                   </div>
                   <div
                     className="px-5 py-4 rounded-[24px]"

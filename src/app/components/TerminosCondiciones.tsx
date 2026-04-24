@@ -477,9 +477,9 @@ export function TerminosCondiciones({ onNavigateHome }: TerminosCondicionesProps
                 fontFamily: 'var(--font-body)',
                 lineHeight: 'var(--line-height-ui)'
               }}>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Parcelas</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Inmobiliarias</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Blog</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Parcelas</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Inmobiliarias</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Blog</div>
               </div>
             </div>
 
@@ -496,10 +496,10 @@ export function TerminosCondiciones({ onNavigateHome }: TerminosCondicionesProps
                 fontFamily: 'var(--font-body)',
                 lineHeight: 'var(--line-height-ui)'
               }}>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Cómo funciona</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Publicar propiedad</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Planes para inmobiliarias</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Para brokers</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Cómo funciona</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Publicar propiedad</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Planes para inmobiliarias</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Para brokers</div>
               </div>
             </div>
 
@@ -516,10 +516,10 @@ export function TerminosCondiciones({ onNavigateHome }: TerminosCondicionesProps
                 fontFamily: 'var(--font-body)',
                 lineHeight: 'var(--line-height-ui)'
               }}>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Centro de ayuda</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Términos y condiciones</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Política de privacidad</div>
-                <div className="cursor-pointer hover:text-[#124854] transition-colors">Contacto</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Centro de ayuda</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Términos y condiciones</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Política de privacidad</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Contacto</div>
               </div>
             </div>
           </div>

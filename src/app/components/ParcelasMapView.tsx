@@ -168,7 +168,7 @@ export function ParcelasMapView({
                     {/* Pin principal */}
                     <path 
                       d="M17.5 0C9.492 0 3 6.492 3 14.5C3 24.5 17.5 45 17.5 45C17.5 45 32 24.5 32 14.5C32 6.492 25.508 0 17.5 0Z" 
-                      fill={isSelected ? '#647E3F' : '#124854'}
+                      fill={isSelected ? '#647E3F' : '#006B4E'}
                       className="transition-colors duration-300"
                     />
                     {/* Círculo blanco interno */}
@@ -183,7 +183,7 @@ export function ParcelasMapView({
                       cx="17.5" 
                       cy="14.5" 
                       r="3.5" 
-                      fill={isSelected ? '#647E3F' : '#124854'}
+                      fill={isSelected ? '#647E3F' : '#006B4E'}
                       className="transition-colors duration-300"
                     />
                     {/* Sombra del pin */}
@@ -425,7 +425,7 @@ export function ParcelasMapView({
                   <div className="flex items-start gap-2">
                     <MapPin 
                       className="w-4 h-4 mt-0.5 flex-shrink-0" 
-                      style={{ color: '#124854' }} 
+                      style={{ color: '#006B4E' }} 
                     />
                     <p 
                       style={{ 
@@ -460,8 +460,8 @@ export function ParcelasMapView({
                       {selectedParcela.caracteristicas.slice(0, 4).map((caracteristica, idx) => (
                         <div key={idx} className="flex items-center gap-2.5">
                           <div 
-                            className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] flex-shrink-0"
-                            style={{ color: '#124854' }}
+                            className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] flex-shrink-0"
+                            style={{ color: '#006B4E' }}
                           >
                             {caracteristica.icon}
                           </div>
@@ -511,7 +511,7 @@ export function ParcelasMapView({
                     className="w-full h-11 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-all shadow-sm"
                     style={{ 
                       fontFamily: 'var(--font-body)',
-                      backgroundColor: '#124854',
+                      backgroundColor: '#006B4E',
                       color: '#FFFFFF'
                     }}
                     onMouseEnter={(e) => {
@@ -520,7 +520,7 @@ export function ParcelasMapView({
                       e.currentTarget.style.boxShadow = '0 4px 12px rgba(18, 72, 84, 0.3)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#124854';
+                      e.currentTarget.style.backgroundColor = '#006B4E';
                       e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = '';
                     }}
@@ -612,7 +612,7 @@ export function ParcelasMapView({
                   <div className="flex items-start gap-2">
                     <MapPin 
                       className="w-4 h-4 mt-0.5 flex-shrink-0" 
-                      style={{ color: '#124854' }} 
+                      style={{ color: '#006B4E' }} 
                     />
                     <p 
                       style={{ 
@@ -647,8 +647,8 @@ export function ParcelasMapView({
                       {selectedParcela.caracteristicas.slice(0, 4).map((caracteristica, idx) => (
                         <div key={idx} className="flex items-center gap-2">
                           <div 
-                            className="[&_svg]:stroke-[#124854] [&_path]:fill-none [&_path]:stroke-[#124854] flex-shrink-0"
-                            style={{ color: '#124854' }}
+                            className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] flex-shrink-0"
+                            style={{ color: '#006B4E' }}
                           >
                             {caracteristica.icon}
                           </div>
@@ -696,11 +696,11 @@ export function ParcelasMapView({
                     className="w-full h-11 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm"
                     style={{ 
                       fontFamily: 'var(--font-body)',
-                      backgroundColor: '#124854',
+                      backgroundColor: '#006B4E',
                       color: '#FFFFFF'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#647E3F'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Ver detalle completo
                   </button>

@@ -427,8 +427,8 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                   letterSpacing: 'var(--letter-spacing-wide)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#124854';
-                  e.currentTarget.style.color = '#124854';
+                  e.currentTarget.style.borderColor = '#006B4E';
+                  e.currentTarget.style.color = '#006B4E';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = '#DEDEDE';
@@ -453,15 +453,15 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
                       style={{
                         backgroundColor: currentStep > step.number 
-                          ? '#124854' 
+                          ? '#006B4E' 
                           : currentStep === step.number 
                           ? '#FFFFFF' 
                           : '#FAFAFA',
-                        border: currentStep >= step.number ? '2px solid #124854' : '2px solid #DEDEDE',
+                        border: currentStep >= step.number ? '2px solid #006B4E' : '2px solid #DEDEDE',
                         color: currentStep > step.number 
                           ? '#FFFFFF' 
                           : currentStep === step.number 
-                          ? '#124854' 
+                          ? '#006B4E' 
                           : '#C3C3C3',
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
@@ -490,7 +490,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                     <div
                       className="flex-1 h-0.5 mx-2 mb-6 transition-colors"
                       style={{
-                        backgroundColor: currentStep > step.number ? '#124854' : '#DEDEDE',
+                        backgroundColor: currentStep > step.number ? '#006B4E' : '#DEDEDE',
                         maxWidth: '40px',
                       }}
                     />
@@ -645,7 +645,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       outline: 'none',
                     }}
                     onFocus={(e) => {
-                      if (!errors.title) e.currentTarget.style.borderColor = '#124854';
+                      if (!errors.title) e.currentTarget.style.borderColor = '#006B4E';
                     }}
                     onBlur={(e) => {
                       if (!errors.title) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -691,7 +691,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       resize: 'vertical',
                     }}
                     onFocus={(e) => {
-                      if (!errors.description) e.currentTarget.style.borderColor = '#124854';
+                      if (!errors.description) e.currentTarget.style.borderColor = '#006B4E';
                     }}
                     onBlur={(e) => {
                       if (!errors.description) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -744,7 +744,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       }}
                       onMouseEnter={(e) => {
                         if (!fileErrors.mainImage) {
-                          e.currentTarget.style.borderColor = '#124854';
+                          e.currentTarget.style.borderColor = '#006B4E';
                           e.currentTarget.style.backgroundColor = '#F9FAFB';
                         }
                       }}
@@ -766,7 +766,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           className="w-10 h-10 rounded-full flex items-center justify-center"
                           style={{ backgroundColor: '#F0F0F0' }}
                         >
-                          <ImageIcon size={20} style={{ color: '#124854' }} />
+                          <ImageIcon size={20} style={{ color: '#006B4E' }} />
                         </div>
                         <div className="text-center">
                           <p style={{
@@ -890,7 +890,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                     }}
                     onMouseEnter={(e) => {
                       if (!fileErrors.galleryImages) {
-                        e.currentTarget.style.borderColor = '#124854';
+                        e.currentTarget.style.borderColor = '#006B4E';
                         e.currentTarget.style.backgroundColor = '#F9FAFB';
                       }
                     }}
@@ -909,7 +909,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       className="hidden"
                     />
                     <div className="flex items-center justify-center gap-2">
-                      <Upload size={16} style={{ color: '#124854' }} />
+                      <Upload size={16} style={{ color: '#006B4E' }} />
                       <span style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
@@ -1010,7 +1010,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         outline: 'none',
                       }}
                       onFocus={(e) => {
-                        if (!errors.price) e.currentTarget.style.borderColor = '#124854';
+                        if (!errors.price) e.currentTarget.style.borderColor = '#006B4E';
                       }}
                       onBlur={(e) => {
                         if (!errors.price) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -1044,7 +1044,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         color: '#0A0A0A',
                         outline: 'none',
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                      onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     >
                       <option value="CLP">CLP (Peso chileno)</option>
@@ -1079,7 +1079,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         color: '#0A0A0A',
                         outline: 'none',
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                      onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     >
                       <option value="">Seleccionar</option>
@@ -1125,7 +1125,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         outline: 'none',
                       }}
                       onFocus={(e) => {
-                        if (!errors.region) e.currentTarget.style.borderColor = '#124854';
+                        if (!errors.region) e.currentTarget.style.borderColor = '#006B4E';
                       }}
                       onBlur={(e) => {
                         if (!errors.region) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -1175,7 +1175,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         cursor: formData.region ? 'pointer' : 'not-allowed',
                       }}
                       onFocus={(e) => {
-                        if (formData.region && !errors.comuna) e.currentTarget.style.borderColor = '#124854';
+                        if (formData.region && !errors.comuna) e.currentTarget.style.borderColor = '#006B4E';
                       }}
                       onBlur={(e) => {
                         if (!errors.comuna) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -1216,7 +1216,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         color: '#0A0A0A',
                         outline: 'none',
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                      onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     />
                   </div>
@@ -1266,7 +1266,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       }}
                       onMouseEnter={(e) => {
                         if (!fileErrors.brochure) {
-                          e.currentTarget.style.borderColor = '#124854';
+                          e.currentTarget.style.borderColor = '#006B4E';
                           e.currentTarget.style.backgroundColor = '#F9FAFB';
                         }
                       }}
@@ -1288,7 +1288,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           className="w-10 h-10 rounded-full flex items-center justify-center"
                           style={{ backgroundColor: '#F0F0F0' }}
                         >
-                          <FileText size={20} style={{ color: '#124854' }} />
+                          <FileText size={20} style={{ color: '#006B4E' }} />
                         </div>
                         <div className="text-center">
                           <p style={{
@@ -1315,7 +1315,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       className="flex items-center justify-between p-4 rounded-lg"
                       style={{
                         backgroundColor: '#F0F9FF',
-                        border: '1px solid #124854'
+                        border: '1px solid #006B4E'
                       }}
                     >
                       <div className="flex items-center gap-3">
@@ -1326,7 +1326,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             border: '1px solid var(--border)'
                           }}
                         >
-                          <FileText size={20} style={{ color: '#124854' }} />
+                          <FileText size={20} style={{ color: '#006B4E' }} />
                         </div>
                         <div>
                           <p style={{
@@ -1443,7 +1443,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       style={{
                         width: '16px',
                         height: '16px',
-                        accentColor: '#124854',
+                        accentColor: '#006B4E',
                         cursor: 'pointer',
                         flexShrink: 0,
                       }}
@@ -1471,13 +1471,13 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           className="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all"
                           style={{
                             backgroundColor: formData[item.key as keyof typeof formData] ? '#F0F9FF' : '#FAFAFA',
-                            border: formData[item.key as keyof typeof formData] ? '2px solid #124854' : '1px solid var(--border)',
+                            border: formData[item.key as keyof typeof formData] ? '2px solid #006B4E' : '1px solid var(--border)',
                           }}
                         >
                           <Icon 
                             size={20} 
                             style={{ 
-                              color: formData[item.key as keyof typeof formData] ? '#124854' : '#737373',
+                              color: formData[item.key as keyof typeof formData] ? '#006B4E' : '#737373',
                               flexShrink: 0 
                             }} 
                           />
@@ -1497,7 +1497,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             style={{
                               width: '18px',
                               height: '18px',
-                              accentColor: '#124854',
+                              accentColor: '#006B4E',
                               cursor: 'pointer',
                               flexShrink: 0,
                             }}
@@ -1532,7 +1532,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       style={{
                         width: '16px',
                         height: '16px',
-                        accentColor: '#124854',
+                        accentColor: '#006B4E',
                         cursor: 'pointer',
                         flexShrink: 0,
                       }}
@@ -1560,13 +1560,13 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           className="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all"
                           style={{
                             backgroundColor: formData[item.key as keyof typeof formData] ? '#F0F9FF' : '#FAFAFA',
-                            border: formData[item.key as keyof typeof formData] ? '2px solid #124854' : '1px solid var(--border)',
+                            border: formData[item.key as keyof typeof formData] ? '2px solid #006B4E' : '1px solid var(--border)',
                           }}
                         >
                           <Icon 
                             size={20} 
                             style={{ 
-                              color: formData[item.key as keyof typeof formData] ? '#124854' : '#737373',
+                              color: formData[item.key as keyof typeof formData] ? '#006B4E' : '#737373',
                               flexShrink: 0 
                             }} 
                           />
@@ -1586,7 +1586,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             style={{
                               width: '18px',
                               height: '18px',
-                              accentColor: '#124854',
+                              accentColor: '#006B4E',
                               cursor: 'pointer',
                               flexShrink: 0,
                             }}
@@ -1621,7 +1621,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       style={{
                         width: '16px',
                         height: '16px',
-                        accentColor: '#124854',
+                        accentColor: '#006B4E',
                         cursor: 'pointer',
                         flexShrink: 0,
                       }}
@@ -1659,13 +1659,13 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           className="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all"
                           style={{
                             backgroundColor: formData[item.key as keyof typeof formData] ? '#F0F9FF' : '#FAFAFA',
-                            border: formData[item.key as keyof typeof formData] ? '2px solid #124854' : '1px solid var(--border)',
+                            border: formData[item.key as keyof typeof formData] ? '2px solid #006B4E' : '1px solid var(--border)',
                           }}
                         >
                           <Icon 
                             size={20} 
                             style={{ 
-                              color: formData[item.key as keyof typeof formData] ? '#124854' : '#737373',
+                              color: formData[item.key as keyof typeof formData] ? '#006B4E' : '#737373',
                               flexShrink: 0 
                             }} 
                           />
@@ -1685,7 +1685,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             style={{
                               width: '18px',
                               height: '18px',
-                              accentColor: '#124854',
+                              accentColor: '#006B4E',
                               cursor: 'pointer',
                               flexShrink: 0,
                             }}
@@ -1720,7 +1720,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       style={{
                         width: '16px',
                         height: '16px',
-                        accentColor: '#124854',
+                        accentColor: '#006B4E',
                         cursor: 'pointer',
                         flexShrink: 0,
                       }}
@@ -1747,13 +1747,13 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           className="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all"
                           style={{
                             backgroundColor: formData[item.key as keyof typeof formData] ? '#F0F9FF' : '#FAFAFA',
-                            border: formData[item.key as keyof typeof formData] ? '2px solid #124854' : '1px solid var(--border)',
+                            border: formData[item.key as keyof typeof formData] ? '2px solid #006B4E' : '1px solid var(--border)',
                           }}
                         >
                           <Icon 
                             size={20} 
                             style={{ 
-                              color: formData[item.key as keyof typeof formData] ? '#124854' : '#737373',
+                              color: formData[item.key as keyof typeof formData] ? '#006B4E' : '#737373',
                               flexShrink: 0 
                             }} 
                           />
@@ -1773,7 +1773,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             style={{
                               width: '18px',
                               height: '18px',
-                              accentColor: '#124854',
+                              accentColor: '#006B4E',
                               cursor: 'pointer',
                               flexShrink: 0,
                             }}
@@ -1840,7 +1840,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         color: '#0A0A0A',
                         outline: 'none',
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                      onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     >
                       <option value="">Selecciona una región</option>
@@ -1879,7 +1879,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         cursor: formData.region ? 'pointer' : 'not-allowed',
                       }}
                       onFocus={(e) => {
-                        if (formData.region) e.currentTarget.style.borderColor = '#124854';
+                        if (formData.region) e.currentTarget.style.borderColor = '#006B4E';
                       }}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     >
@@ -1949,7 +1949,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             border: '1px solid var(--border)'
                           }}
                         >
-                          <Move size={20} style={{ color: '#124854' }} />
+                          <Move size={20} style={{ color: '#006B4E' }} />
                         </div>
                         <input
                           type="url"
@@ -1967,7 +1967,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             color: '#0A0A0A',
                             outline: 'none',
                           }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                           onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                         />
                       </div>
@@ -1997,7 +1997,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           }}
                           onMouseEnter={(e) => {
                             if (!fileErrors.masterPlan) {
-                              e.currentTarget.style.borderColor = '#124854';
+                              e.currentTarget.style.borderColor = '#006B4E';
                               e.currentTarget.style.backgroundColor = '#F9FAFB';
                             }
                           }}
@@ -2019,7 +2019,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                               className="w-12 h-12 rounded-full flex items-center justify-center"
                               style={{ backgroundColor: '#FFFFFF' }}
                             >
-                              <Upload size={24} style={{ color: '#124854' }} />
+                              <Upload size={24} style={{ color: '#006B4E' }} />
                             </div>
                             <div className="text-center">
                               <p style={{
@@ -2136,7 +2136,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           outline: 'none',
                         }}
                         onFocus={(e) => {
-                          if (!errors.coordinates) e.currentTarget.style.borderColor = '#124854';
+                          if (!errors.coordinates) e.currentTarget.style.borderColor = '#006B4E';
                         }}
                         onBlur={(e) => {
                           if (!errors.coordinates) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -2181,7 +2181,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           outline: 'none',
                         }}
                         onFocus={(e) => {
-                          if (!errors.coordinates) e.currentTarget.style.borderColor = '#124854';
+                          if (!errors.coordinates) e.currentTarget.style.borderColor = '#006B4E';
                         }}
                         onBlur={(e) => {
                           if (!errors.coordinates) e.currentTarget.style.borderColor = '#DEDEDE';
@@ -2200,7 +2200,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       backgroundColor: '#FAFAFA'
                     }}
                   >
-                    <MapPin size={48} style={{ color: '#124854', marginBottom: '16px' }} />
+                    <MapPin size={48} style={{ color: '#006B4E', marginBottom: '16px' }} />
                     <p style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-base)',
@@ -2291,7 +2291,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             border: '1px solid var(--border)'
                           }}
                         >
-                          <Icon size={20} style={{ color: '#124854' }} />
+                          <Icon size={20} style={{ color: '#006B4E' }} />
                         </div>
                         <div>
                           <h3 style={{
@@ -2318,8 +2318,8 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         className="cursor-pointer px-4 py-2 rounded-full transition-colors flex items-center gap-2"
                         style={{
                           backgroundColor: fileUploaded ? '#F0F9FF' : '#FFFFFF',
-                          border: fileUploaded ? '1px solid #124854' : '1px solid var(--border)',
-                          color: fileUploaded ? '#124854' : '#0A0A0A',
+                          border: fileUploaded ? '1px solid #006B4E' : '1px solid var(--border)',
+                          color: fileUploaded ? '#006B4E' : '#0A0A0A',
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
                           fontWeight: 'var(--font-weight-medium)',
@@ -2380,7 +2380,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         border: '1px solid var(--border)'
                       }}
                     >
-                      <FileText size={20} style={{ color: '#124854' }} />
+                      <FileText size={20} style={{ color: '#006B4E' }} />
                     </div>
                     <div className="flex-1 space-y-3">
                       <input
@@ -2399,15 +2399,15 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                           color: '#0A0A0A',
                           outline: 'none',
                         }}
-                        onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                        onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                         onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                       />
                       <label 
                         className="cursor-pointer px-4 py-2 rounded-full transition-colors inline-flex items-center gap-2"
                         style={{
                           backgroundColor: doc.file ? '#F0F9FF' : '#FFFFFF',
-                          border: doc.file ? '1px solid #124854' : '1px solid var(--border)',
-                          color: doc.file ? '#124854' : '#0A0A0A',
+                          border: doc.file ? '1px solid #006B4E' : '1px solid var(--border)',
+                          color: doc.file ? '#006B4E' : '#0A0A0A',
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
                           fontWeight: 'var(--font-weight-medium)',
@@ -2455,13 +2455,13 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                   style={{
                     backgroundColor: 'transparent',
                     border: '2px dashed #DEDEDE',
-                    color: '#124854',
+                    color: '#006B4E',
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-body-sm)',
                     fontWeight: 'var(--font-weight-medium)',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#124854';
+                    e.currentTarget.style.borderColor = '#006B4E';
                     e.currentTarget.style.backgroundColor = '#F9FAFB';
                   }}
                   onMouseLeave={(e) => {
@@ -2521,7 +2521,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         border: '1px solid var(--border)'
                       }}
                     >
-                      <Video size={20} style={{ color: '#124854' }} />
+                      <Video size={20} style={{ color: '#006B4E' }} />
                     </div>
                     <input
                       type="text"
@@ -2539,7 +2539,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         color: '#0A0A0A',
                         outline: 'none',
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                      onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     />
                   </div>
@@ -2565,7 +2565,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         border: '1px solid var(--border)'
                       }}
                     >
-                      <Video size={20} style={{ color: '#124854' }} />
+                      <Video size={20} style={{ color: '#006B4E' }} />
                     </div>
                     <input
                       type="text"
@@ -2583,7 +2583,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                         color: '#0A0A0A',
                         outline: 'none',
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#124854'}
+                      onFocus={(e) => e.currentTarget.style.borderColor = '#006B4E'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#DEDEDE'}
                     />
                   </div>
@@ -2673,7 +2673,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                   onClick={handleNext}
                   className="flex items-center gap-2 px-6 py-3 rounded-full transition-all"
                   style={{
-                    backgroundColor: '#124854',
+                    backgroundColor: '#006B4E',
                     color: '#FFFFFF',
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-body-sm)',
@@ -2681,7 +2681,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                     letterSpacing: 'var(--letter-spacing-wide)',
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0F3B44'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Continuar
                   <ChevronLeft size={18} style={{ transform: 'rotate(180deg)' }} />
@@ -2958,7 +2958,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Droplet size={14} style={{ color: '#124854' }} />
+                            <Droplet size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -2975,7 +2975,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Zap size={14} style={{ color: '#124854' }} />
+                            <Zap size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -2992,7 +2992,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Car size={14} style={{ color: '#124854' }} />
+                            <Car size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -3009,7 +3009,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Wifi size={14} style={{ color: '#124854' }} />
+                            <Wifi size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',
@@ -3026,7 +3026,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             className="w-5 h-5 rounded flex items-center justify-center"
                             style={{ backgroundColor: '#E8F4F6' }}
                           >
-                            <Shield size={14} style={{ color: '#124854' }} />
+                            <Shield size={14} style={{ color: '#006B4E' }} />
                           </div>
                           <span style={{
                             fontFamily: 'var(--font-body)',

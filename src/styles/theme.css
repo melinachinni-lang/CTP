@@ -120,7 +120,7 @@
   /* The default color for focus rings, outlines, and other focus indicators in sidebars and navigation menus. */
   --sidebar-ring: rgba(0, 107, 78, 1.00);
   /* Light blue background color for hero sections and special areas. */
-  --hero-background: rgba(240, 248, 255, 1.00);
+  --hero-background: rgba(240, 250, 246, 1.00);
   /* Error color for validation messages and error states. */
   --error: rgba(220, 38, 38, 1.00);
   --error-foreground: rgba(255, 255, 255, 1.00);

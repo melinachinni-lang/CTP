@@ -122,11 +122,11 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-sm)',
               fontWeight: 'var(--font-weight-medium)',
-              backgroundColor: '#124854'
+              backgroundColor: '#006B4E'
             }}
             className="h-10 text-white px-8 rounded-[200px] transition-colors inline-flex items-center justify-center"
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Volver a Inmobiliarias
           </button>
@@ -290,10 +290,10 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
 
             <div className="flex items-center justify-end gap-3">
               <button 
-                style={{ backgroundColor: '#124854' }}
+                style={{ backgroundColor: '#006B4E' }}
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >                Publicar propiedad
               </button>
               <button 
@@ -389,11 +389,11 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
                       fontWeight: 'var(--font-weight-medium)',
-                      backgroundColor: '#124854'
+                      backgroundColor: '#006B4E'
                     }}
                     className="h-10 text-white px-[32px] rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Contactar
                   </button>
@@ -435,7 +435,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white rounded-xl border-2 p-6 hover:shadow-md transition-shadow" style={{ borderColor: 'var(--border)' }}>
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#124854' }}>
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
                           <TrendingUp className="w-6 h-6 text-white" />
                         </div>
                       </div>
@@ -707,7 +707,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     borderColor: 'var(--border)'
                   }}>
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#124854' }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
                         <Phone className="w-5 h-5 text-white" />
                       </div>
                       <h3 style={{ 
@@ -792,11 +792,11 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                             fontFamily: 'var(--font-body)',
                             fontSize: 'var(--font-size-body-sm)',
                             fontWeight: 'var(--font-weight-semibold)',
-                            backgroundColor: '#124854'
+                            backgroundColor: '#006B4E'
                           }}
                           className="h-12 text-white px-6 rounded-[200px] transition-colors flex items-center justify-center shadow-sm hover:shadow"
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
                           WhatsApp
                         </button>

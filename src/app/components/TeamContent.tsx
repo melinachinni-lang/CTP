@@ -716,11 +716,11 @@ export function TeamContent() {
                   fontSize: 'var(--font-size-body-base)',
                   fontWeight: 'var(--font-weight-medium)',
                   lineHeight: 'var(--line-height-body)',
-                  backgroundColor: '#124854'
+                  backgroundColor: '#006B4E'
                 }}
                 className="text-white py-3 px-6 rounded-[200px] transition-colors"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Editar broker
               </button>
@@ -770,11 +770,11 @@ export function TeamContent() {
                 fontSize: 'var(--font-size-body-base)',
                 fontWeight: 'var(--font-weight-medium)',
                 lineHeight: 'var(--line-height-body)',
-                backgroundColor: '#124854'
+                backgroundColor: '#006B4E'
               }}
               className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Entendido
             </button>

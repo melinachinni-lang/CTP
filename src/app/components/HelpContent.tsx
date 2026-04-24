@@ -150,7 +150,7 @@ export function HelpContent() {
                 className="bg-white border-2 border-gray-200 rounded-[24px] p-6 text-left hover:border-gray-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all space-y-4"
               >
                 <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-                  <Icon className="w-6 h-6" style={{ color: '#124854' }} />
+                  <Icon className="w-6 h-6" style={{ color: '#006B4E' }} />
                 </div>
                 <div className="space-y-2">
                   <h3 
@@ -286,11 +286,11 @@ export function HelpContent() {
                   fontSize: 'var(--font-size-body-base)',
                   fontWeight: 'var(--font-weight-medium)',
                   lineHeight: 'var(--line-height-body)',
-                  backgroundColor: '#124854'
+                  backgroundColor: '#006B4E'
                 }}
                 className="mt-3 w-full text-white py-3 px-6 rounded-[200px] transition-colors"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Iniciar chat
               </button>
@@ -332,11 +332,11 @@ export function HelpContent() {
                   fontSize: 'var(--font-size-body-base)',
                   fontWeight: 'var(--font-weight-medium)',
                   lineHeight: 'var(--line-height-body)',
-                  backgroundColor: '#124854'
+                  backgroundColor: '#006B4E'
                 }}
                 className="mt-3 inline-block w-full text-white py-3 px-6 rounded-[200px] transition-colors text-center"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 soporte@compratuparcela.cl
               </a>
@@ -436,11 +436,11 @@ export function HelpContent() {
             fontSize: 'var(--font-size-body-base)',
             fontWeight: 'var(--font-weight-medium)',
             lineHeight: 'var(--line-height-body)',
-            backgroundColor: '#124854'
+            backgroundColor: '#006B4E'
           }}
           className="text-white py-3 px-8 rounded-[200px] transition-colors inline-flex items-center gap-2"
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           <Send className="w-5 h-5" />
           Enviar consulta

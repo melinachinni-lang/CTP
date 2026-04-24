@@ -26,7 +26,7 @@ export const ConsultasDemo: React.FC = () => {
               onClick={() => setActiveView('personal')}
               className={`px-4 py-2 transition-colors ${
                 activeView === 'personal'
-                  ? 'bg-[#124854] text-white'
+                  ? 'bg-[#006B4E] text-white'
                   : 'bg-white text-[#0A0A0A] border border-[#DEDEDE] hover:bg-[#F5F5F5]'
               }`}
               style={{ fontSize: '14px', borderRadius: '8px', fontWeight: 500 }}
@@ -37,7 +37,7 @@ export const ConsultasDemo: React.FC = () => {
               onClick={() => setActiveView('inmobiliaria')}
               className={`px-4 py-2 transition-colors ${
                 activeView === 'inmobiliaria'
-                  ? 'bg-[#124854] text-white'
+                  ? 'bg-[#006B4E] text-white'
                   : 'bg-white text-[#0A0A0A] border border-[#DEDEDE] hover:bg-[#F5F5F5]'
               }`}
               style={{ fontSize: '14px', borderRadius: '8px', fontWeight: 500 }}
@@ -48,7 +48,7 @@ export const ConsultasDemo: React.FC = () => {
               onClick={() => setActiveView('broker')}
               className={`px-4 py-2 transition-colors ${
                 activeView === 'broker'
-                  ? 'bg-[#124854] text-white'
+                  ? 'bg-[#006B4E] text-white'
                   : 'bg-white text-[#0A0A0A] border border-[#DEDEDE] hover:bg-[#F5F5F5]'
               }`}
               style={{ fontSize: '14px', borderRadius: '8px', fontWeight: 500 }}

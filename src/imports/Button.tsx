@@ -14,7 +14,7 @@ function Component3D() {
 
 export default function Button() {
   return (
-    <div style={{ backgroundColor: '#124854' }} className="content-stretch flex gap-[8px] items-center justify-center px-[16px] py-[8px] relative rounded-[200px] size-full" data-name="Button">
+    <div style={{ backgroundColor: '#006B4E' }} className="content-stretch flex gap-[8px] items-center justify-center px-[16px] py-[8px] relative rounded-[200px] size-full" data-name="Button">
       <Component3D />
       <p className="css-ew64yg font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[1.5] not-italic relative shrink-0 text-[16px] text-white">Label</p>
       <Component3D />

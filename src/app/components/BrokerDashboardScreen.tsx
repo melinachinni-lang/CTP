@@ -117,7 +117,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
                     : ''
                 }`}
                 style={{
-                  color: '#124854',
+                  color: '#006B4E',
                   ...(currentSection === item.id
                     ? { backgroundColor: '#CDD8DE' }
                     : { transition: 'background-color 0.2s ease' })
@@ -223,7 +223,7 @@ function HomeContent() {
 
   // Datos para gráfico donut - tipo de interacción
   const tiposInteraccion = [
-    { name: 'Consultas', value: 45, color: '#124854' },
+    { name: 'Consultas', value: 45, color: '#006B4E' },
     { name: 'Guardados', value: 35, color: '#462611' },
     { name: 'Clicks contacto', value: 20, color: '#7D460D' },
   ];
@@ -329,7 +329,7 @@ function HomeContent() {
             Compartir propiedad
           </button>
           <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#124854',
+            backgroundColor: '#006B4E',
             color: '#FFFFFF',
             borderRadius: '200px',
             fontFamily: 'var(--font-body)',
@@ -339,7 +339,7 @@ function HomeContent() {
             lineHeight: 'var(--line-height-ui)'
           }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#124854'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" />
             Agregar a seguimiento
@@ -353,7 +353,7 @@ function HomeContent() {
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Bookmark className="w-5 h-5" style={{ color: '#124854' }} />
+              <Bookmark className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -395,7 +395,7 @@ function HomeContent() {
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Eye className="w-5 h-5" style={{ color: '#124854' }} />
+              <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -437,7 +437,7 @@ function HomeContent() {
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#124854' }} />
+              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
               <AlertCircle className="w-3 h-3" style={{ color: '#462611' }} />
@@ -479,7 +479,7 @@ function HomeContent() {
         <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
-              <Heart className="w-5 h-5" style={{ color: '#124854' }} />
+              <Heart className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
               <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
@@ -572,10 +572,10 @@ function HomeContent() {
               <Line 
                 type="monotone" 
                 dataKey="interacciones" 
-                stroke="#124854" 
+                stroke="#006B4E" 
                 strokeWidth={3}
-                dot={{ fill: '#124854', r: 4 }}
-                activeDot={{ r: 6, fill: '#124854' }}
+                dot={{ fill: '#006B4E', r: 4 }}
+                activeDot={{ r: 6, fill: '#006B4E' }}
                 name="Interacciones"
               />
             </LineChart>
@@ -621,7 +621,7 @@ function HomeContent() {
                 />
                 <Bar 
                   dataKey="consultas" 
-                  fill="#124854" 
+                  fill="#006B4E" 
                   radius={[8, 8, 0, 0]}
                   name="Consultas"
                 />
@@ -2314,7 +2314,7 @@ function PlanContent() {
             return (
               <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: isActive ? '2px solid #0A0A0A' : '1px solid #E5E5E5', boxShadow: isActive ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
                 <div className="mb-6">
-                  {isActive && (<div className="flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full inline-flex" style={{ backgroundColor: '#124854' }}><Star className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} /><span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Plan actual</span></div>)}
+                  {isActive && (<div className="flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full inline-flex" style={{ backgroundColor: '#006B4E' }}><Star className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} /><span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Plan actual</span></div>)}
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '8px' }}>{plan.name}</h4>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5' }}>{plan.description}</p>
                 </div>
@@ -2330,7 +2330,7 @@ function PlanContent() {
                   disabled={isActive} 
                   className="w-full py-2.5 px-6 transition-all" 
                   style={{ 
-                    backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#124854' : '#FFFFFF', 
+                    backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#006B4E' : '#FFFFFF', 
                     color: isActive ? '#A3A3A3' : isHigher ? '#FFFFFF' : 'var(--foreground)', 
                     border: isActive ? '2px solid #E5E5E5' : isHigher ? 'none' : '2px solid #DEDEDE', 
                     borderRadius: '200px', 
@@ -2345,7 +2345,7 @@ function PlanContent() {
                     if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#0D3640' : '#FAFAFA'; 
                   }} 
                   onMouseLeave={(e) => { 
-                    if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#124854' : '#FFFFFF'; 
+                    if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; 
                   }}
                 >
                   {isActive ? 'Plan activo' : isHigher ? 'Mejorar plan' : 'Cambiar a este plan'}

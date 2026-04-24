@@ -43,7 +43,7 @@ export const ConsultasRecientes: React.FC<ConsultasRecientesProps> = ({
       {/* Header */}
       <div className="p-4 border-b border-[#DEDEDE]">
         <div className="flex items-center gap-2">
-          <MessageCircle size={20} style={{ color: '#124854' }} />
+          <MessageCircle size={20} style={{ color: '#006B4E' }} />
           <h3 style={{ color: '#0A0A0A' }}>Consultas recientes</h3>
         </div>
         <p style={{ color: '#6B7280', fontSize: '12px', marginTop: '4px' }}>
@@ -82,7 +82,7 @@ export const ConsultasRecientes: React.FC<ConsultasRecientesProps> = ({
                 {/* Usuario */}
                 <div className="flex items-center gap-2 mb-2">
                   <div
-                    className="w-8 h-8 flex items-center justify-center bg-[#124854] text-white"
+                    className="w-8 h-8 flex items-center justify-center bg-[#006B4E] text-white"
                     style={{ borderRadius: '50%', fontSize: '12px', fontWeight: 600 }}
                   >
                     {consulta.usuario.nombre.charAt(0)}
@@ -100,7 +100,7 @@ export const ConsultasRecientes: React.FC<ConsultasRecientesProps> = ({
                 {/* Tipo de consulta */}
                 <div className="flex items-center gap-2">
                   <span
-                    className="px-2 py-1 bg-[#124854] text-white inline-flex items-center gap-1"
+                    className="px-2 py-1 bg-[#006B4E] text-white inline-flex items-center gap-1"
                     style={{ fontSize: '11px', borderRadius: '4px' }}
                   >
                     <MessageCircle size={12} />

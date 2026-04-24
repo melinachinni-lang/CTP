@@ -240,7 +240,7 @@ export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
                 <div className="space-y-2.5">
                   <div className="h-[20px]"></div>
                   <button 
-                    className="bg-[#124854] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
+                    className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                     style={{ fontFamily: 'var(--font-body)' }}
                   >
                     Buscar
@@ -297,11 +297,11 @@ export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
                 className="h-12 px-8 text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm"
                 style={{ 
                   fontFamily: 'var(--font-body)',
-                  backgroundColor: '#124854',
+                  backgroundColor: '#006B4E',
                   color: '#FFFFFF'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#124854'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Volver al inicio
               </button>

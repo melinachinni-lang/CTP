@@ -538,7 +538,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 className="w-full flex items-center gap-3 px-6 py-3 transition-all"
                 style={{
                   backgroundColor: isActive ? '#CDD8DE' : 'transparent',
-                  color: '#124854',
+                  color: '#006B4E',
                   fontFamily: 'var(--font-body)',
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-body-sm)',
@@ -1287,7 +1287,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                                 width: '32px',
                                 height: '32px',
                                 borderRadius: '8px',
-                                backgroundColor: index < 3 ? '#124854' : '#F5F5F5',
+                                backgroundColor: index < 3 ? '#006B4E' : '#F5F5F5',
                                 color: index < 3 ? '#FFFFFF' : '#737373',
                                 fontFamily: 'var(--font-body)',
                                 fontSize: 'var(--font-size-body-sm)',
@@ -2098,8 +2098,8 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
                           fontWeight: 'var(--font-weight-medium)',
-                          color: activePublicacionesTab === tab.id ? '#124854' : '#737373',
-                          borderBottom: activePublicacionesTab === tab.id ? '2px solid #124854' : '2px solid transparent',
+                          color: activePublicacionesTab === tab.id ? '#006B4E' : '#737373',
+                          borderBottom: activePublicacionesTab === tab.id ? '2px solid #006B4E' : '2px solid transparent',
                           backgroundColor: 'transparent'
                         }}
                       >
@@ -2159,14 +2159,14 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         fontSize: 'var(--font-size-body-sm)',
                         fontWeight: 'var(--font-weight-medium)',
                         color: '#FFFFFF',
-                        backgroundColor: '#124854',
+                        backgroundColor: '#006B4E',
                         border: 'none'
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#0D3640';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#124854';
+                        e.currentTarget.style.backgroundColor = '#006B4E';
                       }}
                     >
                       <Save className="w-4 h-4" />
@@ -2610,14 +2610,14 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                               fontSize: 'var(--font-size-xs)',
                               fontWeight: 'var(--font-weight-medium)',
                               color: '#FFFFFF',
-                              backgroundColor: '#124854',
+                              backgroundColor: '#006B4E',
                               border: 'none'
                             }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#0D3640';
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = '#124854';
+                              e.currentTarget.style.backgroundColor = '#006B4E';
                             }}
                           >
                             <Edit2 className="w-4 h-4" />
@@ -2830,7 +2830,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                           backgroundColor: '#FFFFFF'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#124854';
+                          e.currentTarget.style.borderColor = '#006B4E';
                           e.currentTarget.style.backgroundColor = '#FAFAFA';
                         }}
                         onMouseLeave={(e) => {
@@ -2842,7 +2842,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                           className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
                           style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
                         >
-                          <Layout className="w-6 h-6" style={{ color: '#124854' }} />
+                          <Layout className="w-6 h-6" style={{ color: '#006B4E' }} />
                         </div>
                         <h3
                           style={{
@@ -2880,7 +2880,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                           backgroundColor: '#FFFFFF'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#124854';
+                          e.currentTarget.style.borderColor = '#006B4E';
                           e.currentTarget.style.backgroundColor = '#FAFAFA';
                         }}
                         onMouseLeave={(e) => {
@@ -2892,7 +2892,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                           className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
                           style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
                         >
-                          <Home className="w-6 h-6" style={{ color: '#124854' }} />
+                          <Home className="w-6 h-6" style={{ color: '#006B4E' }} />
                         </div>
                         <h3
                           style={{
