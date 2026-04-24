@@ -14,54 +14,51 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
 
   const planes = [
     {
-      nombre: 'Básico',
-      descripcion: 'Ideal para comenzar a publicar parcelas',
+      nombre: 'Bronce',
+      descripcion: 'Ideal para inmobiliarias que inician',
       precioMensual: 29900,
       precioAnual: 299000,
       destacado: false,
       caracteristicas: [
-        { incluido: true, texto: 'Hasta 5 publicaciones activas' },
-        { incluido: true, texto: 'Panel de gestión básico' },
-        { incluido: true, texto: 'Soporte por email' },
+        { incluido: true, texto: 'Hasta 10 parcelas publicadas' },
+        { incluido: true, texto: '2 publicaciones destacadas' },
+        { incluido: true, texto: 'Visibilidad estándar' },
         { incluido: true, texto: 'Estadísticas básicas' },
-        { incluido: false, texto: 'Gestión de equipo' },
-        { incluido: false, texto: 'Publicaciones destacadas' },
-        { incluido: false, texto: 'API de integración' },
-        { incluido: false, texto: 'Soporte prioritario' }
+        { incluido: true, texto: 'Soporte por email' },
+        { incluido: false, texto: 'Panel de equipo y brokers' },
+        { incluido: false, texto: 'Asesor comercial dedicado' }
       ]
     },
     {
-      nombre: 'Profesional',
+      nombre: 'Plata',
       descripcion: 'Para inmobiliarias en crecimiento',
       precioMensual: 69900,
       precioAnual: 699000,
       destacado: true,
       caracteristicas: [
-        { incluido: true, texto: 'Hasta 20 publicaciones activas' },
-        { incluido: true, texto: 'Panel de gestión avanzado' },
-        { incluido: true, texto: 'Soporte prioritario' },
+        { incluido: true, texto: 'Hasta 30 parcelas publicadas' },
+        { incluido: true, texto: '5 publicaciones destacadas' },
+        { incluido: true, texto: 'Visibilidad alta' },
         { incluido: true, texto: 'Estadísticas avanzadas' },
-        { incluido: true, texto: 'Gestión de equipo (hasta 5 usuarios)' },
-        { incluido: true, texto: '3 publicaciones destacadas/mes' },
-        { incluido: false, texto: 'API de integración' },
-        { incluido: false, texto: 'Asesor dedicado' }
+        { incluido: true, texto: 'Soporte prioritario' },
+        { incluido: true, texto: 'Panel de equipo y brokers' },
+        { incluido: false, texto: 'Asesor comercial dedicado' }
       ]
     },
     {
-      nombre: 'Enterprise',
-      descripcion: 'Para grandes inmobiliarias',
+      nombre: 'Oro',
+      descripcion: 'Máxima exposición para empresas',
       precioMensual: 149900,
       precioAnual: 1499000,
       destacado: false,
       caracteristicas: [
         { incluido: true, texto: 'Publicaciones ilimitadas' },
-        { incluido: true, texto: 'Panel personalizado' },
+        { incluido: true, texto: '15 publicaciones destacadas' },
+        { incluido: true, texto: 'Visibilidad premium' },
+        { incluido: true, texto: 'Estadísticas completas + exportación' },
         { incluido: true, texto: 'Soporte 24/7' },
-        { incluido: true, texto: 'Analytics empresarial' },
-        { incluido: true, texto: 'Usuarios ilimitados' },
-        { incluido: true, texto: 'Publicaciones destacadas ilimitadas' },
-        { incluido: true, texto: 'API de integración' },
-        { incluido: true, texto: 'Asesor dedicado' }
+        { incluido: true, texto: 'Panel completo de equipo y brokers' },
+        { incluido: true, texto: 'Asesor comercial dedicado' }
       ]
     }
   ];
