@@ -27,10 +27,10 @@ export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
   const socialLinks = [
-    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com/compratuparcela' },
-    { name: 'TikTok', icon: TikTokIcon, url: 'https://tiktok.com/@compratuparcela' },
-    { name: 'Facebook', icon: Facebook, url: 'https://facebook.com/compratuparcela' },
-    { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/@compratuparcela' }
+    { name: 'Instagram', icon: Instagram, url: 'https://www.instagram.com/compratuparcela/?hl=es-la' },
+    { name: 'TikTok', icon: TikTokIcon, url: 'https://www.tiktok.com/@compratuparcelaoficial' },
+    { name: 'Facebook', icon: Facebook, url: 'https://www.facebook.com/compratuparcela/?locale=es_LA' },
+    { name: 'YouTube', icon: Youtube, url: 'https://www.youtube.com/@compratuparcelacl' }
   ];
 
   return (
