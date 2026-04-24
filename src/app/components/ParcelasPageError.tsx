@@ -266,7 +266,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 padding: '10px 24px',
                 transition: 'background-color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Crear cuenta
@@ -437,7 +437,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
                 cursor: 'pointer',
                 transition: 'background-color 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Buscar parcelas
@@ -624,7 +624,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
               cursor: 'pointer',
               transition: 'background-color 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Reintentar

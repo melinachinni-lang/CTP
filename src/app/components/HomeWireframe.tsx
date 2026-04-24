@@ -786,7 +786,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <div className="h-[20px] hidden md:block"></div>
                     <button 
                       onClick={() => onNavigate('parcelas', undefined, selectedValues)}
-                      className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
+                      className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
                     >
                       Buscar
                     </button>
@@ -961,7 +961,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <div className="h-[20px]"></div>
                     <button 
                       onClick={() => onNavigate('parcelas', undefined, selectedValues)}
-                      className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
+                      className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                     >
                       Buscar
                     </button>
@@ -1038,7 +1038,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('naturaleza')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('naturaleza')
-                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1050,7 +1050,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('lago-rio')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('lago-rio')
-                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1062,7 +1062,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('inversion')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('inversion')
-                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1074,7 +1074,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('acceso')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('acceso')
-                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -1086,7 +1086,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onClick={() => toggleBadge('servicios')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('servicios')
-                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                          ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                           : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
@@ -2033,7 +2033,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
                 <button
                   onClick={() => onNavigate('parcelas')}
-                  className="w-full sm:w-auto h-11 md:h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 md:px-8 text-sm md:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                  className="w-full sm:w-auto h-11 md:h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 md:px-8 text-sm md:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                 >
                   Explorar parcelas
                 </button>
@@ -2162,7 +2162,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       onNavigate('entry');
                     }
                   }}
-                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
                   Crear cuenta
                 </button>
@@ -2346,7 +2346,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   setIsBudgetModalOpen(false);
                   // Los valores ya están guardados en los estados
                 }}
-                className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-4 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-4 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
               >
                 Aplicar configuración
               </button>
@@ -2594,7 +2594,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onNavigate('parcelas', undefined, selectedValues);
                     setIsMobileFiltersOpen(false);
                   }}
-                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',
@@ -2711,7 +2711,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('naturaleza')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('naturaleza')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2727,7 +2727,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('lago-rio')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2743,7 +2743,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('inversion')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('inversion')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2759,7 +2759,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('acceso')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('acceso')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2775,7 +2775,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     onClick={() => toggleBadge('servicios')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('servicios')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#0d3640]'
+                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
                     style={{ 
@@ -2797,7 +2797,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     handleSmartSearch();
                     setIsSmartSearchBottomSheetOpen(false);
                   }}
-                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white rounded-[100px] transition-colors"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '15px',

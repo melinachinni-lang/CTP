@@ -240,7 +240,7 @@ export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
                 <div className="space-y-2.5">
                   <div className="h-[20px]"></div>
                   <button 
-                    className="bg-[#006B4E] hover:bg-[#0d3640] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
+                    className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                     style={{ fontFamily: 'var(--font-body)' }}
                   >
                     Buscar

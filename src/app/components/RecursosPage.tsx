@@ -659,7 +659,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                       onNavigate('entry');
                     }
                   }}
-                  className="w-full h-12 bg-[#006B4E] hover:bg-[#0d3640] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
+                  className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
                   Crear cuenta
                 </button>

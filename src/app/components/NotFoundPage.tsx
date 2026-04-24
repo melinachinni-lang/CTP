@@ -42,7 +42,7 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
 
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-3">
-              <button className="h-8 bg-[#006B4E] hover:bg-[#0d3640] text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
+              <button className="h-8 bg-[#006B4E] hover:bg-[#01533E] text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
                 Publicar propiedad
               </button>
               <button 
@@ -159,7 +159,7 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
                 backgroundColor: '#006B4E',
                 color: '#FFFFFF'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0d3640'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Explorar parcelas
