@@ -2079,69 +2079,36 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   }}>
                     Explorar
                   </div>
-                  <div className="space-y-2.5 text-sm" style={{ 
-                    color: '#666',
-                    fontFamily: 'var(--font-body)',
-                    lineHeight: 'var(--line-height-ui)'
-                  }}>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Parcelas</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Inmobiliarias</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Blog</div>
+                  <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-ui)' }}>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('parcelas')}>Parcelas</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('inmobiliarias')}>Inmobiliarias</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('recursos')}>Blog</div>
                   </div>
                 </div>
 
                 <div className="lg:col-span-3 space-y-3 md:space-y-4">
-                  <div className="text-xs font-semibold tracking-wider" style={{ 
-                    color: '#0A0A0A',
-                    textTransform: 'uppercase',
-                    fontWeight: 'var(--font-weight-semibold)'
-                  }}>
+                  <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>
                     Plataforma
                   </div>
-                  <div className="space-y-2.5 text-sm" style={{ 
-                    color: '#666',
-                    fontFamily: 'var(--font-body)',
-                    lineHeight: 'var(--line-height-ui)'
-                  }}>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Cómo funciona</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Publicar propiedad</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Planes para inmobiliarias</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Para brokers</div>
+                  <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-ui)' }}>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>Cómo funciona</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => isLoggedIn ? onOpenPublishModal?.() : onNavigateToPublish?.()}>Publicar propiedad</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>Planes para inmobiliarias</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('entry')}>Para brokers</div>
                   </div>
                 </div>
 
                 <div className="lg:col-span-3 space-y-3 md:space-y-4">
-                  <div className="text-xs font-semibold tracking-wider" style={{ 
-                    color: '#0A0A0A',
-                    textTransform: 'uppercase',
-                    fontWeight: 'var(--font-weight-semibold)'
-                  }}>
+                  <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>
                     Soporte
                   </div>
-                  <div className="space-y-2.5 text-sm" style={{ 
-                    color: '#666',
-                    fontFamily: 'var(--font-body)',
-                    lineHeight: 'var(--line-height-ui)'
-                  }}>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Centro de ayuda</div>
-                    <div
-                      className="cursor-pointer hover:text-[#006B4E] transition-colors"
-                      onClick={() => onNavigate('terminos-condiciones')}
-                    >
-                      Términos y condiciones
-                    </div>
-                    <div
-                      className="cursor-pointer hover:text-[#006B4E] transition-colors"
-                      onClick={() => onNavigate('politica-privacidad')}
-                    >
-                      Política de privacidad
-                    </div>
-                    <div
-                      className="cursor-pointer hover:text-[#006B4E] transition-colors"
-                      onClick={() => setIsContactModalOpen(true)}
-                    >
-                      Contacto
-                    </div>
+                  <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-ui)' }}>
+                    <a href="mailto:contacto@compratuparcela.cl" className="block hover:text-[#006B4E] transition-colors" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      contacto@compratuparcela.cl
+                    </a>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('terminos-condiciones')}>Términos y condiciones</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('politica-privacidad')}>Política de privacidad</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => setIsContactModalOpen(true)}>Contacto</div>
                   </div>
                 </div>
               </div>
