@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
@@ -668,6 +668,37 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [isPublicadoPorExpanded, setIsPublicadoPorExpanded] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  }, []);
+
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+
+  const lightboxPrev = useCallback((total: number) =>
+    setLightboxIndex(i => (i === 0 ? total - 1 : i - 1)), []);
+
+  const lightboxNext = useCallback((total: number) =>
+    setLightboxIndex(i => (i === total - 1 ? 0 : i + 1)), []);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const total = parcela?.imagenes?.length ?? 0;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxPrev(total);
+      if (e.key === 'ArrowRight') lightboxNext(total);
+    };
+    window.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [lightboxOpen, parcela, closeLightbox, lightboxPrev, lightboxNext]);
   const [hoveredParcela, setHoveredParcela] = useState<number | null>(null);
   const [mapZoom, setMapZoom] = useState(1);
   const [parcelaSeleccionadaStock, setParcelaSeleccionadaStock] = useState<string>('');
@@ -932,12 +963,33 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                   <>
                     {/* Imagen principal */}
                     <div className="w-full aspect-[16/9] bg-white overflow-hidden rounded-xl border border-gray-200 shadow-sm relative group">
-                      <ImageWithFallback 
-                        src={parcela.imagenes[selectedImage]} 
+                      <ImageWithFallback
+                        src={parcela.imagenes[selectedImage]}
                         alt={parcela.nombre}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover cursor-zoom-in"
+                        onClick={() => openLightbox(selectedImage)}
                       />
-                      
+
+                      {/* Botón expandir - siempre visible en hover */}
+                      <button
+                        onClick={() => openLightbox(selectedImage)}
+                        aria-label="Ver en pantalla completa"
+                        className="absolute top-3 right-3 w-9 h-9 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        style={{ backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+                      >
+                        <Maximize2 className="w-4 h-4" style={{ color: '#fff' }} />
+                      </button>
+
+                      {/* Contador de imagen */}
+                      {parcela.imagenes.length > 1 && (
+                        <div
+                          className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                          style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#fff', fontFamily: 'var(--font-body)', backdropFilter: 'blur(4px)' }}
+                        >
+                          {selectedImage + 1} / {parcela.imagenes.length}
+                        </div>
+                      )}
+
                       {/* Navegación de imágenes - visible en hover */}
                       {parcela.imagenes.length > 1 && (
                         <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -3691,6 +3743,103 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
 
       {/* Asistente Virtual - Contextual para detalle de parcela */}
       <VambeChat context="parcela-detalle" />
+
+      {/* ── LIGHTBOX ── */}
+      {lightboxOpen && parcela.imagenes && parcela.imagenes.length > 0 && (
+        <div
+          className="fixed inset-0 z-[9999] flex flex-col"
+          style={{ backgroundColor: 'rgba(0,0,0,0.95)' }}
+          onClick={closeLightbox}
+        >
+          {/* Header */}
+          <div
+            className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+            style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-body)', fontSize: '14px' }}>
+              {parcela.nombre}
+            </p>
+            <div className="flex items-center gap-3">
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-body)', fontSize: '13px' }}>
+                {lightboxIndex + 1} / {parcela.imagenes.length}
+              </span>
+              <button
+                onClick={closeLightbox}
+                aria-label="Cerrar"
+                className="w-9 h-9 rounded-full flex items-center justify-center transition-colors"
+                style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
+              >
+                <X className="w-5 h-5" style={{ color: '#fff' }} />
+              </button>
+            </div>
+          </div>
+
+          {/* Imagen central */}
+          <div
+            className="flex-1 flex items-center justify-center relative px-14 min-h-0"
+            onClick={e => e.stopPropagation()}
+          >
+            <img
+              src={parcela.imagenes[lightboxIndex]}
+              alt={`${parcela.nombre} — imagen ${lightboxIndex + 1}`}
+              className="max-w-full max-h-full object-contain select-none"
+              style={{ borderRadius: '4px' }}
+              draggable={false}
+            />
+
+            {/* Prev */}
+            {parcela.imagenes.length > 1 && (
+              <>
+                <button
+                  onClick={() => lightboxPrev(parcela.imagenes.length)}
+                  aria-label="Imagen anterior"
+                  className="absolute left-3 w-11 h-11 rounded-full flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}
+                >
+                  <ChevronLeft className="w-6 h-6" style={{ color: '#fff' }} />
+                </button>
+
+                {/* Next */}
+                <button
+                  onClick={() => lightboxNext(parcela.imagenes.length)}
+                  aria-label="Imagen siguiente"
+                  className="absolute right-3 w-11 h-11 rounded-full flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}
+                >
+                  <ChevronRight className="w-6 h-6" style={{ color: '#fff' }} />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Thumbnails */}
+          {parcela.imagenes.length > 1 && (
+            <div
+              className="flex-shrink-0 flex justify-center gap-2 px-4 pb-5 pt-3 overflow-x-auto"
+              style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}
+              onClick={e => e.stopPropagation()}
+            >
+              {parcela.imagenes.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setLightboxIndex(i)}
+                  aria-label={`Ver imagen ${i + 1}`}
+                  className="flex-shrink-0 w-14 h-14 rounded-md overflow-hidden transition-all"
+                  style={{
+                    border: i === lightboxIndex
+                      ? '2px solid #fff'
+                      : '2px solid rgba(255,255,255,0.2)',
+                    opacity: i === lightboxIndex ? 1 : 0.5
+                  }}
+                >
+                  <img src={img} alt="" className="w-full h-full object-cover" draggable={false} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
