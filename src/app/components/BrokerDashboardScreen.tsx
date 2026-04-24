@@ -995,9 +995,9 @@ function LeadsContent() {
         <section className="grid grid-cols-4 gap-4 overflow-x-auto">
           {/* Column 1: Nuevo lead */}
           <div className="space-y-3 min-w-[250px]">
-            <div className="bg-blue-100 border-2 border-blue-300 p-3">
-              <h3 className="text-sm font-bold text-blue-900">Nuevo lead</h3>
-              <span className="text-xs text-blue-700">{kanbanLeads.nuevo.length}</span>
+            <div className="bg-emerald-100 border-2 border-emerald-300 p-3">
+              <h3 className="text-sm font-bold text-emerald-900">Nuevo lead</h3>
+              <span className="text-xs text-emerald-800">{kanbanLeads.nuevo.length}</span>
             </div>
             <div className="space-y-3">
               {kanbanLeads.nuevo.map((lead) => (
@@ -1181,11 +1181,11 @@ function LeadsContent() {
       {/* Leads List with Data */}
       <section className="space-y-3">
         {/* Lead 1 - New/Priority */}
-        <div className="border-2 border-blue-300 bg-blue-50 p-5 space-y-3">
+        <div className="border-2 border-emerald-300 bg-emerald-50 p-5 space-y-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-bold text-blue-700 bg-blue-200 px-2 py-1">
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-200 px-2 py-1">
                   NUEVA
                 </span>
                 <span className="text-xs text-gray-600">Hace 2 horas</span>
@@ -1219,11 +1219,11 @@ function LeadsContent() {
         </div>
 
         {/* Lead 2 - New */}
-        <div className="border-2 border-blue-300 bg-blue-50 p-5 space-y-3">
+        <div className="border-2 border-emerald-300 bg-emerald-50 p-5 space-y-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-bold text-blue-700 bg-blue-200 px-2 py-1">
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-200 px-2 py-1">
                   NUEVA
                 </span>
                 <span className="text-xs text-gray-600">Hace 5 horas</span>
@@ -1655,8 +1655,8 @@ function PerformanceContent() {
           <div className="rounded-xl p-5" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#EFF6FF' }}>
-                  <TrendingUp className="w-4 h-4" style={{ color: '#2563EB' }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#EBFEF5' }}>
+                  <TrendingUp className="w-4 h-4" style={{ color: '#006B4E' }} />
                 </div>
                 <div 
                   style={{ 
@@ -1683,7 +1683,7 @@ function PerformanceContent() {
               </div>
             </div>
             <div className="rounded-full overflow-hidden" style={{ backgroundColor: '#E5E5E5', height: '8px' }}>
-              <div className="rounded-full" style={{ backgroundColor: '#2563EB', height: '8px', width: '42%' }}></div>
+              <div className="rounded-full" style={{ backgroundColor: '#006B4E', height: '8px', width: '42%' }}></div>
             </div>
             <div 
               className="mt-2"
@@ -1811,10 +1811,10 @@ function PerformanceContent() {
         </h2>
         
         <div className="space-y-3">
-          <div className="rounded-xl p-5" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+          <div className="rounded-xl p-5" style={{ backgroundColor: '#EBFEF5', border: '1px solid #B3DAC8' }}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#2563EB' }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
                   <MessageCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
                 </div>
                 <div 
@@ -2121,9 +2121,9 @@ function PerformanceContent() {
       </section>
 
       {/* Info Box - Tips */}
-      <section className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#F0F8FF', border: '1px solid #BFDBFE' }}>
+      <section className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#F0FAF6', border: '1px solid #B3DAC8' }}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#2563EB' }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#006B4E' }}>
             <Zap className="w-5 h-5" style={{ color: '#FFFFFF' }} />
           </div>
           <h2 
@@ -2140,7 +2140,7 @@ function PerformanceContent() {
         </div>
         <div className="space-y-2.5">
           <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#2563EB' }}></div>
+            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#006B4E' }}></div>
             <p 
               style={{ 
                 fontFamily: 'var(--font-body)',
@@ -2153,7 +2153,7 @@ function PerformanceContent() {
             </p>
           </div>
           <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#2563EB' }}></div>
+            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#006B4E' }}></div>
             <p 
               style={{ 
                 fontFamily: 'var(--font-body)',
@@ -2166,7 +2166,7 @@ function PerformanceContent() {
             </p>
           </div>
           <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#2563EB' }}></div>
+            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#006B4E' }}></div>
             <p 
               style={{ 
                 fontFamily: 'var(--font-body)',
@@ -2179,7 +2179,7 @@ function PerformanceContent() {
             </p>
           </div>
           <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#2563EB' }}></div>
+            <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: '#006B4E' }}></div>
             <p 
               style={{ 
                 fontFamily: 'var(--font-body)',
@@ -2499,8 +2499,8 @@ function HelpContent() {
         <div className="space-y-3">
           <div className="rounded-xl p-5" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EFF6FF' }}>
-                <Plus className="w-4 h-4" style={{ color: '#2563EB' }} />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EBFEF5' }}>
+                <Plus className="w-4 h-4" style={{ color: '#006B4E' }} />
               </div>
               <div className="flex-1">
                 <div 
@@ -2686,8 +2686,8 @@ function HelpContent() {
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.borderColor = '#E5E5E5'; }}
           >
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EFF6FF' }}>
-                <Eye className="w-4 h-4" style={{ color: '#2563EB' }} />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EBFEF5' }}>
+                <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
               </div>
               <div className="flex-1">
                 <div 

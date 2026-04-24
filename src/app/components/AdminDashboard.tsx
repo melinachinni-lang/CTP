@@ -364,7 +364,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
 
   const getStatusColor = (estado: string) => {
     switch (estado) {
-      case 'nuevo': return { bg: '#DBEAFE', text: '#1E40AF', label: 'Nuevo' };
+      case 'nuevo': return { bg: '#D1FAE5', text: '#01533E', label: 'Nuevo' };
       case 'asignado': return { bg: '#E0E7FF', text: '#4338CA', label: 'Asignado' };
       case 'contactado': return { bg: '#DCFCE7', text: '#16A34A', label: 'Contactado' };
       case 'cerrado': return { bg: 'rgba(100, 126, 63, 0.1)', text: '#647E3F', label: 'Cerrado' };
@@ -4003,19 +4003,19 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 <div
                   className="mt-6 p-4 rounded-lg"
                   style={{
-                    backgroundColor: '#EFF6FF',
-                    border: '1px solid #BFDBFE'
+                    backgroundColor: '#EBFEF5',
+                    border: '1px solid #B3DAC8'
                   }}
                 >
                   <div className="flex gap-3">
-                    <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: '#1E40AF' }} />
+                    <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: '#01533E' }} />
                     <div>
                       <p
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
                           fontWeight: 'var(--font-weight-medium)',
-                          color: '#1E40AF',
+                          color: '#01533E',
                           marginBottom: '4px'
                         }}
                       >
@@ -4025,7 +4025,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
-                          color: '#1E40AF',
+                          color: '#01533E',
                           lineHeight: 'var(--line-height-body)'
                         }}
                       >

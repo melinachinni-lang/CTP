@@ -94,7 +94,7 @@ export function LeadDetailDrawer({ lead, isOpen, onClose }: LeadDetailDrawerProp
   const getEventColor = (tipo: string) => {
     switch (tipo) {
       case 'visita': return { bg: '#F3F4F6', border: '#E5E5E5', icon: '#737373' };
-      case 'formulario': return { bg: '#DBEAFE', border: '#93C5FD', icon: '#1E40AF' };
+      case 'formulario': return { bg: '#D1FAE5', border: '#86EFAC', icon: '#01533E' };
       case 'cta': return { bg: '#E0E7FF', border: '#A5B4FC', icon: '#4338CA' };
       case 'contacto': return { bg: 'rgba(100, 126, 63, 0.15)', border: 'rgba(100, 126, 63, 0.3)', icon: '#647E3F' };
       case 'reserva': return { bg: 'rgba(100, 126, 63, 0.1)', border: 'rgba(100, 126, 63, 0.3)', icon: '#647E3F' };
@@ -115,7 +115,7 @@ export function LeadDetailDrawer({ lead, isOpen, onClose }: LeadDetailDrawerProp
 
   const getStatusColor = (estado: string) => {
     switch (estado) {
-      case 'nuevo': return { bg: '#DBEAFE', text: '#1E40AF', label: 'Nuevo' };
+      case 'nuevo': return { bg: '#D1FAE5', text: '#01533E', label: 'Nuevo' };
       case 'asignado': return { bg: '#E0E7FF', text: '#4338CA', label: 'Asignado' };
       case 'contactado': return { bg: 'rgba(100, 126, 63, 0.15)', text: '#647E3F', label: 'Contactado' };
       case 'cerrado': return { bg: 'rgba(100, 126, 63, 0.1)', text: '#647E3F', label: 'Cerrado' };

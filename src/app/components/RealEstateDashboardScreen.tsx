@@ -1330,9 +1330,9 @@ function PerformanceContent() {
         </section>
 
         {/* AI Insight */}
-        <section className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-[24px] p-8 space-y-4">
-          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-            <Zap className="w-6 h-6 text-blue-600" />
+        <section className="bg-gradient-to-br from-emerald-50 to-emerald-50 border-2 border-emerald-200 rounded-[24px] p-8 space-y-4">
+          <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
+            <Zap className="w-6 h-6 text-emerald-700" />
           </div>
           <h2 
             style={{ 
@@ -1364,7 +1364,7 @@ function PerformanceContent() {
               fontFamily: 'var(--font-body)',
               fontSize: '14px',
               fontWeight: 'var(--font-weight-medium)',
-              color: '#2563EB',
+              color: '#006B4E',
               lineHeight: 'var(--line-height-body)'
             }}
           >

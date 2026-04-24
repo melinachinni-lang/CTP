@@ -45,7 +45,7 @@ export function SettingsContent() {
 
   const getIconColorClasses = (color: string) => {
     const colors = {
-      blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
+      blue: { bg: 'bg-emerald-100', text: 'text-emerald-700' },
       purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
       green: { bg: 'bg-green-100', text: 'text-green-600' },
       orange: { bg: 'bg-orange-100', text: 'text-orange-600' }
@@ -545,7 +545,7 @@ export function SettingsContent() {
                         className={`px-3 py-1.5 rounded-[100px] ${
                           user.rol === 'Admin' 
                             ? 'bg-purple-100 text-purple-800' 
-                            : 'bg-blue-100 text-blue-800'
+                            : 'bg-emerald-100 text-emerald-900'
                         }`}
                         style={{ 
                           fontFamily: 'var(--font-body)',
@@ -585,7 +585,7 @@ export function SettingsContent() {
               ))}
             </div>
 
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-[16px] p-4">
+            <div className="bg-emerald-50 border-2 border-emerald-200 rounded-[16px] p-4">
               <p 
                 style={{ 
                   fontFamily: 'var(--font-body)',

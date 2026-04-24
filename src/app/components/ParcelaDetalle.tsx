@@ -66,7 +66,7 @@ function GeolocalizacionMap({
   const getEstadoColor = (estado: string) => {
     switch (estado) {
       case 'disponible': return '#10B981'; // Verde
-      case 'reservado': return '#3B82F6'; // Azul
+      case 'reservado': return '#006B4E'; // Azul
       case 'vendido': return '#EF4444'; // Rojo
       default: return '#9CA3AF';
     }
@@ -75,7 +75,7 @@ function GeolocalizacionMap({
   const getEstadoBackgroundColor = (estado: string) => {
     switch (estado) {
       case 'disponible': return '#FFFFFF'; // Blanco
-      case 'reservado': return '#3B82F6'; // Azul
+      case 'reservado': return '#006B4E'; // Azul
       case 'vendido': return '#EF4444'; // Rojo
       default: return '#E5E5E5';
     }
@@ -620,7 +620,7 @@ function GeolocalizacionMap({
           <div className="flex items-center gap-2">
             <div 
               className="w-4 h-4 rounded-full" 
-              style={{ backgroundColor: '#3B82F6' }}
+              style={{ backgroundColor: '#006B4E' }}
             ></div>
             <span style={{ 
               fontFamily: 'var(--font-body)',

@@ -854,15 +854,15 @@ export function ConsultaOnlineModal({
             </div>
           </div>
 
-          <div className="p-4 rounded-lg" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#EBFEF5', border: '1px solid #B3DAC8' }}>
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#2563EB' }} />
+              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#006B4E' }} />
               <div className="text-left">
                 <p style={{ 
                   fontFamily: 'var(--font-body)',
                   fontWeight: 'var(--font-weight-medium)',
                   fontSize: 'var(--font-size-body-sm)',
-                  color: '#1E40AF',
+                  color: '#01533E',
                   marginBottom: '0.25rem'
                 }}>
                   Revisa tu email
@@ -870,7 +870,7 @@ export function ConsultaOnlineModal({
                 <p style={{ 
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
-                  color: '#1E40AF'
+                  color: '#01533E'
                 }}>
                   Te hemos enviado un correo con el link de Google Meet y un recordatorio.
                 </p>

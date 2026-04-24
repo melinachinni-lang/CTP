@@ -610,14 +610,14 @@ export function ContactModal({
 
                 {/* Información adicional */}
                 <div 
-                  className="bg-blue-50 rounded-xl p-4"
-                  style={{ border: '1px solid #DBEAFE' }}
+                  className="bg-emerald-50 rounded-xl p-4"
+                  style={{ border: '1px solid #D1FAE5' }}
                 >
                   <p 
                     style={{ 
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
-                      color: '#1E40AF',
+                      color: '#01533E',
                       lineHeight: 'var(--line-height-body)'
                     }}
                   >

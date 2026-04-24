@@ -171,7 +171,7 @@ export function ConsultarModal({
               <div className="flex items-start gap-4">
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: '#3B82F6' }}
+                  style={{ backgroundColor: '#006B4E' }}
                 >
                   <Video className="w-6 h-6" style={{ color: '#FFFFFF' }} />
                 </div>

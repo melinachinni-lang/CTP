@@ -3155,19 +3155,19 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 <div
                   className="mt-6 p-4 rounded-lg"
                   style={{
-                    backgroundColor: '#EFF6FF',
-                    border: '1px solid #BFDBFE'
+                    backgroundColor: '#EBFEF5',
+                    border: '1px solid #B3DAC8'
                   }}
                 >
                   <div className="flex gap-3">
-                    <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: '#1E40AF' }} />
+                    <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: '#01533E' }} />
                     <div>
                       <p
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
                           fontWeight: 'var(--font-weight-medium)',
-                          color: '#1E40AF',
+                          color: '#01533E',
                           marginBottom: '4px'
                         }}
                       >
@@ -3177,7 +3177,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
-                          color: '#1E40AF',
+                          color: '#01533E',
                           lineHeight: 'var(--line-height-body)'
                         }}
                       >

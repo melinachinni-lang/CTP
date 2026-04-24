@@ -2850,7 +2850,7 @@ function CompareContent() {
               </div>
               <div className="mt-2">
                 <span 
-                  className="bg-blue-100 text-blue-800 px-3 py-1.5 rounded-[100px]"
+                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
                   style={{ 
                     fontFamily: 'var(--font-body)',
                     fontSize: '12px',
@@ -2988,7 +2988,7 @@ function CompareContent() {
               </div>
               <div className="mt-2">
                 <span 
-                  className="bg-blue-100 text-blue-800 px-3 py-1.5 rounded-[100px]"
+                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
                   style={{ 
                     fontFamily: 'var(--font-body)',
                     fontSize: '12px',
@@ -3100,7 +3100,7 @@ function CompareContent() {
               </div>
               <div className="mt-2">
                 <span 
-                  className="bg-blue-100 text-blue-800 px-3 py-1.5 rounded-[100px]"
+                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
                   style={{ 
                     fontFamily: 'var(--font-body)',
                     fontSize: '12px',
@@ -3139,7 +3139,7 @@ function CompareContent() {
               </div>
               <div className="mt-2">
                 <span 
-                  className="bg-blue-100 text-blue-800 px-3 py-1.5 rounded-[100px]"
+                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
                   style={{ 
                     fontFamily: 'var(--font-body)',
                     fontSize: '12px',
@@ -3439,7 +3439,7 @@ function CompareContent() {
       </section>
 
       {/* Summary */}
-      <section className="bg-blue-50 border-2 border-blue-200 p-8 space-y-4 rounded-[24px]">
+      <section className="bg-emerald-50 border-2 border-emerald-200 p-8 space-y-4 rounded-[24px]">
         <h2 
           style={{ 
             fontFamily: 'var(--font-heading)',

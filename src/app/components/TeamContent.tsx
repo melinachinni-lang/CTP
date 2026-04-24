@@ -222,7 +222,7 @@ export function TeamContent() {
                       className={`px-3 py-1.5 rounded-[100px] ${
                         b.rol === 'Admin' 
                           ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-blue-100 text-blue-800'
+                          : 'bg-emerald-100 text-emerald-900'
                       }`}
                       style={{ 
                         fontFamily: 'var(--font-body)',
@@ -432,7 +432,7 @@ export function TeamContent() {
                       className={`px-3 py-1.5 rounded-[100px] ${
                         broker.rol === 'Admin' 
                           ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-blue-100 text-blue-800'
+                          : 'bg-emerald-100 text-emerald-900'
                       }`}
                       style={{ 
                         fontFamily: 'var(--font-body)',

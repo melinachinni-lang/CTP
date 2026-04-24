@@ -90,7 +90,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
       case 'En venta':
         return { backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#16a34a', border: '1px solid rgba(34, 197, 94, 0.2)' };
       case 'Próximamente':
-        return { backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#2563eb', border: '1px solid rgba(59, 130, 246, 0.2)' };
+        return { backgroundColor: 'rgba(0, 107, 78, 0.1)', color: '#006B4E', border: '1px solid rgba(0, 107, 78, 0.2)' };
       case 'En construcción':
         return { backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#d97706', border: '1px solid rgba(245, 158, 11, 0.2)' };
       default:

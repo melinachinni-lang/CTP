@@ -802,12 +802,12 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+              <div className="p-4 rounded-lg" style={{ backgroundColor: '#EBFEF5', border: '1px solid #B3DAC8' }}>
                 <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 mt-0.5" style={{ color: '#2563EB' }} />
+                  <Mail className="w-5 h-5 mt-0.5" style={{ color: '#006B4E' }} />
                   <div className="text-left">
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)', color: '#1E40AF', marginBottom: '0.25rem' }}>Revisa tu email</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#1E40AF' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)', color: '#01533E', marginBottom: '0.25rem' }}>Revisa tu email</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#01533E' }}>
                       Te hemos enviado un correo con los detalles de tu visita y un recordatorio.
                     </p>
                   </div>

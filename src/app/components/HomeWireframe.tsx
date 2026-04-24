@@ -2352,7 +2352,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
               {/* Resultado destacado */}
               {budget && parseFloat(budget) > 0 && (
-                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+                <div className="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-6">
                   <div className="text-center space-y-2">
                     <p className="text-sm font-medium text-gray-600">
                       Cuota mensual aproximada

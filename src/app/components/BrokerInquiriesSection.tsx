@@ -179,7 +179,7 @@ export function BrokerInquiriesSection() {
           <span 
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full"
             style={{ 
-              backgroundColor: '#EFF6FF',
+              backgroundColor: '#EBFEF5',
               color: '#006B4E',
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-xs)',
