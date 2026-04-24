@@ -25,6 +25,7 @@ import { TerminosCondiciones } from '@/app/components/TerminosCondiciones';
 import { BrokerProfile } from '@/app/components/BrokerProfile';
 import { PlanesPage } from '@/app/components/PlanesPage';
 import { ArticuloPage } from '@/app/components/ArticuloPage';
+import { AsesoriaPage } from '@/app/components/AsesoriaPage';
 
 export interface DashboardRef {
   openPublishModal: () => void;
@@ -56,7 +57,8 @@ type Screen =
   | 'admin-dashboard'
   | 'admin-general-dashboard'
   | 'politica-privacidad'
-  | 'terminos-condiciones';
+  | 'terminos-condiciones'
+  | 'asesoria';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -268,6 +270,7 @@ export default function App() {
         {currentScreen === 'admin-general-dashboard' && <AdminGeneralDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigateHome={() => setCurrentScreen('home')} />}
         {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigateHome={() => setCurrentScreen('home')} />}
+        {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
       </div>
     </div>
   );

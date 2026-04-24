@@ -1542,6 +1542,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* CTAs centrados */}
                   <div className="flex flex-col sm:flex-row justify-center gap-3">
                     <button
+                      onClick={() => onNavigate('asesoria')}
                       className="w-full sm:w-auto h-11 md:h-12 px-6 md:px-8 rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                       style={{
                         fontFamily: 'var(--font-body)',
@@ -1563,7 +1564,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     >
                       Más información
                     </button>
-                    <button
+                    <a
+                      href="https://wa.me/56977714626?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20una%20asesor%C3%ADa%20gratuita%20para%20encontrar%20mi%20parcela%20ideal"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full sm:w-auto h-11 md:h-12 px-6 md:px-8 rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                       style={{
                         fontFamily: 'var(--font-body)',
@@ -1572,19 +1576,20 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         color: '#0A0A0A',
                         backgroundColor: '#FFFFFF',
                         border: '1px solid #FFFFFF',
-                        lineHeight: '1.5'
+                        lineHeight: '1.5',
+                        textDecoration: 'none'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#F5F5F5';
-                        e.currentTarget.style.borderColor = '#F5F5F5';
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#F5F5F5';
+                        (e.currentTarget as HTMLElement).style.borderColor = '#F5F5F5';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#FFFFFF';
-                        e.currentTarget.style.borderColor = '#FFFFFF';
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#FFFFFF';
+                        (e.currentTarget as HTMLElement).style.borderColor = '#FFFFFF';
                       }}
                     >
                       Hablar con un asesor
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
