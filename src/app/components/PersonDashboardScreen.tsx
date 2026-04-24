@@ -321,9 +321,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       {/* KPIs Section */}
       <section className="grid grid-cols-4 gap-6">
         {/* Publicaciones activas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
           </div>
@@ -357,9 +357,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
         
         {/* Visualizaciones totales */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -399,9 +399,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
         
         {/* Consultas recibidas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
@@ -441,9 +441,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
         
         {/* Publicaciones destacadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Star className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
           </div>
@@ -1436,7 +1436,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
           style={{
             backgroundColor: '#FFFFFF',
             border: '1px solid #E5E5E5',
-            boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)'
+            boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)'
           }}
         >
           <div className="flex gap-5">
@@ -3621,7 +3621,7 @@ function MyPurchasesContent() {
             style={{ 
               backgroundColor: '#FFFFFF', 
               border: '1px solid #E5E5E5',
-              boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)'
+              boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)'
             }}
           >
             {/* Property Header */}

@@ -480,7 +480,7 @@ export function AdminPublicacionesSection({
                     <div className="flex items-start gap-4 mb-4">
                       <div
                         className="w-12 h-12 rounded-xl flex items-center justify-center"
-                        style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
+                        style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}
                       >
                         <Building2 className="w-6 h-6" style={{ color: '#006B4E' }} />
                       </div>

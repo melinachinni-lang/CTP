@@ -2282,7 +2282,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       >
                         <div
                           className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                          style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
+                          style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}
                         >
                           <Layout className="w-6 h-6" style={{ color: '#006B4E' }} />
                         </div>
@@ -2332,7 +2332,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       >
                         <div
                           className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                          style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
+                          style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}
                         >
                           <Home className="w-6 h-6" style={{ color: '#006B4E' }} />
                         </div>

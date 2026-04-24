@@ -350,9 +350,9 @@ function HomeContent() {
       {/* KPIs Section */}
       <section className="grid grid-cols-4 gap-6">
         {/* Propiedades en seguimiento */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Bookmark className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -392,9 +392,9 @@ function HomeContent() {
         </div>
         
         {/* Visualizaciones totales */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -434,9 +434,9 @@ function HomeContent() {
         </div>
         
         {/* Consultas generadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
@@ -476,9 +476,9 @@ function HomeContent() {
         </div>
         
         {/* Propiedades guardadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Heart className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -1464,7 +1464,7 @@ function PerformanceContent() {
       {/* Stats Overview - KPI Cards */}
       <section className="grid grid-cols-3 gap-4">
         {/* Consultas atendidas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
               <MessageCircle className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -1506,7 +1506,7 @@ function PerformanceContent() {
         </div>
 
         {/* Tasa de respuesta */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
               <CheckCircle className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -1548,7 +1548,7 @@ function PerformanceContent() {
         </div>
 
         {/* Oportunidades activas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
               <TrendingUp className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -1590,7 +1590,7 @@ function PerformanceContent() {
       </section>
 
       {/* Detailed Metrics */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <h2 
           style={{ 
             fontFamily: 'var(--font-heading)',
@@ -1797,7 +1797,7 @@ function PerformanceContent() {
       </section>
 
       {/* Opportunities Funnel */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <h2 
           style={{ 
             fontFamily: 'var(--font-heading)',
@@ -1965,7 +1965,7 @@ function PerformanceContent() {
 
       {/* Comparative Stats */}
       <section className="grid grid-cols-2 gap-4">
-        <div className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
               <Award className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -2042,7 +2042,7 @@ function PerformanceContent() {
           </div>
         </div>
 
-        <div className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
               <CreditCard className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -2484,7 +2484,7 @@ function HelpContent() {
       </section>
 
       {/* FAQ */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <h2 
           style={{ 
             fontFamily: 'var(--font-heading)',
@@ -2629,7 +2629,7 @@ function HelpContent() {
       </section>
 
       {/* Resources */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <h2 
           style={{ 
             fontFamily: 'var(--font-heading)',
@@ -2792,7 +2792,7 @@ function SettingsContent() {
       </div>
 
       {/* Professional Profile */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
             <Users className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -2984,7 +2984,7 @@ function SettingsContent() {
       </section>
 
       {/* Notifications */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
             <AlertCircle className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -3087,7 +3087,7 @@ function SettingsContent() {
       </section>
 
       {/* Account Actions */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
             <Building2 className="w-5 h-5" style={{ color: '#0A0A0A' }} />

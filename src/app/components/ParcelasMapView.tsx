@@ -517,7 +517,7 @@ export function ParcelasMapView({
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#647E3F';
                       e.currentTarget.style.transform = 'translateY(-1px)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(18, 72, 84, 0.3)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 107, 78, 0.3)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = '#006B4E';

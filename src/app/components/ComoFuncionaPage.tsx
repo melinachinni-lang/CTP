@@ -83,7 +83,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       title: 'Publicaciones',
       description: 'Administra tus propiedades y mantenlas actualizadas',
       color: '#006B4E',
-      lightColor: 'rgba(18, 72, 84, 0.1)',
+      lightColor: 'rgba(0, 107, 78, 0.1)',
       detailedInfo: {
         intro: 'Crea y gestiona todas tus publicaciones de parcelas desde un panel centralizado.',
         benefits: [
@@ -100,7 +100,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       title: 'Consultas y leads',
       description: 'Todos los interesados organizados en un solo lugar',
       color: '#006B4E',
-      lightColor: 'rgba(18, 72, 84, 0.1)',
+      lightColor: 'rgba(0, 107, 78, 0.1)',
       detailedInfo: {
         intro: 'Centraliza todas las consultas y gestiona cada lead de forma eficiente.',
         benefits: [
@@ -117,7 +117,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       title: 'Rendimiento',
       description: 'Visualiza métricas clave de tus publicaciones',
       color: '#006B4E',
-      lightColor: 'rgba(18, 72, 84, 0.1)',
+      lightColor: 'rgba(0, 107, 78, 0.1)',
       detailedInfo: {
         intro: 'Analiza el desempeño de tus propiedades con métricas claras y accionables.',
         benefits: [
@@ -134,7 +134,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       title: 'Equipo y brokers',
       description: 'Invita a tu equipo a colaborar en las ventas',
       color: '#006B4E',
-      lightColor: 'rgba(18, 72, 84, 0.1)',
+      lightColor: 'rgba(0, 107, 78, 0.1)',
       detailedInfo: {
         intro: 'Colabora con tu equipo o brokers externos de forma ordenada y transparente.',
         benefits: [
@@ -151,7 +151,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
       title: 'Planes y pagos',
       description: 'Elige el plan que mejor se ajuste a tu operación',
       color: '#006B4E',
-      lightColor: 'rgba(18, 72, 84, 0.1)',
+      lightColor: 'rgba(0, 107, 78, 0.1)',
       detailedInfo: {
         intro: 'Planes flexibles que crecen con tu negocio, sin sorpresas ni costos ocultos.',
         benefits: [
@@ -951,18 +951,18 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
               <button
                 onClick={() => onNavigate('entry')}
                 style={{
-                  boxShadow: '0 2px 8px rgba(18, 72, 84, 0.15)',
+                  boxShadow: '0 2px 8px rgba(0, 107, 78, 0.15)',
                   backgroundColor: '#006B4E'
                 }}
                 className="h-12 text-white px-8 text-base leading-[1.5] font-medium rounded-[200px] transition-all duration-200 flex items-center justify-center min-w-[180px]"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(18, 72, 84, 0.25)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 107, 78, 0.25)';
                   e.currentTarget.style.backgroundColor = '#0D3640';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = '#006B4E';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(18, 72, 84, 0.15)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 107, 78, 0.15)';
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >

@@ -149,7 +149,7 @@ export function HelpContent() {
                 key={card.id}
                 className="bg-white border-2 border-gray-200 rounded-[24px] p-6 text-left hover:border-gray-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all space-y-4"
               >
-                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
                   <Icon className="w-6 h-6" style={{ color: '#006B4E' }} />
                 </div>
                 <div className="space-y-2">

@@ -3200,7 +3200,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     <div 
                       className="absolute top-4 right-4 px-4 py-2 rounded-lg"
                       style={{
-                        backgroundColor: 'rgba(18, 72, 84, 0.95)',
+                        backgroundColor: 'rgba(0, 107, 78, 0.95)',
                         backdropFilter: 'blur(8px)',
                       }}
                     >

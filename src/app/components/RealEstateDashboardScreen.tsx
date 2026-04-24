@@ -127,7 +127,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
               </div>
             </button>
             {showMenu && (
-              <div className="mt-3 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+              <div className="mt-3 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
                 <button
                   onClick={() => onNavigate('entry')}
                   className="w-full text-left px-4 py-2.5 transition-colors"
@@ -329,9 +329,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       {/* KPIs Section */}
       <section className="grid grid-cols-4 gap-6">
         {/* Parcelas activas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -371,9 +371,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
         
         {/* Visualizaciones totales */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -413,9 +413,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
         
         {/* Consultas recibidas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
@@ -455,9 +455,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
         
         {/* Parcelas guardadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)' }}>
+        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <Heart className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
@@ -946,7 +946,7 @@ function PerformanceContent() {
         {/* Consultas Recibidas */}
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
@@ -994,7 +994,7 @@ function PerformanceContent() {
         {/* Publicaciones Activas */}
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
@@ -1041,7 +1041,7 @@ function PerformanceContent() {
         {/* Parcelas Vendidas */}
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <CheckCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">
@@ -1089,7 +1089,7 @@ function PerformanceContent() {
         {/* Tasa de Conversión */}
         <div className="bg-white border-2 border-gray-200 rounded-[24px] p-6 space-y-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
           <div className="flex items-start justify-between">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
               <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
             </div>
             <div className="flex items-center gap-1">

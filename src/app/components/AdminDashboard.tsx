@@ -805,7 +805,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     style={{
                       backgroundColor: '#FFFFFF',
                       border: '1px solid #E5E5E5',
-                      boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)',
+                      boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)',
                       minHeight: '140px'
                     }}
                   >
@@ -870,7 +870,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   style={{
                     backgroundColor: '#FFFFFF',
                     border: '1px solid #E5E5E5',
-                    boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)'
+                    boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)'
                   }}
                 >
                   <div className="flex items-start justify-between mb-6">
@@ -1047,7 +1047,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   style={{
                     backgroundColor: '#FFFFFF',
                     border: '1px solid #E5E5E5',
-                    boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)'
+                    boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)'
                   }}
                 >
                   <h2
@@ -1166,7 +1166,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 style={{
                   backgroundColor: '#FFFFFF',
                   border: '1px solid #E5E5E5',
-                  boxShadow: '0 4px 12px 0 rgba(18, 72, 84, 0.08)'
+                  boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)'
                 }}
               >
                 <div
@@ -2840,7 +2840,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                       >
                         <div
                           className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                          style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
+                          style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}
                         >
                           <Layout className="w-6 h-6" style={{ color: '#006B4E' }} />
                         </div>
@@ -2890,7 +2890,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                       >
                         <div
                           className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                          style={{ backgroundColor: 'rgba(18, 72, 84, 0.1)' }}
+                          style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}
                         >
                           <Home className="w-6 h-6" style={{ color: '#006B4E' }} />
                         </div>

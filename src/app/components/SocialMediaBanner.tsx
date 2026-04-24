@@ -146,7 +146,7 @@ export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
                         borderRadius: '50%',
                         cursor: 'pointer',
                         transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-                        boxShadow: isHovered ? '0 4px 12px rgba(18, 72, 84, 0.25)' : '0 2px 4px rgba(18, 72, 84, 0.15)'
+                        boxShadow: isHovered ? '0 4px 12px rgba(0, 107, 78, 0.25)' : '0 2px 4px rgba(0, 107, 78, 0.15)'
                       }}
                       onMouseEnter={() => setHoveredIcon(social.name)}
                       onMouseLeave={() => setHoveredIcon(null)}
