@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock } from 'lucide-react';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
+import { PlanesModal } from '@/app/components/PlanesModal';
 import { VambeChat } from '@/app/components/VambeChat';
 import { SocialMediaBanner } from '@/app/components/SocialMediaBanner';
 import { Navbar } from '@/app/components/Navbar';
@@ -64,6 +65,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
   // Estado para modal de contacto
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isPlanesModalOpen, setIsPlanesModalOpen] = useState(false);
 
   // Actualizar estado cuando cambie la prop initialLoadingError
   useEffect(() => {
@@ -1882,7 +1884,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       Gestiona tus publicaciones y coordina con tu equipo desde herramientas diseñadas para tu operación.
                     </p>
                   </div>
-                  <button onClick={() => onNavigate('planes')} className="w-full h-10 lg:h-11 px-4 text-sm lg:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center mt-5 lg:mt-6 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030]">
+                  <button onClick={() => setIsPlanesModalOpen(true)} className="w-full h-10 lg:h-11 px-4 text-sm lg:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center mt-5 lg:mt-6 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030]">
                     Conocer planes
                   </button>
                 </div>
@@ -2961,6 +2963,14 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           display: none !important;
         }
       `}</style>
+
+      {/* Modal de Planes */}
+      {isPlanesModalOpen && (
+        <PlanesModal
+          onClose={() => setIsPlanesModalOpen(false)}
+          onNavigatePlanes={() => onNavigate('planes')}
+        />
+      )}
 
       {/* Modal de Contacto */}
       {isContactModalOpen && (
