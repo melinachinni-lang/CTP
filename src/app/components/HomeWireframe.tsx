@@ -336,26 +336,24 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
   // Datos de inmobiliarias
   const inmobiliarias = [
-    { id: 1, nombre: 'Premium Lands', logo: 'https://images.unsplash.com/photo-1741162917720-adc367c3af75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwbG9nbyUyMG1pbmltYWx8ZW58MXx8fHwxNzY5MTg1MjU1fDA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 2, nombre: 'Propiedades del Valle', logo: 'https://images.unsplash.com/photo-1767706508376-84ab4d8ca165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9wZXJ0eSUyMGNvbXBhbnklMjBsb2dvfGVufDF8fHx8MTc2OTE4MzkyMnww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 3, nombre: 'Grupo Andino', logo: 'https://images.unsplash.com/photo-1759174712773-bd301ffa2993?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwYnJhbmQlMjBsb2dvfGVufDF8fHx8MTc2OTE4NTI1Nnww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 4, nombre: 'Inversiones Capital', logo: 'https://images.unsplash.com/photo-1658203897456-14cdc8e81146?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wYW55JTIwbG9nbyUyMGRlc2lnbnxlbnwxfHx8fDE3NjkxMDU0MDN8MA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 5, nombre: 'Torre Business', logo: 'https://images.unsplash.com/photo-1583813166791-525b211bd7ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwZW1ibGVtfGVufDF8fHx8MTc2OTE4NTI1Nnww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 6, nombre: 'Grupo Inmobiliario', logo: 'https://images.unsplash.com/photo-1741162917720-adc367c3af75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwbG9nbyUyMG1pbmltYWx8ZW58MXx8fHwxNzY5MTg1MjU1fDA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 7, nombre: 'Capital Inversiones', logo: 'https://images.unsplash.com/photo-1767706508376-84ab4d8ca165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9wZXJ0eSUyMGNvbXBhbnklMjBsb2dvfGVufDF8fHx8MTc2OTE4MzkyMnww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 8, nombre: 'Propiedades Premium', logo: 'https://images.unsplash.com/photo-1759174712773-bd301ffa2993?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwYnJhbmQlMjBsb2dvfGVufDF8fHx8MTc2OTE4NTI1Nnww&ixlib=rb-4.1.0&q=80&w=1080' },
+    { id: 1, nombre: 'Inmobiliaria Austral', logo: 'https://images.unsplash.com/photo-1763479169474-728a7de108c3?w=300&q=80' },
+    { id: 2, nombre: 'Propiedades del Sur', logo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=300&q=80' },
+    { id: 3, nombre: 'Patagonia Properties', logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80' },
+    { id: 4, nombre: 'Inmobiliaria Valle Verde', logo: 'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=300&q=80' },
+    { id: 5, nombre: 'Araucanía Bienes Raíces', logo: 'https://images.unsplash.com/photo-1760636803392-85a2a18e562d?w=300&q=80' },
+    { id: 6, nombre: 'Inmobiliaria Lagos del Sur', logo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&q=80' },
   ];
 
   // Datos de brokers
   const brokers = [
-    { id: 1, nombre: 'María González', foto: 'https://images.unsplash.com/photo-1629507208649-70919ca33793?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2Zlc3Npb25hbCUyMHBvcnRyYWl0fGVufDF8fHx8MTc2OTA2Njg5Mnww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 2, nombre: 'Carlos Ruiz', foto: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwYWdlbnR8ZW58MXx8fHwxNzY5MDI3Njk5fDA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 3, nombre: 'Andrea Silva', foto: 'https://images.unsplash.com/photo-1763479169474-728a7de108c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGJyb2tlcnxlbnwxfHx8fDE3NjkxMTk0Mjd8MA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 4, nombre: 'Roberto Muñoz', foto: 'https://images.unsplash.com/photo-1589458223095-03eee50f0054?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2Zlc3Npb25hbCUyMG1hbnxlbnwxfHx8fDE3NjkwMzE4OTR8MA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 5, nombre: 'Patricia López', foto: 'https://images.unsplash.com/photo-1655249493799-9cee4fe983bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBoZWFkc2hvdCUyMHdvbWFufGVufDF8fHx8MTc2OTA3OTk4NHww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 6, nombre: 'Jorge Herrera', foto: 'https://images.unsplash.com/photo-1629507208649-70919ca33793?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2Zlc3Npb25hbCUyMHBvcnRyYWl0fGVufDF8fHx8MTc2OTA2Njg5Mnww&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 7, nombre: 'Daniela Torres', foto: 'https://images.unsplash.com/photo-1763479169474-728a7de108c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGJyb2tlcnxlbnwxfHx8fDE3NjkxMTk0Mjd8MA&ixlib=rb-4.1.0&q=80&w=1080' },
-    { id: 8, nombre: 'Francisco Vega', foto: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwYWdlbnR8ZW58MXx8fHwxNzY5MDI3Njk5fDA&ixlib=rb-4.1.0&q=80&w=1080' },
+    { id: 1, nombre: 'Carolina Méndez', foto: 'https://images.unsplash.com/photo-1655249493799-9cee4fe983bb?w=300&q=80' },
+    { id: 2, nombre: 'Roberto Silva', foto: 'https://images.unsplash.com/photo-1629507208649-70919ca33793?w=300&q=80' },
+    { id: 3, nombre: 'Andrea Herrera', foto: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&q=80' },
+    { id: 4, nombre: 'Carlos Muñoz', foto: 'https://images.unsplash.com/photo-1589458223095-03eee50f0054?w=300&q=80' },
+    { id: 5, nombre: 'Patricia Soto', foto: 'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=300&q=80' },
+    { id: 6, nombre: 'Jorge Vega', foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80' },
+    { id: 7, nombre: 'Daniela Ríos', foto: 'https://images.unsplash.com/photo-1763479169474-728a7de108c3?w=300&q=80' },
+    { id: 8, nombre: 'Francisco Torres', foto: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300&q=80' },
   ];
 
   // Efecto para el scroll infinito del carrusel
