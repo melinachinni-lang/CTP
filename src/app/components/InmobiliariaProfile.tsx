@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, MapPin, Phone, Mail, CheckCircle, FileCheck, TrendingUp, Building2, Scale, FileText, Handshake, Shield, Users, CreditCard, X, ChevronRight, Star } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -125,7 +126,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               backgroundColor: '#006B4E'
             }}
             className="h-10 text-white px-8 rounded-[200px] transition-colors inline-flex items-center justify-center"
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Volver a Inmobiliarias
@@ -292,7 +293,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               <button 
                 style={{ backgroundColor: '#006B4E' }}
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >                Publicar propiedad
               </button>
@@ -392,7 +393,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       backgroundColor: '#006B4E'
                     }}
                     className="h-10 text-white px-[32px] rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Contactar
@@ -795,7 +796,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                             backgroundColor: '#006B4E'
                           }}
                           className="h-12 text-white px-6 rounded-[200px] transition-colors flex items-center justify-center shadow-sm hover:shadow"
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
                           WhatsApp
@@ -1377,6 +1378,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
           </div>
         </div>
       )}
+      <SiteFooter onNavigate={onNavigate} />
     </div>
   );
 }

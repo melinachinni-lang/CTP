@@ -500,7 +500,7 @@ export function SettingsContent() {
                   backgroundColor: '#006B4E'
                 }}
                 className="text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Invitar usuario
@@ -708,7 +708,7 @@ export function SettingsContent() {
                   backgroundColor: '#006B4E'
                 }}
                 className="text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Actualizar contraseña
@@ -848,7 +848,7 @@ export function SettingsContent() {
             backgroundColor: '#006B4E'
           }}
           className="text-white py-3 px-8 rounded-[200px] transition-colors shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Guardar cambios

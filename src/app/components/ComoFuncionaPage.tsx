@@ -958,7 +958,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px)';
                   e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 107, 78, 0.25)';
-                  e.currentTarget.style.backgroundColor = '#0D3640';
+                  e.currentTarget.style.backgroundColor = '#01533E';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = '#006B4E';

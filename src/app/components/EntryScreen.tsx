@@ -500,7 +500,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     backgroundColor: '#006B4E'
                   }}
                   className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ingresar
@@ -591,7 +591,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     backgroundColor: '#006B4E'
                   }}
                   className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm mt-6"
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Registrarme
@@ -771,7 +771,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       backgroundColor: forgotPasswordEmail ? '#006B4E' : undefined
                     }}
                     className="flex-1 h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    onMouseEnter={(e) => { if (forgotPasswordEmail) e.currentTarget.style.backgroundColor = '#0D3640'; }}
+                    onMouseEnter={(e) => { if (forgotPasswordEmail) e.currentTarget.style.backgroundColor = '#01533E'; }}
                     onMouseLeave={(e) => { if (forgotPasswordEmail) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                   >
                     Enviar enlace
@@ -812,7 +812,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       backgroundColor: '#006B4E'
                     }}
                     className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Entendido
@@ -901,7 +901,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   ? 'text-white'
                   : 'text-gray-400 cursor-not-allowed'
               }`}
-              onMouseEnter={(e) => { if (selectedProfile) e.currentTarget.style.backgroundColor = '#0D3640'; }}
+              onMouseEnter={(e) => { if (selectedProfile) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedProfile) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Continuar
@@ -987,7 +987,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   ? 'text-white'
                   : 'text-gray-400 cursor-not-allowed'
               }`}
-              onMouseEnter={(e) => { if (selectedAction) e.currentTarget.style.backgroundColor = '#0D3640'; }}
+              onMouseEnter={(e) => { if (selectedAction) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedAction) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Continuar
@@ -1073,7 +1073,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   ? 'text-white'
                   : 'text-gray-400 cursor-not-allowed'
               }`}
-              onMouseEnter={(e) => { if (selectedExperience) e.currentTarget.style.backgroundColor = '#0D3640'; }}
+              onMouseEnter={(e) => { if (selectedExperience) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedExperience) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Continuar
@@ -1159,7 +1159,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   ? 'text-white'
                   : 'text-gray-400 cursor-not-allowed'
               }`}
-              onMouseEnter={(e) => { if (selectedAdvisory) e.currentTarget.style.backgroundColor = '#0D3640'; }}
+              onMouseEnter={(e) => { if (selectedAdvisory) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedAdvisory) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Continuar
@@ -1480,7 +1480,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 backgroundColor: '#006B4E'
               }}
               className="w-full h-12 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm text-white mt-6"
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               {selectedProfile === 'real-estate' && 'Finalizar registro'}
@@ -1822,7 +1822,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 if ((onboardingStep === 1 && usageIntent) ||
                     (onboardingStep === 2 && mainGoal) ||
                     (onboardingStep === 3 && teamSize)) {
-                  e.currentTarget.style.backgroundColor = '#0D3640';
+                  e.currentTarget.style.backgroundColor = '#01533E';
                 }
               }}
               onMouseLeave={(e) => { 
@@ -2181,7 +2181,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 if ((brokerOnboardingStep === 1 && brokerRole) ||
                     (brokerOnboardingStep === 2 && brokerFocus) ||
                     (brokerOnboardingStep === 3 && brokerExperience)) {
-                  e.currentTarget.style.backgroundColor = '#0D3640';
+                  e.currentTarget.style.backgroundColor = '#01533E';
                 }
               }}
               onMouseLeave={(e) => { 

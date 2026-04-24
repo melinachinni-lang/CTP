@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -1355,6 +1356,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
           calendlyUrl: undefined // Aquí puedes agregar la URL de Calendly del agente si está disponible
         }}
       />
+      <SiteFooter onNavigate={onNavigate} />
     </div>
   );
 }

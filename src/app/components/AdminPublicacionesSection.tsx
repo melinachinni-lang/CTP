@@ -238,7 +238,7 @@ export function AdminPublicacionesSection({
                 border: 'none'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#0D3640';
+                e.currentTarget.style.backgroundColor = '#01533E';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#006B4E';
@@ -452,7 +452,7 @@ export function AdminPublicacionesSection({
                 border: 'none'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#0D3640';
+                e.currentTarget.style.backgroundColor = '#01533E';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#006B4E';

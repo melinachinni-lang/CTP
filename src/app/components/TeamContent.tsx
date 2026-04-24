@@ -719,7 +719,7 @@ export function TeamContent() {
                   backgroundColor: '#006B4E'
                 }}
                 className="text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Editar broker
@@ -773,7 +773,7 @@ export function TeamContent() {
                 backgroundColor: '#006B4E'
               }}
               className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
               Entendido

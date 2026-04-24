@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState } from 'react';
 import { ChevronLeft, Check, X } from 'lucide-react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
@@ -112,7 +113,7 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
                   <button
                     style={{ backgroundColor: '#006B4E' }}
                     className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Publicar propiedad
@@ -266,7 +267,7 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
                     color: plan.destacado ? 'white' : '#0A0A0A'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = plan.destacado ? '#0D3640' : '#dedede';
+                    e.currentTarget.style.backgroundColor = plan.destacado ? '#01533E' : '#dedede';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = plan.destacado ? '#006B4E' : '#efefef';
@@ -299,7 +300,7 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
               <button
                 className="px-8 py-3 rounded-full text-sm font-medium transition-all"
                 style={{ backgroundColor: '#006B4E', color: 'white' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Contactar a ventas
@@ -308,6 +309,7 @@ export function PlanesPage({ onNavigate, isLoggedIn = false, currentUser, onLogo
           </div>
         </div>
       </div>
+      <SiteFooter onNavigate={onNavigate} />
     </div>
   );
 }

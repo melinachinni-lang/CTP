@@ -338,7 +338,7 @@ function HomeContent() {
             letterSpacing: 'var(--letter-spacing-wide)',
             lineHeight: 'var(--line-height-ui)'
           }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" />
@@ -2342,7 +2342,7 @@ function PlanContent() {
                     cursor: isActive ? 'not-allowed' : 'pointer' 
                   }} 
                   onMouseEnter={(e) => { 
-                    if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#0D3640' : '#FAFAFA'; 
+                    if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#01533E' : '#FAFAFA'; 
                   }} 
                   onMouseLeave={(e) => { 
                     if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; 

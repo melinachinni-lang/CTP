@@ -300,7 +300,7 @@ export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
                   backgroundColor: '#006B4E',
                   color: '#FFFFFF'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Volver al inicio

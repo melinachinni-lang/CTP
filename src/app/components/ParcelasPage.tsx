@@ -1590,7 +1590,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                         backgroundColor: '#006B4E'
                       }}
                       className="w-full mt-8 text-white py-3 rounded-[200px] transition-colors"
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
                       Aplicar filtros
@@ -1869,7 +1869,7 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                             backgroundColor: '#006B4E',
                             color: '#FFFFFF'
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
                           Limpiar filtros

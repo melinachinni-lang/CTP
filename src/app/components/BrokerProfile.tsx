@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState } from 'react';
 import { ChevronLeft, MapPin, Phone, Mail, CheckCircle, Star, Award, TrendingUp, Briefcase } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -84,7 +85,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
               <button
                 style={{ backgroundColor: '#006B4E' }}
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Publicar propiedad
@@ -160,7 +161,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                     href={`tel:${brokerData.telefono}`}
                     className="flex items-center gap-2 px-4 py-2 rounded-full transition-colors"
                     style={{ backgroundColor: '#006B4E', color: 'white' }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     <Phone className="w-4 h-4" />
@@ -326,6 +327,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
           )}
         </div>
       </div>
+      <SiteFooter onNavigate={onNavigate} />
     </div>
   );
 }

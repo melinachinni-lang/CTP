@@ -284,7 +284,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               lineHeight: 'var(--line-height-ui)',
               cursor: canPublish ? 'pointer' : 'not-allowed'
             }}
-            onMouseEnter={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#0D3640'; }}
+            onMouseEnter={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" />
@@ -1017,7 +1017,7 @@ function ExploreContent() {
             backgroundColor: '#006B4E',
             transition: 'background-color 0.3s ease'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Buscar parcelas
@@ -1320,7 +1320,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
               cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#0D3640';
+              e.currentTarget.style.backgroundColor = '#01533E';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = '#006B4E';
@@ -1417,7 +1417,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
               cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#0D3640';
+              e.currentTarget.style.backgroundColor = '#01533E';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = '#006B4E';
@@ -1915,7 +1915,7 @@ function SavedContent() {
                     backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
@@ -2064,7 +2064,7 @@ function SavedContent() {
                     backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
@@ -2213,7 +2213,7 @@ function SavedContent() {
                     backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
@@ -2362,7 +2362,7 @@ function SavedContent() {
                     backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
@@ -2511,7 +2511,7 @@ function SavedContent() {
                     backgroundColor: '#006B4E',
                     transition: 'background-color 0.3s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Ver detalles
@@ -2566,7 +2566,7 @@ function SavedContent() {
             lineHeight: 'var(--line-height-body)'
           }}
           className="text-white py-3.5 px-8 rounded-[200px] transition-colors"
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Comparar guardadas
@@ -3359,7 +3359,7 @@ function CompareContent() {
                   lineHeight: 'var(--line-height-body)'
                 }}
                 className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Ver detalles
@@ -3387,7 +3387,7 @@ function CompareContent() {
                   lineHeight: 'var(--line-height-body)'
                 }}
                 className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Ver detalles
@@ -3415,7 +3415,7 @@ function CompareContent() {
                   lineHeight: 'var(--line-height-body)'
                 }}
                 className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Ver detalles
@@ -3536,7 +3536,7 @@ function CompareContent() {
               lineHeight: 'var(--line-height-body)'
             }}
             className="flex-1 text-white py-3.5 px-8 rounded-[200px] transition-colors"
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Contactar vendedores
@@ -4396,7 +4396,7 @@ function PlanContent() {
               letterSpacing: 'var(--letter-spacing-wide)',
               lineHeight: 'var(--line-height-ui)'
             }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Ver planes profesionales
@@ -4473,7 +4473,7 @@ function HelpContent() {
             lineHeight: 'var(--line-height-body)'
           }}
           className="w-full text-white py-3.5 px-8 rounded-[200px] transition-colors"
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           Iniciar conversación

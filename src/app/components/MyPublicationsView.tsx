@@ -508,7 +508,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               letterSpacing: 'var(--letter-spacing-wide)',
               lineHeight: 'var(--line-height-ui)'
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-5 h-5" />
@@ -730,7 +730,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 letterSpacing: 'var(--letter-spacing-wide)',
                 lineHeight: 'var(--line-height-ui)'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               Nueva publicación
@@ -1333,7 +1333,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   letterSpacing: 'var(--letter-spacing-wide)',
                   lineHeight: 'var(--line-height-ui)'
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0D3640'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
               >
                 Copiar link

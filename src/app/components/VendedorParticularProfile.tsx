@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState } from 'react';
 import { ChevronLeft, MapPin, Phone, Mail, CheckCircle, Shield, FileCheck, Clock, User, TrendingUp } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -32,7 +33,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
             onClick={() => onNavigate('home')}
             style={{ backgroundColor: '#006B4E' }}
             className="h-10 text-white px-8 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors inline-flex items-center justify-center"
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             Volver al inicio
@@ -84,7 +85,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
               <button 
                 style={{ backgroundColor: '#006B4E' }}
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Publicar propiedad
@@ -164,7 +165,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                   <button 
                     style={{ backgroundColor: '#006B4E' }}
                     className="h-10 text-white px-[32px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     Contactar
@@ -344,7 +345,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         <button 
                           style={{ backgroundColor: '#006B4E' }}
                           className="h-12 text-white px-6 text-sm leading-[1.5] font-semibold rounded-[200px] transition-colors flex items-center justify-center shadow-sm hover:shadow"
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
                           WhatsApp
@@ -430,6 +431,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
           </div>
         </div>
       </main>
+      <SiteFooter onNavigate={onNavigate} />
     </div>
   );
 }

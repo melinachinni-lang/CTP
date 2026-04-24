@@ -289,7 +289,7 @@ export function HelpContent() {
                   backgroundColor: '#006B4E'
                 }}
                 className="mt-3 w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Iniciar chat
@@ -335,7 +335,7 @@ export function HelpContent() {
                   backgroundColor: '#006B4E'
                 }}
                 className="mt-3 inline-block w-full text-white py-3 px-6 rounded-[200px] transition-colors text-center"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 soporte@compratuparcela.cl
@@ -439,7 +439,7 @@ export function HelpContent() {
             backgroundColor: '#006B4E'
           }}
           className="text-white py-3 px-8 rounded-[200px] transition-colors inline-flex items-center gap-2"
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0D3640'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           <Send className="w-5 h-5" />

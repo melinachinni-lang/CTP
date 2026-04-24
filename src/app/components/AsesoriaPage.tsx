@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/app/components/SiteFooter';
 import React from 'react';
 import { ChevronLeft, MapPin, Clock, CheckCircle, Users, MessageCircle, Search, FileText, Phone } from 'lucide-react';
 
@@ -281,6 +282,7 @@ export function AsesoriaPage({ onNavigate }: AsesoriaPageProps) {
         </div>
       </section>
 
+      <SiteFooter onNavigate={onNavigate} />
     </div>
   );
 }

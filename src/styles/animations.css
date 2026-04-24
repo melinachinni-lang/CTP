@@ -123,3 +123,11 @@
 .broker-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
+
+/* Pressed state — botones verdes primarios */
+button[style*="006B4E"]:active,
+button[style*="01533E"]:active,
+a[style*="006B4E"]:active,
+a[style*="01533E"]:active {
+  background-color: #002F23 !important;
+}
