@@ -1679,13 +1679,14 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     logo: 'https://images.unsplash.com/photo-1741162917720-adc367c3af75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwbG9nbyUyMG1pbmltYWx8ZW58MXx8fHwxNzY5MTg1MjU1fDA&ixlib=rb-4.1.0&q=80&w=1080'
                   }
                 ].map((proyecto) => (
-                  <div 
-                    key={proyecto.id} 
+                  <div
+                    key={proyecto.id}
                     className="rounded-xl shadow-sm cursor-pointer group overflow-hidden"
                     style={{
                       border: '2px solid #E5E5E5',
                       transition: 'all 0.3s ease'
                     }}
+                    onClick={() => onNavigate('proyecto-detalle', proyecto.id)}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.boxShadow = '0 8px 24px rgba(70, 38, 17, 0.15)';
                     }}
