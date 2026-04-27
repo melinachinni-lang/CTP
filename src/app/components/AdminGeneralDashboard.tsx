@@ -6,13 +6,14 @@ import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
 import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { NewProjectFlow } from '@/app/components/NewProjectFlow';
 import { AdminPublicacionesSection } from '@/app/components/AdminPublicacionesSection';
+import { CitasAdminView } from '@/app/components/CitasAdminView';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'publicaciones' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'publicaciones' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -372,6 +373,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'brokers' as NavItem, icon: Users, label: 'Brokers' },
     { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
     { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
+    { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
     { id: 'configuracion' as NavItem, icon: Settings, label: 'Configuración' }
@@ -664,6 +666,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'brokers' && 'Gestión de brokers y su actividad'}
                   {activeNav === 'asignaciones' && 'Asignación de leads a brokers'}
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
+                  {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
                   {activeNav === 'configuracion' && 'Configuración general del sistema'}
@@ -1501,6 +1504,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 </table>
               </div>
             </>
+          )}
+
+          {/* SECCIÓN: CITAS */}
+          {activeNav === 'citas' && (
+            <CitasAdminView />
           )}
 
           {/* SECCIÓN: PUBLICACIONES */}

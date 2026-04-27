@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, Clock, User, Mail, CheckCircle, Phone, AlertCircle, Loader2, ChevronLeft, ChevronRight, MapPin, BookOpen } from 'lucide-react';
+import { X, Calendar, Clock, User, Mail, CheckCircle, Phone, AlertCircle, Loader2, ChevronLeft, ChevronRight, MapPin, BookOpen, Video, MessageSquare } from 'lucide-react';
 
 interface Broker {
   id: number;
@@ -162,6 +162,9 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
   const esInmobiliaria = tipoVendedor === 'Inmobiliaria';
 
   const [paso, setPaso] = useState<'seleccion' | 'confirmacion'>('seleccion');
+  const [tipoCita, setTipoCita] = useState<'presencial' | 'videollamada' | null>(null);
+  const [nombre, setNombre] = useState<string>('');
+  const [mensaje, setMensaje] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loadingHorarios, setLoadingHorarios] = useState(false);
@@ -253,6 +256,9 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
   const handleCerrar = () => {
     if (isLoading) return;
     setPaso('seleccion');
+    setTipoCita(null);
+    setNombre('');
+    setMensaje('');
     setFechaSeleccionada(null);
     setHorarioSeleccionado('');
     setEmail('');
@@ -271,7 +277,7 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
   const emailValido = validarEmail(email).valido;
   const telefonoValido = validarTelefono(telefono).valido;
   const brokerListo = !esInmobiliaria || brokerSeleccionado !== null;
-  const puedeConfirmar = brokerListo && fechaSeleccionada && horarioSeleccionado && emailValido && telefonoValido;
+  const puedeConfirmar = tipoCita !== null && brokerListo && fechaSeleccionada && horarioSeleccionado && nombre.trim().length > 0 && emailValido && telefonoValido;
 
   return (
     <div
@@ -312,6 +318,41 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
 
             {/* Content */}
             <div className="p-6 space-y-6" style={{ position: 'relative', minHeight: '400px' }}>
+
+              {/* ── TIPO DE CITA ── */}
+              <div>
+                <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)', marginBottom: '0.75rem' }}>
+                  ¿Cómo preferís conocer la parcela?
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {([
+                    { id: 'presencial', label: 'Visita presencial', desc: 'Recorre el terreno en persona', Icon: MapPin },
+                    { id: 'videollamada', label: 'Videollamada', desc: 'Conoce la parcela online', Icon: Video },
+                  ] as const).map(({ id, label, desc, Icon }) => {
+                    const selected = tipoCita === id;
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => setTipoCita(id)}
+                        className="flex items-start gap-3 p-4 rounded-xl text-left transition-all"
+                        style={{
+                          backgroundColor: selected ? '#EBFEF5' : 'var(--input-background)',
+                          border: selected ? '2px solid #006B4E' : '1px solid var(--border)',
+                        }}
+                      >
+                        <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: selected ? '#006B4E' : 'var(--border)' }}>
+                          <Icon className="w-4 h-4" style={{ color: selected ? '#FFFFFF' : 'var(--muted-foreground)' }} />
+                        </div>
+                        <div>
+                          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', marginBottom: '2px' }}>{label}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)' }}>{desc}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Loading / Success overlay */}
               {(isLoading || showSuccess) && (
                 <div style={{
@@ -341,6 +382,9 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
                   </div>
                 </div>
               )}
+
+              {/* El resto del formulario se muestra solo tras elegir tipo */}
+              {tipoCita !== null && <>
 
               {/* ── BROKER CAROUSEL (solo Inmobiliaria) ── */}
               {esInmobiliaria && (
@@ -721,8 +765,66 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
                       </p>
                     </div>
                   )}
+
+                  {/* Nombre */}
+                  {fechaSeleccionada && horarioSeleccionado && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <User className="w-5 h-5" style={{ color: 'var(--foreground)' }} />
+                        <label style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>
+                          Tu nombre completo
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        value={nombre}
+                        onChange={e => setNombre(e.target.value)}
+                        placeholder="Ej: María González"
+                        className="w-full px-4 py-3 rounded-lg transition-all"
+                        style={{
+                          backgroundColor: 'var(--input-background)',
+                          border: '1px solid var(--border)',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-base)',
+                          color: 'var(--foreground)',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Mensaje opcional */}
+                  {fechaSeleccionada && horarioSeleccionado && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <MessageSquare className="w-5 h-5" style={{ color: 'var(--foreground)' }} />
+                        <label style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>
+                          Mensaje <span style={{ color: 'var(--muted-foreground)', fontWeight: 400 }}>(opcional)</span>
+                        </label>
+                      </div>
+                      <textarea
+                        value={mensaje}
+                        onChange={e => setMensaje(e.target.value)}
+                        placeholder="¿Hay algo específico que quieras ver o preguntar?"
+                        rows={3}
+                        className="w-full px-4 py-3 rounded-lg transition-all resize-none"
+                        style={{
+                          backgroundColor: 'var(--input-background)',
+                          border: '1px solid var(--border)',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-base)',
+                          color: 'var(--foreground)',
+                          outline: 'none',
+                          lineHeight: '1.5'
+                        }}
+                      />
+                    </div>
+                  )}
                 </>
               )}
+
+              {/* Cierre del bloque tipoCita */}
+              </>}
             </div>
 
             {/* Footer */}
@@ -741,34 +843,47 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
                   opacity: puedeConfirmar && !isLoading ? 1 : 0.6
                 }}
               >
-                Confirmar visita
+                Enviar solicitud
               </button>
             </div>
           </>
         ) : (
           <>
-            {/* Confirmación */}
+            {/* Solicitud recibida — pendiente de confirmación */}
             <div className="p-8 text-center space-y-6">
               <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10B981' }}>
-                  <CheckCircle className="w-8 h-8" style={{ color: '#FFFFFF' }} />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEF3C7' }}>
+                  <Clock className="w-8 h-8" style={{ color: '#D97706' }} />
                 </div>
               </div>
 
               <div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', marginBottom: '0.5rem' }}>
-                  ¡Visita confirmada!
+                  ¡Solicitud recibida!
                 </h2>
-                <p style={{ fontFamily: 'var(--font-body)', color: 'var(--muted-foreground)', fontSize: 'var(--font-size-body-base)', marginBottom: '1.5rem' }}>
-                  Tu visita ha sido agendada exitosamente
+                <p style={{ fontFamily: 'var(--font-body)', color: 'var(--muted-foreground)', fontSize: 'var(--font-size-body-base)' }}>
+                  Tu solicitud está <strong>pendiente de confirmación</strong>. Te avisaremos por correo en breve.
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl space-y-4" style={{ backgroundColor: 'var(--input-background)' }}>
+              <div className="p-6 rounded-xl space-y-4 text-left" style={{ backgroundColor: 'var(--input-background)' }}>
+                <div className="flex items-start gap-3">
+                  {tipoCita === 'videollamada'
+                    ? <Video className="w-5 h-5 mt-0.5" style={{ color: 'var(--foreground)' }} />
+                    : <MapPin className="w-5 h-5 mt-0.5" style={{ color: 'var(--foreground)' }} />
+                  }
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Tipo de cita</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>
+                      {tipoCita === 'videollamada' ? 'Videollamada' : 'Visita presencial'}
+                    </p>
+                  </div>
+                </div>
+
                 <div className="flex items-start gap-3">
                   <Calendar className="w-5 h-5 mt-0.5" style={{ color: 'var(--foreground)' }} />
-                  <div className="text-left">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Fecha y hora</p>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Fecha y hora solicitada</p>
                     <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>
                       {fechaSeleccionada && formatearFechaCompleta(fechaSeleccionada)} a las {horarioSeleccionado}
                     </p>
@@ -776,39 +891,21 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <User className="w-5 h-5 mt-0.5" style={{ color: 'var(--foreground)' }} />
-                  <div className="text-left">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Te acompañará</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>
-                      {agenteEfectivo.nombre}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 mt-0.5" style={{ color: 'var(--foreground)' }} />
-                  <div className="text-left">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Email de confirmación</p>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Correo de contacto</p>
                     <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>{email}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 mt-0.5" style={{ color: 'var(--foreground)' }} />
-                  <div className="text-left">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>Teléfono de contacto</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: 'var(--foreground)' }}>{telefono}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg" style={{ backgroundColor: '#EBFEF5', border: '1px solid #B3DAC8' }}>
+              <div className="p-4 rounded-lg" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A' }}>
                 <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 mt-0.5" style={{ color: '#006B4E' }} />
+                  <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#D97706' }} />
                   <div className="text-left">
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)', color: '#01533E', marginBottom: '0.25rem' }}>Revisa tu email</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#01533E' }}>
-                      Te hemos enviado un correo con los detalles de tu visita y un recordatorio.
+                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)', color: '#92400E', marginBottom: '0.25rem' }}>Pendiente de confirmación</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#92400E' }}>
+                      Nuestro equipo revisará tu solicitud y recibirás un correo con la confirmación{tipoCita === 'videollamada' ? ' y el link de Google Meet' : ' o reagendamiento'}.
                     </p>
                   </div>
                 </div>
@@ -818,6 +915,8 @@ export function ReservaVisitaModal({ isOpen, onClose, parcela, agente, tipoVende
                 onClick={handleCerrar}
                 className="w-full px-6 py-3 rounded-full transition-all"
                 style={{ backgroundColor: 'var(--foreground)', color: 'var(--background)', fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)' }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
               >
                 Entendido
               </button>
