@@ -1,6 +1,6 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon, Upload } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -8,6 +8,7 @@ import { ReservaVisitaModal } from '@/app/components/ReservaVisitaModal';
 import { ConsultaOnlineModal } from '@/app/components/ConsultaOnlineModal';
 import { ComprarParcelaModal } from '@/app/components/ComprarParcelaModal';
 import { FlujoCompraModal } from '@/app/components/FlujoCompraModal';
+import { SubirComprobanteModal } from '@/app/components/SubirComprobanteModal';
 import { ConsultarModal } from '@/app/components/ConsultarModal';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 import { VambeChat } from '@/app/components/VambeChat';
@@ -666,6 +667,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
   const [isComprarParcelaOpen, setIsComprarParcelaOpen] = useState(false);
   const [isFlujoCompraOpen, setIsFlujoCompraOpen] = useState(false);
   const [tipoCompra, setTipoCompra] = useState<'comprar' | 'reservar'>('comprar');
+  const [estadoCompra, setEstadoCompra] = useState<'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada'>('disponible');
+  const [isSubirComprobanteOpen, setIsSubirComprobanteOpen] = useState(false);
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [isPublicadoPorExpanded, setIsPublicadoPorExpanded] = useState(false);
@@ -2747,39 +2750,91 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                       ))}
                     </div>
 
-                    {/* CTA principal */}
-                    <button 
-                      onClick={() => setIsComprarParcelaOpen(true)}
-                      className="w-full px-6 py-3 rounded-full transition-all hover:opacity-90 flex items-center justify-center gap-2"
-                      style={{ 
-                        fontFamily: 'var(--font-body)',
-                        backgroundColor: '#006B4E',
-                        color: '#FFFFFF',
-                        fontWeight: 'var(--font-weight-semibold)',
-                        fontSize: 'var(--font-size-body-base)'
-                      }}
-                    >
-                      <div className="[&_svg]:stroke-white [&_path]:fill-none [&_path]:stroke-white [&_circle]:fill-none [&_circle]:stroke-white [&_rect]:fill-none [&_rect]:stroke-white [&_line]:stroke-white [&_polyline]:stroke-white">
-                        <ShoppingCart className="w-4 h-4" />
+                    {/* Badge de estado de compra (cuando no está disponible) */}
+                    {estadoCompra !== 'disponible' && (
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{
+                        backgroundColor: estadoCompra === 'reservandose' ? '#FFFBEB' : estadoCompra === 'pago-en-validacion' ? '#EFF6FF' : '#ECFDF5',
+                        border: `1px solid ${estadoCompra === 'reservandose' ? '#FDE68A' : estadoCompra === 'pago-en-validacion' ? '#BFDBFE' : '#6EE7B7'}`,
+                      }}>
+                        {estadoCompra === 'reservandose' && <Clock className="w-4 h-4 flex-shrink-0" style={{ color: '#D97706' }} />}
+                        {estadoCompra === 'pago-en-validacion' && <Activity className="w-4 h-4 flex-shrink-0" style={{ color: '#2563EB' }} />}
+                        {estadoCompra === 'reservada' && <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#059669' }} />}
+                        <div>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: estadoCompra === 'reservandose' ? '#92400E' : estadoCompra === 'pago-en-validacion' ? '#1E40AF' : '#065F46' }}>
+                            {estadoCompra === 'reservandose' && 'Reservándose'}
+                            {estadoCompra === 'pago-en-validacion' && 'Pago en validación'}
+                            {estadoCompra === 'reservada' && 'Reservada'}
+                          </p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>
+                            {estadoCompra === 'reservandose' && 'Esperando comprobante de transferencia'}
+                            {estadoCompra === 'pago-en-validacion' && 'Revisando tu comprobante'}
+                            {estadoCompra === 'reservada' && 'Parcela reservada a tu nombre'}
+                          </p>
+                        </div>
                       </div>
-                      Comprar parcela
-                    </button>
+                    )}
+
+                    {/* Demo toggle para wireframe */}
+                    <div className="flex gap-1 flex-wrap">
+                      {(['disponible', 'reservandose', 'pago-en-validacion', 'reservada'] as const).map(e => (
+                        <button key={e} onClick={() => setEstadoCompra(e)} className="text-[10px] px-2 py-0.5 rounded border transition-colors" style={{ backgroundColor: estadoCompra === e ? '#006B4E' : '#F5F5F5', color: estadoCompra === e ? '#fff' : '#6B7280', borderColor: estadoCompra === e ? '#006B4E' : '#E5E5E5', fontFamily: 'var(--font-body)' }}>
+                          {e}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* CTA principal — varía según estado */}
+                    {estadoCompra === 'disponible' && (
+                      <button
+                        onClick={() => setIsComprarParcelaOpen(true)}
+                        className="w-full px-6 py-3 rounded-full transition-all flex items-center justify-center gap-2"
+                        style={{ fontFamily: 'var(--font-body)', backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                      >
+                        <div className="[&_svg]:stroke-white [&_path]:fill-none [&_path]:stroke-white [&_circle]:fill-none [&_circle]:stroke-white [&_rect]:fill-none [&_rect]:stroke-white [&_line]:stroke-white [&_polyline]:stroke-white">
+                          <ShoppingCart className="w-4 h-4" />
+                        </div>
+                        Comprar parcela
+                      </button>
+                    )}
+
+                    {estadoCompra === 'reservandose' && (
+                      <button
+                        onClick={() => setIsSubirComprobanteOpen(true)}
+                        className="w-full px-6 py-3 rounded-full transition-all flex items-center justify-center gap-2"
+                        style={{ fontFamily: 'var(--font-body)', backgroundColor: '#D97706', color: '#FFFFFF', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B45309'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#D97706'}
+                      >
+                        <div className="[&_svg]:stroke-white [&_path]:fill-none [&_path]:stroke-white [&_circle]:fill-none [&_circle]:stroke-white [&_rect]:fill-none [&_rect]:stroke-white [&_line]:stroke-white [&_polyline]:stroke-white">
+                          <Upload className="w-4 h-4" />
+                        </div>
+                        Subir comprobante
+                      </button>
+                    )}
+
+                    {estadoCompra === 'pago-en-validacion' && (
+                      <div className="w-full px-6 py-3 rounded-full flex items-center justify-center gap-2" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                        <Activity className="w-4 h-4" style={{ color: '#2563EB' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', color: '#1E40AF', fontWeight: 600, fontSize: 'var(--font-size-body-sm)' }}>Validando pago…</span>
+                      </div>
+                    )}
+
+                    {estadoCompra === 'reservada' && (
+                      <div className="w-full px-6 py-3 rounded-full flex items-center justify-center gap-2" style={{ backgroundColor: '#ECFDF5', border: '1px solid #6EE7B7' }}>
+                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', color: '#065F46', fontWeight: 600, fontSize: 'var(--font-size-body-sm)' }}>Parcela reservada</span>
+                      </div>
+                    )}
 
                     {/* Botón Descargar brochure */}
-                    <button 
-                      onClick={() => {
-                        // Aquí iría la lógica de descarga del brochure
-                        console.log('Descargando brochure...');
-                      }}
-                      className="w-full px-6 py-3 rounded-full transition-all hover:opacity-90 flex items-center justify-center gap-2"
-                      style={{ 
-                        fontFamily: 'var(--font-body)',
-                        backgroundColor: '#F5F5F0',
-                        color: '#006B4E',
-                        fontWeight: 'var(--font-weight-medium)',
-                        fontSize: 'var(--font-size-body-base)',
-                        border: '1px solid #E5E5E0'
-                      }}
+                    <button
+                      onClick={() => { console.log('Descargando brochure...'); }}
+                      className="w-full px-6 py-3 rounded-full transition-all flex items-center justify-center gap-2"
+                      style={{ fontFamily: 'var(--font-body)', backgroundColor: '#F5F5F0', color: '#006B4E', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', border: '1px solid #E5E5E0' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
                     >
                       <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
                         <Download className="w-4 h-4" />
@@ -2788,23 +2843,20 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
                     </button>
 
                     {/* CTA secundario */}
-                    <button 
-                      onClick={() => setIsConsultarOpen(true)}
-                      className="w-full px-6 py-3 rounded-full transition-all hover:bg-gray-100 flex items-center justify-center gap-2"
-                      style={{ 
-                        fontFamily: 'var(--font-body)',
-                        backgroundColor: '#FFFFFF',
-                        color: '#525252',
-                        fontWeight: 'var(--font-weight-medium)',
-                        fontSize: 'var(--font-size-body-base)',
-                        border: '1px solid #E5E5E5'
-                      }}
-                    >
-                      <div className="[&_svg]:stroke-[#525252] [&_path]:fill-none [&_path]:stroke-[#525252] [&_circle]:fill-none [&_circle]:stroke-[#525252] [&_rect]:fill-none [&_rect]:stroke-[#525252] [&_line]:stroke-[#525252] [&_polyline]:stroke-[#525252]">
-                        <MessageSquare className="w-4 h-4" />
-                      </div>
-                      Consultar
-                    </button>
+                    {estadoCompra === 'disponible' && (
+                      <button
+                        onClick={() => setIsConsultarOpen(true)}
+                        className="w-full px-6 py-3 rounded-full transition-all flex items-center justify-center gap-2"
+                        style={{ fontFamily: 'var(--font-body)', backgroundColor: '#FFFFFF', color: '#525252', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', border: '1px solid #E5E5E5' }}
+                        onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F5F5F5')}
+                        onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
+                      >
+                        <div className="[&_svg]:stroke-[#525252] [&_path]:fill-none [&_path]:stroke-[#525252] [&_circle]:fill-none [&_circle]:stroke-[#525252] [&_rect]:fill-none [&_rect]:stroke-[#525252] [&_line]:stroke-[#525252] [&_polyline]:stroke-[#525252]">
+                          <MessageSquare className="w-4 h-4" />
+                        </div>
+                        Consultar
+                      </button>
+                    )}
 
                     {/* Card secundaria - Inmobiliaria */}
                     <div ref={publicadoPorRef} className="p-5 rounded-lg border" style={{ backgroundColor: '#FAFAFA', borderColor: '#E5E5E5' }}>
@@ -3625,8 +3677,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
         onClose={() => setIsComprarParcelaOpen(false)}
         onComprarAhora={() => {
           setIsComprarParcelaOpen(false);
-          setTipoCompra('comprar');
-          setIsFlujoCompraOpen(true);
+          setEstadoCompra('reservandose');
+          setIsSubirComprobanteOpen(true);
         }}
         onReservar={() => {
           setIsComprarParcelaOpen(false);
@@ -3643,6 +3695,17 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
         parcelaNombre={parcelaSeleccionadaStock || parcela.nombre}
         precio={parcela.precio}
         tipoCompra={tipoCompra}
+      />
+
+      {/* Modal de subir comprobante */}
+      <SubirComprobanteModal
+        isOpen={isSubirComprobanteOpen}
+        onClose={() => setIsSubirComprobanteOpen(false)}
+        onComprobanteEnviado={() => {
+          setIsSubirComprobanteOpen(false);
+          setEstadoCompra('pago-en-validacion');
+        }}
+        parcela={{ titulo: parcela.nombre, precio: parcela.precio }}
       />
 
       {/* Modal de confirmación de compra */}
