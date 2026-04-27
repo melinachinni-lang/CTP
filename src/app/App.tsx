@@ -80,6 +80,25 @@ export default function App() {
   const realEstateDashboardRef = useRef<DashboardRef>(null);
   const brokerDashboardRef = useRef<DashboardRef>(null);
 
+  // Estado compartido de compra por parcela (id → estado)
+  type ParcelaEstado = 'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada';
+  const [parcelaEstados, setParcelaEstados] = useState<Record<number, ParcelaEstado>>({});
+  const reservaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleParcelaEstadoChange = (id: number, estado: ParcelaEstado) => {
+    setParcelaEstados(prev => ({ ...prev, [id]: estado }));
+    if (estado === 'reservandose') {
+      if (reservaTimerRef.current) clearTimeout(reservaTimerRef.current);
+      reservaTimerRef.current = setTimeout(() => {
+        setParcelaEstados(prev =>
+          prev[id] === 'reservandose' ? { ...prev, [id]: 'disponible' } : prev
+        );
+      }, 30 * 60 * 1000);
+    } else if (estado !== 'disponible') {
+      if (reservaTimerRef.current) { clearTimeout(reservaTimerRef.current); reservaTimerRef.current = null; }
+    }
+  };
+
   // Estado para filtros de búsqueda
   const [searchFilters, setSearchFilters] = useState<{
     ubicacion: string;
@@ -248,7 +267,7 @@ export default function App() {
       <div className="pt-8">
         {currentScreen === 'home' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'home-error' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} initialLoadingError={true} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
-        {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} />}
+        {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} />}
         {currentScreen === 'parcelas-empty' && <ParcelasPageEmpty onNavigate={handleNavigate} />}
         {currentScreen === 'parcelas-error' && <ParcelasPageError onNavigate={handleNavigate} />}
         {currentScreen === 'inmobiliarias' && <InmobiliariasPage onNavigate={handleNavigate} />}
@@ -257,7 +276,7 @@ export default function App() {
         {currentScreen === 'como-funciona-loading' && <ComoFuncionaPageLoading onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'como-funciona' && <ComoFuncionaPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'recursos' && <RecursosPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
-        {currentScreen === 'parcela-detalle' && <ParcelaDetalle onNavigate={handleNavigate} parcelaId={selectedParcelaId} />}
+        {currentScreen === 'parcela-detalle' && <ParcelaDetalle onNavigate={handleNavigate} parcelaId={selectedParcelaId} estadoCompraInicial={selectedParcelaId !== null ? (parcelaEstados[selectedParcelaId!] || 'disponible') : 'disponible'} onEstadoChange={handleParcelaEstadoChange} />}
         {currentScreen === 'proyecto-detalle' && <ProyectoDetalle onNavigate={handleNavigate} proyectoId={selectedProyectoId} />}
         {currentScreen === 'inmobiliaria-profile' && <InmobiliariaProfile onNavigate={handleNavigate} inmobiliariaName={selectedInmobiliaria} />}
         {currentScreen === 'vendedor-particular-profile' && <VendedorParticularProfile onNavigate={handleNavigate} vendedorName={selectedInmobiliaria} />}

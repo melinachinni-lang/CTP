@@ -12,8 +12,11 @@ import { getAllProyectos } from '@/app/data/proyectosData';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
 
+type ParcelaEstado = 'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada';
+
 interface ParcelasPageProps {
   onNavigate: (screen: string, parcelaId?: number, data?: string) => void;
+  parcelaEstados?: Record<number, ParcelaEstado>;
   initialFilters?: {
     ubicacion: string;
     superficie: string;
@@ -23,7 +26,7 @@ interface ParcelasPageProps {
   } | null;
 }
 
-export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) {
+export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados }: ParcelasPageProps) {
   const [showMap, setShowMap] = useState(false);
   const [sortBy, setSortBy] = useState('relevancia');
   const proyectosCarouselRef = useRef<HTMLDivElement>(null);
@@ -2090,11 +2093,26 @@ export function ParcelasPage({ onNavigate, initialFilters }: ParcelasPageProps) 
                               e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
                             }}
                           >
-                          <ParcelaCardImage 
-                            imagenes={parcela.imagenes}
-                            imagen={parcela.imagen}
-                            nombre={parcela.nombre}
-                          />
+                          <div className="relative">
+                            <ParcelaCardImage
+                              imagenes={parcela.imagenes}
+                              imagen={parcela.imagen}
+                              nombre={parcela.nombre}
+                            />
+                            {parcelaEstados?.[parcela.id] && parcelaEstados[parcela.id] !== 'disponible' && (
+                              <div
+                                className="absolute top-2 left-2 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
+                                style={{
+                                  backgroundColor: parcelaEstados[parcela.id] === 'reservada' ? '#065F46' : '#D97706',
+                                  color: '#FFFFFF',
+                                  fontFamily: 'var(--font-body)',
+                                  boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
+                                }}
+                              >
+                                {parcelaEstados[parcela.id] === 'reservandose' ? 'Reservándose' : 'Reservada'}
+                              </div>
+                            )}
+                          </div>
                           <div className="p-4 sm:p-5 space-y-3 sm:space-y-4 bg-white flex-grow flex flex-col">
                             <div className="space-y-1">
                               <h3 style={{ color: '#0A0A0A', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)' }}>{parcela.nombre}</h3>

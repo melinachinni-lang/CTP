@@ -649,12 +649,16 @@ function GeolocalizacionMap({
   );
 }
 
+type EstadoCompra = 'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada';
+
 interface ParcelaDetalleProps {
   onNavigate: (screen: string, id?: number, data?: string) => void;
   parcelaId?: number | null;
+  estadoCompraInicial?: EstadoCompra;
+  onEstadoChange?: (parcelaId: number, estado: EstadoCompra) => void;
 }
 
-export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
+export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange }: ParcelaDetalleProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
   const [isDocTecnicaOpen, setIsDocTecnicaOpen] = useState(false);
@@ -667,8 +671,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId }: ParcelaDetalleProps) {
   const [isComprarParcelaOpen, setIsComprarParcelaOpen] = useState(false);
   const [isFlujoCompraOpen, setIsFlujoCompraOpen] = useState(false);
   const [tipoCompra, setTipoCompra] = useState<'comprar' | 'reservar'>('comprar');
-  const [estadoCompra, setEstadoCompra] = useState<'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada'>('disponible');
+  const [estadoCompra, setEstadoCompraLocal] = useState<EstadoCompra>(estadoCompraInicial || 'disponible');
   const [isSubirComprobanteOpen, setIsSubirComprobanteOpen] = useState(false);
+
+  const setEstadoCompra = (estado: EstadoCompra) => {
+    setEstadoCompraLocal(estado);
+    if (parcelaId && onEstadoChange) onEstadoChange(parcelaId, estado);
+  };
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [isPublicadoPorExpanded, setIsPublicadoPorExpanded] = useState(false);
