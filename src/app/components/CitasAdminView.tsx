@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Video, MapPin, CheckCircle, X, Clock, User, Mail, Phone, MessageSquare, Search, AlertCircle, Eye, Link, XCircle, ChevronRight } from 'lucide-react';
+import { Calendar, Video, MapPin, CheckCircle, X, Clock, User, Mail, Phone, MessageSquare, Search, AlertCircle, Eye, Link, XCircle, ChevronRight, Edit2 } from 'lucide-react';
 
 interface SolicitudCita {
   id: number;
@@ -386,22 +386,13 @@ function CitaDetalleDrawer({
           {solicitud.estado === 'pendiente' ? (
             <>
               <button
-                onClick={() => onConfirmar(solicitud)}
-                className="w-full py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                <CheckCircle className="w-4 h-4" /> Confirmar solicitud
-              </button>
-              <button
                 onClick={() => onRechazar(solicitud)}
                 className="w-full py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
                 style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FCA5A5'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
               >
-                <X className="w-4 h-4" /> Rechazar
+                <X className="w-4 h-4" /> Rechazar solicitud
               </button>
             </>
           ) : (
@@ -590,15 +581,6 @@ export function CitasAdminView() {
                   <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
                     {s.estado === 'pendiente' ? (
                       <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => setModalConfirmar(s)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-                        >
-                          <CheckCircle className="w-3.5 h-3.5" /> Confirmar
-                        </button>
                         <button
                           onClick={() => setModalRechazar(s)}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"

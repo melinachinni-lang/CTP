@@ -1,5 +1,6 @@
 import React from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar } from 'lucide-react';
+import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
@@ -31,6 +32,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     { id: 'home', label: 'Inicio', icon: Home },
     { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
     { id: 'inquiries', label: 'Consultas', icon: MessageCircle },
+    { id: 'calendarios', label: 'Calendarios', icon: Calendar },
     { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
     { id: 'team', label: 'Equipo / Brokers', icon: Users },
     { id: 'plan', label: 'Plan y facturación', icon: CreditCard },
@@ -152,6 +154,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="inmobiliaria" />}
+        {currentSection === 'calendarios' && <CalendariosView />}
         {currentSection === 'performance' && <PerformanceContent />}
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}

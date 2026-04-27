@@ -1,4 +1,5 @@
 import React from 'react';
+import { CalendariosView } from '@/app/components/CalendariosView';
 import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
@@ -33,6 +34,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'listings', label: 'Mis publicaciones', icon: 'list', group: 'sell' },
     { id: 'saved', label: 'Guardados', icon: 'heart', group: 'buy' },
     { id: 'inquiries', label: 'Consultas recibidas', icon: 'message', group: 'sell' },
+    { id: 'calendarios', label: 'Calendarios', icon: 'calendar', group: 'sell' },
     { id: 'compare', label: 'Comparar', icon: 'chart', group: 'buy' },
     { id: 'purchases', label: 'Mis compras', icon: 'shopping-bag', group: 'buy' },
     { id: 'plan', label: 'Plan y límites', icon: 'credit-card', group: 'sell' },
@@ -192,6 +194,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'listings' && <MyPublicationsView userType="vendedor_particular" userId="person-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'saved' && <SavedContent />}
         {currentSection === 'inquiries' && <ConsultasView viewType="personal" />}
+        {currentSection === 'calendarios' && <CalendariosView />}
         {currentSection === 'compare' && <CompareContent />}
         {currentSection === 'purchases' && <MyPurchasesContent />}
         {currentSection === 'plan' && <PlanContent />}
