@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, Video, MapPin, CheckCircle, X, Clock, User, Mail, Phone, MessageSquare, Search, AlertCircle, Eye, Link, XCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Video, MapPin, CheckCircle, X, Clock, User, Mail, Phone, MessageSquare, Search, AlertCircle, Eye, Link, XCircle, ChevronRight } from 'lucide-react';
 
 interface SolicitudCita {
   id: number;
@@ -217,10 +217,215 @@ function EmailPreviewModal({ solicitud, tipo, onClose }: { solicitud: SolicitudC
   );
 }
 
+function CitaDetalleDrawer({
+  solicitud,
+  onClose,
+  onConfirmar,
+  onRechazar,
+  onVerEmail,
+}: {
+  solicitud: SolicitudCita;
+  onClose: () => void;
+  onConfirmar: (s: SolicitudCita) => void;
+  onRechazar: (s: SolicitudCita) => void;
+  onVerEmail: (s: SolicitudCita) => void;
+}) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const estadoConfig = {
+    pendiente: { label: 'Pendiente', bg: '#FEF3C7', color: '#92400E', dot: '#F59E0B' },
+    confirmada: { label: 'Confirmada', bg: '#D1FAE5', color: '#065F46', dot: '#10B981' },
+    rechazada: { label: 'Rechazada', bg: '#FEE2E2', color: '#991B1B', dot: '#EF4444' },
+  }[solicitud.estado];
+
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        className="fixed inset-0 z-40"
+        style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+        onClick={onClose}
+      />
+      {/* Drawer */}
+      <div
+        className="fixed top-0 right-0 h-full z-50 flex flex-col"
+        style={{ width: '420px', backgroundColor: '#FFFFFF', boxShadow: '-4px 0 24px rgba(0,0,0,0.12)', overflowY: 'auto' }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: '#E5E5E5' }}>
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>Solicitud #{solicitud.id}</p>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>{solicitud.nombre}</h3>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg transition-colors hover:bg-gray-100">
+            <X className="w-5 h-5" style={{ color: '#6B7280' }} />
+          </button>
+        </div>
+
+        <div className="flex-1 px-6 py-6 space-y-6">
+          {/* Estado */}
+          <div className="flex items-center justify-between">
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>Estado</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: estadoConfig.bg, color: estadoConfig.color }}>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: estadoConfig.dot }} />
+              {estadoConfig.label}
+            </span>
+          </div>
+
+          {/* Tipo de cita */}
+          <div className="rounded-xl p-4" style={{ backgroundColor: solicitud.tipoCita === 'videollamada' ? '#EEF2FF' : '#F0FDF4', border: `1px solid ${solicitud.tipoCita === 'videollamada' ? '#C7D2FE' : '#BBF7D0'}` }}>
+            <div className="flex items-center gap-3">
+              {solicitud.tipoCita === 'videollamada'
+                ? <Video className="w-5 h-5" style={{ color: '#4F46E5' }} />
+                : <MapPin className="w-5 h-5" style={{ color: '#16A34A' }} />
+              }
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: solicitud.tipoCita === 'videollamada' ? '#3730A3' : '#166534' }}>
+                  {solicitud.tipoCita === 'videollamada' ? 'Videollamada' : 'Visita presencial'}
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: solicitud.tipoCita === 'videollamada' ? '#6366F1' : '#4ADE80', marginTop: '1px' }}>
+                  {solicitud.tipoCita === 'videollamada' ? 'Se generará link de Google Meet al confirmar' : solicitud.ubicacion}
+                </p>
+              </div>
+            </div>
+            {solicitud.estado === 'confirmada' && solicitud.tipoCita === 'videollamada' && solicitud.linkMeet && (
+              <a href={solicitud.linkMeet} target="_blank" rel="noreferrer" className="flex items-center gap-2 mt-3 px-3 py-2 rounded-lg text-xs font-medium" style={{ backgroundColor: '#4F46E5', color: '#FFFFFF', textDecoration: 'none', width: 'fit-content' }}>
+                <Video className="w-3.5 h-3.5" /> {solicitud.linkMeet}
+              </a>
+            )}
+          </div>
+
+          {/* Fecha y hora */}
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Fecha y hora</p>
+            <div className="flex items-center gap-3">
+              <Calendar className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#111827' }}>{solicitud.fecha}</span>
+            </div>
+            <div className="flex items-center gap-3 mt-2">
+              <Clock className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#111827' }}>{solicitud.horario} hrs</span>
+            </div>
+          </div>
+
+          <div style={{ height: '1px', backgroundColor: '#F3F4F6' }} />
+
+          {/* Datos del usuario */}
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Datos del interesado</p>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <User className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#111827' }}>{solicitud.nombre}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
+                <a href={`mailto:${solicitud.email}`} style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#006B4E', textDecoration: 'none' }}>{solicitud.email}</a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#111827' }}>{solicitud.telefono}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ height: '1px', backgroundColor: '#F3F4F6' }} />
+
+          {/* Parcela */}
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Propiedad</p>
+            <div className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#6B7280' }} />
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: 'var(--font-size-body-sm)', color: '#111827' }}>{solicitud.parcela}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', marginTop: '2px' }}>{solicitud.ubicacion}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mensaje del usuario */}
+          {solicitud.mensaje && (
+            <>
+              <div style={{ height: '1px', backgroundColor: '#F3F4F6' }} />
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Mensaje del interesado</p>
+                <div className="rounded-xl p-4" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                  <div className="flex items-start gap-3">
+                    <MessageSquare className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#6B7280' }} />
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.6', fontStyle: 'italic' }}>"{solicitud.mensaje}"</p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Motivo de rechazo */}
+          {solicitud.estado === 'rechazada' && solicitud.motivoRechazo && (
+            <>
+              <div style={{ height: '1px', backgroundColor: '#F3F4F6' }} />
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Motivo del rechazo</p>
+                <div className="rounded-xl p-4" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#991B1B', lineHeight: '1.6' }}>{solicitud.motivoRechazo}</p>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Metadata */}
+          <div style={{ height: '1px', backgroundColor: '#F3F4F6' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Solicitud recibida {solicitud.fechaCreacion}</p>
+        </div>
+
+        {/* Footer con acciones */}
+        <div className="px-6 py-4 border-t space-y-2" style={{ borderColor: '#E5E5E5' }}>
+          {solicitud.estado === 'pendiente' ? (
+            <>
+              <button
+                onClick={() => onConfirmar(solicitud)}
+                className="w-full py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+              >
+                <CheckCircle className="w-4 h-4" /> Confirmar solicitud
+              </button>
+              <button
+                onClick={() => onRechazar(solicitud)}
+                className="w-full py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FCA5A5'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
+              >
+                <X className="w-4 h-4" /> Rechazar
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => onVerEmail(solicitud)}
+              className="w-full py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
+              style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+            >
+              <Eye className="w-4 h-4" /> Ver correo enviado
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function CitasAdminView() {
   const [solicitudes, setSolicitudes] = useState<SolicitudCita[]>(SOLICITUDES_MOCK);
   const [filtroEstado, setFiltroEstado] = useState<'todas' | 'pendiente' | 'confirmada' | 'rechazada'>('todas');
   const [busqueda, setBusqueda] = useState('');
+  const [solicitudDetalle, setSolicitudDetalle] = useState<SolicitudCita | null>(null);
   const [modalConfirmar, setModalConfirmar] = useState<SolicitudCita | null>(null);
   const [modalRechazar, setModalRechazar] = useState<SolicitudCita | null>(null);
   const [motivoRechazo, setMotivoRechazo] = useState('');
@@ -340,7 +545,13 @@ export function CitasAdminView() {
             </thead>
             <tbody>
               {solicitudesFiltradas.map((s, i) => (
-                <tr key={s.id} style={{ borderBottom: i < solicitudesFiltradas.length - 1 ? '1px solid #F9FAFB' : 'none' }}>
+                <tr
+                  key={s.id}
+                  onClick={() => setSolicitudDetalle(s)}
+                  style={{ borderBottom: i < solicitudesFiltradas.length - 1 ? '1px solid #F9FAFB' : 'none', cursor: 'pointer', transition: 'background-color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FAFAFA')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                >
                   {/* Usuario */}
                   <td className="px-6 py-4">
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827', marginBottom: '2px' }}>{s.nombre}</p>
@@ -376,7 +587,7 @@ export function CitasAdminView() {
                     )}
                   </td>
                   {/* Acciones */}
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
                     {s.estado === 'pendiente' ? (
                       <div className="flex items-center gap-2">
                         <button
@@ -409,6 +620,10 @@ export function CitasAdminView() {
                         <Eye className="w-3.5 h-3.5" /> Ver correo
                       </button>
                     )}
+                  </td>
+                  {/* Indicador de detalle */}
+                  <td className="pr-4 py-4">
+                    <ChevronRight className="w-4 h-4" style={{ color: '#D1D5DB' }} />
                   </td>
                 </tr>
               ))}
@@ -531,6 +746,17 @@ export function CitasAdminView() {
           solicitud={emailPreview.solicitud}
           tipo={emailPreview.tipo}
           onClose={() => setEmailPreview(null)}
+        />
+      )}
+
+      {/* Drawer de detalle */}
+      {solicitudDetalle && (
+        <CitaDetalleDrawer
+          solicitud={solicitudes.find(s => s.id === solicitudDetalle.id) ?? solicitudDetalle}
+          onClose={() => setSolicitudDetalle(null)}
+          onConfirmar={(s) => { setModalConfirmar(s); }}
+          onRechazar={(s) => { setModalRechazar(s); }}
+          onVerEmail={(s) => setEmailPreview({ solicitud: s, tipo: s.estado === 'rechazada' ? 'rechazo' : s.tipoCita === 'videollamada' ? 'confirmacion-videollamada' : 'confirmacion-presencial' })}
         />
       )}
     </div>
