@@ -8,13 +8,14 @@ import { NewProjectFlow } from '@/app/components/NewProjectFlow';
 import { AdminPublicacionesSection } from '@/app/components/AdminPublicacionesSection';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
+import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -375,6 +376,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
     { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
     { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
+    { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
     { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
@@ -669,6 +671,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'asignaciones' && 'Asignación de leads a brokers'}
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
+                  {activeNav === 'reservas' && 'Comprobantes de transferencia recibidos — revisión y validación de pagos'}
                   {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
@@ -1512,6 +1515,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {/* SECCIÓN: CITAS */}
           {activeNav === 'citas' && (
             <CitasAdminView />
+          )}
+
+          {/* SECCIÓN: RESERVAS */}
+          {activeNav === 'reservas' && (
+            <ReservasAdminView />
           )}
 
           {/* SECCIÓN: WHITELIST */}
