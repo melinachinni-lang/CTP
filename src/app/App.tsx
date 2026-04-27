@@ -26,6 +26,7 @@ import { BrokerProfile } from '@/app/components/BrokerProfile';
 import { PlanesPage } from '@/app/components/PlanesPage';
 import { ArticuloPage } from '@/app/components/ArticuloPage';
 import { AsesoriaPage } from '@/app/components/AsesoriaPage';
+import { AccesoNoAutorizadoPage } from '@/app/components/AccesoNoAutorizadoPage';
 
 export interface DashboardRef {
   openPublishModal: () => void;
@@ -58,7 +59,8 @@ type Screen =
   | 'admin-general-dashboard'
   | 'politica-privacidad'
   | 'terminos-condiciones'
-  | 'asesoria';
+  | 'asesoria'
+  | 'acceso-no-autorizado';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -271,6 +273,7 @@ export default function App() {
         {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigateHome={() => setCurrentScreen('home')} />}
         {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigateHome={() => setCurrentScreen('home')} />}
         {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
+        {currentScreen === 'acceso-no-autorizado' && <AccesoNoAutorizadoPage onNavigate={handleNavigate} />}
       </div>
     </div>
   );

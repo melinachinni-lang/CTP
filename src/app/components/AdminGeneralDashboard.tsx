@@ -7,13 +7,14 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { NewProjectFlow } from '@/app/components/NewProjectFlow';
 import { AdminPublicacionesSection } from '@/app/components/AdminPublicacionesSection';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
+import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'publicaciones' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -374,6 +375,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
     { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
     { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
+    { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
     { id: 'configuracion' as NavItem, icon: Settings, label: 'Configuración' }
@@ -667,6 +669,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'asignaciones' && 'Asignación de leads a brokers'}
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
+                  {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
                   {activeNav === 'configuracion' && 'Configuración general del sistema'}
@@ -1509,6 +1512,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {/* SECCIÓN: CITAS */}
           {activeNav === 'citas' && (
             <CitasAdminView />
+          )}
+
+          {/* SECCIÓN: WHITELIST */}
+          {activeNav === 'whitelist' && (
+            <WhitelistAdminView />
           )}
 
           {/* SECCIÓN: PUBLICACIONES */}
