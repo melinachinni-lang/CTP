@@ -142,7 +142,7 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
             <div className="rounded-xl p-3 flex items-start gap-2" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A' }}>
               <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#D97706' }} />
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#92400E', lineHeight: '1.5' }}>
-                Asegurate de transferir el monto exacto e incluir el número de parcela como referencia.
+                Asegúrate de transferir el monto exacto e incluir el número de parcela como referencia.
               </p>
             </div>
 
@@ -153,7 +153,7 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
-              Ya realicé la transferencia →
+              Ya he realizado la transferencia →
             </button>
           </div>
         )}
@@ -224,7 +224,7 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
                 >
                   <Upload className="w-8 h-8 mx-auto mb-2" style={{ color: dragOver ? '#006B4E' : '#9CA3AF' }} />
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '2px' }}>
-                    Arrastrá el archivo o hacé click para seleccionar
+                    Arrastra el archivo o haz clic para seleccionar
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
                     JPG, PNG o PDF · Máximo 10 MB
