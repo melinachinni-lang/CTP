@@ -623,7 +623,7 @@ export function CitasAdminView() {
                   </td>
                   {/* Indicador de detalle */}
                   <td className="pr-4 py-4">
-                    <ChevronRight className="w-4 h-4" style={{ color: '#D1D5DB' }} />
+                    <ChevronRight className="w-4 h-4" style={{ color: '#006B4E' }} />
                   </td>
                 </tr>
               ))}
