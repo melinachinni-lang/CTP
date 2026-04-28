@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, MessageSquare, CheckCircle, XCircle, Phone, Tag, Link, AlertTriangle, Copy, Check } from 'lucide-react';
-
-type EstadoNumero = 'activo' | 'inactivo';
+import React, { useState, useEffect } from 'react';
+import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, MessageSquare, CheckCircle, Phone, Link, AlertTriangle, Check } from 'lucide-react';
 
 interface Asignacion {
   tipo: 'parcela' | 'proyecto';
@@ -13,13 +11,11 @@ interface Asignacion {
 interface NumeroWhatsApp {
   id: string;
   etiqueta: string;
-  numero: string; // con código de país
-  estado: EstadoNumero;
+  numero: string;
   mensaje: string;
   asignaciones: Asignacion[];
   ambito: 'inmobiliaria' | 'broker' | 'parcela';
 }
-
 
 const PARCELAS_MOCK = [
   { id: 'parc-1', nombre: 'Parcela Vista al Lago', ubicacion: 'Chile Chico, Aysén' },
@@ -40,7 +36,6 @@ const MOCK_NUMEROS: NumeroWhatsApp[] = [
     id: 'wa-1',
     etiqueta: 'Inmobiliaria Principal',
     numero: '+56 9 8000 1234',
-    estado: 'activo',
     mensaje: 'Hola, me interesa la parcela {nombre_parcela} ubicada en {ubicacion}. ¿Podrían darme más información?',
     ambito: 'inmobiliaria',
     asignaciones: [
@@ -53,7 +48,6 @@ const MOCK_NUMEROS: NumeroWhatsApp[] = [
     id: 'wa-2',
     etiqueta: 'Broker Andrés Muñoz',
     numero: '+56 9 9123 4567',
-    estado: 'activo',
     mensaje: 'Buenos días, vi la {nombre_parcela} (ID: {id_parcela}) en CompraTuParcela y quisiera coordinar una visita.',
     ambito: 'broker',
     asignaciones: [
@@ -65,7 +59,6 @@ const MOCK_NUMEROS: NumeroWhatsApp[] = [
     id: 'wa-3',
     etiqueta: 'Línea Proyectos RM',
     numero: '+56 9 7654 3210',
-    estado: 'activo',
     mensaje: 'Hola, me interesa el proyecto {nombre_proyecto}. ¿Tienen parcelas disponibles?',
     ambito: 'broker',
     asignaciones: [
@@ -77,26 +70,11 @@ const MOCK_NUMEROS: NumeroWhatsApp[] = [
     id: 'wa-4',
     etiqueta: 'Número de respaldo',
     numero: '+56 9 5000 9999',
-    estado: 'inactivo',
     mensaje: 'Hola, consulto por la parcela {nombre_parcela}.',
     ambito: 'inmobiliaria',
     asignaciones: [],
   },
 ];
-
-function BadgeEstado({ estado }: { estado: EstadoNumero }) {
-  return (
-    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{
-      backgroundColor: estado === 'activo' ? '#ECFDF5' : '#F3F4F6',
-      color: estado === 'activo' ? '#065F46' : '#6B7280',
-      border: `1px solid ${estado === 'activo' ? '#6EE7B7' : '#E5E5E5'}`,
-      fontFamily: 'var(--font-body)',
-    }}>
-      {estado === 'activo' ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-      {estado === 'activo' ? 'Activo' : 'Inactivo'}
-    </span>
-  );
-}
 
 function MensajePreview({ mensaje }: { mensaje: string }) {
   const preview = mensaje.length > 60 ? mensaje.slice(0, 60) + '…' : mensaje;
@@ -119,7 +97,6 @@ function NumeroModal({ numero, onClose, onGuardar }: {
 }) {
   const [etiqueta, setEtiqueta] = useState(numero?.etiqueta || '');
   const [tel, setTel] = useState(numero?.numero || '+56 9 ');
-  const [estado, setEstado] = useState<EstadoNumero>(numero?.estado || 'activo');
   const [mensaje, setMensaje] = useState(numero?.mensaje || 'Hola, me interesa la parcela {nombre_parcela} ubicada en {ubicacion}. ¿Me pueden dar más información?');
 
   const [asignacionesOpen, setAsignacionesOpen] = useState(false);
@@ -146,7 +123,7 @@ function NumeroModal({ numero, onClose, onGuardar }: {
   const handleGuardar = () => {
     if (!puedeGuardar) return;
     const asignaciones = TODAS_LAS_PUBLICACIONES.filter(p => seleccionadas.has(p.id));
-    onGuardar({ etiqueta, numero: tel, estado, mensaje, asignaciones });
+    onGuardar({ etiqueta, numero: tel, mensaje, asignaciones });
   };
 
   return (
@@ -188,28 +165,6 @@ function NumeroModal({ numero, onClose, onGuardar }: {
             </p>
           </div>
 
-          {/* Estado */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>
-              Estado
-            </label>
-            <div className="flex gap-3">
-              {(['activo', 'inactivo'] as EstadoNumero[]).map(e => (
-                <button key={e} onClick={() => setEstado(e)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                  style={{
-                    backgroundColor: estado === e ? (e === 'activo' ? '#ECFDF5' : '#F3F4F6') : '#FAFAFA',
-                    color: estado === e ? (e === 'activo' ? '#065F46' : '#374151') : '#9CA3AF',
-                    border: `1px solid ${estado === e ? (e === 'activo' ? '#6EE7B7' : '#D1D5DB') : '#E5E5E5'}`,
-                    fontFamily: 'var(--font-body)',
-                  }}>
-                  {e === 'activo' ? <CheckCircle className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
-                  {e === 'activo' ? 'Activo' : 'Inactivo'}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Mensaje predeterminado */}
           <div>
             <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
@@ -246,7 +201,6 @@ function NumeroModal({ numero, onClose, onGuardar }: {
 
             {asignacionesOpen && (
               <div style={{ borderTop: '1px solid #E5E5E5' }}>
-                {/* Búsqueda */}
                 <div className="px-4 py-3" style={{ borderBottom: '1px solid #F3F4F6' }}>
                   <div className="relative">
                     <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
@@ -257,7 +211,6 @@ function NumeroModal({ numero, onClose, onGuardar }: {
                   </div>
                 </div>
 
-                {/* Checklist */}
                 <div className="max-h-48 overflow-y-auto">
                   {publicacionesFiltradas.map((pub, i) => {
                     const checked = seleccionadas.has(pub.id);
@@ -340,7 +293,6 @@ function AsignacionModal({ numero, onClose, onAsignar }: {
         </div>
 
         <div className="p-5 space-y-4">
-          {/* Tipo */}
           <div className="flex gap-2">
             {(['parcela', 'proyecto'] as const).map(t => (
               <button key={t} onClick={() => { setTipo(t); setBusqueda(''); }}
@@ -355,7 +307,6 @@ function AsignacionModal({ numero, onClose, onAsignar }: {
             ))}
           </div>
 
-          {/* Búsqueda */}
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
             <input type="text" placeholder="Buscar..." value={busqueda} onChange={e => setBusqueda(e.target.value)}
@@ -363,7 +314,6 @@ function AsignacionModal({ numero, onClose, onAsignar }: {
               style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
           </div>
 
-          {/* Lista */}
           <div className="rounded-xl overflow-hidden max-h-64 overflow-y-auto" style={{ border: '1px solid #E5E5E5' }}>
             {filtrada.length === 0 ? (
               <p className="py-6 text-center" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>
@@ -412,12 +362,9 @@ function DetalleDrawer({ numero, onClose, onEditar, onEliminarAsignacion, onAgre
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Info principal */}
           <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>Etiqueta</p>
-                <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{numero.etiqueta}</p>
-              </div>
-              <BadgeEstado estado={numero.estado} />
+            <div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>Etiqueta</p>
+              <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{numero.etiqueta}</p>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
@@ -557,38 +504,49 @@ function EliminarModal({ numero, onClose, onConfirmar }: {
 export function ContactosWhatsAppAdminView() {
   const [numeros, setNumeros] = useState<NumeroWhatsApp[]>(MOCK_NUMEROS);
   const [busqueda, setBusqueda] = useState('');
-  const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos');
+  const [filtroAsignacion, setFiltroAsignacion] = useState<'todos' | 'con-asignacion' | 'sin-asignar'>('todos');
   const [detalleAbierto, setDetalleAbierto] = useState<NumeroWhatsApp | null>(null);
   const [editando, setEditando] = useState<NumeroWhatsApp | null | 'nuevo'>('');
   const [eliminando, setEliminando] = useState<NumeroWhatsApp | null>(null);
   const [asignando, setAsignando] = useState<NumeroWhatsApp | null>(null);
+  const [toast, setToast] = useState<{ etiqueta: string; asignaciones: Asignacion[] } | null>(null);
 
-  const activos = numeros.filter(n => n.estado === 'activo').length;
-  const inactivos = numeros.filter(n => n.estado === 'inactivo').length;
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  const conAsignaciones = numeros.filter(n => n.asignaciones.length > 0).length;
   const sinAsignar = numeros.filter(n => n.asignaciones.length === 0).length;
+  const totalAsignaciones = numeros.reduce((sum, n) => sum + n.asignaciones.length, 0);
 
   const filtrados = numeros.filter(n => {
     const matchBusqueda = !busqueda || n.etiqueta.toLowerCase().includes(busqueda.toLowerCase()) || n.numero.includes(busqueda);
-    const matchEstado = filtroEstado === 'todos' || n.estado === filtroEstado;
-    return matchBusqueda && matchEstado;
+    const matchAsignacion =
+      filtroAsignacion === 'todos' ||
+      (filtroAsignacion === 'con-asignacion' && n.asignaciones.length > 0) ||
+      (filtroAsignacion === 'sin-asignar' && n.asignaciones.length === 0);
+    return matchBusqueda && matchAsignacion;
   });
 
   const handleGuardar = (data: Partial<NumeroWhatsApp>) => {
+    const asignaciones = data.asignaciones || [];
     if (editando === 'nuevo') {
       const nuevo: NumeroWhatsApp = {
         id: `wa-${Date.now()}`,
         etiqueta: data.etiqueta || '',
         numero: data.numero || '',
-        estado: data.estado || 'activo',
         mensaje: data.mensaje || '',
         ambito: 'inmobiliaria',
-        asignaciones: [],
+        asignaciones,
       };
       setNumeros(prev => [...prev, nuevo]);
     } else if (editando) {
-      setNumeros(prev => prev.map(n => n.id === editando.id ? { ...n, ...data } : n));
-      if (detalleAbierto?.id === editando.id) setDetalleAbierto(prev => prev ? { ...prev, ...data } : prev);
+      setNumeros(prev => prev.map(n => n.id === (editando as NumeroWhatsApp).id ? { ...n, ...data } : n));
+      if (detalleAbierto?.id === (editando as NumeroWhatsApp).id) setDetalleAbierto(prev => prev ? { ...prev, ...data } : prev);
     }
+    setToast({ etiqueta: data.etiqueta || '', asignaciones });
     setEditando('');
   };
 
@@ -627,9 +585,9 @@ export function ContactosWhatsAppAdminView() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total números', value: numeros.length, color: '#0A0A0A' },
-          { label: 'Activos', value: activos, color: '#065F46' },
-          { label: 'Inactivos', value: inactivos, color: '#6B7280' },
+          { label: 'Con asignaciones', value: conAsignaciones, color: '#065F46' },
           { label: 'Sin asignar', value: sinAsignar, color: '#D97706' },
+          { label: 'Total asignaciones', value: totalAsignaciones, color: '#1E40AF' },
         ].map(stat => (
           <div key={stat.label} className="rounded-2xl p-5" style={cardStyle}>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '8px' }}>{stat.label}</p>
@@ -644,14 +602,18 @@ export function ContactosWhatsAppAdminView() {
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="flex gap-1 p-1 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-          {([['todos', 'Todos'], ['activo', 'Activos'], ['inactivo', 'Inactivos']] as const).map(([id, label]) => (
-            <button key={id} onClick={() => setFiltroEstado(id)}
+          {([
+            ['todos', 'Todos'],
+            ['con-asignacion', 'Con asignaciones'],
+            ['sin-asignar', 'Sin asignar'],
+          ] as const).map(([id, label]) => (
+            <button key={id} onClick={() => setFiltroAsignacion(id)}
               className="px-3 py-1.5 rounded-md text-sm font-medium transition-all"
               style={{
-                backgroundColor: filtroEstado === id ? '#FFFFFF' : 'transparent',
-                color: filtroEstado === id ? '#006B4E' : '#6B7280',
+                backgroundColor: filtroAsignacion === id ? '#FFFFFF' : 'transparent',
+                color: filtroAsignacion === id ? '#006B4E' : '#6B7280',
                 fontFamily: 'var(--font-body)',
-                boxShadow: filtroEstado === id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                boxShadow: filtroAsignacion === id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
               }}>
               {label}
             </button>
@@ -679,8 +641,8 @@ export function ContactosWhatsAppAdminView() {
       <div className="rounded-2xl overflow-hidden" style={cardStyle}>
         {/* Header */}
         <div className="grid grid-cols-12 px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-          {['Etiqueta', 'Número', 'Estado', 'Asignaciones', 'Mensaje', ''].map((h, i) => (
-            <div key={i} className={['col-span-3', 'col-span-2', 'col-span-1', 'col-span-2', 'col-span-3', 'col-span-1'][i]}>
+          {['Etiqueta', 'Número', 'Asignaciones', 'Mensaje', ''].map((h, i) => (
+            <div key={i} className={['col-span-3', 'col-span-3', 'col-span-2', 'col-span-3', 'col-span-1'][i]}>
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</span>
             </div>
           ))}
@@ -707,13 +669,8 @@ export function ContactosWhatsAppAdminView() {
             </div>
 
             {/* Número */}
-            <div className="col-span-2">
+            <div className="col-span-3">
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151' }}>{n.numero}</p>
-            </div>
-
-            {/* Estado */}
-            <div className="col-span-1">
-              <BadgeEstado estado={n.estado} />
             </div>
 
             {/* Asignaciones */}
@@ -781,6 +738,35 @@ export function ContactosWhatsAppAdminView() {
           onClose={() => setAsignando(null)}
           onAsignar={(asignacion) => handleAgregarAsignacion(asignando.id, asignacion)}
         />
+      )}
+
+      {/* Toast de confirmación */}
+      {toast && (
+        <div
+          className="fixed bottom-6 right-6 z-[100] flex items-start gap-3 px-5 py-4 rounded-2xl shadow-2xl"
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #A7F3D0', maxWidth: '360px', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+        >
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EBFEF5' }}>
+            <CheckCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#065F46', marginBottom: '2px' }}>
+              Número "{toast.etiqueta}" guardado
+            </p>
+            {toast.asignaciones.length > 0 ? (
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#374151', lineHeight: '1.5' }}>
+                Asignado a: {toast.asignaciones.map(a => a.nombre).join(', ')}
+              </p>
+            ) : (
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                Sin asignaciones por ahora.
+              </p>
+            )}
+          </div>
+          <button onClick={() => setToast(null)} className="p-1 rounded-lg hover:bg-gray-100 flex-shrink-0">
+            <X className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+          </button>
+        </div>
       )}
     </div>
   );
