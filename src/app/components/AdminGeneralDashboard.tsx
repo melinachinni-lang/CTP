@@ -9,13 +9,14 @@ import { AdminPublicacionesSection } from '@/app/components/AdminPublicacionesSe
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
+import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -377,6 +378,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
     { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
     { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
+    { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'WhatsApp' },
     { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
@@ -672,6 +674,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
                   {activeNav === 'reservas' && 'Comprobantes de transferencia recibidos — revisión y validación de pagos'}
+                  {activeNav === 'whatsapp' && 'Gestión de números de WhatsApp y mensajes predeterminados por parcela o proyecto'}
                   {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
@@ -1520,6 +1523,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {/* SECCIÓN: RESERVAS */}
           {activeNav === 'reservas' && (
             <ReservasAdminView />
+          )}
+
+          {/* SECCIÓN: WHATSAPP */}
+          {activeNav === 'whatsapp' && (
+            <ContactosWhatsAppAdminView />
           )}
 
           {/* SECCIÓN: WHITELIST */}
