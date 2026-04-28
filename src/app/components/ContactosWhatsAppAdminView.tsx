@@ -20,13 +20,6 @@ interface NumeroWhatsApp {
   ambito: 'inmobiliaria' | 'broker' | 'parcela';
 }
 
-const VARIABLES_DISPONIBLES = [
-  { key: '{nombre_parcela}', desc: 'Nombre de la parcela' },
-  { key: '{nombre_proyecto}', desc: 'Nombre del proyecto' },
-  { key: '{id_parcela}', desc: 'ID de la parcela' },
-  { key: '{ubicacion}', desc: 'Ubicación' },
-  { key: '{precio}', desc: 'Precio de la parcela' },
-];
 
 const PARCELAS_MOCK = [
   { id: 'parc-1', nombre: 'Parcela Vista al Lago', ubicacion: 'Chile Chico, Aysén' },
@@ -128,15 +121,12 @@ function NumeroModal({ numero, onClose, onGuardar }: {
   const [tel, setTel] = useState(numero?.numero || '+56 9 ');
   const [estado, setEstado] = useState<EstadoNumero>(numero?.estado || 'activo');
   const [mensaje, setMensaje] = useState(numero?.mensaje || 'Hola, me interesa la parcela {nombre_parcela} ubicada en {ubicacion}. ¿Me pueden dar más información?');
-  const [copiado, setCopiado] = useState<string | null>(null);
+
   const [asignacionesOpen, setAsignacionesOpen] = useState(false);
   const [busquedaPublicaciones, setBusquedaPublicaciones] = useState('');
   const [seleccionadas, setSeleccionadas] = useState<Set<string>>(
     new Set(numero?.asignaciones.map(a => a.id) || [])
   );
-
-  const insertarVariable = (variable: string) => setMensaje(prev => prev + variable);
-  const copiarLink = (variable: string) => { setCopiado(variable); setTimeout(() => setCopiado(null), 1200); };
 
   const publicacionesFiltradas = TODAS_LAS_PUBLICACIONES.filter(p =>
     p.nombre.toLowerCase().includes(busquedaPublicaciones.toLowerCase()) ||
@@ -228,19 +218,6 @@ function NumeroModal({ numero, onClose, onGuardar }: {
             <textarea value={mensaje} onChange={e => setMensaje(e.target.value)} rows={3}
               className="w-full px-4 py-2.5 rounded-lg text-sm resize-none"
               style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', lineHeight: '1.6' }} />
-            <div className="mt-2 p-3 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B7280', marginBottom: '6px' }}>Variables — click para insertar:</p>
-              <div className="flex flex-wrap gap-1.5">
-                {VARIABLES_DISPONIBLES.map(v => (
-                  <button key={v.key} onClick={() => { insertarVariable(v.key); copiarLink(v.key); }} title={v.desc}
-                    className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all"
-                    style={{ backgroundColor: copiado === v.key ? '#D1FAE5' : '#EFF6FF', color: copiado === v.key ? '#065F46' : '#1E40AF', border: `1px solid ${copiado === v.key ? '#6EE7B7' : '#BFDBFE'}`, fontFamily: 'var(--font-body)' }}>
-                    {copiado === v.key ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
-                    {v.key}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Asignar publicaciones — colapsable */}
@@ -463,9 +440,6 @@ function DetalleDrawer({ numero, onClose, onEditar, onEliminarAsignacion, onAgre
                 "{numero.mensaje}"
               </p>
             </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-              Las variables se reemplazan en tiempo real al abrir WhatsApp.
-            </p>
           </div>
 
           {/* Asignaciones */}
