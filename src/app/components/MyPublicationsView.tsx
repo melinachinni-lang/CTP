@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, MoreVertical, Edit2, Share2, Trash2, Calendar, MapPin, Maximize2, Eye, Link as LinkIcon, Check, Copy, FileText, Building2, CheckCircle2, X, Pause, Play } from 'lucide-react';
+import { Plus, MoreVertical, Edit2, Share2, Trash2, Calendar, MapPin, Maximize2, Eye, Link as LinkIcon, Check, Copy, FileText, Building2, CheckCircle2, X, Pause, Play, FileSpreadsheet, RefreshCw, ExternalLink } from 'lucide-react';
 import { PublicationWizard, PublicationData, PublicationStatus, StockUnit } from '@/app/components/PublicationWizard';
 import { PublicacionPublicaView } from '@/app/components/PublicacionPublicaView';
 import { NewListingFlow } from '@/app/components/NewListingFlow';
@@ -39,6 +39,9 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const [newlyPublishedId, setNewlyPublishedId] = useState<string | null>(null);
   const [successLinkCopied, setSuccessLinkCopied] = useState(false);
   const [publishedType, setPublishedType] = useState<'parcela' | 'proyecto'>('parcela');
+  const [sheetConectado, setSheetConectado] = useState(false);
+  const [sincronizando, setSincronizando] = useState(false);
+  const handleSincronizar = () => { setSincronizando(true); setTimeout(() => setSincronizando(false), 2000); };
   const [showPublicationLimitModal, setShowPublicationLimitModal] = useState(false);
 
   // Efecto para abrir el modal cuando cambia autoOpenModal
@@ -651,6 +654,78 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
           </div>
         </div>
       </div>
+
+      {/* Bloque Google Sheets — solo inmobiliarias */}
+      {userType === 'inmobiliaria' && (
+        <div className="px-6 py-4 bg-background" style={{ borderBottom: '1px solid var(--border)' }}>
+          {!sheetConectado ? (
+            <div className="rounded-2xl p-4 flex items-center justify-between gap-4"
+              style={{ backgroundColor: '#F9FAFB', border: '1px dashed #D1D5DB' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                  <FileSpreadsheet className="w-4 h-4" style={{ color: '#006B4E' }} />
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', marginBottom: '2px' }}>
+                    Hoja de cálculo
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                    No configurada — Conectá una Google Sheet para importar tus parcelas automáticamente
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => setSheetConectado(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+                <Plus className="w-4 h-4" /> Crear hoja de cálculo
+              </button>
+            </div>
+          ) : (
+            <div className="rounded-2xl p-4 flex items-center justify-between gap-4"
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
+                  <FileSpreadsheet className="w-4 h-4" style={{ color: '#006B4E' }} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>
+                      Hoja de cálculo
+                    </p>
+                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#16A34A', fontWeight: 500 }}>
+                      <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: '#16A34A' }} /> Conectada
+                    </span>
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                    {sincronizando ? 'Sincronizando...' : 'Última sincronización: hace 2 horas'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <a href="#" onClick={e => e.preventDefault()}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', textDecoration: 'none' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                  <ExternalLink className="w-3.5 h-3.5" /> Visualizar hoja
+                </a>
+                <button onClick={handleSincronizar} disabled={sincronizando}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: sincronizando ? '#E5E5E5' : '#006B4E', color: sincronizando ? '#9CA3AF' : '#FFFFFF', fontFamily: 'var(--font-body)', cursor: sincronizando ? 'not-allowed' : 'pointer' }}
+                  onMouseEnter={e => { if (!sincronizando) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                  onMouseLeave={e => { if (!sincronizando) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+                  <RefreshCw className={`w-3.5 h-3.5 ${sincronizando ? 'animate-spin' : ''}`} />
+                  {sincronizando ? 'Sincronizando...' : 'Sincronizar cambios'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Filters */}
       <div className="px-6 py-4 bg-background" style={{ borderBottom: '1px solid var(--border)' }}>
