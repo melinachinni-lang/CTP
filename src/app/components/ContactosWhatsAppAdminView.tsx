@@ -687,16 +687,19 @@ export function ContactosWhatsAppAdminView() {
             </div>
 
             {/* Acciones */}
-            <div className="col-span-1 flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
-              <button onClick={() => { setEditando(n); setDetalleAbierto(null); }}
+            <div className="col-span-1 flex items-center justify-end gap-1">
+              <button onClick={e => { e.stopPropagation(); setEditando(n); setDetalleAbierto(null); }}
                 className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors" title="Editar">
                 <Edit2 className="w-3.5 h-3.5" style={{ color: '#6B7280' }} />
               </button>
-              <button onClick={() => setEliminando(n)}
+              <button onClick={e => { e.stopPropagation(); setEliminando(n); }}
                 className="p-1.5 rounded-lg hover:bg-red-50 transition-colors" title="Eliminar">
                 <Trash2 className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
               </button>
-              <ChevronRight className="w-4 h-4" style={{ color: '#006B4E' }} />
+              <button onClick={() => setDetalleAbierto(n)}
+                className="p-1.5 rounded-lg hover:bg-green-50 transition-colors" title="Ver detalle">
+                <ChevronRight className="w-4 h-4" style={{ color: '#006B4E' }} />
+              </button>
             </div>
           </div>
         ))}
