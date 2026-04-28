@@ -625,7 +625,7 @@ export function ContactosWhatsAppAdminView() {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
             <input type="text" placeholder="Buscar etiqueta o número..." value={busqueda} onChange={e => setBusqueda(e.target.value)}
               className="pl-9 pr-4 py-2 rounded-lg text-sm"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '220px' }} />
+              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '280px' }} />
           </div>
           <button onClick={() => setEditando('nuevo')}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
