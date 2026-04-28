@@ -744,27 +744,29 @@ export function ContactosWhatsAppAdminView() {
       {toast && (
         <div
           className="fixed bottom-6 right-6 z-[100] flex items-start gap-3 px-5 py-4 rounded-2xl shadow-2xl"
-          style={{ backgroundColor: '#FFFFFF', border: '1px solid #A7F3D0', maxWidth: '360px', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+          style={{ backgroundColor: '#0A0A0A', maxWidth: '360px', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}
         >
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EBFEF5' }}>
-            <CheckCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+            <CheckCircle className="w-4 h-4" style={{ color: '#4ADE80' }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#065F46', marginBottom: '2px' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#FFFFFF', marginBottom: '2px' }}>
               Número "{toast.etiqueta}" guardado
             </p>
             {toast.asignaciones.length > 0 ? (
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#374151', lineHeight: '1.5' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
                 Asignado a: {toast.asignaciones.map(a => a.nombre).join(', ')}
               </p>
             ) : (
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
                 Sin asignaciones por ahora.
               </p>
             )}
           </div>
-          <button onClick={() => setToast(null)} className="p-1 rounded-lg hover:bg-gray-100 flex-shrink-0">
-            <X className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+          <button onClick={() => setToast(null)} className="p-1 rounded-lg flex-shrink-0" style={{ opacity: 0.5 }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '0.5'}>
+            <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
           </button>
         </div>
       )}
