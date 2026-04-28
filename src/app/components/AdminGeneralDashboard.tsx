@@ -378,7 +378,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
     { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
     { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
-    { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Asignación de números' },
+    { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
     { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
@@ -674,7 +674,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
                   {activeNav === 'reservas' && 'Comprobantes de transferencia recibidos — revisión y validación de pagos'}
-                  {activeNav === 'whatsapp' && 'Asignación de números telefónicos a publicaciones de parcelas y proyectos'}
+                  {activeNav === 'whatsapp' && 'Números telefónicos asignados a publicaciones de parcelas y proyectos'}
                   {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
