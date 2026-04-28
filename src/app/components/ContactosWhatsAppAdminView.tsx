@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Plus, Edit2, Trash2, X, ChevronRight, MessageSquare, CheckCircle, XCircle, Phone, Tag, Link, AlertTriangle, Copy, Check } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, MessageSquare, CheckCircle, XCircle, Phone, Tag, Link, AlertTriangle, Copy, Check } from 'lucide-react';
 
 type EstadoNumero = 'activo' | 'inactivo';
 
@@ -114,6 +114,11 @@ function MensajePreview({ mensaje }: { mensaje: string }) {
   );
 }
 
+const TODAS_LAS_PUBLICACIONES: Asignacion[] = [
+  ...PARCELAS_MOCK.map(p => ({ tipo: 'parcela' as const, id: p.id, nombre: p.nombre, ubicacion: p.ubicacion })),
+  ...PROYECTOS_MOCK.map(p => ({ tipo: 'proyecto' as const, id: p.id, nombre: p.nombre, ubicacion: p.ubicacion })),
+];
+
 function NumeroModal({ numero, onClose, onGuardar }: {
   numero: NumeroWhatsApp | null;
   onClose: () => void;
@@ -124,17 +129,35 @@ function NumeroModal({ numero, onClose, onGuardar }: {
   const [estado, setEstado] = useState<EstadoNumero>(numero?.estado || 'activo');
   const [mensaje, setMensaje] = useState(numero?.mensaje || 'Hola, me interesa la parcela {nombre_parcela} ubicada en {ubicacion}. ¿Me pueden dar más información?');
   const [copiado, setCopiado] = useState<string | null>(null);
+  const [asignacionesOpen, setAsignacionesOpen] = useState(false);
+  const [busquedaPublicaciones, setBusquedaPublicaciones] = useState('');
+  const [seleccionadas, setSeleccionadas] = useState<Set<string>>(
+    new Set(numero?.asignaciones.map(a => a.id) || [])
+  );
 
-  const insertarVariable = (variable: string) => {
-    setMensaje(prev => prev + variable);
-  };
+  const insertarVariable = (variable: string) => setMensaje(prev => prev + variable);
+  const copiarLink = (variable: string) => { setCopiado(variable); setTimeout(() => setCopiado(null), 1200); };
 
-  const copiarLink = (variable: string) => {
-    setCopiado(variable);
-    setTimeout(() => setCopiado(null), 1200);
+  const publicacionesFiltradas = TODAS_LAS_PUBLICACIONES.filter(p =>
+    p.nombre.toLowerCase().includes(busquedaPublicaciones.toLowerCase()) ||
+    p.ubicacion.toLowerCase().includes(busquedaPublicaciones.toLowerCase())
+  );
+
+  const toggleSeleccion = (id: string) => {
+    setSeleccionadas(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
   };
 
   const puedeGuardar = etiqueta.trim() && tel.trim().length > 6;
+
+  const handleGuardar = () => {
+    if (!puedeGuardar) return;
+    const asignaciones = TODAS_LAS_PUBLICACIONES.filter(p => seleccionadas.has(p.id));
+    onGuardar({ etiqueta, numero: tel, estado, mensaje, asignaciones });
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
@@ -202,32 +225,97 @@ function NumeroModal({ numero, onClose, onGuardar }: {
             <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
               Mensaje predeterminado
             </label>
-            <textarea value={mensaje} onChange={e => setMensaje(e.target.value)} rows={4}
+            <textarea value={mensaje} onChange={e => setMensaje(e.target.value)} rows={3}
               className="w-full px-4 py-2.5 rounded-lg text-sm resize-none"
               style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', lineHeight: '1.6' }} />
-
-            {/* Variables disponibles */}
-            <div className="mt-3 p-3 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B7280', marginBottom: '8px' }}>
-                Variables disponibles — click para insertar:
-              </p>
-              <div className="flex flex-wrap gap-2">
+            <div className="mt-2 p-3 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B7280', marginBottom: '6px' }}>Variables — click para insertar:</p>
+              <div className="flex flex-wrap gap-1.5">
                 {VARIABLES_DISPONIBLES.map(v => (
-                  <button key={v.key} onClick={() => { insertarVariable(v.key); copiarLink(v.key); }}
-                    title={v.desc}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-                    style={{
-                      backgroundColor: copiado === v.key ? '#D1FAE5' : '#EFF6FF',
-                      color: copiado === v.key ? '#065F46' : '#1E40AF',
-                      border: `1px solid ${copiado === v.key ? '#6EE7B7' : '#BFDBFE'}`,
-                      fontFamily: 'var(--font-body)',
-                    }}>
+                  <button key={v.key} onClick={() => { insertarVariable(v.key); copiarLink(v.key); }} title={v.desc}
+                    className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all"
+                    style={{ backgroundColor: copiado === v.key ? '#D1FAE5' : '#EFF6FF', color: copiado === v.key ? '#065F46' : '#1E40AF', border: `1px solid ${copiado === v.key ? '#6EE7B7' : '#BFDBFE'}`, fontFamily: 'var(--font-body)' }}>
                     {copiado === v.key ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                     {v.key}
                   </button>
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Asignar publicaciones — colapsable */}
+          <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+            <button
+              onClick={() => setAsignacionesOpen(prev => !prev)}
+              className="w-full flex items-center justify-between px-4 py-3 transition-colors"
+              style={{ backgroundColor: asignacionesOpen ? '#F9FAFB' : '#FFFFFF' }}
+            >
+              <div className="flex items-center gap-2">
+                <Link className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>
+                  Asignar a publicaciones
+                </span>
+                {seleccionadas.size > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ backgroundColor: '#EBFEF5', color: '#006B4E', fontFamily: 'var(--font-body)' }}>
+                    {seleccionadas.size} seleccionada(s)
+                  </span>
+                )}
+              </div>
+              {asignacionesOpen
+                ? <ChevronDown className="w-4 h-4" style={{ color: '#6B7280' }} />
+                : <ChevronRight className="w-4 h-4" style={{ color: '#6B7280' }} />
+              }
+            </button>
+
+            {asignacionesOpen && (
+              <div style={{ borderTop: '1px solid #E5E5E5' }}>
+                {/* Búsqueda */}
+                <div className="px-4 py-3" style={{ borderBottom: '1px solid #F3F4F6' }}>
+                  <div className="relative">
+                    <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
+                    <input type="text" placeholder="Buscar parcela o proyecto..." value={busquedaPublicaciones}
+                      onChange={e => setBusquedaPublicaciones(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 rounded-lg text-sm"
+                      style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
+                  </div>
+                </div>
+
+                {/* Checklist */}
+                <div className="max-h-48 overflow-y-auto">
+                  {publicacionesFiltradas.map((pub, i) => {
+                    const checked = seleccionadas.has(pub.id);
+                    return (
+                      <label key={pub.id}
+                        className="flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors"
+                        style={{ borderBottom: i < publicacionesFiltradas.length - 1 ? '1px solid #F9FAFB' : 'none', backgroundColor: checked ? '#F0FDF4' : '#FFFFFF' }}
+                        onMouseEnter={e => { if (!checked) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = checked ? '#F0FDF4' : '#FFFFFF'; }}
+                      >
+                        <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 transition-all"
+                          style={{ backgroundColor: checked ? '#006B4E' : '#FFFFFF', border: `2px solid ${checked ? '#006B4E' : '#D1D5DB'}` }}
+                          onClick={() => toggleSeleccion(pub.id)}>
+                          {checked && <Check className="w-2.5 h-2.5" style={{ color: '#FFFFFF' }} />}
+                        </div>
+                        <input type="checkbox" className="hidden" checked={checked} onChange={() => toggleSeleccion(pub.id)} />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0" style={{
+                              backgroundColor: pub.tipo === 'parcela' ? '#EFF6FF' : '#F5F3FF',
+                              color: pub.tipo === 'parcela' ? '#1E40AF' : '#5B21B6',
+                              fontFamily: 'var(--font-body)',
+                            }}>
+                              {pub.tipo === 'parcela' ? 'Parcela' : 'Proyecto'}
+                            </span>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>{pub.nombre}</p>
+                          </div>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{pub.ubicacion}</p>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -237,15 +325,9 @@ function NumeroModal({ numero, onClose, onGuardar }: {
             style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
             Cancelar
           </button>
-          <button onClick={() => { if (puedeGuardar) onGuardar({ etiqueta, numero: tel, estado, mensaje }); }}
-            disabled={!puedeGuardar}
+          <button onClick={handleGuardar} disabled={!puedeGuardar}
             className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-            style={{
-              backgroundColor: puedeGuardar ? '#006B4E' : '#E5E5E5',
-              color: puedeGuardar ? '#FFFFFF' : '#9CA3AF',
-              fontFamily: 'var(--font-body)',
-              cursor: puedeGuardar ? 'pointer' : 'not-allowed',
-            }}
+            style={{ backgroundColor: puedeGuardar ? '#006B4E' : '#E5E5E5', color: puedeGuardar ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: puedeGuardar ? 'pointer' : 'not-allowed' }}
             onMouseEnter={e => { if (puedeGuardar) e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { if (puedeGuardar) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
             {numero ? 'Guardar cambios' : 'Agregar número'}
