@@ -656,7 +656,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       </div>
 
       {/* Bloque Google Sheets — solo inmobiliarias */}
-      {userType === 'inmobiliaria' && (
+      
         <div className="px-6 py-4 bg-background" style={{ borderBottom: '1px solid var(--border)' }}>
           {!sheetConectado ? (
             <div className="rounded-2xl p-4 flex items-center justify-between gap-4"
@@ -725,7 +725,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
             </div>
           )}
         </div>
-      )}
+      
 
       {/* Filters */}
       <div className="px-6 py-4 bg-background" style={{ borderBottom: '1px solid var(--border)' }}>
