@@ -4,7 +4,7 @@ import entryBackground from 'figma:asset/e5096b94942ada0bf27ee8e61e30034a31f87b4
 
 interface EntryScreenProps {
   onNavigate: (screen: string) => void;
-  onSelectGoogleAccount?: (account: { name: string; email: string }) => void;
+  onSelectGoogleAccount?: (account: { name: string; email: string }, skipNavigation?: boolean) => void;
 }
 
 export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenProps) {
@@ -18,6 +18,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [registerEmail, setRegisterEmail] = React.useState('');
   const [registerPassword, setRegisterPassword] = React.useState('');
+  const [pendingGoogleAccount, setPendingGoogleAccount] = React.useState<{ name: string; email: string } | null>(null);
   const [showProfileSelection, setShowProfileSelection] = React.useState(false);
   const [selectedProfile, setSelectedProfile] = React.useState<string | null>(null);
   const [showPersonAction, setShowPersonAction] = React.useState(false);
@@ -81,14 +82,23 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
   const handleGoogleAccountSelect = (account: { name: string; email: string }) => {
     setShowGoogleSelector(false);
-    if (onSelectGoogleAccount) {
-      onSelectGoogleAccount(account);
+    if (activeTab === 'register') {
+      // Guardar cuenta y mostrar onboarding igual que con email/contraseña
+      setPendingGoogleAccount(account);
+      setFullName(account.name);
+      setShowProfileSelection(true);
+    } else {
+      if (onSelectGoogleAccount) onSelectGoogleAccount(account);
     }
   };
 
   // Auto-redirect after completion modal
   React.useEffect(() => {
     if (showCompletion && completionProfile) {
+      // Si viene de Google, registrar el login (sin navegar, el timeout maneja eso)
+      if (pendingGoogleAccount && onSelectGoogleAccount) {
+        onSelectGoogleAccount(pendingGoogleAccount, true);
+      }
       const timer = setTimeout(() => {
         if (completionProfile === 'real-estate') {
           onNavigate('real-estate-dashboard');
@@ -234,15 +244,16 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const handleProfileFormSubmit = () => {
-    // Navegar al dashboard correspondiente según el perfil
     if (selectedProfile === 'person') {
+      // Si viene de Google, registrar el login (sin navegar, onNavigate lo maneja)
+      if (pendingGoogleAccount && onSelectGoogleAccount) {
+        onSelectGoogleAccount(pendingGoogleAccount, true);
+      }
       onNavigate('person-dashboard');
     } else if (selectedProfile === 'real-estate') {
-      // Para inmobiliarias, mostrar onboarding antes de ir al dashboard
       setShowRealEstateOnboarding(true);
       setShowProfileForm(false);
     } else if (selectedProfile === 'broker') {
-      // Para brokers, mostrar onboarding antes de ir al dashboard
       setShowBrokerOnboarding(true);
       setShowProfileForm(false);
     }

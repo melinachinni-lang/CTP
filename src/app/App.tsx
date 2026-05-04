@@ -187,15 +187,16 @@ export default function App() {
     }
   };
 
-  const handleSelectAccount = (account: { name: string; email: string }) => {
+  const handleSelectAccount = (account: { name: string; email: string }, skipNavigation?: boolean) => {
     setCurrentUser(account);
     setIsLoggedIn(true);
-    
+
+    if (skipNavigation) return; // Onboarding maneja la navegación
+
     // Si hay una acción pendiente de publicar, ir al dashboard y abrir el modal
     if (pendingAction === 'publish') {
       setCurrentScreen('person-dashboard');
       setPendingAction(null);
-      // Abrir el modal después de que el dashboard se monte
       setTimeout(() => {
         personDashboardRef.current?.openPublishModal();
       }, 300);
