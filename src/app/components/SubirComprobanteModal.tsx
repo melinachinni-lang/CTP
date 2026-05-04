@@ -24,7 +24,9 @@ function formatCLP(value: number) {
 export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, parcela }: SubirComprobanteModalProps) {
   const [paso, setPaso] = useState<1 | 2 | 3>(1);
   const [copiado, setCopiado] = useState<string | null>(null);
-  const [monto, setMonto] = useState(formatCLP(parcela.precio));
+  const [moneda, setMoneda] = useState<'CLP' | 'UF'>('CLP');
+  const [montoIngresado, setMontoIngresado] = useState('');
+  const [monto, setMonto] = useState('');
   const [fecha, setFecha] = useState('');
   const [referencia, setReferencia] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -115,9 +117,32 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
             </div>
 
             {/* Monto a transferir */}
-            <div className="rounded-xl p-4 text-center" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Monto a transferir</p>
-              <p style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', fontWeight: 700, color: '#065F46' }}>{formatCLP(parcela.precio)}</p>
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, textAlign: 'center' }}>Monto a transferir</p>
+              <div className="flex gap-2">
+                {/* Selector de moneda */}
+                <select
+                  value={moneda}
+                  onChange={e => setMoneda(e.target.value as 'CLP' | 'UF')}
+                  className="px-3 py-2.5 rounded-lg text-sm font-semibold"
+                  style={{ border: '1px solid #A7F3D0', backgroundColor: '#FFFFFF', color: '#065F46', fontFamily: 'var(--font-body)', outline: 'none', flexShrink: 0 }}
+                >
+                  <option value="CLP">CLP $</option>
+                  <option value="UF">UF</option>
+                </select>
+                {/* Input monto */}
+                <input
+                  type="text"
+                  value={montoIngresado}
+                  onChange={e => setMontoIngresado(e.target.value.replace(/[^0-9.,]/g, ''))}
+                  placeholder={moneda === 'CLP' ? '500.000' : '12,5'}
+                  className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold"
+                  style={{ border: '1px solid #A7F3D0', backgroundColor: '#FFFFFF', color: '#065F46', fontFamily: 'var(--font-body)', outline: 'none' }}
+                />
+              </div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginTop: '8px', textAlign: 'center' }}>
+                Monto mínimo: {moneda === 'CLP' ? '$500.000' : 'UF 12,9'}
+              </p>
             </div>
 
             {/* Datos bancarios */}
