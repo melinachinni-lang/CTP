@@ -122,6 +122,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
   const [montoReservaUF, setMontoReservaUF] = useState('12.9');
   const [montoReservaCLPEditado, setMontoReservaCLPEditado] = useState('500000');
   const [montoReservaUFEditado, setMontoReservaUFEditado] = useState('12.9');
+  const [editandoMonto, setEditandoMonto] = useState(false);
   const [guardandoMonto, setGuardandoMonto] = useState(false);
   const [montoGuardado, setMontoGuardado] = useState(false);
   const [estadoSistema, setEstadoSistema] = useState<'produccion' | 'mantenimiento'>('produccion');
@@ -2719,107 +2720,133 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 mb-6">
-                  {/* CLP */}
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
-                      Monto mínimo en CLP
-                    </label>
-                    <div className="relative">
-                      <span
-                        className="absolute left-4 top-1/2 -translate-y-1/2"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}
-                      >
-                        $
-                      </span>
-                      <input
-                        type="text"
-                        value={montoReservaCLPEditado}
-                        onChange={e => {
-                          setMontoReservaCLPEditado(e.target.value.replace(/[^0-9]/g, ''));
-                          setMontoGuardado(false);
-                        }}
-                        className="w-full pl-8 pr-4 py-2.5 rounded-lg"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', outline: 'none' }}
-                        placeholder="500000"
-                      />
-                    </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>
-                      Valor actual: ${Number(montoReservaCLP).toLocaleString('es-CL')}
-                    </p>
-                  </div>
-
-                  {/* UF */}
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
-                      Monto mínimo en UF
-                    </label>
-                    <div className="relative">
-                      <span
-                        className="absolute left-4 top-1/2 -translate-y-1/2"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}
-                      >
-                        UF
-                      </span>
-                      <input
-                        type="text"
-                        value={montoReservaUFEditado}
-                        onChange={e => {
-                          setMontoReservaUFEditado(e.target.value.replace(/[^0-9.,]/g, ''));
-                          setMontoGuardado(false);
-                        }}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', outline: 'none' }}
-                        placeholder="12.9"
-                      />
-                    </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>
-                      Valor actual: UF {montoReservaUF}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer de la card */}
-                <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid #F3F4F6' }}>
-                  {montoGuardado ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
-                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                          <path d="M2 6l3 3 5-5" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                {/* Modo lectura */}
+                {!editandoMonto && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-8">
+                      <div>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          CLP
+                        </p>
+                        <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>
+                          ${Number(montoReservaCLP).toLocaleString('es-CL')}
+                        </p>
                       </div>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#16A34A', fontWeight: 500 }}>
-                        Cambios guardados correctamente
-                      </span>
+                      <div style={{ width: '1px', backgroundColor: '#E5E5E5' }} />
+                      <div>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          UF
+                        </p>
+                        <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>
+                          UF {montoReservaUF}
+                        </p>
+                      </div>
                     </div>
-                  ) : (
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                      Los cambios se aplican de inmediato en el flujo de reserva
-                    </span>
-                  )}
 
-                  <button
-                    onClick={async () => {
-                      setGuardandoMonto(true);
-                      await new Promise(r => setTimeout(r, 800));
-                      setMontoReservaCLP(montoReservaCLPEditado);
-                      setMontoReservaUF(montoReservaUFEditado);
-                      setGuardandoMonto(false);
-                      setMontoGuardado(true);
-                    }}
-                    disabled={guardandoMonto || (montoReservaCLPEditado === montoReservaCLP && montoReservaUFEditado === montoReservaUF)}
-                    className="px-5 py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      backgroundColor: guardandoMonto ? '#E5E5E5' : '#0A0A0A',
-                      color: guardandoMonto ? '#9CA3AF' : '#FFFFFF'
-                    }}
-                  >
-                    {guardandoMonto ? 'Guardando...' : 'Guardar cambios'}
-                  </button>
-                </div>
+                    <div className="flex items-center gap-3">
+                      {montoGuardado && (
+                        <div className="flex items-center gap-1.5">
+                          <svg width="14" height="14" viewBox="0 0 12 12" fill="none">
+                            <path d="M2 6l3 3 5-5" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#16A34A', fontWeight: 500 }}>
+                            Guardado
+                          </span>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => {
+                          setMontoReservaCLPEditado(montoReservaCLP);
+                          setMontoReservaUFEditado(montoReservaUF);
+                          setMontoGuardado(false);
+                          setEditandoMonto(true);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all hover:bg-gray-100"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Editar
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Modo edición */}
+                {editandoMonto && (
+                  <div>
+                    <div className="grid grid-cols-2 gap-6 mb-5">
+                      {/* CLP */}
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
+                          Monto mínimo en CLP
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}>
+                            $
+                          </span>
+                          <input
+                            type="text"
+                            value={montoReservaCLPEditado}
+                            onChange={e => setMontoReservaCLPEditado(e.target.value.replace(/[^0-9]/g, ''))}
+                            autoFocus
+                            className="w-full pl-8 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                            style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
+                            placeholder="500000"
+                          />
+                        </div>
+                      </div>
+
+                      {/* UF */}
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
+                          Monto mínimo en UF
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}>
+                            UF
+                          </span>
+                          <input
+                            type="text"
+                            value={montoReservaUFEditado}
+                            onChange={e => setMontoReservaUFEditado(e.target.value.replace(/[^0-9.,]/g, ''))}
+                            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                            style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
+                            placeholder="12.9"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-4" style={{ borderTop: '1px solid #F3F4F6' }}>
+                      <button
+                        onClick={() => setEditandoMonto(false)}
+                        className="px-4 py-2 rounded-lg transition-all hover:bg-gray-100"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#525252', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={async () => {
+                          setGuardandoMonto(true);
+                          await new Promise(r => setTimeout(r, 800));
+                          setMontoReservaCLP(montoReservaCLPEditado);
+                          setMontoReservaUF(montoReservaUFEditado);
+                          setGuardandoMonto(false);
+                          setMontoGuardado(true);
+                          setEditandoMonto(false);
+                        }}
+                        disabled={guardandoMonto || !montoReservaCLPEditado || !montoReservaUFEditado}
+                        className="px-5 py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', backgroundColor: '#0A0A0A', color: '#FFFFFF' }}
+                      >
+                        {guardandoMonto ? 'Guardando...' : 'Guardar cambios'}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </section>
 
               {/* SECCIÓN 2: GOBIERNO DEL SISTEMA */}
