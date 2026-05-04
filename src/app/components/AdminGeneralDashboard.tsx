@@ -116,6 +116,14 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
   // Estados para Configuración
   const [reglaAsignacion, setReglaAsignacion] = useState('round-robin');
   const [tiempoMaximoRespuesta, setTiempoMaximoRespuesta] = useState('24');
+
+  // Estados para monto mínimo de reserva
+  const [montoReservaCLP, setMontoReservaCLP] = useState('500000');
+  const [montoReservaUF, setMontoReservaUF] = useState('12.9');
+  const [montoReservaCLPEditado, setMontoReservaCLPEditado] = useState('500000');
+  const [montoReservaUFEditado, setMontoReservaUFEditado] = useState('12.9');
+  const [guardandoMonto, setGuardandoMonto] = useState(false);
+  const [montoGuardado, setMontoGuardado] = useState(false);
   const [estadoSistema, setEstadoSistema] = useState<'produccion' | 'mantenimiento'>('produccion');
   const [modulosActivos, setModulosActivos] = useState({
     leads: true,
@@ -2681,6 +2689,136 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       max="168"
                     />
                   </div>
+                </div>
+              </section>
+
+              {/* SECCIÓN MONTO DE RESERVA */}
+              <section
+                className="rounded-2xl p-6 mb-6"
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E5E5E5',
+                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                }}
+              >
+                <div className="mb-6">
+                  <h2
+                    style={{
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: 'var(--font-size-h3)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      color: '#0A0A0A',
+                      lineHeight: 'var(--line-height-heading)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Monto mínimo de reserva
+                  </h2>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                    Valor mínimo que el usuario debe transferir para iniciar una reserva. Se muestra en el flujo de pago.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                  {/* CLP */}
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
+                      Monto mínimo en CLP
+                    </label>
+                    <div className="relative">
+                      <span
+                        className="absolute left-4 top-1/2 -translate-y-1/2"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}
+                      >
+                        $
+                      </span>
+                      <input
+                        type="text"
+                        value={montoReservaCLPEditado}
+                        onChange={e => {
+                          setMontoReservaCLPEditado(e.target.value.replace(/[^0-9]/g, ''));
+                          setMontoGuardado(false);
+                        }}
+                        className="w-full pl-8 pr-4 py-2.5 rounded-lg"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', outline: 'none' }}
+                        placeholder="500000"
+                      />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>
+                      Valor actual: ${Number(montoReservaCLP).toLocaleString('es-CL')}
+                    </p>
+                  </div>
+
+                  {/* UF */}
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
+                      Monto mínimo en UF
+                    </label>
+                    <div className="relative">
+                      <span
+                        className="absolute left-4 top-1/2 -translate-y-1/2"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}
+                      >
+                        UF
+                      </span>
+                      <input
+                        type="text"
+                        value={montoReservaUFEditado}
+                        onChange={e => {
+                          setMontoReservaUFEditado(e.target.value.replace(/[^0-9.,]/g, ''));
+                          setMontoGuardado(false);
+                        }}
+                        className="w-full pl-10 pr-4 py-2.5 rounded-lg"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', outline: 'none' }}
+                        placeholder="12.9"
+                      />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>
+                      Valor actual: UF {montoReservaUF}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Footer de la card */}
+                <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid #F3F4F6' }}>
+                  {montoGuardado ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                          <path d="M2 6l3 3 5-5" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#16A34A', fontWeight: 500 }}>
+                        Cambios guardados correctamente
+                      </span>
+                    </div>
+                  ) : (
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                      Los cambios se aplican de inmediato en el flujo de reserva
+                    </span>
+                  )}
+
+                  <button
+                    onClick={async () => {
+                      setGuardandoMonto(true);
+                      await new Promise(r => setTimeout(r, 800));
+                      setMontoReservaCLP(montoReservaCLPEditado);
+                      setMontoReservaUF(montoReservaUFEditado);
+                      setGuardandoMonto(false);
+                      setMontoGuardado(true);
+                    }}
+                    disabled={guardandoMonto || (montoReservaCLPEditado === montoReservaCLP && montoReservaUFEditado === montoReservaUF)}
+                    className="px-5 py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      backgroundColor: guardandoMonto ? '#E5E5E5' : '#0A0A0A',
+                      color: guardandoMonto ? '#9CA3AF' : '#FFFFFF'
+                    }}
+                  >
+                    {guardandoMonto ? 'Guardando...' : 'Guardar cambios'}
+                  </button>
                 </div>
               </section>
 
