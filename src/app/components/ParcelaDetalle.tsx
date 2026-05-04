@@ -3718,7 +3718,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
           setIsSubirComprobanteOpen(false);
           setEstadoCompra('pago-en-validacion');
         }}
-        parcela={{ titulo: parcela.nombre, precio: parcela.precio }}
+        parcela={{ titulo: parcela.nombre }}
+        initialPaso={2}
       />
 
       {/* Modal de confirmación de compra */}

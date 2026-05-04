@@ -1,31 +1,17 @@
-import React, { useState, useRef } from 'react';
-import { X, Copy, CheckCircle, Upload, FileText, AlertCircle, Clock, ChevronRight } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, CheckCircle, Upload, FileText, Clock, ChevronRight } from 'lucide-react';
 
 interface SubirComprobanteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onComprobanteEnviado: () => void;
-  parcela: { titulo: string; precio: number };
+  parcela: { titulo: string };
+  initialPaso?: 1 | 2;
 }
 
-const DATOS_BANCARIOS = [
-  { label: 'Banco', value: 'Banco de Chile' },
-  { label: 'Nombre', value: 'Compra Tu Parcela SpA' },
-  { label: 'RUT', value: '76.842.310-5' },
-  { label: 'Tipo de cuenta', value: 'Cuenta Corriente' },
-  { label: 'N° de cuenta', value: '00-123-45678-09' },
-  { label: 'Email', value: 'pagos@compratuparcela.cl' },
-];
 
-function formatCLP(value: number) {
-  return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 }).format(value);
-}
-
-export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, parcela }: SubirComprobanteModalProps) {
-  const [paso, setPaso] = useState<1 | 2 | 3>(1);
-  const [copiado, setCopiado] = useState<string | null>(null);
-  const [moneda, setMoneda] = useState<'CLP' | 'UF'>('CLP');
-  const [montoIngresado, setMontoIngresado] = useState('');
+export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, parcela, initialPaso = 1 }: SubirComprobanteModalProps) {
+  const [paso, setPaso] = useState<1 | 2 | 3>(initialPaso);
   const [monto, setMonto] = useState('');
   const [fecha, setFecha] = useState('');
   const [referencia, setReferencia] = useState('');
@@ -35,13 +21,18 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
   const [enviando, setEnviando] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) {
+      setPaso(initialPaso);
+      setArchivo(null);
+      setFecha('');
+      setReferencia('');
+      setMensaje('');
+      setMonto('');
+    }
+  }, [isOpen]);
 
-  const handleCopiar = (valor: string, key: string) => {
-    navigator.clipboard.writeText(valor).catch(() => {});
-    setCopiado(key);
-    setTimeout(() => setCopiado(null), 1500);
-  };
+  if (!isOpen) return null;
 
   const handleArchivo = (file: File) => {
     if (file.size > 10 * 1024 * 1024) return;
@@ -68,7 +59,6 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
   const handleCerrar = () => {
     if (paso === 3) onComprobanteEnviado();
     onClose();
-    setTimeout(() => { setPaso(1); setArchivo(null); setFecha(''); setReferencia(''); setMensaje(''); }, 300);
   };
 
   return (
@@ -103,85 +93,6 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
             <X className="w-4 h-4" style={{ color: '#6B7280' }} />
           </button>
         </div>
-
-        {/* PASO 1 — Datos bancarios */}
-        {paso === 1 && (
-          <div className="p-6 space-y-6">
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '6px' }}>
-                Realiza la transferencia
-              </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', lineHeight: '1.6' }}>
-                Transfiere el monto exacto a la siguiente cuenta y luego sube el comprobante.
-              </p>
-            </div>
-
-            {/* Monto a transferir */}
-            <div className="rounded-xl p-4" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, textAlign: 'center' }}>Monto a transferir</p>
-              <div className="flex gap-2">
-                {/* Selector de moneda */}
-                <select
-                  value={moneda}
-                  onChange={e => setMoneda(e.target.value as 'CLP' | 'UF')}
-                  className="px-3 py-2.5 rounded-lg text-sm font-semibold"
-                  style={{ border: '1px solid #A7F3D0', backgroundColor: '#FFFFFF', color: '#065F46', fontFamily: 'var(--font-body)', outline: 'none', flexShrink: 0 }}
-                >
-                  <option value="CLP">CLP $</option>
-                  <option value="UF">UF</option>
-                </select>
-                {/* Input monto */}
-                <input
-                  type="text"
-                  value={montoIngresado}
-                  onChange={e => setMontoIngresado(e.target.value.replace(/[^0-9.,]/g, ''))}
-                  placeholder={moneda === 'CLP' ? '500.000' : '12,5'}
-                  className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold"
-                  style={{ border: '1px solid #A7F3D0', backgroundColor: '#FFFFFF', color: '#065F46', fontFamily: 'var(--font-body)', outline: 'none' }}
-                />
-              </div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginTop: '8px', textAlign: 'center' }}>
-                Monto mínimo: {moneda === 'CLP' ? '$500.000' : 'UF 12,9'}
-              </p>
-            </div>
-
-            {/* Datos bancarios */}
-            <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-              {DATOS_BANCARIOS.map((dato, i) => (
-                <div key={dato.label} className="flex items-center justify-between px-4 py-3" style={{ borderBottom: i < DATOS_BANCARIOS.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FAFAFA' : '#FFFFFF' }}>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '1px' }}>{dato.label}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>{dato.value}</p>
-                  </div>
-                  <button
-                    onClick={() => handleCopiar(dato.value, dato.label)}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all"
-                    style={{ backgroundColor: copiado === dato.label ? '#D1FAE5' : '#F5F5F5', color: copiado === dato.label ? '#065F46' : '#6B7280', fontFamily: 'var(--font-body)' }}
-                  >
-                    {copiado === dato.label ? <><CheckCircle className="w-3 h-3" /> Copiado</> : <><Copy className="w-3 h-3" /> Copiar</>}
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            <div className="rounded-xl p-3 flex items-start gap-2" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A' }}>
-              <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#D97706' }} />
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#92400E', lineHeight: '1.5' }}>
-                Asegúrate de transferir el monto exacto e incluir el número de parcela como referencia.
-              </p>
-            </div>
-
-            <button
-              onClick={() => setPaso(2)}
-              className="w-full py-3 rounded-full text-sm font-medium transition-all"
-              style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-            >
-              Ya he realizado la transferencia →
-            </button>
-          </div>
-        )}
 
         {/* PASO 2 — Formulario */}
         {paso === 2 && (
@@ -269,11 +180,13 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
             </div>
 
             <div className="flex gap-3 pt-1">
-              <button onClick={() => setPaso(1)} className="px-5 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-                Atrás
-              </button>
+              {initialPaso === 1 && (
+                <button onClick={() => setPaso(1)} className="px-5 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                  Atrás
+                </button>
+              )}
               <button onClick={handleEnviar} disabled={!puedeEnviar || enviando} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
                 style={{ backgroundColor: puedeEnviar && !enviando ? '#006B4E' : '#E5E5E5', color: puedeEnviar && !enviando ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: puedeEnviar && !enviando ? 'pointer' : 'not-allowed' }}
                 onMouseEnter={e => { if (puedeEnviar && !enviando) e.currentTarget.style.backgroundColor = '#01533E'; }}
