@@ -7,6 +7,7 @@ interface FlujoCompraModalProps {
   parcelaNombre: string;
   precio: string;
   tipoCompra: 'comprar' | 'reservar';
+  onContinuarAPago?: () => void;
 }
 
 type Paso = 'datos-personales' | 'metodo-pago' | 'confirmacion';
@@ -17,7 +18,8 @@ export function FlujoCompraModal({
   onClose,
   parcelaNombre,
   precio,
-  tipoCompra
+  tipoCompra,
+  onContinuarAPago
 }: FlujoCompraModalProps) {
   const [pasoActual, setPasoActual] = useState<Paso>('datos-personales');
   const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState<MetodoPago>('transferencia');
@@ -44,7 +46,12 @@ export function FlujoCompraModal({
     if (pasoActual === 'datos-personales') {
       setPasoActual('metodo-pago');
     } else if (pasoActual === 'metodo-pago') {
-      setPasoActual('confirmacion');
+      if (onContinuarAPago) {
+        onClose();
+        onContinuarAPago();
+      } else {
+        setPasoActual('confirmacion');
+      }
     }
   };
 

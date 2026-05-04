@@ -3704,6 +3704,10 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
         parcelaNombre={parcelaSeleccionadaStock || parcela.nombre}
         precio={parcela.precio}
         tipoCompra={tipoCompra}
+        onContinuarAPago={() => {
+          setEstadoCompra('reservandose');
+          setIsSubirComprobanteOpen(true);
+        }}
       />
 
       {/* Modal de subir comprobante */}
