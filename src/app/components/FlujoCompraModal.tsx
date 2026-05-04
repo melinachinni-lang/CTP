@@ -22,6 +22,8 @@ export function FlujoCompraModal({
   const [pasoActual, setPasoActual] = useState<Paso>('datos-personales');
   const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState<MetodoPago>('transferencia');
   const [mostrarLinkPago, setMostrarLinkPago] = useState(false);
+  const [moneda, setMoneda] = useState<'CLP' | 'UF'>('CLP');
+  const [montoIngresado, setMontoIngresado] = useState('');
   const [datosPersonales, setDatosPersonales] = useState({
     nombre: '',
     apellido: '',
@@ -289,6 +291,36 @@ export function FlujoCompraModal({
           {/* Paso 2: Método de pago */}
           {pasoActual === 'metodo-pago' && (
             <div className="space-y-3">
+
+              {/* Monto a transferir */}
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, textAlign: 'center' }}>
+                  Monto a transferir
+                </p>
+                <div className="flex gap-2">
+                  <select
+                    value={moneda}
+                    onChange={e => setMoneda(e.target.value as 'CLP' | 'UF')}
+                    className="px-3 py-2.5 rounded-lg text-sm font-semibold"
+                    style={{ border: '1px solid #A7F3D0', backgroundColor: '#FFFFFF', color: '#065F46', fontFamily: 'var(--font-body)', outline: 'none', flexShrink: 0 }}
+                  >
+                    <option value="CLP">CLP $</option>
+                    <option value="UF">UF</option>
+                  </select>
+                  <input
+                    type="text"
+                    value={montoIngresado}
+                    onChange={e => setMontoIngresado(e.target.value.replace(/[^0-9.,]/g, ''))}
+                    placeholder={moneda === 'CLP' ? '500.000' : '12,5'}
+                    className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold"
+                    style={{ border: '1px solid #A7F3D0', backgroundColor: '#FFFFFF', color: '#065F46', fontFamily: 'var(--font-body)', outline: 'none' }}
+                  />
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginTop: '8px', textAlign: 'center' }}>
+                  Monto mínimo: {moneda === 'CLP' ? '$500.000' : 'UF 12,9'}
+                </p>
+              </div>
+
               {/* Transferencia bancaria - ACTIVO */}
               <button
                 className="w-full p-5 rounded-xl border-2 transition-all hover:border-gray-900 text-left"
