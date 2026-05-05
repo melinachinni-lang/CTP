@@ -223,7 +223,7 @@ export function SubirComprobanteModal({ isOpen, onClose, onComprobanteEnviado, p
               </div>
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#1E40AF', marginBottom: '2px' }}>
-                  Revisá tu casilla de email
+                  Revisa tu casilla de email
                 </p>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#3B82F6', lineHeight: '1.5' }}>
                   Te enviamos la confirmación de tu solicitud. Una vez validado el pago, recibirás un segundo correo con la confirmación final.

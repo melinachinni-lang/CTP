@@ -38,7 +38,7 @@ const pasos = [
 const beneficios = [
   { titulo: 'Sin costo para el comprador', descripcion: 'Nuestro servicio de asesoría es completamente gratuito para quienes buscan comprar.' },
   { titulo: 'Asesores con experiencia local', descripcion: 'Conocemos las zonas, los precios reales y los proyectos más confiables de cada región.' },
-  { titulo: 'Respuesta en menos de 24 horas', descripcion: 'Nos comprometemos a contactarte el mismo día hábil en que nos escribís.' },
+  { titulo: 'Respuesta en menos de 24 horas', descripcion: 'Nos comprometemos a contactarte el mismo día hábil en que nos escribes.' },
   { titulo: 'Sin presión de venta', descripcion: 'No te empujamos a decidir rápido. El objetivo es que encuentres la parcela correcta.' },
   { titulo: 'Acceso a propiedades exclusivas', descripcion: 'Tenemos acceso a propiedades que no siempre se publican de forma abierta en el portal.' },
   { titulo: 'Asesoría legal básica incluida', descripcion: 'Te explicamos qué documentos pedir, qué revisar en el título y los pasos para escriturar.' },

@@ -57,7 +57,7 @@ export function GoogleAccountSelector({ onSelectAccount, onBack }: GoogleAccount
               fontFamily: 'var(--font-heading)'
             }}
           >
-            Elegí una cuenta
+            Elige una cuenta
           </h1>
 
           {/* Lista de cuentas */}
@@ -114,7 +114,7 @@ export function GoogleAccountSelector({ onSelectAccount, onBack }: GoogleAccount
               lineHeight: '1.5'
             }}
           >
-            Al continuar, aceptás los términos de servicio y la política de privacidad de CompraTuParcela.
+            Al continuar, aceptas los términos de servicio y la política de privacidad de CompraTuParcela.
           </p>
         </div>
       </div>

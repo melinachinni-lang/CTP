@@ -214,7 +214,7 @@ export function FlujoCompraModal({
               {/* Selector de método */}
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#525252', marginBottom: '10px' }}>
-                  Seleccioná cómo querés pagar
+                  Selecciona cómo quieres pagar
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <button

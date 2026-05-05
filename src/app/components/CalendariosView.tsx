@@ -946,7 +946,7 @@ export function CalendariosView() {
               <span>Al eliminar este calendario, los usuarios no podrán agendar visitas asociadas a él. Las reservas ya confirmadas no se verán afectadas.</span>
             </div>
             <p className="text-[13.5px] text-[#555] leading-relaxed">
-              ¿Estás seguro que querés eliminar <strong>"{deleteTarget.sub}"</strong>?
+              ¿Estás seguro de que quieres eliminar <strong>"{deleteTarget.sub}"</strong>?
             </p>
             <div className="flex justify-end gap-2.5 pt-5 border-t border-[#f0f0ec] mt-5">
               <button onClick={() => setShowDeleteModal(false)} className="border border-[#ddd] rounded-lg px-4 py-2.5 text-[13.5px] font-medium bg-white hover:border-[#bbb] transition-colors cursor-pointer">

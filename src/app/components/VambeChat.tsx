@@ -446,7 +446,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                           margin: 0
                         }}
                       >
-                        Entiendo. Para ayudarte mejor, seleccioná la categoría del problema:
+                        Entiendo. Para ayudarte mejor, selecciona la categoría del problema:
                       </p>
                     </div>
                   </div>
@@ -543,7 +543,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                               margin: 0
                             }}
                           >
-                            Perfecto. Ahora describí brevemente el problema:
+                            Perfecto. Ahora describe brevemente el problema:
                           </p>
                         </div>
                       </div>
@@ -552,7 +552,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                         <textarea
                           value={problemDescription}
                           onChange={(e) => setProblemDescription(e.target.value)}
-                          placeholder="Describí brevemente el problema que estás teniendo"
+                          placeholder="Describe brevemente el problema que estás teniendo"
                           rows={4}
                           className="w-full px-4 py-3 rounded-[24px] resize-none focus:outline-none transition-all"
                           style={{
@@ -709,9 +709,9 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                         margin: 0
                       }}
                     >
-                      {selectedOption === 'Buscar parcelas' && 'Podés explorar todas las parcelas disponibles usando los filtros de búsqueda para encontrar la ideal para vos.'}
-                      {selectedOption === 'Contactar inmobiliaria' && 'Podés contactar directamente a las inmobiliarias desde la página de cada parcela o proyecto.'}
-                      {selectedOption === 'Consultas sobre pagos / planes' && 'Para consultas sobre planes y pagos, podés revisar la sección de "Plan y facturación" en tu perfil o contactarnos por email.'}
+                      {selectedOption === 'Buscar parcelas' && 'Puedes explorar todas las parcelas disponibles usando los filtros de búsqueda para encontrar la ideal para ti.'}
+                      {selectedOption === 'Contactar inmobiliaria' && 'Puedes contactar directamente a las inmobiliarias desde la página de cada parcela o proyecto.'}
+                      {selectedOption === 'Consultas sobre pagos / planes' && 'Para consultas sobre planes y pagos, puedes revisar la sección de "Plan y facturación" en tu perfil o contactarnos por email.'}
                     </p>
                   </div>
                 </div>

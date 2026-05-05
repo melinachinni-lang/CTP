@@ -492,7 +492,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                         marginTop: '8px'
                       }}
                     >
-                      El formato del email no es correcto. Revisá que esté bien escrito (ej: usuario@email.com).
+                      El formato del email no es correcto. Revisa que esté bien escrito (ej: usuario@email.com).
                     </p>
                   )}
                 </div>
@@ -770,7 +770,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             </div>
 
             <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '26px', fontWeight: 600, color: '#0A0A0A', marginBottom: '12px' }}>
-              Revisá tu email
+              Revisa tu email
             </h1>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#6B7280', lineHeight: '1.6', marginBottom: '8px' }}>
               Te enviamos un link de confirmación a
@@ -786,7 +786,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             </div>
 
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#9CA3AF', marginBottom: '16px' }}>
-              ¿No recibiste el email? Revisá la carpeta de spam o
+              ¿No recibiste el email? Revisa la carpeta de spam o
             </p>
             <button
               onClick={() => {}}
@@ -880,7 +880,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 lineHeight: '1.5'
               }}
             >
-              Al continuar, aceptás los términos de servicio y la política de privacidad de CompraTuParcela.
+              Al continuar, aceptas los términos de servicio y la política de privacidad de CompraTuParcela.
             </p>
 
             {/* Botón Cancelar */}
@@ -2434,7 +2434,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
             {/* Subtitle */}
             <p className="text-center mb-8" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 400, lineHeight: '1.6' }}>
-              Tu cuenta está lista. Ahora podés explorar, reservar y publicar parcelas en CompraTuParcela.
+              Tu cuenta está lista. Ahora puedes explorar, reservar y publicar parcelas en CompraTuParcela.
             </p>
 
             {/* Buttons */}

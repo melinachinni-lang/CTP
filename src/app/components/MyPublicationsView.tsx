@@ -1453,7 +1453,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               marginBottom: '12px',
               textAlign: 'center'
             }}>
-              ¿Qué querés publicar?
+              ¿Qué quieres publicar?
             </h3>
             <p style={{
               fontFamily: 'var(--font-body)',
@@ -1637,7 +1637,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               marginBottom: '12px',
               textAlign: 'center'
             }}>
-              Ya tenés una parcela publicada
+              Ya tienes una parcela publicada
             </h3>
             
             {/* Descripción */}

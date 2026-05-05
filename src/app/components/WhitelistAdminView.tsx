@@ -284,7 +284,7 @@ export function WhitelistAdminView() {
                 <div>
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '4px' }}>Eliminar acceso</h3>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>
-                    ¿Estás seguro de que querés eliminar el acceso de <strong style={{ color: '#111827' }}>{modalEliminar.email}</strong>?
+                    ¿Estás seguro de que quieres eliminar el acceso de <strong style={{ color: '#111827' }}>{modalEliminar.email}</strong>?
                   </p>
                 </div>
               </div>

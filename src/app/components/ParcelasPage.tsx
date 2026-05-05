@@ -1193,7 +1193,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados }: Par
                             color: '#0A0A0A'
                           }}
                         >
-                          Conocé qué parcela podés comprar según tu capacidad
+                          Conoce qué parcela puedes comprar según tu capacidad
                         </p>
                       </div>
                     </div>
@@ -2806,7 +2806,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados }: Par
                       lineHeight: '1.5'
                     }}
                   >
-                    Conocé qué parcela podés comprar
+                    Conoce qué parcela puedes comprar
                   </p>
                 </div>
               </div>

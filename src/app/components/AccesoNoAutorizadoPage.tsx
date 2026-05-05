@@ -101,7 +101,7 @@ export function AccesoNoAutorizadoPage({ email, onNavigate }: AccesoNoAutorizado
                 >
                   contacto@compratuparcela.cl
                 </a>{' '}
-                indicando tu nombre y el correo con el que querés acceder.
+                indicando tu nombre y el correo con el que quieres acceder.
               </p>
             </div>
           </div>
