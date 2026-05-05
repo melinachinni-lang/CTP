@@ -12,6 +12,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = React.useState('');
   const [passwordResetSent, setPasswordResetSent] = React.useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = React.useState<'email' | 'sent' | 'new-password' | 'success'>('email');
+  const [forgotPasswordGoogleError, setForgotPasswordGoogleError] = React.useState(false);
+  const [resetRequestCount, setResetRequestCount] = React.useState(0);
+  const [newPassword, setNewPassword] = React.useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
+  const [showNewPassword, setShowNewPassword] = React.useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = React.useState(false);
+  const [resetCountdown, setResetCountdown] = React.useState(3);
   const [activeTab, setActiveTab] = React.useState<'login' | 'register'>('login');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -410,14 +418,41 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   ];
 
   const handleForgotPasswordSubmit = () => {
-    // Simular envío de email
+    // Detectar cuenta Google
+    const googleEmails = googleAccounts.map(a => a.email.toLowerCase());
+    if (googleEmails.includes(forgotPasswordEmail.toLowerCase())) {
+      setForgotPasswordGoogleError(true);
+      return;
+    }
+    setForgotPasswordGoogleError(false);
+    setResetRequestCount(c => c + 1);
+    setForgotPasswordStep('sent');
     setPasswordResetSent(true);
+  };
+
+  const handleResetPassword = () => {
+    setForgotPasswordStep('success');
+    setResetCountdown(3);
+    let count = 3;
+    const interval = setInterval(() => {
+      count -= 1;
+      setResetCountdown(count);
+      if (count <= 0) {
+        clearInterval(interval);
+        closeForgotPasswordModal();
+      }
+    }, 1000);
   };
 
   const closeForgotPasswordModal = () => {
     setShowForgotPassword(false);
     setForgotPasswordEmail('');
     setPasswordResetSent(false);
+    setForgotPasswordStep('email');
+    setForgotPasswordGoogleError(false);
+    setNewPassword('');
+    setConfirmNewPassword('');
+    setResetCountdown(3);
   };
 
   return (
@@ -956,21 +991,20 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
       {showForgotPassword && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
           <div className="bg-white w-full max-w-md rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] overflow-hidden">
-            
-            {!passwordResetSent ? (
+
+            {/* ── Paso 1: ingresar email ── */}
+            {forgotPasswordStep === 'email' && (
               <>
-                {/* Modal Header */}
                 <div className="p-6 border-b border-gray-200">
                   <h3 className="text-xl font-semibold mb-1" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
                     Recuperar contraseña
                   </h3>
-                  <p className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
-                    Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña
+                  <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
+                    Ingresa tu email y te enviamos un link para restablecer tu contraseña.
                   </p>
                 </div>
 
-                {/* Email Input */}
-                <div className="p-6">
+                <div className="p-6 space-y-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
                       Email <span style={{ color: '#0A0A0A' }}>*</span>
@@ -979,80 +1013,245 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       type="email"
                       placeholder="tu@email.com"
                       value={forgotPasswordEmail}
-                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                      required
+                      onChange={(e) => { setForgotPasswordEmail(e.target.value); setForgotPasswordGoogleError(false); }}
                       className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', borderColor: forgotPasswordGoogleError ? '#3B82F6' : undefined }}
                     />
+                    {/* Google account notice */}
+                    {forgotPasswordGoogleError && (
+                      <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                        <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#3B82F6"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/></svg>
+                        <p className="text-sm" style={{ color: '#1D4ED8', fontFamily: 'Inter, sans-serif' }}>
+                          Esta cuenta usa Google. Ingresa con el botón de Google — no necesitas contraseña.
+                        </p>
+                      </div>
+                    )}
+                    {/* Rate limit notice */}
+                    {resetRequestCount >= 3 && (
+                      <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D' }}>
+                        <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#D97706"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
+                        <p className="text-sm" style={{ color: '#92400E', fontFamily: 'Inter, sans-serif' }}>
+                          Has alcanzado el máximo de 3 solicitudes por hora.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Actions */}
                 <div className="p-6 border-t border-gray-200 flex gap-3">
                   <button
                     onClick={closeForgotPasswordModal}
-                    className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-black px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                    className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 text-sm font-medium rounded-[200px] transition-colors"
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
-                    Cancelar
+                    Volver al login
                   </button>
                   <button
                     onClick={handleForgotPasswordSubmit}
-                    disabled={!forgotPasswordEmail}
-                    style={{ 
-                      fontFamily: 'Inter, sans-serif',
-                      backgroundColor: forgotPasswordEmail ? '#006B4E' : undefined
-                    }}
-                    className="flex-1 h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    onMouseEnter={(e) => { if (forgotPasswordEmail) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                    onMouseLeave={(e) => { if (forgotPasswordEmail) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                    disabled={!forgotPasswordEmail || resetRequestCount >= 3}
+                    style={{ fontFamily: 'Inter, sans-serif', backgroundColor: (forgotPasswordEmail && resetRequestCount < 3) ? '#006B4E' : undefined }}
+                    className="flex-1 h-12 text-white px-6 text-sm font-medium rounded-[200px] transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                    onMouseEnter={(e) => { if (forgotPasswordEmail && resetRequestCount < 3) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                    onMouseLeave={(e) => { if (forgotPasswordEmail && resetRequestCount < 3) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                   >
-                    Enviar enlace
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Success State */}
-                <div className="p-8 text-center">
-                  {/* Icon de éxito */}
-                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  
-                  <h3 className="text-xl font-semibold mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
-                    Enlace enviado
-                  </h3>
-                  
-                  <p className="text-sm text-gray-600 mb-2" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, lineHeight: '1.6' }}>
-                    Te enviamos un enlace de recuperación a:
-                  </p>
-                  
-                  <p className="text-base font-medium mb-6" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    {forgotPasswordEmail}
-                  </p>
-                  
-                  <p className="text-sm text-gray-600 mb-6" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, lineHeight: '1.6' }}>
-                    Revisa tu bandeja de entrada y sigue las instrucciones para restablecer tu contraseña.
-                  </p>
-
-                  <button
-                    onClick={closeForgotPasswordModal}
-                    style={{ 
-                      fontFamily: 'Inter, sans-serif',
-                      backgroundColor: '#006B4E'
-                    }}
-                    className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                  >
-                    Entendido
+                    Enviar link
                   </button>
                 </div>
               </>
             )}
+
+            {/* ── Paso 2: email enviado ── */}
+            {forgotPasswordStep === 'sent' && (
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#EBFEF5' }}>
+                  <svg className="w-8 h-8" fill="none" stroke="#006B4E" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
+                  Revisa tu email
+                </h3>
+                <p className="text-sm mb-6" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6' }}>
+                  Si ese email está registrado, te enviamos un link para restablecer tu contraseña. El link expira en 24 horas.
+                </p>
+                <div className="text-xs mb-6 px-4 py-3 rounded-lg" style={{ backgroundColor: '#F3F4F6', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                  No olvides revisar la carpeta de spam.
+                </div>
+
+                {/* Simular click en link — solo en wireframe */}
+                <button
+                  onClick={() => setForgotPasswordStep('new-password')}
+                  className="w-full mb-3 h-12 text-white text-sm font-medium rounded-[200px] transition-colors"
+                  style={{ backgroundColor: '#006B4E', fontFamily: 'Inter, sans-serif' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
+                >
+                  Simular click en el link →
+                </button>
+                <button
+                  onClick={closeForgotPasswordModal}
+                  className="w-full h-10 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Volver al login
+                </button>
+              </div>
+            )}
+
+            {/* ── Paso 3: nueva contraseña ── */}
+            {forgotPasswordStep === 'new-password' && (() => {
+              const hasMin = newPassword.length >= 8;
+              const hasNumber = /\d/.test(newPassword);
+              const hasUpper = /[A-Z]/.test(newPassword);
+              const hasLower = /[a-z]/.test(newPassword);
+              const score = [hasMin, hasNumber, hasUpper, hasLower].filter(Boolean).length;
+              const strength = score <= 1 ? { label: 'Débil', color: '#EF4444', width: '33%' }
+                : score <= 3 ? { label: 'Media', color: '#F59E0B', width: '66%' }
+                : { label: 'Fuerte', color: '#16A34A', width: '100%' };
+              const rules = [
+                { label: 'Mínimo 8 caracteres', met: hasMin },
+                { label: 'Al menos 1 número', met: hasNumber },
+                { label: 'Al menos 1 mayúscula', met: hasUpper },
+                { label: 'Al menos 1 minúscula', met: hasLower },
+              ];
+              const canSubmit = hasMin && hasNumber && hasUpper && hasLower && newPassword === confirmNewPassword && newPassword.length > 0;
+              return (
+                <>
+                  <div className="p-6 border-b border-gray-200">
+                    <h3 className="text-xl font-semibold mb-1" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
+                      Nueva contraseña
+                    </h3>
+                    <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
+                      Elige una contraseña segura para tu cuenta.
+                    </p>
+                  </div>
+
+                  <div className="p-6 space-y-4">
+                    {/* Requisitos — siempre visibles */}
+                    <div className="p-3 rounded-lg space-y-1.5" style={{ backgroundColor: '#F9FAFB' }}>
+                      <p className="text-xs font-medium mb-2" style={{ color: '#374151', fontFamily: 'Inter, sans-serif' }}>Tu contraseña debe tener:</p>
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+                        {rules.map(rule => (
+                          <div key={rule.label} className="flex items-center gap-1.5">
+                            <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0"
+                              style={{ backgroundColor: newPassword ? (rule.met ? '#DCFCE7' : '#FEE2E2') : '#F3F4F6' }}>
+                              {newPassword && (rule.met
+                                ? <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                : <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 2l4 4M6 2l-4 4" stroke="#DC2626" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                              )}
+                            </div>
+                            <span className="text-xs" style={{ fontFamily: 'Inter, sans-serif', color: newPassword ? (rule.met ? '#15803D' : '#DC2626') : '#9CA3AF' }}>
+                              {rule.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Nueva contraseña */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>Nueva contraseña *</label>
+                      <div className="relative">
+                        <input
+                          type={showNewPassword ? 'text' : 'password'}
+                          placeholder="••••••••"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 pr-11 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                          style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
+                        />
+                        <button type="button" onClick={() => setShowNewPassword(v => !v)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1" style={{ color: '#9CA3AF' }}>
+                          {showNewPassword
+                            ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                            : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          }
+                        </button>
+                      </div>
+                      {/* Indicador de fortaleza */}
+                      {newPassword && (
+                        <div className="space-y-1 pt-1">
+                          <div className="w-full bg-gray-200 rounded-full h-1.5">
+                            <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: strength.color, width: strength.width }}></div>
+                          </div>
+                          <p className="text-xs" style={{ color: strength.color, fontFamily: 'Inter, sans-serif' }}>{strength.label}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Confirmar contraseña */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>Confirmar contraseña *</label>
+                      <div className="relative">
+                        <input
+                          type={showConfirmNewPassword ? 'text' : 'password'}
+                          placeholder="••••••••"
+                          value={confirmNewPassword}
+                          onChange={(e) => setConfirmNewPassword(e.target.value)}
+                          className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 pr-11 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                          style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', borderColor: confirmNewPassword && confirmNewPassword !== newPassword ? '#EF4444' : undefined }}
+                        />
+                        <button type="button" onClick={() => setShowConfirmNewPassword(v => !v)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1" style={{ color: '#9CA3AF' }}>
+                          {showConfirmNewPassword
+                            ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                            : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          }
+                        </button>
+                      </div>
+                      {confirmNewPassword && confirmNewPassword !== newPassword && (
+                        <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>Las contraseñas no coinciden.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="p-6 border-t border-gray-200 flex gap-3">
+                    <button
+                      onClick={closeForgotPasswordModal}
+                      className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 text-sm font-medium rounded-[200px] transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
+                      Volver al login
+                    </button>
+                    <button
+                      onClick={handleResetPassword}
+                      disabled={!canSubmit}
+                      style={{ fontFamily: 'Inter, sans-serif', backgroundColor: canSubmit ? '#006B4E' : undefined }}
+                      className="flex-1 h-12 text-white px-6 text-sm font-medium rounded-[200px] transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                      onMouseEnter={(e) => { if (canSubmit) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                      onMouseLeave={(e) => { if (canSubmit) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                    >
+                      Restablecer contraseña
+                    </button>
+                  </div>
+                </>
+              );
+            })()}
+
+            {/* ── Paso 4: éxito + countdown ── */}
+            {forgotPasswordStep === 'success' && (
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#EBFEF5' }}>
+                  <svg className="w-8 h-8" fill="none" stroke="#006B4E" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
+                  ¡Contraseña restablecida!
+                </h3>
+                <p className="text-sm mb-6" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6' }}>
+                  Tu contraseña fue actualizada correctamente. Volviendo al login en {resetCountdown} segundo{resetCountdown !== 1 ? 's' : ''}...
+                </p>
+                <button
+                  onClick={closeForgotPasswordModal}
+                  className="w-full h-12 text-sm font-medium rounded-[200px] border transition-colors hover:bg-gray-50"
+                  style={{ color: '#0A0A0A', borderColor: '#CDD8DE', fontFamily: 'Inter, sans-serif' }}
+                >
+                  Volver al login ahora
+                </button>
+              </div>
+            )}
+
           </div>
         </div>
       )}
