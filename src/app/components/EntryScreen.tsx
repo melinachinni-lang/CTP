@@ -18,6 +18,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [registerEmail, setRegisterEmail] = React.useState('');
   const [registerPassword, setRegisterPassword] = React.useState('');
+  const [showRegisterPassword, setShowRegisterPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [showLoginPassword, setShowLoginPassword] = React.useState(false);
+  const [registerErrors, setRegisterErrors] = React.useState<{ email?: string; password?: string; confirm?: string }>({});
+  const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(false);
   const [pendingGoogleAccount, setPendingGoogleAccount] = React.useState<{ name: string; email: string } | null>(null);
   const [showProfileSelection, setShowProfileSelection] = React.useState(false);
   const [selectedProfile, setSelectedProfile] = React.useState<string | null>(null);
@@ -136,6 +141,35 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
     return emailRegex.test(emailToValidate);
   };
 
+  const getPasswordStrength = (pwd: string): { label: string; color: string; width: string } | null => {
+    if (!pwd) return null;
+    const hasMin = pwd.length >= 8;
+    const hasNumber = /\d/.test(pwd);
+    const hasUpper = /[A-Z]/.test(pwd);
+    const hasSpecial = /[^A-Za-z0-9]/.test(pwd);
+    const score = [hasMin, hasNumber, hasUpper, hasSpecial].filter(Boolean).length;
+    if (score <= 1) return { label: 'Débil', color: '#EF4444', width: '33%' };
+    if (score === 2 || score === 3) return { label: 'Media', color: '#F59E0B', width: '66%' };
+    return { label: 'Fuerte', color: '#16A34A', width: '100%' };
+  };
+
+  const validateRegisterForm = (): boolean => {
+    const errors: { email?: string; password?: string; confirm?: string } = {};
+    if (!validateEmailFormat(registerEmail)) {
+      errors.email = 'El formato del email no es correcto.';
+    }
+    if (registerPassword.length < 8) {
+      errors.password = 'La contraseña debe tener al menos 8 caracteres.';
+    } else if (!/\d/.test(registerPassword)) {
+      errors.password = 'La contraseña debe incluir al menos un número.';
+    }
+    if (confirmPassword !== registerPassword) {
+      errors.confirm = 'Las contraseñas no coinciden.';
+    }
+    setRegisterErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleEmailSubmit = () => {
     if (activeTab === 'login') {
       // Primero validar formato del email
@@ -162,8 +196,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
         });
       }
     } else {
-      // Cuando el usuario se registra, mostrar la selección de perfil
-      setShowProfileSelection(true);
+      // Validar formulario de registro
+      if (!validateRegisterForm()) return;
+      // Mostrar pantalla intermedia de confirmación de email
+      setShowEmailConfirmation(true);
     }
   };
 
@@ -464,29 +500,26 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
                     Contraseña <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full bg-white border-2 py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                    style={{ 
-                      fontFamily: 'Inter, sans-serif', 
-                      fontSize: '16px',
-                      borderColor: loginError ? 'var(--error)' : '#D1D5DB'
-                    }}
-                  />
-                  {/* Error message - Credentials */}
+                  <div className="relative">
+                    <input
+                      type={showLoginPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="w-full bg-white border-2 py-3 px-4 pr-11 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', borderColor: loginError ? 'var(--error)' : '#D1D5DB' }}
+                    />
+                    <button type="button" onClick={() => setShowLoginPassword(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1" style={{ color: '#9CA3AF' }}>
+                      {showLoginPassword
+                        ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      }
+                    </button>
+                  </div>
                   {loginError && !emailFormatError && (
-                    <p 
-                      className="text-sm"
-                      style={{ 
-                        color: 'var(--error)', 
-                        fontFamily: 'Inter, sans-serif',
-                        marginTop: '8px'
-                      }}
-                    >
+                    <p className="text-sm" style={{ color: 'var(--error)', fontFamily: 'Inter, sans-serif', marginTop: '8px' }}>
                       Email o contraseña incorrectos. Verificá tus datos e intentá nuevamente.
                     </p>
                   )}
@@ -546,63 +579,107 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Formulario de registro */}
             {activeTab === 'register' && (
               <div className="space-y-4">
-                {/* Email Input */}
-                <div className="space-y-2">
+                {/* Email */}
+                <div className="space-y-1">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Email <span style={{ color: '#0A0A0A' }}>*</span>
+                    Email *
                   </label>
                   <input
                     type="email"
                     placeholder="tu@email.com"
                     value={registerEmail}
-                    onChange={(e) => setRegisterEmail(e.target.value)}
-                    required
-                    className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
+                    onChange={(e) => { setRegisterEmail(e.target.value); setRegisterErrors(prev => ({ ...prev, email: undefined })); }}
+                    className="w-full bg-white border-2 py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', borderColor: registerErrors.email ? '#EF4444' : '#D1D5DB' }}
                   />
+                  {registerErrors.email && (
+                    <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>{registerErrors.email}</p>
+                  )}
                 </div>
 
-                {/* Password Input */}
-                <div className="space-y-2">
+                {/* Contraseña */}
+                <div className="space-y-1">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Contraseña <span style={{ color: '#0A0A0A' }}>*</span>
+                    Contraseña *
                   </label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    value={registerPassword}
-                    onChange={(e) => setRegisterPassword(e.target.value)}
-                    required
-                    className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
-                  />
+                  <div className="relative">
+                    <input
+                      type={showRegisterPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={registerPassword}
+                      onChange={(e) => { setRegisterPassword(e.target.value); setRegisterErrors(prev => ({ ...prev, password: undefined })); }}
+                      className="w-full bg-white border-2 py-3 px-4 pr-11 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', borderColor: registerErrors.password ? '#EF4444' : '#D1D5DB' }}
+                    />
+                    <button type="button" onClick={() => setShowRegisterPassword(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1"
+                      style={{ color: '#9CA3AF' }}>
+                      {showRegisterPassword
+                        ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      }
+                    </button>
+                  </div>
+                  {/* Indicador de fortaleza */}
+                  {registerPassword && (() => {
+                    const strength = getPasswordStrength(registerPassword);
+                    return strength ? (
+                      <div className="space-y-1 pt-1">
+                        <div className="h-1.5 rounded-full" style={{ backgroundColor: '#E5E7EB' }}>
+                          <div className="h-1.5 rounded-full transition-all" style={{ width: strength.width, backgroundColor: strength.color }} />
+                        </div>
+                        <p className="text-xs" style={{ color: strength.color, fontFamily: 'Inter, sans-serif' }}>
+                          Contraseña {strength.label.toLowerCase()}
+                        </p>
+                      </div>
+                    ) : null;
+                  })()}
+                  {registerErrors.password && (
+                    <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>{registerErrors.password}</p>
+                  )}
                 </div>
 
-                {/* Confirm Password Input */}
-                <div className="space-y-2">
+                {/* Confirmar contraseña */}
+                <div className="space-y-1">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Confirmar contraseña <span style={{ color: '#0A0A0A' }}>*</span>
+                    Confirmar contraseña *
                   </label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
-                  />
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={confirmPassword}
+                      onChange={(e) => { setConfirmPassword(e.target.value); setRegisterErrors(prev => ({ ...prev, confirm: undefined })); }}
+                      className="w-full bg-white border-2 py-3 px-4 pr-11 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', borderColor: registerErrors.confirm ? '#EF4444' : '#D1D5DB' }}
+                    />
+                    <button type="button" onClick={() => setShowConfirmPassword(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1"
+                      style={{ color: '#9CA3AF' }}>
+                      {showConfirmPassword
+                        ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      }
+                    </button>
+                  </div>
+                  {confirmPassword && confirmPassword === registerPassword && (
+                    <p className="text-xs flex items-center gap-1" style={{ color: '#16A34A', fontFamily: 'Inter, sans-serif' }}>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Las contraseñas coinciden
+                    </p>
+                  )}
+                  {registerErrors.confirm && (
+                    <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>{registerErrors.confirm}</p>
+                  )}
                 </div>
 
-                {/* Primary CTA */}
+                {/* Botón Registrarme — deshabilitado hasta completar los 3 campos */}
                 <button
                   onClick={handleEmailSubmit}
-                  style={{ 
-                    fontFamily: 'Inter, sans-serif',
-                    backgroundColor: '#006B4E'
-                  }}
-                  className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm mt-6"
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                  disabled={!registerEmail || !registerPassword || !confirmPassword}
+                  style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#006B4E' }}
+                  className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onMouseEnter={(e) => { if (registerEmail && registerPassword && confirmPassword) e.currentTarget.style.backgroundColor = '#01533E'; }}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
                   Registrarme
@@ -641,6 +718,62 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
           </p>
         </div>
       </div>
+
+      {/* Pantalla de confirmación de email */}
+      {showEmailConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
+          <div className="w-full max-w-md px-6 text-center">
+            <div className="flex justify-center mb-8">
+              <img src={logo} alt="CompraTuParcela" className="h-14" />
+            </div>
+
+            {/* Ícono de email */}
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#EBFEF5' }}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006B4E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+            </div>
+
+            <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '26px', fontWeight: 600, color: '#0A0A0A', marginBottom: '12px' }}>
+              Revisá tu email
+            </h1>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#6B7280', lineHeight: '1.6', marginBottom: '8px' }}>
+              Te enviamos un link de confirmación a
+            </p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 600, color: '#0A0A0A', marginBottom: '32px' }}>
+              {registerEmail}
+            </p>
+
+            <div className="rounded-xl p-4 text-left mb-6" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6B7280', lineHeight: '1.6' }}>
+                Hacé clic en el link del email para activar tu cuenta. El link expira en <strong style={{ color: '#374151' }}>48 horas</strong>.
+              </p>
+            </div>
+
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#9CA3AF', marginBottom: '16px' }}>
+              ¿No recibiste el email? Revisá la carpeta de spam o
+            </p>
+            <button
+              onClick={() => {}}
+              style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 600, color: '#006B4E' }}
+              className="hover:underline"
+            >
+              Reenviar email de confirmación
+            </button>
+
+            <div className="mt-8">
+              <button
+                onClick={() => setShowEmailConfirmation(false)}
+                style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#9CA3AF' }}
+                className="hover:text-gray-600 transition-colors"
+              >
+                ← Volver al registro
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Google Account Selector Modal */}
       {showGoogleSelector && (
