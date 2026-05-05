@@ -478,7 +478,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
                 {activeTab === 'login' 
-                  ? 'Continúa donde lo dejaste' 
+                  ? 'Ingresa a tu cuenta para buscar y/o vender parcelas'
                   : 'Es rápido y sin costo'}
               </p>
             </div>
