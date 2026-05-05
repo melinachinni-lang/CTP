@@ -583,7 +583,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
                     onClick={() => setShowForgotPassword(true)}
                   >
-                    ¿Olvidé mi contraseña?
+                    Olvidé mi contraseña
                   </button>
                 </div>
 
