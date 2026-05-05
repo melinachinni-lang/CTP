@@ -1634,7 +1634,7 @@ export function PublicationWizard({ onClose, onSave, initialData, mode, publishe
               }}
             >
               <Check className="w-4 h-4" />
-              Publicar
+              {mode === 'edit' && initialData?.status !== 'draft' ? 'Guardar cambios' : 'Publicar'}
             </button>
           )}
         </div>
