@@ -76,6 +76,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   // Login error states
   const [loginError, setLoginError] = React.useState(false);
   const [emailFormatError, setEmailFormatError] = React.useState(false);
+  const [googleAccountError, setGoogleAccountError] = React.useState(false);
+  const [failedAttempts, setFailedAttempts] = React.useState(0);
+  const [blockedUntil, setBlockedUntil] = React.useState<Date | null>(null);
+  const [rememberMe, setRememberMe] = React.useState(false);
 
   const googleAccounts = [
     { name: 'María Pérez', email: 'maria.perez@gmail.com' },
@@ -122,6 +126,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   React.useEffect(() => {
     setLoginError(false);
     setEmailFormatError(false);
+    setGoogleAccountError(false);
   }, [activeTab, email, password]);
 
   const validateEmailFormat = (emailToValidate: string): boolean => {
@@ -174,27 +179,53 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
   const handleEmailSubmit = () => {
     if (activeTab === 'login') {
+      // Verificar si el acceso está bloqueado
+      if (blockedUntil && new Date() < blockedUntil) {
+        return;
+      }
+
       // Primero validar formato del email
       if (!validateEmailFormat(email)) {
         setEmailFormatError(true);
         setLoginError(false);
+        setGoogleAccountError(false);
         return;
       }
 
-      // Validar contraseña
-      if (password.length < 6) {
-        setLoginError(true);
+      // Detectar si el email pertenece a una cuenta Google
+      const googleEmails = googleAccounts.map(a => a.email.toLowerCase());
+      if (googleEmails.includes(email.toLowerCase())) {
+        setGoogleAccountError(true);
+        setLoginError(false);
         setEmailFormatError(false);
         return;
       }
-      
-      // Login exitoso: simular usuario logueado y usar el mismo flujo que Google
+
+      // Validar contraseña (en wireframe cualquier contraseña >= 6 chars es válida)
+      if (password.length < 6) {
+        const newAttempts = failedAttempts + 1;
+        setFailedAttempts(newAttempts);
+        if (newAttempts >= 5) {
+          const until = new Date();
+          until.setMinutes(until.getMinutes() + 15);
+          setBlockedUntil(until);
+        }
+        setLoginError(true);
+        setEmailFormatError(false);
+        setGoogleAccountError(false);
+        return;
+      }
+
+      // Login exitoso
       setLoginError(false);
       setEmailFormatError(false);
+      setGoogleAccountError(false);
+      setFailedAttempts(0);
+      setBlockedUntil(null);
       if (onSelectGoogleAccount) {
-        onSelectGoogleAccount({ 
-          name: email.split('@')[0], // Usar parte del email como nombre
-          email: email 
+        onSelectGoogleAccount({
+          name: email.split('@')[0],
+          email: email
         });
       }
     } else {
@@ -475,16 +506,18 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   />
                   {/* Error message - Email format */}
                   {emailFormatError && (
-                    <p 
-                      className="text-sm"
-                      style={{ 
-                        color: 'var(--error)', 
-                        fontFamily: 'Inter, sans-serif',
-                        marginTop: '8px'
-                      }}
-                    >
+                    <p className="text-sm" style={{ color: 'var(--error)', fontFamily: 'Inter, sans-serif', marginTop: '8px' }}>
                       El formato del email no es correcto. Revisa que esté bien escrito (ej: usuario@email.com).
                     </p>
+                  )}
+                  {/* Error message - Google account */}
+                  {googleAccountError && (
+                    <div className="flex items-start gap-2 mt-2 p-3 rounded-lg" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                      <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#3B82F6"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/></svg>
+                      <p className="text-sm" style={{ color: '#1D4ED8', fontFamily: 'Inter, sans-serif' }}>
+                        Esta cuenta usa Google. Ingresa con el botón de Google.
+                      </p>
+                    </div>
                   )}
                 </div>
 
@@ -512,36 +545,67 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     </button>
                   </div>
                   {loginError && !emailFormatError && (
-                    <p className="text-sm" style={{ color: 'var(--error)', fontFamily: 'Inter, sans-serif', marginTop: '8px' }}>
-                      Email o contraseña incorrectos. Verificá tus datos e intentá nuevamente.
-                    </p>
+                    <div className="mt-2">
+                      {blockedUntil && new Date() < blockedUntil ? (
+                        <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+                          <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#EF4444"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
+                          <p className="text-sm" style={{ color: '#B91C1C', fontFamily: 'Inter, sans-serif' }}>
+                            Demasiados intentos fallidos. Tu acceso está bloqueado por 15 minutos. Intenta más tarde o usa "Olvidé mi contraseña".
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-sm" style={{ color: 'var(--error)', fontFamily: 'Inter, sans-serif' }}>
+                          Email o contraseña incorrectos.
+                          {failedAttempts >= 2 && failedAttempts < 5 && (
+                            <span className="block mt-0.5" style={{ color: '#B45309', fontSize: '12px' }}>
+                              {5 - failedAttempts} intento{5 - failedAttempts !== 1 ? 's' : ''} restante{5 - failedAttempts !== 1 ? 's' : ''} antes del bloqueo.
+                            </span>
+                          )}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
 
-                {/* Forgot password */}
-                <div className="text-right">
+                {/* Recordarme + Olvidé contraseña */}
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="w-4 h-4 rounded accent-[#006B4E]"
+                    />
+                    <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>Recordarme</span>
+                  </label>
                   <button
                     className="text-sm text-gray-600 hover:text-black transition-colors"
                     style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
                     onClick={() => setShowForgotPassword(true)}
                   >
-                    ¿Olvidaste tu contraseña?
+                    ¿Olvidé mi contraseña?
                   </button>
                 </div>
 
                 {/* Primary CTA */}
-                <button
-                  onClick={handleEmailSubmit}
-                  style={{ 
-                    fontFamily: 'Inter, sans-serif',
-                    backgroundColor: '#006B4E'
-                  }}
-                  className="w-full h-12 text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                >
-                  Ingresar
-                </button>
+                {(() => {
+                  const isBlocked = !!(blockedUntil && new Date() < blockedUntil);
+                  return (
+                    <button
+                      onClick={handleEmailSubmit}
+                      disabled={isBlocked}
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        backgroundColor: isBlocked ? '#E5E5E5' : '#006B4E'
+                      }}
+                      className={`w-full h-12 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm ${isBlocked ? 'text-gray-400 cursor-not-allowed' : 'text-white'}`}
+                      onMouseEnter={(e) => { if (!isBlocked) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                      onMouseLeave={(e) => { if (!isBlocked) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                    >
+                      {isBlocked ? 'Acceso bloqueado temporalmente' : 'Ingresar'}
+                    </button>
+                  );
+                })()}
 
                 {/* Divider */}
                 <div className="flex items-center gap-4 py-2">
