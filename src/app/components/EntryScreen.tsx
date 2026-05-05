@@ -620,19 +620,51 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       }
                     </button>
                   </div>
-                  {/* Indicador de fortaleza */}
-                  {registerPassword && (() => {
+                  {/* Requisitos + indicador de fortaleza */}
+                  {(() => {
+                    const hasMin = registerPassword.length >= 8;
+                    const hasNumber = /\d/.test(registerPassword);
+                    const hasUpper = /[A-Z]/.test(registerPassword);
+                    const hasLower = /[a-z]/.test(registerPassword);
                     const strength = getPasswordStrength(registerPassword);
-                    return strength ? (
-                      <div className="space-y-1 pt-1">
-                        <div className="h-1.5 rounded-full" style={{ backgroundColor: '#E5E7EB' }}>
-                          <div className="h-1.5 rounded-full transition-all" style={{ width: strength.width, backgroundColor: strength.color }} />
+                    const rules = [
+                      { label: 'Mínimo 8 caracteres', met: hasMin },
+                      { label: 'Al menos 1 número', met: hasNumber },
+                      { label: 'Al menos 1 mayúscula', met: hasUpper },
+                      { label: 'Al menos 1 minúscula', met: hasLower },
+                    ];
+                    return (
+                      <div className="pt-2 space-y-2">
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+                          {rules.map(rule => (
+                            <div key={rule.label} className="flex items-center gap-1.5">
+                              <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0"
+                                style={{ backgroundColor: registerPassword ? (rule.met ? '#DCFCE7' : '#FEE2E2') : '#F3F4F6' }}>
+                                {registerPassword && rule.met
+                                  ? <svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                  : registerPassword
+                                    ? <svg width="7" height="7" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="#EF4444" strokeWidth="1.8" strokeLinecap="round"/></svg>
+                                    : null
+                                }
+                              </div>
+                              <span className="text-xs" style={{ fontFamily: 'Inter, sans-serif', color: registerPassword ? (rule.met ? '#15803D' : '#DC2626') : '#9CA3AF' }}>
+                                {rule.label}
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                        <p className="text-xs" style={{ color: strength.color, fontFamily: 'Inter, sans-serif' }}>
-                          Contraseña {strength.label.toLowerCase()}
-                        </p>
+                        {strength && (
+                          <div className="space-y-1">
+                            <div className="h-1.5 rounded-full" style={{ backgroundColor: '#E5E7EB' }}>
+                              <div className="h-1.5 rounded-full transition-all duration-300" style={{ width: strength.width, backgroundColor: strength.color }} />
+                            </div>
+                            <p className="text-xs" style={{ color: strength.color, fontFamily: 'Inter, sans-serif' }}>
+                              Contraseña {strength.label.toLowerCase()}
+                            </p>
+                          </div>
+                        )}
                       </div>
-                    ) : null;
+                    );
                   })()}
                   {registerErrors.password && (
                     <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>{registerErrors.password}</p>
