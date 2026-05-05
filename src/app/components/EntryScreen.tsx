@@ -67,6 +67,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   // Completion/Loading states
   const [showCompletion, setShowCompletion] = React.useState(false);
   const [completionProfile, setCompletionProfile] = React.useState<'real-estate' | 'broker' | null>(null);
+
+  // Welcome modal after registration
+  const [showWelcomeModal, setShowWelcomeModal] = React.useState(false);
+  const [welcomeDestination, setWelcomeDestination] = React.useState<'person-dashboard' | 'real-estate-dashboard' | 'broker-dashboard'>('person-dashboard');
   
   // Login error states
   const [loginError, setLoginError] = React.useState(false);
@@ -97,21 +101,18 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
     }
   };
 
-  // Auto-redirect after completion modal
+  // After loading screen, show welcome modal
   React.useEffect(() => {
     if (showCompletion && completionProfile) {
-      // Si viene de Google, registrar el login (sin navegar, el timeout maneja eso)
       if (pendingGoogleAccount && onSelectGoogleAccount) {
         onSelectGoogleAccount(pendingGoogleAccount, true);
       }
       const timer = setTimeout(() => {
-        if (completionProfile === 'real-estate') {
-          onNavigate('real-estate-dashboard');
-        } else if (completionProfile === 'broker') {
-          onNavigate('broker-dashboard');
-        }
-      }, 3500); // 3.5 seconds
-
+        setShowCompletion(false);
+        const dest = completionProfile === 'real-estate' ? 'real-estate-dashboard' : 'broker-dashboard';
+        setWelcomeDestination(dest);
+        setShowWelcomeModal(true);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [showCompletion, completionProfile, onNavigate]);
@@ -281,11 +282,12 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
   const handleProfileFormSubmit = () => {
     if (selectedProfile === 'person') {
-      // Si viene de Google, registrar el login (sin navegar, onNavigate lo maneja)
       if (pendingGoogleAccount && onSelectGoogleAccount) {
         onSelectGoogleAccount(pendingGoogleAccount, true);
       }
-      onNavigate('person-dashboard');
+      setShowProfileForm(false);
+      setWelcomeDestination('person-dashboard');
+      setShowWelcomeModal(true);
     } else if (selectedProfile === 'real-estate') {
       setShowRealEstateOnboarding(true);
       setShowProfileForm(false);
@@ -2389,8 +2391,6 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
       {showCompletion && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
           <div className="bg-white/95 backdrop-blur-sm w-full max-w-md rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] p-10">
-            
-            {/* Success Icon */}
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full border-4 border-black flex items-center justify-center">
                 <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: '#0A0A0A' }}>
@@ -2398,27 +2398,61 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 </svg>
               </div>
             </div>
-
-            {/* Title */}
             <h1 className="text-center mb-4" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2' }}>
               ¡Todo listo!
             </h1>
-
-            {/* Description */}
             <p className="text-center text-gray-600 mb-6" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
               Tu cuenta está configurada. Ahora puedes empezar a usar CompraTuParcela.
             </p>
-
-            {/* Info Box */}
             <div className="bg-gray-100 p-4 rounded-lg mb-6">
               <p className="text-center text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, lineHeight: '1.6' }}>
-                Estamos preparando tu portal. En unos segundos serás redirigido automáticamente.
+                Estamos preparando tu portal. En unos segundos continuarás automáticamente.
               </p>
             </div>
-
-            {/* Loading Spinner */}
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-black"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Welcome Modal – after registration complete */}
+      {showWelcomeModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+          <div className="bg-white w-full max-w-md rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] p-10 flex flex-col items-center">
+            {/* Icon */}
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: '#EBFEF5' }}>
+              <svg className="w-10 h-10" fill="none" stroke="#006B4E" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-center mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '28px', fontWeight: 700, lineHeight: '1.2' }}>
+              ¡Ya estás dentro!
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-center mb-8" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 400, lineHeight: '1.6' }}>
+              Tu cuenta está lista. Ahora podés explorar, reservar y publicar parcelas en CompraTuParcela.
+            </p>
+
+            {/* Buttons */}
+            <div className="w-full flex flex-col gap-3">
+              <button
+                onClick={() => { setShowWelcomeModal(false); onNavigate(welcomeDestination); }}
+                className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90"
+                style={{ backgroundColor: '#006B4E', fontFamily: 'Inter, sans-serif' }}
+              >
+                Ir a mi panel
+              </button>
+              <button
+                onClick={() => { setShowWelcomeModal(false); onNavigate('home'); }}
+                className="w-full py-3 rounded-xl text-sm font-medium border transition-colors hover:bg-gray-50"
+                style={{ color: '#0A0A0A', borderColor: '#CDD8DE', fontFamily: 'Inter, sans-serif' }}
+              >
+                Ir al inicio
+              </button>
             </div>
           </div>
         </div>
