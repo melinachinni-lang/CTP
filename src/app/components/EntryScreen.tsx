@@ -1453,14 +1453,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       value={phoneCountryCode}
                       onChange={(e) => setPhoneCountryCode(e.target.value)}
                       className="bg-white border-2 border-gray-300 focus:border-black py-3 px-3 rounded-lg text-black focus:outline-none transition-colors"
-                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', minWidth: '90px' }}
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', width: '100px', flexShrink: 0 }}
                     >
-                      <option value="+56">🇨🇱 +56</option>
-                      <option value="+54">🇦🇷 +54</option>
-                      <option value="+51">🇵🇪 +51</option>
-                      <option value="+57">🇨🇴 +57</option>
-                      <option value="+34">🇪🇸 +34</option>
-                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+56">+56 (CL)</option>
+                      <option value="+54">+54 (AR)</option>
+                      <option value="+51">+51 (PE)</option>
+                      <option value="+57">+57 (CO)</option>
+                      <option value="+34">+34 (ES)</option>
+                      <option value="+1">+1 (US)</option>
                     </select>
                     <input
                       type="tel"
@@ -1536,14 +1536,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       value={phoneCountryCode}
                       onChange={(e) => setPhoneCountryCode(e.target.value)}
                       className="bg-white border-2 border-gray-300 focus:border-black py-3 px-3 rounded-lg text-black focus:outline-none transition-colors"
-                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', minWidth: '90px' }}
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', width: '100px', flexShrink: 0 }}
                     >
-                      <option value="+56">🇨🇱 +56</option>
-                      <option value="+54">🇦🇷 +54</option>
-                      <option value="+51">🇵🇪 +51</option>
-                      <option value="+57">🇨🇴 +57</option>
-                      <option value="+34">🇪🇸 +34</option>
-                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+56">+56 (CL)</option>
+                      <option value="+54">+54 (AR)</option>
+                      <option value="+51">+51 (PE)</option>
+                      <option value="+57">+57 (CO)</option>
+                      <option value="+34">+34 (ES)</option>
+                      <option value="+1">+1 (US)</option>
                     </select>
                     <input
                       type="tel"
