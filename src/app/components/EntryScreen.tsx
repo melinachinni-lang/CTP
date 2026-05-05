@@ -49,7 +49,8 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   const [dni, setDni] = React.useState('');
   const [license, setLicense] = React.useState('');
   const [operationZone, setOperationZone] = React.useState('');
-  
+  const [phoneCountryCode, setPhoneCountryCode] = React.useState('+56');
+
   // Onboarding states for Real Estate profile
   const [showRealEstateOnboarding, setShowRealEstateOnboarding] = React.useState(false);
   const [onboardingStep, setOnboardingStep] = React.useState(1);
@@ -211,15 +212,8 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
   const handleProfileContinue = () => {
     if (selectedProfile) {
-      if (selectedProfile === 'person') {
-        // Si es perfil Personal, mostrar la pregunta de acción
-        setShowPersonAction(true);
-        setShowProfileSelection(false);
-      } else {
-        // Para Inmobiliaria y Broker, mostrar el formulario de perfil directamente
-        setShowProfileForm(true);
-        setShowProfileSelection(false);
-      }
+      setShowPersonAction(true);
+      setShowProfileSelection(false);
     }
   };
 
@@ -281,20 +275,17 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const handleProfileFormSubmit = () => {
-    if (selectedProfile === 'person') {
-      if (pendingGoogleAccount && onSelectGoogleAccount) {
-        onSelectGoogleAccount(pendingGoogleAccount, true);
-      }
-      setShowProfileForm(false);
-      setWelcomeDestination('person-dashboard');
-      setShowWelcomeModal(true);
-    } else if (selectedProfile === 'real-estate') {
-      setShowRealEstateOnboarding(true);
-      setShowProfileForm(false);
-    } else if (selectedProfile === 'broker') {
-      setShowBrokerOnboarding(true);
-      setShowProfileForm(false);
+    if (pendingGoogleAccount && onSelectGoogleAccount) {
+      onSelectGoogleAccount(pendingGoogleAccount, true);
     }
+    setShowProfileForm(false);
+    const dest = selectedProfile === 'real-estate'
+      ? 'real-estate-dashboard'
+      : selectedProfile === 'broker'
+      ? 'broker-dashboard'
+      : 'person-dashboard';
+    setWelcomeDestination(dest);
+    setShowWelcomeModal(true);
   };
 
   const handleOnboardingContinue = () => {
@@ -1006,17 +997,16 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
       {showProfileSelection && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
           <div className="bg-white/95 backdrop-blur-sm w-full max-w-2xl rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] p-10">
-            {/* Back Button */}
-            <button
-              onClick={handleBackToRegister}
-              className="flex items-center gap-2 text-sm mb-6"
-              style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Atrás
-            </button>
+
+            {/* Progress Bar – Paso 1 de 5 */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 1 de 5</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '20%' }}></div>
+              </div>
+            </div>
 
             {/* Header */}
             <div className="mb-8">
@@ -1036,20 +1026,20 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   onClick={() => setSelectedProfile(profile.id)}
                   className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
                     selectedProfile === profile.id
-                      ? 'border-black bg-gray-50'
+                      ? 'bg-[#EBFEF5]'
                       : 'border-gray-300 bg-white hover:border-gray-400'
                   }`}
+                  style={selectedProfile === profile.id ? { borderColor: '#006B4E' } : {}}
                 >
                   <div className="flex items-start gap-4">
                     {/* Radio Button Visual */}
                     <div className="mt-0.5">
                       <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          selectedProfile === profile.id ? 'border-black' : 'border-gray-400'
-                        }`}
+                        className="w-6 h-6 rounded-full border-2 flex items-center justify-center"
+                        style={{ borderColor: selectedProfile === profile.id ? '#006B4E' : '#9CA3AF' }}
                       >
                         {selectedProfile === profile.id && (
-                          <div className="w-3 h-3 rounded-full bg-black"></div>
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#006B4E' }}></div>
                         )}
                       </div>
                     </div>
@@ -1095,7 +1085,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Back Button */}
             <button
               onClick={handleBackToProfileSelection}
-              className="flex items-center gap-2 text-sm mb-6"
+              className="flex items-center gap-2 text-sm mb-4"
               style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1104,13 +1094,23 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               Atrás
             </button>
 
+            {/* Progress Bar – Paso 2 de 5 */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 2 de 5</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '40%' }}></div>
+              </div>
+            </div>
+
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
                 ¿Qué quieres hacer?
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                Selecciona la acción que deseas realizar con tu cuenta personal.
+                Selecciona la acción que deseas realizar en CompraTuParcela.
               </p>
             </div>
 
@@ -1121,21 +1121,19 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   key={action.id}
                   onClick={() => setSelectedAction(action.id)}
                   className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                    selectedAction === action.id
-                      ? 'border-black bg-gray-50'
-                      : 'border-gray-300 bg-white hover:border-gray-400'
+                    selectedAction === action.id ? 'bg-[#EBFEF5]' : 'border-gray-300 bg-white hover:border-gray-400'
                   }`}
+                  style={selectedAction === action.id ? { borderColor: '#006B4E' } : {}}
                 >
                   <div className="flex items-start gap-4">
                     {/* Radio Button Visual */}
                     <div className="mt-0.5">
                       <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          selectedAction === action.id ? 'border-black' : 'border-gray-400'
-                        }`}
+                        className="w-6 h-6 rounded-full border-2 flex items-center justify-center"
+                        style={{ borderColor: selectedAction === action.id ? '#006B4E' : '#9CA3AF' }}
                       >
                         {selectedAction === action.id && (
-                          <div className="w-3 h-3 rounded-full bg-black"></div>
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#006B4E' }}></div>
                         )}
                       </div>
                     </div>
@@ -1181,7 +1179,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Back Button */}
             <button
               onClick={handleBackToAction}
-              className="flex items-center gap-2 text-sm mb-6"
+              className="flex items-center gap-2 text-sm mb-4"
               style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1190,10 +1188,20 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               Atrás
             </button>
 
+            {/* Progress Bar – Paso 3 de 5 */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 3 de 5</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '60%' }}></div>
+              </div>
+            </div>
+
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
-                ¿Tenés experiencia comprando o vendiendo parcelas?
+                ¿Tienes experiencia comprando o vendiendo parcelas?
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
                 Esto nos ayuda a personalizar tu experiencia en la plataforma.
@@ -1207,21 +1215,19 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   key={level.id}
                   onClick={() => setSelectedExperience(level.id)}
                   className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                    selectedExperience === level.id
-                      ? 'border-black bg-gray-50'
-                      : 'border-gray-300 bg-white hover:border-gray-400'
+                    selectedExperience === level.id ? 'bg-[#EBFEF5]' : 'border-gray-300 bg-white hover:border-gray-400'
                   }`}
+                  style={selectedExperience === level.id ? { borderColor: '#006B4E' } : {}}
                 >
                   <div className="flex items-start gap-4">
                     {/* Radio Button Visual */}
                     <div className="mt-0.5">
                       <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          selectedExperience === level.id ? 'border-black' : 'border-gray-400'
-                        }`}
+                        className="w-6 h-6 rounded-full border-2 flex items-center justify-center"
+                        style={{ borderColor: selectedExperience === level.id ? '#006B4E' : '#9CA3AF' }}
                       >
                         {selectedExperience === level.id && (
-                          <div className="w-3 h-3 rounded-full bg-black"></div>
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#006B4E' }}></div>
                         )}
                       </div>
                     </div>
@@ -1267,7 +1273,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Back Button */}
             <button
               onClick={handleBackToExperience}
-              className="flex items-center gap-2 text-sm mb-6"
+              className="flex items-center gap-2 text-sm mb-4"
               style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1276,13 +1282,23 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               Atrás
             </button>
 
+            {/* Progress Bar – Paso 4 de 5 */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 4 de 5</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '80%' }}></div>
+              </div>
+            </div>
+
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
                 ¿Te gustaría contar con asesoría durante el proceso?
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                Podés solicitarla más adelante si lo necesitás.
+                Puedes solicitarla más adelante si lo necesitas.
               </p>
             </div>
 
@@ -1293,21 +1309,19 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   key={option.id}
                   onClick={() => setSelectedAdvisory(option.id)}
                   className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                    selectedAdvisory === option.id
-                      ? 'border-black bg-gray-50'
-                      : 'border-gray-300 bg-white hover:border-gray-400'
+                    selectedAdvisory === option.id ? 'bg-[#EBFEF5]' : 'border-gray-300 bg-white hover:border-gray-400'
                   }`}
+                  style={selectedAdvisory === option.id ? { borderColor: '#006B4E' } : {}}
                 >
                   <div className="flex items-start gap-4">
                     {/* Radio Button Visual */}
                     <div className="mt-0.5">
                       <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          selectedAdvisory === option.id ? 'border-black' : 'border-gray-400'
-                        }`}
+                        className="w-6 h-6 rounded-full border-2 flex items-center justify-center"
+                        style={{ borderColor: selectedAdvisory === option.id ? '#006B4E' : '#9CA3AF' }}
                       >
                         {selectedAdvisory === option.id && (
-                          <div className="w-3 h-3 rounded-full bg-black"></div>
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#006B4E' }}></div>
                         )}
                       </div>
                     </div>
@@ -1351,29 +1365,26 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
           <div className="bg-white/95 backdrop-blur-sm w-full max-w-2xl rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] p-10">
             {/* Back Button */}
-            {selectedProfile === 'person' ? (
-              <button
-                onClick={handleBackToPersonAction}
-                className="flex items-center gap-2 text-sm mb-6"
-                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Atrás
-              </button>
-            ) : (
-              <button
-                onClick={handleBackToProfileSelectionFromForm}
-                className="flex items-center gap-2 text-sm mb-6"
-                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Atrás
-              </button>
-            )}
+            <button
+              onClick={handleBackToPersonAction}
+              className="flex items-center gap-2 text-sm mb-4"
+              style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Atrás
+            </button>
+
+            {/* Progress Bar – Paso 5 de 5 */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 5 de 5</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '100%' }}></div>
+              </div>
+            </div>
 
             {/* Header */}
             <div className="mb-8">
@@ -1437,15 +1448,30 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
                     Teléfono <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
-                  <input
-                    type="tel"
-                    placeholder="+56 9 1234 5678"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
-                  />
+                  <div className="flex gap-2">
+                    <select
+                      value={phoneCountryCode}
+                      onChange={(e) => setPhoneCountryCode(e.target.value)}
+                      className="bg-white border-2 border-gray-300 focus:border-black py-3 px-3 rounded-lg text-black focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', minWidth: '90px' }}
+                    >
+                      <option value="+56">🇨🇱 +56</option>
+                      <option value="+54">🇦🇷 +54</option>
+                      <option value="+51">🇵🇪 +51</option>
+                      <option value="+57">🇨🇴 +57</option>
+                      <option value="+34">🇪🇸 +34</option>
+                      <option value="+1">🇺🇸 +1</option>
+                    </select>
+                    <input
+                      type="tel"
+                      placeholder="9 1234 5678"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                      className="flex-1 bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
+                    />
+                  </div>
                 </div>
 
                 {/* City Input */}
@@ -1505,15 +1531,30 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
                     Teléfono de contacto <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
-                  <input
-                    type="tel"
-                    placeholder="+56 2 2345 6789"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
-                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
-                  />
+                  <div className="flex gap-2">
+                    <select
+                      value={phoneCountryCode}
+                      onChange={(e) => setPhoneCountryCode(e.target.value)}
+                      className="bg-white border-2 border-gray-300 focus:border-black py-3 px-3 rounded-lg text-black focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', minWidth: '90px' }}
+                    >
+                      <option value="+56">🇨🇱 +56</option>
+                      <option value="+54">🇦🇷 +54</option>
+                      <option value="+51">🇵🇪 +51</option>
+                      <option value="+57">🇨🇴 +57</option>
+                      <option value="+34">🇪🇸 +34</option>
+                      <option value="+1">🇺🇸 +1</option>
+                    </select>
+                    <input
+                      type="tel"
+                      placeholder="2 2345 6789"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                      className="flex-1 bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
+                    />
+                  </div>
                 </div>
 
                 {/* Office Address Input */}
@@ -1661,9 +1702,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
-              {selectedProfile === 'real-estate' && 'Finalizar registro'}
-              {selectedProfile === 'broker' && 'Finalizar registro'}
-              {selectedProfile === 'person' && 'Continuar'}
+              Finalizar registro
             </button>
           </div>
         </div>
@@ -2428,30 +2467,30 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             </div>
 
             {/* Title */}
-            <h1 className="text-center mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '28px', fontWeight: 700, lineHeight: '1.2' }}>
-              ¡Ya estás dentro!
+            <h1 className="text-center mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '26px', fontWeight: 700, lineHeight: '1.2' }}>
+              ¡Bienvenido/a{fullName ? `, ${fullName.split(' ')[0]}` : ''}!
             </h1>
 
             {/* Subtitle */}
             <p className="text-center mb-8" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 400, lineHeight: '1.6' }}>
-              Tu cuenta está lista. Ahora puedes explorar, reservar y publicar parcelas en CompraTuParcela.
+              Tu cuenta está lista. Empieza explorando parcelas o publica la tuya.
             </p>
 
             {/* Buttons */}
             <div className="w-full flex flex-col gap-3">
               <button
-                onClick={() => { setShowWelcomeModal(false); onNavigate(welcomeDestination); }}
+                onClick={() => { setShowWelcomeModal(false); onNavigate('parcelas'); }}
                 className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#006B4E', fontFamily: 'Inter, sans-serif' }}
               >
-                Ir a mi panel
+                Explorar parcelas
               </button>
               <button
-                onClick={() => { setShowWelcomeModal(false); onNavigate('home'); }}
+                onClick={() => { setShowWelcomeModal(false); onNavigate(welcomeDestination); }}
                 className="w-full py-3 rounded-xl text-sm font-medium border transition-colors hover:bg-gray-50"
                 style={{ color: '#0A0A0A', borderColor: '#CDD8DE', fontFamily: 'Inter, sans-serif' }}
               >
-                Ir al inicio
+                Publicar mi parcela
               </button>
             </div>
           </div>
