@@ -31,6 +31,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const [editingPublication, setEditingPublication] = useState<Publication | undefined>();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+  const [showPauseConfirm, setShowPauseConfirm] = useState<string | null>(null);
+  const [savedFeedbackId, setSavedFeedbackId] = useState<string | null>(null);
   const [showShareModal, setShowShareModal] = useState<Publication | null>(null);
   const [viewingPublicPublication, setViewingPublicPublication] = useState<Publication | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
@@ -189,18 +191,18 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
 
   const handleSavePublication = (data: PublicationData, status: PublicationStatus) => {
     if (editingPublication) {
-      // Actualizar publicación existente
-      setPublications(publications.map(pub => 
-        pub.id === editingPublication.id 
-          ? { ...pub, ...data, status, lastEdited: new Date().toISOString().split('T')[0] }
+      setPublications(publications.map(pub =>
+        pub.id === editingPublication.id
+          ? { ...pub, ...data, status, lastEdited: new Date().toISOString() }
           : pub
       ));
+      setSavedFeedbackId(editingPublication.id);
+      setTimeout(() => setSavedFeedbackId(null), 3000);
     } else {
-      // Crear nueva publicación
       const newPub: Publication = {
         ...data,
         id: `pub-${Date.now()}`,
-        lastEdited: new Date().toISOString().split('T')[0],
+        lastEdited: new Date().toISOString(),
       };
       setPublications([newPub, ...publications]);
     }
@@ -218,11 +220,29 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
     setPublications(publications.map(pub => {
       if (pub.id === id) {
         const newStatus = pub.status === 'published' ? 'paused' : 'published';
-        return { ...pub, status: newStatus, lastEdited: new Date().toISOString().split('T')[0] };
+        return { ...pub, status: newStatus, lastEdited: new Date().toISOString() };
       }
       return pub;
     }));
     setActiveMenu(null);
+    setShowPauseConfirm(null);
+  };
+
+  const handleConfirmPause = () => {
+    if (showPauseConfirm) handleTogglePublicationStatus(showPauseConfirm);
+  };
+
+  const formatLastEdited = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'hoy';
+    if (diffDays === 1) return 'hace 1 día';
+    if (diffDays < 30) return `hace ${diffDays} días`;
+    const diffMonths = Math.floor(diffDays / 30);
+    if (diffMonths === 1) return 'hace 1 mes';
+    return `hace ${diffMonths} meses`;
   };
 
   const handleSharePublication = (pub: Publication) => {
@@ -251,9 +271,9 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       },
       paused: {
         label: 'PAUSADA',
-        bgColor: '#FEF3C7',
-        textColor: '#92400E',
-        borderColor: '#FCD34D',
+        bgColor: '#F3F4F6',
+        textColor: '#6B7280',
+        borderColor: '#D1D5DB',
       },
       unpublished: {
         label: 'DESPUBLICADA',
@@ -969,68 +989,37 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                               </>
                             )}
 
-                            {/* Pausar/Activar publicación */}
+                            {/* Pausar / Volver a publicar */}
                             {(pub.status === 'published' || pub.status === 'paused') && (
                               <button
-                                onClick={() => handleTogglePublicationStatus(pub.id)}
+                                onClick={() => {
+                                  if (pub.status === 'published') {
+                                    setShowPauseConfirm(pub.id);
+                                  } else {
+                                    handleTogglePublicationStatus(pub.id);
+                                  }
+                                  setActiveMenu(null);
+                                }}
                                 className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted"
                                 style={{ borderTop: '1px solid var(--border)' }}
                               >
                                 {pub.status === 'published' ? (
                                   <>
-                                    <Pause className="w-4 h-4 flex-shrink-0" style={{ color: '#92400E' }} />
-                                    <span style={{
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 'var(--font-size-body-sm)',
-                                      color: 'var(--foreground)',
-                                      lineHeight: 'var(--line-height-ui)',
-                                      whiteSpace: 'nowrap'
-                                    }}>
+                                    <Pause className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }}>
                                       Pausar publicación
                                     </span>
                                   </>
                                 ) : (
                                   <>
-                                    <Play className="w-4 h-4 flex-shrink-0" style={{ color: '#647E3F' }} />
-                                    <span style={{
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 'var(--font-size-body-sm)',
-                                      color: 'var(--foreground)',
-                                      lineHeight: 'var(--line-height-ui)',
-                                      whiteSpace: 'nowrap'
-                                    }}>
-                                      Activar publicación
+                                    <Play className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#006B4E', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }}>
+                                      Volver a publicar
                                     </span>
                                   </>
                                 )}
                               </button>
                             )}
-                            
-                            <button
-                              onClick={() => {
-                                setShowDeleteConfirm(pub.id);
-                                setActiveMenu(null);
-                              }}
-                              className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted"
-                              style={{ borderTop: '1px solid var(--border)' }}
-                              onMouseEnter={(e) => { 
-                                e.currentTarget.style.backgroundColor = '#FEF2F2';
-                              }}
-                              onMouseLeave={(e) => { 
-                                e.currentTarget.style.backgroundColor = 'transparent';
-                              }}
-                            >
-                              <Trash2 className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
-                              <span style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 'var(--font-size-body-sm)',
-                                color: '#DC2626',
-                                lineHeight: 'var(--line-height-ui)',
-                                whiteSpace: 'nowrap'
-                              }}>
-                                Eliminar
-                              </span>
-                            </button>
                           </div>
                         </>
                       )}
@@ -1259,7 +1248,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                         color: '#737373',
                         lineHeight: 'var(--line-height-ui)'
                       }}>
-                        Última edición: {new Date(pub.lastEdited).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        Última modificación: {formatLastEdited(pub.lastEdited)}
                       </span>
                     </div>
 
@@ -1276,6 +1265,54 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                         </p>
                       </div>
                     )}
+
+                    {/* Cambios guardados feedback */}
+                    {savedFeedbackId === pub.id && (
+                      <div className="px-3 py-2 rounded-lg flex items-center gap-2" style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
+                        <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#065F46', fontWeight: 500 }}>
+                          Cambios guardados
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Action buttons */}
+                    <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
+                      <button
+                        onClick={() => handleEditPublication(pub)}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
+                        style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                        Editar
+                      </button>
+                      {pub.status === 'published' && (
+                        <button
+                          onClick={() => setShowPauseConfirm(pub.id)}
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
+                          style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                        >
+                          <Pause className="w-3.5 h-3.5" />
+                          Pausar
+                        </button>
+                      )}
+                      {pub.status === 'paused' && (
+                        <button
+                          onClick={() => handleTogglePublicationStatus(pub.id)}
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
+                          style={{ backgroundColor: '#EBFEF5', color: '#065F46', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#D1FAE5'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#EBFEF5'}
+                        >
+                          <Play className="w-3.5 h-3.5" />
+                          Volver a publicar
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -1283,6 +1320,58 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
           </div>
         )}
       </div>
+
+      {/* Pause Confirmation Modal */}
+      {showPauseConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <div className="w-full max-w-md p-6 rounded-xl bg-background mx-4" style={{ border: '1px solid var(--border)' }}>
+            <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#F3F4F6' }}>
+              <Pause className="w-5 h-5" style={{ color: '#6B7280' }} />
+            </div>
+            <h3 style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'var(--font-size-h4)',
+              fontWeight: 'var(--font-weight-semibold)',
+              color: 'var(--foreground)',
+              lineHeight: 'var(--line-height-heading)',
+              marginBottom: '8px',
+              textAlign: 'center'
+            }}>
+              ¿Pausar esta publicación?
+            </h3>
+            <p style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--font-size-body-sm)',
+              color: '#737373',
+              lineHeight: 'var(--line-height-body)',
+              marginBottom: '24px',
+              textAlign: 'center'
+            }}>
+              Los compradores no podrán verla mientras esté pausada. Puedes volver a publicarla cuando quieras.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowPauseConfirm(null)}
+                className="flex-1 px-4 py-2.5 rounded-full transition-colors"
+                style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmPause}
+                className="flex-1 px-4 py-2.5 rounded-full transition-colors"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+              >
+                Pausar publicación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
