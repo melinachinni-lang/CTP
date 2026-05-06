@@ -241,7 +241,10 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentSection(item.id)}
+                onClick={() => {
+                  if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
+                  setCurrentSection(item.id);
+                }}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
                   currentSection === item.id
                     ? 'font-medium'

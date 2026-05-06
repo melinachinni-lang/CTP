@@ -144,6 +144,11 @@ const NOTIFICACIONES_MOCK = [
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
   const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones'>(defaultTab);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    setActiveTab(defaultTab);
+    setExpandedId(null);
+  }, [defaultTab]);
   const [consultas, setConsultas] = useState<{ recibidas: Consulta[]; enviadas: Consulta[] }>({ recibidas: RECIBIDAS, enviadas: ENVIADAS });
   const [notificaciones, setNotificaciones] = useState(NOTIFICACIONES_MOCK);
   const [showReprogramar, setShowReprogramar] = useState<string | null>(null);
