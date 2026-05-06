@@ -4,7 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -22,6 +22,27 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     const [showMenu, setShowMenu] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
+    const [showNotifications, setShowNotifications] = React.useState(false);
+    const [notifications, setNotifications] = React.useState([
+      { id: 1, type: 'consulta', text: 'Pedro Soto envió una consulta sobre "Parcela en Colbún"', time: 'Hace 5 min', read: false },
+      { id: 2, type: 'visita', text: 'Visita confirmada para el 15 de mayo a las 10:00 hrs', time: 'Hace 1 hora', read: false },
+      { id: 3, type: 'system', text: 'Tu publicación "Parcela en Colbún" fue vista 50 veces', time: 'Hace 3 horas', read: false },
+      { id: 4, type: 'consulta', text: 'Ana Torres respondió a tu consulta sobre "Parcela Lago Ranco"', time: 'Ayer', read: true },
+      { id: 5, type: 'system', text: 'Recuerda completar tu perfil para más visibilidad', time: 'Hace 2 días', read: true },
+    ]);
+    const notifRef = React.useRef<HTMLDivElement>(null);
+    const unreadCount = notifications.filter(n => !n.read).length;
+
+    React.useEffect(() => {
+      if (!showNotifications) return;
+      const handler = (e: MouseEvent) => {
+        if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+          setShowNotifications(false);
+        }
+      };
+      document.addEventListener('mousedown', handler);
+      return () => document.removeEventListener('mousedown', handler);
+    }, [showNotifications]);
 
     // Exponer función para abrir modal de publicación
     React.useImperativeHandle(ref, () => ({
@@ -37,7 +58,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'explore', label: 'Explorar parcelas', icon: 'search', group: 'buy' },
     { id: 'listings', label: 'Mis publicaciones', icon: 'list', group: 'sell' },
     { id: 'saved', label: 'Guardados', icon: 'heart', group: 'buy' },
-    { id: 'inquiries', label: 'Consultas recibidas', icon: 'message', group: 'sell' },
+    { id: 'inquiries', label: 'Consultas', icon: 'message', group: 'sell' },
     { id: 'calendarios', label: 'Calendarios', icon: 'calendar', group: 'sell' },
     { id: 'compare', label: 'Comparar', icon: 'chart', group: 'buy' },
     { id: 'purchases', label: 'Mis compras', icon: 'shopping-bag', group: 'buy' },
@@ -129,9 +150,87 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
       <aside className="w-56 border-r-2 border-gray-300 bg-gray-50 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20">
         <div className="h-full flex flex-col">
           {/* Logo Area */}
-          <div className="border-b-2 border-gray-300 p-2 mt-8">
+          <div className="border-b-2 border-gray-300 p-2 mt-8 flex items-center justify-between">
             <div className="font-bold text-base text-black">CompraTuParcela</div>
+            <button
+              onClick={() => setShowNotifications(v => !v)}
+              className="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              title="Notificaciones"
+            >
+              <Bell className="w-5 h-5" style={{ color: '#006B4E' }} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full px-0.5">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
           </div>
+
+          {/* Notification panel */}
+          {showNotifications && (
+            <div
+              ref={notifRef}
+              className="fixed z-50 bg-white border-2 border-gray-200 rounded-[16px] shadow-xl overflow-hidden"
+              style={{ left: 224, top: 0, width: 320, maxHeight: '80vh' }}
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b-2 border-gray-100">
+                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-base)', color: '#0A0A0A' }}>
+                  Notificaciones
+                </span>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={() => setNotifications(ns => ns.map(n => ({ ...n, read: true })))}
+                    className="text-xs hover:underline"
+                    style={{ color: '#006B4E', fontFamily: 'var(--font-body)' }}
+                  >
+                    Marcar todo como leído
+                  </button>
+                )}
+              </div>
+              <div className="overflow-y-auto" style={{ maxHeight: 'calc(80vh - 52px)' }}>
+                {notifications.length === 0 ? (
+                  <div className="px-4 py-8 text-center text-sm text-gray-400">Sin notificaciones</div>
+                ) : (
+                  notifications.map(notif => (
+                    <button
+                      key={notif.id}
+                      onClick={() => setNotifications(ns => ns.map(n => n.id === notif.id ? { ...n, read: true } : n))}
+                      className="w-full flex items-start gap-3 px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+                    >
+                      <div className="flex-shrink-0 mt-0.5">
+                        {notif.type === 'consulta' && (
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8F4F0' }}>
+                            <MessageCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
+                          </div>
+                        )}
+                        {notif.type === 'visita' && (
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#EFF6FF' }}>
+                            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        )}
+                        {notif.type === 'system' && (
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF7ED' }}>
+                            <Info className="w-4 h-4 text-orange-500" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm leading-snug" style={{ color: notif.read ? '#6B6B6B' : '#0A0A0A', fontWeight: notif.read ? 400 : 500, fontFamily: 'var(--font-body)' }}>
+                          {notif.text}
+                        </p>
+                        <p className="text-xs mt-1" style={{ color: '#A3A3A3', fontFamily: 'var(--font-body)' }}>{notif.time}</p>
+                      </div>
+                      {!notif.read && (
+                        <div className="flex-shrink-0 w-2 h-2 rounded-full mt-2" style={{ backgroundColor: '#006B4E' }} />
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Navigation Items */}
           <nav className="flex-1 py-4 overflow-y-auto">
@@ -4237,6 +4336,7 @@ function SettingsContent() {
   const [avatarPreview, setAvatarPreview] = React.useState<string | null>(null);
   const [editAvatarPreview, setEditAvatarPreview] = React.useState<string | null>(null);
   const [showSuccess, setShowSuccess] = React.useState(false);
+  const [emailNotifConsultas, setEmailNotifConsultas] = React.useState(true);
   const [showPasswordSection, setShowPasswordSection] = React.useState(false);
   const [currentPassword, setCurrentPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
@@ -4629,8 +4729,44 @@ function SettingsContent() {
         <div className="space-y-3">
           <div className="flex items-center justify-between border-2 border-gray-200 p-5 rounded-[12px]">
             <div>
-              <div 
-                style={{ 
+              <div
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-body-base)',
+                  fontWeight: 'var(--font-weight-medium)',
+                  color: '#0A0A0A',
+                  lineHeight: 'var(--line-height-body)'
+                }}
+              >
+                Consultas y visitas por correo
+              </div>
+              <div
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  fontWeight: 'var(--font-weight-regular)',
+                  color: '#6B6B6B',
+                  lineHeight: 'var(--line-height-body)'
+                }}
+              >
+                Recibir notificaciones al email sobre nuevas consultas
+              </div>
+            </div>
+            <button
+              onClick={() => setEmailNotifConsultas(v => !v)}
+              className="flex-shrink-0 w-12 h-6 rounded-full transition-colors relative"
+              style={{ backgroundColor: emailNotifConsultas ? '#006B4E' : '#D1D5DB', minWidth: 48 }}
+            >
+              <div
+                className="w-5 h-5 bg-white rounded-full shadow transition-transform absolute top-0.5"
+                style={{ left: emailNotifConsultas ? 'calc(100% - 22px)' : 2 }}
+              />
+            </button>
+          </div>
+          <div className="flex items-center justify-between border-2 border-gray-200 p-5 rounded-[12px]">
+            <div>
+              <div
+                style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-base)',
                   fontWeight: 'var(--font-weight-medium)',
