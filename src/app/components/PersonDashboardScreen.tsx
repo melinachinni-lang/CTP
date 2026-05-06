@@ -22,6 +22,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     const [showMenu, setShowMenu] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
+    const [consultasDefaultTab, setConsultasDefaultTab] = React.useState<'recibidas' | 'enviadas' | 'notificaciones'>('recibidas');
     const [showNotifications, setShowNotifications] = React.useState(false);
     const [notifications, setNotifications] = React.useState([
       { id: 1, type: 'consulta', text: 'Pedro Soto envió una consulta sobre "Parcela en Colbún"', time: 'Hace 5 min', read: false },
@@ -48,9 +49,12 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     React.useImperativeHandle(ref, () => ({
       openPublishModal: () => {
         setCurrentSection('listings');
-        // Incrementar contador para forzar el trigger
         setTriggerPublishModal(prev => prev + 1);
-      }
+      },
+      openNotificationsSection: () => {
+        setConsultasDefaultTab('notificaciones');
+        setCurrentSection('inquiries');
+      },
     }));
 
   const navItems = [
@@ -302,7 +306,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'explore' && <ExploreContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="vendedor_particular" userId="person-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'saved' && <SavedContent savedParcelaIds={savedParcelaIds} onToggleSaved={onToggleSaved} onNavigate={onNavigate} />}
-        {currentSection === 'inquiries' && <ConsultasView viewType="personal" />}
+        {currentSection === 'inquiries' && <ConsultasView viewType="personal" defaultTab={consultasDefaultTab} />}
         {currentSection === 'calendarios' && <CalendariosView />}
         {currentSection === 'compare' && <CompareContent />}
         {currentSection === 'purchases' && <MyPurchasesContent />}

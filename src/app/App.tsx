@@ -30,6 +30,7 @@ import { AccesoNoAutorizadoPage } from '@/app/components/AccesoNoAutorizadoPage'
 
 export interface DashboardRef {
   openPublishModal: () => void;
+  openNotificationsSection?: () => void;
 }
 
 type Screen =
@@ -192,6 +193,11 @@ export default function App() {
     precio: string;
     tipo: string;
   }) => {
+    if (screen === 'person-dashboard-notifications') {
+      setCurrentScreen('person-dashboard');
+      setTimeout(() => personDashboardRef.current?.openNotificationsSection?.(), 50);
+      return;
+    }
     setCurrentScreen(screen as Screen);
     
     // Si hay pendingAction y se navega a un dashboard, abrir el modal

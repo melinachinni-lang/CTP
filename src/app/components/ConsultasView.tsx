@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info } from 'lucide-react';
 
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
   onFeedback?: (msg: string) => void;
+  defaultTab?: 'recibidas' | 'enviadas' | 'notificaciones';
 }
 
 type EstadoConsulta = 'pendiente' | 'confirmada' | 'reprogramada' | 'cancelada' | 'expirada';
@@ -132,10 +133,19 @@ function TipoLabel({ tipo }: { tipo: TipoContacto }) {
   return <span>{labels[tipo]}</span>;
 }
 
-export function ConsultasView({ viewType = 'personal', onFeedback }: ConsultasViewProps) {
-  const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas'>('recibidas');
+const NOTIFICACIONES_MOCK = [
+  { id: 'n1', type: 'consulta' as const, text: 'Pedro Soto envió una consulta sobre "Parcela Vista Cordillera"', time: 'Hace 5 min', read: false },
+  { id: 'n2', type: 'visita' as const, text: 'Visita confirmada para el 15 de mayo a las 10:00 hrs', time: 'Hace 1 hora', read: false },
+  { id: 'n3', type: 'sistema' as const, text: 'Tu publicación "Parcela Vista Cordillera" fue vista 50 veces', time: 'Hace 3 horas', read: false },
+  { id: 'n4', type: 'consulta' as const, text: 'Ana Torres respondió a tu consulta sobre "Parcela Lago Ranco"', time: 'Ayer', read: true },
+  { id: 'n5', type: 'sistema' as const, text: 'Recuerda completar tu perfil para más visibilidad', time: 'Hace 2 días', read: true },
+];
+
+export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
+  const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones'>(defaultTab);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [consultas, setConsultas] = useState<{ recibidas: Consulta[]; enviadas: Consulta[] }>({ recibidas: RECIBIDAS, enviadas: ENVIADAS });
+  const [notificaciones, setNotificaciones] = useState(NOTIFICACIONES_MOCK);
   const [showReprogramar, setShowReprogramar] = useState<string | null>(null);
   const [showCancelar, setShowCancelar] = useState<string | null>(null);
   const [repFecha, setRepFecha] = useState('');
@@ -171,8 +181,9 @@ export function ConsultasView({ viewType = 'personal', onFeedback }: ConsultasVi
     showFeedback('Visita cancelada. Se notificó al comprador.');
   };
 
-  const lista = activeTab === 'recibidas' ? consultas.recibidas : consultas.enviadas;
+  const lista = activeTab === 'recibidas' ? consultas.recibidas : activeTab === 'enviadas' ? consultas.enviadas : [];
   const canManage = (c: Consulta) => activeTab === 'recibidas' && (c.estado === 'pendiente' || c.estado === 'confirmada') && c.tipo !== 'whatsapp';
+  const unreadNotifCount = notificaciones.filter(n => !n.read).length;
 
   return (
     <main className="px-6 py-6 space-y-6">
@@ -196,28 +207,105 @@ export function ConsultasView({ viewType = 'personal', onFeedback }: ConsultasVi
 
       {/* Tabs */}
       <div className="flex gap-1 p-1 rounded-xl" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
-        {(['recibidas', 'enviadas'] as const).map(tab => (
+        {[
+          { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
+          { id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length },
+          { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
+        ].map(tab => (
           <button
-            key={tab}
-            onClick={() => { setActiveTab(tab); setExpandedId(null); }}
-            className="px-5 py-2 rounded-lg text-sm font-medium transition-all"
+            key={tab.id}
+            onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones'); setExpandedId(null); }}
+            className="px-5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1"
             style={{
               fontFamily: 'var(--font-body)',
-              backgroundColor: activeTab === tab ? '#FFFFFF' : 'transparent',
-              color: activeTab === tab ? '#0A0A0A' : '#6B7280',
-              boxShadow: activeTab === tab ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+              backgroundColor: activeTab === tab.id ? '#FFFFFF' : 'transparent',
+              color: activeTab === tab.id ? '#0A0A0A' : '#6B7280',
+              boxShadow: activeTab === tab.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             }}
           >
-            {tab === 'recibidas' ? 'Recibidas' : 'Enviadas'}
-            <span className="ml-2 px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: activeTab === tab ? '#006B4E' : '#E5E5E5', color: activeTab === tab ? '#FFFFFF' : '#9CA3AF' }}>
-              {tab === 'recibidas' ? consultas.recibidas.length : consultas.enviadas.length}
-            </span>
+            {tab.label}
+            {tab.count > 0 && (
+              <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: activeTab === tab.id ? (tab.id === 'notificaciones' ? '#DC2626' : '#006B4E') : '#E5E5E5', color: activeTab === tab.id ? '#FFFFFF' : '#9CA3AF' }}>
+                {tab.count}
+              </span>
+            )}
           </button>
         ))}
       </div>
 
-      {/* Lista */}
-      {lista.length === 0 ? (
+      {/* Notificaciones tab content */}
+      {activeTab === 'notificaciones' && (
+        <div className="space-y-3">
+          {unreadNotifCount > 0 && (
+            <div className="flex items-center justify-between">
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#6B6B6B' }}>
+                {unreadNotifCount} sin leer
+              </p>
+              <button
+                onClick={() => setNotificaciones(ns => ns.map(n => ({ ...n, read: true })))}
+                className="text-sm font-medium hover:underline"
+                style={{ color: '#006B4E', fontFamily: 'var(--font-body)' }}
+              >
+                Marcar todo como leído
+              </button>
+            </div>
+          )}
+          {notificaciones.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
+                <Bell className="w-8 h-8" style={{ color: '#D1D5DB' }} />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
+                Sin notificaciones
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                Acá aparecerán las novedades sobre tus consultas y publicaciones.
+              </p>
+            </div>
+          ) : (
+            notificaciones.map(notif => (
+              <button
+                key={notif.id}
+                onClick={() => setNotificaciones(ns => ns.map(n => n.id === notif.id ? { ...n, read: true } : n))}
+                className="w-full flex items-start gap-4 p-4 rounded-2xl border-2 text-left transition-colors hover:bg-gray-50"
+                style={{ borderColor: notif.read ? '#E5E7EB' : '#006B4E', backgroundColor: notif.read ? '#FFFFFF' : '#F0FAF7' }}
+              >
+                <div className="flex-shrink-0">
+                  {notif.type === 'consulta' && (
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
+                      <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
+                    </div>
+                  )}
+                  {notif.type === 'visita' && (
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DBEAFE' }}>
+                      <Calendar className="w-5 h-5 text-blue-600" />
+                    </div>
+                  )}
+                  {notif.type === 'sistema' && (
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEF3C7' }}>
+                      <Info className="w-5 h-5 text-amber-600" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: notif.read ? 400 : 500, color: notif.read ? '#6B6B6B' : '#0A0A0A', lineHeight: '1.5' }}>
+                    {notif.text}
+                  </p>
+                  <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#A3A3A3' }}>
+                    {notif.time}
+                  </p>
+                </div>
+                {!notif.read && (
+                  <div className="flex-shrink-0 w-2.5 h-2.5 rounded-full mt-1.5" style={{ backgroundColor: '#006B4E' }} />
+                )}
+              </button>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Lista (Recibidas / Enviadas) */}
+      {activeTab !== 'notificaciones' && (lista.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
             <MessageCircle className="w-8 h-8" style={{ color: '#D1D5DB' }} />
@@ -345,7 +433,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback }: ConsultasVi
             );
           })}
         </div>
-      )}
+      ))}
 
       {/* Modal Reprogramar */}
       {showReprogramar && (

@@ -158,7 +158,7 @@ export function Navbar({
                       <button
                         onClick={() => {
                           setShowDropdown(false);
-                          onNavigate('person-dashboard');
+                          onNavigate('person-dashboard-notifications');
                         }}
                         className="w-full px-4 py-3 text-left text-sm hover:bg-[#F5F5F5] transition-colors flex items-center gap-3"
                         style={{ color: '#0A0A0A' }}
