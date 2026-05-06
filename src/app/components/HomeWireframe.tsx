@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
-import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock } from 'lucide-react';
+import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart } from 'lucide-react';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { PlanesModal } from '@/app/components/PlanesModal';
 import { VambeChat } from '@/app/components/VambeChat';
@@ -32,11 +32,28 @@ interface HomeWireframeProps {
   initialLoadingError?: boolean;
   onOpenPublishModal?: () => void;
   onNavigateToPublish?: () => void;
+  savedParcelaIds?: number[];
+  onToggleSaved?: (id: number) => void;
 }
 
-export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onLogout, initialLoadingError = false, onOpenPublishModal, onNavigateToPublish }: HomeWireframeProps) {
+export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onLogout, initialLoadingError = false, onOpenPublishModal, onNavigateToPublish, savedParcelaIds = [], onToggleSaved }: HomeWireframeProps) {
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
+  const [animatingParcelaId, setAnimatingParcelaId] = useState<number | null>(null);
+  const [animatingProyectoId, setAnimatingProyectoId] = useState<number | null>(null);
+
+  const handleToggleParcela = (id: number) => {
+    setAnimatingParcelaId(id);
+    setTimeout(() => setAnimatingParcelaId(null), 200);
+    onToggleSaved?.(id);
+  };
+
+  const handleToggleProyecto = (id: number) => {
+    setAnimatingProyectoId(id);
+    setTimeout(() => setAnimatingProyectoId(null), 200);
+    setSavedProyectoIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
   const [selectedValues, setSelectedValues] = useState({
     ubicacion: '',
     superficie: '',
@@ -1369,11 +1386,27 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         }}
                       >
                         {/* Imagen */}
-                        <ParcelaCardImage
-                          imagenes={parcela.imagenes || [parcela.imagen]}
-                          imagen={parcela.imagen}
-                          nombre={parcela.nombre}
-                        />
+                        <div className="relative">
+                          <ParcelaCardImage
+                            imagenes={parcela.imagenes || [parcela.imagen]}
+                            imagen={parcela.imagen}
+                            nombre={parcela.nombre}
+                          />
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleToggleParcela(parcela.id); }}
+                            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
+                          >
+                            <Heart
+                              className="w-4 h-4"
+                              style={{
+                                fill: savedParcelaIds.includes(parcela.id) ? '#006B4E' : 'none',
+                                stroke: savedParcelaIds.includes(parcela.id) ? '#006B4E' : '#6B6B6B',
+                                transform: animatingParcelaId === parcela.id ? 'scale(1.5)' : 'scale(1)',
+                                transition: 'transform 150ms ease',
+                              }}
+                            />
+                          </button>
+                        </div>
 
                         {/* Contenido */}
                         <div className="p-4 md:p-5 flex flex-col flex-grow">
@@ -1698,11 +1731,27 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
                     }}
                   >
-                    <ProjectCardImage
-                      imagenes={proyecto.imagenes}
-                      imagen={proyecto.imagen}
-                      nombre={proyecto.nombre}
-                    />
+                    <div className="relative">
+                      <ProjectCardImage
+                        imagenes={proyecto.imagenes}
+                        imagen={proyecto.imagen}
+                        nombre={proyecto.nombre}
+                      />
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleToggleProyecto(proyecto.id); }}
+                        className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
+                      >
+                        <Heart
+                          className="w-4 h-4"
+                          style={{
+                            fill: savedProyectoIds.includes(proyecto.id) ? '#006B4E' : 'none',
+                            stroke: savedProyectoIds.includes(proyecto.id) ? '#006B4E' : '#6B6B6B',
+                            transform: animatingProyectoId === proyecto.id ? 'scale(1.5)' : 'scale(1)',
+                            transition: 'transform 150ms ease',
+                          }}
+                        />
+                      </button>
+                    </div>
                     <div className="p-5 space-y-4 bg-white">
                       <div className="space-y-1">
                         <h3 style={{ color: '#0A0A0A', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.nombre}</h3>
