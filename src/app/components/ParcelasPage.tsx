@@ -24,9 +24,13 @@ interface ParcelasPageProps {
     precio: string;
     tipo: string;
   } | null;
+  savedParcelaIds?: number[];
+  onToggleSaved?: (id: number) => void;
+  isLoggedIn?: boolean;
 }
 
-export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados }: ParcelasPageProps) {
+export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, savedParcelaIds = [], onToggleSaved, isLoggedIn }: ParcelasPageProps) {
+  const [animatingSaveId, setAnimatingSaveId] = useState<number | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [sortBy, setSortBy] = useState('relevancia');
   const proyectosCarouselRef = useRef<HTMLDivElement>(null);
@@ -2112,6 +2116,35 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados }: Par
                                 {parcelaEstados[parcela.id] === 'reservandose' ? 'Reservándose' : 'Reservada'}
                               </div>
                             )}
+                            {/* Botón guardar */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (onToggleSaved) {
+                                  setAnimatingSaveId(parcela.id);
+                                  setTimeout(() => setAnimatingSaveId(null), 300);
+                                  onToggleSaved(parcela.id);
+                                }
+                              }}
+                              className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                              style={{ backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
+                              title={savedParcelaIds.includes(parcela.id) ? 'Eliminar de guardados' : 'Guardar parcela'}
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                style={{
+                                  width: '16px',
+                                  height: '16px',
+                                  fill: savedParcelaIds.includes(parcela.id) ? '#006B4E' : 'none',
+                                  stroke: savedParcelaIds.includes(parcela.id) ? '#006B4E' : '#6B7280',
+                                  strokeWidth: 2,
+                                  transform: animatingSaveId === parcela.id ? 'scale(1.5)' : 'scale(1)',
+                                  transition: 'transform 150ms ease, fill 150ms ease, stroke 150ms ease',
+                                }}
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                              </svg>
+                            </button>
                           </div>
                           <div className="p-4 sm:p-5 space-y-3 sm:space-y-4 bg-white flex-grow flex flex-col">
                             <div className="space-y-1">

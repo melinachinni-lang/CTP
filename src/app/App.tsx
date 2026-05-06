@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import '@/styles/index.css';
 import { EntryScreen } from '@/app/components/EntryScreen';
 import { RealEstateDashboardScreen } from '@/app/components/RealEstateDashboardScreen';
@@ -74,6 +74,60 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
   const [pendingAction, setPendingAction] = useState<'publish' | null>(null);
+
+  // Estado de guardados
+  const [savedParcelaIds, setSavedParcelaIds] = useState<number[]>([]);
+  const [pendingSaveId, setPendingSaveId] = useState<number | null>(null);
+
+  // Toast
+  type Toast = { message: string; actionLabel?: string; onAction?: () => void; id: number };
+  const [toast, setToast] = useState<Toast | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (t: Omit<Toast, 'id'>) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    const id = Date.now();
+    setToast({ ...t, id });
+    toastTimerRef.current = setTimeout(() => setToast(null), 4000);
+  };
+
+  const handleToggleSaved = (parcelaId: number) => {
+    if (!isLoggedIn) {
+      setPendingSaveId(parcelaId);
+      setCurrentScreen('entry');
+      return;
+    }
+    const isSaved = savedParcelaIds.includes(parcelaId);
+    if (isSaved) {
+      setSavedParcelaIds(prev => prev.filter(id => id !== parcelaId));
+      showToast({
+        message: 'Eliminada de guardados',
+        actionLabel: 'Deshacer',
+        onAction: () => {
+          setSavedParcelaIds(prev => [parcelaId, ...prev]);
+          setToast(null);
+        },
+      });
+    } else {
+      if (savedParcelaIds.length >= 50) {
+        showToast({ message: 'Alcanzaste el límite de 50 guardados. Elimina alguno para agregar más' });
+        return;
+      }
+      setSavedParcelaIds(prev => [parcelaId, ...prev]);
+      showToast({
+        message: 'Parcela guardada',
+        actionLabel: 'Ver guardados',
+        onAction: () => {
+          setCurrentScreen('person-dashboard');
+          setToast(null);
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    return () => { if (toastTimerRef.current) clearTimeout(toastTimerRef.current); };
+  }, []);
 
   // Refs para los dashboards
   const personDashboardRef = useRef<DashboardRef>(null);
@@ -191,6 +245,17 @@ export default function App() {
     setCurrentUser(account);
     setIsLoggedIn(true);
 
+    // Auto-guardar parcela pendiente si la había
+    if (pendingSaveId !== null) {
+      setSavedParcelaIds(prev => prev.includes(pendingSaveId) ? prev : [pendingSaveId, ...prev]);
+      showToast({
+        message: 'Parcela guardada',
+        actionLabel: 'Ver guardados',
+        onAction: () => { setCurrentScreen('person-dashboard'); setToast(null); },
+      });
+      setPendingSaveId(null);
+    }
+
     if (skipNavigation) return; // Onboarding maneja la navegación
 
     // Si hay una acción pendiente de publicar, ir al dashboard y abrir el modal
@@ -268,7 +333,7 @@ export default function App() {
       <div className="pt-8">
         {currentScreen === 'home' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'home-error' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} initialLoadingError={true} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
-        {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} />}
+        {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} />}
         {currentScreen === 'parcelas-empty' && <ParcelasPageEmpty onNavigate={handleNavigate} />}
         {currentScreen === 'parcelas-error' && <ParcelasPageError onNavigate={handleNavigate} />}
         {currentScreen === 'inmobiliarias' && <InmobiliariasPage onNavigate={handleNavigate} />}
@@ -277,7 +342,7 @@ export default function App() {
         {currentScreen === 'como-funciona-loading' && <ComoFuncionaPageLoading onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'como-funciona' && <ComoFuncionaPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'recursos' && <RecursosPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
-        {currentScreen === 'parcela-detalle' && <ParcelaDetalle onNavigate={handleNavigate} parcelaId={selectedParcelaId} estadoCompraInicial={selectedParcelaId !== null ? (parcelaEstados[selectedParcelaId!] || 'disponible') : 'disponible'} onEstadoChange={handleParcelaEstadoChange} />}
+        {currentScreen === 'parcela-detalle' && <ParcelaDetalle onNavigate={handleNavigate} parcelaId={selectedParcelaId} estadoCompraInicial={selectedParcelaId !== null ? (parcelaEstados[selectedParcelaId!] || 'disponible') : 'disponible'} onEstadoChange={handleParcelaEstadoChange} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} />}
         {currentScreen === 'proyecto-detalle' && <ProyectoDetalle onNavigate={handleNavigate} proyectoId={selectedProyectoId} />}
         {currentScreen === 'inmobiliaria-profile' && <InmobiliariaProfile onNavigate={handleNavigate} inmobiliariaName={selectedInmobiliaria} />}
         {currentScreen === 'vendedor-particular-profile' && <VendedorParticularProfile onNavigate={handleNavigate} vendedorName={selectedInmobiliaria} />}
@@ -285,7 +350,7 @@ export default function App() {
         {currentScreen === 'planes' && <PlanesPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} />}
         {currentScreen === 'articulo' && <ArticuloPage onNavigate={handleNavigate} articuloId={selectedArticuloId} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} />}
         {currentScreen === 'entry' && <EntryScreen onNavigate={handleNavigate} onSelectGoogleAccount={handleSelectAccount} />}
-        {currentScreen === 'person-dashboard' && <PersonDashboardScreen onNavigate={handleNavigate} ref={personDashboardRef} />}
+        {currentScreen === 'person-dashboard' && <PersonDashboardScreen onNavigate={handleNavigate} ref={personDashboardRef} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} />}
         {currentScreen === 'real-estate-dashboard' && <RealEstateDashboardScreen onNavigate={handleNavigate} ref={realEstateDashboardRef} />}
         {currentScreen === 'broker-dashboard' && <BrokerDashboardScreen onNavigate={handleNavigate} ref={brokerDashboardRef} />}
         {currentScreen === 'admin-dashboard' && <AdminDashboard onNavigate={handleNavigate} />}
@@ -295,6 +360,34 @@ export default function App() {
         {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
         {currentScreen === 'acceso-no-autorizado' && <AccesoNoAutorizadoPage onNavigate={handleNavigate} />}
       </div>
+
+      {/* Toast global */}
+      {toast && (
+        <div
+          key={toast.id}
+          className="fixed bottom-6 left-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg"
+          style={{
+            transform: 'translateX(-50%)',
+            backgroundColor: '#0A0A0A',
+            color: '#FFFFFF',
+            fontFamily: 'var(--font-body)',
+            fontSize: 'var(--font-size-body-sm)',
+            minWidth: '240px',
+            maxWidth: '380px',
+          }}
+        >
+          <span className="flex-1">{toast.message}</span>
+          {toast.actionLabel && toast.onAction && (
+            <button
+              onClick={toast.onAction}
+              className="flex-shrink-0 font-medium underline"
+              style={{ color: '#86EFAC', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+            >
+              {toast.actionLabel}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

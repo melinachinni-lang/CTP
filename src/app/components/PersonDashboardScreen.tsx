@@ -4,17 +4,21 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
+import { getAllParcelas } from '@/app/data/parcelasData';
+import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 
 interface PersonDashboardScreenProps {
   onNavigate: (screen: string, id?: number) => void;
+  savedParcelaIds?: number[];
+  onToggleSaved?: (id: number) => void;
 }
 
 export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashboardScreenProps>(
-  ({ onNavigate }, ref) => {
+  ({ onNavigate, savedParcelaIds = [], onToggleSaved }, ref) => {
     const [showMenu, setShowMenu] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
@@ -192,7 +196,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'explore' && <ExploreContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="vendedor_particular" userId="person-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
-        {currentSection === 'saved' && <SavedContent />}
+        {currentSection === 'saved' && <SavedContent savedParcelaIds={savedParcelaIds} onToggleSaved={onToggleSaved} onNavigate={onNavigate} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="personal" />}
         {currentSection === 'calendarios' && <CalendariosView />}
         {currentSection === 'compare' && <CompareContent />}
@@ -1755,13 +1759,53 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
   );
 }
 
-function SavedContent() {
+function SavedContent({ savedParcelaIds, onToggleSaved, onNavigate }: { savedParcelaIds: number[]; onToggleSaved?: (id: number) => void; onNavigate: (screen: string, id?: number) => void; }) {
+  const allParcelas = getAllParcelas();
+  const savedParcelas = savedParcelaIds
+    .map(id => allParcelas.find(p => p.id === id))
+    .filter(Boolean) as ReturnType<typeof getAllParcelas>;
+
+  if (savedParcelas.length === 0) {
+    return (
+      <main className="px-6 py-6">
+        <div className="space-y-2 mb-8">
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+            Guardados
+          </h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', lineHeight: 'var(--line-height-body)' }}>
+            Todas tus parcelas favoritas en un solo lugar
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mb-5" style={{ backgroundColor: '#F5F5F5' }}>
+            <Heart className="w-10 h-10" style={{ color: '#D1D5DB' }} />
+          </div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
+            Todavía no guardaste ninguna parcela
+          </h3>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '24px', maxWidth: '320px', lineHeight: '1.6' }}>
+            Guarda las parcelas que te interesan para encontrarlas fácilmente después.
+          </p>
+          <button
+            onClick={() => onNavigate('parcelas')}
+            className="px-6 py-3 rounded-full transition-all"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+          >
+            Explorar parcelas
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="px-6 py-6 space-y-6">
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h1 
-            style={{ 
+          <h1
+            style={{
               fontFamily: 'var(--font-heading)',
               fontSize: 'var(--font-size-h2)',
               fontWeight: 'var(--font-weight-medium)',
@@ -1770,11 +1814,11 @@ function SavedContent() {
               letterSpacing: 'var(--letter-spacing-normal)'
             }}
           >
-            Parcelas guardadas
+            Guardados
           </h1>
-          <span 
+          <span
             className="bg-gray-100 px-4 py-1.5 rounded-[100px]"
-            style={{ 
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: '14px',
               fontWeight: 'var(--font-weight-medium)',
@@ -1782,11 +1826,11 @@ function SavedContent() {
               lineHeight: 'var(--line-height-body)'
             }}
           >
-            5
+            {savedParcelas.length}
           </span>
         </div>
-        <p 
-          style={{ 
+        <p
+          style={{
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-base)',
             fontWeight: 'var(--font-weight-regular)',
@@ -1799,781 +1843,84 @@ function SavedContent() {
         </p>
       </div>
 
-      {/* Saved Properties - With Data */}
-      <section className="space-y-4">
-        {/* Property 1 */}
-        <div 
-          className="bg-white p-6 rounded-[16px] cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
-          style={{
-            border: '2px solid #E5E5E5',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 126, 63, 0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)';
-          }}
-        >
-          <div className="flex gap-5">
-            <div className="w-40 h-40 bg-gray-100 flex-shrink-0 rounded-[12px] overflow-hidden">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1764222233275-87dc016c11dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmQlMjBwcm9wZXJ0eSUyMGFlcmlhbHxlbnwxfHx8fDE3NzAxMzMyOTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Parcela Vista al Valle"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-lg)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
+      {/* Grid de guardadas */}
+      <section>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {savedParcelas.map((parcela) => {
+            const isUnavailable = false; // en producción: parcela.status !== 'published'
+            return (
+              <div
+                key={parcela.id}
+                onClick={() => !isUnavailable && onNavigate('parcela-detalle', parcela.id)}
+                className="rounded-xl overflow-hidden transition-all bg-white"
+                style={{
+                  border: '2px solid #E5E5E5',
+                  cursor: isUnavailable ? 'default' : 'pointer',
+                  opacity: isUnavailable ? 0.7 : 1,
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={e => { if (!isUnavailable) e.currentTarget.style.boxShadow = '0 8px 24px rgba(100,126,63,0.25)'; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                {/* Imagen */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                  <img
+                    src={parcela.imagenes?.[0] || ''}
+                    alt={parcela.nombre}
+                    className="w-full h-full object-cover"
+                  />
+                  {isUnavailable && (
+                    <div className="absolute inset-0 flex items-end p-3" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
+                      <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #D1D5DB' }}>
+                        No disponible
+                      </span>
+                    </div>
+                  )}
+                  {/* Botón eliminar (corazón relleno) */}
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      onToggleSaved?.(parcela.id);
                     }}
+                    className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
+                    title="Eliminar de guardados"
                   >
-                    Parcela Vista al Valle
-                  </h3>
-                  <p 
-                    className="mt-1"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Sector Los Aromos, Región Metropolitana
-                  </p>
+                    <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: '#006B4E', stroke: '#006B4E', strokeWidth: 2 }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
                 </div>
-                <button className="p-2 hover:bg-gray-50 rounded-[8px] transition-colors">
-                  <svg className="w-6 h-6 text-red-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Tamaño:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    5.000 m²
-                  </span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Precio:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    $45.000.000
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  className="flex-1 text-white py-3 px-6 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#006B4E',
-                    transition: 'background-color 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                >
-                  Ver detalles
-                </button>
-                <button 
-                  className="flex-1 bg-white text-black py-3 px-6 border-2 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    color: '#0A0A0A',
-                    borderColor: '#E5E5E5',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.08)';
-                    e.currentTarget.style.borderColor = '#647E3F';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.borderColor = '#E5E5E5';
-                  }}
-                >
-                  Agregar a comparación
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Property 2 */}
-        <div 
-          className="bg-white p-6 rounded-[16px] cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
-          style={{
-            border: '2px solid #E5E5E5',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 126, 63, 0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)';
-          }}
-        >
-          <div className="flex gap-5">
-            <div className="w-40 h-40 bg-gray-100 flex-shrink-0 rounded-[12px] overflow-hidden">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1762110341498-59a612f1bddb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMHByb3BlcnR5JTIwdGVycmFpbiUyMGhpbGxzfGVufDF8fHx8MTc3MDEzMzI5OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Parcela El Bosque"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-lg)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Parcela El Bosque
+                {/* Contenido */}
+                <div className="p-4 space-y-2">
+                  <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-lg)', fontWeight: 600, color: '#0A0A0A', lineHeight: '1.4' }}>
+                    {parcela.nombre}
                   </h3>
-                  <p 
-                    className="mt-1"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Sector Piedra Roja, Colina
-                  </p>
-                </div>
-                <button className="p-2 hover:bg-gray-50 rounded-[8px] transition-colors">
-                  <svg className="w-6 h-6 text-red-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Tamaño:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    8.500 m²
-                  </span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Precio:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    $62.000.000
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#737373' }} />
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{parcela.ubicacion}</p>
+                  </div>
+                  <div className="pt-2" style={{ borderTop: '1px solid #F0F0F0' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginBottom: '2px' }}>Desde</p>
+                    <PrecioDisplay precioCLP={parcela.precio} precioSize="sm" />
+                  </div>
+                  {!isUnavailable && (
+                    <button
+                      onClick={e => { e.stopPropagation(); onNavigate('parcela-detalle', parcela.id); }}
+                      className="w-full py-2 rounded-full text-sm font-medium transition-all mt-1"
+                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                    >
+                      Ver detalles
+                    </button>
+                  )}
                 </div>
               </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  className="flex-1 text-white py-3 px-6 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#006B4E',
-                    transition: 'background-color 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                >
-                  Ver detalles
-                </button>
-                <button 
-                  className="flex-1 bg-white text-black py-3 px-6 border-2 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    color: '#0A0A0A',
-                    borderColor: '#E5E5E5',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.08)';
-                    e.currentTarget.style.borderColor = '#647E3F';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.borderColor = '#E5E5E5';
-                  }}
-                >
-                  Agregar a comparación
-                </button>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
-
-        {/* Property 3 */}
-        <div 
-          className="bg-white p-6 rounded-[16px] cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
-          style={{
-            border: '2px solid #E5E5E5',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 126, 63, 0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)';
-          }}
-        >
-          <div className="flex gap-5">
-            <div className="w-40 h-40 bg-gray-100 flex-shrink-0 rounded-[12px] overflow-hidden">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1763397929062-eb0582008877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyYWwlMjBsYW5kJTIwZ3JlZW4lMjBmaWVsZHN8ZW58MXx8fHwxNzcwMTMzMjk4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Parcela Los Robles"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-lg)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Parcela Los Robles
-                  </h3>
-                  <p 
-                    className="mt-1"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Chicureo, Región Metropolitana
-                  </p>
-                </div>
-                <button className="p-2 hover:bg-gray-50 rounded-[8px] transition-colors">
-                  <svg className="w-6 h-6 text-red-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Tamaño:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    3.200 m²
-                  </span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Precio:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    $38.500.000
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  className="flex-1 text-white py-3 px-6 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#006B4E',
-                    transition: 'background-color 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                >
-                  Ver detalles
-                </button>
-                <button 
-                  className="flex-1 bg-white text-black py-3 px-6 border-2 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    color: '#0A0A0A',
-                    borderColor: '#E5E5E5',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.08)';
-                    e.currentTarget.style.borderColor = '#647E3F';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.borderColor = '#E5E5E5';
-                  }}
-                >
-                  Agregar a comparación
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Property 4 */}
-        <div 
-          className="bg-white p-6 rounded-[16px] cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
-          style={{
-            border: '2px solid #E5E5E5',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 126, 63, 0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)';
-          }}
-        >
-          <div className="flex gap-5">
-            <div className="w-40 h-40 bg-gray-100 flex-shrink-0 rounded-[12px] overflow-hidden">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1557275134-5a789e9607be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb3Jlc3QlMjBwcm9wZXJ0eSUyMGxhbmQlMjB0cmVlc3xlbnwxfHx8fDE3NzAxMzMyOTh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Terreno Agrícola Las Vertientes"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-lg)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Terreno Agrícola Las Vertientes
-                  </h3>
-                  <p 
-                    className="mt-1"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Pirque, Región Metropolitana
-                  </p>
-                </div>
-                <button className="p-2 hover:bg-gray-50 rounded-[8px] transition-colors">
-                  <svg className="w-6 h-6 text-red-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Tamaño:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    18.000 m²
-                  </span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Precio:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    $95.000.000
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  className="flex-1 text-white py-3 px-6 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#006B4E',
-                    transition: 'background-color 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                >
-                  Ver detalles
-                </button>
-                <button 
-                  className="flex-1 bg-white text-black py-3 px-6 border-2 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    color: '#0A0A0A',
-                    borderColor: '#E5E5E5',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.08)';
-                    e.currentTarget.style.borderColor = '#647E3F';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.borderColor = '#E5E5E5';
-                  }}
-                >
-                  Agregar a comparación
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Property 5 */}
-        <div 
-          className="bg-white p-6 rounded-[16px] cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
-          style={{
-            border: '2px solid #E5E5E5',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 126, 63, 0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)';
-          }}
-        >
-          <div className="flex gap-5">
-            <div className="w-40 h-40 bg-gray-100 flex-shrink-0 rounded-[12px] overflow-hidden">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1694617447949-ce9399009bc5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBtZWFkb3clMjBsYW5kJTIwcHJvcGVydHl8ZW58MXx8fHwxNzcwMTMzNDY2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Parcela El Manzano"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-lg)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Parcela El Manzano
-                  </h3>
-                  <p 
-                    className="mt-1"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Lampa, Región Metropolitana
-                  </p>
-                </div>
-                <button className="p-2 hover:bg-gray-50 rounded-[8px] transition-colors">
-                  <svg className="w-6 h-6 text-red-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Tamaño:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#6B6B6B',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    4.800 m²
-                  </span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <div className="flex items-center gap-2">
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#462611',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    Precio:
-                  </span>
-                  <span 
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 'var(--font-weight-regular)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-body)'
-                    }}
-                  >
-                    $52.000.000
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  className="flex-1 text-white py-3 px-6 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    backgroundColor: '#006B4E',
-                    transition: 'background-color 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                >
-                  Ver detalles
-                </button>
-                <button 
-                  className="flex-1 bg-white text-black py-3 px-6 border-2 rounded-[200px]"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)',
-                    color: '#0A0A0A',
-                    borderColor: '#E5E5E5',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.08)';
-                    e.currentTarget.style.borderColor = '#647E3F';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.borderColor = '#E5E5E5';
-                  }}
-                >
-                  Agregar a comparación
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-gray-50 border-2 border-gray-200 p-8 text-center space-y-4 rounded-[16px]">
-        <p 
-          style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-body)'
-          }}
-        >
-          ¿Quieres comparar estas parcelas?
-        </p>
-        <button 
-          style={{
-            backgroundColor: '#006B4E',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-medium)',
-            lineHeight: 'var(--line-height-body)'
-          }}
-          className="text-white py-3.5 px-8 rounded-[200px] transition-colors"
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-        >
-          Comparar guardadas
-        </button>
       </section>
     </main>
   );

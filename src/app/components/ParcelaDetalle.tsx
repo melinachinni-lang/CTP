@@ -656,9 +656,12 @@ interface ParcelaDetalleProps {
   parcelaId?: number | null;
   estadoCompraInicial?: EstadoCompra;
   onEstadoChange?: (parcelaId: number, estado: EstadoCompra) => void;
+  savedParcelaIds?: number[];
+  onToggleSaved?: (id: number) => void;
+  isLoggedIn?: boolean;
 }
 
-export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange }: ParcelaDetalleProps) {
+export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange, savedParcelaIds = [], onToggleSaved, isLoggedIn }: ParcelaDetalleProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
   const [isDocTecnicaOpen, setIsDocTecnicaOpen] = useState(false);
@@ -957,8 +960,32 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       </div>
                     )}
                   </div>
+
+                  {/* Botón guardar */}
+                  {parcelaId !== null && parcelaId !== undefined && (
+                    <button
+                      onClick={() => onToggleSaved?.(parcelaId as number)}
+                      className="w-10 h-10 rounded-full flex items-center justify-center border transition-all flex-shrink-0"
+                      style={{
+                        backgroundColor: savedParcelaIds.includes(parcelaId as number) ? '#EBFEF5' : '#FFFFFF',
+                        borderColor: savedParcelaIds.includes(parcelaId as number) ? '#A7F3D0' : '#D4D4D4',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+                      }}
+                      title={savedParcelaIds.includes(parcelaId as number) ? 'Eliminar de guardados' : 'Guardar parcela'}
+                    >
+                      <svg viewBox="0 0 24 24" style={{
+                        width: '18px', height: '18px',
+                        fill: savedParcelaIds.includes(parcelaId as number) ? '#006B4E' : 'none',
+                        stroke: savedParcelaIds.includes(parcelaId as number) ? '#006B4E' : '#6B7280',
+                        strokeWidth: 2,
+                        transition: 'fill 150ms ease, stroke 150ms ease',
+                      }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-                
+
                 {/* Subtítulo - Ubicación */}
                 <p className="flex items-center gap-2" style={{ 
                   fontFamily: 'var(--font-body)',
