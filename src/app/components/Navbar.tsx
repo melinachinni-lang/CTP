@@ -114,9 +114,9 @@ export function Navbar({
                 <div className="relative hidden sm:block" ref={dropdownRef}>
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="h-8 bg-[#efefef] hover:bg-[#dedede] px-3 rounded-[200px] transition-colors flex items-center gap-2"
+                    className="h-8 bg-[#efefef] hover:bg-[#dedede] px-2 rounded-[200px] transition-colors flex items-center gap-1.5"
                   >
-                    {/* Avatar con badge */}
+                    {/* Avatar con dot rojo */}
                     <div className="relative">
                       <div className="w-6 h-6 rounded-full bg-[#006B4E] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
                         {userAvatar ? (
@@ -126,19 +126,12 @@ export function Navbar({
                         )}
                       </div>
                       {unreadNotificationsCount > 0 && (
-                        <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-3.5 bg-red-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full px-0.5">
-                          {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
-                        </span>
+                        <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-[#efefef]" />
                       )}
                     </div>
-                    
-                    {/* Nombre */}
-                    <span className="text-sm leading-[1.5] font-medium text-black">
-                      {userName}
-                    </span>
-                    
+
                     {/* Icono dropdown */}
-                    <ChevronDown 
+                    <ChevronDown
                       className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
                       style={{ color: '#0A0A0A' }}
                     />
@@ -158,16 +151,9 @@ export function Navbar({
                         className="w-full px-4 py-3 text-left text-sm hover:bg-[#F5F5F5] transition-colors flex items-center gap-3"
                         style={{ color: '#0A0A0A' }}
                       >
-                        <Bell className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Notificaciones</span>
-                        {unreadNotificationsCount > 0 && (
-                          <span className="ml-auto min-w-[20px] h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full px-1">
-                            {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
-                          </span>
-                        )}
+                        <User className="w-4 h-4" style={{ color: '#006B4E' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Mi perfil</span>
                       </button>
-
-                      <div className="border-t" style={{ borderColor: '#EEF0F2' }}></div>
 
                       <button
                         onClick={() => {
@@ -177,9 +163,14 @@ export function Navbar({
                         className="w-full px-4 py-3 text-left text-sm hover:bg-[#F5F5F5] transition-colors flex items-center gap-3"
                         style={{ color: '#0A0A0A' }}
                       >
-                        <User className="w-4 h-4" style={{ color: '#006B4E' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Mi perfil</span>
+                        <Bell className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Notificaciones</span>
+                        {unreadNotificationsCount > 0 && (
+                          <span className="ml-auto w-2 h-2 bg-red-500 rounded-full" />
+                        )}
                       </button>
+
+                      <div className="border-t" style={{ borderColor: '#EEF0F2' }}></div>
                       
                       <button
                         onClick={() => {
