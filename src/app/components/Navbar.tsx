@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, User, Settings, LogOut, Menu, X } from 'lucide-react';
+import { ChevronDown, User, Settings, LogOut, Menu, X, Bell } from 'lucide-react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 
 interface NavbarProps {
@@ -9,15 +9,17 @@ interface NavbarProps {
   userName?: string;
   userAvatar?: string;
   onShowPublishModal?: () => void;
+  unreadNotificationsCount?: number;
 }
 
-export function Navbar({ 
-  onNavigate, 
-  estado = 'visitante', 
+export function Navbar({
+  onNavigate,
+  estado = 'visitante',
   onLogout,
   userName = 'María Pérez',
   userAvatar,
-  onShowPublishModal
+  onShowPublishModal,
+  unreadNotificationsCount = 0,
 }: NavbarProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -114,12 +116,19 @@ export function Navbar({
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="h-8 bg-[#efefef] hover:bg-[#dedede] px-3 rounded-[200px] transition-colors flex items-center gap-2"
                   >
-                    {/* Avatar */}
-                    <div className="w-6 h-6 rounded-full bg-[#006B4E] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
-                      {userAvatar ? (
-                        <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
-                      ) : (
-                        <span>{getInitials(userName)}</span>
+                    {/* Avatar con badge */}
+                    <div className="relative">
+                      <div className="w-6 h-6 rounded-full bg-[#006B4E] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
+                        {userAvatar ? (
+                          <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
+                        ) : (
+                          <span>{getInitials(userName)}</span>
+                        )}
+                      </div>
+                      {unreadNotificationsCount > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-3.5 bg-red-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full px-0.5">
+                          {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                        </span>
                       )}
                     </div>
                     
@@ -137,10 +146,29 @@ export function Navbar({
 
                   {/* Dropdown Menu */}
                   {showDropdown && (
-                    <div 
+                    <div
                       className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border overflow-hidden"
                       style={{ borderColor: '#CDD8DE' }}
                     >
+                      <button
+                        onClick={() => {
+                          setShowDropdown(false);
+                          onNavigate('person-dashboard');
+                        }}
+                        className="w-full px-4 py-3 text-left text-sm hover:bg-[#F5F5F5] transition-colors flex items-center gap-3"
+                        style={{ color: '#0A0A0A' }}
+                      >
+                        <Bell className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Notificaciones</span>
+                        {unreadNotificationsCount > 0 && (
+                          <span className="ml-auto min-w-[20px] h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full px-1">
+                            {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                          </span>
+                        )}
+                      </button>
+
+                      <div className="border-t" style={{ borderColor: '#EEF0F2' }}></div>
+
                       <button
                         onClick={() => {
                           setShowDropdown(false);

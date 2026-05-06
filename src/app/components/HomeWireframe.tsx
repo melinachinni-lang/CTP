@@ -534,12 +534,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     return (
       <div className="min-h-screen relative">
         {/* Navbar */}
-        <Navbar 
+        <Navbar
           onNavigate={onNavigate}
           estado={isLoggedIn ? 'logueado' : 'visitante'}
           onLogout={onLogout}
           userName={currentUser?.name}
           onShowPublishModal={isLoggedIn && onOpenPublishModal ? onOpenPublishModal : () => setShowPublishModal(true)}
+          unreadNotificationsCount={isLoggedIn ? 3 : 0}
         />
 
         {/* Mensaje de error centrado */}
@@ -628,12 +629,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   return (
     <div className="min-h-screen relative">
       {/* 1. Header / Navbar */}
-      <Navbar 
+      <Navbar
         onNavigate={onNavigate}
         estado={isLoggedIn ? 'logueado' : 'visitante'}
         onLogout={onLogout}
         userName={currentUser?.name}
         onShowPublishModal={isLoggedIn && onOpenPublishModal ? onOpenPublishModal : () => setShowPublishModal(true)}
+        unreadNotificationsCount={isLoggedIn ? 3 : 0}
       />
 
       {/* Main Content - with padding for fixed header */}
