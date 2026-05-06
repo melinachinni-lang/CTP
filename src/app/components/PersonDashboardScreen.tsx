@@ -4220,115 +4220,351 @@ function HelpContent() {
 }
 
 function SettingsContent() {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [nombre, setNombre] = React.useState('María García');
+  const [editNombre, setEditNombre] = React.useState('María García');
+  const [telefono, setTelefono] = React.useState('9 1234 5678');
+  const [editTelefono, setEditTelefono] = React.useState('9 1234 5678');
+  const [phoneCode, setPhoneCode] = React.useState('+56 (CL)');
+  const [region, setRegion] = React.useState('Región Metropolitana');
+  const [editRegion, setEditRegion] = React.useState('Región Metropolitana');
+  const [avatarPreview, setAvatarPreview] = React.useState<string | null>(null);
+  const [editAvatarPreview, setEditAvatarPreview] = React.useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = React.useState(false);
+  const [showPasswordSection, setShowPasswordSection] = React.useState(false);
+  const [currentPassword, setCurrentPassword] = React.useState('');
+  const [newPassword, setNewPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [showCurrentPwd, setShowCurrentPwd] = React.useState(false);
+  const [showNewPwd, setShowNewPwd] = React.useState(false);
+  const [showConfirmPwd, setShowConfirmPwd] = React.useState(false);
+  const [showEmailTooltip, setShowEmailTooltip] = React.useState(false);
+  const avatarInputRef = React.useRef<HTMLInputElement>(null);
+  const isGoogleAccount = false; // simular cuenta de email
+
+  const email = 'maria.garcia@gmail.com';
+  const regiones = [
+    'Región de Arica y Parinacota','Región de Tarapacá','Región de Antofagasta',
+    'Región de Atacama','Región de Coquimbo','Región de Valparaíso',
+    'Región Metropolitana','Región del Libertador General Bernardo O\'Higgins',
+    'Región del Maule','Región de Ñuble','Región del Biobío',
+    'Región de La Araucanía','Región de Los Ríos','Región de Los Lagos',
+    'Región de Aysén','Región de Magallanes',
+  ];
+  const phoneCodes = ['+56 (CL)','+54 (AR)','+55 (BR)','+51 (PE)','+57 (CO)','+52 (MX)','+34 (ES)','+1 (US)'];
+
+  const handleStartEdit = () => {
+    setEditNombre(nombre);
+    setEditTelefono(telefono);
+    setEditRegion(region);
+    setEditAvatarPreview(avatarPreview);
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setShowPasswordSection(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  };
+
+  const handleSave = () => {
+    if (!editNombre.trim()) return;
+    setNombre(editNombre.trim());
+    setTelefono(editTelefono);
+    setRegion(editRegion);
+    setAvatarPreview(editAvatarPreview);
+    setIsEditing(false);
+    setShowPasswordSection(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3500);
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return;
+    const reader = new FileReader();
+    reader.onload = ev => setEditAvatarPreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const getInitials = (name: string) => name.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+
+  const canSave = editNombre.trim().length > 0;
+
   return (
     <main className="px-6 py-6 space-y-6">
-      <div className="space-y-2">
-        <h1 
-          style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'var(--font-size-h2)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-heading)',
-            letterSpacing: 'var(--letter-spacing-normal)'
-          }}
-        >
-          Configuración
-        </h1>
-        <p 
-          style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-regular)',
-            color: '#6B6B6B',
-            lineHeight: 'var(--line-height-body)',
-            letterSpacing: 'var(--letter-spacing-normal)'
-          }}
-        >
-          Administra tu cuenta y preferencias
-        </p>
+      {/* Toast éxito */}
+      {showSuccess && (
+        <div className="fixed bottom-6 left-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', minWidth: '260px' }}>
+          <svg viewBox="0 0 24 24" style={{ width: '18px', height: '18px', fill: 'none', stroke: '#86EFAC', strokeWidth: 2.5, flexShrink: 0 }}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Perfil actualizado correctamente
+        </div>
+      )}
+
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+            Configuración
+          </h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', lineHeight: 'var(--line-height-body)' }}>
+            Administra tu cuenta y preferencias
+          </p>
+        </div>
+        {!isEditing && (
+          <button
+            onClick={handleStartEdit}
+            className="flex items-center gap-2 px-4 py-2 rounded-full transition-all"
+            style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: '1px solid #E5E5E5' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+          >
+            <svg viewBox="0 0 24 24" style={{ width: '15px', height: '15px', fill: 'none', stroke: '#374151', strokeWidth: 2 }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Editar perfil
+          </button>
+        )}
       </div>
 
-      {/* Profile Info */}
-      <section className="bg-white border-2 border-gray-200 p-8 space-y-5 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-        <h2 
-          style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'var(--font-size-h3)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-heading)',
-            letterSpacing: 'var(--letter-spacing-normal)'
-          }}
-        >
+      {/* Información de perfil */}
+      <section className="bg-white border-2 p-8 space-y-6 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]" style={{ borderColor: isEditing ? '#006B4E' : '#E5E5E5' }}>
+        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
           Información de perfil
         </h2>
-        <div className="space-y-4">
-          <div>
-            <div 
-              className="mb-2"
-              style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                fontWeight: 'var(--font-weight-medium)',
-                color: '#6B6B6B',
-                lineHeight: 'var(--line-height-body)'
-              }}
+
+        {/* Avatar */}
+        <div className="flex items-center gap-5">
+          <div className="relative flex-shrink-0">
+            <div
+              onClick={() => { if (isEditing) avatarInputRef.current?.click(); }}
+              className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
+              style={{ backgroundColor: '#006B4E', cursor: isEditing ? 'pointer' : 'default', position: 'relative' }}
             >
-              Tipo de usuario
+              {(isEditing ? editAvatarPreview : avatarPreview) ? (
+                <img src={(isEditing ? editAvatarPreview : avatarPreview)!} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 600, color: '#FFFFFF' }}>{getInitials(nombre)}</span>
+              )}
+              {isEditing && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                  <svg viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'none', stroke: '#FFFFFF', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              )}
             </div>
-            <div 
-              className="bg-gray-50 p-4 rounded-[12px]"
-              style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-regular)',
-                color: '#0A0A0A',
-                lineHeight: 'var(--line-height-body)'
-              }}
-            >
-              Personal
-            </div>
+            <input ref={avatarInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleAvatarChange} />
           </div>
           <div>
-            <div 
-              className="mb-2"
-              style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                fontWeight: 'var(--font-weight-medium)',
-                color: '#6B6B6B',
-                lineHeight: 'var(--line-height-body)'
-              }}
-            >
-              Correo electrónico
-            </div>
-            <div 
-              className="bg-gray-50 p-4 rounded-[12px]"
-              style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-regular)',
-                color: '#0A0A0A',
-                lineHeight: 'var(--line-height-body)'
-              }}
-            >
-              usuario@ejemplo.com
-            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}>{nombre}</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '2px' }}>Cuenta personal</p>
+            {isEditing && (
+              <button onClick={() => avatarInputRef.current?.click()} className="mt-2 text-xs underline" style={{ color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                Cambiar foto de perfil
+              </button>
+            )}
+            {isEditing && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>JPG, PNG o WEBP · Máximo 5 MB</p>}
           </div>
         </div>
-        <button 
-          className="w-full bg-white hover:bg-gray-50 text-black py-3.5 px-8 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-medium)',
-            lineHeight: 'var(--line-height-body)',
-            color: '#0A0A0A'
-          }}
-        >
-          Editar perfil
-        </button>
+
+        <div className="space-y-4">
+          {/* Nombre */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+              Nombre completo {isEditing && <span style={{ color: '#DC2626' }}>*</span>}
+            </label>
+            {isEditing ? (
+              <input
+                type="text"
+                value={editNombre}
+                onChange={e => setEditNombre(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl text-sm"
+                style={{ border: `1px solid ${editNombre.trim() ? '#E5E5E5' : '#FCA5A5'}`, backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+              />
+            ) : (
+              <div
+                onClick={handleStartEdit}
+                className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
+                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              >
+                {nombre}
+              </div>
+            )}
+          </div>
+
+          {/* Email (bloqueado) */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+              Correo electrónico
+            </label>
+            <div className="relative">
+              <div
+                onMouseEnter={() => setShowEmailTooltip(true)}
+                onMouseLeave={() => setShowEmailTooltip(false)}
+                className="px-4 py-2.5 rounded-xl flex items-center justify-between"
+                style={{ backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', cursor: 'not-allowed' }}
+              >
+                <span>{email}</span>
+                <svg viewBox="0 0 24 24" style={{ width: '15px', height: '15px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2, flexShrink: 0 }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              {showEmailTooltip && (
+                <div className="absolute left-0 -top-9 px-3 py-1.5 rounded-lg whitespace-nowrap z-10" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
+                  El email no se puede modificar
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Teléfono */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+              Teléfono
+            </label>
+            {isEditing ? (
+              <div className="flex gap-2">
+                <select
+                  value={phoneCode}
+                  onChange={e => setPhoneCode(e.target.value)}
+                  className="px-2 py-2.5 rounded-xl text-sm"
+                  style={{ width: '110px', flexShrink: 0, border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', outline: 'none' }}
+                >
+                  {phoneCodes.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <input
+                  type="tel"
+                  value={editTelefono}
+                  onChange={e => setEditTelefono(e.target.value)}
+                  placeholder="9 1234 5678"
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+                />
+              </div>
+            ) : (
+              <div
+                onClick={handleStartEdit}
+                className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
+                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: telefono ? '#0A0A0A' : '#9CA3AF' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              >
+                {telefono ? `${phoneCode} ${telefono}` : 'Sin teléfono — clic para agregar'}
+              </div>
+            )}
+          </div>
+
+          {/* Región */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+              Región
+            </label>
+            {isEditing ? (
+              <select
+                value={editRegion}
+                onChange={e => setEditRegion(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl text-sm"
+                style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+              >
+                <option value="">Sin especificar</option>
+                {regiones.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            ) : (
+              <div
+                onClick={handleStartEdit}
+                className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
+                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: region ? '#0A0A0A' : '#9CA3AF' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              >
+                {region || 'Sin especificar'}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Sección contraseña — solo cuentas email, solo en modo edición */}
+        {!isGoogleAccount && isEditing && (
+          <div>
+            <button
+              onClick={() => setShowPasswordSection(!showPasswordSection)}
+              className="flex items-center gap-2 text-sm"
+              style={{ color: '#006B4E', fontFamily: 'var(--font-body)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              <svg viewBox="0 0 24 24" style={{ width: '15px', height: '15px', fill: 'none', stroke: '#006B4E', strokeWidth: 2, transform: showPasswordSection ? 'rotate(90deg)' : 'none', transition: 'transform 150ms' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+              Cambiar contraseña
+            </button>
+
+            {showPasswordSection && (
+              <div className="mt-4 space-y-3 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                {[
+                  { label: 'Contraseña actual', value: currentPassword, setter: setCurrentPassword, show: showCurrentPwd, toggleShow: () => setShowCurrentPwd(v => !v) },
+                  { label: 'Nueva contraseña', value: newPassword, setter: setNewPassword, show: showNewPwd, toggleShow: () => setShowNewPwd(v => !v) },
+                  { label: 'Confirmar nueva contraseña', value: confirmPassword, setter: setConfirmPassword, show: showConfirmPwd, toggleShow: () => setShowConfirmPwd(v => !v) },
+                ].map(({ label, value, setter, show, toggleShow }) => (
+                  <div key={label}>
+                    <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>{label}</label>
+                    <div className="relative">
+                      <input
+                        type={show ? 'text' : 'password'}
+                        value={value}
+                        onChange={e => setter(e.target.value)}
+                        className="w-full px-4 py-2.5 pr-10 rounded-xl text-sm"
+                        style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+                      />
+                      <button type="button" onClick={toggleShow} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2 }}>
+                          {show ? <><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></> : <><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></>}
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {newPassword && confirmPassword && newPassword !== confirmPassword && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626' }}>Las contraseñas no coinciden</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Botones Guardar / Cancelar */}
+        {isEditing && (
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={handleCancel}
+              className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
+              style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={!canSave}
+              className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+              style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: canSave ? 'pointer' : 'not-allowed' }}
+              onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
+              onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+            >
+              Guardar cambios
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Preferences */}
