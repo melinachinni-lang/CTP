@@ -339,20 +339,20 @@ export function MontosReservaAdminView() {
   };
 
   return (
-    <div className="px-6 py-6">
+    <div className="p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
             Montos de reserva
-          </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', marginTop: '4px', lineHeight: 'var(--line-height-body)' }}>
-            Montos fijos de reserva asignados a parcelas y proyectos específicos
+          </h2>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+            Montos fijos asignables a parcelas y proyectos. Los valores pueden variar por período.
           </p>
         </div>
         <button
           onClick={() => setModalMonto('new')}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
           style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
