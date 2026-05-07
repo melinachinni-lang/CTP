@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity } from 'lucide-react';
+import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -10,13 +10,14 @@ import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
+import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'montos' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -388,6 +389,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
     { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
     { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
+    { id: 'montos' as NavItem, icon: DollarSign, label: 'Montos de reserva' },
     { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
@@ -684,6 +686,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
                   {activeNav === 'reservas' && 'Comprobantes de transferencia recibidos — revisión y validación de pagos'}
                   {activeNav === 'whatsapp' && 'Números telefónicos asignados a publicaciones de parcelas y proyectos'}
+                  {activeNav === 'montos' && 'Montos fijos de reserva asignados a parcelas y proyectos'}
                   {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
@@ -1537,6 +1540,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {/* SECCIÓN: WHATSAPP */}
           {activeNav === 'whatsapp' && (
             <ContactosWhatsAppAdminView />
+          )}
+
+          {/* SECCIÓN: MONTOS DE RESERVA */}
+          {activeNav === 'montos' && (
+            <MontosReservaAdminView />
           )}
 
           {/* SECCIÓN: WHITELIST */}
@@ -2693,15 +2701,8 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 </div>
               </section>
 
-              {/* SECCIÓN MONTO DE RESERVA */}
-              <section
-                className="rounded-2xl p-6 mb-6"
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid #E5E5E5',
-                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-                }}
-              >
+              {/* Montos de reserva — disponible en el menú lateral "Montos de reserva" */}
+              {false && <section>
                 <div className="mb-6">
                   <h2
                     style={{
@@ -2847,7 +2848,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     </div>
                   </div>
                 )}
-              </section>
+              </section>}
 
               {/* SECCIÓN 2: GOBIERNO DEL SISTEMA */}
               <section
