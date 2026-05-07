@@ -72,8 +72,9 @@ function formatCLP(value: string) {
   return n.toLocaleString('es-CL');
 }
 
-function MontoModal({ monto, onClose, onGuardar }: {
+function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
   monto: MontoReserva | null;
+  todosLosMontos: MontoReserva[];
   onClose: () => void;
   onGuardar: (data: Partial<MontoReserva>) => void;
 }) {
@@ -85,6 +86,18 @@ function MontoModal({ monto, onClose, onGuardar }: {
   const [seleccionadas, setSeleccionadas] = useState<Set<string>>(
     new Set(monto?.asignaciones.map(a => a.id) || [])
   );
+
+  // Mapa: id de publicación → etiqueta del monto que ya la tiene asignada (excluyendo el monto actual)
+  const asignadaEn = React.useMemo(() => {
+    const map = new Map<string, string>();
+    for (const m of todosLosMontos) {
+      if (monto && m.id === monto.id) continue;
+      for (const a of m.asignaciones) {
+        map.set(a.id, m.etiqueta);
+      }
+    }
+    return map;
+  }, [todosLosMontos, monto]);
 
   const filtradas = TODAS_LAS_PUBLICACIONES.filter(p =>
     p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -218,6 +231,7 @@ function MontoModal({ monto, onClose, onGuardar }: {
                 <div className="max-h-48 overflow-y-auto">
                   {filtradas.map((pub, i) => {
                     const checked = seleccionadas.has(pub.id);
+                    const conflicto = asignadaEn.get(pub.id);
                     return (
                       <label
                         key={pub.id}
@@ -235,7 +249,7 @@ function MontoModal({ monto, onClose, onGuardar }: {
                         </div>
                         <input type="checkbox" className="hidden" checked={checked} onChange={() => toggleSeleccion(pub.id)} />
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <span className="px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0" style={{
                               backgroundColor: pub.tipo === 'parcela' ? '#EFF6FF' : '#F5F3FF',
                               color: pub.tipo === 'parcela' ? '#1E40AF' : '#5B21B6',
@@ -244,6 +258,16 @@ function MontoModal({ monto, onClose, onGuardar }: {
                               {pub.tipo === 'parcela' ? 'Parcela' : 'Proyecto'}
                             </span>
                             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>{pub.nombre}</p>
+                            {conflicto && !checked && (
+                              <span className="px-2 py-0.5 rounded-full text-xs flex-shrink-0" style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
+                                ya en "{conflicto}"
+                              </span>
+                            )}
+                            {conflicto && checked && (
+                              <span className="px-2 py-0.5 rounded-full text-xs flex-shrink-0" style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
+                                reemplaza a "{conflicto}"
+                              </span>
+                            )}
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{pub.ubicacion}</p>
                         </div>
@@ -324,11 +348,23 @@ export function MontosReservaAdminView() {
   );
 
   const handleGuardar = (data: Partial<MontoReserva>) => {
-    if (modalMonto === 'new') {
-      setMontos(prev => [...prev, { id: `mr-${Date.now()}`, etiqueta: '', montoCLP: '', montoUF: '', asignaciones: [], ...data }]);
-    } else if (modalMonto) {
-      setMontos(prev => prev.map(m => m.id === modalMonto.id ? { ...m, ...data } : m));
-    }
+    const nuevasAsignaciones = new Set((data.asignaciones || []).map(a => a.id));
+    const idEditado = modalMonto !== 'new' && modalMonto ? modalMonto.id : null;
+
+    setMontos(prev => {
+      // Quitar de otros montos las publicaciones que ahora se asignan aquí
+      const desconflictado = prev.map(m => {
+        if (m.id === idEditado) return m;
+        return { ...m, asignaciones: m.asignaciones.filter(a => !nuevasAsignaciones.has(a.id)) };
+      });
+
+      if (modalMonto === 'new') {
+        return [...desconflictado, { id: `mr-${Date.now()}`, etiqueta: '', montoCLP: '', montoUF: '', asignaciones: [], ...data }];
+      } else if (idEditado) {
+        return desconflictado.map(m => m.id === idEditado ? { ...m, ...data } : m);
+      }
+      return desconflictado;
+    });
     setModalMonto(null);
   };
 
@@ -524,6 +560,7 @@ export function MontosReservaAdminView() {
       {modalMonto !== null && (
         <MontoModal
           monto={modalMonto === 'new' ? null : modalMonto}
+          todosLosMontos={montos}
           onClose={() => setModalMonto(null)}
           onGuardar={handleGuardar}
         />
