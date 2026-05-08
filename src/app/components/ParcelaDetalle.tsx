@@ -3713,8 +3713,8 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
         onClose={() => setIsComprarParcelaOpen(false)}
         onComprarAhora={() => {
           setIsComprarParcelaOpen(false);
-          setEstadoCompra('reservandose');
-          setIsSubirComprobanteOpen(true);
+          setTipoCompra('comprar');
+          setIsFlujoCompraOpen(true);
         }}
         onReservar={() => {
           setIsComprarParcelaOpen(false);
@@ -3724,17 +3724,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
         parcelaNombre={parcela.nombre}
       />
 
-      {/* Modal de flujo de compra */}
+      {/* Modal de flujo de compra/reserva */}
       <FlujoCompraModal
         isOpen={isFlujoCompraOpen}
         onClose={() => setIsFlujoCompraOpen(false)}
         parcelaNombre={parcelaSeleccionadaStock || parcela.nombre}
         precio={parcela.precio}
         tipoCompra={tipoCompra}
-        onContinuarAPago={() => {
-          setEstadoCompra('reservandose');
-          setIsSubirComprobanteOpen(true);
-        }}
       />
 
       {/* Modal de subir comprobante */}
