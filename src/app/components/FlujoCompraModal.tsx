@@ -197,7 +197,7 @@ interface FlujoCompraModalProps {
 }
 
 export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoCompra }: FlujoCompraModalProps) {
-  const [paso, setPaso] = useState<1 | 2 | 3>(1);
+  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3>(1);
   const [metodoPago, setMetodoPago] = useState<'transferencia' | 'link'>('transferencia');
   const [aceptoTyC, setAceptoTyC] = useState(false);
   const [todoCopiado, setTodoCopiado] = useState(false);
@@ -246,15 +246,13 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   }, [isOpen]);
 
   useEffect(() => {
-    if (paso >= 2 && isOpen) {
-      if (!timerRef.current) {
-        timerRef.current = setInterval(() => {
-          setSegundosTimer(prev => {
-            if (prev <= 1) { clearInterval(timerRef.current!); timerRef.current = null; return 0; }
-            return prev - 1;
-          });
-        }, 1000);
-      }
+    if (paso === 2 && isOpen && !timerRef.current) {
+      timerRef.current = setInterval(() => {
+        setSegundosTimer(prev => {
+          if (prev <= 1) { clearInterval(timerRef.current!); timerRef.current = null; return 0; }
+          return prev - 1;
+        });
+      }, 1000);
     }
     return () => {};
   }, [paso, isOpen]);
@@ -326,26 +324,29 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
               </button>
             </div>
 
-            {/* Stepper */}
-            <div className="flex items-center gap-2">
-              {pasoLabels.map((label, i) => {
-                const num = (i + 1) as 1 | 2 | 3;
-                return (
-                  <React.Fragment key={num}>
-                    {i > 0 && <div className="flex-1 h-px" style={{ backgroundColor: paso > i ? '#0A0A0A' : '#E5E5E5' }} />}
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0"
-                        style={{ backgroundColor: paso >= num ? '#0A0A0A' : '#E5E5E5', color: paso >= num ? '#FFFFFF' : '#9CA3AF' }}>
-                        {paso > num ? <Check className="w-3.5 h-3.5" /> : num}
+            {/* Stepper — oculto en la pantalla de aviso */}
+            {paso !== 'aviso' && (
+              <div className="flex items-center gap-2">
+                {pasoLabels.map((label, i) => {
+                  const num = (i + 1) as 1 | 2 | 3;
+                  const pasoNum = paso === 1 ? 1 : (paso as number);
+                  return (
+                    <React.Fragment key={num}>
+                      {i > 0 && <div className="flex-1 h-px" style={{ backgroundColor: pasoNum > i ? '#0A0A0A' : '#E5E5E5' }} />}
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0"
+                          style={{ backgroundColor: pasoNum >= num ? '#0A0A0A' : '#E5E5E5', color: pasoNum >= num ? '#FFFFFF' : '#9CA3AF' }}>
+                          {pasoNum > num ? <Check className="w-3.5 h-3.5" /> : num}
+                        </div>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: pasoNum === num ? '#0A0A0A' : '#9CA3AF', fontWeight: pasoNum === num ? 600 : 400, whiteSpace: 'nowrap' }}>
+                          {label}
+                        </span>
                       </div>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: paso === num ? '#0A0A0A' : '#9CA3AF', fontWeight: paso === num ? 600 : 400, whiteSpace: 'nowrap' }}>
-                        {label}
-                      </span>
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-            </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
@@ -422,6 +423,73 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* ── AVISO: Pantalla de confirmación antes del timer ── */}
+          {paso === 'aviso' && !enviado && (
+            <div className="py-2 text-center space-y-6">
+              {/* Ícono */}
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto"
+                style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
+                <Clock className="w-10 h-10" style={{ color: '#D97706' }} />
+              </div>
+
+              {/* Título y descripción */}
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '12px' }}>
+                  ¿Estás listo/a para continuar?
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#374151', lineHeight: '1.7' }}>
+                  Al hacer clic en <strong>Comenzar</strong>, la parcela quedará bloqueada exclusivamente para vos
+                  y se activará un contador de <strong>30 minutos</strong> para completar el pago.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', lineHeight: '1.6', marginTop: '8px' }}>
+                  Si el tiempo expira sin recibir el comprobante, la reserva se liberará automáticamente.
+                </p>
+              </div>
+
+              {/* Checklist de lo que necesitan tener listo */}
+              <div className="rounded-2xl p-5 text-left space-y-3" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#111827', marginBottom: '4px' }}>
+                  Asegurate de tener listo:
+                </p>
+                {[
+                  'Acceso a tu banco para realizar la transferencia o el link de pago',
+                  'El comprobante de pago (imagen o PDF) para subir al finalizar',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
+                      <Check className="w-3 h-3" style={{ color: '#059669' }} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.5' }}>
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Botón Comenzar */}
+              <button
+                onClick={() => setPaso(2)}
+                className="w-full py-4 rounded-full font-semibold text-base transition-all"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+              >
+                Comenzar — tengo 30 minutos
+              </button>
+
+              <button
+                onClick={() => setPaso(1)}
+                className="w-full py-2 text-sm transition-colors"
+                style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#374151'}
+                onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}
+              >
+                ← Volver a mis datos
+              </button>
             </div>
           )}
 
@@ -664,11 +732,15 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
           )}
         </div>
 
-        {/* Footer */}
-        {!enviado && (
+        {/* Footer — oculto en la pantalla de aviso (tiene sus propios botones) */}
+        {!enviado && paso !== 'aviso' && (
           <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: '#E5E5E5' }}>
-            {paso > 1 ? (
-              <button onClick={() => setPaso(prev => (prev - 1) as 1 | 2 | 3)}
+            {paso !== 1 ? (
+              <button
+                onClick={() => {
+                  if (paso === 2) setPaso('aviso');
+                  else if (paso === 3) setPaso(2);
+                }}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
                 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#525252', fontWeight: 500 }}>
                 <ChevronLeft className="w-4 h-4" /> Anterior
@@ -676,19 +748,11 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             ) : <div />}
 
             {paso === 1 && (
-              <div className="flex flex-col items-end gap-2">
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#9CA3AF' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                    Al continuar se activará un contador de 30 minutos para completar el pago
-                  </span>
-                </div>
-                <button onClick={() => setPaso(2)} disabled={!formValido}
-                  className="px-6 py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}>
-                  Siguiente →
-                </button>
-              </div>
+              <button onClick={() => setPaso('aviso')} disabled={!formValido}
+                className="px-6 py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}>
+                Siguiente →
+              </button>
             )}
 
             {paso === 2 && (
