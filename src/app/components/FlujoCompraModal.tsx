@@ -163,10 +163,10 @@ function CountdownTimer({ segundos }: { segundos: number }) {
         </div>
         <div className="flex-1 min-w-0">
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: urgente ? '#DC2626' : '#111827', marginBottom: '2px' }}>
-            {urgente ? '⚠ Tiempo limitado' : 'Reserva bloqueada para vos'}
+            {urgente ? '⚠ Tiempo limitado' : 'Reserva bloqueada para ti'}
           </p>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: urgente ? '#DC2626' : '#6B7280' }}>
-            {urgente ? 'Completá el pago antes de que expire la reserva.' : 'Tenés tiempo para completar el pago.'}
+            {urgente ? 'Completa el pago antes de que expire la reserva.' : 'Tienes tiempo para completar el pago.'}
           </p>
         </div>
         <div className="text-right flex-shrink-0">
@@ -175,7 +175,6 @@ function CountdownTimer({ segundos }: { segundos: number }) {
           </span>
         </div>
       </div>
-      {/* Barra de progreso */}
       <div style={{ height: '4px', backgroundColor: urgente ? '#FCA5A5' : '#E5E5E5' }}>
         <div style={{
           height: '100%',
@@ -208,11 +207,9 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const [enviado, setEnviado] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Timer — arranca al entrar al paso 2
   const [segundosTimer, setSegundosTimer] = useState(30 * 60);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Datos formulario
   const [datosCliente, setDatosCliente] = useState<DatosCliente>(DATOS_VACIOS);
   const [masDuenio, setMasDuenio] = useState(false);
   const [datosSegundoDuenio, setDatosSegundoDuenio] = useState<DatosCliente>(DATOS_VACIOS);
@@ -305,11 +302,13 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl" style={{ maxHeight: '90vh', overflow: 'auto' }}>
+
+      {/* Modal */}
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
 
         {/* Header */}
         {!enviado && (
-          <div className="px-6 py-5 border-b sticky top-0 bg-white z-10" style={{ borderColor: '#E5E5E5' }}>
+          <div className="px-6 py-5 border-b bg-white z-10" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '0.25rem' }}>
@@ -324,7 +323,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
               </button>
             </div>
 
-            {/* Stepper — oculto en la pantalla de aviso */}
+            {/* Stepper */}
             {paso !== 'aviso' && (
               <div className="flex items-center gap-2">
                 {pasoLabels.map((label, i) => {
@@ -347,10 +346,18 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 })}
               </div>
             )}
+
+            {/* Timer — visible y fijo en el header durante los pasos 2 y 3 */}
+            {(paso === 2 || paso === 3) && (
+              <div className="mt-4">
+                <CountdownTimer segundos={segundosTimer} />
+              </div>
+            )}
           </div>
         )}
 
-        <div className="px-6 py-6">
+        {/* Contenido scrollable */}
+        <div className="px-6 py-6" style={{ overflowY: 'auto', flex: 1 }}>
 
           {/* ── PASO 1: Datos del cliente ── */}
           {paso === 1 && !enviado && (
@@ -364,10 +371,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
               <ClienteForm datos={datosCliente} onChange={setDatosCliente} />
 
-              {/* Toggles */}
               <div className="space-y-4 pt-2 border-t" style={{ borderColor: '#F3F4F6' }}>
-
-                {/* Más de un dueño */}
                 <div className="flex items-center justify-between">
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
                     ¿Más de un dueño?
@@ -379,7 +383,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   <ClienteForm datos={datosSegundoDuenio} onChange={setDatosSegundoDuenio} titulo="Segundo dueño" />
                 )}
 
-                {/* Compra como empresa */}
                 <div className="flex items-center justify-between">
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
                     ¿Compra como empresa?
@@ -426,78 +429,9 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             </div>
           )}
 
-          {/* ── AVISO: Pantalla de confirmación antes del timer ── */}
-          {paso === 'aviso' && !enviado && (
-            <div className="py-2 text-center space-y-6">
-              {/* Ícono */}
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto"
-                style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
-                <Clock className="w-10 h-10" style={{ color: '#D97706' }} />
-              </div>
-
-              {/* Título y descripción */}
-              <div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '12px' }}>
-                  ¿Estás listo/a para continuar?
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#374151', lineHeight: '1.7' }}>
-                  Al hacer clic en <strong>Comenzar</strong>, la parcela quedará bloqueada exclusivamente para vos
-                  y se activará un contador de <strong>30 minutos</strong> para completar el pago.
-                </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', lineHeight: '1.6', marginTop: '8px' }}>
-                  Si el tiempo expira sin recibir el comprobante, la reserva se liberará automáticamente.
-                </p>
-              </div>
-
-              {/* Checklist de lo que necesitan tener listo */}
-              <div className="rounded-2xl p-5 text-left space-y-3" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#111827', marginBottom: '4px' }}>
-                  Asegurate de tener listo:
-                </p>
-                {[
-                  'Acceso a tu banco para realizar la transferencia o el link de pago',
-                  'El comprobante de pago (imagen o PDF) para subir al finalizar',
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
-                      <Check className="w-3 h-3" style={{ color: '#059669' }} />
-                    </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.5' }}>
-                      {item}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Botón Comenzar */}
-              <button
-                onClick={() => setPaso(2)}
-                className="w-full py-4 rounded-full font-semibold text-base transition-all"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                Comenzar — tengo 30 minutos
-              </button>
-
-              <button
-                onClick={() => setPaso(1)}
-                className="w-full py-2 text-sm transition-colors"
-                style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
-                onMouseEnter={e => e.currentTarget.style.color = '#374151'}
-                onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}
-              >
-                ← Volver a mis datos
-              </button>
-            </div>
-          )}
-
           {/* ── PASO 2: Método de pago + TyC ── */}
           {paso === 2 && !enviado && (
             <div className="space-y-5">
-              <CountdownTimer segundos={segundosTimer} />
-
               {/* Monto de reserva */}
               <div className="rounded-xl p-4 text-center" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
@@ -511,7 +445,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 </p>
               </div>
 
-              {/* Selector método */}
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#525252', marginBottom: '10px' }}>
                   Selecciona cómo querés pagar
@@ -526,7 +459,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                     </div>
                     <div>
                       <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>Transferencia bancaria</p>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Pagá desde tu banco</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Paga desde tu banco</p>
                     </div>
                   </button>
 
@@ -539,13 +472,12 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                     </div>
                     <div>
                       <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>Link de pago</p>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Pagá online con tarjeta</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Paga online con tarjeta</p>
                     </div>
                   </button>
                 </div>
               </div>
 
-              {/* Términos y condiciones */}
               <div
                 className="flex items-start gap-3 p-4 rounded-xl cursor-pointer"
                 style={{ backgroundColor: '#F9FAFB', border: `1px solid ${aceptoTyC ? '#0A0A0A' : '#E5E5E5'}` }}
@@ -571,9 +503,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
           {/* ── PASO 3: Datos bancarios / link + comprobante ── */}
           {paso === 3 && !enviado && (
             <div className="space-y-5">
-              <CountdownTimer segundos={segundosTimer} />
-
-              {/* Transferencia */}
               {metodoPago === 'transferencia' && (
                 <>
                   <div>
@@ -603,20 +532,19 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   <div className="rounded-xl p-3 flex items-start gap-2" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A' }}>
                     <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#D97706' }} />
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#92400E', lineHeight: '1.5' }}>
-                      Transferí el monto exacto e incluí el número de parcela como referencia.
+                      Transfiere el monto exacto e incluye el número de parcela como referencia.
                     </p>
                   </div>
                 </>
               )}
 
-              {/* Link de pago */}
               {metodoPago === 'link' && (
                 <div className="rounded-xl p-5 space-y-3" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#15803D' }}>
                     Link de pago generado
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', lineHeight: '1.5' }}>
-                    Usá este link para pagar con tarjeta. Una vez completado, subí el comprobante.
+                    Usa este link para pagar con tarjeta. Una vez completado, sube el comprobante.
                   </p>
                   <div className="flex items-center gap-2">
                     <div className="flex-1 px-3 py-2.5 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
@@ -640,7 +568,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 </div>
               )}
 
-              {/* Upload comprobante */}
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#0A0A0A', marginBottom: '4px' }}>
                   Comprobante de pago <span style={{ color: '#DC2626' }}>*</span>
@@ -669,7 +596,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   >
                     <Upload className="w-8 h-8 mx-auto mb-2" style={{ color: dragOver ? '#006B4E' : '#9CA3AF' }} />
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '2px' }}>
-                      Arrastrá el archivo o hacé clic para seleccionar
+                      Arrastra el archivo o haz clic para seleccionar
                     </p>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
                       JPG, PNG o PDF · Máximo 10 MB
@@ -703,7 +630,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#1E40AF', marginBottom: '2px' }}>Revisá tu casilla de email</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#1E40AF', marginBottom: '2px' }}>Revisa tu casilla de email</p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#3B82F6', lineHeight: '1.5' }}>
                     Te enviamos la confirmación de tu solicitud. Una vez validado el pago, recibirás un segundo correo con la confirmación final.
                   </p>
@@ -732,9 +659,9 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
           )}
         </div>
 
-        {/* Footer — oculto en la pantalla de aviso (tiene sus propios botones) */}
+        {/* Footer */}
         {!enviado && paso !== 'aviso' && (
-          <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: '#E5E5E5' }}>
+          <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             {paso !== 1 ? (
               <button
                 onClick={() => {
@@ -774,6 +701,74 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             )}
           </div>
         )}
+
+        {/* ── AVISO OVERLAY — aparece como capa sobre el modal ── */}
+        {paso === 'aviso' && !enviado && (
+          <div
+            className="absolute inset-0 rounded-2xl z-20 flex items-center justify-center p-6"
+            style={{ backgroundColor: 'rgba(10, 10, 10, 0.55)' }}
+          >
+            <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm space-y-5 text-center">
+
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+                style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
+                <Clock className="w-8 h-8" style={{ color: '#D97706' }} />
+              </div>
+
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '10px' }}>
+                  Antes de continuar
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.7' }}>
+                  Al aceptar, la parcela quedará bloqueada para ti y se activará un <strong>temporizador de 30 minutos</strong> por razones de seguridad para completar el pago.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', lineHeight: '1.6', marginTop: '6px' }}>
+                  Si el tiempo expira sin recibir el comprobante, la reserva se liberará automáticamente.
+                </p>
+              </div>
+
+              <div className="rounded-xl p-4 text-left space-y-2.5" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '12px', color: '#111827' }}>
+                  Asegúrate de tener listo:
+                </p>
+                {[
+                  'Acceso a tu banco para realizar la transferencia',
+                  'El comprobante de pago (imagen o PDF) para subir',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
+                      <Check className="w-2.5 h-2.5" style={{ color: '#059669' }} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151', lineHeight: '1.5' }}>
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-2">
+                <button
+                  onClick={() => setPaso(2)}
+                  className="w-full py-3 rounded-full font-semibold transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+                  Aceptar y comenzar
+                </button>
+                <button
+                  onClick={() => setPaso(1)}
+                  className="w-full py-2 transition-colors text-sm"
+                  style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#374151'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
+                  ← Volver a mis datos
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
