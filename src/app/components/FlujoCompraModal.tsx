@@ -151,13 +151,39 @@ function CountdownTimer({ segundos }: { segundos: number }) {
   const mins = Math.floor(segundos / 60).toString().padStart(2, '0');
   const secs = (segundos % 60).toString().padStart(2, '0');
   const urgente = segundos <= 300;
+  const porcentaje = (segundos / (30 * 60)) * 100;
+
   return (
-    <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl"
-      style={{ backgroundColor: urgente ? '#FEF2F2' : '#F3F4F6', border: `1px solid ${urgente ? '#FCA5A5' : '#E5E5E5'}` }}>
-      <Clock className="w-4 h-4 flex-shrink-0" style={{ color: urgente ? '#DC2626' : '#6B7280' }} />
-      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: urgente ? '#DC2626' : '#374151' }}>
-        {mins}:{secs} para completar el pago
-      </span>
+    <div className="rounded-xl overflow-hidden"
+      style={{ border: `2px solid ${urgente ? '#FCA5A5' : '#E5E5E5'}`, backgroundColor: urgente ? '#FEF2F2' : '#F9FAFB' }}>
+      <div className="flex items-center gap-3 px-4 py-3">
+        <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+          style={{ backgroundColor: urgente ? '#FEE2E2' : '#F3F4F6' }}>
+          <Clock className="w-5 h-5" style={{ color: urgente ? '#DC2626' : '#6B7280' }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: urgente ? '#DC2626' : '#111827', marginBottom: '2px' }}>
+            {urgente ? '⚠ Tiempo limitado' : 'Reserva bloqueada para vos'}
+          </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: urgente ? '#DC2626' : '#6B7280' }}>
+            {urgente ? 'Completá el pago antes de que expire la reserva.' : 'Tenés tiempo para completar el pago.'}
+          </p>
+        </div>
+        <div className="text-right flex-shrink-0">
+          <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: urgente ? '#DC2626' : '#0A0A0A', letterSpacing: '0.02em' }}>
+            {mins}:{secs}
+          </span>
+        </div>
+      </div>
+      {/* Barra de progreso */}
+      <div style={{ height: '4px', backgroundColor: urgente ? '#FCA5A5' : '#E5E5E5' }}>
+        <div style={{
+          height: '100%',
+          width: `${porcentaje}%`,
+          backgroundColor: urgente ? '#DC2626' : '#006B4E',
+          transition: 'width 1s linear, background-color 0.5s ease'
+        }} />
+      </div>
     </div>
   );
 }
@@ -650,11 +676,19 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             ) : <div />}
 
             {paso === 1 && (
-              <button onClick={() => setPaso(2)} disabled={!formValido}
-                className="px-6 py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}>
-                Siguiente →
-              </button>
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#9CA3AF' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                    Al continuar se activará un contador de 30 minutos para completar el pago
+                  </span>
+                </div>
+                <button onClick={() => setPaso(2)} disabled={!formValido}
+                  className="px-6 py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}>
+                  Siguiente →
+                </button>
+              </div>
             )}
 
             {paso === 2 && (
