@@ -205,6 +205,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const [dragOver, setDragOver] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [showExitWarning, setShowExitWarning] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [segundosTimer, setSegundosTimer] = useState(30 * 60);
@@ -230,6 +231,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     setDragOver(false);
     setEnviando(false);
     setEnviado(false);
+    setShowExitWarning(false);
     setSegundosTimer(30 * 60);
     setDatosCliente(DATOS_VACIOS);
     setMasDuenio(false);
@@ -298,10 +300,16 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
   const pasoLabels = ['Tus datos', 'Método de pago', metodoPago === 'transferencia' ? 'Comprobante' : 'Pago online'];
 
+  const handleIntentoCerrar = () => {
+    if (enviado) { onClose(); return; }
+    setShowExitWarning(true);
+  };
+
   return (
+    <>
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-      onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      onClick={e => { if (e.target === e.currentTarget) handleIntentoCerrar(); }}>
 
       {/* Modal */}
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
@@ -318,7 +326,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   {parcelaNombre} · {precio}
                 </p>
               </div>
-              <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
+              <button onClick={handleIntentoCerrar} className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
                 <X className="w-5 h-5" style={{ color: '#525252' }} />
               </button>
             </div>
@@ -614,14 +622,9 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 <Clock className="w-9 h-9" style={{ color: '#D97706' }} />
               </div>
               <div>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '8px' }}>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>
                   ¡Comprobante recibido!
                 </h2>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B7280', lineHeight: '1.6' }}>
-                  Tu pago está siendo validado. La parcela quedará en estado{' '}
-                  <strong style={{ color: '#D97706' }}>Pago en validación</strong>{' '}
-                  hasta que nuestro equipo confirme la transferencia.
-                </p>
               </div>
               <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DBEAFE' }}>
@@ -771,5 +774,49 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
       </div>
     </div>
+
+    {/* ── WARNING SALIR — overlay fixed encima de todo ── */}
+    {showExitWarning && (
+      <div
+        className="fixed inset-0 z-[60] flex items-center justify-center p-6"
+        style={{ backgroundColor: 'rgba(10, 10, 10, 0.65)' }}
+      >
+        <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm space-y-5 text-center">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto"
+            style={{ backgroundColor: '#FEF2F2', border: '4px solid #FECACA' }}>
+            <AlertCircle className="w-7 h-7" style={{ color: '#DC2626' }} />
+          </div>
+
+          <div>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '10px' }}>
+              ¿Seguro que quieres salir?
+            </h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.7' }}>
+              Si sales ahora es posible que <strong>pierdas la reserva</strong>. La parcela podría quedar disponible para otro comprador.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <button
+              onClick={() => setShowExitWarning(false)}
+              className="w-full py-3 rounded-full font-semibold transition-all"
+              style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+              Continuar con el proceso
+            </button>
+            <button
+              onClick={() => { setShowExitWarning(false); onClose(); }}
+              className="w-full py-2 transition-colors text-sm"
+              style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#DC2626'}
+              onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
+              Salir de todas formas
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
