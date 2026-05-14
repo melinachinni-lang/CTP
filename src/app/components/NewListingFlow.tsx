@@ -113,7 +113,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
   };
 
   // Constantes de validación de archivos
-  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+  const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
   const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
   const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
   const ALLOWED_PDF_TYPES = ['application/pdf'];
@@ -783,7 +783,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                             fontSize: 'var(--font-size-xs)',
                             color: '#737373',
                           }}>
-                            PNG, JPG hasta 5MB
+                            PNG, JPG · 1600×900 px recomendado · Máximo 2 MB
                           </p>
                         </div>
                       </div>

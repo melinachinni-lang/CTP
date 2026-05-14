@@ -132,7 +132,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
   };
 
   // Constantes de validación de archivos
-  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+  const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
   const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_EXCEL_SIZE = 5 * 1024 * 1024; // 5MB
   const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -1052,7 +1052,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                             color: '#737373',
                             marginTop: '4px'
                           }}>
-                            PNG, JPG hasta 5MB
+                            PNG, JPG · 1600×900 px recomendado · Máximo 2 MB
                           </p>
                         </div>
                       </button>
