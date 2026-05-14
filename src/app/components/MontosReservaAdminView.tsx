@@ -448,7 +448,7 @@ export function MontosReservaAdminView() {
 
       {/* Tarjeta Valor por defecto */}
       <div className="rounded-xl flex items-center justify-between px-5 py-4 mb-6"
-        style={{ border: '1px dashed #D1D5DB', backgroundColor: '#FFFFFF' }}>
+        style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FFFFFF' }}>
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
@@ -465,12 +465,9 @@ export function MontosReservaAdminView() {
         </div>
         <button
           onClick={() => setEditandoDefault(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0"
-          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-          <Edit2 className="w-3.5 h-3.5" />
-          Editar valor
+          className="p-2 rounded-lg transition-colors hover:bg-gray-100 flex-shrink-0"
+          title="Editar valor por defecto">
+          <Edit2 className="w-4 h-4" style={{ color: '#6B7280' }} />
         </button>
       </div>
 
