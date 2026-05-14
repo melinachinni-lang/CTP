@@ -448,46 +448,30 @@ export function MontosReservaAdminView() {
 
       {/* Tarjeta Valor por defecto */}
       <div className="rounded-xl flex items-center justify-between px-5 py-4 mb-6"
-        style={{ border: '1.5px dashed #A7F3D0', backgroundColor: '#F0FDF4' }}>
+        style={{ border: '1px dashed #D1D5DB', backgroundColor: '#FFFFFF' }}>
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: '#DCFCE7', border: '1px solid #A7F3D0' }}>
+            style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
             <DollarSign className="w-5 h-5" style={{ color: '#006B4E' }} />
           </div>
           <div>
-            <div className="flex items-center gap-2 mb-0.5">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#065F46' }}>
-                Valor por defecto
-              </p>
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium"
-                style={{ backgroundColor: '#DCFCE7', color: '#065F46', fontFamily: 'var(--font-body)', border: '1px solid #A7F3D0' }}>
-                Por defecto
-              </span>
-            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>
+              Valor por defecto
+            </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>
-              Se aplica a publicaciones sin valor de reserva asignado
+              ${Number(defaultCLP).toLocaleString('es-CL')} · UF {defaultUF} — Se aplica a publicaciones sin valor asignado
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#006B4E' }}>
-              ${Number(defaultCLP).toLocaleString('es-CL')}
-            </p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#059669' }}>
-              UF {defaultUF}
-            </p>
-          </div>
-          <button
-            onClick={() => setEditandoDefault(true)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
-            style={{ backgroundColor: '#FFFFFF', color: '#006B4E', fontFamily: 'var(--font-body)', border: '1px solid #A7F3D0' }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCFCE7'; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-            <Edit2 className="w-3.5 h-3.5" />
-            Editar valor
-          </button>
-        </div>
+        <button
+          onClick={() => setEditandoDefault(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+          <Edit2 className="w-3.5 h-3.5" />
+          Editar valor
+        </button>
       </div>
 
       {/* Tabs + Buscador */}
