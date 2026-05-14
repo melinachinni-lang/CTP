@@ -38,7 +38,7 @@ const TODAS_LAS_PUBLICACIONES: Asignacion[] = [
 const MOCK_MONTOS: MontoReserva[] = [
   {
     id: 'mr-1',
-    etiqueta: 'Monto estándar',
+    etiqueta: 'Valor Región Valparaíso',
     montoCLP: '500000',
     montoUF: '12.9',
     asignaciones: [
@@ -49,9 +49,9 @@ const MOCK_MONTOS: MontoReserva[] = [
   },
   {
     id: 'mr-2',
-    etiqueta: 'Proyectos premium',
-    montoCLP: '1000000',
-    montoUF: '25.8',
+    etiqueta: 'Valor estándar',
+    montoCLP: '100000',
+    montoUF: '2.6',
     asignaciones: [
       { tipo: 'proyecto', id: 'proy-3', nombre: 'Proyecto Cordillera Viva', ubicacion: 'RM' },
       { tipo: 'parcela', id: 'parc-4', nombre: 'Parcela Sector Cordillera', ubicacion: 'Pirque, RM' },
@@ -72,6 +72,76 @@ function formatCLP(value: string) {
   return n.toLocaleString('es-CL');
 }
 
+// Modal simplificado — solo edita el valor del monto por defecto
+function DefaultValueModal({ montoCLP, montoUF, onClose, onGuardar }: {
+  montoCLP: string;
+  montoUF: string;
+  onClose: () => void;
+  onGuardar: (montoCLP: string, montoUF: string) => void;
+}) {
+  const [clp, setClp] = useState(montoCLP);
+  const [uf, setUf] = useState(montoUF);
+  const puedeGuardar = clp.trim() && uf.trim();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm" onClick={e => e.stopPropagation()}>
+        <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#E5E5E5' }}>
+          <div>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
+              Editar valor por defecto
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>
+              Se aplica a publicaciones sin valor asignado
+            </p>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+            <X className="w-4 h-4" style={{ color: '#6B7280' }} />
+          </button>
+        </div>
+        <div className="p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                Monto en CLP <span style={{ color: '#DC2626' }}>*</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}>$</span>
+                <input type="text" value={clp} onChange={e => setClp(e.target.value.replace(/[^0-9]/g, ''))} placeholder="50000"
+                  className="w-full pl-7 pr-4 py-2.5 rounded-lg text-sm"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
+              </div>
+              {clp && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>${formatCLP(clp)}</p>}
+            </div>
+            <div>
+              <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                Monto en UF <span style={{ color: '#DC2626' }}>*</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}>UF</span>
+                <input type="text" value={uf} onChange={e => setUf(e.target.value.replace(/[^0-9.,]/g, ''))} placeholder="1.3"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="px-6 py-4 border-t flex gap-3" style={{ borderColor: '#E5E5E5' }}>
+          <button onClick={onClose} className="flex-1 py-2.5 rounded-full text-sm font-medium"
+            style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
+            Cancelar
+          </button>
+          <button onClick={() => { if (puedeGuardar) onGuardar(clp, uf); }} disabled={!puedeGuardar}
+            className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+            style={{ backgroundColor: puedeGuardar ? '#006B4E' : '#E5E5E5', color: puedeGuardar ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: puedeGuardar ? 'pointer' : 'not-allowed' }}>
+            Guardar cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
   monto: MontoReserva | null;
   todosLosMontos: MontoReserva[];
@@ -87,7 +157,6 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
     new Set(monto?.asignaciones.map(a => a.id) || [])
   );
 
-  // Mapa: id de publicación → etiqueta del monto que ya la tiene asignada (excluyendo el monto actual)
   const asignadaEn = React.useMemo(() => {
     const map = new Map<string, string>();
     for (const m of todosLosMontos) {
@@ -125,7 +194,7 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="sticky top-0 bg-white px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#E5E5E5' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
-            {monto ? 'Editar monto de reserva' : 'Agregar monto de reserva'}
+            {monto ? 'Editar valor de reserva' : 'Agregar valor de reserva'}
           </h2>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
             <X className="w-4 h-4" style={{ color: '#6B7280' }} />
@@ -133,22 +202,15 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
         </div>
 
         <div className="p-6 space-y-5">
-          {/* Etiqueta */}
           <div>
             <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
               Nombre / etiqueta <span style={{ color: '#DC2626' }}>*</span>
             </label>
-            <input
-              type="text"
-              value={etiqueta}
-              onChange={e => setEtiqueta(e.target.value)}
-              placeholder="Ej: Monto estándar, Proyectos premium"
+            <input type="text" value={etiqueta} onChange={e => setEtiqueta(e.target.value)} placeholder="Ej: Valor estándar, Proyectos premium"
               className="w-full px-4 py-2.5 rounded-lg text-sm"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-            />
+              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
           </div>
 
-          {/* Montos */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
@@ -156,20 +218,11 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}>$</span>
-                <input
-                  type="text"
-                  value={montoCLP}
-                  onChange={e => setMontoCLP(e.target.value.replace(/[^0-9]/g, ''))}
-                  placeholder="500000"
+                <input type="text" value={montoCLP} onChange={e => setMontoCLP(e.target.value.replace(/[^0-9]/g, ''))} placeholder="500000"
                   className="w-full pl-7 pr-4 py-2.5 rounded-lg text-sm"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-                />
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
               </div>
-              {montoCLP && (
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>
-                  ${formatCLP(montoCLP)}
-                </p>
-              )}
+              {montoCLP && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '4px' }}>${formatCLP(montoCLP)}</p>}
             </div>
             <div>
               <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
@@ -177,25 +230,17 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', fontWeight: 600 }}>UF</span>
-                <input
-                  type="text"
-                  value={montoUF}
-                  onChange={e => setMontoUF(e.target.value.replace(/[^0-9.,]/g, ''))}
-                  placeholder="12.9"
+                <input type="text" value={montoUF} onChange={e => setMontoUF(e.target.value.replace(/[^0-9.,]/g, ''))} placeholder="12.9"
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-                />
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
               </div>
             </div>
           </div>
 
-          {/* Asignar publicaciones */}
           <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-            <button
-              onClick={() => setAsignacionesOpen(prev => !prev)}
+            <button onClick={() => setAsignacionesOpen(prev => !prev)}
               className="w-full flex items-center justify-between px-4 py-3 transition-colors"
-              style={{ backgroundColor: asignacionesOpen ? '#F9FAFB' : '#FFFFFF' }}
-            >
+              style={{ backgroundColor: asignacionesOpen ? '#F9FAFB' : '#FFFFFF' }}>
               <div className="flex items-center gap-2">
                 <Link className="w-4 h-4" style={{ color: '#006B4E' }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>
@@ -209,8 +254,7 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
               </div>
               {asignacionesOpen
                 ? <ChevronDown className="w-4 h-4" style={{ color: '#6B7280' }} />
-                : <ChevronRight className="w-4 h-4" style={{ color: '#6B7280' }} />
-              }
+                : <ChevronRight className="w-4 h-4" style={{ color: '#6B7280' }} />}
             </button>
 
             {asignacionesOpen && (
@@ -218,14 +262,9 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
                 <div className="px-4 py-3" style={{ borderBottom: '1px solid #F3F4F6' }}>
                   <div className="relative">
                     <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
-                    <input
-                      type="text"
-                      placeholder="Buscar parcela o proyecto..."
-                      value={busqueda}
-                      onChange={e => setBusqueda(e.target.value)}
+                    <input type="text" placeholder="Buscar parcela o proyecto..." value={busqueda} onChange={e => setBusqueda(e.target.value)}
                       className="w-full pl-8 pr-3 py-2 rounded-lg text-sm"
-                      style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-                    />
+                      style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
                   </div>
                 </div>
                 <div className="max-h-48 overflow-y-auto">
@@ -233,18 +272,13 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
                     const checked = seleccionadas.has(pub.id);
                     const conflicto = asignadaEn.get(pub.id);
                     return (
-                      <label
-                        key={pub.id}
-                        className="flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors"
+                      <label key={pub.id} className="flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors"
                         style={{ borderBottom: i < filtradas.length - 1 ? '1px solid #F9FAFB' : 'none', backgroundColor: checked ? '#F0FDF4' : '#FFFFFF' }}
                         onMouseEnter={e => { if (!checked) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = checked ? '#F0FDF4' : '#FFFFFF'; }}
-                      >
-                        <div
-                          className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 transition-all"
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = checked ? '#F0FDF4' : '#FFFFFF'; }}>
+                        <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 transition-all"
                           style={{ backgroundColor: checked ? '#006B4E' : '#FFFFFF', border: `2px solid ${checked ? '#006B4E' : '#D1D5DB'}` }}
-                          onClick={() => toggleSeleccion(pub.id)}
-                        >
+                          onClick={() => toggleSeleccion(pub.id)}>
                           {checked && <Check className="w-2.5 h-2.5" style={{ color: '#FFFFFF' }} />}
                         </div>
                         <input type="checkbox" className="hidden" checked={checked} onChange={() => toggleSeleccion(pub.id)} />
@@ -285,15 +319,12 @@ function MontoModal({ monto, todosLosMontos, onClose, onGuardar }: {
             style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
             Cancelar
           </button>
-          <button
-            onClick={handleGuardar}
-            disabled={!puedeGuardar}
+          <button onClick={handleGuardar} disabled={!puedeGuardar}
             className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
             style={{ backgroundColor: puedeGuardar ? '#006B4E' : '#E5E5E5', color: puedeGuardar ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: puedeGuardar ? 'pointer' : 'not-allowed' }}
             onMouseEnter={e => { if (puedeGuardar) e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={e => { if (puedeGuardar) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-          >
-            {monto ? 'Guardar cambios' : 'Agregar monto'}
+            onMouseLeave={e => { if (puedeGuardar) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+            {monto ? 'Guardar cambios' : 'Agregar valor'}
           </button>
         </div>
       </div>
@@ -314,7 +345,7 @@ function ConfirmDeleteModal({ etiqueta, onConfirm, onClose }: {
             <AlertTriangle className="w-5 h-5 text-red-500" />
           </div>
           <div>
-            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>Eliminar monto</h3>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>Eliminar valor</h3>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', marginTop: '2px' }}>
               ¿Eliminar <strong>"{etiqueta}"</strong>? Esta acción no se puede deshacer.
             </p>
@@ -335,24 +366,35 @@ function ConfirmDeleteModal({ etiqueta, onConfirm, onClose }: {
   );
 }
 
+type Tab = 'todos' | 'con-asignaciones' | 'sin-asignar';
+
 export function MontosReservaAdminView() {
   const [montos, setMontos] = useState<MontoReserva[]>(MOCK_MONTOS);
+  const [defaultCLP, setDefaultCLP] = useState('50000');
+  const [defaultUF, setDefaultUF] = useState('1.3');
   const [busqueda, setBusqueda] = useState('');
+  const [tab, setTab] = useState<Tab>('todos');
   const [modalMonto, setModalMonto] = useState<MontoReserva | null | 'new'>(null);
+  const [editandoDefault, setEditandoDefault] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<MontoReserva | null>(null);
 
-  const filtrados = montos.filter(m =>
-    m.etiqueta.toLowerCase().includes(busqueda.toLowerCase()) ||
-    m.asignaciones.some(a => a.nombre.toLowerCase().includes(busqueda.toLowerCase()))
-  );
+  const filtrados = montos
+    .filter(m => {
+      if (tab === 'con-asignaciones') return m.asignaciones.length > 0;
+      if (tab === 'sin-asignar') return m.asignaciones.length === 0;
+      return true;
+    })
+    .filter(m =>
+      m.etiqueta.toLowerCase().includes(busqueda.toLowerCase()) ||
+      m.asignaciones.some(a => a.nombre.toLowerCase().includes(busqueda.toLowerCase()))
+    );
 
   const handleGuardar = (data: Partial<MontoReserva>) => {
     const nuevasAsignaciones = new Set((data.asignaciones || []).map(a => a.id));
     const idEditado = modalMonto !== 'new' && modalMonto ? modalMonto.id : null;
 
     setMontos(prev => {
-      // Quitar de otros montos las publicaciones que ahora se asignan aquí
       const desconflictado = prev.map(m => {
         if (m.id === idEditado) return m;
         return { ...m, asignaciones: m.asignaciones.filter(a => !nuevasAsignaciones.has(a.id)) };
@@ -374,52 +416,125 @@ export function MontosReservaAdminView() {
     if (expandedId === monto.id) setExpandedId(null);
   };
 
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'todos', label: 'Todos' },
+    { id: 'con-asignaciones', label: 'Con asignaciones' },
+    { id: 'sin-asignar', label: 'Sin asignar' },
+  ];
+
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
-            Montos de reserva
+            Valores de Reserva
           </h2>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-            Montos fijos asignables a parcelas y proyectos. Los valores pueden variar por período.
+            Gestiona los valores de reserva asociados a tus parcelas y proyectos.
           </p>
         </div>
         <button
           onClick={() => setModalMonto('new')}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
           style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
         >
           <Plus className="w-4 h-4" />
-          Agregar monto
+          Agregar valor
         </button>
       </div>
 
-      {/* Buscador */}
-      <div className="relative mb-4">
-        <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
-        <input
-          type="text"
-          placeholder="Buscar por etiqueta o publicación..."
-          value={busqueda}
-          onChange={e => setBusqueda(e.target.value)}
-          className="w-full pl-11 pr-4 py-2.5 rounded-xl text-sm"
-          style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-        />
+      {/* Tarjeta Valor por defecto */}
+      <div className="rounded-xl flex items-center justify-between px-5 py-4 mb-6"
+        style={{ border: '1.5px dashed #A7F3D0', backgroundColor: '#F0FDF4' }}>
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ backgroundColor: '#DCFCE7', border: '1px solid #A7F3D0' }}>
+            <DollarSign className="w-5 h-5" style={{ color: '#006B4E' }} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#065F46' }}>
+                Valor por defecto
+              </p>
+              <span className="px-2 py-0.5 rounded-full text-xs font-medium"
+                style={{ backgroundColor: '#DCFCE7', color: '#065F46', fontFamily: 'var(--font-body)', border: '1px solid #A7F3D0' }}>
+                Por defecto
+              </span>
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>
+              Se aplica a publicaciones sin valor de reserva asignado
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-right">
+            <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#006B4E' }}>
+              ${Number(defaultCLP).toLocaleString('es-CL')}
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#059669' }}>
+              UF {defaultUF}
+            </p>
+          </div>
+          <button
+            onClick={() => setEditandoDefault(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+            style={{ backgroundColor: '#FFFFFF', color: '#006B4E', fontFamily: 'var(--font-body)', border: '1px solid #A7F3D0' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCFCE7'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+            <Edit2 className="w-3.5 h-3.5" />
+            Editar valor
+          </button>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="flex items-center gap-4 mb-5">
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-          {montos.length} monto{montos.length !== 1 ? 's' : ''} configurado{montos.length !== 1 ? 's' : ''}
-        </span>
-        <span style={{ color: '#E5E5E5' }}>·</span>
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-          {montos.filter(m => m.asignaciones.length === 0).length} sin asignar
-        </span>
+      {/* Tabs + Buscador */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-1" style={{ borderBottom: '2px solid #F3F4F6' }}>
+          {tabs.map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className="px-4 py-2 text-sm font-medium transition-colors relative"
+              style={{
+                fontFamily: 'var(--font-body)',
+                color: tab === t.id ? '#006B4E' : '#6B7280',
+                borderBottom: tab === t.id ? '2px solid #006B4E' : '2px solid transparent',
+                marginBottom: '-2px',
+                backgroundColor: 'transparent',
+              }}>
+              {t.label}
+              {t.id === 'sin-asignar' && montos.filter(m => m.asignaciones.length === 0).length > 0 && (
+                <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-xs"
+                  style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
+                  {montos.filter(m => m.asignaciones.length === 0).length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+        <div className="relative">
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
+          <input
+            type="text"
+            placeholder="Buscar por etiqueta..."
+            value={busqueda}
+            onChange={e => setBusqueda(e.target.value)}
+            className="pl-9 pr-4 py-2 rounded-lg text-sm"
+            style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '220px' }}
+          />
+        </div>
+      </div>
+
+      {/* Cabecera de tabla */}
+      <div className="grid px-5 py-2 mb-1" style={{ gridTemplateColumns: '1fr 140px 1fr 80px' }}>
+        {['ETIQUETA', 'VALOR', 'ASIGNACIONES', ''].map(col => (
+          <p key={col} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            {col}
+          </p>
+        ))}
       </div>
 
       {/* Lista */}
@@ -429,95 +544,73 @@ export function MontosReservaAdminView() {
             <DollarSign className="w-6 h-6" style={{ color: '#D1D5DB' }} />
           </div>
           <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: '#374151', marginBottom: '4px' }}>
-            {busqueda ? 'Sin resultados' : 'No hay montos configurados'}
+            {busqueda ? 'Sin resultados' : 'No hay valores configurados'}
           </p>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>
-            {busqueda ? 'Intenta con otro término.' : 'Agrega el primer monto de reserva.'}
+            {busqueda ? 'Intenta con otro término.' : 'Agrega el primer valor de reserva.'}
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-1">
           {filtrados.map(monto => {
             const isExpanded = expandedId === monto.id;
             return (
               <div key={monto.id} className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-                {/* Fila principal */}
-                <div className="flex items-center gap-4 px-5 py-4">
-                  {/* Ícono */}
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0FDF4' }}>
-                    <DollarSign className="w-5 h-5" style={{ color: '#006B4E' }} />
+                <div className="grid items-center px-5 py-4 gap-4" style={{ gridTemplateColumns: '1fr 140px 1fr 80px' }}>
+                  {/* Etiqueta */}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0FDF4' }}>
+                      <DollarSign className="w-4 h-4" style={{ color: '#006B4E' }} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {monto.etiqueta}
+                    </p>
                   </div>
 
-                  {/* Info principal */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}>
-                        {monto.etiqueta}
-                      </p>
-                      {monto.asignaciones.length === 0 && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
-                          Sin asignar
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
-                        ${Number(monto.montoCLP).toLocaleString('es-CL')}
-                      </span>
-                      <span style={{ color: '#D1D5DB' }}>·</span>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                        UF {monto.montoUF}
-                      </span>
-                    </div>
+                  {/* Valor */}
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#006B4E' }}>
+                      ${Number(monto.montoCLP).toLocaleString('es-CL')}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>UF {monto.montoUF}</p>
                   </div>
 
-                  {/* Asignaciones badge */}
+                  {/* Asignaciones */}
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : monto.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors hover:bg-gray-50"
-                    style={{ border: '1px solid #E5E5E5' }}
+                    className="flex items-center gap-1.5 hover:opacity-70 transition-opacity text-left"
                   >
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: monto.asignaciones.length > 0 ? '#006B4E' : '#9CA3AF' }}>
-                      {monto.asignaciones.length} publicación{monto.asignaciones.length !== 1 ? 'es' : ''}
+                    <Link className="w-3.5 h-3.5 flex-shrink-0" style={{ color: monto.asignaciones.length > 0 ? '#006B4E' : '#D1D5DB' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: monto.asignaciones.length > 0 ? '#374151' : '#9CA3AF' }}>
+                      {monto.asignaciones.length} asignacion{monto.asignaciones.length !== 1 ? 'es' : ''}
                     </span>
-                    {isExpanded
-                      ? <ChevronDown className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                      : <ChevronRight className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                    }
                   </button>
 
                   {/* Acciones */}
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <button
-                      onClick={() => setModalMonto(monto)}
-                      className="p-2 rounded-lg transition-colors hover:bg-gray-100"
-                      title="Editar"
-                    >
-                      <Edit2 className="w-4 h-4" style={{ color: '#6B7280' }} />
+                  <div className="flex items-center gap-1 justify-end">
+                    <button onClick={() => setModalMonto(monto)} className="p-1.5 rounded-lg transition-colors hover:bg-gray-100" title="Editar">
+                      <Edit2 className="w-3.5 h-3.5" style={{ color: '#6B7280' }} />
                     </button>
-                    <button
-                      onClick={() => setConfirmDelete(monto)}
-                      className="p-2 rounded-lg transition-colors hover:bg-red-50"
-                      title="Eliminar"
-                    >
-                      <Trash2 className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+                    <button onClick={() => setConfirmDelete(monto)} className="p-1.5 rounded-lg transition-colors hover:bg-red-50" title="Eliminar">
+                      <Trash2 className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                    </button>
+                    <button onClick={() => setExpandedId(isExpanded ? null : monto.id)} className="p-1.5 rounded-lg transition-colors hover:bg-gray-100">
+                      {isExpanded
+                        ? <ChevronDown className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                        : <ChevronRight className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />}
                     </button>
                   </div>
                 </div>
 
-                {/* Panel expandido: asignaciones */}
                 {isExpanded && (
                   <div style={{ borderTop: '1px solid #F3F4F6', backgroundColor: '#FAFAFA' }}>
                     {monto.asignaciones.length === 0 ? (
                       <div className="px-5 py-4 flex items-center gap-2">
                         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>
-                          No hay publicaciones asignadas a este monto.
+                          No hay publicaciones asignadas.
                         </p>
-                        <button
-                          onClick={() => setModalMonto(monto)}
-                          className="text-sm font-medium hover:underline"
-                          style={{ color: '#006B4E', fontFamily: 'var(--font-body)' }}
-                        >
+                        <button onClick={() => setModalMonto(monto)} className="text-sm font-medium hover:underline"
+                          style={{ color: '#006B4E', fontFamily: 'var(--font-body)' }}>
                           Asignar ahora
                         </button>
                       </div>
@@ -528,11 +621,8 @@ export function MontosReservaAdminView() {
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {monto.asignaciones.map(a => (
-                            <div
-                              key={a.id}
-                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-                              style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
-                            >
+                            <div key={a.id} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                              style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
                               <span className="px-1.5 py-0.5 rounded text-xs font-medium" style={{
                                 backgroundColor: a.tipo === 'parcela' ? '#EFF6FF' : '#F5F3FF',
                                 color: a.tipo === 'parcela' ? '#1E40AF' : '#5B21B6',
@@ -554,6 +644,16 @@ export function MontosReservaAdminView() {
             );
           })}
         </div>
+      )}
+
+      {/* Modal valor por defecto */}
+      {editandoDefault && (
+        <DefaultValueModal
+          montoCLP={defaultCLP}
+          montoUF={defaultUF}
+          onClose={() => setEditandoDefault(false)}
+          onGuardar={(clp, uf) => { setDefaultCLP(clp); setDefaultUF(uf); setEditandoDefault(false); }}
+        />
       )}
 
       {/* Modal crear/editar */}
