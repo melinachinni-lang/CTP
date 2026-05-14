@@ -1524,7 +1524,12 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
           {/* SECCIÓN: RESERVAS */}
           {activeNav === 'reservas' && (
-            <ReservasAdminView />
+            <>
+              <div className="rounded-2xl overflow-hidden mb-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                <MontosReservaAdminView />
+              </div>
+              <ReservasAdminView />
+            </>
           )}
 
           {/* SECCIÓN: WHATSAPP */}
