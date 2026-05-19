@@ -1005,8 +1005,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                               >
                                 {pub.status === 'published' ? (
                                   <>
-                                    <Pause className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
-                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }}>
+                                    <Pause className="w-4 h-4 flex-shrink-0" style={{ color: '#EF4444' }} />
+                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#EF4444', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }}>
                                       Pausar publicación
                                     </span>
                                   </>
@@ -1292,9 +1292,9 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                         <button
                           onClick={() => setShowPauseConfirm(pub.id)}
                           className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                          style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                          style={{ backgroundColor: '#FEF2F2', color: '#EF4444', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}
                         >
                           <Pause className="w-3.5 h-3.5" />
                           Pausar
