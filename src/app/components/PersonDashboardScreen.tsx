@@ -438,8 +438,8 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
           <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
             <div className="flex items-start justify-between gap-3 mb-3">
               <div className="flex items-start gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)', border: '1px solid rgba(0, 107, 78, 0.12)' }}>
-                  <MapPin className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
+                  <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=80&h=80&fit=crop&q=80" alt="Parcela Valle del Sol" className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0">
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
@@ -487,8 +487,8 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
           <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
             <div className="flex items-start justify-between gap-3 mb-3">
               <div className="flex items-start gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)', border: '1px solid rgba(0, 107, 78, 0.12)' }}>
-                  <MapPin className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
+                  <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=80&h=80&fit=crop&q=80" alt="Terreno El Refugio" className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0">
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
