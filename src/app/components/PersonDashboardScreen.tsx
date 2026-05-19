@@ -4246,32 +4246,8 @@ function SettingsContent() {
       {/* Grid inferior: Preferencias + Cuenta | Notificaciones */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
 
-        {/* Columna izquierda: Preferencias + Cuenta */}
+        {/* Columna izquierda: Cuenta + Preferencias */}
         <div className="space-y-5">
-          {/* Preferencias de búsqueda */}
-          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
-                <Search className="w-4 h-4" style={{ color: '#006B4E' }} />
-              </div>
-              <div>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-                  Preferencias de búsqueda
-                </h2>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '3px' }}>
-                  Configura tus criterios predeterminados
-                </p>
-              </div>
-            </div>
-            <button className="w-full py-2.5 px-4 rounded-full transition-all text-center"
-              style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
-            >
-              Configurar preferencias
-            </button>
-          </section>
-
           {/* Cuenta */}
           <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '8px' }}>
@@ -4306,6 +4282,30 @@ function SettingsContent() {
                 <ChevronRight className="w-4 h-4" style={{ color: '#FCA5A5' }} />
               </button>
             </div>
+          </section>
+
+          {/* Preferencias de búsqueda */}
+          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                <Search className="w-4 h-4" style={{ color: '#006B4E' }} />
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+                  Preferencias de búsqueda
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '3px' }}>
+                  Configura tus criterios predeterminados
+                </p>
+              </div>
+            </div>
+            <button className="w-full py-2.5 px-4 rounded-full transition-all text-center"
+              style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+            >
+              Configurar preferencias
+            </button>
           </section>
         </div>
 
