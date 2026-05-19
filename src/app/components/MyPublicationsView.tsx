@@ -1280,8 +1280,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                     <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
                       <button
                         onClick={() => handleEditPublication(pub)}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                        className="flex items-center gap-1.5 px-3 py-2 transition-colors"
+                        style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
                       >
@@ -1291,8 +1291,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                       {pub.status === 'published' && (
                         <button
                           onClick={() => setShowPauseConfirm(pub.id)}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                          style={{ backgroundColor: '#FEF2F2', color: '#EF4444', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                          className="flex items-center gap-1.5 px-3 py-2 transition-colors"
+                          style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
                           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'}
                           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}
                         >
@@ -1303,10 +1303,10 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                       {pub.status === 'paused' && (
                         <button
                           onClick={() => handleTogglePublicationStatus(pub.id)}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                          style={{ backgroundColor: '#EBFEF5', color: '#065F46', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#D1FAE5'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#EBFEF5'}
+                          className="flex items-center gap-1.5 px-3 py-2 transition-colors"
+                          style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '1.5px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#DCFCE7'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
                         >
                           <Play className="w-3.5 h-3.5" />
                           Volver a publicar

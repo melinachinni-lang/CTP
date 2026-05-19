@@ -4,7 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -477,12 +477,14 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Ver
               </button>
-              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                <Edit className="w-3.5 h-3.5 flex-shrink-0" />
                 Editar
               </button>
               <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '2px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FECACA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                <Pause className="w-3.5 h-3.5 flex-shrink-0" />
                 Pausar
               </button>
             </div>
@@ -528,18 +530,21 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Ver
               </button>
-              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                <Edit className="w-3.5 h-3.5 flex-shrink-0" />
                 Editar
               </button>
               {pub2Paused ? (
                 <button onClick={() => setPub2Paused(false)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '2px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DCFCE7'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}>
+                  <Play className="w-3.5 h-3.5 flex-shrink-0" />
                   Publicar
                 </button>
               ) : (
-                <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F5F5F5', color: '#525252', border: '2px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+                <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '2px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FECACA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                  <Pause className="w-3.5 h-3.5 flex-shrink-0" />
                   Pausar
                 </button>
               )}
