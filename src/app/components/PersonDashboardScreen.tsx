@@ -334,7 +334,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
   const slotsLibres = maxPublications - currentPublications;
 
   return (
-    <main className="px-4 py-6 space-y-5" style={{ maxWidth: '680px' }}>
+    <main className="px-6 py-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -422,7 +422,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       </div>
 
       {/* Parcelas */}
-      <section className="space-y-3">
+      <section className="space-y-4">
         <h2 style={{
           fontFamily: 'var(--font-heading)',
           fontWeight: 'var(--font-weight-medium)',
@@ -433,171 +433,173 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
           Tus parcelas
         </h2>
 
-        {/* Publicación 1 */}
-        <div className="rounded-xl p-4 sm:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="min-w-0">
-              <h3 style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'var(--font-size-h4)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A',
-                lineHeight: 'var(--line-height-heading)'
-              }}>
-                Parcela Valle del Sol
-              </h3>
-              <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
-                Lampa, RM · 6.000 m²
-              </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Publicación 1 */}
+          <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="min-w-0">
+                <h3 style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'var(--font-size-h4)',
+                  fontWeight: 'var(--font-weight-semibold)',
+                  color: '#0A0A0A',
+                  lineHeight: 'var(--line-height-heading)'
+                }}>
+                  Parcela Valle del Sol
+                </h3>
+                <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
+                  Lampa, RM · 6.000 m²
+                </p>
+              </div>
+              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
+                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+              </div>
             </div>
-            <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+
+            <div className="flex items-center gap-4 flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+              <div className="flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => onNavigate('parcela-detalle', 1)}
+                className="flex-1 py-2 px-3 transition-all" style={{
+                backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+                borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              >
+                Ver
+              </button>
+              <button className="flex-1 py-2 px-3 transition-all" style={{
+                backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+                borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              >
+                Editar
+              </button>
+              <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
+                backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
+                borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
+              >
+                <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+                Destacar
+              </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-5 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
-            <div className="flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
+          {/* Publicación 2 */}
+          <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="min-w-0">
+                <h3 style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'var(--font-size-h4)',
+                  fontWeight: 'var(--font-weight-semibold)',
+                  color: '#0A0A0A',
+                  lineHeight: 'var(--line-height-heading)'
+                }}>
+                  Terreno El Refugio
+                </h3>
+                <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
+                  Colina, RM · 3.500 m²
+                </p>
+              </div>
+              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
+                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
+
+            <div className="flex items-center gap-4 flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+              <div className="flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => onNavigate('parcela-detalle', 2)}
+                className="flex-1 py-2 px-3 transition-all" style={{
+                backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+                borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              >
+                Ver
+              </button>
+              <button className="flex-1 py-2 px-3 transition-all" style={{
+                backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+                borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              >
+                Editar
+              </button>
+              <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
+                backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
+                borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
+              >
+                <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+                Destacar
+              </button>
             </div>
           </div>
 
-          <div className="flex gap-2">
+          {/* Slot vacío */}
+          {canPublish && (
             <button
-              onClick={() => onNavigate('parcela-detalle', 1)}
-              className="flex-1 py-2 px-3 transition-all" style={{
-              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              onClick={() => {
+                setCurrentSection('listings');
+                setTriggerPublishModal(prev => prev + 1);
+              }}
+              className="rounded-xl p-4 flex flex-col items-center justify-center gap-3 transition-all"
+              style={{ border: '2px dashed #DEDEDE', backgroundColor: 'transparent', cursor: 'pointer', minHeight: '160px' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.borderColor = '#006B4E'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#DEDEDE'; }}
             >
-              Ver
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                <Plus className="w-5 h-5" style={{ color: '#006B4E' }} />
+              </div>
+              <div className="text-center">
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#006B4E' }}>
+                  Publicar nueva parcela
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3', marginTop: '4px' }}>
+                  {slotsLibres === 1 ? 'Tienes 1 espacio disponible' : `Tienes ${slotsLibres} espacios disponibles`}
+                </p>
+              </div>
             </button>
-            <button className="flex-1 py-2 px-3 transition-all" style={{
-              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-            >
-              Editar
-            </button>
-            <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
-              backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
-              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
-            >
-              <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-              Destacar
-            </button>
-          </div>
+          )}
         </div>
-
-        {/* Publicación 2 */}
-        <div className="rounded-xl p-4 sm:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="min-w-0">
-              <h3 style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'var(--font-size-h4)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A',
-                lineHeight: 'var(--line-height-heading)'
-              }}>
-                Terreno El Refugio
-              </h3>
-              <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
-                Colina, RM · 3.500 m²
-              </p>
-            </div>
-            <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-5 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
-            <div className="flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={() => onNavigate('parcela-detalle', 2)}
-              className="flex-1 py-2 px-3 transition-all" style={{
-              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-            >
-              Ver
-            </button>
-            <button className="flex-1 py-2 px-3 transition-all" style={{
-              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-            >
-              Editar
-            </button>
-            <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
-              backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
-              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
-            >
-              <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-              Destacar
-            </button>
-          </div>
-        </div>
-
-        {/* Slot vacío */}
-        {canPublish && (
-          <button
-            onClick={() => {
-              setCurrentSection('listings');
-              setTriggerPublishModal(prev => prev + 1);
-            }}
-            className="w-full rounded-xl p-4 sm:p-5 flex items-center gap-4 transition-all"
-            style={{ border: '2px dashed #DEDEDE', backgroundColor: 'transparent', cursor: 'pointer' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.borderColor = '#006B4E'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#DEDEDE'; }}
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
-              <Plus className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="text-left">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#006B4E' }}>
-                Publicar nueva parcela
-              </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3', marginTop: '2px' }}>
-                {slotsLibres === 1 ? 'Tienes 1 espacio disponible' : `Tienes ${slotsLibres} espacios disponibles`}
-              </p>
-            </div>
-          </button>
-        )}
       </section>
     </main>
   );
