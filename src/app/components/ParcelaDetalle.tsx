@@ -20,36 +20,31 @@ function OwnershipTooltip({ valor }: { valor: string }) {
   const [show, setShow] = React.useState(false);
 
   const tooltipMap: Record<string, string> = {
-    'Primer dueño': 'Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
-    'Segundo dueño': 'Esta parcela tuvo un propietario anterior.',
-    'Tercer dueño': 'Esta parcela ha tenido dos propietarios anteriores.',
-    'Cuarto dueño': 'Esta parcela ha tenido tres o más propietarios en el tiempo.',
+    'Primer dueño': 'Primer dueño · Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
+    'Segundo dueño': 'Segundo dueño · Esta parcela tuvo un propietario anterior.',
+    'Tercer dueño': 'Tercer dueño · Esta parcela ha tenido dos propietarios anteriores.',
+    'Cuarto dueño': 'Cuarto dueño · Esta parcela ha tenido tres o más propietarios en el tiempo.',
   };
-  const tooltip = tooltipMap[valor] ?? 'Historial de propiedad de esta parcela.';
+  const tooltip = tooltipMap[valor] ?? valor;
 
   return (
-    <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full"
-      style={{ backgroundColor: '#F5F5F0', border: '1px solid #E5E5E0' }}>
-      <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E]">
-        <FileBadge className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
-      </div>
+    <div className="relative inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full cursor-default"
+      style={{ backgroundColor: '#F5F5F0', border: '1px solid #E5E5E0' }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}>
+      <Info className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#006B4E' }} />
       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#525252', fontWeight: 'var(--font-weight-medium)' }}>
-        {valor}
+        Historial de propiedad
       </span>
-      <div className="relative flex items-center"
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}>
-        <Info className="w-3 h-3 cursor-pointer" style={{ color: '#A3A3A3' }} />
-        {show && (
-          <div className="absolute z-50 rounded-xl p-3 shadow-lg"
-            style={{ bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', width: '220px', backgroundColor: '#0A0A0A' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#FFFFFF', lineHeight: '1.5' }}>
-              {tooltip}
-            </p>
-            <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '5px solid #0A0A0A' }} />
-          </div>
-        )}
-      </div>
+      {show && (
+        <div className="absolute z-50 rounded-xl p-3 shadow-lg"
+          style={{ bottom: 'calc(100% + 8px)', left: '0', width: '240px', backgroundColor: '#0A0A0A' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#FFFFFF', lineHeight: '1.6' }}>
+            {tooltip}
+          </p>
+          <div style={{ position: 'absolute', top: '100%', left: '16px', width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '5px solid #0A0A0A' }} />
+        </div>
+      )}
     </div>
   );
 }
