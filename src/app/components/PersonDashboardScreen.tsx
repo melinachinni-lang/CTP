@@ -328,27 +328,17 @@ interface HomeContentProps {
 }
 
 function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentProps) {
-  const maxPublications = 3; // Límite de publicaciones para usuarios persona natural
+  const maxPublications = 3;
   const currentPublications = 2;
   const canPublish = currentPublications < maxPublications;
-
-  // Datos simulados para el gráfico
-  const interestData = [
-    { date: '1 Feb', views: 45 },
-    { date: '5 Feb', views: 52 },
-    { date: '10 Feb', views: 67 },
-    { date: '15 Feb', views: 78 },
-    { date: '20 Feb', views: 89 },
-    { date: '25 Feb', views: 95 },
-    { date: '28 Feb', views: 108 },
-  ];
+  const slotsLibres = maxPublications - currentPublications;
 
   return (
-    <main className="px-8 py-8 space-y-8">
+    <main className="px-4 py-6 space-y-5" style={{ maxWidth: '680px' }}>
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 style={{ 
+          <h1 style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 'var(--font-weight-regular)',
             fontSize: 'var(--font-size-h2)',
@@ -357,611 +347,257 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
           }}>
             Mis publicaciones
           </h1>
-          <p style={{ 
+          <p style={{
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-base)',
             color: '#737373',
-            marginTop: '8px'
+            marginTop: '6px'
           }}>
-            Gestiona tus parcelas y revisa el interés generado
+            Gestiona tus parcelas publicadas
           </p>
         </div>
-
-        <div className="flex gap-3">
-          <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            border: '2px solid #DEDEDE',
+        <button
+          disabled={!canPublish}
+          onClick={() => {
+            setCurrentSection('listings');
+            setTriggerPublishModal(prev => prev + 1);
+          }}
+          className="flex items-center justify-center gap-2 py-2.5 px-5 transition-all self-start sm:self-auto flex-shrink-0"
+          style={{
+            backgroundColor: canPublish ? '#006B4E' : '#F5F5F5',
+            color: canPublish ? '#FFFFFF' : '#A3A3A3',
             borderRadius: '200px',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-sm)',
             fontWeight: 'var(--font-weight-medium)',
             letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
+            lineHeight: 'var(--line-height-ui)',
+            cursor: canPublish ? 'pointer' : 'not-allowed',
+            whiteSpace: 'nowrap'
           }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-          >
-            <Edit className="w-4 h-4" />
-            Editar publicaciones
-          </button>
-          <button 
-            disabled={!canPublish}
-            onClick={() => {
-              setCurrentSection('listings');
-              setTriggerPublishModal(prev => prev + 1);
-            }}
-            className="py-2.5 px-5 flex items-center gap-2 transition-all" 
-            style={{ 
-              backgroundColor: canPublish ? '#006B4E' : '#F5F5F5',
-              color: canPublish ? '#FFFFFF' : '#A3A3A3',
-              borderRadius: '200px',
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)',
-              letterSpacing: 'var(--letter-spacing-wide)',
-              lineHeight: 'var(--line-height-ui)',
-              cursor: canPublish ? 'pointer' : 'not-allowed'
-            }}
-            onMouseEnter={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-          >
-            <Plus className="w-4 h-4" />
-            Nueva publicación
-          </button>
+          onMouseEnter={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#01533E'; }}
+          onMouseLeave={(e) => { if (canPublish) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+        >
+          <Plus className="w-4 h-4 flex-shrink-0" />
+          Nueva publicación
+        </button>
+      </div>
+
+      {/* Resumen: slots + stats */}
+      <div className="rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: maxPublications }).map((_, i) => (
+              <div key={i} className="w-3 h-3 rounded-full" style={{
+                backgroundColor: i < currentPublications ? '#006B4E' : '#E5E5E5'
+              }} />
+            ))}
+          </div>
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>
+              {currentPublications} de {maxPublications} publicaciones usadas
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
+              {canPublish
+                ? `${slotsLibres === 1 ? 'Tienes 1 espacio disponible' : `Tienes ${slotsLibres} espacios disponibles`}`
+                : 'Alcanzaste el límite gratuito'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-1.5">
+            <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>347</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>vistas</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <MessageCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>12</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>consultas</span>
+            <span className="px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#462611' }}>2 nuevas</span>
+          </div>
         </div>
       </div>
 
-      {/* Límite de publicaciones info */}
-      <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
-        <Info className="w-5 h-5 flex-shrink-0" style={{ color: '#CA8A04', marginTop: '2px' }} />
-        <div>
-          <p style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            color: '#0A0A0A',
-            lineHeight: '1.5'
-          }}>
-            <strong>Tienes {currentPublications} de {maxPublications} publicaciones activas.</strong>
-            {!canPublish && ' Has alcanzado el límite de publicaciones gratuitas.'}
-          </p>
-          <p style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            color: '#6B6B6B',
-            marginTop: '4px',
-            lineHeight: '1.5'
-          }}>
-            Puedes destacar tus publicaciones para aumentar su visibilidad por un pago único.
-          </p>
-        </div>
-      </div>
-
-      {/* KPIs Section */}
-      <section className="grid grid-cols-4 gap-6">
-        {/* Publicaciones activas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Publicaciones activas
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              {currentPublications}
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              de {maxPublications} disponibles
-            </div>
-          </div>
-        </div>
-        
-        {/* Visualizaciones totales */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +18%
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Visualizaciones
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              347
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Últimos 30 días
-            </div>
-          </div>
-        </div>
-        
-        {/* Consultas recibidas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
-              <AlertCircle className="w-3 h-3" style={{ color: '#462611' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#462611' }}>
-                2 nuevas
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Consultas recibidas
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              12
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Últimos 30 días
-            </div>
-          </div>
-        </div>
-        
-        {/* Publicaciones destacadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Star className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Destacadas
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              0
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Ninguna actualmente
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Gráfico de interés */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <h2 style={{ 
+      {/* Parcelas */}
+      <section className="space-y-3">
+        <h2 style={{
           fontFamily: 'var(--font-heading)',
           fontWeight: 'var(--font-weight-medium)',
           fontSize: 'var(--font-size-h3)',
           lineHeight: 'var(--line-height-heading)',
           color: '#0A0A0A'
         }}>
-          Interés en tus publicaciones
+          Tus parcelas
         </h2>
-        <div style={{ width: '100%', height: '280px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={interestData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#CDD8DE" />
-              <XAxis 
-                dataKey="date" 
-                style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-              />
-              <YAxis 
-                style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#FFFFFF', 
-                  border: '1px solid #CDD8DE', 
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontFamily: 'var(--font-body)'
-                }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="views" 
-                stroke="#006B4E" 
-                strokeWidth={3}
-                dot={{ fill: '#006B4E', r: 4 }}
-                activeDot={{ r: 6, fill: '#006B4E' }}
-                name="Visualizaciones"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <p style={{ 
-          fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-sm)',
-          color: '#737373',
-          lineHeight: '1.5'
-        }}>
-          Este gráfico muestra las visualizaciones de todas tus publicaciones en los últimos 30 días.
-        </p>
-      </section>
 
-      {/* Lista de publicaciones */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-center justify-between">
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h3)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Tus parcelas publicadas
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {/* Publicación 1 */}
-          <div className="rounded-xl p-5 transition-all cursor-pointer" style={{ border: '1px solid #E5E5E5' }}
-            onMouseEnter={(e) => { 
-              e.currentTarget.style.backgroundColor = '#FAFAFA'; 
-              e.currentTarget.style.borderColor = '#DEDEDE';
-            }}
-            onMouseLeave={(e) => { 
-              e.currentTarget.style.backgroundColor = 'transparent'; 
-              e.currentTarget.style.borderColor = '#E5E5E5';
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 style={{ 
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'var(--font-size-h4)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-heading)'
-                }}>
-                  Parcela Valle del Sol
-                </h3>
-                <p style={{ 
-                  fontSize: 'var(--font-size-body-sm)',
-                  color: '#737373',
-                  marginTop: '4px'
-                }}>
-                  Lampa, Región Metropolitana • 6.000 m²
-                </p>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-                <span style={{ 
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#647E3F',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}>
-                  Activa
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-6 mb-4">
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4" style={{ color: '#737373' }} />
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    234
-                  </div>
-                  <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-                    Visualizaciones
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4" style={{ color: '#737373' }} />
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    8
-                  </div>
-                  <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-                    Consultas
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="w-4 h-4" style={{ color: '#737373' }} />
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    No destacada
-                  </div>
-                  <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-                    Visibilidad estándar
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <button 
-                onClick={() => onNavigate('parcela-detalle', 1)}
-                className="flex-1 py-2 px-4 transition-all" style={{ 
-                backgroundColor: '#FFFFFF',
+        {/* Publicación 1 */}
+        <div className="rounded-xl p-4 sm:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="min-w-0">
+              <h3 style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'var(--font-size-h4)',
+                fontWeight: 'var(--font-weight-semibold)',
                 color: '#0A0A0A',
-                border: '2px solid #DEDEDE',
-                borderRadius: '200px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                letterSpacing: 'var(--letter-spacing-wide)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                Ver publicación
-              </button>
-              <button className="flex-1 py-2 px-4 transition-all" style={{ 
-                backgroundColor: '#FFFFFF',
-                color: '#0A0A0A',
-                border: '2px solid #DEDEDE',
-                borderRadius: '200px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                letterSpacing: 'var(--letter-spacing-wide)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                Editar
-              </button>
-              <button className="flex-1 py-2 px-4 flex items-center justify-center gap-2 transition-all" style={{ 
-                backgroundColor: '#FEF3C7',
-                color: '#CA8A04',
-                border: '2px solid #FDE68A',
-                borderRadius: '200px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                letterSpacing: 'var(--letter-spacing-wide)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
-              >
-                <Zap className="w-4 h-4" />
-                Destacar
-              </button>
+                lineHeight: 'var(--line-height-heading)'
+              }}>
+                Parcela Valle del Sol
+              </h3>
+              <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
+                Lampa, RM · 6.000 m²
+              </p>
+            </div>
+            <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
             </div>
           </div>
 
-          {/* Publicación 2 */}
-          <div className="rounded-xl p-5 transition-all cursor-pointer" style={{ border: '1px solid #E5E5E5' }}
-            onMouseEnter={(e) => { 
-              e.currentTarget.style.backgroundColor = '#FAFAFA'; 
-              e.currentTarget.style.borderColor = '#DEDEDE';
-            }}
-            onMouseLeave={(e) => { 
-              e.currentTarget.style.backgroundColor = 'transparent'; 
-              e.currentTarget.style.borderColor = '#E5E5E5';
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 style={{ 
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'var(--font-size-h4)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-heading)'
-                }}>
-                  Terreno El Refugio
-                </h3>
-                <p style={{ 
-                  fontSize: 'var(--font-size-body-sm)',
-                  color: '#737373',
-                  marginTop: '4px'
-                }}>
-                  Colina, Región Metropolitana • 3.500 m²
-                </p>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-                <span style={{ 
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#647E3F',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}>
-                  Activa
-                </span>
-              </div>
+          <div className="flex items-center gap-5 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+            <div className="flex items-center gap-1.5">
+              <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
             </div>
-
-            <div className="grid grid-cols-3 gap-6 mb-4">
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4" style={{ color: '#737373' }} />
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    113
-                  </div>
-                  <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-                    Visualizaciones
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4" style={{ color: '#737373' }} />
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    4
-                  </div>
-                  <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-                    Consultas
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="w-4 h-4" style={{ color: '#737373' }} />
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    No destacada
-                  </div>
-                  <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-                    Visibilidad estándar
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <button 
-                onClick={() => onNavigate('parcela-detalle', 2)}
-                className="flex-1 py-2 px-4 transition-all" style={{ 
-                backgroundColor: '#FFFFFF',
-                color: '#0A0A0A',
-                border: '2px solid #DEDEDE',
-                borderRadius: '200px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                letterSpacing: 'var(--letter-spacing-wide)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                Ver publicación
-              </button>
-              <button className="flex-1 py-2 px-4 transition-all" style={{ 
-                backgroundColor: '#FFFFFF',
-                color: '#0A0A0A',
-                border: '2px solid #DEDEDE',
-                borderRadius: '200px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                letterSpacing: 'var(--letter-spacing-wide)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                Editar
-              </button>
-              <button className="flex-1 py-2 px-4 flex items-center justify-center gap-2 transition-all" style={{ 
-                backgroundColor: '#FEF3C7',
-                color: '#CA8A04',
-                border: '2px solid #FDE68A',
-                borderRadius: '200px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                letterSpacing: 'var(--letter-spacing-wide)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
-              >
-                <Zap className="w-4 h-4" />
-                Destacar
-              </button>
+            <div className="flex items-center gap-1.5">
+              <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
             </div>
           </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => onNavigate('parcela-detalle', 1)}
+              className="flex-1 py-2 px-3 transition-all" style={{
+              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              Ver
+            </button>
+            <button className="flex-1 py-2 px-3 transition-all" style={{
+              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              Editar
+            </button>
+            <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
+              backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
+              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
+            >
+              <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+              Destacar
+            </button>
+          </div>
         </div>
+
+        {/* Publicación 2 */}
+        <div className="rounded-xl p-4 sm:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="min-w-0">
+              <h3 style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'var(--font-size-h4)',
+                fontWeight: 'var(--font-weight-semibold)',
+                color: '#0A0A0A',
+                lineHeight: 'var(--line-height-heading)'
+              }}>
+                Terreno El Refugio
+              </h3>
+              <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
+                Colina, RM · 3.500 m²
+              </p>
+            </div>
+            <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-5 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+            <div className="flex items-center gap-1.5">
+              <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+              <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => onNavigate('parcela-detalle', 2)}
+              className="flex-1 py-2 px-3 transition-all" style={{
+              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              Ver
+            </button>
+            <button className="flex-1 py-2 px-3 transition-all" style={{
+              backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
+              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              Editar
+            </button>
+            <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
+              backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
+              borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+              fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
+            >
+              <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+              Destacar
+            </button>
+          </div>
+        </div>
+
+        {/* Slot vacío */}
+        {canPublish && (
+          <button
+            onClick={() => {
+              setCurrentSection('listings');
+              setTriggerPublishModal(prev => prev + 1);
+            }}
+            className="w-full rounded-xl p-4 sm:p-5 flex items-center gap-4 transition-all"
+            style={{ border: '2px dashed #DEDEDE', backgroundColor: 'transparent', cursor: 'pointer' }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.borderColor = '#006B4E'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#DEDEDE'; }}
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+              <Plus className="w-5 h-5" style={{ color: '#006B4E' }} />
+            </div>
+            <div className="text-left">
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#006B4E' }}>
+                Publicar nueva parcela
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3', marginTop: '2px' }}>
+                {slotsLibres === 1 ? 'Tienes 1 espacio disponible' : `Tienes ${slotsLibres} espacios disponibles`}
+              </p>
+            </div>
+          </button>
+        )}
       </section>
     </main>
   );
