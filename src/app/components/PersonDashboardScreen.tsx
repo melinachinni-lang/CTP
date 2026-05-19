@@ -4,7 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -4007,7 +4007,7 @@ function SettingsContent() {
   const canSave = editNombre.trim().length > 0;
 
   return (
-    <main className="px-6 py-6 space-y-6">
+    <main className="px-4 py-6 sm:px-6 space-y-5">
       {/* Toast éxito */}
       {showSuccess && (
         <div className="fixed bottom-6 left-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', minWidth: '260px' }}>
@@ -4018,19 +4018,20 @@ function SettingsContent() {
         </div>
       )}
 
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
             Configuración
           </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', lineHeight: 'var(--line-height-body)' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B' }}>
             Administra tu cuenta y preferencias
           </p>
         </div>
         {!isEditing && (
           <button
             onClick={handleStartEdit}
-            className="flex items-center gap-2 px-4 py-2 rounded-full transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-full transition-all flex-shrink-0"
             style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: '1px solid #E5E5E5' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
@@ -4043,28 +4044,28 @@ function SettingsContent() {
         )}
       </div>
 
-      {/* Información de perfil */}
-      <section className="bg-white border-2 p-8 space-y-6 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]" style={{ borderColor: isEditing ? '#006B4E' : '#E5E5E5' }}>
+      {/* Información de perfil — ancho completo */}
+      <section className="rounded-2xl p-5 space-y-5" style={{ backgroundColor: '#FFFFFF', border: isEditing ? '1px solid #006B4E' : '1px solid #E5E5E5' }}>
         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
           Información de perfil
         </h2>
 
         {/* Avatar */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
           <div className="relative flex-shrink-0">
             <div
               onClick={() => { if (isEditing) avatarInputRef.current?.click(); }}
-              className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
+              className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center"
               style={{ backgroundColor: '#006B4E', cursor: isEditing ? 'pointer' : 'default', position: 'relative' }}
             >
               {(isEditing ? editAvatarPreview : avatarPreview) ? (
                 <img src={(isEditing ? editAvatarPreview : avatarPreview)!} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
-                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 600, color: '#FFFFFF' }}>{getInitials(nombre)}</span>
+                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 600, color: '#FFFFFF' }}>{getInitials(nombre)}</span>
               )}
               {isEditing && (
                 <div className="absolute inset-0 flex items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
-                  <svg viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'none', stroke: '#FFFFFF', strokeWidth: 2 }}>
+                  <svg viewBox="0 0 24 24" style={{ width: '18px', height: '18px', fill: 'none', stroke: '#FFFFFF', strokeWidth: 2 }}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -4077,55 +4078,74 @@ function SettingsContent() {
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}>{nombre}</p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '2px' }}>Cuenta personal</p>
             {isEditing && (
-              <button onClick={() => avatarInputRef.current?.click()} className="mt-2 text-xs underline" style={{ color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                Cambiar foto de perfil
+              <button onClick={() => avatarInputRef.current?.click()} className="mt-1.5 text-xs underline" style={{ color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                Cambiar foto
               </button>
             )}
-            {isEditing && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>JPG, PNG o WEBP · Máximo 5 MB</p>}
+            {isEditing && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>JPG, PNG o WEBP · Máx. 5 MB</p>}
           </div>
         </div>
 
-        <div className="space-y-4">
+        {/* Campos — 2 columnas en desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Nombre */}
           <div>
             <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
               Nombre completo {isEditing && <span style={{ color: '#DC2626' }}>*</span>}
             </label>
             {isEditing ? (
-              <input
-                type="text"
-                value={editNombre}
-                onChange={e => setEditNombre(e.target.value)}
+              <input type="text" value={editNombre} onChange={e => setEditNombre(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl text-sm"
                 style={{ border: `1px solid ${editNombre.trim() ? '#E5E5E5' : '#FCA5A5'}`, backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
               />
             ) : (
-              <div
-                onClick={handleStartEdit}
-                className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
+              <div onClick={handleStartEdit} className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
                 style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              >
-                {nombre}
-              </div>
+              >{nombre}</div>
             )}
           </div>
 
-          {/* Email (bloqueado) */}
+          {/* Teléfono */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+              Teléfono
+            </label>
+            {isEditing ? (
+              <div className="flex gap-2">
+                <select value={phoneCode} onChange={e => setPhoneCode(e.target.value)}
+                  className="px-2 py-2.5 rounded-xl text-sm"
+                  style={{ width: '110px', flexShrink: 0, border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', outline: 'none' }}
+                >
+                  {phoneCodes.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <input type="tel" value={editTelefono} onChange={e => setEditTelefono(e.target.value)} placeholder="9 1234 5678"
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+                />
+              </div>
+            ) : (
+              <div onClick={handleStartEdit} className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
+                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: telefono ? '#0A0A0A' : '#9CA3AF' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              >{telefono ? `${phoneCode} ${telefono}` : 'Sin teléfono'}</div>
+            )}
+          </div>
+
+          {/* Email */}
           <div>
             <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
               Correo electrónico
             </label>
             <div className="relative">
-              <div
-                onMouseEnter={() => setShowEmailTooltip(true)}
-                onMouseLeave={() => setShowEmailTooltip(false)}
+              <div onMouseEnter={() => setShowEmailTooltip(true)} onMouseLeave={() => setShowEmailTooltip(false)}
                 className="px-4 py-2.5 rounded-xl flex items-center justify-between"
                 style={{ backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', cursor: 'not-allowed' }}
               >
                 <span>{email}</span>
-                <svg viewBox="0 0 24 24" style={{ width: '15px', height: '15px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2, flexShrink: 0 }}>
+                <svg viewBox="0 0 24 24" style={{ width: '14px', height: '14px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2, flexShrink: 0 }}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
@@ -4137,52 +4157,13 @@ function SettingsContent() {
             </div>
           </div>
 
-          {/* Teléfono */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              Teléfono
-            </label>
-            {isEditing ? (
-              <div className="flex gap-2">
-                <select
-                  value={phoneCode}
-                  onChange={e => setPhoneCode(e.target.value)}
-                  className="px-2 py-2.5 rounded-xl text-sm"
-                  style={{ width: '110px', flexShrink: 0, border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', outline: 'none' }}
-                >
-                  {phoneCodes.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-                <input
-                  type="tel"
-                  value={editTelefono}
-                  onChange={e => setEditTelefono(e.target.value)}
-                  placeholder="9 1234 5678"
-                  className="flex-1 px-4 py-2.5 rounded-xl text-sm"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-                />
-              </div>
-            ) : (
-              <div
-                onClick={handleStartEdit}
-                className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
-                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: telefono ? '#0A0A0A' : '#9CA3AF' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              >
-                {telefono ? `${phoneCode} ${telefono}` : 'Sin teléfono — clic para agregar'}
-              </div>
-            )}
-          </div>
-
           {/* Región */}
           <div>
             <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
               Región
             </label>
             {isEditing ? (
-              <select
-                value={editRegion}
-                onChange={e => setEditRegion(e.target.value)}
+              <select value={editRegion} onChange={e => setEditRegion(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl text-sm"
                 style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
               >
@@ -4190,24 +4171,19 @@ function SettingsContent() {
                 {regiones.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
             ) : (
-              <div
-                onClick={handleStartEdit}
-                className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
+              <div onClick={handleStartEdit} className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
                 style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: region ? '#0A0A0A' : '#9CA3AF' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              >
-                {region || 'Sin especificar'}
-              </div>
+              >{region || 'Sin especificar'}</div>
             )}
           </div>
         </div>
 
-        {/* Sección contraseña — solo cuentas email, solo en modo edición */}
+        {/* Contraseña */}
         {!isGoogleAccount && isEditing && (
           <div>
-            <button
-              onClick={() => setShowPasswordSection(!showPasswordSection)}
+            <button onClick={() => setShowPasswordSection(!showPasswordSection)}
               className="flex items-center gap-2 text-sm"
               style={{ color: '#006B4E', fontFamily: 'var(--font-body)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
             >
@@ -4216,7 +4192,6 @@ function SettingsContent() {
               </svg>
               Cambiar contraseña
             </button>
-
             {showPasswordSection && (
               <div className="mt-4 space-y-3 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
                 {[
@@ -4227,10 +4202,7 @@ function SettingsContent() {
                   <div key={label}>
                     <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>{label}</label>
                     <div className="relative">
-                      <input
-                        type={show ? 'text' : 'password'}
-                        value={value}
-                        onChange={e => setter(e.target.value)}
+                      <input type={show ? 'text' : 'password'} value={value} onChange={e => setter(e.target.value)}
                         className="w-full px-4 py-2.5 pr-10 rounded-xl text-sm"
                         style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
                       />
@@ -4250,22 +4222,17 @@ function SettingsContent() {
           </div>
         )}
 
-        {/* Botones Guardar / Cancelar */}
+        {/* Guardar / Cancelar */}
         {isEditing && (
-          <div className="flex gap-3 pt-2">
-            <button
-              onClick={handleCancel}
-              className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
+          <div className="flex gap-3 pt-1">
+            <button onClick={handleCancel} className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
               style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
             >
               Cancelar
             </button>
-            <button
-              onClick={handleSave}
-              disabled={!canSave}
-              className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+            <button onClick={handleSave} disabled={!canSave} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
               style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: canSave ? 'pointer' : 'not-allowed' }}
               onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
@@ -4276,231 +4243,103 @@ function SettingsContent() {
         )}
       </section>
 
-      {/* Preferences */}
-      <section className="bg-white border-2 border-gray-200 p-8 space-y-5 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-        <h2 
-          style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'var(--font-size-h3)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-heading)',
-            letterSpacing: 'var(--letter-spacing-normal)'
-          }}
-        >
-          Preferencias de búsqueda
-        </h2>
-        <p 
-          style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: '14px',
-            fontWeight: 'var(--font-weight-regular)',
-            color: '#6B6B6B',
-            lineHeight: 'var(--line-height-body)'
-          }}
-        >
-          Configura tus criterios de búsqueda predeterminados
-        </p>
-        <button 
-          className="w-full bg-white hover:bg-gray-50 text-black py-3.5 px-8 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-medium)',
-            lineHeight: 'var(--line-height-body)',
-            color: '#0A0A0A'
-          }}
-        >
-          Configurar preferencias
-        </button>
-      </section>
+      {/* Grid inferior: Notificaciones | Preferencias + Cuenta */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
 
-      {/* Notifications */}
-      <section className="bg-white border-2 border-gray-200 p-8 space-y-5 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-        <h2 
-          style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'var(--font-size-h3)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-heading)',
-            letterSpacing: 'var(--letter-spacing-normal)'
-          }}
-        >
-          Notificaciones
-        </h2>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between border-2 border-gray-200 p-5 rounded-[12px]">
-            <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Consultas y visitas por correo
+        {/* Notificaciones */}
+        <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '16px' }}>
+            Notificaciones
+          </h2>
+          <div style={{ borderTop: '1px solid #F5F5F5' }}>
+            {[
+              { label: 'Consultas y visitas por correo', desc: 'Recibir notificaciones al email sobre nuevas consultas', toggle: true, active: emailNotifConsultas, onToggle: () => setEmailNotifConsultas(v => !v) },
+              { label: 'Nuevas parcelas', desc: 'Recibir alertas de nuevas publicaciones', toggle: false },
+              { label: 'Cambios de precio', desc: 'Notificar si cambia el precio de favoritos', toggle: false },
+              { label: 'Consejos y recomendaciones', desc: 'Recibir tips para compradores', toggle: false },
+            ].map(item => (
+              <div key={item.label} className="flex items-center justify-between py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
+                <div className="pr-4">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{item.label}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>{item.desc}</p>
+                </div>
+                {item.toggle ? (
+                  <button onClick={item.onToggle} className="flex-shrink-0 w-11 h-6 rounded-full transition-colors relative" style={{ backgroundColor: item.active ? '#006B4E' : '#D1D5DB', minWidth: 44 }}>
+                    <div className="w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-all" style={{ left: item.active ? 'calc(100% - 20px)' : 4 }} />
+                  </button>
+                ) : (
+                  <div className="flex-shrink-0 w-11 h-6 rounded-full" style={{ backgroundColor: '#E5E5E5', minWidth: 44 }}>
+                    <div className="w-4 h-4 bg-white rounded-full shadow mt-1 ml-1" />
+                  </div>
+                )}
               </div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#6B6B6B',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Recibir notificaciones al email sobre nuevas consultas
+            ))}
+          </div>
+        </section>
+
+        {/* Columna derecha: Preferencias + Cuenta */}
+        <div className="space-y-5">
+          {/* Preferencias de búsqueda */}
+          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                <Search className="w-4 h-4" style={{ color: '#006B4E' }} />
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+                  Preferencias de búsqueda
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '3px' }}>
+                  Configura tus criterios predeterminados
+                </p>
               </div>
             </div>
-            <button
-              onClick={() => setEmailNotifConsultas(v => !v)}
-              className="flex-shrink-0 w-12 h-6 rounded-full transition-colors relative"
-              style={{ backgroundColor: emailNotifConsultas ? '#006B4E' : '#D1D5DB', minWidth: 48 }}
+            <button className="w-full py-2.5 px-4 rounded-full transition-all text-center"
+              style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
             >
-              <div
-                className="w-5 h-5 bg-white rounded-full shadow transition-transform absolute top-0.5"
-                style={{ left: emailNotifConsultas ? 'calc(100% - 22px)' : 2 }}
-              />
+              Configurar preferencias
             </button>
-          </div>
-          <div className="flex items-center justify-between border-2 border-gray-200 p-5 rounded-[12px]">
-            <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Nuevas parcelas
-              </div>
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#6B6B6B',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Recibir alertas de nuevas publicaciones
-              </div>
-            </div>
-            <div className="w-12 h-6 bg-gray-200 rounded-full"></div>
-          </div>
-          <div className="flex items-center justify-between border-2 border-gray-200 p-5 rounded-[12px]">
-            <div>
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Cambios de precio
-              </div>
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#6B6B6B',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Notificar si cambia el precio de favoritos
-              </div>
-            </div>
-            <div className="w-12 h-6 bg-gray-200 rounded-full"></div>
-          </div>
-          <div className="flex items-center justify-between border-2 border-gray-200 p-5 rounded-[12px]">
-            <div>
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Consejos y recomendaciones
-              </div>
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#6B6B6B',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Recibir tips para compradores
-              </div>
-            </div>
-            <div className="w-12 h-6 bg-gray-200 rounded-full"></div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Account Actions */}
-      <section className="bg-white border-2 border-gray-200 p-8 space-y-4 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-        <h2 
-          style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'var(--font-size-h3)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-heading)',
-            letterSpacing: 'var(--letter-spacing-normal)'
-          }}
-        >
-          Cuenta
-        </h2>
-        <button 
-          className="w-full text-left py-4 px-5 border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-[12px] transition-colors"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-regular)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-body)'
-          }}
-        >
-          Cambiar contraseña
-        </button>
-        <button 
-          className="w-full text-left py-4 px-5 border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-[12px] transition-colors"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-regular)',
-            color: '#0A0A0A',
-            lineHeight: 'var(--line-height-body)'
-          }}
-        >
-          Privacidad y datos
-        </button>
-        <button 
-          className="w-full text-left py-4 px-5 border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-[12px] transition-colors"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-regular)',
-            color: '#6B6B6B',
-            lineHeight: 'var(--line-height-body)'
-          }}
-        >
-          Cerrar sesión
-        </button>
-      </section>
+          {/* Cuenta */}
+          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '8px' }}>
+              Cuenta
+            </h2>
+            <div style={{ borderTop: '1px solid #F5F5F5' }}>
+              {[
+                { label: 'Cambiar contraseña', icon: <Lock className="w-4 h-4" />, color: '#374151' },
+                { label: 'Privacidad y datos', icon: <Shield className="w-4 h-4" />, color: '#374151' },
+              ].map(item => (
+                <button key={item.label} className="w-full flex items-center justify-between py-3.5 transition-colors"
+                  style={{ borderBottom: '1px solid #F5F5F5', background: 'none', cursor: 'pointer' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <div className="flex items-center gap-3">
+                    <span style={{ color: '#737373' }}>{item.icon}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: item.color }}>{item.label}</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4" style={{ color: '#A3A3A3' }} />
+                </button>
+              ))}
+              <button className="w-full flex items-center justify-between py-3.5 transition-colors"
+                style={{ background: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <div className="flex items-center gap-3">
+                  <LogOut className="w-4 h-4" style={{ color: '#EF4444' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#EF4444' }}>Cerrar sesión</span>
+                </div>
+                <ChevronRight className="w-4 h-4" style={{ color: '#FCA5A5' }} />
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   );
 }
