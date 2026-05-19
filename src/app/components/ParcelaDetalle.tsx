@@ -20,12 +20,12 @@ function OwnershipTooltip({ valor }: { valor: string }) {
   const [show, setShow] = React.useState(false);
 
   const tooltipMap: Record<string, string> = {
-    'Primer dueño': 'Primer dueño · Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
-    'Segundo dueño': 'Segundo dueño · Esta parcela tuvo un propietario anterior.',
-    'Tercer dueño': 'Tercer dueño · Esta parcela ha tenido dos propietarios anteriores.',
-    'Cuarto dueño': 'Cuarto dueño · Esta parcela ha tenido tres o más propietarios en el tiempo.',
+    'Primer dueño': 'Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
+    'Segundo dueño': 'Esta parcela tuvo un propietario anterior.',
+    'Tres o más dueños': 'Esta parcela ha tenido dos o más propietarios anteriores.',
   };
-  const tooltip = tooltipMap[valor] ?? valor;
+  const label = valor === 'Tercer dueño' || valor === 'Cuarto dueño' ? 'Tres o más dueños' : valor;
+  const tooltip = tooltipMap[label] ?? label;
 
   return (
     <div className="relative inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full cursor-default"
@@ -34,7 +34,7 @@ function OwnershipTooltip({ valor }: { valor: string }) {
       onMouseLeave={() => setShow(false)}>
       <Info className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#006B4E' }} />
       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#525252', fontWeight: 'var(--font-weight-medium)' }}>
-        Historial de propiedad
+        {label}
       </span>
       {show && (
         <div className="absolute z-50 rounded-xl p-3 shadow-lg"

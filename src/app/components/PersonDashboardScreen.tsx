@@ -4037,7 +4037,7 @@ function SettingsContent() {
           {!isEditing && (
             <button
               onClick={handleStartEdit}
-              className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
+              className="w-11 h-11 flex items-center justify-center rounded-lg transition-all"
               style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}
               title="Editar perfil"
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
