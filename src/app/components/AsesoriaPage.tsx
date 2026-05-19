@@ -18,7 +18,7 @@ const pasos = [
   {
     numero: '02',
     titulo: 'Análisis personalizado',
-    descripcion: 'El asesor estudia tu perfil y objetivos: si buscás una parcela agrícola, turística, para construcción o inversión. Sin compromiso.',
+    descripcion: 'El asesor estudia tu perfil y objetivos: si buscas una parcela agrícola, turística, para construcción o inversión. Sin compromiso.',
     icono: Search,
   },
   {
@@ -55,7 +55,7 @@ const preguntas = [
   },
   {
     pregunta: '¿Cuánto tarda el proceso?',
-    respuesta: 'Depende de lo que buscás. En algunos casos podemos presentarte opciones el mismo día. En otros, si la búsqueda es más específica, puede tomar entre 3 y 7 días hábiles.',
+    respuesta: 'Depende de lo que buscas. En algunos casos podemos presentarte opciones el mismo día. En otros, si la búsqueda es más específica, puede tomar entre 3 y 7 días hábiles.',
   },
   {
     pregunta: '¿Pueden acompañarme a ver la parcela?',
@@ -258,7 +258,7 @@ export function AsesoriaPage({ onNavigate }: AsesoriaPageProps) {
             ¿Listo para encontrar tu parcela?
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '16px', marginBottom: '36px' }}>
-            Escribinos hoy y un asesor se pondrá en contacto con vos en menos de 24 horas.
+            Escríbenos hoy y un asesor se pondrá en contacto contigo en menos de 24 horas.
           </p>
           <a
             href={WHATSAPP_URL}

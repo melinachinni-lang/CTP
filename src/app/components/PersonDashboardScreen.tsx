@@ -1381,7 +1381,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
           color: '#525252',
           lineHeight: 'var(--line-height-body)'
         }}>
-          ¿Tenés otra parcela para publicar?
+          ¿Tienes otra parcela para publicar?
         </p>
         <button
           onClick={() => setShowNewListingFlow(true)}

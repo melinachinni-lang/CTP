@@ -455,7 +455,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#525252', marginBottom: '10px' }}>
-                  Selecciona cómo querés pagar
+                  Selecciona cómo quieres pagar
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <button onClick={() => setMetodoPago('transferencia')}

@@ -91,10 +91,10 @@ export function AccesoNoAutorizadoPage({ email, onNavigate }: AccesoNoAutorizado
             </div>
             <div>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827', marginBottom: '2px' }}>
-                ¿Querés solicitar acceso?
+                ¿Quieres solicitar acceso?
               </p>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', lineHeight: '1.5' }}>
-                Escribinos a{' '}
+                Escríbenos a{' '}
                 <a
                   href="mailto:contacto@compratuparcela.cl"
                   style={{ color: '#006B4E', textDecoration: 'none', fontWeight: 500 }}

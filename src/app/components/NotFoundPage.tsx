@@ -142,7 +142,7 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
               margin: '0 auto 32px'
             }}
           >
-            La página que buscás no existe o fue movida. Podés volver al inicio o explorar las parcelas disponibles.
+            La página que buscas no existe o fue movida. Puedes volver al inicio o explorar las parcelas disponibles.
           </p>
 
           {/* Botones de acción */}

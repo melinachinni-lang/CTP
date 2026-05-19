@@ -276,7 +276,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                       margin: 0
                     }}
                   >
-                    Podés buscar parcelas, hacer una consulta o reportar un inconveniente.
+                    Puedes buscar parcelas, hacer una consulta o reportar un inconveniente.
                   </p>
                 </div>
               </div>

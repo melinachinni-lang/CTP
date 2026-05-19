@@ -157,7 +157,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const handleShareInstagram = () => {
     // Instagram no permite compartir links directamente desde web
     // Copiamos el link y mostramos un mensaje
-    alert('El enlace ha sido copiado. Podés pegarlo en tu historia o publicación de Instagram.');
+    alert('El enlace ha sido copiado. Puedes pegarlo en tu historia o publicación de Instagram.');
   };
 
   const handleCopySuccessLink = (publicationId: string) => {

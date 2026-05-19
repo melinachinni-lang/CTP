@@ -606,7 +606,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
             maxWidth: '500px',
             lineHeight: 'var(--line-height-body)'
           }}>
-            Estamos teniendo un problema temporal al obtener los datos. Podés intentar nuevamente.
+            Estamos teniendo un problema temporal al obtener los datos. Puedes intentar nuevamente.
           </p>
 
           {/* Retry Button */}
