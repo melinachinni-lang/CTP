@@ -384,53 +384,39 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       </div>
 
       {/* Resumen: slots + stats */}
-      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(0, 107, 78, 0.18)', boxShadow: '0 2px 12px rgba(0, 107, 78, 0.07)' }}>
-        {/* Franja verde superior */}
-        <div className="px-5 py-3 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #006B4E 0%, #647E3F 100%)' }}>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: 'rgba(255,255,255,0.85)' }}>
-            Resumen del mes
-          </span>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.6)' }}>Últimos 30 días</span>
-        </div>
-        {/* Cuerpo */}
-        <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" style={{ backgroundColor: '#F0F9F6' }}>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              {Array.from({ length: maxPublications }).map((_, i) => (
-                <div key={i} className="w-4 h-4 rounded-full" style={{
-                  backgroundColor: i < currentPublications ? '#006B4E' : '#D1FAE5',
-                  border: i < currentPublications ? 'none' : '1.5px solid #A7F3D0'
-                }} />
-              ))}
-            </div>
-            <div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>
-                {currentPublications} de {maxPublications} publicaciones
-              </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#006B4E', marginTop: '1px', fontWeight: 'var(--font-weight-medium)' }}>
-                {canPublish
-                  ? `${slotsLibres === 1 ? '1 espacio disponible' : `${slotsLibres} espacios disponibles`}`
-                  : 'Límite alcanzado'}
-              </p>
-            </div>
+      <div className="rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: maxPublications }).map((_, i) => (
+              <div key={i} className="w-3 h-3 rounded-full" style={{
+                backgroundColor: i < currentPublications ? '#006B4E' : '#E5E5E5'
+              }} />
+            ))}
           </div>
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>
+              {currentPublications} de {maxPublications} publicaciones usadas
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
+              {canPublish
+                ? `${slotsLibres === 1 ? 'Tienes 1 espacio disponible' : `Tienes ${slotsLibres} espacios disponibles`}`
+                : 'Alcanzaste el límite gratuito'}
+            </p>
+          </div>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl px-4 py-2.5 flex items-center gap-2" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,107,78,0.12)' }}>
-              <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
-              <div>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>347</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginLeft: '4px' }}>vistas</span>
-              </div>
-            </div>
-            <div className="rounded-xl px-4 py-2.5 flex items-center gap-2" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,107,78,0.12)' }}>
-              <MessageCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
-              <div>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>12</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginLeft: '4px' }}>consultas</span>
-              </div>
-              <span className="px-1.5 py-0.5 rounded-full" style={{ backgroundColor: '#FEF3C7', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#CA8A04' }}>2 nuevas</span>
-            </div>
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-1.5">
+            <Eye className="w-4 h-4" style={{ color: '#006B4E' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>347</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>vistas</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <MessageCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>12</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>consultas</span>
+            <span className="px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#462611' }}>2 nuevas</span>
           </div>
         </div>
       </div>
@@ -449,168 +435,100 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Publicación 1 */}
-          <div className="rounded-xl flex flex-col overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', boxShadow: '0 4px 16px rgba(0, 107, 78, 0.09)' }}>
-            {/* Thumbnail */}
-            <div className="flex items-center justify-center" style={{ height: '100px', background: 'linear-gradient(135deg, #006B4E 0%, #647E3F 100%)' }}>
-              <MapPin className="w-9 h-9" style={{ color: 'rgba(255,255,255,0.55)' }} />
-            </div>
-            <div className="p-4 flex flex-col flex-1">
-              <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)', border: '1px solid rgba(0, 107, 78, 0.12)' }}>
+                  <MapPin className="w-4 h-4" style={{ color: '#006B4E' }} />
+                </div>
                 <div className="min-w-0">
-                  <h3 style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-heading)'
-                  }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
                     Parcela Valle del Sol
                   </h3>
                   <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
                     Lampa, RM · 6.000 m²
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#647E3F' }} />
-                  <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
-                </div>
               </div>
+              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
+                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+              </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-2 flex-1 mb-4">
-                <div className="rounded-lg p-2.5" style={{ backgroundColor: '#F7FAF9' }}>
-                  <div className="flex items-center gap-1 mb-1">
-                    <Eye className="w-3 h-3" style={{ color: '#006B4E' }} />
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>Vistas</span>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>234</span>
-                </div>
-                <div className="rounded-lg p-2.5" style={{ backgroundColor: '#F7FAF9' }}>
-                  <div className="flex items-center gap-1 mb-1">
-                    <MessageCircle className="w-3 h-3" style={{ color: '#006B4E' }} />
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>Consultas</span>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>8</span>
-                </div>
+            <div className="flex items-center gap-4 flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+              <div className="flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
               </div>
+              <div className="flex items-center gap-1.5">
+                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
+              </div>
+            </div>
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => onNavigate('parcela-detalle', 1)}
-                  className="flex-1 py-2 px-3 transition-all" style={{
-                  backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-                  borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  Ver
-                </button>
-                <button className="flex-1 py-2 px-3 transition-all" style={{
-                  backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-                  borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  Editar
-                </button>
-                <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
-                  backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
-                  borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
-                >
-                  <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-                  Destacar
-                </button>
-              </div>
+            <div className="flex gap-2">
+              <button onClick={() => onNavigate('parcela-detalle', 1)} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                Ver
+              </button>
+              <button className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                Editar
+              </button>
+              <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}>
+                <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+                Destacar
+              </button>
             </div>
           </div>
 
           {/* Publicación 2 */}
-          <div className="rounded-xl flex flex-col overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', boxShadow: '0 4px 16px rgba(0, 107, 78, 0.09)' }}>
-            {/* Thumbnail */}
-            <div className="flex items-center justify-center" style={{ height: '100px', background: 'linear-gradient(135deg, #1a7a5a 0%, #4a6a2f 100%)' }}>
-              <MapPin className="w-9 h-9" style={{ color: 'rgba(255,255,255,0.55)' }} />
-            </div>
-            <div className="p-4 flex flex-col flex-1">
-              <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)', border: '1px solid rgba(0, 107, 78, 0.12)' }}>
+                  <MapPin className="w-4 h-4" style={{ color: '#006B4E' }} />
+                </div>
                 <div className="min-w-0">
-                  <h3 style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-heading)'
-                  }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
                     Terreno El Refugio
                   </h3>
                   <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
                     Colina, RM · 3.500 m²
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#647E3F' }} />
-                  <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
-                </div>
               </div>
+              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
+                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+              </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-2 flex-1 mb-4">
-                <div className="rounded-lg p-2.5" style={{ backgroundColor: '#F7FAF9' }}>
-                  <div className="flex items-center gap-1 mb-1">
-                    <Eye className="w-3 h-3" style={{ color: '#006B4E' }} />
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>Vistas</span>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>113</span>
-                </div>
-                <div className="rounded-lg p-2.5" style={{ backgroundColor: '#F7FAF9' }}>
-                  <div className="flex items-center gap-1 mb-1">
-                    <MessageCircle className="w-3 h-3" style={{ color: '#006B4E' }} />
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>Consultas</span>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>4</span>
-                </div>
+            <div className="flex items-center gap-4 flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+              <div className="flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
               </div>
+              <div className="flex items-center gap-1.5">
+                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
+              </div>
+            </div>
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => onNavigate('parcela-detalle', 2)}
-                  className="flex-1 py-2 px-3 transition-all" style={{
-                  backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-                  borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  Ver
-                </button>
-                <button className="flex-1 py-2 px-3 transition-all" style={{
-                  backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE',
-                  borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  Editar
-                </button>
-                <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{
-                  backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A',
-                  borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)'
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}
-                >
-                  <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-                  Destacar
-                </button>
-              </div>
+            <div className="flex gap-2">
+              <button onClick={() => onNavigate('parcela-detalle', 2)} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                Ver
+              </button>
+              <button className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                Editar
+              </button>
+              <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}>
+                <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+                Destacar
+              </button>
             </div>
           </div>
 
@@ -621,19 +539,19 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 setCurrentSection('listings');
                 setTriggerPublishModal(prev => prev + 1);
               }}
-              className="rounded-xl flex flex-col items-center justify-center gap-3 transition-all"
-              style={{ border: '2px dashed rgba(0, 107, 78, 0.3)', backgroundColor: 'rgba(0, 107, 78, 0.03)', cursor: 'pointer', minHeight: '232px' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 107, 78, 0.07)'; e.currentTarget.style.borderColor = '#006B4E'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 107, 78, 0.03)'; e.currentTarget.style.borderColor = 'rgba(0, 107, 78, 0.3)'; }}
+              className="rounded-xl p-4 flex flex-col items-center justify-center gap-3 transition-all"
+              style={{ border: '2px dashed #DEDEDE', backgroundColor: 'transparent', cursor: 'pointer', minHeight: '160px' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.borderColor = '#006B4E'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#DEDEDE'; }}
             >
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-                <Plus className="w-7 h-7" style={{ color: '#006B4E' }} />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                <Plus className="w-5 h-5" style={{ color: '#006B4E' }} />
               </div>
-              <div className="text-center px-4">
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#006B4E' }}>
+              <div className="text-center">
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#006B4E' }}>
                   Publicar nueva parcela
                 </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '4px', lineHeight: '1.5' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3', marginTop: '4px' }}>
                   {slotsLibres === 1 ? 'Tienes 1 espacio disponible' : `Tienes ${slotsLibres} espacios disponibles`}
                 </p>
               </div>
