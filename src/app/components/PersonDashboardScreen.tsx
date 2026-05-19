@@ -4243,41 +4243,10 @@ function SettingsContent() {
         )}
       </section>
 
-      {/* Grid inferior: Notificaciones | Preferencias + Cuenta */}
+      {/* Grid inferior: Preferencias + Cuenta | Notificaciones */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
 
-        {/* Notificaciones */}
-        <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '16px' }}>
-            Notificaciones
-          </h2>
-          <div style={{ borderTop: '1px solid #F5F5F5' }}>
-            {[
-              { label: 'Consultas y visitas por correo', desc: 'Recibir notificaciones al email sobre nuevas consultas', toggle: true, active: emailNotifConsultas, onToggle: () => setEmailNotifConsultas(v => !v) },
-              { label: 'Nuevas parcelas', desc: 'Recibir alertas de nuevas publicaciones', toggle: false },
-              { label: 'Cambios de precio', desc: 'Notificar si cambia el precio de favoritos', toggle: false },
-              { label: 'Consejos y recomendaciones', desc: 'Recibir tips para compradores', toggle: false },
-            ].map(item => (
-              <div key={item.label} className="flex items-center justify-between py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
-                <div className="pr-4">
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{item.label}</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>{item.desc}</p>
-                </div>
-                {item.toggle ? (
-                  <button onClick={item.onToggle} className="flex-shrink-0 w-11 h-6 rounded-full transition-colors relative" style={{ backgroundColor: item.active ? '#006B4E' : '#D1D5DB', minWidth: 44 }}>
-                    <div className="w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-all" style={{ left: item.active ? 'calc(100% - 20px)' : 4 }} />
-                  </button>
-                ) : (
-                  <div className="flex-shrink-0 w-11 h-6 rounded-full" style={{ backgroundColor: '#E5E5E5', minWidth: 44 }}>
-                    <div className="w-4 h-4 bg-white rounded-full shadow mt-1 ml-1" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Columna derecha: Preferencias + Cuenta */}
+        {/* Columna izquierda: Preferencias + Cuenta */}
         <div className="space-y-5">
           {/* Preferencias de búsqueda */}
           <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
@@ -4339,6 +4308,38 @@ function SettingsContent() {
             </div>
           </section>
         </div>
+
+        {/* Notificaciones */}
+        <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '16px' }}>
+            Notificaciones
+          </h2>
+          <div style={{ borderTop: '1px solid #F5F5F5' }}>
+            {[
+              { label: 'Consultas y visitas por correo', desc: 'Recibir notificaciones al email sobre nuevas consultas', toggle: true, active: emailNotifConsultas, onToggle: () => setEmailNotifConsultas(v => !v) },
+              { label: 'Nuevas parcelas', desc: 'Recibir alertas de nuevas publicaciones', toggle: false },
+              { label: 'Cambios de precio', desc: 'Notificar si cambia el precio de favoritos', toggle: false },
+              { label: 'Consejos y recomendaciones', desc: 'Recibir tips para compradores', toggle: false },
+            ].map(item => (
+              <div key={item.label} className="flex items-center justify-between py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
+                <div className="pr-4">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{item.label}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>{item.desc}</p>
+                </div>
+                {item.toggle ? (
+                  <button onClick={item.onToggle} className="flex-shrink-0 w-11 h-6 rounded-full transition-colors relative" style={{ backgroundColor: item.active ? '#006B4E' : '#D1D5DB', minWidth: 44 }}>
+                    <div className="w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-all" style={{ left: item.active ? 'calc(100% - 20px)' : 4 }} />
+                  </button>
+                ) : (
+                  <div className="flex-shrink-0 w-11 h-6 rounded-full" style={{ backgroundColor: '#E5E5E5', minWidth: 44 }}>
+                    <div className="w-4 h-4 bg-white rounded-full shadow mt-1 ml-1" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
       </div>
     </main>
   );
