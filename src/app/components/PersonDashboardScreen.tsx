@@ -4019,36 +4019,36 @@ function SettingsContent() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-            Configuración
-          </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B' }}>
-            Administra tu cuenta y preferencias
-          </p>
-        </div>
-        {!isEditing && (
-          <button
-            onClick={handleStartEdit}
-            className="flex items-center gap-2 px-4 py-2 rounded-full transition-all flex-shrink-0"
-            style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: '1px solid #E5E5E5' }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-          >
-            <svg viewBox="0 0 24 24" style={{ width: '15px', height: '15px', fill: 'none', stroke: '#374151', strokeWidth: 2 }}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            Editar perfil
-          </button>
-        )}
+      <div className="space-y-1">
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+          Configuración
+        </h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B' }}>
+          Administra tu cuenta y preferencias
+        </p>
       </div>
 
       {/* Información de perfil — ancho completo */}
       <section className="rounded-2xl p-5 space-y-5" style={{ backgroundColor: '#FFFFFF', border: isEditing ? '1px solid #006B4E' : '1px solid #E5E5E5' }}>
-        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-          Información de perfil
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+            Información de perfil
+          </h2>
+          {!isEditing && (
+            <button
+              onClick={handleStartEdit}
+              className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
+              style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}
+              title="Editar perfil"
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+            >
+              <svg viewBox="0 0 24 24" style={{ width: '14px', height: '14px', fill: 'none', stroke: '#374151', strokeWidth: 2 }}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+          )}
+        </div>
 
         {/* Avatar */}
         <div className="flex items-center gap-4">
