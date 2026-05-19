@@ -481,8 +481,8 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Editar
               </button>
-              <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F5F5F5', color: '#525252', border: '2px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+              <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '2px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FECACA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
                 Pausar
               </button>
             </div>
