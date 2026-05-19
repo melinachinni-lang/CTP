@@ -1,6 +1,6 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon, Upload } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon, Upload, Info } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -15,6 +15,44 @@ import { VambeChat } from '@/app/components/VambeChat';
 import { getParcelaById, getSimilarParcelas } from '@/app/data/parcelasData';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
+
+function OwnershipTooltip({ valor }: { valor: string }) {
+  const [show, setShow] = React.useState(false);
+
+  const tooltipMap: Record<string, string> = {
+    'Primer dueño': 'Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
+    'Segundo dueño': 'Esta parcela tuvo un propietario anterior.',
+    'Tercer dueño': 'Esta parcela ha tenido dos propietarios anteriores.',
+    'Cuarto dueño': 'Esta parcela ha tenido tres o más propietarios en el tiempo.',
+  };
+  const tooltip = tooltipMap[valor] ?? 'Historial de propiedad de esta parcela.';
+
+  return (
+    <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full"
+      style={{ backgroundColor: '#F5F5F0', border: '1px solid #E5E5E0' }}>
+      <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E]">
+        <FileBadge className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
+      </div>
+      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#525252', fontWeight: 'var(--font-weight-medium)' }}>
+        {valor}
+      </span>
+      <div className="relative flex items-center"
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}>
+        <Info className="w-3 h-3 cursor-pointer" style={{ color: '#A3A3A3' }} />
+        {show && (
+          <div className="absolute z-50 rounded-xl p-3 shadow-lg"
+            style={{ bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', width: '220px', backgroundColor: '#0A0A0A' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#FFFFFF', lineHeight: '1.5' }}>
+              {tooltip}
+            </p>
+            <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '5px solid #0A0A0A' }} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // Datos de ejemplo de parcelas para el masterplan interactivo
 // Cada parcela tiene puntos que definen su forma irregular (terreno rural)
@@ -2747,25 +2785,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       />
                       
                       {/* Badge de historial de propiedad */}
-                      <div 
-                        className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full"
-                        style={{ 
-                          backgroundColor: '#F5F5F0',
-                          border: '1px solid #E5E5E0'
-                        }}
-                      >
-                        <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
-                          <FileBadge className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
-                        </div>
-                        <span style={{ 
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-xs)',
-                          color: '#525252',
-                          fontWeight: 'var(--font-weight-medium)'
-                        }}>
-                          {parcela.historialPropiedad}
-                        </span>
-                      </div>
+                      <OwnershipTooltip valor={parcela.historialPropiedad} />
                     </div>
 
                     {/* Características destacadas */}
