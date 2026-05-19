@@ -333,6 +333,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
   const canPublish = currentPublications < maxPublications;
   const slotsLibres = maxPublications - currentPublications;
 
+  const [pub2Paused, setPub2Paused] = React.useState(true);
+  const [showPauseConfirm, setShowPauseConfirm] = React.useState(false);
+
   return (
     <main className="px-6 py-6 space-y-6">
       {/* Header */}
@@ -455,15 +458,18 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               </div>
             </div>
 
-            <div className="flex items-center gap-4 flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
-              <div className="flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
+            <div className="flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
+              <div className="flex items-center gap-4 mb-2">
+                <div className="flex items-center gap-1.5">
+                  <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
-              </div>
+              <p style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 3 días</p>
             </div>
 
             <div className="flex gap-2">
@@ -471,14 +477,13 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Ver
               </button>
-              <button className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Editar
               </button>
-              <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}>
-                <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-                Destacar
+              <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F5F5F5', color: '#525252', border: '2px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+                Pausar
               </button>
             </div>
           </div>
@@ -499,20 +504,23 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                   </p>
                 </div>
               </div>
-              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
+              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: pub2Paused ? '#F3F4F6' : 'rgba(100, 126, 63, 0.1)' }}>
+                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: pub2Paused ? '#6B7280' : '#647E3F' }}>{pub2Paused ? 'Pausada' : 'Activa'}</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
-              <div className="flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
+            <div className="flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px', opacity: pub2Paused ? 0.5 : 1 }}>
+              <div className="flex items-center gap-4 mb-2">
+                <div className="flex items-center gap-1.5">
+                  <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
-              </div>
+              <p style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 12 días</p>
             </div>
 
             <div className="flex gap-2">
@@ -520,15 +528,21 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Ver
               </button>
-              <button className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
                 Editar
               </button>
-              <button className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF3C7', color: '#CA8A04', border: '2px solid #FDE68A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FDE68A'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF3C7'; }}>
-                <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-                Destacar
-              </button>
+              {pub2Paused ? (
+                <button onClick={() => setPub2Paused(false)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '2px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DCFCE7'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}>
+                  Publicar
+                </button>
+              ) : (
+                <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F5F5F5', color: '#525252', border: '2px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+                  Pausar
+                </button>
+              )}
             </div>
           </div>
 
@@ -559,6 +573,39 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
           )}
         </div>
       </section>
+
+      {/* Modal confirmación pausa */}
+      {showPauseConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
+          <div className="rounded-2xl p-6 w-full max-w-sm" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F3F4F6' }}>
+                <svg viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'none', stroke: '#6B7280', strokeWidth: 2 }}>
+                  <rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 600, color: '#0A0A0A', marginBottom: '8px' }}>
+                  ¿Pausar esta publicación?
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6' }}>
+                  Los compradores no podrán verla mientras esté pausada. Puedes volver a publicarla cuando quieras.
+                </p>
+              </div>
+              <div className="flex gap-3 w-full">
+                <button onClick={() => setShowPauseConfirm(false)} className="flex-1 py-2.5 px-4 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                  Cancelar
+                </button>
+                <button onClick={() => { setPub2Paused(true); setShowPauseConfirm(false); }} className="flex-1 py-2.5 px-4 transition-all" style={{ backgroundColor: '#374151', color: '#FFFFFF', border: '2px solid #374151', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#1F2937'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#374151'; }}>
+                  Pausar publicación
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
