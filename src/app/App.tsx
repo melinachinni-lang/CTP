@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import '@/styles/index.css';
 import { EntryScreen } from '@/app/components/EntryScreen';
+import { CompletarPerfilScreen } from '@/app/components/CompletarPerfilScreen';
 import { RealEstateDashboardScreen } from '@/app/components/RealEstateDashboardScreen';
 import { BrokerDashboardScreen } from '@/app/components/BrokerDashboardScreen';
 import { PersonDashboardScreen } from '@/app/components/PersonDashboardScreen';
@@ -61,7 +62,8 @@ type Screen =
   | 'politica-privacidad'
   | 'terminos-condiciones'
   | 'asesoria'
-  | 'acceso-no-autorizado';
+  | 'acceso-no-autorizado'
+  | 'completar-perfil';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -365,6 +367,7 @@ export default function App() {
         {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigateHome={() => setCurrentScreen('home')} />}
         {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
         {currentScreen === 'acceso-no-autorizado' && <AccesoNoAutorizadoPage onNavigate={handleNavigate} />}
+        {currentScreen === 'completar-perfil' && <CompletarPerfilScreen onNavigate={handleNavigate} />}
       </div>
 
       {/* Toast global */}
