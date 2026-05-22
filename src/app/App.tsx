@@ -326,6 +326,7 @@ export default function App() {
                 <option value="recursos">0.6. Recursos</option>
                 <option value="google-account-selector">Login - Selección de cuenta</option>
                 <option value="entry">1. Punto de entrada</option>
+                <option value="completar-perfil">1.1. Completar perfil (post-verificación)</option>
                 <option value="person-dashboard">7. Dashboard Personal</option>
                 <option value="real-estate-dashboard">10. Dashboard Inmobiliaria</option>
                 <option value="broker-dashboard">11. Dashboard Broker</option>
