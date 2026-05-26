@@ -2366,6 +2366,26 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
 
                 {/* Acciones */}
                 <div className="flex flex-wrap items-center gap-3 mb-6">
+                  {/* Descargar template */}
+                  <button
+                    onClick={() => {}}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#0A0A0A',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      border: '1px solid #DEDEDE'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Descargar template</span>
+                  </button>
+
+                  {/* Importar parcelas */}
                   <button
                     onClick={handleImportPlots}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
@@ -2377,25 +2397,11 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                       fontWeight: 'var(--font-weight-medium)',
                       border: 'none'
                     }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     <Download className="w-4 h-4" />
                     <span>Importar parcelas</span>
-                  </button>
-
-                  <button
-                    onClick={handleAddPlot}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      color: '#0A0A0A',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      border: '1px solid #DEDEDE'
-                    }}
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Agregar parcela</span>
                   </button>
 
                   {/* Input file oculto para importar Excel */}
@@ -2407,6 +2413,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     style={{ display: 'none' }}
                   />
 
+                  {/* Buscador */}
                   <div className="flex-1 min-w-[200px]">
                     <div className="relative">
                       <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#737373' }} />
@@ -2427,6 +2434,25 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                       />
                     </div>
                   </div>
+
+                  {/* Agregar parcela — color secundario, derecha */}
+                  <button
+                    onClick={handleAddPlot}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ml-auto"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#006B4E',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      border: '1px solid #006B4E'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Agregar parcela</span>
+                  </button>
                 </div>
 
                 {/* Tabla */}
