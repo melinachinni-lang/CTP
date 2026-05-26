@@ -2366,7 +2366,29 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
 
                 {/* Acciones */}
                 <div className="flex flex-wrap items-center gap-3 mb-6">
-                  {/* Descargar template — outline */}
+                  {/* Buscador — izquierda */}
+                  <div className="flex-1 min-w-[200px]">
+                    <div className="relative">
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#737373' }} />
+                      <input
+                        type="text"
+                        value={searchPlot}
+                        onChange={(e) => setSearchPlot(e.target.value)}
+                        placeholder="Buscar parcela..."
+                        className="w-full pl-10 pr-4 py-2.5 rounded-lg transition-all"
+                        style={{
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #DEDEDE',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
+                          color: '#0A0A0A',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Descargar template — outline, derecha */}
                   <button
                     onClick={() => {}}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
@@ -2385,7 +2407,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     <span>Descargar template</span>
                   </button>
 
-                  {/* Importar parcelas — verde primario */}
+                  {/* Importar parcelas — verde primario, derecha */}
                   <button
                     onClick={handleImportPlots}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
@@ -2412,47 +2434,6 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     onChange={handleExcelFileChange}
                     style={{ display: 'none' }}
                   />
-
-                  {/* Buscador */}
-                  <div className="flex-1 min-w-[200px]">
-                    <div className="relative">
-                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#737373' }} />
-                      <input
-                        type="text"
-                        value={searchPlot}
-                        onChange={(e) => setSearchPlot(e.target.value)}
-                        placeholder="Buscar parcela..."
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg transition-all"
-                        style={{
-                          backgroundColor: '#FFFFFF',
-                          border: '1px solid #DEDEDE',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-body-sm)',
-                          color: '#0A0A0A',
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Agregar parcela — secundario, derecha */}
-                  <button
-                    onClick={handleAddPlot}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ml-auto"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      color: '#006B4E',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      border: '1px solid #006B4E'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Agregar parcela</span>
-                  </button>
                 </div>
 
                 {/* Tabla */}
@@ -2674,6 +2655,27 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                       </tbody>
                     </table>
                   </div>
+                </div>
+
+                {/* Agregar parcela — debajo de tabla, derecha */}
+                <div className="flex justify-end mt-3">
+                  <button
+                    onClick={handleAddPlot}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#006B4E',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      border: '1px solid #006B4E'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Agregar parcela</span>
+                  </button>
                 </div>
 
                 {/* Resumen */}
