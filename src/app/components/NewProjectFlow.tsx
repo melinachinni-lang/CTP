@@ -2366,6 +2366,53 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
 
                 {/* Acciones */}
                 <div className="flex flex-wrap items-center gap-3 mb-6">
+                  {/* Descargar template — outline */}
+                  <button
+                    onClick={() => {}}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#0A0A0A',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      border: '1px solid #DEDEDE'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Descargar template</span>
+                  </button>
+
+                  {/* Importar parcelas — verde primario */}
+                  <button
+                    onClick={handleImportPlots}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: '#006B4E',
+                      color: '#FFFFFF',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      border: 'none'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span>Importar parcelas</span>
+                  </button>
+
+                  {/* Input file oculto para importar Excel */}
+                  <input
+                    ref={excelInputRef}
+                    type="file"
+                    accept=".xlsx, .xls, .csv"
+                    onChange={handleExcelFileChange}
+                    style={{ display: 'none' }}
+                  />
+
                   {/* Buscador */}
                   <div className="flex-1 min-w-[200px]">
                     <div className="relative">
@@ -2388,53 +2435,24 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     </div>
                   </div>
 
-                  {/* Descargar template — texto only */}
+                  {/* Agregar parcela — secundario, derecha */}
                   <button
-                    onClick={() => {}}
-                    className="flex items-center gap-1.5 px-3 py-2.5 transition-all"
+                    onClick={handleAddPlot}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ml-auto"
                     style={{
-                      background: 'none',
-                      border: 'none',
+                      backgroundColor: '#FFFFFF',
                       color: '#006B4E',
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
                       fontWeight: 'var(--font-weight-medium)',
-                      cursor: 'pointer',
-                      textDecoration: 'underline',
-                      textUnderlineOffset: '3px'
+                      border: '1px solid #006B4E'
                     }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
                   >
-                    <Download className="w-4 h-4" />
-                    <span>Descargar template</span>
+                    <Plus className="w-4 h-4" />
+                    <span>Agregar parcela</span>
                   </button>
-
-                  {/* Importar parcelas — verde primario, derecha */}
-                  <button
-                    onClick={handleImportPlots}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
-                    style={{
-                      backgroundColor: '#006B4E',
-                      color: '#FFFFFF',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      border: 'none'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Importar parcelas</span>
-                  </button>
-
-                  {/* Input file oculto para importar Excel */}
-                  <input
-                    ref={excelInputRef}
-                    type="file"
-                    accept=".xlsx, .xls, .csv"
-                    onChange={handleExcelFileChange}
-                    style={{ display: 'none' }}
-                  />
                 </div>
 
                 {/* Tabla */}
@@ -2656,27 +2674,6 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                       </tbody>
                     </table>
                   </div>
-                </div>
-
-                {/* Agregar parcela — debajo de la tabla */}
-                <div className="mt-3">
-                  <button
-                    onClick={handleAddPlot}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      color: '#006B4E',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      border: '1px solid #006B4E'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Agregar parcela</span>
-                  </button>
                 </div>
 
                 {/* Resumen */}
