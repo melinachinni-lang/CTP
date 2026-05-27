@@ -2729,6 +2729,37 @@ function MyPurchasesContent() {
     rechazada:    -1,
   };
 
+  type EstadoPago = 'aprobado' | 'pendiente' | 'rechazado';
+  type Pago = { fecha: string; monto: string; estado: EstadoPago; medio: string };
+  type Documento = { nombre: string; tipo: string; fecha: string };
+
+  const estadoPagoConfig: Record<EstadoPago, { label: string; bg: string; color: string; border: string }> = {
+    aprobado:  { label: 'Aprobado',  bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
+    pendiente: { label: 'Pendiente', bg: '#FFFBEB', color: '#CA8A04', border: '#FDE68A' },
+    rechazado: { label: 'Rechazado', bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
+  };
+
+  const pagosData: Record<number, Pago[]> = {
+    1: [{ fecha: '15 May 2026', monto: '$500.000', estado: 'pendiente', medio: 'Transferencia bancaria' }],
+    2: [{ fecha: '28 Abr 2026', monto: '$500.000', estado: 'aprobado', medio: 'Mercado Pago' }],
+    3: [
+      { fecha: '12 Mar 2026', monto: '$500.000', estado: 'aprobado', medio: 'Transferencia bancaria' },
+      { fecha: '1 May 2026', monto: '$84.500.000', estado: 'aprobado', medio: 'Transferencia bancaria' },
+    ],
+    4: [{ fecha: '3 Mar 2026', monto: '$500.000', estado: 'rechazado', medio: 'Transferencia bancaria' }],
+  };
+
+  const documentosData: Record<number, Documento[]> = {
+    1: [{ nombre: 'Comprobante de transferencia', tipo: 'Comprobante de pago', fecha: '15 May 2026' }],
+    2: [{ nombre: 'Comprobante de pago', tipo: 'Comprobante de pago', fecha: '28 Abr 2026' }],
+    3: [
+      { nombre: 'Comprobante de reserva', tipo: 'Comprobante de pago', fecha: '12 Mar 2026' },
+      { nombre: 'Comprobante de compra', tipo: 'Comprobante de pago', fecha: '1 May 2026' },
+      { nombre: 'Promesa de compraventa', tipo: 'Documento legal', fecha: '5 May 2026' },
+    ],
+    4: [],
+  };
+
   // ── VISTA DETALLE ──
   if (selectedId !== null) {
     const compra = compras.find(c => c.id === selectedId)!;
@@ -2879,6 +2910,64 @@ function MyPurchasesContent() {
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: row.label === 'Estado' ? cfg.color : '#111827' }}>{row.value}</span>
             </div>
           ))}
+        </div>
+
+        {/* Historial de pagos */}
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+          <div className="px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Historial de pagos</p>
+          </div>
+          {pagosData[compra.id].length === 0 ? (
+            <div className="flex flex-col items-center py-10 gap-2">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path strokeLinecap="round" d="M2 10h20"/></svg>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>Sin pagos registrados</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid px-5 py-2" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+                {['Fecha', 'Monto', 'Estado', 'Medio de pago'].map(h => (
+                  <span key={h} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</span>
+                ))}
+              </div>
+              {pagosData[compra.id].map((pago, i) => {
+                const pcfg = estadoPagoConfig[pago.estado];
+                return (
+                  <div key={i} className="grid px-5 py-3 items-center" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: i < pagosData[compra.id].length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151' }}>{pago.fecha}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{pago.monto}</span>
+                    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '9999px', backgroundColor: pcfg.bg, border: `1px solid ${pcfg.border}`, fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: pcfg.color, width: 'fit-content' }}>{pcfg.label}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{pago.medio}</span>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+
+        {/* Documentación */}
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+          <div className="px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Documentación</p>
+          </div>
+          {documentosData[compra.id].length === 0 ? (
+            <div className="flex flex-col items-center py-10 gap-2">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>Sin documentos disponibles</p>
+            </div>
+          ) : (
+            documentosData[compra.id].map((doc, i) => (
+              <div key={i} className="flex items-center gap-4 px-5 py-3" style={{ borderBottom: i < documentosData[compra.id].length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{doc.nombre}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{doc.tipo} · {doc.fecha}</p>
+                </div>
+                <span style={{ padding: '2px 8px', borderRadius: '9999px', backgroundColor: '#DCFCE7', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#166534', flexShrink: 0 }}>Disponible</span>
+              </div>
+            ))
+          )}
         </div>
       </main>
     );
