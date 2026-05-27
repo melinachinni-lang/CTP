@@ -2968,8 +2968,16 @@ function MyPurchasesContent() {
 
         {/* Documentación */}
         <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-          <div className="px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+          <div className="px-5 py-3 flex items-center justify-between" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Documentación</p>
+            <button
+              style={{ width: '34px', height: '34px', borderRadius: '8px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', flexShrink: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; e.currentTarget.style.borderColor = '#86EFAC'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#E5E5E5'; }}
+              title="Descargar seleccionados"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            </button>
           </div>
           {documentosData[compra.id].length === 0 ? (
             <div className="flex flex-col items-center py-10 gap-2">
@@ -2997,15 +3005,6 @@ function MyPurchasesContent() {
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{doc.tipo} · {doc.fecha}</p>
                 </div>
                 <span style={{ padding: '2px 8px', borderRadius: '9999px', backgroundColor: '#DCFCE7', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#166534', flexShrink: 0 }}>Disponible</span>
-                {/* Botón descargar */}
-                <button
-                  style={{ width: '34px', height: '34px', borderRadius: '8px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', flexShrink: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; e.currentTarget.style.borderColor = '#86EFAC'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#E5E5E5'; }}
-                  title="Descargar"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                </button>
               </div>
             ))
           )}
