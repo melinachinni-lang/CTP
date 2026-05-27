@@ -2909,12 +2909,7 @@ function MyPurchasesContent() {
                 <img src={compra.imagen} alt={compra.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-3 mb-1">
-                  <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}>{compra.nombre}</h3>
-                  <span className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
-                    {cfg.label}
-                  </span>
-                </div>
+                <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A', marginBottom: '4px' }}>{compra.nombre}</h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{compra.ubicacion}</p>
                 <div className="flex items-center gap-4 mt-2 flex-wrap">
                   <span className="px-2 py-0.5 rounded-md" style={{ backgroundColor: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: '11px', color: '#525252', fontWeight: 500 }}>
@@ -2924,18 +2919,23 @@ function MyPurchasesContent() {
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: '#374151' }}>{compra.monto}</span>
                 </div>
               </div>
-              <button
-                onClick={() => setSelectedId(compra.id)}
-                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full transition-all"
-                style={{ backgroundColor: '#F5F5F5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: 'none', cursor: 'pointer' }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.color = '#FFFFFF'; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#0A0A0A'; }}
-              >
-                Ver detalle
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+              <div className="flex-shrink-0 flex flex-col items-end gap-2">
+                <span className="px-2.5 py-1 rounded-full" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
+                  {cfg.label}
+                </span>
+                <button
+                  onClick={() => setSelectedId(compra.id)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-all"
+                  style={{ backgroundColor: '#F5F5F5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: 'none', cursor: 'pointer' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#0A0A0A'; }}
+                >
+                  Ver detalle
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           );
         })}
