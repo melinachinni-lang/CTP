@@ -2906,45 +2906,43 @@ function MyPurchasesContent() {
               style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
             >
               {/* Imagen */}
-              <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden' }}>
+              <div style={{ width: '100%', height: '120px', overflow: 'hidden' }}>
                 <img src={compra.imagen} alt={compra.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
 
               {/* Contenido */}
-              <div className="flex flex-col flex-1 p-5" style={{ gap: '12px' }}>
-                {/* Badge estado */}
-                <div>
-                  <span className="px-2.5 py-1 rounded-full" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
+              <div className="flex flex-col flex-1 p-4" style={{ gap: '8px' }}>
+                {/* Nombre + badge en la misma fila */}
+                <div className="flex items-start justify-between gap-2">
+                  <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', lineHeight: '1.3' }}>{compra.nombre}</h3>
+                  <span className="px-2 py-0.5 rounded-full flex-shrink-0" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: cfg.color }}>
                     {cfg.label}
                   </span>
                 </div>
 
-                {/* Nombre y ubicación */}
-                <div>
-                  <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A', marginBottom: '4px' }}>{compra.nombre}</h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{compra.ubicacion}</p>
-                </div>
+                {/* Ubicación */}
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{compra.ubicacion}</p>
 
                 {/* Tipo · Fecha · Monto */}
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="px-2 py-0.5 rounded-md" style={{ backgroundColor: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: '11px', color: '#525252', fontWeight: 500 }}>
                     {compra.tipo === 'reserva' ? 'Reserva' : 'Compra'}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{compra.fecha}</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: '#374151' }}>{compra.monto}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{compra.fecha}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#374151' }}>{compra.monto}</span>
                 </div>
 
                 {/* Botón */}
-                <div className="mt-auto pt-2">
+                <div className="mt-auto pt-1">
                   <button
                     onClick={() => setSelectedId(compra.id)}
-                    className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-full transition-all"
-                    style={{ backgroundColor: '#F5F5F5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: 'none', cursor: 'pointer' }}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-full transition-all"
+                    style={{ backgroundColor: '#F5F5F5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, border: 'none', cursor: 'pointer' }}
                     onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.color = '#FFFFFF'; }}
                     onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#0A0A0A'; }}
                   >
                     Ver detalle
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
