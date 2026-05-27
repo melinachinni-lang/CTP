@@ -304,7 +304,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 ml-56">
+      <div className="flex-1 ml-56 overflow-y-auto h-screen">
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'explore' && <ExploreContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="vendedor_particular" userId="person-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
