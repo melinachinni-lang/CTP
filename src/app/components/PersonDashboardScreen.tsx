@@ -2659,6 +2659,13 @@ function CompareContent() {
 
 function MyPurchasesContent() {
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
+  const [pagosFiltroFecha, setPagosFiltroFecha] = React.useState<string>('todas');
+  const [docsSeleccionados, setDocsSeleccionados] = React.useState<Set<number>>(new Set());
+  const toggleDoc = (i: number) => setDocsSeleccionados(prev => {
+    const next = new Set(prev);
+    if (next.has(i)) next.delete(i); else next.add(i);
+    return next;
+  });
 
   type EstadoCompra = 'reservandose' | 'reservada' | 'aprobada' | 'rechazada';
   type TipoCompra = 'reserva' | 'compra';
@@ -2914,8 +2921,23 @@ function MyPurchasesContent() {
 
         {/* Historial de pagos */}
         <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-          <div className="px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+          <div className="px-5 py-3 flex items-center justify-between" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Historial de pagos</p>
+            <div className="relative">
+              <select
+                value={pagosFiltroFecha}
+                onChange={e => setPagosFiltroFecha(e.target.value)}
+                style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#374151', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '5px 28px 5px 10px', appearance: 'none', WebkitAppearance: 'none', cursor: 'pointer', outline: 'none' }}
+              >
+                <option value="todas">Todas las fechas</option>
+                {[...new Set(pagosData[compra.id].map(p => p.fecha))].map(f => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
+              </select>
+              <svg className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
           {pagosData[compra.id].length === 0 ? (
             <div className="flex flex-col items-center py-10 gap-2">
@@ -2929,10 +2951,10 @@ function MyPurchasesContent() {
                   <span key={h} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</span>
                 ))}
               </div>
-              {pagosData[compra.id].map((pago, i) => {
+              {(pagosFiltroFecha === 'todas' ? pagosData[compra.id] : pagosData[compra.id].filter(p => p.fecha === pagosFiltroFecha)).map((pago, i, arr) => {
                 const pcfg = estadoPagoConfig[pago.estado];
                 return (
-                  <div key={i} className="grid px-5 py-3 items-center" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: i < pagosData[compra.id].length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+                  <div key={i} className="grid px-5 py-3 items-center" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: i < arr.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
                     <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151' }}>{pago.fecha}</span>
                     <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{pago.monto}</span>
                     <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '9999px', backgroundColor: pcfg.bg, border: `1px solid ${pcfg.border}`, fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: pcfg.color, width: 'fit-content' }}>{pcfg.label}</span>
@@ -2957,6 +2979,16 @@ function MyPurchasesContent() {
           ) : (
             documentosData[compra.id].map((doc, i) => (
               <div key={i} className="flex items-center gap-4 px-5 py-3" style={{ borderBottom: i < documentosData[compra.id].length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+                {/* Checkbox redondeado */}
+                <div
+                  onClick={() => toggleDoc(i)}
+                  style={{ width: '20px', height: '20px', borderRadius: '6px', border: `2px solid ${docsSeleccionados.has(i) ? '#006B4E' : '#D1D5DB'}`, backgroundColor: docsSeleccionados.has(i) ? '#006B4E' : '#FFFFFF', flexShrink: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                >
+                  {docsSeleccionados.has(i) && (
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  )}
+                </div>
+                {/* Ícono de documento */}
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
@@ -2965,6 +2997,15 @@ function MyPurchasesContent() {
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{doc.tipo} · {doc.fecha}</p>
                 </div>
                 <span style={{ padding: '2px 8px', borderRadius: '9999px', backgroundColor: '#DCFCE7', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#166534', flexShrink: 0 }}>Disponible</span>
+                {/* Botón descargar */}
+                <button
+                  style={{ width: '34px', height: '34px', borderRadius: '8px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', flexShrink: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; e.currentTarget.style.borderColor = '#86EFAC'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#E5E5E5'; }}
+                  title="Descargar"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                </button>
               </div>
             ))
           )}
