@@ -2919,7 +2919,7 @@ function MyPurchasesContent() {
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: '#374151' }}>{compra.monto}</span>
                 </div>
               </div>
-              <div className="flex-shrink-0 flex flex-col items-end justify-between" style={{ minHeight: '64px' }}>
+              <div className="flex-shrink-0 flex flex-col items-end" style={{ gap: '20px' }}>
                 <span className="px-2.5 py-1 rounded-full" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
                   {cfg.label}
                 </span>
