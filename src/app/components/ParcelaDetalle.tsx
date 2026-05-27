@@ -60,7 +60,7 @@ const parcelasGeoData = [
   
   { id: 5, numero: 5, points: [[8, 26], [26, 24], [28, 40], [10, 42]], centroid: [18, 33], estado: 'disponible', area: '5,300 m²' },
   { id: 6, numero: 6, points: [[30, 24], [48, 22], [50, 38], [32, 41]], centroid: [40, 31], estado: 'vendido', area: '5,000 m²' },
-  { id: 7, numero: 7, points: [[52, 22], [70, 24], [72, 40], [54, 39]], centroid: [62, 31], estado: 'disponible', area: '5,100 m²' },
+  { id: 7, numero: 7, points: [[52, 22], [70, 24], [72, 40], [54, 39]], centroid: [62, 31], estado: 'reservandose', area: '5,100 m²' },
   { id: 8, numero: 8, points: [[74, 25], [90, 27], [92, 43], [76, 41]], centroid: [83, 34], estado: 'reservado', area: '4,900 m²' },
   
   { id: 9, numero: 9, points: [[10, 46], [28, 44], [30, 62], [12, 64]], centroid: [20, 54], estado: 'disponible', area: '5,200 m²' },
@@ -100,18 +100,20 @@ function GeolocalizacionMap({
 
   const getEstadoColor = (estado: string) => {
     switch (estado) {
-      case 'disponible': return '#10B981'; // Verde
-      case 'reservado': return '#006B4E'; // Azul
-      case 'vendido': return '#EF4444'; // Rojo
+      case 'disponible': return '#10B981';
+      case 'reservandose': return '#F59E0B';
+      case 'reservado': return '#006B4E';
+      case 'vendido': return '#EF4444';
       default: return '#9CA3AF';
     }
   };
 
   const getEstadoBackgroundColor = (estado: string) => {
     switch (estado) {
-      case 'disponible': return '#FFFFFF'; // Blanco
-      case 'reservado': return '#006B4E'; // Azul
-      case 'vendido': return '#EF4444'; // Rojo
+      case 'disponible': return '#FFFFFF';
+      case 'reservandose': return '#F59E0B';
+      case 'reservado': return '#006B4E';
+      case 'vendido': return '#EF4444';
       default: return '#E5E5E5';
     }
   };
@@ -119,6 +121,7 @@ function GeolocalizacionMap({
   const getEstadoLabel = (estado: string) => {
     switch (estado) {
       case 'disponible': return 'Disponible';
+      case 'reservandose': return 'Reservándose';
       case 'reservado': return 'Reservado';
       case 'vendido': return 'Vendido';
       default: return '';
@@ -287,7 +290,7 @@ function GeolocalizacionMap({
               const isActual = parcelaActualId === parcela.id;
               const bgColor = getEstadoBackgroundColor(parcela.estado);
               const borderColor = getEstadoColor(parcela.estado);
-              const textColor = parcela.estado === 'disponible' ? '#0A0A0A' : '#FFFFFF';
+              const textColor = (parcela.estado === 'disponible' || parcela.estado === 'reservandose') ? '#0A0A0A' : '#FFFFFF';
               
               return (
                 <div
@@ -638,43 +641,23 @@ function GeolocalizacionMap({
           }}
         >
           <div className="flex items-center gap-2">
-            <div 
-              className="w-4 h-4 rounded-full flex items-center justify-center" 
-              style={{ 
-                backgroundColor: '#FFFFFF',
-                border: '2px solid #10B981'
-              }}
+            <div
+              className="w-4 h-4 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: '#FFFFFF', border: '2px solid #10B981' }}
             ></div>
-            <span style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              color: '#0A0A0A',
-              fontWeight: 'var(--font-weight-medium)'
-            }}>Disponible</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Disponible</span>
           </div>
           <div className="flex items-center gap-2">
-            <div 
-              className="w-4 h-4 rounded-full" 
-              style={{ backgroundColor: '#006B4E' }}
-            ></div>
-            <span style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              color: '#0A0A0A',
-              fontWeight: 'var(--font-weight-medium)'
-            }}>Reservado</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#F59E0B' }}></div>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Reservándose</span>
           </div>
           <div className="flex items-center gap-2">
-            <div 
-              className="w-4 h-4 rounded-full" 
-              style={{ backgroundColor: '#EF4444' }}
-            ></div>
-            <span style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              color: '#0A0A0A',
-              fontWeight: 'var(--font-weight-medium)'
-            }}>Vendido</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#006B4E' }}></div>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Reservado</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#EF4444' }}></div>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Vendido</span>
           </div>
         </div>
       </div>
