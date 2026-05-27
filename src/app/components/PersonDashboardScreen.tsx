@@ -2658,463 +2658,287 @@ function CompareContent() {
 }
 
 function MyPurchasesContent() {
-  const compras = [
+  const [selectedId, setSelectedId] = React.useState<number | null>(null);
+
+  type EstadoCompra = 'reservandose' | 'reservada' | 'aprobada' | 'rechazada';
+  type TipoCompra = 'reserva' | 'compra';
+
+  const estadoConfig: Record<EstadoCompra, { label: string; bg: string; color: string; border: string }> = {
+    reservandose: { label: 'Reservándose', bg: '#FFFBEB', color: '#CA8A04', border: '#FDE68A' },
+    reservada:    { label: 'Reservada',    bg: '#EBFEF5', color: '#006B4E', border: '#A7F3D0' },
+    aprobada:     { label: 'Aprobada',     bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
+    rechazada:    { label: 'Rechazada',    bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
+  };
+
+  const compras: { id: number; nombre: string; ubicacion: string; superficie: string; fecha: string; monto: string; estado: EstadoCompra; tipo: TipoCompra; metodoPago: string; imagen: string }[] = [
     {
       id: 1,
       nombre: 'Parcela Vista al Valle',
       ubicacion: 'Pirque, Región Metropolitana',
       superficie: '5.000 m²',
-      fechaCompra: '12 Mar 2026',
-      precioTotal: 85000000,
-      estado: 'en-proceso',
-      etapaActual: 'Documentación',
-      cuotasPagadas: 3,
-      cuotasTotales: 12,
-      proximaCuota: '15 Abr 2026',
-      imagen: 'https://images.unsplash.com/photo-1765574780421-451d6b943191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGxhbmQlMjB2YWxsZXklMjBjaGlsZSUyMGNvdW50cnlzaWRlfGVufDF8fHx8MTc2OTc5MjgzMHww&ixlib=rb-4.1.0&q=80&w=1080',
-      documentos: [
-        { nombre: 'Contrato de compraventa', estado: 'completado' },
-        { nombre: 'Escritura', estado: 'en-proceso' },
-        { nombre: 'Comprobante de pago inicial', estado: 'completado' }
-      ]
+      fecha: '15 May 2026',
+      monto: '$500.000',
+      estado: 'reservandose',
+      tipo: 'reserva',
+      metodoPago: 'Transferencia bancaria',
+      imagen: 'https://images.unsplash.com/photo-1765574780421-451d6b943191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGxhbmQlMjB2YWxsZXklMjBjaGlsZSUyMGNvdW50cnlzaWRlfGVufDF8fHx8MTc2OTc5MjgzMHww&ixlib=rb-4.1.0&q=80&w=400',
     },
     {
       id: 2,
       nombre: 'Parcela Bosque del Sur',
       ubicacion: 'Cabrero, Región del Biobío',
       superficie: '7.200 m²',
-      fechaCompra: '28 Ene 2026',
-      precioTotal: 62000000,
-      estado: 'completado',
-      etapaActual: 'Escritura firmada',
-      cuotasPagadas: 12,
-      cuotasTotales: 12,
-      proximaCuota: null,
-      imagen: 'https://images.unsplash.com/photo-1761786271694-66020392b461?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxncmVlbiUyMGZvcmVzdCUyMHByb3BlcnR5JTIwYWVyaWFsfGVufDF8fHx8MTc2OTc5MjgzM3ww&ixlib=rb-4.1.0&q=80&w=1080',
-      documentos: [
-        { nombre: 'Contrato de compraventa', estado: 'completado' },
-        { nombre: 'Escritura', estado: 'completado' },
-        { nombre: 'Comprobante de pago final', estado: 'completado' }
-      ]
-    }
+      fecha: '28 Abr 2026',
+      monto: '$500.000',
+      estado: 'reservada',
+      tipo: 'reserva',
+      metodoPago: 'Mercado Pago',
+      imagen: 'https://images.unsplash.com/photo-1761786271694-66020392b461?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxncmVlbiUyMGZvcmVzdCUyMHByb3BlcnR5JTIwYWVyaWFsfGVufDF8fHx8MTc2OTc5MjgzM3ww&ixlib=rb-4.1.0&q=80&w=400',
+    },
+    {
+      id: 3,
+      nombre: 'Parcela Los Robles',
+      ubicacion: 'Colina, Región Metropolitana',
+      superficie: '6.000 m²',
+      fecha: '12 Mar 2026',
+      monto: '$85.000.000',
+      estado: 'aprobada',
+      tipo: 'compra',
+      metodoPago: 'Transferencia bancaria',
+      imagen: 'https://images.unsplash.com/photo-1764168414096-fa2a80540745?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMHByb3BlcnR5JTIwbGFuZCUyMGFlcmlhbHxlbnwxfHx8fDE3NzAxMzI5NjJ8MA&ixlib=rb-4.1.0&q=80&w=400',
+    },
+    {
+      id: 4,
+      nombre: 'Parcela Valle Escondido',
+      ubicacion: "San Fernando, Región de O'Higgins",
+      superficie: '4.500 m²',
+      fecha: '3 Mar 2026',
+      monto: '$500.000',
+      estado: 'rechazada',
+      tipo: 'reserva',
+      metodoPago: 'Transferencia bancaria',
+      imagen: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=300&fit=crop&q=80',
+    },
   ];
 
+  const STEPPER = ['Reservándose', 'Reservada', 'Aprobada'];
+  const pasoActivo: Record<EstadoCompra, number> = {
+    reservandose: 0,
+    reservada:    1,
+    aprobada:     2,
+    rechazada:    -1,
+  };
+
+  // ── VISTA DETALLE ──
+  if (selectedId !== null) {
+    const compra = compras.find(c => c.id === selectedId)!;
+    const cfg = estadoConfig[compra.estado];
+    const pasoIdx = pasoActivo[compra.estado];
+
+    return (
+      <main className="px-8 py-8 space-y-6">
+        <button
+          onClick={() => setSelectedId(null)}
+          className="flex items-center gap-2 text-sm transition-colors"
+          style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          onMouseEnter={e => e.currentTarget.style.color = '#0A0A0A'}
+          onMouseLeave={e => e.currentTarget.style.color = '#737373'}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Mis compras
+        </button>
+
+        {/* Header */}
+        <div className="flex gap-5 items-start">
+          <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
+            <img src={compra.imagen} alt={compra.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div className="flex-1 space-y-3">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-regular)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+                  {compra.nombre}
+                </h1>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>{compra.ubicacion}</p>
+              </div>
+              <span className="px-3 py-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
+                {cfg.label}
+              </span>
+            </div>
+            <div className="flex gap-6 flex-wrap">
+              {[
+                { label: 'Tipo', value: compra.tipo === 'reserva' ? 'Reserva' : 'Compra' },
+                { label: 'Fecha', value: compra.fecha },
+                { label: 'Monto', value: compra.monto },
+                { label: 'Superficie', value: compra.superficie },
+              ].map(item => (
+                <div key={item.label}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>{item.label}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Stepper */}
+        <div className="rounded-xl p-5" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', marginBottom: '20px' }}>
+            Seguimiento de la operación
+          </p>
+          {compra.estado === 'rechazada' ? (
+            <div className="flex items-center gap-3 p-4 rounded-xl" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" className="flex-shrink-0">
+                <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M15 9l-6 6M9 9l6 6" />
+              </svg>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#DC2626' }}>Operación rechazada</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>El pago fue rechazado. La parcela volvió a estar disponible.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              {STEPPER.map((label, i) => {
+                const done = pasoIdx > i;
+                const active = pasoIdx === i;
+                return (
+                  <React.Fragment key={label}>
+                    <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: done ? '#006B4E' : active ? '#FFFBEB' : '#F5F5F5', border: `2px solid ${done ? '#006B4E' : active ? '#F59E0B' : '#E5E5E5'}` }}>
+                        {done ? (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        ) : (
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: active ? '#F59E0B' : '#D1D5DB' }} />
+                        )}
+                      </div>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: active ? 600 : 400, color: active ? '#0A0A0A' : done ? '#006B4E' : '#9CA3AF', whiteSpace: 'nowrap' }}>
+                        {label}
+                      </p>
+                    </div>
+                    {i < STEPPER.length - 1 && (
+                      <div className="flex-1 h-0.5 mx-2 mb-6" style={{ backgroundColor: done ? '#006B4E' : '#E5E5E5' }} />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Mensaje contextual */}
+        {compra.estado === 'reservandose' && (
+          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4l2 2" /></svg>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#92400E', lineHeight: '1.5' }}>
+              Tu comprobante está siendo revisado. Te notificaremos por email en un plazo de 24 horas hábiles.
+            </p>
+          </div>
+        )}
+        {compra.estado === 'reservada' && (
+          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006B4E" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#065F46', lineHeight: '1.5' }}>
+              Tu pago fue validado. La parcela está reservada a tu nombre. El equipo se pondrá en contacto para los pasos siguientes.
+            </p>
+          </div>
+        )}
+        {compra.estado === 'aprobada' && (
+          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#DCFCE7', border: '1px solid #86EFAC' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
+              ¡Operación aprobada! Tu compra fue confirmada exitosamente.
+            </p>
+          </div>
+        )}
+        {compra.estado === 'rechazada' && (
+          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4" /><circle cx="12" cy="16" r="0.5" fill="#DC2626" /></svg>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#B91C1C', lineHeight: '1.5' }}>
+              El pago fue rechazado. Si quieres adquirir esta parcela, puedes iniciar una nueva reserva desde el detalle de la publicación.
+            </p>
+          </div>
+        )}
+
+        {/* Resumen de la operación */}
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+          <div className="px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Resumen de la operación</p>
+          </div>
+          {[
+            { label: 'Tipo de operación', value: compra.tipo === 'reserva' ? 'Reserva de parcela' : 'Compra de parcela' },
+            { label: 'Parcela', value: compra.nombre },
+            { label: 'Monto', value: compra.monto },
+            { label: 'Método de pago', value: compra.metodoPago },
+            { label: 'Fecha', value: compra.fecha },
+            { label: 'Estado', value: cfg.label },
+          ].map((row, i, arr) => (
+            <div key={row.label} className="flex items-center justify-between px-5 py-3" style={{ borderBottom: i < arr.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{row.label}</span>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: row.label === 'Estado' ? cfg.color : '#111827' }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+      </main>
+    );
+  }
+
+  // ── VISTA LISTA ──
   return (
-    <main className="px-8 py-8 space-y-8">
-      {/* Header */}
+    <main className="px-8 py-8 space-y-6">
       <div>
-        <h1 style={{ 
-          fontFamily: 'var(--font-heading)',
-          fontWeight: 'var(--font-weight-regular)',
-          fontSize: 'var(--font-size-h2)',
-          lineHeight: 'var(--line-height-heading)',
-          color: '#0A0A0A'
-        }}>
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
           Mis compras
         </h1>
-        <p style={{ 
-          fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-base)',
-          color: '#737373',
-          marginTop: '8px'
-        }}>
-          Revisa el estado de tus parcelas adquiridas, pagos y documentación
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '8px' }}>
+          Historial de reservas y compras, de la más reciente a la más antigua
         </p>
       </div>
 
-      {/* Lista de compras */}
-      <div className="space-y-6">
-        {compras.map((compra) => (
-          <section 
-            key={compra.id}
-            className="rounded-2xl p-6 space-y-6" 
-            style={{ 
-              backgroundColor: '#FFFFFF', 
-              border: '1px solid #E5E5E5',
-              boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)'
-            }}
-          >
-            {/* Property Header */}
-            <div className="flex gap-6">
-              <div 
-                className="rounded-xl flex-shrink-0 overflow-hidden" 
-                style={{ 
-                  width: '160px', 
-                  height: '160px'
-                }}
-              >
-                <ImageWithFallback 
-                  src={compra.imagen}
-                  alt={compra.nombre}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-              </div>
-              <div className="flex-1 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h2 style={{ 
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'var(--font-size-h3)',
-                      fontWeight: 'var(--font-weight-semibold)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-heading)',
-                      marginBottom: '6px'
-                    }}>
-                      {compra.nombre}
-                    </h2>
-                    <p style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      color: '#737373'
-                    }}>
-                      {compra.ubicacion}
-                    </p>
-                  </div>
-                  <div 
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-full" 
-                    style={{ 
-                      backgroundColor: compra.estado === 'completado' ? 'rgba(100, 126, 63, 0.1)' : '#FFFBEB'
-                    }}
-                  >
-                    <span style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-xs)',
-                      fontWeight: 'var(--font-weight-semibold)',
-                      color: compra.estado === 'completado' ? '#647E3F' : '#CA8A04',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em'
-                    }}>
-                      {compra.estado === 'completado' ? 'Completado' : 'En proceso'}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
-                      <svg className="w-5 h-5" fill="none" stroke="#0A0A0A" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div style={{ 
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-xs)',
-                        color: '#737373',
-                        marginBottom: '2px'
-                      }}>
-                        Superficie
-                      </div>
-                      <div style={{ 
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-body-sm)',
-                        fontWeight: 'var(--font-weight-semibold)',
-                        color: '#0A0A0A'
-                      }}>
-                        {compra.superficie}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
-                      <svg className="w-5 h-5" fill="none" stroke="#0A0A0A" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div style={{ 
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-xs)',
-                        color: '#737373',
-                        marginBottom: '2px'
-                      }}>
-                        Fecha de compra
-                      </div>
-                      <div style={{ 
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-body-sm)',
-                        fontWeight: 'var(--font-weight-semibold)',
-                        color: '#0A0A0A'
-                      }}>
-                        {compra.fechaCompra}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Estado del proceso */}
-            <div 
-              className="rounded-xl p-5" 
-              style={{ 
-                backgroundColor: '#FAFAFA', 
-                border: '1px solid #E5E5E5' 
-              }}
+      <div className="space-y-3">
+        {compras.map((compra) => {
+          const cfg = estadoConfig[compra.estado];
+          return (
+            <div
+              key={compra.id}
+              className="rounded-2xl p-5 flex gap-5 items-center"
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#0A0A0A'
-                }}>
-                  Estado del proceso
-                </h3>
+              <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
+                <img src={compra.imagen} alt={compra.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <div className="flex items-center gap-3">
-                <div 
-                  className="w-2 h-2 rounded-full" 
-                  style={{ 
-                    backgroundColor: compra.estado === 'completado' ? '#647E3F' : '#CA8A04' 
-                  }}
-                />
-                <span style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  color: '#737373'
-                }}>
-                  Etapa actual: <span style={{ fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>{compra.etapaActual}</span>
-                </span>
-              </div>
-              {compra.estado === 'en-proceso' && (
-                <p style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-xs)',
-                  color: '#737373',
-                  marginTop: '12px',
-                  paddingLeft: '20px'
-                }}>
-                  Los documentos están siendo preparados. Te notificaremos cuando estén listos.
-                </p>
-              )}
-            </div>
-
-            {/* Información de pagos */}
-            <div 
-              className="rounded-xl p-5 space-y-5" 
-              style={{ 
-                backgroundColor: '#FAFAFA', 
-                border: '1px solid #E5E5E5' 
-              }}
-            >
-              <h3 style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A'
-              }}>
-                Información de pagos
-              </h3>
-              <div className="grid grid-cols-4 gap-6">
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-xs)',
-                    color: '#737373',
-                    marginBottom: '6px'
-                  }}>
-                    Precio total
-                  </div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'var(--font-size-h4)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    ${(compra.precioTotal / 1000000).toFixed(1)}M
-                  </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-3 mb-1">
+                  <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}>{compra.nombre}</h3>
+                  <span className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
+                    {cfg.label}
+                  </span>
                 </div>
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-xs)',
-                    color: '#737373',
-                    marginBottom: '6px'
-                  }}>
-                    Modalidad
-                  </div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-sm)',
-                    color: '#0A0A0A'
-                  }}>
-                    Pago en cuotas
-                  </div>
-                </div>
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-xs)',
-                    color: '#737373',
-                    marginBottom: '6px'
-                  }}>
-                    Cuotas pagadas
-                  </div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-sm)',
-                    color: '#0A0A0A'
-                  }}>
-                    {compra.cuotasPagadas} de {compra.cuotasTotales}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-xs)',
-                    color: '#737373',
-                    marginBottom: '6px'
-                  }}>
-                    Próxima cuota
-                  </div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-sm)',
-                    color: '#0A0A0A'
-                  }}>
-                    {compra.proximaCuota || '—'}
-                  </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{compra.ubicacion}</p>
+                <div className="flex items-center gap-4 mt-2 flex-wrap">
+                  <span className="px-2 py-0.5 rounded-md" style={{ backgroundColor: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: '11px', color: '#525252', fontWeight: 500 }}>
+                    {compra.tipo === 'reserva' ? 'Reserva' : 'Compra'}
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{compra.fecha}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: '#374151' }}>{compra.monto}</span>
                 </div>
               </div>
-              <div 
-                className="rounded-lg p-4 flex items-center gap-3" 
-                style={{ 
-                  backgroundColor: compra.estado === 'completado' ? 'rgba(100, 126, 63, 0.1)' : 'rgba(100, 126, 63, 0.1)',
-                  border: `1px solid ${compra.estado === 'completado' ? 'rgba(100, 126, 63, 0.3)' : 'rgba(100, 126, 63, 0.3)'}`
-                }}
+              <button
+                onClick={() => setSelectedId(compra.id)}
+                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full transition-all"
+                style={{ backgroundColor: '#F5F5F5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, border: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#0A0A0A'; }}
               >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                Ver detalle
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
-                <span style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#647E3F'
-                }}>
-                  Estado: {compra.estado === 'completado' ? 'Pagado completamente' : 'Al día'}
-                </span>
-              </div>
-            </div>
-
-            {/* Documentación */}
-            <div 
-              className="rounded-xl p-5 space-y-4" 
-              style={{ 
-                backgroundColor: '#FAFAFA', 
-                border: '1px solid #E5E5E5' 
-              }}
-            >
-              <h3 style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A'
-              }}>
-                Documentación
-              </h3>
-              <div className="space-y-2">
-                {compra.documentos.map((doc, index) => (
-                  <div 
-                    key={index}
-                    className="flex items-center gap-3 p-4 rounded-lg" 
-                    style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
-                  >
-                    {doc.estado === 'completado' ? (
-                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    ) : (
-                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="#CA8A04" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    )}
-                    <span style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      color: '#0A0A0A',
-                      flex: '1'
-                    }}>
-                      {doc.nombre}
-                      {doc.estado === 'en-proceso' && (
-                        <span style={{ 
-                          fontSize: 'var(--font-size-xs)', 
-                          color: '#737373',
-                          marginLeft: '8px'
-                        }}>
-                          (en preparación)
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="grid grid-cols-3 gap-3 pt-2">
-              <button 
-                className="py-3 px-4 transition-all" 
-                style={{ 
-                  backgroundColor: '#FFFFFF',
-                  color: '#0A0A0A',
-                  border: '2px solid #DEDEDE',
-                  borderRadius: '200px',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  letterSpacing: 'var(--letter-spacing-wide)',
-                  lineHeight: 'var(--line-height-ui)'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                Ver documentación
-              </button>
-              <button 
-                className="py-3 px-4 transition-all" 
-                style={{ 
-                  backgroundColor: '#FFFFFF',
-                  color: '#0A0A0A',
-                  border: '2px solid #DEDEDE',
-                  borderRadius: '200px',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  letterSpacing: 'var(--letter-spacing-wide)',
-                  lineHeight: 'var(--line-height-ui)'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                Ver pagos
-              </button>
-              <button 
-                className="py-3 px-4 transition-all" 
-                style={{ 
-                  backgroundColor: '#111',
-                  color: '#FFFFFF',
-                  borderRadius: '200px',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  letterSpacing: 'var(--letter-spacing-wide)',
-                  lineHeight: 'var(--line-height-ui)'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#6B6B6B'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#111'; }}
-              >
-                Ver detalles
               </button>
             </div>
-          </section>
-        ))}
+          );
+        })}
       </div>
     </main>
   );
