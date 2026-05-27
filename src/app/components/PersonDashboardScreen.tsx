@@ -2789,23 +2789,23 @@ function MyPurchasesContent() {
         </button>
 
         {/* Header */}
-        <div className="flex gap-5 items-start">
-          <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
+        <div className="flex gap-8 items-start">
+          <div className="w-28 h-28 rounded-xl overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
             <img src={compra.imagen} alt={compra.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
-          <div className="flex-1 space-y-3">
+          <div className="flex-1 space-y-4">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-regular)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
                   {compra.nombre}
                 </h1>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>{compra.ubicacion}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '6px' }}>{compra.ubicacion}</p>
               </div>
               <span className="px-3 py-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: cfg.color }}>
                 {cfg.label}
               </span>
             </div>
-            <div className="flex gap-6 flex-wrap">
+            <div className="flex gap-8 flex-wrap">
               {[
                 { label: 'Tipo', value: compra.tipo === 'reserva' ? 'Reserva' : 'Compra' },
                 { label: 'Fecha', value: compra.fecha },
@@ -2813,7 +2813,7 @@ function MyPurchasesContent() {
                 { label: 'Superficie', value: compra.superficie },
               ].map(item => (
                 <div key={item.label}>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>{item.label}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '4px' }}>{item.label}</p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{item.value}</p>
                 </div>
               ))}
