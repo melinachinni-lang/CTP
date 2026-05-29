@@ -2103,6 +2103,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               imagen={parcela.imagen}
                               nombre={parcela.nombre}
                             />
+                            {(!parcelaEstados?.[parcela.id] || parcelaEstados[parcela.id] === 'disponible') && (
+                              <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Parcela</span>
+                            )}
                             {parcelaEstados?.[parcela.id] && parcelaEstados[parcela.id] !== 'disponible' && (
                               <div
                                 className="absolute top-2 left-2 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
@@ -2315,11 +2318,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           >
                             {/* Imagen */}
                             <div className="relative w-full h-40 sm:h-44 lg:h-48 overflow-hidden">
-                              <ImageWithFallback 
+                              <ImageWithFallback
                                 src={proyecto.imagen}
                                 alt={proyecto.nombre}
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                               />
+                              <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#92400E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Proyecto</span>
                               {/* Badge de estado */}
                               <div 
                                 className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium"
