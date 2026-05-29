@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, User, Settings, LogOut, Menu, X, Bell } from 'lucide-react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
+import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 
 interface NavbarProps {
   onNavigate: (screen: string) => void;
@@ -90,7 +91,10 @@ export function Navbar({
 
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-2 lg:gap-3">
-              <button 
+              <div className="hidden lg:block">
+                <LanguageCurrencySelector variant="header" />
+              </div>
+              <button
                 onClick={() => {
                   if (onShowPublishModal) {
                     // Usuario logueado o no logueado: mostrar modal

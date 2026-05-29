@@ -11,6 +11,7 @@ import { getAllParcelas } from '@/app/data/parcelasData';
 import { getAllProyectos } from '@/app/data/proyectosData';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 type ParcelaEstado = 'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada';
 
@@ -30,6 +31,7 @@ interface ParcelasPageProps {
 }
 
 export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, savedParcelaIds = [], onToggleSaved, isLoggedIn }: ParcelasPageProps) {
+  const { t } = useI18n();
   const [animatingSaveId, setAnimatingSaveId] = useState<number | null>(null);
   const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
   const [animatingProyectoSaveId, setAnimatingProyectoSaveId] = useState<number | null>(null);
@@ -993,7 +995,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 {/* Switch Incluir proyectos */}
                 <div className="space-y-2.5 w-full md:w-auto">
-                  <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Incluir proyectos</label>
+                  <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
                   <div 
                     onClick={() => setIncludeProjects(!includeProjects)}
                     className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
@@ -2111,7 +2113,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               nombre={parcela.nombre}
                             />
                             {(!parcelaEstados?.[parcela.id] || parcelaEstados[parcela.id] === 'disponible') && (
-                              <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Parcela</span>
+                              <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>{t.explore.parcelTag}</span>
                             )}
                             {parcelaEstados?.[parcela.id] && parcelaEstados[parcela.id] !== 'disponible' && (
                               <div
@@ -2222,7 +2224,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             >
                               <div className="relative w-full h-40 overflow-hidden">
                                 <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" />
-                                <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146,64,14,0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)' }}>Proyecto</span>
+                                <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146,64,14,0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)' }}>{t.explore.projectTag}</span>
                                 <button
                                   onClick={(e) => { e.stopPropagation(); handleToggleProyecto(item.id); }}
                                   className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center z-10"
@@ -2370,7 +2372,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 alt={proyecto.nombre}
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                               />
-                              <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146, 64, 14, 0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)' }}>Proyecto</span>
+                              <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146, 64, 14, 0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)' }}>{t.explore.projectTag}</span>
                               {/* Botón favorito */}
                               <button
                                 onClick={(e) => { e.stopPropagation(); handleToggleProyecto(proyecto.id); }}

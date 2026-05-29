@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import '@/styles/index.css';
+import { I18nProvider } from '@/app/i18n/i18nContext';
 import { EntryScreen } from '@/app/components/EntryScreen';
 import { CompletarPerfilScreen } from '@/app/components/CompletarPerfilScreen';
 import { RealEstateDashboardScreen } from '@/app/components/RealEstateDashboardScreen';
@@ -285,6 +286,7 @@ export default function App() {
   };
 
   return (
+    <I18nProvider>
     <div className="size-full">
       {/* Navigation Bar */}
       <div className="fixed top-0 left-0 right-0 bg-gray-100 border-b border-gray-300 z-[9999]">
@@ -399,5 +401,6 @@ export default function App() {
         </div>
       )}
     </div>
+    </I18nProvider>
   );
 }

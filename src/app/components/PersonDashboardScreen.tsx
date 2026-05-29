@@ -10,6 +10,8 @@ import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
 import { getAllParcelas } from '@/app/data/parcelasData';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
+import { useI18n } from '@/app/i18n/i18nContext';
+import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 
 interface PersonDashboardScreenProps {
   onNavigate: (screen: string, id?: number) => void;
@@ -57,18 +59,20 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
       },
     }));
 
+  const { t } = useI18n();
+
   const navItems = [
-    { id: 'home', label: 'Inicio', icon: 'home' },
-    { id: 'explore', label: 'Explorar parcelas', icon: 'search', group: 'buy' },
-    { id: 'listings', label: 'Mis publicaciones', icon: 'list', group: 'sell' },
-    { id: 'saved', label: 'Guardados', icon: 'heart', group: 'buy' },
-    { id: 'inquiries', label: 'Consultas', icon: 'message', group: 'sell' },
-    { id: 'calendarios', label: 'Calendarios', icon: 'calendar', group: 'sell' },
-    { id: 'compare', label: 'Comparar', icon: 'chart', group: 'buy' },
-    { id: 'purchases', label: 'Mis compras', icon: 'shopping-bag', group: 'buy' },
-    { id: 'plan', label: 'Plan y límites', icon: 'credit-card', group: 'sell' },
-    { id: 'help', label: 'Ayuda', icon: 'help' },
-    { id: 'settings', label: 'Configuración', icon: 'settings' },
+    { id: 'home', label: t.nav.home, icon: 'home' },
+    { id: 'explore', label: t.nav.explore, icon: 'search', group: 'buy' },
+    { id: 'listings', label: t.nav.listings, icon: 'list', group: 'sell' },
+    { id: 'saved', label: t.nav.saved, icon: 'heart', group: 'buy' },
+    { id: 'inquiries', label: t.nav.inquiries, icon: 'message', group: 'sell' },
+    { id: 'calendarios', label: t.nav.calendarios, icon: 'calendar', group: 'sell' },
+    { id: 'compare', label: t.nav.compare, icon: 'chart', group: 'buy' },
+    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag', group: 'buy' },
+    { id: 'plan', label: t.nav.plan, icon: 'credit-card', group: 'sell' },
+    { id: 'help', label: t.nav.help, icon: 'help' },
+    { id: 'settings', label: t.nav.settings, icon: 'settings' },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -284,7 +288,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <span className="flex-1 text-left font-medium">Mi cuenta</span>
+              <span className="flex-1 text-left font-medium">{t.nav.myAccount}</span>
             </button>
             {showMenu && (
               <div className="mt-2 bg-white border-2 border-gray-300">
@@ -295,10 +299,13 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.1)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
                 >
-                  Cerrar sesión
+                  {t.nav.signOut}
                 </button>
               </div>
             )}
+          </div>
+          <div className="border-t border-gray-200">
+            <LanguageCurrencySelector variant="sidebar" />
           </div>
         </div>
       </aside>
@@ -1520,6 +1527,7 @@ function ListingsContent({ onNavigate }: { onNavigate: (screen: string, id?: num
 }
 
 function SavedContent({ savedParcelaIds, onToggleSaved, onNavigate }: { savedParcelaIds: number[]; onToggleSaved?: (id: number) => void; onNavigate: (screen: string, id?: number) => void; }) {
+  const { t } = useI18n();
   const allParcelas = getAllParcelas();
   const savedParcelas = savedParcelaIds
     .map(id => allParcelas.find(p => p.id === id))
@@ -1629,7 +1637,7 @@ function SavedContent({ savedParcelaIds, onToggleSaved, onNavigate }: { savedPar
                     alt={parcela.nombre}
                     className="w-full h-full object-cover"
                   />
-                  <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Parcela</span>
+                  <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>{t.explore.parcelTag}</span>
                   {isUnavailable && (
                     <div className="absolute inset-0 flex items-end p-3" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #D1D5DB' }}>
@@ -2659,6 +2667,7 @@ function CompareContent() {
 }
 
 function MyPurchasesContent() {
+  const { t } = useI18n();
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
   const [pagosFiltroFecha, setPagosFiltroFecha] = React.useState<string>('todas');
   const [docsSeleccionados, setDocsSeleccionados] = React.useState<Set<number>>(new Set());
@@ -2672,10 +2681,10 @@ function MyPurchasesContent() {
   type TipoCompra = 'reserva' | 'compra';
 
   const estadoConfig: Record<EstadoCompra, { label: string; bg: string; color: string; border: string }> = {
-    reservandose: { label: 'Reservándose', bg: '#FFFBEB', color: '#CA8A04', border: '#FDE68A' },
-    reservada:    { label: 'Reservada',    bg: '#EBFEF5', color: '#006B4E', border: '#A7F3D0' },
-    aprobada:     { label: 'Aprobada',     bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
-    rechazada:    { label: 'Rechazada',    bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
+    reservandose: { label: t.status.reservandose, bg: '#FFFBEB', color: '#CA8A04', border: '#FDE68A' },
+    reservada:    { label: t.status.reservada,    bg: '#EBFEF5', color: '#006B4E', border: '#A7F3D0' },
+    aprobada:     { label: t.status.aprobada,     bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
+    rechazada:    { label: t.status.rechazada,    bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
   };
 
   const compras: { id: number; nombre: string; ubicacion: string; superficie: string; fecha: string; monto: string; estado: EstadoCompra; tipo: TipoCompra; metodoPago: string; imagen: string }[] = [
@@ -2729,7 +2738,7 @@ function MyPurchasesContent() {
     },
   ];
 
-  const STEPPER = ['Reservándose', 'Reservada', 'Aprobada'];
+  const STEPPER = [t.status.reservandose, t.status.reservada, t.status.aprobada];
   const pasoActivo: Record<EstadoCompra, number> = {
     reservandose: 0,
     reservada:    1,
@@ -2742,9 +2751,9 @@ function MyPurchasesContent() {
   type Documento = { nombre: string; tipo: string; fecha: string };
 
   const estadoPagoConfig: Record<EstadoPago, { label: string; bg: string; color: string; border: string }> = {
-    aprobado:  { label: 'Aprobado',  bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
-    pendiente: { label: 'Pendiente', bg: '#FFFBEB', color: '#CA8A04', border: '#FDE68A' },
-    rechazado: { label: 'Rechazado', bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
+    aprobado:  { label: t.status.aprobado,  bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
+    pendiente: { label: t.status.pendiente, bg: '#FFFBEB', color: '#CA8A04', border: '#FDE68A' },
+    rechazado: { label: t.status.rechazado, bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
   };
 
   const pagosData: Record<number, Pago[]> = {
@@ -2786,7 +2795,7 @@ function MyPurchasesContent() {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          Mis compras
+          {t.purchases.backToList.replace('← ', '')}
         </button>
 
         {/* Header */}
@@ -2808,10 +2817,10 @@ function MyPurchasesContent() {
             </div>
             <div className="flex gap-8 flex-wrap">
               {[
-                { label: 'Tipo', value: compra.tipo === 'reserva' ? 'Reserva' : 'Compra' },
-                { label: 'Fecha', value: compra.fecha },
-                { label: 'Monto', value: compra.monto },
-                { label: 'Superficie', value: compra.superficie },
+                { label: t.common.type, value: compra.tipo === 'reserva' ? t.purchases.reservationType : t.purchases.purchaseType },
+                { label: t.common.date, value: compra.fecha },
+                { label: t.common.amount, value: compra.monto },
+                { label: t.common.area, value: compra.superficie },
               ].map(item => (
                 <div key={item.label}>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '4px' }}>{item.label}</p>
@@ -2825,7 +2834,7 @@ function MyPurchasesContent() {
         {/* Stepper */}
         <div className="rounded-xl p-5" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', marginBottom: '20px' }}>
-            Seguimiento de la operación
+            {t.purchases.operationTracking}
           </p>
           {compra.estado === 'rechazada' ? (
             <div className="flex items-center gap-3 p-4 rounded-xl" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
@@ -2833,8 +2842,8 @@ function MyPurchasesContent() {
                 <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M15 9l-6 6M9 9l6 6" />
               </svg>
               <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#DC2626' }}>Operación rechazada</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>El pago fue rechazado. La parcela volvió a estar disponible.</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#DC2626' }}>{t.purchases.operationRejected}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>{t.purchases.operationRejectedDesc}</p>
               </div>
             </div>
           ) : (
@@ -2871,7 +2880,7 @@ function MyPurchasesContent() {
           <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4l2 2" /></svg>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#92400E', lineHeight: '1.5' }}>
-              Tu comprobante está siendo revisado. Te notificaremos por email en un plazo de 24 horas hábiles.
+              {t.purchases.msg_reservandose}
             </p>
           </div>
         )}
@@ -2879,7 +2888,7 @@ function MyPurchasesContent() {
           <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006B4E" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#065F46', lineHeight: '1.5' }}>
-              Tu pago fue validado. La parcela está reservada a tu nombre. El equipo se pondrá en contacto para los pasos siguientes.
+              {t.purchases.msg_reservada}
             </p>
           </div>
         )}
@@ -2887,7 +2896,7 @@ function MyPurchasesContent() {
           <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#DCFCE7', border: '1px solid #86EFAC' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
-              ¡Operación aprobada! Tu compra fue confirmada exitosamente.
+              {t.purchases.msg_aprobada}
             </p>
           </div>
         )}
@@ -2895,7 +2904,7 @@ function MyPurchasesContent() {
           <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4" /><circle cx="12" cy="16" r="0.5" fill="#DC2626" /></svg>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#B91C1C', lineHeight: '1.5' }}>
-              El pago fue rechazado. Si quieres adquirir esta parcela, puedes iniciar una nueva reserva desde el detalle de la publicación.
+              {t.purchases.msg_rechazada}
             </p>
           </div>
         )}
@@ -2903,15 +2912,15 @@ function MyPurchasesContent() {
         {/* Resumen de la operación */}
         <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
           <div className="px-5 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Resumen de la operación</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.purchases.operationSummary}</p>
           </div>
           {[
-            { label: 'Tipo de operación', value: compra.tipo === 'reserva' ? 'Reserva de parcela' : 'Compra de parcela' },
-            { label: 'Parcela', value: compra.nombre },
-            { label: 'Monto', value: compra.monto },
-            { label: 'Método de pago', value: compra.metodoPago },
-            { label: 'Fecha', value: compra.fecha },
-            { label: 'Estado', value: cfg.label },
+            { label: t.purchases.operationType, value: compra.tipo === 'reserva' ? t.purchases.parcelReservation : t.purchases.parcelPurchase },
+            { label: t.purchases.parcelaLabel, value: compra.nombre },
+            { label: t.common.amount, value: compra.monto },
+            { label: t.common.paymentMethod, value: compra.metodoPago },
+            { label: t.common.date, value: compra.fecha },
+            { label: t.common.status, value: cfg.label },
           ].map((row, i, arr) => (
             <div key={row.label} className="flex items-center justify-between px-5 py-3" style={{ borderBottom: i < arr.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{row.label}</span>
@@ -2923,14 +2932,14 @@ function MyPurchasesContent() {
         {/* Historial de pagos */}
         <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
           <div className="px-5 py-3 flex items-center justify-between" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Historial de pagos</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.purchases.paymentHistory}</p>
             <div className="relative">
               <select
                 value={pagosFiltroFecha}
                 onChange={e => setPagosFiltroFecha(e.target.value)}
                 style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#374151', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '5px 28px 5px 10px', appearance: 'none', WebkitAppearance: 'none', cursor: 'pointer', outline: 'none' }}
               >
-                <option value="todas">Todas las fechas</option>
+                <option value="todas">{t.common.allDates}</option>
                 {[...new Set(pagosData[compra.id].map(p => p.fecha))].map(f => (
                   <option key={f} value={f}>{f}</option>
                 ))}
@@ -2943,12 +2952,12 @@ function MyPurchasesContent() {
           {pagosData[compra.id].length === 0 ? (
             <div className="flex flex-col items-center py-10 gap-2">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path strokeLinecap="round" d="M2 10h20"/></svg>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>Sin pagos registrados</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>{t.purchases.noPayments}</p>
             </div>
           ) : (
             <>
               <div className="grid px-5 py-2" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-                {['Fecha', 'Monto', 'Estado', 'Medio de pago'].map(h => (
+                {[t.purchases.dateCol, t.purchases.amountCol, t.purchases.statusCol, t.purchases.methodCol].map(h => (
                   <span key={h} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</span>
                 ))}
               </div>
@@ -2970,7 +2979,7 @@ function MyPurchasesContent() {
         {/* Documentación */}
         <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
           <div className="px-5 py-3 flex items-center justify-between" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Documentación</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.purchases.documentation}</p>
             <button
               style={{ width: '34px', height: '34px', borderRadius: '8px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', flexShrink: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; e.currentTarget.style.borderColor = '#86EFAC'; }}
@@ -2983,7 +2992,7 @@ function MyPurchasesContent() {
           {documentosData[compra.id].length === 0 ? (
             <div className="flex flex-col items-center py-10 gap-2">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>Sin documentos disponibles</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>{t.purchases.noDocuments}</p>
             </div>
           ) : (
             documentosData[compra.id].map((doc, i) => (
@@ -3005,7 +3014,7 @@ function MyPurchasesContent() {
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{doc.nombre}</p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{doc.tipo} · {doc.fecha}</p>
                 </div>
-                <span style={{ padding: '2px 8px', borderRadius: '9999px', backgroundColor: '#DCFCE7', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#166534', flexShrink: 0 }}>Disponible</span>
+                <span style={{ padding: '2px 8px', borderRadius: '9999px', backgroundColor: '#DCFCE7', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#166534', flexShrink: 0 }}>{t.common.availableLabel}</span>
               </div>
             ))
           )}
@@ -3019,10 +3028,10 @@ function MyPurchasesContent() {
     <main className="px-8 py-8 space-y-6">
       <div>
         <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
-          Mis compras
+          {t.purchases.title}
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '8px' }}>
-          Historial de reservas y compras, de la más reciente a la más antigua
+          {t.purchases.subtitle}
         </p>
       </div>
 
@@ -3056,7 +3065,7 @@ function MyPurchasesContent() {
                 {/* Tipo · Fecha · Monto */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="px-2 py-0.5 rounded-md" style={{ backgroundColor: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: '11px', color: '#525252', fontWeight: 500 }}>
-                    {compra.tipo === 'reserva' ? 'Reserva' : 'Compra'}
+                    {compra.tipo === 'reserva' ? t.purchases.reservationType : t.purchases.purchaseType}
                   </span>
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{compra.fecha}</span>
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#374151' }}>{compra.monto}</span>
@@ -3071,7 +3080,7 @@ function MyPurchasesContent() {
                     onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.color = '#FFFFFF'; }}
                     onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#0A0A0A'; }}
                   >
-                    Ver detalle
+                    {t.purchases.viewDetail}
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>

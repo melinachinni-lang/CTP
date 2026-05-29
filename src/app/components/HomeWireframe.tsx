@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart } from 'lucide-react';
+import { useI18n } from '@/app/i18n/i18nContext';
+import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { PlanesModal } from '@/app/components/PlanesModal';
 import { VambeChat } from '@/app/components/VambeChat';
@@ -37,6 +39,7 @@ interface HomeWireframeProps {
 }
 
 export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onLogout, initialLoadingError = false, onOpenPublishModal, onNavigateToPublish, savedParcelaIds = [], onToggleSaved }: HomeWireframeProps) {
+  const { t } = useI18n();
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
@@ -1392,7 +1395,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                             imagen={parcela.imagen}
                             nombre={parcela.nombre}
                           />
-                          <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>Parcela</span>
+                          <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>{t.explore.parcelTag}</span>
                           <button
                             onClick={(e) => { e.stopPropagation(); handleToggleParcela(parcela.id); }}
                             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
@@ -1738,7 +1741,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         imagen={proyecto.imagen}
                         nombre={proyecto.nombre}
                       />
-                      <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146, 64, 14, 0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>Proyecto</span>
+                      <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146, 64, 14, 0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>{t.explore.projectTag}</span>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleToggleProyecto(proyecto.id); }}
                         className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
