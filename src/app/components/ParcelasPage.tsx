@@ -2324,36 +2324,36 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                               />
                               <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#92400E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Proyecto</span>
-                              {/* Badge de estado */}
-                              <div 
-                                className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium"
-                                style={{
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 'var(--font-size-xs)',
-                                  fontWeight: 'var(--font-weight-medium)',
-                                  backgroundColor: proyecto.estado === 'En venta' ? '#DCFCE7' : proyecto.estado === 'Próximamente' ? '#FEF3C7' : '#E0E7FF',
-                                  color: proyecto.estado === 'En venta' ? '#166534' : proyecto.estado === 'Próximamente' ? '#854D0E' : '#3730A3',
-                                  border: `1px solid ${proyecto.estado === 'En venta' ? '#BBF7D0' : proyecto.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}`
-                                }}
-                              >
-                                {proyecto.estado}
-                              </div>
                             </div>
 
                             {/* Contenido */}
                             <div className="p-4 sm:p-5 flex-1 flex flex-col">
-                              {/* Nombre y ubicación */}
-                              <h3 style={{ 
-                                fontFamily: 'var(--font-heading)',
-                                fontWeight: 'var(--font-weight-medium)',
-                                fontSize: 'var(--font-size-body-lg)',
-                                color: '#0A0A0A',
-                                marginBottom: '0.5rem',
-                                lineHeight: 'var(--line-height-heading)'
-                              }}>
-                                {proyecto.nombre}
-                              </h3>
-                              <p style={{ 
+                              {/* Nombre, ubicación y badge de estado */}
+                              <div className="flex items-start justify-between gap-2 mb-1">
+                                <h3 style={{
+                                  fontFamily: 'var(--font-heading)',
+                                  fontWeight: 'var(--font-weight-medium)',
+                                  fontSize: 'var(--font-size-body-lg)',
+                                  color: '#0A0A0A',
+                                  lineHeight: 'var(--line-height-heading)'
+                                }}>
+                                  {proyecto.nombre}
+                                </h3>
+                                <span
+                                  className="px-2.5 py-0.5 rounded-full flex-shrink-0"
+                                  style={{
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: '11px',
+                                    fontWeight: 600,
+                                    backgroundColor: proyecto.estado === 'En venta' ? '#DCFCE7' : proyecto.estado === 'Próximamente' ? '#FEF3C7' : '#E0E7FF',
+                                    color: proyecto.estado === 'En venta' ? '#166534' : proyecto.estado === 'Próximamente' ? '#854D0E' : '#3730A3',
+                                    border: `1px solid ${proyecto.estado === 'En venta' ? '#BBF7D0' : proyecto.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}`
+                                  }}
+                                >
+                                  {proyecto.estado}
+                                </span>
+                              </div>
+                              <p style={{
                                 fontFamily: 'var(--font-body)',
                                 color: '#737373',
                                 fontSize: 'var(--font-size-body-sm)',
