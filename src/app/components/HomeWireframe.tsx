@@ -1392,6 +1392,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                             imagen={parcela.imagen}
                             nombre={parcela.nombre}
                           />
+                          <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>Parcela</span>
                           <button
                             onClick={(e) => { e.stopPropagation(); handleToggleParcela(parcela.id); }}
                             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
@@ -1737,6 +1738,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         imagen={proyecto.imagen}
                         nombre={proyecto.nombre}
                       />
+                      <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#92400E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>Proyecto</span>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleToggleProyecto(proyecto.id); }}
                         className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"

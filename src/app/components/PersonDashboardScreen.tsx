@@ -1629,6 +1629,7 @@ function SavedContent({ savedParcelaIds, onToggleSaved, onNavigate }: { savedPar
                     alt={parcela.nombre}
                     className="w-full h-full object-cover"
                   />
+                  <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Parcela</span>
                   {isUnavailable && (
                     <div className="absolute inset-0 flex items-end p-3" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #D1D5DB' }}>
