@@ -2087,8 +2087,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           </div>
                         ))
                       ) : (
-                        // Cards reales
-                        displayedParcelas.map((parcela) => (
+                        <>
+                        {displayedParcelas.map((parcela) => (
                           <div 
                             key={parcela.id}
                             onClick={() => onNavigate('parcela-detalle', parcela.id)}
@@ -2210,7 +2210,47 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             </div>
                           </div>
                         </div>
-                      ))
+                      ))}
+                          {includeProjects && proyectos.map((item) => (
+                            <div
+                              key={`proyecto-${item.id}`}
+                              onClick={() => onNavigate('proyecto-detalle', item.id)}
+                              className="h-full flex flex-col rounded-xl shadow-sm cursor-pointer overflow-hidden"
+                              style={{ border: '2px solid #E5E5E5', transition: 'all 0.3s ease' }}
+                              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 8px 24px rgba(70,38,17,0.15)'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'; }}
+                            >
+                              <div className="relative w-full h-40 overflow-hidden">
+                                <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" />
+                                <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(146,64,14,0.55)', backdropFilter: 'blur(4px)', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-body)' }}>Proyecto</span>
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleToggleProyecto(item.id); }}
+                                  className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center z-10"
+                                  style={{ backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
+                                >
+                                  <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: savedProyectoIds.includes(item.id) ? '#006B4E' : 'none', stroke: savedProyectoIds.includes(item.id) ? '#006B4E' : '#6B7280', strokeWidth: 2, transition: 'all 150ms ease' }}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                  </svg>
+                                </button>
+                              </div>
+                              <div className="p-4 flex-1 flex flex-col bg-white">
+                                <div className="mb-2">
+                                  <span className="px-2.5 py-0.5 rounded-full" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, backgroundColor: item.estado === 'En venta' ? '#DCFCE7' : item.estado === 'Próximamente' ? '#FEF3C7' : '#E0E7FF', color: item.estado === 'En venta' ? '#166534' : item.estado === 'Próximamente' ? '#854D0E' : '#3730A3', border: `1px solid ${item.estado === 'En venta' ? '#BBF7D0' : item.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}` }}>{item.estado}</span>
+                                </div>
+                                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '4px' }}>{item.nombre}</h3>
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '12px' }}>{item.ubicacion}, {item.region}</p>
+                                <div className="space-y-1 mb-3">
+                                  <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Disponibles</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.parcelasDisponibles} de {item.totalParcelas}</span></div>
+                                  <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Desde</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.superficieDesde}</span></div>
+                                </div>
+                                <div className="mt-auto pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>
+                                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Desde</p>
+                                  <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#0A0A0A' }}>{item.precioDesde}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </>
                       )}
                     </div>
 
@@ -2247,7 +2287,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
             </div>
 
             {/* Sección de Proyectos */}
-            <div id="proyectos-section" className="py-12 sm:py-14 md:py-16 bg-white">
+            {!includeProjects && <div id="proyectos-section" className="py-12 sm:py-14 md:py-16 bg-white">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
                 {/* Título */}
                 <div className="mb-6 sm:mb-8 text-center">
@@ -2497,7 +2537,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   </button>
                 </div>
               </div>
-            </div>
+            </div>}
 
             {/* Sección de captación para vendedores - Full Width */}
             <VendedorCaptacionSection 
