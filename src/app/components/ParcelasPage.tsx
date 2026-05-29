@@ -31,6 +31,13 @@ interface ParcelasPageProps {
 
 export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, savedParcelaIds = [], onToggleSaved, isLoggedIn }: ParcelasPageProps) {
   const [animatingSaveId, setAnimatingSaveId] = useState<number | null>(null);
+  const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
+  const [animatingProyectoSaveId, setAnimatingProyectoSaveId] = useState<number | null>(null);
+  const handleToggleProyecto = (id: number) => {
+    setAnimatingProyectoSaveId(id);
+    setTimeout(() => setAnimatingProyectoSaveId(null), 300);
+    setSavedProyectoIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
   const [showMap, setShowMap] = useState(false);
   const [sortBy, setSortBy] = useState('relevancia');
   const proyectosCarouselRef = useRef<HTMLDivElement>(null);
@@ -2324,23 +2331,25 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                               />
                               <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#92400E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)' }}>Proyecto</span>
+                              {/* Botón favorito */}
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleToggleProyecto(proyecto.id); }}
+                                className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10"
+                                style={{ backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
+                                title={savedProyectoIds.includes(proyecto.id) ? 'Eliminar de guardados' : 'Guardar proyecto'}
+                              >
+                                <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: savedProyectoIds.includes(proyecto.id) ? '#006B4E' : 'none', stroke: savedProyectoIds.includes(proyecto.id) ? '#006B4E' : '#6B7280', strokeWidth: 2, transform: animatingProyectoSaveId === proyecto.id ? 'scale(1.5)' : 'scale(1)', transition: 'transform 150ms ease, fill 150ms ease' }}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                              </button>
                             </div>
 
                             {/* Contenido */}
                             <div className="p-4 sm:p-5 flex-1 flex flex-col">
-                              {/* Nombre, ubicación y badge de estado */}
-                              <div className="flex items-start justify-between gap-2 mb-1">
-                                <h3 style={{
-                                  fontFamily: 'var(--font-heading)',
-                                  fontWeight: 'var(--font-weight-medium)',
-                                  fontSize: 'var(--font-size-body-lg)',
-                                  color: '#0A0A0A',
-                                  lineHeight: 'var(--line-height-heading)'
-                                }}>
-                                  {proyecto.nombre}
-                                </h3>
+                              {/* Badge de estado */}
+                              <div className="mb-2">
                                 <span
-                                  className="px-2.5 py-0.5 rounded-full flex-shrink-0"
+                                  className="px-2.5 py-0.5 rounded-full"
                                   style={{
                                     fontFamily: 'var(--font-body)',
                                     fontSize: '11px',
@@ -2353,6 +2362,17 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                   {proyecto.estado}
                                 </span>
                               </div>
+                              {/* Nombre y ubicación */}
+                              <h3 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontWeight: 'var(--font-weight-medium)',
+                                fontSize: 'var(--font-size-body-lg)',
+                                color: '#0A0A0A',
+                                marginBottom: '0.25rem',
+                                lineHeight: 'var(--line-height-heading)'
+                              }}>
+                                {proyecto.nombre}
+                              </h3>
                               <p style={{
                                 fontFamily: 'var(--font-body)',
                                 color: '#737373',
