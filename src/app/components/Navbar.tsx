@@ -303,6 +303,11 @@ export function Navbar({
               {/* Divisor */}
               <div className="border-t border-gray-200 my-6"></div>
 
+              {/* Selector de idioma y moneda */}
+              <div className="mb-4">
+                <LanguageCurrencySelector variant="header" />
+              </div>
+
               {/* Botones de acción */}
               <div className="space-y-3">
                 <button 
