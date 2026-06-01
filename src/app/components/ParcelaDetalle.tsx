@@ -693,6 +693,10 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
   const [estadoCompra, setEstadoCompraLocal] = useState<EstadoCompra>(estadoCompraInicial || 'disponible');
   const [isSubirComprobanteOpen, setIsSubirComprobanteOpen] = useState(false);
 
+  useEffect(() => {
+    if (estadoCompraInicial) setEstadoCompraLocal(estadoCompraInicial);
+  }, [estadoCompraInicial]);
+
   const setEstadoCompra = (estado: EstadoCompra) => {
     setEstadoCompraLocal(estado);
     if (parcelaId && onEstadoChange) onEstadoChange(parcelaId, estado);
