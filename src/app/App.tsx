@@ -142,6 +142,7 @@ export default function App() {
   type ParcelaEstado = 'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada';
   const [parcelaEstados, setParcelaEstados] = useState<Record<number, ParcelaEstado>>({});
   const reservaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const validacionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleParcelaEstadoChange = (id: number, estado: ParcelaEstado) => {
     setParcelaEstados(prev => ({ ...prev, [id]: estado }));
@@ -152,8 +153,16 @@ export default function App() {
           prev[id] === 'reservandose' ? { ...prev, [id]: 'disponible' } : prev
         );
       }, 30 * 60 * 1000);
-    } else if (estado !== 'disponible') {
+    } else if (estado === 'pago-en-validacion') {
+      if (validacionTimerRef.current) clearTimeout(validacionTimerRef.current);
+      validacionTimerRef.current = setTimeout(() => {
+        setParcelaEstados(prev =>
+          prev[id] === 'pago-en-validacion' ? { ...prev, [id]: 'reservada' } : prev
+        );
+      }, 60 * 1000);
+    } else {
       if (reservaTimerRef.current) { clearTimeout(reservaTimerRef.current); reservaTimerRef.current = null; }
+      if (validacionTimerRef.current) { clearTimeout(validacionTimerRef.current); validacionTimerRef.current = null; }
     }
   };
 
