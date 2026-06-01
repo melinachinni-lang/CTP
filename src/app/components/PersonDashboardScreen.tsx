@@ -11,7 +11,6 @@ import { DashboardRef } from '@/app/App';
 import { getAllParcelas } from '@/app/data/parcelasData';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 import { useI18n } from '@/app/i18n/i18nContext';
-import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 
 interface PersonDashboardScreenProps {
   onNavigate: (screen: string, id?: number) => void;
@@ -303,9 +302,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 </button>
               </div>
             )}
-          </div>
-          <div className="border-t border-gray-200">
-            <LanguageCurrencySelector variant="sidebar" />
           </div>
         </div>
       </aside>
