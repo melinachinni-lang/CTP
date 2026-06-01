@@ -351,7 +351,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             lineHeight: 'var(--line-heading)',
             color: '#0A0A0A'
           }}>
-            Mis publicaciones
+            Mi panel
           </h1>
           <p style={{
             fontFamily: 'var(--font-body)',
@@ -359,7 +359,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             color: '#737373',
             marginTop: '6px'
           }}>
-            Gestiona tus parcelas publicadas
+            Resumen de tu actividad
           </p>
         </div>
         <button
