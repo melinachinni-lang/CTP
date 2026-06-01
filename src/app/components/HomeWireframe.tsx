@@ -1764,8 +1764,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       </div>
                       
                       <div className="flex items-center justify-between text-sm font-medium" style={{ color: '#0A0A0A' }}>
-                        <span>{proyecto.parcelas}</span>
-                        <span>{proyecto.desde}</span>
+                        <span>{proyecto.parcelas.split(' ')[0]} {t.common.parcelas}</span>
+                        <span>{t.explore.from} {proyecto.desde.replace(/^Desde\s+/, '')}</span>
                       </div>
                       
                       <div className="space-y-1">

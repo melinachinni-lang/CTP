@@ -13,7 +13,7 @@ export interface Translations {
     viewDetail: string; save: string; publish: string; pause: string; edit: string;
     view: string; search: string; filters: string; sortBy: string; from: string;
     available: string; area: string; download: string; type: string; date: string;
-    amount: string; status: string; parcela: string; project: string;
+    amount: string; status: string; parcela: string; parcelas: string; project: string;
     reservation: string; purchase: string; paymentMethod: string;
     allDates: string; availableLabel: string; noData: string;
   };
@@ -114,7 +114,7 @@ const es: Translations = {
     edit: 'Editar', view: 'Ver', search: 'Buscar', filters: 'Filtros',
     sortBy: 'Ordenar por', from: 'Desde', available: 'Disponibles', area: 'Superficie',
     download: 'Descargar', type: 'Tipo', date: 'Fecha', amount: 'Monto',
-    status: 'Estado', parcela: 'Parcela', project: 'Proyecto',
+    status: 'Estado', parcela: 'Parcela', parcelas: 'parcelas', project: 'Proyecto',
     reservation: 'Reserva', purchase: 'Compra', paymentMethod: 'Método de pago',
     allDates: 'Todas las fechas', availableLabel: 'Disponible', noData: 'Sin datos disponibles',
   },
@@ -268,7 +268,7 @@ const en: Translations = {
     edit: 'Edit', view: 'View', search: 'Search', filters: 'Filters',
     sortBy: 'Sort by', from: 'From', available: 'Available', area: 'Area',
     download: 'Download', type: 'Type', date: 'Date', amount: 'Amount',
-    status: 'Status', parcela: 'Parcel', project: 'Project',
+    status: 'Status', parcela: 'Parcel', parcelas: 'parcels', project: 'Project',
     reservation: 'Reservation', purchase: 'Purchase', paymentMethod: 'Payment method',
     allDates: 'All dates', availableLabel: 'Available', noData: 'No data available',
   },
