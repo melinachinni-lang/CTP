@@ -2002,21 +2002,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   <div className="aspect-[16/9] bg-gray-200">
                     <img
                       src="https://images.unsplash.com/photo-1662153480559-0485a7848921?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGVja2xpc3QlMjBwbGFubmluZyUyMGRvY3VtZW50c3xlbnwxfHx8fDE3Njg4NjY3NzJ8MA&ixlib=rb-4.1.0&q=80&w=1080"
-                      alt="Checklist esencial para comprar parcela"
+                      alt={t.home.blogTitle1}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-5 space-y-4">
-                    <div className="text-xs font-medium text-gray-500" style={{ textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wide)' }}>GUÍA DE COMPRA</div>
-                    <h3 style={{ color: '#0A0A0A' }}>
-                      Qué considerar antes de comprar una parcela: checklist esencial
-                    </h3>
-                    <p className="text-gray-500">
-                      Conoce los aspectos legales, técnicos y financieros que debes revisar
-                      antes de tomar tu decisión de compra.
-                    </p>
+                    <div className="text-xs font-medium text-gray-500" style={{ textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wide)' }}>{t.home.blogCat1}</div>
+                    <h3 style={{ color: '#0A0A0A' }}>{t.home.blogTitle1}</h3>
+                    <p className="text-gray-500">{t.home.blogDesc1}</p>
                     <div className="pt-3 border-t border-gray-200">
-                      <span className="text-gray-500" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>Hace 2 días • 5 min de lectura</span>
+                      <span className="text-gray-500" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>{t.home.blogDate1}</span>
                     </div>
                   </div>
                 </div>
@@ -2026,21 +2021,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   <div className="aspect-[16/9] bg-gray-200">
                     <img
                       src="https://images.unsplash.com/photo-1768055104929-cf2317674a80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbnZlc3RtZW50JTIwY2hhcnQlMjBncm93dGh8ZW58MXx8fHwxNzY4ODY2NzcyfDA&ixlib=rb-4.1.0&q=80&w=1080"
-                      alt="Tendencias del mercado inmobiliario"
+                      alt={t.home.blogTitle2}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-5 space-y-4">
-                    <div className="text-xs font-medium text-gray-500" style={{ textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wide)' }}>INVERSIÓN</div>
-                    <h3 style={{ color: '#0A0A0A' }}>
-                      Parcelas como inversión: tendencias del mercado 2026
-                    </h3>
-                    <p className="text-gray-500">
-                      Análisis de las zonas con mayor proyección de valorización y
-                      factores que impactan el mercado inmobiliario.
-                    </p>
+                    <div className="text-xs font-medium text-gray-500" style={{ textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wide)' }}>{t.home.blogCat2}</div>
+                    <h3 style={{ color: '#0A0A0A' }}>{t.home.blogTitle2}</h3>
+                    <p className="text-gray-500">{t.home.blogDesc2}</p>
                     <div className="pt-3 border-t border-gray-200">
-                      <span className="text-gray-500" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>Hace 1 semana • 8 min de lectura</span>
+                      <span className="text-gray-500" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>{t.home.blogDate2}</span>
                     </div>
                   </div>
                 </div>
@@ -2050,21 +2040,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   <div className="aspect-[16/9] bg-gray-200">
                     <img
                       src="https://images.unsplash.com/photo-1764106813759-9ef7bf42a0af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsZWdhbCUyMGRvY3VtZW50cyUyMGNvbnRyYWN0fGVufDF8fHx8MTc2ODg2NTc1Nnww&ixlib=rb-4.1.0&q=80&w=1080"
-                      alt="Guía de permisos de construcción"
+                      alt={t.home.blogTitle3}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-5 space-y-4">
-                    <div className="text-xs font-medium text-gray-500" style={{ textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wide)' }}>LEGAL</div>
-                    <h3 style={{ color: '#0A0A0A' }}>
-                      Entendiendo los permisos de construcción en terrenos rurales
-                    </h3>
-                    <p className="text-gray-500">
-                      Guía práctica sobre regulaciones, zonificación y requisitos
-                      para construir en parcelas de agrado.
-                    </p>
+                    <div className="text-xs font-medium text-gray-500" style={{ textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wide)' }}>{t.home.blogCat3}</div>
+                    <h3 style={{ color: '#0A0A0A' }}>{t.home.blogTitle3}</h3>
+                    <p className="text-gray-500">{t.home.blogDesc3}</p>
                     <div className="pt-3 border-t border-gray-200">
-                      <span className="text-gray-500" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>Hace 2 semanas • 6 min de lectura</span>
+                      <span className="text-gray-500" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>{t.home.blogDate3}</span>
                     </div>
                   </div>
                 </div>

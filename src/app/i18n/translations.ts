@@ -95,6 +95,10 @@ export interface Translations {
     publishModalTitle: string; publishModalDesc: string;
     createAccountBtn: string; loginBtn: string; publishModalNote: string;
     errorTitle: string; errorDesc: string; backToHome: string; retry: string;
+    blogCat1: string; blogCat2: string; blogCat3: string;
+    blogTitle1: string; blogTitle2: string; blogTitle3: string;
+    blogDesc1: string; blogDesc2: string; blogDesc3: string;
+    blogDate1: string; blogDate2: string; blogDate3: string;
   };
   selector: {
     language: string; currency: string; spanish: string; english: string;
@@ -253,6 +257,16 @@ const es: Translations = {
     errorTitle: 'Ocurrió un problema al cargar la página',
     errorDesc: 'Hubo un problema al obtener la información. Puedes reintentar ahora o volver al inicio.',
     backToHome: 'Volver al inicio', retry: 'Reintentar',
+    blogCat1: 'GUÍA DE COMPRA', blogCat2: 'INVERSIÓN', blogCat3: 'LEGAL',
+    blogTitle1: 'Qué considerar antes de comprar una parcela: checklist esencial',
+    blogTitle2: 'Parcelas como inversión: tendencias del mercado 2026',
+    blogTitle3: 'Entendiendo los permisos de construcción en terrenos rurales',
+    blogDesc1: 'Conoce los aspectos legales, técnicos y financieros que debes revisar antes de tomar tu decisión de compra.',
+    blogDesc2: 'Análisis de las zonas con mayor proyección de valorización y factores que impactan el mercado inmobiliario.',
+    blogDesc3: 'Guía práctica sobre regulaciones, zonificación y requisitos para construir en parcelas de agrado.',
+    blogDate1: 'Hace 2 días • 5 min de lectura',
+    blogDate2: 'Hace 1 semana • 8 min de lectura',
+    blogDate3: 'Hace 2 semanas • 6 min de lectura',
   },
   selector: {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
@@ -411,6 +425,16 @@ const en: Translations = {
     errorTitle: 'Something went wrong loading the page',
     errorDesc: 'There was a problem fetching the information. You can retry now or go back home.',
     backToHome: 'Back to home', retry: 'Retry',
+    blogCat1: 'BUYING GUIDE', blogCat2: 'INVESTMENT', blogCat3: 'LEGAL',
+    blogTitle1: 'What to consider before buying a parcel: essential checklist',
+    blogTitle2: 'Parcels as investment: 2026 market trends',
+    blogTitle3: 'Understanding construction permits on rural land',
+    blogDesc1: 'Learn the legal, technical and financial aspects to review before making your purchase decision.',
+    blogDesc2: 'Analysis of the areas with the highest appreciation potential and factors that impact the real estate market.',
+    blogDesc3: 'Practical guide on regulations, zoning and requirements to build on leisure parcels.',
+    blogDate1: '2 days ago • 5 min read',
+    blogDate2: '1 week ago • 8 min read',
+    blogDate3: '2 weeks ago • 6 min read',
   },
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',
