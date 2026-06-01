@@ -193,9 +193,10 @@ interface FlujoCompraModalProps {
   parcelaNombre: string;
   precio: string;
   tipoCompra: 'comprar' | 'reservar';
+  onEstadoChange?: (estado: 'disponible' | 'reservandose' | 'pago-en-validacion' | 'reservada') => void;
 }
 
-export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoCompra }: FlujoCompraModalProps) {
+export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoCompra, onEstadoChange }: FlujoCompraModalProps) {
   const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'expirado' | 'error'>(1);
   const [metodoPago, setMetodoPago] = useState<'transferencia' | 'link'>('transferencia');
   const [aceptoTyC, setAceptoTyC] = useState(false);
@@ -263,6 +264,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   useEffect(() => {
     if (segundosTimer === 0 && (paso === 2 || paso === 3)) {
       setPaso('expirado');
+      onEstadoChange?.('disponible');
     }
   }, [segundosTimer, paso]);
 
@@ -301,6 +303,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     await new Promise(r => setTimeout(r, 1500));
     setEnviando(false);
     setEnviado(true);
+    onEstadoChange?.('pago-en-validacion');
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
@@ -879,7 +882,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
               <div className="space-y-2">
                 <button
-                  onClick={() => setPaso(2)}
+                  onClick={() => { setPaso(2); onEstadoChange?.('reservandose'); }}
                   className="w-full py-3 rounded-full font-semibold transition-all"
                   style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
