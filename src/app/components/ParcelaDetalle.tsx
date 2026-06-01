@@ -3728,9 +3728,6 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
         onClose={() => setIsFlujoCompraOpen(false)}
         onEstadoChange={(estado) => {
           setEstadoCompra(estado);
-          if (estado === 'pago-en-validacion' || estado === 'disponible') {
-            setIsFlujoCompraOpen(false);
-          }
         }}
         parcelaNombre={parcelaSeleccionadaStock || parcela.nombre}
         precio={parcela.precio}

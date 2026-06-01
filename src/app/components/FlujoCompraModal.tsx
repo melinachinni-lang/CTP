@@ -303,7 +303,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     await new Promise(r => setTimeout(r, 1500));
     setEnviando(false);
     setEnviado(true);
-    onEstadoChange?.('pago-en-validacion');
+    onEstadoChange?.('reservada');
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
