@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, User, Settings, LogOut, Menu, X, Bell } from 'lucide-react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface NavbarProps {
   onNavigate: (screen: string) => void;
@@ -22,6 +23,7 @@ export function Navbar({
   onShowPublishModal,
   unreadNotificationsCount = 0,
 }: NavbarProps) {
+  const { t } = useI18n();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -82,10 +84,10 @@ export function Navbar({
               />
               
               <nav className="hidden lg:flex items-center justify-center gap-0 whitespace-nowrap">
-                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Parcelas</button>
-                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Inmobiliarias</button>
-                <button onClick={() => onNavigate('como-funciona-loading')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Cómo funciona</button>
-                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Recursos</button>
+                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.parcelas}</button>
+                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.inmobiliarias}</button>
+                <button onClick={() => onNavigate('como-funciona-loading')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.howItWorks}</button>
+                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.resources}</button>
               </nav>
             </div>
 
@@ -103,8 +105,8 @@ export function Navbar({
                 }}
                 className="h-8 bg-[#006B4E] hover:bg-[#005540] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
               >
-                <span className="hidden sm:inline">Publicar propiedad</span>
-                <span className="sm:hidden">Publicar</span>
+                <span className="hidden sm:inline">{t.nav.publishProperty}</span>
+                <span className="sm:hidden">{t.nav.publishShort}</span>
               </button>
               
               {estado === 'visitante' ? (
@@ -112,7 +114,7 @@ export function Navbar({
                   onClick={() => onNavigate('entry')}
                   className="hidden sm:flex h-8 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors items-center justify-center py-[0px]"
                 >
-                  Ingresar
+                  {t.nav.login}
                 </button>
               ) : (
                 <div className="relative hidden sm:block" ref={dropdownRef}>
@@ -252,7 +254,7 @@ export function Navbar({
                     fontWeight: 500
                   }}
                 >
-                  Parcelas
+                  {t.nav.parcelas}
                 </button>
                 <button
                   onClick={() => {
@@ -266,7 +268,7 @@ export function Navbar({
                     fontWeight: 500
                   }}
                 >
-                  Inmobiliarias
+                  {t.nav.inmobiliarias}
                 </button>
                 <button
                   onClick={() => {
@@ -280,7 +282,7 @@ export function Navbar({
                     fontWeight: 500
                   }}
                 >
-                  Cómo funciona
+                  {t.nav.howItWorks}
                 </button>
                 <button
                   onClick={() => {
@@ -294,7 +296,7 @@ export function Navbar({
                     fontWeight: 500
                   }}
                 >
-                  Recursos
+                  {t.nav.resources}
                 </button>
               </nav>
 
@@ -317,10 +319,10 @@ export function Navbar({
                     fontWeight: 500
                   }}
                 >
-                  Publicar propiedad
+                  {t.nav.publishProperty}
                 </button>
                 {estado === 'visitante' ? (
-                  <button 
+                  <button
                     onClick={() => {
                       onNavigate('entry');
                       setIsMobileMenuOpen(false);
@@ -332,7 +334,7 @@ export function Navbar({
                       fontWeight: 500
                     }}
                   >
-                    Ingresar
+                    {t.nav.login}
                   </button>
                 ) : (
                   <>

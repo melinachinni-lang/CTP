@@ -123,40 +123,40 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       // Mapeo de valores de filtros del Home
       const dropdownOptions = {
         ubicacion: [
-          { value: '', label: 'Todos' },
-          { value: 'metropolitana', label: 'Región Metropolitana' },
-          { value: 'valparaiso', label: 'Valparaíso' },
-          { value: 'biobio', label: 'Biobío' },
-          { value: 'araucania', label: 'La Araucanía' },
-          { value: 'los-lagos', label: 'Los Lagos' },
-          { value: 'los-rios', label: 'Los Ríos' },
-          { value: 'maule', label: 'Maule' },
-          { value: 'ohiggins', label: "O'Higgins" },
-          { value: 'coquimbo', label: 'Coquimbo' },
-          { value: 'atacama', label: 'Atacama' },
-          { value: 'antofagasta', label: 'Antofagasta' },
-          { value: 'tarapaca', label: 'Tarapacá' },
-          { value: 'arica', label: 'Arica y Parinacota' },
-          { value: 'aysen', label: 'Aysén' },
-          { value: 'magallanes', label: 'Magallanes' }
+          { value: '', label: t.filters.all },
+          { value: 'metropolitana', label: t.filters.metropolitan },
+          { value: 'valparaiso', label: t.filters.valparaiso },
+          { value: 'biobio', label: t.filters.biobio },
+          { value: 'araucania', label: t.filters.araucania },
+          { value: 'los-lagos', label: t.filters.losLagos },
+          { value: 'los-rios', label: t.filters.losRios },
+          { value: 'maule', label: t.filters.maule },
+          { value: 'ohiggins', label: t.filters.ohiggins },
+          { value: 'coquimbo', label: t.filters.coquimbo },
+          { value: 'atacama', label: t.filters.atacama },
+          { value: 'antofagasta', label: t.filters.antofagasta },
+          { value: 'tarapaca', label: t.filters.tarapaca },
+          { value: 'arica', label: t.filters.arica },
+          { value: 'aysen', label: t.filters.aysen },
+          { value: 'magallanes', label: t.filters.magallanes }
         ],
         superficie: [
-          { value: '', label: 'Todos' },
-          { value: '0-5000', label: 'Hasta 5.000 m²' },
-          { value: '5000-10000', label: '5.000 - 10.000 m²' },
-          { value: '10000-50000', label: '1 - 5 hectáreas' },
-          { value: '50000-100000', label: '5 - 10 hectáreas' },
-          { value: '100000-500000', label: '10 - 50 hectáreas' },
-          { value: '500000+', label: 'Más de 50 hectáreas' }
+          { value: '', label: t.filters.all },
+          { value: '0-5000', label: t.filters.upTo5k },
+          { value: '5000-10000', label: t.filters.from5to10k },
+          { value: '10000-50000', label: t.filters.from1to5ha },
+          { value: '50000-100000', label: t.filters.from5to10ha },
+          { value: '100000-500000', label: t.filters.from10to50ha },
+          { value: '500000+', label: t.filters.more50ha }
         ],
         precio: [
-          { value: '', label: 'Todos' },
-          { value: '0-10000000', label: 'Hasta $10.000.000' },
-          { value: '10000000-30000000', label: '$10M - $30M' },
-          { value: '30000000-50000000', label: '$30M - $50M' },
-          { value: '50000000-100000000', label: '$50M - $100M' },
-          { value: '100000000-200000000', label: '$100M - $200M' },
-          { value: '200000+', label: 'Más de $200M' }
+          { value: '', label: t.filters.all },
+          { value: '0-10000000', label: t.filters.upTo10m },
+          { value: '10000000-30000000', label: t.filters.from10to30m },
+          { value: '30000000-50000000', label: t.filters.from30to50m },
+          { value: '50000000-100000000', label: t.filters.from50to100m },
+          { value: '100000000-200000000', label: t.filters.from100to200m },
+          { value: '200000+', label: t.filters.more200m }
         ]
       };
 
@@ -327,13 +327,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       labels.push({ type: 'ubicacion', label: activeFilters.ubicacion });
     }
     if (activeFilters.precioMin) {
-      labels.push({ type: 'precioMin', label: `Desde ${activeFilters.precioMin}` });
+      labels.push({ type: 'precioMin', label: `${t.explore.from} ${activeFilters.precioMin}` });
     }
     if (activeFilters.precioMax) {
       labels.push({ type: 'precioMax', label: activeFilters.precioMax });
     }
     if (activeFilters.superficieMin) {
-      labels.push({ type: 'superficieMin', label: `Desde ${activeFilters.superficieMin} m²` });
+      labels.push({ type: 'superficieMin', label: `${t.explore.from} ${activeFilters.superficieMin} m²` });
     }
     if (activeFilters.superficieMax) {
       labels.push({ type: 'superficieMax', label: activeFilters.superficieMax });
@@ -346,11 +346,11 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     }
     // Mapeo de badges a labels legibles
     const badgeLabels: Record<string, string> = {
-      'naturaleza': 'Rodeado de naturaleza',
-      'lago-rio': 'Cerca de lago o río',
-      'inversion': 'Ideal para inversión',
-      'acceso': 'Buen acceso',
-      'servicios': 'Con servicios disponibles'
+      'naturaleza': t.filters.badgeNature,
+      'lago-rio': t.filters.badgeWater,
+      'inversion': t.filters.badgeInvestment,
+      'acceso': t.filters.badgeAccess,
+      'servicios': t.filters.badgeServices
     };
     activeFilters.smartBadges.forEach(badge => {
       labels.push({ type: 'smartBadge', label: badgeLabels[badge] || badge, value: badge });
@@ -560,47 +560,47 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     // Mapeo de opciones para obtener labels legibles
     const dropdownOptions = {
       ubicacion: [
-        { value: '', label: 'Todos' },
-        { value: 'metropolitana', label: 'Región Metropolitana' },
-        { value: 'valparaiso', label: 'Valparaíso' },
-        { value: 'biobio', label: 'Biobío' },
-        { value: 'araucania', label: 'La Araucanía' },
-        { value: 'los-lagos', label: 'Los Lagos' },
-        { value: 'los-rios', label: 'Los Ríos' },
-        { value: 'maule', label: 'Maule' },
-        { value: 'ohiggins', label: "O'Higgins" },
-        { value: 'coquimbo', label: 'Coquimbo' },
-        { value: 'atacama', label: 'Atacama' },
-        { value: 'antofagasta', label: 'Antofagasta' },
-        { value: 'tarapaca', label: 'Tarapacá' },
-        { value: 'arica', label: 'Arica y Parinacota' },
-        { value: 'aysen', label: 'Aysén' },
-        { value: 'magallanes', label: 'Magallanes' }
+        { value: '', label: t.filters.all },
+        { value: 'metropolitana', label: t.filters.metropolitan },
+        { value: 'valparaiso', label: t.filters.valparaiso },
+        { value: 'biobio', label: t.filters.biobio },
+        { value: 'araucania', label: t.filters.araucania },
+        { value: 'los-lagos', label: t.filters.losLagos },
+        { value: 'los-rios', label: t.filters.losRios },
+        { value: 'maule', label: t.filters.maule },
+        { value: 'ohiggins', label: t.filters.ohiggins },
+        { value: 'coquimbo', label: t.filters.coquimbo },
+        { value: 'atacama', label: t.filters.atacama },
+        { value: 'antofagasta', label: t.filters.antofagasta },
+        { value: 'tarapaca', label: t.filters.tarapaca },
+        { value: 'arica', label: t.filters.arica },
+        { value: 'aysen', label: t.filters.aysen },
+        { value: 'magallanes', label: t.filters.magallanes }
       ],
       superficie: [
-        { value: '', label: 'Todos' },
-        { value: '0-5000', label: 'Hasta 5.000 m²' },
-        { value: '5000-10000', label: '5.000 - 10.000 m²' },
-        { value: '10000-50000', label: '1 - 5 hectáreas' },
-        { value: '50000-100000', label: '5 - 10 hectáreas' },
-        { value: '100000-500000', label: '10 - 50 hectáreas' },
-        { value: '500000+', label: 'Más de 50 hectáreas' }
+        { value: '', label: t.filters.all },
+        { value: '0-5000', label: t.filters.upTo5k },
+        { value: '5000-10000', label: t.filters.from5to10k },
+        { value: '10000-50000', label: t.filters.from1to5ha },
+        { value: '50000-100000', label: t.filters.from5to10ha },
+        { value: '100000-500000', label: t.filters.from10to50ha },
+        { value: '500000+', label: t.filters.more50ha }
       ],
       precio: [
-        { value: '', label: 'Todos' },
-        { value: '0-10000000', label: 'Hasta $10.000.000' },
-        { value: '10000000-30000000', label: '$10M - $30M' },
-        { value: '30000000-50000000', label: '$30M - $50M' },
-        { value: '50000000-100000000', label: '$50M - $100M' },
-        { value: '100000000-200000000', label: '$100M - $200M' },
-        { value: '200000+', label: 'Más de $200M' }
+        { value: '', label: t.filters.all },
+        { value: '0-10000000', label: t.filters.upTo10m },
+        { value: '10000000-30000000', label: t.filters.from10to30m },
+        { value: '30000000-50000000', label: t.filters.from30to50m },
+        { value: '50000000-100000000', label: t.filters.from50to100m },
+        { value: '100000000-200000000', label: t.filters.from100to200m },
+        { value: '200000+', label: t.filters.more200m }
       ],
       condicion: [
-        { value: '', label: 'Todos' },
-        { value: 'primer-dueno', label: 'Primer dueño' },
-        { value: 'segundo-dueno', label: 'Segundo dueño' },
-        { value: 'tercer-dueno', label: 'Tercer dueño' },
-        { value: 'cuarto-dueno', label: 'Cuarto dueño o más' }
+        { value: '', label: t.filters.all },
+        { value: 'primer-dueno', label: t.filters.firstOwner },
+        { value: 'segundo-dueno', label: t.filters.secondOwner },
+        { value: 'tercer-dueno', label: t.filters.thirdOwner },
+        { value: 'cuarto-dueno', label: t.filters.fourthOwner }
       ]
     };
     
@@ -788,23 +788,23 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
               />
               
               <nav className="hidden lg:flex items-center justify-center gap-0 whitespace-nowrap">
-                <button 
+                <button
                   onClick={() => onNavigate('parcelas')}
                   className="h-8 px-4 text-sm leading-[1.5] font-normal text-black bg-[#efefef] rounded-[200px] whitespace-nowrap flex items-center justify-center"
                 >
-                  Parcelas
+                  {t.nav.parcelas}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('inmobiliarias')}
                   className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center"
                 >
-                  Inmobiliarias
+                  {t.nav.inmobiliarias}
                 </button>
                 <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">
-                  Cómo funciona
+                  {t.nav.howItWorks}
                 </button>
                 <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">
-                  Recursos
+                  {t.nav.resources}
                 </button>
               </nav>
             </div>
@@ -812,14 +812,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
             {/* Action Buttons - Right side */}
             <div className="flex items-center justify-end gap-2 lg:gap-3">
               <button className="h-8 bg-[#006B4E] hover:bg-[#01533E] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
-                <span className="hidden sm:inline">Publicar propiedad</span>
-                <span className="sm:hidden">Publicar</span>
+                <span className="hidden sm:inline">{t.nav.publishProperty}</span>
+                <span className="sm:hidden">{t.nav.publishShort}</span>
               </button>
-              <button 
+              <button
                 onClick={() => onNavigate('entry')}
                 className="hidden sm:flex h-8 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors items-center justify-center py-[0px]"
               >
-                Ingresar
+                {t.nav.login}
               </button>
             </div>
           </div>
@@ -862,11 +862,11 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   letterSpacing: '-0.02em'
                 }}
               >
-                Parcelas en venta
+                {t.explore.pageTitle}
               </h1>
-              <p 
+              <p
                 className="text-sm sm:text-base md:text-xl"
-                style={{ 
+                style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: 300,
                   lineHeight: '1.6',
@@ -874,7 +874,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   color: '#0A0A0A'
                 }}
               >
-                Encuentra parcelas verificadas con información clara para tomar decisiones seguras
+                {t.explore.pageSubtitle}
               </p>
             </div>
 
@@ -884,34 +884,34 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
               <div className="flex flex-wrap items-end gap-3 sm:gap-4">
                 <div className="space-y-2.5 w-full md:w-auto">
                   <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                    Ubicación
+                    {t.filters.location}
                   </label>
                   <div className="relative">
-                    <select 
+                    <select
                       value={heroFilters.ubicacion}
                       onChange={(e) => setHeroFilters(prev => ({ ...prev, ubicacion: e.target.value }))}
-                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[155px] appearance-none" 
-                      style={{ 
-                        fontWeight: 400, 
-                        lineHeight: '1.5' 
+                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[155px] appearance-none"
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '1.5'
                       }}
                     >
-                      <option value="">Todos</option>
-                      <option value="metropolitana">Región Metropolitana</option>
-                      <option value="valparaiso">Valparaíso</option>
-                      <option value="biobio">Biobío</option>
-                      <option value="araucania">La Araucanía</option>
-                      <option value="los-lagos">Los Lagos</option>
-                      <option value="los-rios">Los Ríos</option>
-                      <option value="maule">Maule</option>
-                      <option value="ohiggins">O'Higgins</option>
-                      <option value="coquimbo">Coquimbo</option>
-                      <option value="atacama">Atacama</option>
-                      <option value="antofagasta">Antofagasta</option>
-                      <option value="tarapaca">Tarapacá</option>
-                      <option value="arica">Arica y Parinacota</option>
-                      <option value="aysen">Aysén</option>
-                      <option value="magallanes">Magallanes</option>
+                      <option value="">{t.filters.all}</option>
+                      <option value="metropolitana">{t.filters.metropolitan}</option>
+                      <option value="valparaiso">{t.filters.valparaiso}</option>
+                      <option value="biobio">{t.filters.biobio}</option>
+                      <option value="araucania">{t.filters.araucania}</option>
+                      <option value="los-lagos">{t.filters.losLagos}</option>
+                      <option value="los-rios">{t.filters.losRios}</option>
+                      <option value="maule">{t.filters.maule}</option>
+                      <option value="ohiggins">{t.filters.ohiggins}</option>
+                      <option value="coquimbo">{t.filters.coquimbo}</option>
+                      <option value="atacama">{t.filters.atacama}</option>
+                      <option value="antofagasta">{t.filters.antofagasta}</option>
+                      <option value="tarapaca">{t.filters.tarapaca}</option>
+                      <option value="arica">{t.filters.arica}</option>
+                      <option value="aysen">{t.filters.aysen}</option>
+                      <option value="magallanes">{t.filters.magallanes}</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                   </div>
@@ -919,25 +919,25 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 <div className="space-y-2.5 w-full md:w-auto">
                   <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                    Superficie
+                    {t.filters.area}
                   </label>
                   <div className="relative">
-                    <select 
+                    <select
                       value={heroFilters.superficieMin}
                       onChange={(e) => setHeroFilters(prev => ({ ...prev, superficieMin: e.target.value }))}
-                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[155px] appearance-none" 
-                      style={{ 
-                        fontWeight: 400, 
-                        lineHeight: '1.5' 
+                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[155px] appearance-none"
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '1.5'
                       }}
                     >
-                      <option value="">Todos</option>
-                      <option value="0-5000">Hasta 5.000 m²</option>
-                      <option value="5000-10000">5.000 - 10.000 m²</option>
-                      <option value="10000-50000">1 - 5 hectáreas</option>
-                      <option value="50000-100000">5 - 10 hectáreas</option>
-                      <option value="100000-500000">10 - 50 hectáreas</option>
-                      <option value="500000+">Más de 50 hectáreas</option>
+                      <option value="">{t.filters.all}</option>
+                      <option value="0-5000">{t.filters.upTo5k}</option>
+                      <option value="5000-10000">{t.filters.from5to10k}</option>
+                      <option value="10000-50000">{t.filters.from1to5ha}</option>
+                      <option value="50000-100000">{t.filters.from5to10ha}</option>
+                      <option value="100000-500000">{t.filters.from10to50ha}</option>
+                      <option value="500000+">{t.filters.more50ha}</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                   </div>
@@ -945,23 +945,23 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 <div className="space-y-2.5 w-full md:w-auto">
                   <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                    Condición
+                    {t.filters.condition}
                   </label>
                   <div className="relative">
-                    <select 
+                    <select
                       value={heroFilters.condicion}
                       onChange={(e) => setHeroFilters(prev => ({ ...prev, condicion: e.target.value }))}
-                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[170px] appearance-none" 
-                      style={{ 
-                        fontWeight: 400, 
-                        lineHeight: '1.5' 
+                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[170px] appearance-none"
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '1.5'
                       }}
                     >
-                      <option value="">Todos</option>
-                      <option value="primer-dueno">Primer dueño</option>
-                      <option value="segundo-dueno">Segundo dueño</option>
-                      <option value="tercer-dueno">Tercer dueño</option>
-                      <option value="cuarto-dueno">Cuarto dueño o más</option>
+                      <option value="">{t.filters.all}</option>
+                      <option value="primer-dueno">{t.filters.firstOwner}</option>
+                      <option value="segundo-dueno">{t.filters.secondOwner}</option>
+                      <option value="tercer-dueno">{t.filters.thirdOwner}</option>
+                      <option value="cuarto-dueno">{t.filters.fourthOwner}</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                   </div>
@@ -969,25 +969,25 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 <div className="space-y-2.5 w-full md:w-auto">
                   <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                    Rango de precio
+                    {t.filters.priceRange}
                   </label>
                   <div className="relative">
-                    <select 
+                    <select
                       value={heroFilters.precioMin}
                       onChange={(e) => setHeroFilters(prev => ({ ...prev, precioMin: e.target.value }))}
-                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[165px] appearance-none" 
-                      style={{ 
-                        fontWeight: 400, 
-                        lineHeight: '1.5' 
+                      className="bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-9 py-2 text-sm text-gray-900 rounded-[100px] focus:outline-none transition-all duration-200 cursor-pointer h-[40px] shadow-sm hover:shadow-md w-full md:w-[165px] appearance-none"
+                      style={{
+                        fontWeight: 400,
+                        lineHeight: '1.5'
                       }}
                     >
-                      <option value="">Todos</option>
-                      <option value="0-10000000">Hasta $10.000.000</option>
-                      <option value="10000000-30000000">$10M - $30M</option>
-                      <option value="30000000-50000000">$30M - $50M</option>
-                      <option value="50000000-100000000">$50M - $100M</option>
-                      <option value="100000000-200000000">$100M - $200M</option>
-                      <option value="200000000+">Más de $200M</option>
+                      <option value="">{t.filters.all}</option>
+                      <option value="0-10000000">{t.filters.upTo10m}</option>
+                      <option value="10000000-30000000">{t.filters.from10to30m}</option>
+                      <option value="30000000-50000000">{t.filters.from30to50m}</option>
+                      <option value="50000000-100000000">{t.filters.from50to100m}</option>
+                      <option value="100000000-200000000">{t.filters.from100to200m}</option>
+                      <option value="200000000+">{t.filters.more200m}</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                   </div>
@@ -1014,7 +1014,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       />
                     </div>
                     <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
-                      {includeProjects ? 'Sí' : 'No'}
+                      {includeProjects ? t.filters.yes : t.filters.no}
                     </span>
                   </div>
                 </div>
@@ -1025,7 +1025,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     onClick={handleSearch}
                     className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
                   >
-                    Buscar
+                    {t.filters.search}
                   </button>
                 </div>
 
@@ -1044,7 +1044,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     className="h-[40px] bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[14px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap w-full md:w-auto"
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>Búsqueda inteligente</span>
+                    <span>{t.filters.smartSearch}</span>
                   </button>
                 </div>
               </div>
@@ -1063,7 +1063,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 {/* Encabezado con texto y botón cerrar */}
                 <div className="flex items-start justify-between mb-4 sm:mb-5 gap-3">
                   <p className="text-xs sm:text-sm" style={{ fontWeight: 400, lineHeight: '1.6', color: '#0A0A0A' }}>
-                    Describe lo que buscas y te mostramos las parcelas que mejor se ajustan.
+                    {t.filters.smartSearchDesc}
                   </p>
                   <button
                     onClick={() => setIsSmartSearchExpanded(false)}
@@ -1071,7 +1071,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   >
                     <X className="w-4 h-4" />
-                    <span className="hidden sm:inline">Cerrar</span>
+                    <span className="hidden sm:inline">{t.filters.close}</span>
                   </button>
                 </div>
 
@@ -1081,16 +1081,16 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     type="text"
                     value={smartSearchValue}
                     onChange={(e) => setSmartSearchValue(e.target.value)}
-                    placeholder="Ej: parcela cerca de un lago"
+                    placeholder={t.filters.smartSearchPlaceholder}
                     className="w-full h-12 sm:h-14 lg:h-16 pl-4 sm:pl-6 pr-4 sm:pr-32 lg:pr-40 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[12px] sm:rounded-[16px] focus:outline-none transition-all duration-200"
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   />
-                  <button 
+                  <button
                     onClick={handleSmartSearch}
                     className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 h-9 sm:h-10 lg:h-12 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-3 sm:px-4 lg:px-5 text-xs sm:text-sm leading-[1.5] font-medium rounded-[8px] sm:rounded-[12px] transition-colors flex items-center justify-center gap-1.5 sm:gap-2"
                   >
                     <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Buscar</span>
+                    <span>{t.filters.search}</span>
                   </button>
                 </div>
 
@@ -1112,9 +1112,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   >
                     <Trees className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Rodeado de naturaleza</span>
+                    <span>{t.filters.badgeNature}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('lago-rio')
@@ -1124,9 +1124,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   >
                     <Waves className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Cerca de lago o río</span>
+                    <span>{t.filters.badgeWater}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('inversion')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('inversion')
@@ -1136,9 +1136,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   >
                     <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Ideal para inversión</span>
+                    <span>{t.filters.badgeInvestment}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('acceso')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('acceso')
@@ -1148,9 +1148,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   >
                     <Car className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Buen acceso</span>
+                    <span>{t.filters.badgeAccess}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('servicios')}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-[100px] transition-all duration-200 flex items-center gap-1.5 sm:gap-2 ${
                       selectedBadges.includes('servicios')
@@ -1160,7 +1160,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     style={{ fontWeight: 400, lineHeight: '1.5' }}
                   >
                     <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Con servicios disponibles</span>
+                    <span>{t.filters.badgeServices}</span>
                   </button>
                 </div>
               </div>
@@ -1398,26 +1398,26 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           fontWeight: 500
                         }}
                       >
-                        Ordenar por
+                        {t.explore.sortBy}
                       </label>
                       <div className="relative">
-                        <select 
+                        <select
                           value={sortBy}
                           onChange={(e) => setSortBy(e.target.value)}
                           className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                          style={{ 
+                          style={{
                             color: '#0A0A0A',
                             fontFamily: 'Inter, sans-serif',
                             fontSize: '14px',
                             fontWeight: 400
                           }}
                         >
-                          <option value="relevancia">Relevancia</option>
-                          <option value="recientes">Más recientes</option>
-                          <option value="precio-asc">Menor precio</option>
-                          <option value="precio-desc">Mayor precio</option>
-                          <option value="superficie-asc">Menor superficie</option>
-                          <option value="superficie-desc">Mayor superficie</option>
+                          <option value="relevancia">{t.filters.relevance}</option>
+                          <option value="recientes">{t.filters.mostRecent}</option>
+                          <option value="precio-asc">{t.filters.priceLow}</option>
+                          <option value="precio-desc">{t.filters.priceHigh}</option>
+                          <option value="superficie-asc">{t.filters.areaLow}</option>
+                          <option value="superficie-desc">{t.filters.areaHigh}</option>
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                       </div>
@@ -1609,7 +1609,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
-                      Aplicar filtros
+                      {t.filters.applyFilters}
                     </button>
                   </div>
                 </div>
@@ -1659,26 +1659,26 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         fontWeight: 500
                       }}
                     >
-                      Ordenar por
+                      {t.explore.sortBy}
                     </label>
                     <div className="relative">
-                      <select 
+                      <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
                         className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                        style={{ 
+                        style={{
                           color: '#0A0A0A',
                           fontFamily: 'Inter, sans-serif',
                           fontSize: '14px',
                           fontWeight: 400
                         }}
                       >
-                        <option value="relevancia">Relevancia</option>
-                        <option value="recientes">Más recientes</option>
-                        <option value="precio-asc">Menor precio</option>
-                        <option value="precio-desc">Mayor precio</option>
-                        <option value="superficie-asc">Menor superficie</option>
-                        <option value="superficie-desc">Mayor superficie</option>
+                        <option value="relevancia">{t.filters.relevance}</option>
+                        <option value="recientes">{t.filters.mostRecent}</option>
+                        <option value="precio-asc">{t.filters.priceLow}</option>
+                        <option value="precio-desc">{t.filters.priceHigh}</option>
+                        <option value="superficie-asc">{t.filters.areaLow}</option>
+                        <option value="superficie-desc">{t.filters.areaHigh}</option>
                       </select>
                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
@@ -1714,7 +1714,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         fontWeight: 400
                       }}
                     >
-                      {parcelas.length} parcelas encontradas
+                      {parcelas.length} {t.explore.parcelasFoundSuffix}
                     </p>
 
                     {/* Botones de selector de vista */}
@@ -1744,7 +1744,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         }}
                       >
                         <List className="w-4 h-4" />
-                        <span className="hidden sm:inline">Ver lista</span>
+                        <span className="hidden sm:inline">{t.explore.viewList}</span>
                       </button>
 
                       <button
@@ -1772,7 +1772,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         }}
                       >
                         <MapIcon className="w-4 h-4" />
-                        <span className="hidden sm:inline">Ver mapa</span>
+                        <span className="hidden sm:inline">{t.explore.viewMap}</span>
                       </button>
                     </div>
                   </div>
@@ -1846,13 +1846,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           lineHeight: 'var(--line-height-heading)'
                         }}
                       >
-                        No encontramos parcelas con estos filtros
+                        {t.explore.noParcelasFound}
                       </h3>
-                      
+
                       {/* Texto descriptivo */}
-                      <p 
+                      <p
                         className="mb-6 sm:mb-8"
-                        style={{ 
+                        style={{
                           color: '#737373',
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-base)',
@@ -1860,7 +1860,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           maxWidth: '480px'
                         }}
                       >
-                        Intenta ajustar tus criterios de búsqueda o elimina algunos filtros para ver más opciones disponibles.
+                        {t.explore.noParcelasFoundDesc}
                       </p>
                       
                       {/* Botones de acción */}
@@ -1888,13 +1888,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
-                          Limpiar filtros
+                          {t.filters.clearFilters}
                         </button>
-                        
+
                         <button
                           onClick={() => onNavigate('home')}
                           className="h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base leading-[1.5] font-medium rounded-[200px] transition-colors border-2 w-full sm:w-auto"
-                          style={{ 
+                          style={{
                             fontFamily: 'var(--font-body)',
                             backgroundColor: 'transparent',
                             color: '#0A0A0A',
@@ -1909,7 +1909,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             e.currentTarget.style.borderColor = '#DEDEDE';
                           }}
                         >
-                          Volver al inicio
+                          {t.home.backToHome}
                         </button>
                       </div>
                     </div>
@@ -2197,7 +2197,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                             <div className="pt-3" style={{ borderTop: '1px solid #CDD8DE' }}>
                               <div className="mb-3">
-                                <div className="text-xs mb-1" style={{ color: '#462611', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</div>
+                                <div className="text-xs mb-1" style={{ color: '#462611', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.explore.from}</div>
                                 <PrecioDisplay 
                                   precioCLP={parcela.precio}
                                   precioSize="lg"
@@ -2242,11 +2242,11 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '4px' }}>{item.nombre}</h3>
                                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '12px' }}>{item.ubicacion}, {item.region}</p>
                                 <div className="space-y-1 mb-3">
-                                  <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Disponibles</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.parcelasDisponibles} de {item.totalParcelas}</span></div>
-                                  <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Desde</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.superficieDesde}</span></div>
+                                  <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{t.explore.disponibles}</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.parcelasDisponibles} de {item.totalParcelas}</span></div>
+                                  <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{t.explore.from}</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.superficieDesde}</span></div>
                                 </div>
                                 <div className="mt-auto pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>
-                                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Desde</p>
+                                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{t.explore.from}</p>
                                   <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#0A0A0A' }}>{item.precioDesde}</p>
                                 </div>
                               </div>
@@ -2275,7 +2275,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             fontSize: 'var(--font-size-body-sm)',
                             color: '#737373'
                           }}>
-                            Cargando más parcelas...
+                            {t.explore.loadingMore}
                           </p>
                         </div>
                       )}
@@ -2300,15 +2300,15 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     color: '#0A0A0A',
                     marginBottom: '0.5rem'
                   }}>
-                    Proyectos disponibles
+                    {t.explore.projectsTitle}
                   </h2>
-                  <p style={{ 
+                  <p style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373',
                     fontSize: 'var(--font-size-body-base)',
                     lineHeight: 'var(--line-height-body)'
                   }}>
-                    Descubrí desarrollos con múltiples parcelas
+                    {t.explore.projectsDesc}
                   </p>
                 </div>
 
@@ -2428,14 +2428,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               {/* Información clave */}
                               <div className="space-y-2 mb-4 flex-1">
                                 <div className="flex items-center justify-between">
-                                  <span style={{ 
+                                  <span style={{
                                     fontFamily: 'var(--font-body)',
                                     color: '#737373',
                                     fontSize: 'var(--font-size-xs)'
                                   }}>
-                                    Disponibles
+                                    {t.explore.disponibles}
                                   </span>
-                                  <span style={{ 
+                                  <span style={{
                                     fontFamily: 'var(--font-body)',
                                     color: '#0A0A0A',
                                     fontSize: 'var(--font-size-body-sm)',
@@ -2445,12 +2445,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                   </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                  <span style={{ 
+                                  <span style={{
                                     fontFamily: 'var(--font-body)',
                                     color: '#737373',
                                     fontSize: 'var(--font-size-xs)'
                                   }}>
-                                    Desde
+                                    {t.explore.from}
                                   </span>
                                   <span style={{ 
                                     fontFamily: 'var(--font-body)',
@@ -2465,13 +2465,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                               {/* Precio */}
                               <div className="pt-4 border-t border-gray-200">
-                                <p style={{ 
+                                <p style={{
                                   fontFamily: 'var(--font-body)',
                                   color: '#737373',
                                   fontSize: 'var(--font-size-xs)',
                                   marginBottom: '0.25rem'
                                 }}>
-                                  Desde
+                                  {t.explore.from}
                                 </p>
                                 <p style={{ 
                                   fontFamily: 'var(--font-heading)',
@@ -2535,7 +2535,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       e.currentTarget.style.borderColor = '#E5E5E5';
                     }}
                   >
-                    Ver todos los proyectos
+                    {t.explore.viewAllProjects}
                   </button>
                 </div>
               </div>
@@ -2611,34 +2611,34 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 {/* Ordenar por */}
                 <div className="mb-6">
-                  <label 
-                    className="block mb-3" 
-                    style={{ 
+                  <label
+                    className="block mb-3"
+                    style={{
                       color: '#0A0A0A',
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
                       fontWeight: 500
                     }}
                   >
-                    Ordenar por
+                    {t.explore.sortBy}
                   </label>
                   <div className="relative">
-                    <select 
+                    <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                       className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                      style={{ 
+                      style={{
                         color: '#0A0A0A',
                         fontFamily: 'Inter, sans-serif',
                         fontSize: '13px',
                         fontWeight: 400
                       }}
                     >
-                      <option value="relevancia">Más relevantes</option>
-                      <option value="precio-asc">Menor precio</option>
-                      <option value="precio-desc">Mayor precio</option>
-                      <option value="superficie-asc">Menor superficie</option>
-                      <option value="superficie-desc">Mayor superficie</option>
+                      <option value="relevancia">{t.filters.relevance}</option>
+                      <option value="precio-asc">{t.filters.priceLow}</option>
+                      <option value="precio-desc">{t.filters.priceHigh}</option>
+                      <option value="superficie-asc">{t.filters.areaLow}</option>
+                      <option value="superficie-desc">{t.filters.areaHigh}</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   </div>
@@ -2846,9 +2846,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Aplicar filtros
+                  {t.filters.applyFilters}
                 </button>
-                <button 
+                <button
                   className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 text-black px-6 py-3 rounded-[100px] transition-colors"
                   style={{
                     fontFamily: 'Inter, sans-serif',
@@ -2856,7 +2856,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Limpiar filtros
+                  {t.filters.clearFilters}
                 </button>
               </div>
             </div>
@@ -3128,7 +3128,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Parcelas
+                  {t.nav.parcelas}
                 </button>
                 <button
                   onClick={() => {
@@ -3142,7 +3142,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Inmobiliarias
+                  {t.nav.inmobiliarias}
                 </button>
                 <button
                   onClick={() => {
@@ -3156,7 +3156,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Cómo funciona
+                  {t.nav.howItWorks}
                 </button>
                 <button
                   onClick={() => {
@@ -3170,7 +3170,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Recursos
+                  {t.nav.resources}
                 </button>
               </nav>
 
@@ -3187,9 +3187,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Publicar propiedad
+                  {t.nav.publishProperty}
                 </button>
-                <button 
+                <button
                   onClick={() => {
                     onNavigate('entry');
                     setIsMobileMenuOpen(false);
@@ -3201,7 +3201,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Ingresar
+                  {t.nav.login}
                 </button>
               </div>
             </div>
@@ -3239,7 +3239,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     color: '#0A0A0A'
                   }}
                 >
-                  Búsqueda inteligente
+                  {t.filters.smartSearch}
                 </h3>
                 <button
                   onClick={() => setIsSmartSearchBottomSheetOpen(false)}
@@ -3253,16 +3253,16 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
             {/* Contenido del bottom sheet */}
             <div className="p-4 space-y-6 pb-24">
               {/* Descripción */}
-              <p 
+              <p
                 className="text-sm"
-                style={{ 
+                style={{
                   fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400, 
-                  lineHeight: '1.6', 
-                  color: '#737373' 
+                  fontWeight: 400,
+                  lineHeight: '1.6',
+                  color: '#737373'
                 }}
               >
-                Describe lo que buscas y te mostramos las parcelas que mejor se ajustan.
+                {t.filters.smartSearchDesc}
               </p>
 
               {/* Campo de texto con botón integrado */}
@@ -3271,15 +3271,15 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   type="text"
                   value={smartSearchValue}
                   onChange={(e) => setSmartSearchValue(e.target.value)}
-                  placeholder="Ej: parcela cerca de un lago"
+                  placeholder={t.filters.smartSearchPlaceholder}
                   className="w-full h-14 pl-4 pr-32 text-sm text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[16px] focus:outline-none transition-all duration-200"
-                  style={{ 
+                  style={{
                     fontFamily: 'Inter, sans-serif',
-                    fontWeight: 400, 
-                    lineHeight: '1.5' 
+                    fontWeight: 400,
+                    lineHeight: '1.5'
                   }}
                 />
-                <button 
+                <button
                   onClick={() => {
                     handleSmartSearch();
                     setIsSmartSearchBottomSheetOpen(false);
@@ -3290,21 +3290,21 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   }}
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Buscar</span>
+                  <span>{t.filters.search}</span>
                 </button>
               </div>
 
               {/* Chips de sugerencias */}
               <div>
-                <p 
+                <p
                   className="text-sm mb-3"
-                  style={{ 
+                  style={{
                     fontFamily: 'Inter, sans-serif',
-                    fontWeight: 500, 
-                    color: '#0A0A0A' 
+                    fontWeight: 500,
+                    color: '#0A0A0A'
                   }}
                 >
-                  Sugerencias
+                  {t.filters.suggestions}
                 </p>
                 <div className="flex flex-wrap gap-2.5">
                   <button 
@@ -3321,55 +3321,55 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                   >
                     <Trees className="w-4 h-4" />
-                    <span>Rodeado de naturaleza</span>
+                    <span>{t.filters.badgeNature}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('lago-rio')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <Waves className="w-4 h-4" />
-                    <span>Cerca de lago o río</span>
+                    <span>{t.filters.badgeWater}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('inversion')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('inversion')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <TrendingUp className="w-4 h-4" />
-                    <span>Ideal para inversión</span>
+                    <span>{t.filters.badgeInvestment}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('acceso')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('acceso')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <Car className="w-4 h-4" />
-                    <span>Buen acceso</span>
+                    <span>{t.filters.badgeAccess}</span>
                   </button>
                 </div>
               </div>
@@ -3388,7 +3388,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Aplicar búsqueda
+                  {t.filters.applySearch}
                 </button>
               </div>
             </div>

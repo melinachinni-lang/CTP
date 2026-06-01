@@ -6,6 +6,8 @@ export interface Translations {
     home: string; explore: string; listings: string; saved: string;
     inquiries: string; calendarios: string; compare: string; purchases: string;
     plan: string; help: string; settings: string; myAccount: string; signOut: string;
+    parcelas: string; inmobiliarias: string; howItWorks: string; resources: string;
+    publishProperty: string; publishShort: string; login: string;
   };
   common: {
     viewDetail: string; save: string; publish: string; pause: string; edit: string;
@@ -33,9 +35,63 @@ export interface Translations {
   };
   explore: {
     includeProjects: string; parcelTag: string; projectTag: string;
-    noResults: string; loadMore: string; sortBy: string;
+    noResults: string; loadMore: string; loadingMore: string; sortBy: string;
     viewMap: string; viewList: string; surface: string; from: string;
     disponibles: string;
+    pageTitle: string; pageSubtitle: string;
+    noParcelasFound: string; noParcelasFoundDesc: string;
+    parcelasFoundSuffix: string;
+    projectsTitle: string; projectsDesc: string; viewAllProjects: string;
+  };
+  filters: {
+    location: string; area: string; condition: string; priceRange: string;
+    search: string; smartSearch: string;
+    smartSearchPlaceholder: string; smartSearchDesc: string; close: string;
+    all: string; yes: string; no: string;
+    metropolitan: string; valparaiso: string; biobio: string; araucania: string;
+    losLagos: string; losRios: string; maule: string; ohiggins: string;
+    coquimbo: string; atacama: string; antofagasta: string; tarapaca: string;
+    arica: string; aysen: string; magallanes: string;
+    upTo5k: string; from5to10k: string; from1to5ha: string;
+    from5to10ha: string; from10to50ha: string; more50ha: string;
+    firstOwner: string; secondOwner: string; thirdOwner: string; fourthOwner: string;
+    upTo10m: string; from10to30m: string; from30to50m: string;
+    from50to100m: string; from100to200m: string; more200m: string;
+    relevance: string; mostRecent: string; priceLow: string; priceHigh: string;
+    areaLow: string; areaHigh: string;
+    badgeNature: string; badgeWater: string; badgeInvestment: string;
+    badgeAccess: string; badgeServices: string;
+    searchParcels: string; suggestions: string; applySearch: string;
+    applyFilters: string; clearFilters: string;
+    parcelType: string; typeResidential: string; typeAgricultural: string;
+    typeForestry: string; typeMixed: string;
+  };
+  home: {
+    heroTitle: string; heroSubtitle: string;
+    featuredTitle: string; featuredSubtitle: string; viewAllParcels: string;
+    from: string;
+    advisoryTitle: string; advisorySubtitle: string; moreInfo: string; talkToAdvisor: string;
+    projectsTitle: string; projectsSubtitle: string; projectFrom: string;
+    stepsTitle: string; stepsSubtitle: string;
+    step1Title: string; step1Desc: string;
+    step2Title: string; step2Desc: string;
+    step3Title: string; step3Desc: string;
+    platformTitle: string; platformSubtitle: string;
+    buyersTitle: string; buyersDesc: string; buyersBtn: string;
+    ownersTitle: string; ownersDesc: string; ownersBtn: string;
+    inmobiliariasTitle: string; inmobiliariasDesc: string; inmobiliariasBtn: string;
+    brokersTitle: string; brokersDesc: string; brokersBtn: string;
+    blogTitle: string; blogSubtitle: string; viewAllArticles: string;
+    ctaTitle: string; ctaSubtitle: string; exploreParcels: string; createAccount: string; ctaNote: string;
+    footerDesc: string;
+    footerExplore: string; footerPlatform: string; footerSupport: string;
+    footerHowItWorks: string; footerPublish: string; footerPlans: string; footerBrokers: string;
+    footerTerms: string; footerPrivacy: string; footerContact: string; footerCopyright: string;
+    footerBlog: string;
+    tabInmobiliarias: string; tabBrokers: string; viewAllFemale: string; viewAllMale: string;
+    publishModalTitle: string; publishModalDesc: string;
+    createAccountBtn: string; loginBtn: string; publishModalNote: string;
+    errorTitle: string; errorDesc: string; backToHome: string; retry: string;
   };
   selector: {
     language: string; currency: string; spanish: string; english: string;
@@ -49,6 +105,9 @@ const es: Translations = {
     saved: 'Guardados', inquiries: 'Consultas', calendarios: 'Calendarios',
     compare: 'Comparar', purchases: 'Mis compras', plan: 'Plan y límites',
     help: 'Ayuda', settings: 'Configuración', myAccount: 'Mi cuenta', signOut: 'Cerrar sesión',
+    parcelas: 'Parcelas', inmobiliarias: 'Inmobiliarias',
+    howItWorks: 'Cómo funciona', resources: 'Recursos',
+    publishProperty: 'Publicar propiedad', publishShort: 'Publicar', login: 'Ingresar',
   },
   common: {
     viewDetail: 'Ver detalle', save: 'Guardar', publish: 'Publicar', pause: 'Pausar',
@@ -85,8 +144,108 @@ const es: Translations = {
   explore: {
     includeProjects: 'Incluir proyectos', parcelTag: 'Parcela', projectTag: 'Proyecto',
     noResults: 'No se encontraron resultados', loadMore: 'Cargar más parcelas...',
+    loadingMore: 'Cargando más parcelas...',
     sortBy: 'Ordenar por', viewMap: 'Ver mapa', viewList: 'Ver lista',
     surface: 'Superficie', from: 'Desde', disponibles: 'Disponibles',
+    pageTitle: 'Parcelas en venta',
+    pageSubtitle: 'Encuentra parcelas verificadas con información clara para tomar decisiones seguras',
+    noParcelasFound: 'No encontramos parcelas con estos filtros',
+    noParcelasFoundDesc: 'Intenta ajustar tus criterios de búsqueda o elimina algunos filtros para ver más opciones disponibles.',
+    parcelasFoundSuffix: 'parcelas encontradas',
+    projectsTitle: 'Proyectos disponibles',
+    projectsDesc: 'Descubre desarrollos con múltiples parcelas',
+    viewAllProjects: 'Ver todos los proyectos',
+  },
+  filters: {
+    location: 'Ubicación', area: 'Superficie', condition: 'Condición', priceRange: 'Rango de precio',
+    search: 'Buscar', smartSearch: 'Búsqueda inteligente',
+    smartSearchPlaceholder: 'Ej: busco una parcela cerca de un lago para vivir',
+    smartSearchDesc: 'Describe lo que buscas y te mostramos las parcelas que mejor se ajustan.',
+    close: 'Cerrar',
+    all: 'Todos', yes: 'Sí', no: 'No',
+    metropolitan: 'Región Metropolitana', valparaiso: 'Valparaíso', biobio: 'Biobío',
+    araucania: 'La Araucanía', losLagos: 'Los Lagos', losRios: 'Los Ríos', maule: 'Maule',
+    ohiggins: "O'Higgins", coquimbo: 'Coquimbo', atacama: 'Atacama',
+    antofagasta: 'Antofagasta', tarapaca: 'Tarapacá', arica: 'Arica y Parinacota',
+    aysen: 'Aysén', magallanes: 'Magallanes',
+    upTo5k: 'Hasta 5.000 m²', from5to10k: '5.000 - 10.000 m²',
+    from1to5ha: '1 - 5 hectáreas', from5to10ha: '5 - 10 hectáreas',
+    from10to50ha: '10 - 50 hectáreas', more50ha: 'Más de 50 hectáreas',
+    firstOwner: 'Primer dueño', secondOwner: 'Segundo dueño',
+    thirdOwner: 'Tercer dueño', fourthOwner: 'Cuarto dueño o más',
+    upTo10m: 'Hasta $10.000.000', from10to30m: '$10M - $30M', from30to50m: '$30M - $50M',
+    from50to100m: '$50M - $100M', from100to200m: '$100M - $200M', more200m: 'Más de $200M',
+    relevance: 'Relevancia', mostRecent: 'Más recientes',
+    priceLow: 'Menor precio', priceHigh: 'Mayor precio',
+    areaLow: 'Menor superficie', areaHigh: 'Mayor superficie',
+    badgeNature: 'Rodeado de naturaleza', badgeWater: 'Cerca de lago o río',
+    badgeInvestment: 'Ideal para inversión', badgeAccess: 'Buen acceso',
+    badgeServices: 'Con servicios disponibles',
+    searchParcels: 'Buscar parcelas', suggestions: 'Sugerencias', applySearch: 'Aplicar búsqueda',
+    applyFilters: 'Aplicar filtros', clearFilters: 'Limpiar',
+    parcelType: 'Tipo de parcela', typeResidential: 'Residencial', typeAgricultural: 'Agrícola',
+    typeForestry: 'Forestal', typeMixed: 'Mixta',
+  },
+  home: {
+    heroTitle: 'Compra y vende parcelas fácilmente',
+    heroSubtitle: 'Explora oportunidades reales, en un solo lugar.',
+    featuredTitle: 'Parcelas destacadas',
+    featuredSubtitle: 'Propiedades seleccionadas con información verificada',
+    viewAllParcels: 'Ver todas las parcelas',
+    from: 'Desde',
+    advisoryTitle: 'Asesoría gratuita para encontrar tu parcela ideal',
+    advisorySubtitle: 'Te acompañamos en la búsqueda de tu terreno ideal, analizando ubicación, presupuesto y tipo de parcela según tus objetivos.',
+    moreInfo: 'Más información',
+    talkToAdvisor: 'Hablar con un asesor',
+    projectsTitle: 'Próximos proyectos',
+    projectsSubtitle: 'Nuevos desarrollos que estarán disponibles próximamente',
+    projectFrom: 'Desde',
+    stepsTitle: 'Proceso claro, paso a paso',
+    stepsSubtitle: 'Te acompañamos en cada etapa con información clara y respaldo profesional',
+    step1Title: 'Explora con información verificada',
+    step1Desc: 'Revisa parcelas y proyectos con datos completos y confiables. Filtra por ubicación, precio y características relevantes para ti.',
+    step2Title: 'Conecta con profesionales',
+    step2Desc: 'Comunícate con inmobiliarias y brokers verificados. Agenda visitas y resuelve dudas con asesoría especializada.',
+    step3Title: 'Decide con confianza',
+    step3Desc: 'Accede a recursos y herramientas para avanzar de forma informada en cada etapa del proceso de compra.',
+    platformTitle: 'Una plataforma para todos',
+    platformSubtitle: 'Conectamos compradores, dueños, inmobiliarias y brokers en un solo lugar',
+    buyersTitle: 'Compradores',
+    buyersDesc: 'Explora con información verificada y compara opciones para encontrar la parcela que se ajuste a lo que buscas.',
+    buyersBtn: 'Comenzar a explorar',
+    ownersTitle: 'Dueños',
+    ownersDesc: 'Publica tu parcela con información clara y conecta con compradores reales interesados en tu propiedad.',
+    ownersBtn: 'Publicar parcela',
+    inmobiliariasTitle: 'Inmobiliarias',
+    inmobiliariasDesc: 'Gestiona tus publicaciones y coordina con tu equipo desde herramientas diseñadas para tu operación.',
+    inmobiliariasBtn: 'Conocer planes',
+    brokersTitle: 'Brokers',
+    brokersDesc: 'Conecta con nuevas oportunidades, gestiona tus contactos y accede a herramientas para aumentar tu alcance.',
+    brokersBtn: 'Registrarme',
+    blogTitle: 'Recursos y consejos',
+    blogSubtitle: 'Información útil para compradores e inversionistas',
+    viewAllArticles: 'Ver todos los artículos →',
+    ctaTitle: 'Encuentra tu parcela ideal con información clara y respaldo profesional',
+    ctaSubtitle: 'Únete a cientos de personas que están tomando decisiones informadas sobre su próxima propiedad',
+    exploreParcels: 'Explorar parcelas',
+    createAccount: 'Crear cuenta gratis',
+    ctaNote: 'Sin compromiso • Explora todas las funciones • Cancela cuando quieras',
+    footerDesc: 'Plataforma especializada en compra y venta de parcelas',
+    footerExplore: 'Explorar', footerPlatform: 'Plataforma', footerSupport: 'Soporte',
+    footerHowItWorks: 'Cómo funciona', footerPublish: 'Publicar propiedad',
+    footerPlans: 'Planes para inmobiliarias', footerBrokers: 'Para brokers',
+    footerTerms: 'Términos y condiciones', footerPrivacy: 'Política de privacidad',
+    footerContact: 'Contacto', footerBlog: 'Blog',
+    footerCopyright: '© 2026 Compra Tu Parcela. Todos los derechos reservados.',
+    tabInmobiliarias: 'Inmobiliarias', tabBrokers: 'Brokers',
+    viewAllFemale: 'Ver todas', viewAllMale: 'Ver todos',
+    publishModalTitle: 'Para publicar tu propiedad, necesitas una cuenta',
+    publishModalDesc: 'Crear una cuenta te permite gestionar tus publicaciones, recibir consultas de compradores reales y avanzar con seguridad durante todo el proceso.',
+    createAccountBtn: 'Crear cuenta', loginBtn: 'Iniciar sesión',
+    publishModalNote: 'Es rápido, sin compromiso y te guía paso a paso.',
+    errorTitle: 'Ocurrió un problema al cargar la página',
+    errorDesc: 'Hubo un problema al obtener la información. Puedes reintentar ahora o volver al inicio.',
+    backToHome: 'Volver al inicio', retry: 'Reintentar',
   },
   selector: {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
@@ -100,6 +259,9 @@ const en: Translations = {
     saved: 'Saved', inquiries: 'Inquiries', calendarios: 'Calendars',
     compare: 'Compare', purchases: 'My purchases', plan: 'Plan & limits',
     help: 'Help', settings: 'Settings', myAccount: 'My account', signOut: 'Sign out',
+    parcelas: 'Parcels', inmobiliarias: 'Real estate agencies',
+    howItWorks: 'How it works', resources: 'Resources',
+    publishProperty: 'List your property', publishShort: 'List', login: 'Log in',
   },
   common: {
     viewDetail: 'View detail', save: 'Save', publish: 'Publish', pause: 'Pause',
@@ -135,9 +297,109 @@ const en: Translations = {
   },
   explore: {
     includeProjects: 'Include projects', parcelTag: 'Parcel', projectTag: 'Project',
-    noResults: 'No results found', loadMore: 'Loading more parcels...',
+    noResults: 'No results found', loadMore: 'Load more parcels...',
+    loadingMore: 'Loading more parcels...',
     sortBy: 'Sort by', viewMap: 'View map', viewList: 'View list',
     surface: 'Area', from: 'From', disponibles: 'Available',
+    pageTitle: 'Parcels for sale',
+    pageSubtitle: 'Find verified parcels with clear information to make confident decisions',
+    noParcelasFound: 'No parcels found with these filters',
+    noParcelasFoundDesc: 'Try adjusting your search criteria or remove some filters to see more available options.',
+    parcelasFoundSuffix: 'parcels found',
+    projectsTitle: 'Available projects',
+    projectsDesc: 'Discover developments with multiple parcels',
+    viewAllProjects: 'View all projects',
+  },
+  filters: {
+    location: 'Location', area: 'Area', condition: 'Condition', priceRange: 'Price range',
+    search: 'Search', smartSearch: 'Smart search',
+    smartSearchPlaceholder: 'E.g.: looking for a parcel near a lake to live',
+    smartSearchDesc: 'Describe what you are looking for and we will show you the best matching parcels.',
+    close: 'Close',
+    all: 'All', yes: 'Yes', no: 'No',
+    metropolitan: 'Metropolitan Region', valparaiso: 'Valparaíso', biobio: 'Biobío',
+    araucania: 'La Araucanía', losLagos: 'Los Lagos', losRios: 'Los Ríos', maule: 'Maule',
+    ohiggins: "O'Higgins", coquimbo: 'Coquimbo', atacama: 'Atacama',
+    antofagasta: 'Antofagasta', tarapaca: 'Tarapacá', arica: 'Arica y Parinacota',
+    aysen: 'Aysén', magallanes: 'Magallanes',
+    upTo5k: 'Up to 5,000 m²', from5to10k: '5,000 - 10,000 m²',
+    from1to5ha: '1 - 5 hectares', from5to10ha: '5 - 10 hectares',
+    from10to50ha: '10 - 50 hectares', more50ha: 'More than 50 hectares',
+    firstOwner: 'First owner', secondOwner: 'Second owner',
+    thirdOwner: 'Third owner', fourthOwner: 'Fourth owner or more',
+    upTo10m: 'Up to $10,000,000', from10to30m: '$10M - $30M', from30to50m: '$30M - $50M',
+    from50to100m: '$50M - $100M', from100to200m: '$100M - $200M', more200m: 'More than $200M',
+    relevance: 'Relevance', mostRecent: 'Most recent',
+    priceLow: 'Lowest price', priceHigh: 'Highest price',
+    areaLow: 'Smallest area', areaHigh: 'Largest area',
+    badgeNature: 'Surrounded by nature', badgeWater: 'Near lake or river',
+    badgeInvestment: 'Ideal for investment', badgeAccess: 'Good road access',
+    badgeServices: 'With available utilities',
+    searchParcels: 'Search parcels', suggestions: 'Suggestions', applySearch: 'Apply search',
+    applyFilters: 'Apply filters', clearFilters: 'Clear',
+    parcelType: 'Parcel type', typeResidential: 'Residential', typeAgricultural: 'Agricultural',
+    typeForestry: 'Forestry', typeMixed: 'Mixed',
+  },
+  home: {
+    heroTitle: 'Buy and sell parcels easily',
+    heroSubtitle: 'Explore real opportunities, all in one place.',
+    featuredTitle: 'Featured parcels',
+    featuredSubtitle: 'Selected properties with verified information',
+    viewAllParcels: 'View all parcels',
+    from: 'From',
+    advisoryTitle: 'Free advisory to find your ideal parcel',
+    advisorySubtitle: 'We guide you in finding your ideal land, analyzing location, budget and parcel type according to your goals.',
+    moreInfo: 'More information',
+    talkToAdvisor: 'Talk to an advisor',
+    projectsTitle: 'Upcoming projects',
+    projectsSubtitle: 'New developments coming soon',
+    projectFrom: 'From',
+    stepsTitle: 'Clear process, step by step',
+    stepsSubtitle: 'We are with you at every stage with clear information and professional support',
+    step1Title: 'Explore with verified information',
+    step1Desc: 'Browse parcels and projects with complete, reliable data. Filter by location, price and features relevant to you.',
+    step2Title: 'Connect with professionals',
+    step2Desc: 'Communicate with verified agencies and brokers. Schedule visits and get answers with specialized advisory.',
+    step3Title: 'Decide with confidence',
+    step3Desc: 'Access resources and tools to move forward in an informed way at every stage of the buying process.',
+    platformTitle: 'A platform for everyone',
+    platformSubtitle: 'Connecting buyers, owners, real estate agencies and brokers in one place',
+    buyersTitle: 'Buyers',
+    buyersDesc: 'Explore with verified information and compare options to find the parcel that fits what you are looking for.',
+    buyersBtn: 'Start exploring',
+    ownersTitle: 'Owners',
+    ownersDesc: 'List your parcel with clear information and connect with real buyers interested in your property.',
+    ownersBtn: 'List parcel',
+    inmobiliariasTitle: 'Real estate agencies',
+    inmobiliariasDesc: 'Manage your listings and coordinate with your team using tools designed for your operation.',
+    inmobiliariasBtn: 'See plans',
+    brokersTitle: 'Brokers',
+    brokersDesc: 'Connect with new opportunities, manage your contacts and access tools to expand your reach.',
+    brokersBtn: 'Sign up',
+    blogTitle: 'Resources & tips',
+    blogSubtitle: 'Useful information for buyers and investors',
+    viewAllArticles: 'View all articles →',
+    ctaTitle: 'Find your ideal parcel with clear information and professional support',
+    ctaSubtitle: 'Join hundreds of people making informed decisions about their next property',
+    exploreParcels: 'Explore parcels',
+    createAccount: 'Create free account',
+    ctaNote: 'No commitment • Explore all features • Cancel anytime',
+    footerDesc: 'Specialized platform for buying and selling parcels',
+    footerExplore: 'Explore', footerPlatform: 'Platform', footerSupport: 'Support',
+    footerHowItWorks: 'How it works', footerPublish: 'List your property',
+    footerPlans: 'Plans for agencies', footerBrokers: 'For brokers',
+    footerTerms: 'Terms & conditions', footerPrivacy: 'Privacy policy',
+    footerContact: 'Contact', footerBlog: 'Blog',
+    footerCopyright: '© 2026 CompraTuParcela. All rights reserved.',
+    tabInmobiliarias: 'Agencies', tabBrokers: 'Brokers',
+    viewAllFemale: 'View all', viewAllMale: 'View all',
+    publishModalTitle: 'To list your property you need an account',
+    publishModalDesc: 'Creating an account lets you manage your listings, receive inquiries from real buyers and move forward securely throughout the process.',
+    createAccountBtn: 'Create account', loginBtn: 'Log in',
+    publishModalNote: 'Quick, no commitment and guides you step by step.',
+    errorTitle: 'Something went wrong loading the page',
+    errorDesc: 'There was a problem fetching the information. You can retry now or go back home.',
+    backToHome: 'Back to home', retry: 'Retry',
   },
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',

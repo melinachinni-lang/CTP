@@ -192,50 +192,50 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   // Datos de dropdowns
   const dropdownOptions = {
     ubicacion: [
-      { value: '', label: 'Todos' },
-      { value: 'metropolitana', label: 'Región Metropolitana' },
-      { value: 'valparaiso', label: 'Valparaíso' },
-      { value: 'biobio', label: 'Biobío' },
-      { value: 'araucania', label: 'La Araucanía' },
-      { value: 'los-lagos', label: 'Los Lagos' },
-      { value: 'los-rios', label: 'Los Ríos' },
-      { value: 'maule', label: 'Maule' },
-      { value: 'ohiggins', label: "O'Higgins" },
-      { value: 'coquimbo', label: 'Coquimbo' },
-      { value: 'atacama', label: 'Atacama' },
-      { value: 'antofagasta', label: 'Antofagasta' },
-      { value: 'tarapaca', label: 'Tarapacá' },
-      { value: 'arica', label: 'Arica y Parinacota' },
-      { value: 'aysen', label: 'Aysén' },
-      { value: 'magallanes', label: 'Magallanes' }
+      { value: '', label: t.filters.all },
+      { value: 'metropolitana', label: t.filters.metropolitan },
+      { value: 'valparaiso', label: t.filters.valparaiso },
+      { value: 'biobio', label: t.filters.biobio },
+      { value: 'araucania', label: t.filters.araucania },
+      { value: 'los-lagos', label: t.filters.losLagos },
+      { value: 'los-rios', label: t.filters.losRios },
+      { value: 'maule', label: t.filters.maule },
+      { value: 'ohiggins', label: t.filters.ohiggins },
+      { value: 'coquimbo', label: t.filters.coquimbo },
+      { value: 'atacama', label: t.filters.atacama },
+      { value: 'antofagasta', label: t.filters.antofagasta },
+      { value: 'tarapaca', label: t.filters.tarapaca },
+      { value: 'arica', label: t.filters.arica },
+      { value: 'aysen', label: t.filters.aysen },
+      { value: 'magallanes', label: t.filters.magallanes }
     ],
     superficie: [
-      { value: '', label: 'Todos' },
-      { value: '0-5000', label: 'Hasta 5.000 m²' },
-      { value: '5000-10000', label: '5.000 - 10.000 m²' },
-      { value: '10000-50000', label: '1 - 5 hectáreas' },
-      { value: '50000-100000', label: '5 - 10 hectáreas' },
-      { value: '100000-500000', label: '10 - 50 hectáreas' },
-      { value: '500000+', label: 'Más de 50 hectáreas' }
+      { value: '', label: t.filters.all },
+      { value: '0-5000', label: t.filters.upTo5k },
+      { value: '5000-10000', label: t.filters.from5to10k },
+      { value: '10000-50000', label: t.filters.from1to5ha },
+      { value: '50000-100000', label: t.filters.from5to10ha },
+      { value: '100000-500000', label: t.filters.from10to50ha },
+      { value: '500000+', label: t.filters.more50ha }
     ],
     condicion: [
-      { value: '', label: 'Todos' },
-      { value: 'primer-dueno', label: 'Primer dueño' },
-      { value: 'segundo-dueno', label: 'Segundo dueño' },
-      { value: 'tercer-dueno', label: 'Tercer dueño' },
-      { value: 'cuarto-dueno', label: 'Cuarto dueño o más' }
+      { value: '', label: t.filters.all },
+      { value: 'primer-dueno', label: t.filters.firstOwner },
+      { value: 'segundo-dueno', label: t.filters.secondOwner },
+      { value: 'tercer-dueno', label: t.filters.thirdOwner },
+      { value: 'cuarto-dueno', label: t.filters.fourthOwner }
     ],
     precio: [
-      { value: '', label: 'Todos' },
-      { value: '0-10000000', label: 'Hasta $10.000.000' },
-      { value: '10000000-30000000', label: '$10M - $30M' },
-      { value: '30000000-50000000', label: '$30M - $50M' },
-      { value: '50000000-100000000', label: '$50M - $100M' },
-      { value: '100000000-200000000', label: '$100M - $200M' },
-      { value: '200000000+', label: 'Más de $200M' }
+      { value: '', label: t.filters.all },
+      { value: '0-10000000', label: t.filters.upTo10m },
+      { value: '10000000-30000000', label: t.filters.from10to30m },
+      { value: '30000000-50000000', label: t.filters.from30to50m },
+      { value: '50000000-100000000', label: t.filters.from50to100m },
+      { value: '100000000-200000000', label: t.filters.from100to200m },
+      { value: '200000000+', label: t.filters.more200m }
     ],
     tipo: [
-      { value: '', label: 'Todos' },
+      { value: '', label: t.filters.all },
       { value: 'parcelas', label: 'Parcelas' }
     ]
   };
@@ -585,22 +585,22 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 fontWeight: 'var(--font-weight-medium)'
               }}
             >
-              Ocurrió un problema al cargar la página
+              {t.home.errorTitle}
             </h3>
-            
+
             {/* Texto descriptivo */}
-            <p 
+            <p
               className="mb-8 text-center max-w-md"
-              style={{ 
+              style={{
                 color: '#737373',
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--font-size-body-base)',
                 lineHeight: 'var(--line-height-body)'
               }}
             >
-              Hubo un problema al obtener la información. Puedes reintentar ahora o volver al inicio.
+              {t.home.errorDesc}
             </p>
-            
+
             {/* Botones */}
             <div className="flex gap-3">
               {/* Botón secundario: Volver al inicio */}
@@ -622,14 +622,14 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   e.currentTarget.style.color = '#006B4E';
                 }}
               >
-                Volver al inicio
+                {t.home.backToHome}
               </button>
-              
+
               {/* Botón primario: Reintentar */}
               <button
                 onClick={handleRetry}
                 className="h-12 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm"
-                style={{ 
+                style={{
                   fontFamily: 'var(--font-body)',
                   backgroundColor: '#006B4E',
                   color: '#FFFFFF'
@@ -637,7 +637,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
-                Reintentar
+                {t.home.retry}
               </button>
             </div>
           </div>
@@ -673,10 +673,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               {/* Headlines */}
               <div className="space-y-3 md:space-y-4">
                 <h1 style={{ color: '#0A0A0A', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1' }}>
-                  Compra y vende parcelas fácilmente
+                  {t.home.heroTitle}
                 </h1>
                 <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: '#0A0A0A' }}>
-                  Explora oportunidades reales, en un solo lugar.
+                  {t.home.heroSubtitle}
                 </p>
               </div>
 
@@ -688,7 +688,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* Select Ubicación */}
                   <div className="space-y-2.5 w-full md:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                      Ubicación
+                      {t.filters.location}
                     </label>
                     <div className="relative">
                       <select 
@@ -711,7 +711,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* Select Superficie */}
                   <div className="space-y-2.5 w-full md:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                      Superficie
+                      {t.filters.area}
                     </label>
                     <div className="relative">
                       <select 
@@ -734,7 +734,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* Select Condición */}
                   <div className="space-y-2.5 w-full md:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                      Condición
+                      {t.filters.condition}
                     </label>
                     <div className="relative">
                       <select 
@@ -757,7 +757,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* Select Precio */}
                   <div className="space-y-2.5 w-full md:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
-                      Rango de precio
+                      {t.filters.priceRange}
                     </label>
                     <div className="relative">
                       <select 
@@ -779,8 +779,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
                   {/* Switch Incluir proyectos */}
                   <div className="space-y-2.5 w-full md:w-auto">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Incluir proyectos</label>
-                    <div 
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
+                    <div
                       onClick={() => setIncludeProjects(!includeProjects)}
                       className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
                     >
@@ -798,7 +798,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         />
                       </div>
                       <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
-                        {includeProjects ? 'Sí' : 'No'}
+                        {includeProjects ? t.filters.yes : t.filters.no}
                       </span>
                     </div>
                   </div>
@@ -806,23 +806,23 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* Botón Buscar */}
                   <div className="space-y-2.5 w-full md:w-auto">
                     <div className="h-[20px] hidden md:block"></div>
-                    <button 
+                    <button
                       onClick={() => onNavigate('parcelas', undefined, selectedValues)}
                       className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
                     >
-                      Buscar
+                      {t.filters.search}
                     </button>
                   </div>
 
                   {/* Botón Búsqueda Inteligente */}
                   <div className="space-y-2.5 w-full md:w-auto">
                     <div className="h-[20px] hidden md:block"></div>
-                    <button 
+                    <button
                       onClick={() => setIsSmartSearchBottomSheetOpen(true)}
                       className="h-[40px] bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[14px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap w-full md:w-auto"
                     >
                       <Sparkles className="w-4 h-4" />
-                      <span>Búsqueda inteligente</span>
+                      <span>{t.filters.smartSearch}</span>
                     </button>
                   </div>
                 </div>
@@ -839,7 +839,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 <div className="flex items-end gap-2 flex-wrap lg:flex-nowrap">
                   {/* Dropdown Ubicación */}
                   <div className="space-y-2.5 relative dropdown-container">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Ubicación</label>
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.filters.location}</label>
                     <div className="relative">
                       <button
                         onClick={() => setOpenDropdown(openDropdown === 'ubicacion' ? null : 'ubicacion')}
@@ -868,7 +868,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
                   {/* Dropdown Superficie */}
                   <div className="space-y-2.5 relative dropdown-container">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Superficie</label>
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.filters.area}</label>
                     <div className="relative">
                       <button
                         onClick={() => setOpenDropdown(openDropdown === 'superficie' ? null : 'superficie')}
@@ -897,7 +897,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
                   {/* Dropdown Condición */}
                   <div className="space-y-2.5 relative dropdown-container">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Condición</label>
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.filters.condition}</label>
                     <div className="relative">
                       <button
                         onClick={() => setOpenDropdown(openDropdown === 'condicion' ? null : 'condicion')}
@@ -926,7 +926,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
                   {/* Dropdown Precio */}
                   <div className="space-y-2.5 relative dropdown-container">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Rango de precio</label>
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.filters.priceRange}</label>
                     <div className="relative">
                       <button
                         onClick={() => setOpenDropdown(openDropdown === 'precio' ? null : 'precio')}
@@ -955,8 +955,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
                   {/* Switch Incluir proyectos */}
                   <div className="space-y-2.5">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>Incluir proyectos</label>
-                    <div 
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
+                    <div
                       onClick={() => setIncludeProjects(!includeProjects)}
                       className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
                     >
@@ -974,24 +974,24 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         />
                       </div>
                       <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
-                        {includeProjects ? 'Sí' : 'No'}
+                        {includeProjects ? t.filters.yes : t.filters.no}
                       </span>
                     </div>
                   </div>
 
                   <div className="space-y-2.5">
                     <div className="h-[20px]"></div>
-                    <button 
+                    <button
                       onClick={() => onNavigate('parcelas', undefined, selectedValues)}
                       className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                     >
-                      Buscar
+                      {t.filters.search}
                     </button>
                   </div>
 
                   <div className="space-y-2.5 w-full lg:w-auto">
                     <div className="h-[20px] hidden lg:block"></div>
-                    <button 
+                    <button
                       onClick={() => {
                         // En desktop: expandir inline
                         setIsSmartSearchExpanded(!isSmartSearchExpanded);
@@ -999,7 +999,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       className="h-[40px] bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[14px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap w-full lg:w-auto"
                     >
                       <Sparkles className="w-4 h-4" />
-                      <span>Búsqueda inteligente</span>
+                      <span>{t.filters.smartSearch}</span>
                     </button>
                   </div>
                 </div>
@@ -1017,7 +1017,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   {/* Encabezado con texto y botón cerrar */}
                   <div className="flex items-start justify-between mb-5">
                     <p className="text-base text-gray-600" style={{ fontWeight: 400, lineHeight: '1.5' }}>
-                      Describe lo que buscas y te mostramos las parcelas que mejor se ajustan.
+                      {t.filters.smartSearchDesc}
                     </p>
                     <button
                       onClick={() => setIsSmartSearchExpanded(false)}
@@ -1025,7 +1025,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     >
                       <X className="w-4 h-4" />
-                      Cerrar
+                      {t.filters.close}
                     </button>
                   </div>
 
@@ -1035,28 +1035,28 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       type="text"
                       value={smartSearchValue}
                       onChange={(e) => setSmartSearchValue(e.target.value)}
-                      placeholder="Ej: busco una parcela cerca de un lago para vivir"
+                      placeholder={t.filters.smartSearchPlaceholder}
                       className="w-full h-[64px] pl-6 pr-[160px] text-base text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[16px] focus:outline-none transition-all duration-200"
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     />
-                    <button 
+                    <button
                       onClick={handleSmartSearch}
                       className="absolute right-2 top-1/2 -translate-y-1/2 h-[48px] bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-5 text-sm leading-[1.5] font-medium rounded-[12px] transition-colors flex items-center justify-center gap-2"
                     >
                       <Sparkles className="w-4 h-4" />
-                      Buscar
+                      {t.filters.search}
                     </button>
                   </div>
 
                   {/* Chips de sugerencias */}
-                  <div 
+                  <div
                     className="flex flex-wrap gap-2.5 mt-5 transition-all duration-500 ease-out"
                     style={{
                       opacity: isSmartSearchExpanded ? 1 : 0,
                       transform: isSmartSearchExpanded ? 'translateY(0)' : 'translateY(-10px)'
                     }}
                   >
-                    <button 
+                    <button
                       onClick={() => toggleBadge('naturaleza')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('naturaleza')
@@ -1066,9 +1066,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     >
                       <Trees className="w-4 h-4" />
-                      <span>Rodeado de naturaleza</span>
+                      <span>{t.filters.badgeNature}</span>
                     </button>
-                    <button 
+                    <button
                       onClick={() => toggleBadge('lago-rio')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('lago-rio')
@@ -1078,9 +1078,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     >
                       <Waves className="w-4 h-4" />
-                      <span>Cerca de lago o río</span>
+                      <span>{t.filters.badgeWater}</span>
                     </button>
-                    <button 
+                    <button
                       onClick={() => toggleBadge('inversion')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('inversion')
@@ -1090,9 +1090,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     >
                       <TrendingUp className="w-4 h-4" />
-                      <span>Ideal para inversión</span>
+                      <span>{t.filters.badgeInvestment}</span>
                     </button>
-                    <button 
+                    <button
                       onClick={() => toggleBadge('acceso')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('acceso')
@@ -1102,9 +1102,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     >
                       <Car className="w-4 h-4" />
-                      <span>Buen acceso</span>
+                      <span>{t.filters.badgeAccess}</span>
                     </button>
-                    <button 
+                    <button
                       onClick={() => toggleBadge('servicios')}
                       className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                         selectedBadges.includes('servicios')
@@ -1114,7 +1114,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       style={{ fontWeight: 400, lineHeight: '1.5' }}
                     >
                       <Zap className="w-4 h-4" />
-                      <span>Con servicios disponibles</span>
+                      <span>{t.filters.badgeServices}</span>
                     </button>
                   </div>
                 </div>
@@ -1148,7 +1148,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         boxShadow: selectedTab === 'inmobiliarias' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
                       }}
                     >
-                      Inmobiliarias
+                      {t.home.tabInmobiliarias}
                     </button>
                     <button
                       onClick={() => setSelectedTab('brokers')}
@@ -1161,7 +1161,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         boxShadow: selectedTab === 'brokers' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
                       }}
                     >
-                      Brokers
+                      {t.home.tabBrokers}
                     </button>
                   </div>
                 </div>
@@ -1324,7 +1324,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     e.currentTarget.style.borderColor = '#E5E5E5';
                   }}
                 >
-                  {selectedTab === 'inmobiliarias' ? 'Ver todas' : 'Ver todos'}
+                  {selectedTab === 'inmobiliarias' ? t.home.viewAllFemale : t.home.viewAllMale}
                 </button>
               </div>
             </div>
@@ -1335,9 +1335,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               {/* Título y subtítulo */}
               <div className="mb-8 md:mb-10 text-center">
-                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Parcelas destacadas</h2>
+                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>{t.home.featuredTitle}</h2>
                 <p className="body-lead text-sm md:text-base" style={{ color: '#0A0A0A' }}>
-                  Propiedades seleccionadas con información verificada
+                  {t.home.featuredSubtitle}
                 </p>
               </div>
 
@@ -1480,17 +1480,17 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                           {/* Precio y broker */}
                           <div className="mt-auto pt-4" style={{ borderTop: '1px solid #CDD8DE' }}>
                             <div className="mb-3">
-                              <div 
-                                className="mb-1" 
-                                style={{ 
-                                  color: '#462611', 
-                                  textTransform: 'uppercase', 
-                                  letterSpacing: '0.05em', 
-                                  fontSize: '0.625rem', 
-                                  fontWeight: 'var(--font-weight-medium)' 
+                              <div
+                                className="mb-1"
+                                style={{
+                                  color: '#462611',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.05em',
+                                  fontSize: '0.625rem',
+                                  fontWeight: 'var(--font-weight-medium)'
                                 }}
                               >
-                                Desde
+                                {t.home.from}
                               </div>
                               <PrecioDisplay 
                                 precioCLP={parcela.precio}
@@ -1532,7 +1532,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     e.currentTarget.style.color = '#0A0A0A';
                   }}
                 >
-                  Ver todas las parcelas
+                  {t.home.viewAllParcels}
                 </button>
               </div>
             </div>
@@ -1563,7 +1563,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       letterSpacing: 'var(--letter-spacing-normal)'
                     }}
                   >
-                    Asesoría gratuita para encontrar tu parcela ideal
+                    {t.home.advisoryTitle}
                   </h2>
 
                   {/* Texto explicativo */}
@@ -1577,7 +1577,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       letterSpacing: 'var(--letter-spacing-normal)'
                     }}
                   >
-                    Te acompañamos en la búsqueda de tu terreno ideal, analizando ubicación, presupuesto y tipo de parcela según tus objetivos.
+                    {t.home.advisorySubtitle}
                   </p>
 
                   {/* CTAs centrados */}
@@ -1603,7 +1603,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                       }}
                     >
-                      Más información
+                      {t.home.moreInfo}
                     </button>
                     <a
                       href="https://wa.me/56977714626?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20una%20asesor%C3%ADa%20gratuita%20para%20encontrar%20mi%20parcela%20ideal"
@@ -1629,7 +1629,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         (e.currentTarget as HTMLElement).style.borderColor = '#FFFFFF';
                       }}
                     >
-                      Hablar con un asesor
+                      {t.home.talkToAdvisor}
                     </a>
                   </div>
                 </div>
@@ -1641,9 +1641,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           <section className="py-12 md:py-16 lg:py-20 bg-white relative z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="mb-8 md:mb-10 lg:mb-12">
-                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Próximos proyectos</h2>
+                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>{t.home.projectsTitle}</h2>
                 <p className="body-lead text-sm md:text-base" style={{ color: '#0A0A0A' }}>
-                  Nuevos desarrollos que estarán disponibles próximamente
+                  {t.home.projectsSubtitle}
                 </p>
               </div>
 
@@ -1769,7 +1769,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       </div>
                       
                       <div className="space-y-1">
-                        <div className="text-xs text-gray-500 mb-1" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</div>
+                        <div className="text-xs text-gray-500 mb-1" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.home.projectFrom}</div>
                         <PrecioDisplay 
                           precioCLP={proyecto.precio.replace('Desde ', '')}
                           precioSize="lg"
@@ -1796,9 +1796,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           <section className="py-12 md:py-16 lg:py-20 bg-white relative z-10">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
               <div className="mb-10 md:mb-12 lg:mb-16 text-center">
-                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Proceso claro, paso a paso</h2>
+                <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>{t.home.stepsTitle}</h2>
                 <p className="body-lead max-w-2xl mx-auto text-sm md:text-base" style={{ color: '#0A0A0A' }}>
-                  Te acompañamos en cada etapa con información clara y respaldo profesional
+                  {t.home.stepsSubtitle}
                 </p>
               </div>
 
@@ -1809,10 +1809,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <Search className="w-7 h-7" style={{ color: '#0A0A0A' }} strokeWidth={1.5} />
                   </div>
                   <h3 style={{ color: '#0A0A0A' }}>
-                    Explora con información verificada
+                    {t.home.step1Title}
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    Revisa parcelas y proyectos con datos completos y confiables. Filtra por ubicación, precio y características relevantes para ti.
+                    {t.home.step1Desc}
                   </p>
                 </div>
 
@@ -1822,10 +1822,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <Users className="w-7 h-7" style={{ color: '#0A0A0A' }} strokeWidth={1.5} />
                   </div>
                   <h3 style={{ color: '#0A0A0A' }}>
-                    Conecta con profesionales
+                    {t.home.step2Title}
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    Comunícate con inmobiliarias y brokers verificados. Agenda visitas y resuelve dudas con asesoría especializada.
+                    {t.home.step2Desc}
                   </p>
                 </div>
 
@@ -1835,10 +1835,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <CheckCircle className="w-7 h-7" style={{ color: '#0A0A0A' }} strokeWidth={1.5} />
                   </div>
                   <h3 style={{ color: '#0A0A0A' }}>
-                    Decide con confianza
+                    {t.home.step3Title}
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    Accede a recursos y herramientas para avanzar de forma informada en cada etapa del proceso de compra.
+                    {t.home.step3Desc}
                   </p>
                 </div>
               </div>
@@ -1857,9 +1857,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           >
             <div className="max-w-7xl mx-auto px-6">
               <div className="mb-16 text-center">
-                <h2 className="mb-3 text-white">Una plataforma para todos</h2>
+                <h2 className="mb-3 text-white">{t.home.platformTitle}</h2>
                 <p className="body-lead text-gray-300">
-                  Conectamos compradores, dueños, inmobiliarias y brokers en un solo lugar
+                  {t.home.platformSubtitle}
                 </p>
               </div>
 
@@ -1881,13 +1881,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     </svg>
                   </div>
                   <div className="space-y-2 lg:space-y-3 flex-grow">
-                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>Compradores</h4>
+                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>{t.home.buyersTitle}</h4>
                     <p className="text-gray-200 text-sm lg:text-base leading-relaxed" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)' }}>
-                      Explora con información verificada y compara opciones para encontrar la parcela que se ajuste a lo que buscas.
+                      {t.home.buyersDesc}
                     </p>
                   </div>
                   <button onClick={() => onNavigate('parcelas')} className="w-full h-10 lg:h-11 px-4 text-sm lg:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center mt-5 lg:mt-6 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030]">
-                    Comenzar a explorar
+                    {t.home.buyersBtn}
                   </button>
                 </div>
 
@@ -1908,13 +1908,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     </svg>
                   </div>
                   <div className="space-y-2 lg:space-y-3 flex-grow">
-                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>Dueños</h4>
+                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>{t.home.ownersTitle}</h4>
                     <p className="text-gray-200 text-sm lg:text-base leading-relaxed" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)' }}>
-                      Publica tu parcela con información clara y conecta con compradores reales interesados en tu propiedad.
+                      {t.home.ownersDesc}
                     </p>
                   </div>
                   <button onClick={() => isLoggedIn ? onOpenPublishModal?.() : onNavigateToPublish?.()} className="w-full h-10 lg:h-11 px-4 text-sm lg:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center mt-5 lg:mt-6 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030]">
-                    Publicar parcela
+                    {t.home.ownersBtn}
                   </button>
                 </div>
 
@@ -1935,13 +1935,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     </svg>
                   </div>
                   <div className="space-y-2 lg:space-y-3 flex-grow">
-                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>Inmobiliarias</h4>
+                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>{t.home.inmobiliariasTitle}</h4>
                     <p className="text-gray-200 text-sm lg:text-base leading-relaxed" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)' }}>
-                      Gestiona tus publicaciones y coordina con tu equipo desde herramientas diseñadas para tu operación.
+                      {t.home.inmobiliariasDesc}
                     </p>
                   </div>
                   <button onClick={() => setIsPlanesModalOpen(true)} className="w-full h-10 lg:h-11 px-4 text-sm lg:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center mt-5 lg:mt-6 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030]">
-                    Conocer planes
+                    {t.home.inmobiliariasBtn}
                   </button>
                 </div>
 
@@ -1962,13 +1962,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     </svg>
                   </div>
                   <div className="space-y-2 lg:space-y-3 flex-grow">
-                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>Brokers</h4>
+                    <h4 className="text-white text-lg lg:text-xl" style={{ fontWeight: 'var(--font-weight-semibold)' }}>{t.home.brokersTitle}</h4>
                     <p className="text-gray-200 text-sm lg:text-base leading-relaxed" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)' }}>
-                      Conecta con nuevas oportunidades, gestiona tus contactos y accede a herramientas para aumentar tu alcance.
+                      {t.home.brokersDesc}
                     </p>
                   </div>
                   <button onClick={() => onNavigate('entry')} className="w-full h-10 lg:h-11 px-4 text-sm lg:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center mt-5 lg:mt-6 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030]">
-                    Registrarme
+                    {t.home.brokersBtn}
                   </button>
                 </div>
               </div>
@@ -1980,13 +1980,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="mb-8 md:mb-10 lg:mb-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                  <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>Recursos y consejos</h2>
+                  <h2 className="mb-2 md:mb-3" style={{ color: '#006B4E' }}>{t.home.blogTitle}</h2>
                   <p className="body-lead text-sm md:text-base" style={{ color: '#0A0A0A' }}>
-                    Información útil para compradores e inversionistas
+                    {t.home.blogSubtitle}
                   </p>
                 </div>
                 <button onClick={() => onNavigate('recursos')} className="text-sm text-black font-medium hover:underline self-start md:self-auto">
-                  Ver todos los artículos →
+                  {t.home.viewAllArticles}
                 </button>
               </div>
 
@@ -2078,11 +2078,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   lineHeight: 'var(--line-height-heading)',
                   margin: 0
                 }}>
-                  Encuentra tu parcela ideal con<br className="hidden sm:inline" /><span className="sm:hidden"> </span>información clara y respaldo profesional
+                  {t.home.ctaTitle}
                 </h2>
                 <p className="body-lead max-w-2xl mx-auto text-[14px]" style={{ color: '#0A0A0A' }}>
-                  Únete a cientos de personas que están tomando decisiones informadas 
-                  sobre su próxima propiedad
+                  {t.home.ctaSubtitle}
                 </p>
               </div>
 
@@ -2091,15 +2090,15 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   onClick={() => onNavigate('parcelas')}
                   className="w-full sm:w-auto h-11 md:h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 md:px-8 text-sm md:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                 >
-                  Explorar parcelas
+                  {t.home.exploreParcels}
                 </button>
                 <button onClick={() => onNavigate('entry')} className="w-full sm:w-auto h-11 md:h-12 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-6 md:px-8 text-sm md:text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center">
-                  Crear cuenta gratis
+                  {t.home.createAccount}
                 </button>
               </div>
 
               <p className="text-sm text-gray-500">
-                Sin compromiso • Explora todas las funciones • Cancela cuando quieras
+                {t.home.ctaNote}
               </p>
             </div>
           </section>
@@ -2123,48 +2122,48 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     fontWeight: 'var(--font-weight-regular)',
                     lineHeight: 'var(--line-height-relaxed)'
                   }}>
-                    Plataforma especializada en compra y venta de parcelas
+                    {t.home.footerDesc}
                   </p>
                 </div>
                 
                 <div className="lg:col-span-2 space-y-3 md:space-y-4">
-                  <div className="text-xs font-semibold tracking-wider" style={{ 
+                  <div className="text-xs font-semibold tracking-wider" style={{
                     color: '#0A0A0A',
                     textTransform: 'uppercase',
                     fontWeight: 'var(--font-weight-semibold)'
                   }}>
-                    Explorar
+                    {t.home.footerExplore}
                   </div>
                   <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-ui)' }}>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('parcelas')}>Parcelas</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('inmobiliarias')}>Inmobiliarias</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('recursos')}>Blog</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('parcelas')}>{t.nav.parcelas}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('inmobiliarias')}>{t.nav.inmobiliarias}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('recursos')}>{t.home.footerBlog}</div>
                   </div>
                 </div>
 
                 <div className="lg:col-span-3 space-y-3 md:space-y-4">
                   <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>
-                    Plataforma
+                    {t.home.footerPlatform}
                   </div>
                   <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-ui)' }}>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>Cómo funciona</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => isLoggedIn ? onOpenPublishModal?.() : onNavigateToPublish?.()}>Publicar propiedad</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>Planes para inmobiliarias</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('entry')}>Para brokers</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>{t.home.footerHowItWorks}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => isLoggedIn ? onOpenPublishModal?.() : onNavigateToPublish?.()}>{t.home.footerPublish}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>{t.home.footerPlans}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('entry')}>{t.home.footerBrokers}</div>
                   </div>
                 </div>
 
                 <div className="lg:col-span-3 space-y-3 md:space-y-4">
                   <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 'var(--font-weight-semibold)' }}>
-                    Soporte
+                    {t.home.footerSupport}
                   </div>
                   <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-ui)' }}>
                     <a href="mailto:contacto@compratuparcela.cl" className="block hover:text-[#006B4E] transition-colors" style={{ color: 'inherit', textDecoration: 'none' }}>
                       contacto@compratuparcela.cl
                     </a>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('terminos-condiciones')}>Términos y condiciones</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('politica-privacidad')}>Política de privacidad</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => setIsContactModalOpen(true)}>Contacto</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('terminos-condiciones')}>{t.home.footerTerms}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('politica-privacidad')}>{t.home.footerPrivacy}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => setIsContactModalOpen(true)}>{t.home.footerContact}</div>
                   </div>
                 </div>
               </div>
@@ -2175,7 +2174,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   fontFamily: 'var(--font-body)',
                   fontWeight: 'var(--font-weight-regular)'
                 }}>
-                  © 2026 Compra Tu Parcela. Todos los derechos reservados.
+                  {t.home.footerCopyright}
                 </p>
               </div>
             </div>
@@ -2199,12 +2198,12 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="p-8 pt-10">
               {/* Título */}
               <h2 className="mb-4 pr-8" style={{ color: '#006B4E', fontSize: 'var(--font-size-h3)' }}>
-                Para publicar tu propiedad, necesitas una cuenta
+                {t.home.publishModalTitle}
               </h2>
 
               {/* Descripción */}
               <p className="text-gray-600 mb-6" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)' }}>
-                Crear una cuenta te permite gestionar tus publicaciones, recibir consultas de compradores reales y avanzar con seguridad durante todo el proceso.
+                {t.home.publishModalDesc}
               </p>
 
               {/* Botones principales */}
@@ -2220,7 +2219,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   }}
                   className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
-                  Crear cuenta
+                  {t.home.createAccountBtn}
                 </button>
                 <button
                   onClick={() => {
@@ -2233,13 +2232,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   }}
                   className="w-full h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-black px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                 >
-                  Iniciar sesión
+                  {t.home.loginBtn}
                 </button>
               </div>
 
               {/* Texto de refuerzo */}
               <p className="text-gray-500 text-center mt-6" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)', fontSize: 'var(--font-size-body-sm)' }}>
-                Es rápido, sin compromiso y te guía paso a paso.
+                {t.home.publishModalNote}
               </p>
             </div>
           </div>
@@ -2446,7 +2445,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     color: '#0A0A0A'
                   }}
                 >
-                  Buscar parcelas
+                  {t.filters.searchParcels}
                 </h3>
                 <button
                   onClick={() => setIsMobileFiltersOpen(false)}
@@ -2461,16 +2460,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="p-4 space-y-6 pb-24">
               {/* Ubicación */}
               <div>
-                <label 
-                  className="block mb-3" 
-                  style={{ 
+                <label
+                  className="block mb-3"
+                  style={{
                     color: '#0A0A0A',
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
-                  Ubicación
+                  {t.filters.location}
                 </label>
                 <div className="relative">
                   <select 
@@ -2494,16 +2493,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
               {/* Tipo */}
               <div>
-                <label 
-                  className="block mb-3" 
-                  style={{ 
+                <label
+                  className="block mb-3"
+                  style={{
                     color: '#0A0A0A',
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
-                  Tipo
+                  {t.common.type}
                 </label>
                 <div className="relative">
                   <select 
@@ -2527,16 +2526,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
               {/* Superficie */}
               <div>
-                <label 
-                  className="block mb-3" 
-                  style={{ 
+                <label
+                  className="block mb-3"
+                  style={{
                     color: '#0A0A0A',
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
-                  Superficie
+                  {t.filters.area}
                 </label>
                 <div className="relative">
                   <select 
@@ -2560,16 +2559,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
               {/* Condición */}
               <div>
-                <label 
-                  className="block mb-3" 
-                  style={{ 
+                <label
+                  className="block mb-3"
+                  style={{
                     color: '#0A0A0A',
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
-                  Condición
+                  {t.filters.condition}
                 </label>
                 <div className="relative">
                   <select 
@@ -2593,16 +2592,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
               {/* Precio */}
               <div>
-                <label 
-                  className="block mb-3" 
-                  style={{ 
+                <label
+                  className="block mb-3"
+                  style={{
                     color: '#0A0A0A',
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
-                  Rango de precio
+                  {t.filters.priceRange}
                 </label>
                 <div className="relative">
                   <select 
@@ -2639,7 +2638,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   }}
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Búsqueda inteligente</span>
+                  <span>{t.filters.smartSearch}</span>
                 </button>
               </div>
 
@@ -2657,7 +2656,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     fontWeight: 500
                   }}
                 >
-                  Buscar
+                  {t.filters.search}
                 </button>
               </div>
             </div>
@@ -2695,7 +2694,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     color: '#0A0A0A'
                   }}
                 >
-                  Búsqueda inteligente
+                  {t.filters.smartSearch}
                 </h3>
                 <button
                   onClick={() => setIsSmartSearchBottomSheetOpen(false)}
@@ -2709,16 +2708,16 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             {/* Contenido del bottom sheet */}
             <div className="p-4 space-y-6 pb-24">
               {/* Descripción */}
-              <p 
+              <p
                 className="text-sm"
-                style={{ 
+                style={{
                   fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400, 
-                  lineHeight: '1.6', 
-                  color: '#737373' 
+                  fontWeight: 400,
+                  lineHeight: '1.6',
+                  color: '#737373'
                 }}
               >
-                Describe lo que buscas y te mostramos las parcelas que mejor se ajustan.
+                {t.filters.smartSearchDesc}
               </p>
 
               {/* Campo de texto con botón integrado */}
@@ -2727,15 +2726,15 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   type="text"
                   value={smartSearchValue}
                   onChange={(e) => setSmartSearchValue(e.target.value)}
-                  placeholder="Ej: busco una parcela cerca de un lago para vivir"
+                  placeholder={t.filters.smartSearchPlaceholder}
                   className="w-full h-14 pl-4 pr-32 text-sm text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[16px] focus:outline-none transition-all duration-200"
-                  style={{ 
+                  style={{
                     fontFamily: 'Inter, sans-serif',
-                    fontWeight: 400, 
-                    lineHeight: '1.5' 
+                    fontWeight: 400,
+                    lineHeight: '1.5'
                   }}
                 />
-                <button 
+                <button
                   onClick={() => {
                     handleSmartSearch();
                     setIsSmartSearchBottomSheetOpen(false);
@@ -2746,102 +2745,102 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   }}
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Buscar</span>
+                  <span>{t.filters.search}</span>
                 </button>
               </div>
 
               {/* Chips de sugerencias */}
               <div>
-                <p 
+                <p
                   className="text-sm mb-3"
-                  style={{ 
+                  style={{
                     fontFamily: 'Inter, sans-serif',
-                    fontWeight: 500, 
-                    color: '#0A0A0A' 
+                    fontWeight: 500,
+                    color: '#0A0A0A'
                   }}
                 >
-                  Sugerencias
+                  {t.filters.suggestions}
                 </p>
                 <div className="flex flex-wrap gap-2.5">
-                  <button 
+                  <button
                     onClick={() => toggleBadge('naturaleza')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('naturaleza')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <Trees className="w-4 h-4" />
-                    <span>Rodeado de naturaleza</span>
+                    <span>{t.filters.badgeNature}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('lago-rio')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('lago-rio')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <Waves className="w-4 h-4" />
-                    <span>Cerca de lago o río</span>
+                    <span>{t.filters.badgeWater}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('inversion')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('inversion')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <TrendingUp className="w-4 h-4" />
-                    <span>Ideal para inversión</span>
+                    <span>{t.filters.badgeInvestment}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('acceso')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('acceso')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <Car className="w-4 h-4" />
-                    <span>Buen acceso</span>
+                    <span>{t.filters.badgeAccess}</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleBadge('servicios')}
                     className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
                       selectedBadges.includes('servicios')
                         ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
                         : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
+                      fontWeight: 400,
+                      lineHeight: '1.5'
                     }}
                   >
                     <Zap className="w-4 h-4" />
-                    <span>Con servicios disponibles</span>
+                    <span>{t.filters.badgeServices}</span>
                   </button>
                 </div>
               </div>
@@ -2860,7 +2859,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     fontWeight: 500
                   }}
                 >
-                  Aplicar búsqueda
+                  {t.filters.applySearch}
                 </button>
               </div>
             </div>
