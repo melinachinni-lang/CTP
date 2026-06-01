@@ -78,7 +78,7 @@ function ClienteForm({ datos, onChange, titulo }: {
           className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label style={labelStyle}>Nacionalidad</label>
           <input type="text" value={datos.nacionalidad} onChange={set('nacionalidad')} placeholder="Ej: Chilena"
@@ -108,7 +108,7 @@ function ClienteForm({ datos, onChange, titulo }: {
         <label style={labelStyle}>Dirección <span style={{ color: '#9CA3AF', fontWeight: 400, fontSize: '11px' }}>(Código postal es opcional)</span></label>
         <input type="text" value={datos.direccion} onChange={set('direccion')} placeholder="Ingresa tu dirección"
           className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 mb-2" style={inputStyle} />
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <input type="text" value={datos.ciudad} onChange={set('ciudad')} placeholder="Ciudad"
             className="px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
           <input type="text" value={datos.provincia} onChange={set('provincia')} placeholder="Provincia"
@@ -118,7 +118,7 @@ function ClienteForm({ datos, onChange, titulo }: {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label style={labelStyle}>Email <span style={{ color: '#DC2626' }}>*</span></label>
           <input type="email" value={datos.email} onChange={set('email')} placeholder="tu@email.com"
@@ -428,7 +428,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                       <label style={labelStyle}>Dirección comercial <span style={{ color: '#9CA3AF', fontWeight: 400, fontSize: '11px' }}>(Código postal es opcional)</span></label>
                       <input type="text" value={dirEmpresa.direccion} onChange={e => setDirEmpresa({ ...dirEmpresa, direccion: e.target.value })} placeholder="Ingresa la dirección"
                         className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900 mb-2" style={inputStyle} />
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <input type="text" value={dirEmpresa.ciudad} onChange={e => setDirEmpresa({ ...dirEmpresa, ciudad: e.target.value })} placeholder="Ciudad"
                           className="px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                         <input type="text" value={dirEmpresa.provincia} onChange={e => setDirEmpresa({ ...dirEmpresa, provincia: e.target.value })} placeholder="Provincia"
@@ -463,7 +463,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#525252', marginBottom: '10px' }}>
                   Selecciona cómo quieres pagar
                 </p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button onClick={() => setMetodoPago('transferencia')}
                     className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left"
                     style={{ borderColor: metodoPago === 'transferencia' ? '#0A0A0A' : '#E5E5E5', backgroundColor: metodoPago === 'transferencia' ? '#FAFAFA' : '#FFFFFF' }}>
