@@ -449,9 +449,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       precio: '$85.000.000',
       caracteristicas: [
         { icon: <Expand className="w-4 h-4" />, text: '5.000 m²' },
-        { icon: <FileCheck className="w-4 h-4" />, text: 'Rol aprobado' },
-        { icon: <Pickaxe className="w-4 h-4" />, text: 'Camino ejecutado' },
-        { icon: <PenLine className="w-4 h-4" />, text: 'Listo escritura' }
+        { icon: <FileCheck className="w-4 h-4" />, text: t.common.rolAprobado },
+        { icon: <Pickaxe className="w-4 h-4" />, text: t.common.caminoEjecutado },
+        { icon: <PenLine className="w-4 h-4" />, text: t.common.listoEscritura }
       ],
       inmobiliaria: 'Inmobiliaria Sur Propiedades',
       tipoVendedor: 'Inmobiliaria',
@@ -471,9 +471,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       precio: '$120.000.000',
       caracteristicas: [
         { icon: <Expand className="w-4 h-4" />, text: '8.500 m²' },
-        { icon: <DoorOpen className="w-4 h-4" />, text: 'Portón acceso' },
-        { icon: <FileCheck className="w-4 h-4" />, text: 'Rol aprobado' },
-        { icon: <Pickaxe className="w-4 h-4" />, text: 'Factibilidad agua' }
+        { icon: <DoorOpen className="w-4 h-4" />, text: t.common.portonAcceso },
+        { icon: <FileCheck className="w-4 h-4" />, text: t.common.rolAprobado },
+        { icon: <Pickaxe className="w-4 h-4" />, text: t.common.factibilidadAgua }
       ],
       inmobiliaria: 'Inmobiliaria Premium Lands',
       tipoVendedor: 'Inmobiliaria',
@@ -488,9 +488,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       precio: '$195.000.000',
       caracteristicas: [
         { icon: <Expand className="w-4 h-4" />, text: '12.000 m²' },
-        { icon: <PenLine className="w-4 h-4" />, text: 'Listo escritura' },
-        { icon: <Pickaxe className="w-4 h-4" />, text: 'Camino ejecutado' },
-        { icon: <FileCheck className="w-4 h-4" />, text: 'Rol aprobado' }
+        { icon: <PenLine className="w-4 h-4" />, text: t.common.listoEscritura },
+        { icon: <Pickaxe className="w-4 h-4" />, text: t.common.caminoEjecutado },
+        { icon: <FileCheck className="w-4 h-4" />, text: t.common.rolAprobado }
       ],
       inmobiliaria: 'Carolina Morales',
       tipoVendedor: 'Broker',
@@ -505,9 +505,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       precio: '$95.000.000',
       caracteristicas: [
         { icon: <Expand className="w-4 h-4" />, text: '6.500 m²' },
-        { icon: <DoorOpen className="w-4 h-4" />, text: 'Portón acceso' },
-        { icon: <FileCheck className="w-4 h-4" />, text: 'Rol aprobado' },
-        { icon: <Pickaxe className="w-4 h-4" />, text: 'Camino ejecutado' }
+        { icon: <DoorOpen className="w-4 h-4" />, text: t.common.portonAcceso },
+        { icon: <FileCheck className="w-4 h-4" />, text: t.common.rolAprobado },
+        { icon: <Pickaxe className="w-4 h-4" />, text: t.common.caminoEjecutado }
       ],
       inmobiliaria: 'Roberto Silva',
       tipoVendedor: 'Persona natural',
@@ -522,9 +522,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       precio: '$145.000.000',
       caracteristicas: [
         { icon: <Expand className="w-4 h-4" />, text: '10.000 m²' },
-        { icon: <PenLine className="w-4 h-4" />, text: 'Listo escritura' },
-        { icon: <FileCheck className="w-4 h-4" />, text: 'Rol aprobado' },
-        { icon: <DoorOpen className="w-4 h-4" />, text: 'Portón acceso' }
+        { icon: <PenLine className="w-4 h-4" />, text: t.common.listoEscritura },
+        { icon: <FileCheck className="w-4 h-4" />, text: t.common.rolAprobado },
+        { icon: <DoorOpen className="w-4 h-4" />, text: t.common.portonAcceso }
       ],
       inmobiliaria: 'Inmobiliaria Valle Andino',
       tipoVendedor: 'Inmobiliaria',
@@ -539,9 +539,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       precio: '$105.000.000',
       caracteristicas: [
         { icon: <Expand className="w-4 h-4" />, text: '7.200 m²' },
-        { icon: <Pickaxe className="w-4 h-4" />, text: 'Camino ejecutado' },
-        { icon: <FileCheck className="w-4 h-4" />, text: 'Rol aprobado' },
-        { icon: <DoorOpen className="w-4 h-4" />, text: 'Portón acceso' }
+        { icon: <Pickaxe className="w-4 h-4" />, text: t.common.caminoEjecutado },
+        { icon: <FileCheck className="w-4 h-4" />, text: t.common.rolAprobado },
+        { icon: <DoorOpen className="w-4 h-4" />, text: t.common.portonAcceso }
       ],
       inmobiliaria: 'Inmobiliaria Norte Verde',
       tipoVendedor: 'Inmobiliaria',
@@ -1777,7 +1777,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       </div>
                       
                       <div className="pt-3 border-t border-gray-200">
-                        <div className="text-xs font-medium" style={{ color: '#0A0A0A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{proyecto.estado}</div>
+                        <div className="text-xs font-medium" style={{ color: '#0A0A0A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          {proyecto.estado === 'Pre-venta iniciada' ? t.status.preventa
+                            : proyecto.estado === 'En construcción' ? t.status.enConstruccion
+                            : proyecto.estado === 'Planos aprobados' ? t.status.planosAprobados
+                            : proyecto.estado.startsWith('Lanzamiento') ? `${t.status.lanzamiento} ${proyecto.estado.replace('Lanzamiento ', '')}`
+                            : proyecto.estado}
+                        </div>
                       </div>
                       
                       <PublicadoPorCompact 

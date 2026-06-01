@@ -14,6 +14,8 @@ export interface Translations {
     view: string; search: string; filters: string; sortBy: string; from: string;
     available: string; area: string; download: string; type: string; date: string;
     amount: string; status: string; parcela: string; parcelas: string; project: string;
+    rolAprobado: string; caminoEjecutado: string; listoEscritura: string;
+    portonAcceso: string; factibilidadAgua: string;
     reservation: string; purchase: string; paymentMethod: string;
     allDates: string; availableLabel: string; noData: string;
   };
@@ -21,6 +23,7 @@ export interface Translations {
     disponible: string; reservada: string; reservandose: string;
     aprobada: string; rechazada: string; activa: string; pausada: string;
     pendiente: string; aprobado: string; rechazado: string;
+    preventa: string; enConstruccion: string; planosAprobados: string; lanzamiento: string;
   };
   purchases: {
     title: string; subtitle: string; viewDetail: string; backToList: string;
@@ -115,6 +118,8 @@ const es: Translations = {
     sortBy: 'Ordenar por', from: 'Desde', available: 'Disponibles', area: 'Superficie',
     download: 'Descargar', type: 'Tipo', date: 'Fecha', amount: 'Monto',
     status: 'Estado', parcela: 'Parcela', parcelas: 'parcelas', project: 'Proyecto',
+    rolAprobado: 'Rol aprobado', caminoEjecutado: 'Camino ejecutado', listoEscritura: 'Listo escritura',
+    portonAcceso: 'Portón acceso', factibilidadAgua: 'Factibilidad agua',
     reservation: 'Reserva', purchase: 'Compra', paymentMethod: 'Método de pago',
     allDates: 'Todas las fechas', availableLabel: 'Disponible', noData: 'Sin datos disponibles',
   },
@@ -122,6 +127,8 @@ const es: Translations = {
     disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
     aprobada: 'Aprobada', rechazada: 'Rechazada', activa: 'Activa', pausada: 'Pausada',
     pendiente: 'Pendiente', aprobado: 'Aprobado', rechazado: 'Rechazado',
+    preventa: 'Pre-venta iniciada', enConstruccion: 'En construcción',
+    planosAprobados: 'Planos aprobados', lanzamiento: 'Lanzamiento',
   },
   purchases: {
     title: 'Mis compras',
@@ -269,6 +276,8 @@ const en: Translations = {
     sortBy: 'Sort by', from: 'From', available: 'Available', area: 'Area',
     download: 'Download', type: 'Type', date: 'Date', amount: 'Amount',
     status: 'Status', parcela: 'Parcel', parcelas: 'parcels', project: 'Project',
+    rolAprobado: 'Approved deed roll', caminoEjecutado: 'Road built', listoEscritura: 'Deed ready',
+    portonAcceso: 'Access gate', factibilidadAgua: 'Water study',
     reservation: 'Reservation', purchase: 'Purchase', paymentMethod: 'Payment method',
     allDates: 'All dates', availableLabel: 'Available', noData: 'No data available',
   },
@@ -276,6 +285,8 @@ const en: Translations = {
     disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',
     aprobada: 'Approved', rechazada: 'Rejected', activa: 'Active', pausada: 'Paused',
     pendiente: 'Pending', aprobado: 'Approved', rechazado: 'Rejected',
+    preventa: 'Pre-sale started', enConstruccion: 'Under construction',
+    planosAprobados: 'Plans approved', lanzamiento: 'Launch',
   },
   purchases: {
     title: 'My purchases',
