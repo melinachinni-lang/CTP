@@ -698,9 +698,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, color: '#0A0A0A' }}>{pin.label}</div>
                     <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#006B4E' }}>{pin.price}</div>
                   </div>
-                  {/* Pin circular negro con logo CTP */}
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', backgroundColor: '#0A0A0A', boxShadow: '0 4px 16px rgba(0,0,0,0.5)', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    <img src={logo} alt="" style={{ width: '20px', height: '20px', transform: 'rotate(45deg)', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                  {/* Pin blanco con logo CTP */}
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', backgroundColor: '#FFFFFF', boxShadow: '0 4px 18px rgba(0,0,0,0.45)', border: '1.5px solid rgba(0,0,0,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <img src={logo} alt="" style={{ width: '22px', height: '22px', transform: 'rotate(45deg)', objectFit: 'contain' }} />
                   </div>
                 </div>
               ))}
