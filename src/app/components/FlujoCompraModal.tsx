@@ -19,6 +19,11 @@ interface DatosCliente {
   nacionalidad: string;
   profesion: string;
   estadoCivil: string;
+  regimenPatrimonial: string;
+  conyugeNombre: string;
+  conyugeRut: string;
+  conyugeEmail: string;
+  conyugeCelular: string;
   direccion: string;
   ciudad: string;
   provincia: string;
@@ -29,7 +34,9 @@ interface DatosCliente {
 
 const DATOS_VACIOS: DatosCliente = {
   nombreCompleto: '', rut: '', nacionalidad: '', profesion: '',
-  estadoCivil: '', direccion: '', ciudad: '', provincia: '',
+  estadoCivil: '', regimenPatrimonial: '',
+  conyugeNombre: '', conyugeRut: '', conyugeEmail: '', conyugeCelular: '',
+  direccion: '', ciudad: '', provincia: '',
   codigoPostal: '', email: '', celular: '',
 };
 
@@ -103,6 +110,52 @@ function ClienteForm({ datos, onChange, titulo }: {
           <ChevronDown className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
         </div>
       </div>
+
+      {datos.estadoCivil === 'Casado/a' && (
+        <>
+          <div>
+            <label style={labelStyle}>Régimen patrimonial</label>
+            <div className="relative">
+              <select value={datos.regimenPatrimonial} onChange={set('regimenPatrimonial')}
+                className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 appearance-none"
+                style={{ ...inputStyle, cursor: 'pointer' }}>
+                <option value="">Seleccionar...</option>
+                <option value="sociedad-conyugal">Sociedad conyugal</option>
+                <option value="separacion-bienes">Separación de bienes</option>
+                <option value="participacion-gananciales">Participación en los gananciales</option>
+              </select>
+              <ChevronDown className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+            </div>
+          </div>
+          <div className="space-y-4 p-4 rounded-lg border" style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E5E5' }}>
+            <p style={{ ...labelStyle, marginBottom: 0, color: '#374151' }}>Datos del cónyuge</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label style={labelStyle}>Nombre completo</label>
+                <input type="text" value={datos.conyugeNombre} onChange={set('conyugeNombre')} placeholder="Nombre del cónyuge"
+                  className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+              </div>
+              <div>
+                <label style={labelStyle}>RUT</label>
+                <input type="text" value={datos.conyugeRut} onChange={set('conyugeRut')} placeholder="11.111.111-1"
+                  className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label style={labelStyle}>Email</label>
+                <input type="email" value={datos.conyugeEmail} onChange={set('conyugeEmail')} placeholder="conyuge@email.com"
+                  className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+              </div>
+              <div>
+                <label style={labelStyle}>Celular</label>
+                <input type="tel" value={datos.conyugeCelular} onChange={set('conyugeCelular')} placeholder="+56 9 1234 5678"
+                  className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <div>
         <label style={labelStyle}>Dirección <span style={{ color: '#9CA3AF', fontWeight: 400, fontSize: '11px' }}>(Código postal es opcional)</span></label>

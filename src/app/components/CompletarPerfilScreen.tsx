@@ -34,6 +34,8 @@ export function CompletarPerfilScreen({ onNavigate, email }: CompletarPerfilScre
   const [telefono, setTelefono] = React.useState('');
   const [region, setRegion] = React.useState('');
   const [nombreError, setNombreError] = React.useState(false);
+  const [aceptaTyC, setAceptaTyC] = React.useState(false);
+  const [newsletter, setNewsletter] = React.useState(false);
 
   const handleSubmit = () => {
     if (!nombre.trim()) {
@@ -144,13 +146,44 @@ export function CompletarPerfilScreen({ onNavigate, email }: CompletarPerfilScre
                 </div>
               </div>
 
+              {/* Checkboxes legales */}
+              <div className="space-y-3 mt-2">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={aceptaTyC}
+                    onChange={e => setAceptaTyC(e.target.checked)}
+                    className="mt-0.5 flex-shrink-0 w-4 h-4 accent-[#006B4E]"
+                  />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#374151', lineHeight: '1.5' }}>
+                    Acepto los{' '}
+                    <a href="#" style={{ color: '#006B4E', textDecoration: 'underline' }}>términos y condiciones</a>
+                    {' '}y la{' '}
+                    <a href="#" style={{ color: '#006B4E', textDecoration: 'underline' }}>política de privacidad</a>
+                    {' '}<span style={{ color: '#DC2626' }}>*</span>
+                  </span>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={newsletter}
+                    onChange={e => setNewsletter(e.target.checked)}
+                    className="mt-0.5 flex-shrink-0 w-4 h-4 accent-[#006B4E]"
+                  />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#374151', lineHeight: '1.5' }}>
+                    Quiero recibir el boletín de novedades y oportunidades de inversión
+                  </span>
+                </label>
+              </div>
+
               {/* Botón */}
               <button
                 onClick={handleSubmit}
+                disabled={!aceptaTyC}
                 className="w-full py-3.5 rounded-full font-semibold transition-all mt-2"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', fontSize: '16px', border: 'none', cursor: 'pointer' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                style={{ backgroundColor: aceptaTyC ? '#006B4E' : '#D1D5DB', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', fontSize: '16px', border: 'none', cursor: aceptaTyC ? 'pointer' : 'not-allowed' }}
+                onMouseEnter={e => { if (aceptaTyC) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { if (aceptaTyC) e.currentTarget.style.backgroundColor = '#006B4E'; }}
               >
                 Comenzar
               </button>

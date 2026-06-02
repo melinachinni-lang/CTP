@@ -159,18 +159,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           {/* Logo Area */}
           <div className="border-b-2 border-gray-300 p-2 mt-8 flex items-center justify-between">
             <div className="font-bold text-base text-black">CompraTuParcela</div>
-            <button
-              onClick={() => setShowNotifications(v => !v)}
-              className="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-              title="Notificaciones"
-            >
-              <Bell className="w-5 h-5" style={{ color: '#006B4E' }} />
-              {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full px-0.5">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
           </div>
 
           {/* Notification panel */}
@@ -271,7 +259,10 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 }}
               >
                 {renderIcon(item.icon, currentSection === item.id)}
-                <span>{item.label}</span>
+                <span className="flex-1">{item.label}</span>
+                {item.id === 'inquiries' && (
+                  <span className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
+                )}
               </button>
             ))}
           </nav>
@@ -308,6 +299,21 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
       {/* Main Content Area */}
       <div className="flex-1 ml-56 overflow-y-auto h-screen">
+        {/* Topbar con campana */}
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-3 flex justify-end">
+          <button
+            onClick={() => setShowNotifications(v => !v)}
+            className="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+            title="Notificaciones"
+          >
+            <Bell className="w-5 h-5" style={{ color: '#006B4E' }} />
+            {unreadCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full px-0.5">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </button>
+        </div>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'explore' && <ExploreContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="vendedor_particular" userId="person-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
