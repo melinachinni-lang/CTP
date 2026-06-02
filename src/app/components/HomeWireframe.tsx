@@ -684,29 +684,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               style={{ animation: 'kenBurnsHero 12s ease-out forwards', transformOrigin: '55% 45%', willChange: 'transform' }}
             />
 
-            {/* Pines animados sobre el terreno */}
-            <div className="absolute inset-0 z-[5] pointer-events-none select-none hidden md:block">
-              {[
-                { top: '44%', left: '8%',  label: 'Pirque, RM',   price: '$85.000.000',  delay: '0.6s' },
-                { top: '60%', left: '33%', label: 'Buin, RM',     price: '$95.000.000',  delay: '1.1s' },
-                { top: '40%', left: '61%', label: 'Colina, RM',   price: '$120.000.000', delay: '1.6s' },
-                { top: '55%', left: '83%', label: 'Farellones',   price: '$195.000.000', delay: '2.1s' },
-              ].map((pin, i) => (
-                <div key={i} className="absolute flex flex-col items-center" style={{ top: pin.top, left: pin.left, animation: `pinDrop 0.8s cubic-bezier(0.34,1.56,0.64,1) ${pin.delay} both` }}>
-                  {/* Burbuja label */}
-                  <div style={{ backgroundColor: 'rgba(255,255,255,0.93)', backdropFilter: 'blur(6px)', borderRadius: '10px', padding: '5px 10px', marginBottom: '5px', boxShadow: '0 4px 16px rgba(0,0,0,0.22)', whiteSpace: 'nowrap', animation: `fadeInPin 0.5s ease ${pin.delay} both` }}>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, color: '#0A0A0A' }}>{pin.label}</div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#006B4E' }}>{pin.price}</div>
-                  </div>
-                  {/* Pin blanco con logo CTP */}
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', backgroundColor: '#FFFFFF', boxShadow: '0 4px 18px rgba(0,0,0,0.45)', border: '1.5px solid rgba(0,0,0,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    <img src={logo} alt="" style={{ width: '22px', height: '22px', transform: 'rotate(45deg)', objectFit: 'contain' }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
+<div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
               {/* Headlines */}
               <div className="space-y-3 md:space-y-4">
                 <h1 style={{ color: '#0A0A0A', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1' }}>
@@ -2914,19 +2892,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           100% { transform: scale(1.05) translate(2%, 1%); }
         }
 
-        @keyframes pinDrop {
-          0%   { transform: translateY(-45px) scale(0.7); opacity: 0; }
-          55%  { transform: translateY(7px)  scale(1.05); opacity: 1; }
-          75%  { transform: translateY(-3px) scale(1); }
-          100% { transform: translateY(0)    scale(1); opacity: 1; }
-        }
-
-        @keyframes fadeInPin {
-          from { opacity: 0; transform: scale(0.85); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-
-        /* Slick Carousel Styles */
+/* Slick Carousel Styles */
         .slick-slider {
           position: relative;
           display: block;
