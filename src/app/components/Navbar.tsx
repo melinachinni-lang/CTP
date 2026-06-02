@@ -62,32 +62,33 @@ export function Navbar({
 
   return (
     <>
-      <header className="fixed top-8 left-0 right-0 z-50" style={{ backgroundColor: 'var(--hero-background)' }}>
+      <header className="fixed top-8 left-0 right-0 z-50" style={{ backgroundColor: '#0D1F17', boxShadow: '0 2px 20px rgba(0,0,0,0.3)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Hamburger Menu - Mobile/Tablet only */}
-            <button 
+            <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
               aria-label="Abrir menú"
             >
-              <Menu className="w-6 h-6 text-black" />
+              <Menu className="w-6 h-6 text-white" />
             </button>
 
             {/* Logo and Navigation - Left side */}
             <div className="flex items-center gap-0">
-              <img 
-                src={logo} 
-                alt="CompraTuParcela" 
-                className="h-10 sm:h-12 lg:h-14 cursor-pointer" 
+              <img
+                src={logo}
+                alt="CompraTuParcela"
+                className="h-10 sm:h-12 lg:h-14 cursor-pointer"
+                style={{ filter: 'brightness(0) invert(1)' }}
                 onClick={() => onNavigate('home')}
               />
-              
+
               <nav className="hidden lg:flex items-center justify-center gap-0 whitespace-nowrap">
-                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.parcelas}</button>
-                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.inmobiliarias}</button>
-                <button onClick={() => onNavigate('como-funciona-loading')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.howItWorks}</button>
-                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.resources}</button>
+                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-white/80 hover:bg-white/10 hover:text-white rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.parcelas}</button>
+                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-white/80 hover:bg-white/10 hover:text-white rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.inmobiliarias}</button>
+                <button onClick={() => onNavigate('como-funciona-loading')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-white/80 hover:bg-white/10 hover:text-white rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.howItWorks}</button>
+                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-white/80 hover:bg-white/10 hover:text-white rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.resources}</button>
               </nav>
             </div>
 
@@ -99,20 +100,19 @@ export function Navbar({
               <button
                 onClick={() => {
                   if (onShowPublishModal) {
-                    // Usuario logueado o no logueado: mostrar modal
                     onShowPublishModal();
                   }
                 }}
-                className="h-8 bg-[#006B4E] hover:bg-[#005540] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
+                className="h-8 bg-[#00A86B] hover:bg-[#00C27B] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
               >
                 <span className="hidden sm:inline">{t.nav.publishProperty}</span>
                 <span className="sm:hidden">{t.nav.publishShort}</span>
               </button>
-              
+
               {estado === 'visitante' ? (
-                <button 
+                <button
                   onClick={() => onNavigate('entry')}
-                  className="hidden sm:flex h-8 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors items-center justify-center py-[0px]"
+                  className="hidden sm:flex h-8 bg-white/10 hover:bg-white/20 text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors items-center justify-center py-[0px] border border-white/20"
                 >
                   {t.nav.login}
                 </button>
@@ -120,11 +120,11 @@ export function Navbar({
                 <div className="relative hidden sm:block" ref={dropdownRef}>
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="h-8 bg-[#efefef] hover:bg-[#dedede] px-2 rounded-[200px] transition-colors flex items-center gap-1.5"
+                    className="h-8 bg-white/10 hover:bg-white/20 px-2 rounded-[200px] transition-colors flex items-center gap-1.5 border border-white/20"
                   >
                     {/* Avatar con dot rojo */}
                     <div className="relative">
-                      <div className="w-6 h-6 rounded-full bg-[#006B4E] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
+                      <div className="w-6 h-6 rounded-full bg-[#00A86B] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
                         {userAvatar ? (
                           <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
                         ) : (
@@ -132,14 +132,14 @@ export function Navbar({
                         )}
                       </div>
                       {unreadNotificationsCount > 0 && (
-                        <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-[#efefef]" />
+                        <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-[#0D1F17]" />
                       )}
                     </div>
 
                     {/* Icono dropdown */}
                     <ChevronDown
                       className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
-                      style={{ color: '#0A0A0A' }}
+                      style={{ color: 'white' }}
                     />
                   </button>
 
