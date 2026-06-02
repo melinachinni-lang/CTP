@@ -674,7 +674,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       {/* Main Content - with padding for fixed header */}
       <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
-          <section className="relative pt-12 pb-44 md:pt-16 md:pb-56 lg:pt-20 lg:pb-72 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
+          <section className="relative pt-8 pb-28 md:pt-12 md:pb-36 lg:pt-16 lg:pb-48 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
             {/* Background image con Ken Burns + parallax */}
             <img
               ref={heroImgRef}
