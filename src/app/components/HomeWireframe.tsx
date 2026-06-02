@@ -71,6 +71,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   const [smartSearchValue, setSmartSearchValue] = useState('');
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const heroImgRef = useRef<HTMLImageElement>(null);
   const [selectedTab, setSelectedTab] = useState<'inmobiliarias' | 'brokers'>('inmobiliarias');
   const [isScrolling, setIsScrolling] = useState(false);
   const [includeProjects, setIncludeProjects] = useState(false);
@@ -177,6 +178,18 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
         observer.unobserve(currentRef);
       }
     };
+  }, []);
+
+  // Parallax del hero
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroImgRef.current) {
+        const y = window.scrollY * 0.28;
+        heroImgRef.current.style.transform = `translateY(${y}px) scale(1.05)`;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Manejador para scroll horizontal con la rueda del mouse
@@ -662,13 +675,37 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
           <section className="relative py-16 pb-32 md:py-24 md:pb-40 lg:py-32 lg:pb-52 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
-            {/* Background image */}
-            <img 
+            {/* Background image con Ken Burns + parallax */}
+            <img
+              ref={heroImgRef}
               src={heroBackground}
               alt="Campos rurales"
               className="absolute inset-0 w-full h-full object-cover z-0"
+              style={{ animation: 'kenBurnsHero 9s ease-out forwards', transformOrigin: 'center center', willChange: 'transform' }}
             />
-            
+
+            {/* Pines animados sobre el terreno */}
+            <div className="absolute inset-0 z-[5] pointer-events-none select-none">
+              {[
+                { top: '54%', left: '9%',  label: 'Pirque, RM',    price: '$85.000.000',  delay: '0.5s' },
+                { top: '68%', left: '32%', label: 'Buin, RM',      price: '$95.000.000',  delay: '1.0s' },
+                { top: '50%', left: '60%', label: 'Colina, RM',    price: '$120.000.000', delay: '1.5s' },
+                { top: '62%', left: '82%', label: 'Farellones',    price: '$195.000.000', delay: '2.0s' },
+              ].map((pin, i) => (
+                <div key={i} className="absolute flex flex-col items-center" style={{ top: pin.top, left: pin.left, animation: `pinDrop 0.7s cubic-bezier(0.34,1.56,0.64,1) ${pin.delay} both` }}>
+                  {/* Bubble */}
+                  <div style={{ backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(4px)', borderRadius: '10px', padding: '5px 10px', marginBottom: '4px', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', animation: `fadeInPin 0.4s ease ${pin.delay} both` }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#0A0A0A', whiteSpace: 'nowrap' }}>{pin.label}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#006B4E', whiteSpace: 'nowrap' }}>{pin.price}</div>
+                  </div>
+                  {/* Pin */}
+                  <div style={{ width: '20px', height: '20px', backgroundColor: '#006B4E', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', boxShadow: '0 3px 10px rgba(0,107,78,0.55)', position: 'relative' }}>
+                    <div style={{ width: '8px', height: '8px', backgroundColor: 'white', borderRadius: '50%', position: 'absolute', top: '6px', left: '6px' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center space-y-12 md:space-y-16 lg:space-y-24 z-10 -mt-[40px] md:-mt-[60px] lg:-mt-[80px]">
               {/* Headlines */}
               <div className="space-y-3 md:space-y-4">
@@ -2869,6 +2906,23 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           to {
             transform: translateY(0);
           }
+        }
+
+        @keyframes kenBurnsHero {
+          0%   { transform: scale(1.12) translate(-1.5%, -1%); }
+          100% { transform: scale(1.05) translate(0%, 0%); }
+        }
+
+        @keyframes pinDrop {
+          0%   { transform: translateY(-45px) scale(0.7); opacity: 0; }
+          55%  { transform: translateY(7px)  scale(1.05); opacity: 1; }
+          75%  { transform: translateY(-3px) scale(1); }
+          100% { transform: translateY(0)    scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInPin {
+          from { opacity: 0; transform: scale(0.85); }
+          to   { opacity: 1; transform: scale(1); }
         }
 
         /* Slick Carousel Styles */
