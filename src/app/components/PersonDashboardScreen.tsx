@@ -314,7 +314,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'saved' && <SavedContent savedParcelaIds={savedParcelaIds} onToggleSaved={onToggleSaved} onNavigate={onNavigate} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="personal" defaultTab={consultasDefaultTab} />}
         {currentSection === 'calendarios' && <CalendariosView />}
-        {currentSection === 'compare' && <CompareContent />}
+        {currentSection === 'compare' && <CompareContent onNavigate={onNavigate} />}
         {currentSection === 'purchases' && <MyPurchasesContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
@@ -1691,13 +1691,55 @@ function SavedContent({ savedParcelaIds, onToggleSaved, onNavigate }: { savedPar
   );
 }
 
-function CompareContent() {
+interface CompareContentProps {
+  onNavigate: (screen: string, id?: number) => void;
+}
+
+const COMPARE_ITEMS_INITIAL = [
+  { id: 1, nombre: 'Parcela Vista al Valle', ubicacion: 'Los Aromos, RM', img: 'https://images.unsplash.com/photo-1764222233275-87dc016c11dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmQlMjBwcm9wZXJ0eSUyMGFlcmlhbHxlbnwxfHx8fDE3NzAxMzMyOTd8MA&ixlib=rb-4.1.0&q=80&w=1080', precio: '$45.000.000', precioNum: 45000000, tamano: '5.000 m²', tamanoNum: 5000, preciom2: '$9.000/m²', preciom2Num: 9000, agua: 'Pozo profundo', aguaVentaja: false, electricidad: '✓ Disponible', acceso: 'Camino pavimentado', accesoVentaja: true, topografia: 'Plana', distanciaKm: 35, documentacion: 'Al día' },
+  { id: 2, nombre: 'Parcela El Bosque', ubicacion: 'Piedra Roja, Colina', img: 'https://images.unsplash.com/photo-1762110341498-59a612f1bddb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMHByb3BlcnR5JTIwdGVycmFpbiUyMGhpbGxzfGVufDF8fHx8MTc3MDEzMzI5OHww&ixlib=rb-4.1.0&q=80&w=1080', precio: '$62.000.000', precioNum: 62000000, tamano: '8.500 m²', tamanoNum: 8500, preciom2: '$7.294/m²', preciom2Num: 7294, agua: 'Red pública', aguaVentaja: true, electricidad: '✓ Disponible', acceso: 'Camino ripiado', accesoVentaja: false, topografia: 'Semi-plana', distanciaKm: 42, documentacion: 'Al día' },
+  { id: 3, nombre: 'Parcela Los Robles', ubicacion: 'Chicureo, RM', img: 'https://images.unsplash.com/photo-1763397929062-eb0582008877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyYWwlMjBsYW5kJTIwZ3JlZW4lMjBmaWVsZHN8ZW58MXx8fHwxNzcwMTMzMjk4fDA&ixlib=rb-4.1.0&q=80&w=1080', precio: '$38.500.000', precioNum: 38500000, tamano: '3.200 m²', tamanoNum: 3200, preciom2: '$12.031/m²', preciom2Num: 12031, agua: 'Pozo profundo', aguaVentaja: false, electricidad: '✓ Disponible', acceso: 'Camino pavimentado', accesoVentaja: true, topografia: 'Irregular', distanciaKm: 28, documentacion: 'Al día' },
+];
+
+function CompareContent({ onNavigate }: CompareContentProps) {
+  const [items, setItems] = React.useState(COMPARE_ITEMS_INITIAL);
+  const remove = (id: number) => setItems(prev => prev.filter(i => i.id !== id));
+
+  const bestPrecio   = items.length ? Math.min(...items.map(i => i.precioNum))   : 0;
+  const bestTamano   = items.length ? Math.max(...items.map(i => i.tamanoNum))   : 0;
+  const bestPreciom2 = items.length ? Math.min(...items.map(i => i.preciom2Num)) : 0;
+  const bestDist     = items.length ? Math.min(...items.map(i => i.distanciaKm)) : 0;
+
+  const gridCols = `200px repeat(${items.length}, 1fr)`;
+  const bodyFont = { fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)' } as React.CSSProperties;
+  const labelFont = { ...bodyFont, fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' } as React.CSSProperties;
+  const valueFont = { ...bodyFont, fontWeight: 'var(--font-weight-regular)', color: '#0A0A0A' } as React.CSSProperties;
+
+  const Badge = ({ text, cls }: { text: string; cls: string }) => (
+    <div className="mt-2">
+      <span className={`${cls} px-3 py-1.5 rounded-[100px]`} style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-body)' }}>{text}</span>
+    </div>
+  );
+
+  const colBorder = (idx: number) => idx < items.length - 1 ? 'border-r-2 border-gray-200' : '';
+
+  if (items.length === 0) {
+    return (
+      <main className="px-6 py-6 flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <p style={valueFont}>No hay parcelas en comparación.</p>
+        <button onClick={() => onNavigate('parcelas')} className="px-6 py-3 rounded-[200px] text-white transition-colors" style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 'var(--font-weight-medium)' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+          Explorar parcelas
+        </button>
+      </main>
+    );
+  }
+
   return (
     <main className="px-6 py-6 space-y-6">
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h1 
-            style={{ 
+          <h1
+            style={{
               fontFamily: 'var(--font-heading)',
               fontSize: 'var(--font-size-h2)',
               fontWeight: 'var(--font-weight-medium)',
@@ -1708,9 +1750,9 @@ function CompareContent() {
           >
             Comparar parcelas
           </h1>
-          <span 
+          <span
             className="bg-gray-100 px-4 py-1.5 rounded-[100px]"
-            style={{ 
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: '14px',
               fontWeight: 'var(--font-weight-medium)',
@@ -1718,11 +1760,11 @@ function CompareContent() {
               lineHeight: 'var(--line-height-body)'
             }}
           >
-            3 en comparación
+            {items.length} en comparación
           </span>
         </div>
-        <p 
-          style={{ 
+        <p
+          style={{
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-base)',
             fontWeight: 'var(--font-weight-regular)',
@@ -1739,824 +1781,208 @@ function CompareContent() {
       <section className="bg-white border-2 border-gray-200 rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
         <div className="overflow-x-auto">
           <div className="min-w-max">
-            <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-gray-50">
+
+            {/* Header row */}
+            <div className="border-b-2 border-gray-200 bg-gray-50" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
               <div className="border-r-2 border-gray-200 p-5">
-                <span 
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Característica
-                </span>
+                <span style={labelFont}>Característica</span>
               </div>
-              <div className="border-r-2 border-gray-200 p-5 space-y-3">
-                <div className="w-full h-28 bg-gray-100 rounded-[12px] overflow-hidden">
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1764222233275-87dc016c11dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmQlMjBwcm9wZXJ0eSUyMGFlcmlhbHxlbnwxfHx8fDE3NzAxMzMyOTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                    alt="Parcela Vista al Valle"
-                    className="w-full h-full object-cover"
-                  />
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 space-y-3`}>
+                  <div className="w-full h-28 bg-gray-100 rounded-[12px] overflow-hidden">
+                    <ImageWithFallback
+                      src={item.img}
+                      alt={item.nombre}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div
+                    className="text-center"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-base)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      color: '#0A0A0A',
+                      lineHeight: 'var(--line-height-body)'
+                    }}
+                  >
+                    {item.nombre}
+                  </div>
+                  <div
+                    className="text-center"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '14px',
+                      fontWeight: 'var(--font-weight-regular)',
+                      color: '#6B6B6B',
+                      lineHeight: 'var(--line-height-body)'
+                    }}
+                  >
+                    {item.ubicacion}
+                  </div>
                 </div>
-                <div 
-                  className="text-center"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Parcela Vista al Valle
+              ))}
+            </div>
+
+            {/* Precio */}
+            <div className="border-b-2 border-gray-200 bg-white" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Precio</span>
+              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-h3)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      color: '#0A0A0A',
+                      lineHeight: 'var(--line-height-heading)'
+                    }}
+                  >
+                    {item.precio}
+                  </span>
+                  {item.precioNum === bestPrecio && <Badge text="Mejor precio" cls="bg-green-100 text-green-800" />}
                 </div>
-                <div 
-                  className="text-center"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-regular)',
-                    color: '#6B6B6B',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Los Aromos, RM
+              ))}
+            </div>
+
+            {/* Tamaño */}
+            <div className="border-b-2 border-gray-200 bg-gray-50" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Tamaño</span>
+              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.tamano}</span>
+                  {item.tamanoNum === bestTamano && <Badge text="Más grande" cls="bg-emerald-100 text-emerald-900" />}
                 </div>
+              ))}
+            </div>
+
+            {/* Precio por m² */}
+            <div className="border-b-2 border-gray-200 bg-white" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Precio por m²</span>
               </div>
-              <div className="border-r-2 border-gray-200 p-5 space-y-3">
-                <div className="w-full h-28 bg-gray-100 rounded-[12px] overflow-hidden">
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1762110341498-59a612f1bddb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMHByb3BlcnR5JTIwdGVycmFpbiUyMGhpbGxzfGVufDF8fHx8MTc3MDEzMzI5OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                    alt="Parcela El Bosque"
-                    className="w-full h-full object-cover"
-                  />
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.preciom2}</span>
+                  {item.preciom2Num === bestPreciom2 && <Badge text="Mejor valor" cls="bg-green-100 text-green-800" />}
                 </div>
-                <div 
-                  className="text-center"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Parcela El Bosque
+              ))}
+            </div>
+
+            {/* Agua */}
+            <div className="border-b-2 border-gray-200 bg-gray-50" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Agua</span>
+              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.agua}</span>
+                  {item.aguaVentaja && <Badge text="Ventaja" cls="bg-emerald-100 text-emerald-900" />}
                 </div>
-                <div 
-                  className="text-center"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-regular)',
-                    color: '#6B6B6B',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Piedra Roja, Colina
+              ))}
+            </div>
+
+            {/* Electricidad */}
+            <div className="border-b-2 border-gray-200 bg-white" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Electricidad</span>
+              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.electricidad}</span>
                 </div>
+              ))}
+            </div>
+
+            {/* Acceso */}
+            <div className="border-b-2 border-gray-200 bg-gray-50" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Acceso</span>
               </div>
-              <div className="p-5 space-y-3">
-                <div className="w-full h-28 bg-gray-100 rounded-[12px] overflow-hidden">
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1763397929062-eb0582008877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyYWwlMjBsYW5kJTIwZ3JlZW4lMjBmaWVsZHN8ZW58MXx8fHwxNzcwMTMzMjk4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                    alt="Parcela Los Robles"
-                    className="w-full h-full object-cover"
-                  />
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.acceso}</span>
+                  {item.accesoVentaja && <Badge text="Ventaja" cls="bg-emerald-100 text-emerald-900" />}
                 </div>
-                <div 
-                  className="text-center"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Parcela Los Robles
+              ))}
+            </div>
+
+            {/* Topografía */}
+            <div className="border-b-2 border-gray-200 bg-white" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Topografía</span>
+              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.topografia}</span>
                 </div>
-                <div 
-                  className="text-center"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 'var(--font-weight-regular)',
-                    color: '#6B6B6B',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Chicureo, RM
+              ))}
+            </div>
+
+            {/* Distancia a Santiago */}
+            <div className="border-b-2 border-gray-200 bg-gray-50" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Distancia a Santiago</span>
+              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.distanciaKm} km</span>
+                  {item.distanciaKm === bestDist && <Badge text="Más cerca" cls="bg-green-100 text-green-800" />}
                 </div>
-              </div>
+              ))}
             </div>
 
-          {/* Price */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-white">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Precio
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-h3)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-heading)'
-                }}
-              >
-                $45.000.000
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-h3)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-heading)'
-                }}
-              >
-                $62.000.000
-              </span>
-            </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-h3)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-heading)'
-                }}
-              >
-                $38.500.000
-              </span>
-              <div className="mt-2">
-                <span 
-                  className="bg-green-100 text-green-800 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Mejor precio
-                </span>
+            {/* Documentación */}
+            <div className="border-b-2 border-gray-200 bg-white" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Documentación</span>
               </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 text-center`}>
+                  <span style={valueFont}>{item.documentacion}</span>
+                </div>
+              ))}
             </div>
-          </div>
 
-          {/* Size */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-gray-50">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Tamaño
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                5.000 m²
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                8.500 m²
+            {/* Acciones */}
+            <div className="bg-gray-50" style={{ display: 'grid', gridTemplateColumns: gridCols }}>
+              <div className="border-r-2 border-gray-200 p-5">
+                <span style={labelFont}>Acciones</span>
               </div>
-              <div className="mt-2">
-                <span 
-                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Más grande
-                </span>
-              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className={`${colBorder(idx)} p-5 space-y-3`}>
+                  <button
+                    onClick={() => onNavigate('parcela-detalle', item.id)}
+                    style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-body)' }}
+                    className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
+                  >
+                    Ver detalles
+                  </button>
+                  <button
+                    onClick={() => remove(item.id)}
+                    className="w-full bg-white hover:bg-gray-50 text-black py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
+                    style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-body)', color: '#0A0A0A' }}
+                  >
+                    Quitar
+                  </button>
+                </div>
+              ))}
             </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                3.200 m²
-              </span>
-            </div>
-          </div>
 
-          {/* Price per m² */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-white">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Precio por m²
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                $9.000/m²
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                $7.294/m²
-              </div>
-              <div className="mt-2">
-                <span 
-                  className="bg-green-100 text-green-800 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Mejor valor
-                </span>
-              </div>
-            </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                $12.031/m²
-              </span>
-            </div>
-          </div>
-
-          {/* Water */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-gray-50">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Agua
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Pozo profundo
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Red pública
-              </div>
-              <div className="mt-2">
-                <span 
-                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Ventaja
-                </span>
-              </div>
-            </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Pozo profundo
-              </span>
-            </div>
-          </div>
-
-          {/* Electricity */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-white">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Electricidad
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                ✓ Disponible
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                ✓ Disponible
-              </span>
-            </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                ✓ Disponible
-              </span>
-            </div>
-          </div>
-
-          {/* Access */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-gray-50">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Acceso
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Camino pavimentado
-              </div>
-              <div className="mt-2">
-                <span 
-                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Ventaja
-                </span>
-              </div>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Camino ripiado
-              </span>
-            </div>
-            <div className="p-5 text-center">
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Camino pavimentado
-              </div>
-              <div className="mt-2">
-                <span 
-                  className="bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Ventaja
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Topography */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-white">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Topografía
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Plana
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Semi-plana
-              </span>
-            </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Irregular
-              </span>
-            </div>
-          </div>
-
-          {/* Distance */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-gray-50">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Distancia a Santiago
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                35 km
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                42 km
-              </span>
-            </div>
-            <div className="p-5 text-center">
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                28 km
-              </div>
-              <div className="mt-2">
-                <span 
-                  className="bg-green-100 text-green-800 px-3 py-1.5 rounded-[100px]"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 'var(--font-weight-medium)',
-                    lineHeight: 'var(--line-height-body)'
-                  }}
-                >
-                  Más cerca
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Documentation */}
-          <div className="grid grid-cols-4 border-b-2 border-gray-200 bg-white">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Documentación
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Al día
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Al día
-              </span>
-            </div>
-            <div className="p-5 text-center">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Al día
-              </span>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="grid grid-cols-4 bg-gray-50">
-            <div className="border-r-2 border-gray-200 p-5">
-              <span 
-                style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-              >
-                Acciones
-              </span>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 space-y-3">
-              <button 
-                style={{
-                  backgroundColor: '#006B4E',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-medium)',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-                className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                Ver detalles
-              </button>
-              <button 
-                className="w-full bg-white hover:bg-gray-50 text-black py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-medium)',
-                  lineHeight: 'var(--line-height-body)',
-                  color: '#0A0A0A'
-                }}
-              >
-                Quitar
-              </button>
-            </div>
-            <div className="border-r-2 border-gray-200 p-5 space-y-3">
-              <button 
-                style={{
-                  backgroundColor: '#006B4E',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-medium)',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-                className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                Ver detalles
-              </button>
-              <button 
-                className="w-full bg-white hover:bg-gray-50 text-black py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-medium)',
-                  lineHeight: 'var(--line-height-body)',
-                  color: '#0A0A0A'
-                }}
-              >
-                Quitar
-              </button>
-            </div>
-            <div className="p-5 space-y-3">
-              <button 
-                style={{
-                  backgroundColor: '#006B4E',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-medium)',
-                  lineHeight: 'var(--line-height-body)'
-                }}
-                className="w-full text-white py-3 px-6 rounded-[200px] transition-colors"
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                Ver detalles
-              </button>
-              <button 
-                className="w-full bg-white hover:bg-gray-50 text-black py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  fontWeight: 'var(--font-weight-medium)',
-                  lineHeight: 'var(--line-height-body)',
-                  color: '#0A0A0A'
-                }}
-              >
-                Quitar
-              </button>
-            </div>
-          </div>
           </div>
         </div>
       </section>
 
       {/* Summary */}
       <section className="bg-emerald-50 border-2 border-emerald-200 p-8 space-y-4 rounded-[24px]">
-        <h2 
-          style={{ 
+        <h2
+          style={{
             fontFamily: 'var(--font-heading)',
             fontSize: 'var(--font-size-h3)',
             fontWeight: 'var(--font-weight-medium)',
@@ -2568,8 +1994,8 @@ function CompareContent() {
           Análisis de comparación
         </h2>
         <div className="space-y-3">
-          <p 
-            style={{ 
+          <p
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-base)',
               fontWeight: 'var(--font-weight-regular)',
@@ -2579,8 +2005,8 @@ function CompareContent() {
           >
             • <strong style={{ fontWeight: 'var(--font-weight-medium)' }}>Mejor precio total:</strong> Parcela Los Robles ($38.500.000)
           </p>
-          <p 
-            style={{ 
+          <p
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-base)',
               fontWeight: 'var(--font-weight-regular)',
@@ -2590,8 +2016,8 @@ function CompareContent() {
           >
             • <strong style={{ fontWeight: 'var(--font-weight-medium)' }}>Mejor valor por m²:</strong> Parcela El Bosque ($7.294/m²)
           </p>
-          <p 
-            style={{ 
+          <p
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-base)',
               fontWeight: 'var(--font-weight-regular)',
@@ -2601,8 +2027,8 @@ function CompareContent() {
           >
             • <strong style={{ fontWeight: 'var(--font-weight-medium)' }}>Más grande:</strong> Parcela El Bosque (8.500 m²)
           </p>
-          <p 
-            style={{ 
+          <p
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-base)',
               fontWeight: 'var(--font-weight-regular)',
@@ -2617,8 +2043,8 @@ function CompareContent() {
 
       {/* CTA */}
       <section className="bg-white border-2 border-gray-200 p-8 space-y-5 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-        <h2 
-          style={{ 
+        <h2
+          style={{
             fontFamily: 'var(--font-heading)',
             fontSize: 'var(--font-size-h3)',
             fontWeight: 'var(--font-weight-medium)',
@@ -2630,7 +2056,8 @@ function CompareContent() {
           ¿Ya elegiste tu favorita?
         </h2>
         <div className="flex gap-4">
-          <button 
+          <button
+            onClick={() => onNavigate('parcelas')}
             className="flex-1 bg-white hover:bg-gray-50 text-black py-3.5 px-8 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
             style={{
               fontFamily: 'var(--font-body)',
@@ -2642,7 +2069,7 @@ function CompareContent() {
           >
             Agregar más parcelas
           </button>
-          <button 
+          <button
             style={{
               backgroundColor: '#006B4E',
               fontFamily: 'var(--font-body)',
