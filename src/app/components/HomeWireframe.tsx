@@ -684,29 +684,23 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               style={{ animation: 'kenBurnsHero 12s ease-out forwards', transformOrigin: '55% 45%', willChange: 'transform' }}
             />
 
-            {/* Zonas de parcelas animadas sobre el terreno */}
+            {/* Pines animados sobre el terreno */}
             <div className="absolute inset-0 z-[5] pointer-events-none select-none hidden md:block">
               {[
-                { zT: '42%', zL: '5%',  zW: '13%', zH: '22%', label: 'Pirque, RM',   price: '$85.000.000',  delay: '0.6s' },
-                { zT: '55%', zL: '28%', zW: '16%', zH: '20%', label: 'Buin, RM',     price: '$95.000.000',  delay: '1.1s' },
-                { zT: '38%', zL: '57%', zW: '14%', zH: '24%', label: 'Colina, RM',   price: '$120.000.000', delay: '1.6s' },
-                { zT: '50%', zL: '80%', zW: '13%', zH: '18%', label: 'Farellones',   price: '$195.000.000', delay: '2.1s' },
+                { top: '44%', left: '8%',  label: 'Pirque, RM',   price: '$85.000.000',  delay: '0.6s' },
+                { top: '60%', left: '33%', label: 'Buin, RM',     price: '$95.000.000',  delay: '1.1s' },
+                { top: '40%', left: '61%', label: 'Colina, RM',   price: '$120.000.000', delay: '1.6s' },
+                { top: '55%', left: '83%', label: 'Farellones',   price: '$195.000.000', delay: '2.1s' },
               ].map((pin, i) => (
-                <div key={i} className="absolute" style={{ top: pin.zT, left: pin.zL, width: pin.zW, height: pin.zH, animation: `pinDrop 0.8s cubic-bezier(0.34,1.56,0.64,1) ${pin.delay} both` }}>
-                  {/* Rectángulo de zona */}
-                  <div style={{ position: 'absolute', inset: 0, border: '1.5px dashed rgba(0,0,0,0.6)', backgroundColor: 'rgba(0,0,0,0.07)', borderRadius: '4px' }} />
-
-                  {/* Label dentro de la zona */}
-                  <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)', borderRadius: '6px', padding: '4px 8px', whiteSpace: 'nowrap', animation: `fadeInPin 0.5s ease ${pin.delay} both` }}>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 700, color: '#FFFFFF' }}>{pin.label}</div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 500, color: '#86efac' }}>{pin.price}</div>
+                <div key={i} className="absolute flex flex-col items-center" style={{ top: pin.top, left: pin.left, animation: `pinDrop 0.8s cubic-bezier(0.34,1.56,0.64,1) ${pin.delay} both` }}>
+                  {/* Burbuja label */}
+                  <div style={{ backgroundColor: 'rgba(255,255,255,0.93)', backdropFilter: 'blur(6px)', borderRadius: '10px', padding: '5px 10px', marginBottom: '5px', boxShadow: '0 4px 16px rgba(0,0,0,0.22)', whiteSpace: 'nowrap', animation: `fadeInPin 0.5s ease ${pin.delay} both` }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, color: '#0A0A0A' }}>{pin.label}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#006B4E' }}>{pin.price}</div>
                   </div>
-
-                  {/* Pin negro con logo — sale del borde inferior del rectángulo */}
-                  <div style={{ position: 'absolute', bottom: '-22px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div style={{ width: '28px', height: '28px', backgroundColor: '#0A0A0A', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', boxShadow: '0 4px 14px rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                      <img src={logo} alt="" style={{ width: '16px', height: '16px', transform: 'rotate(45deg)', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-                    </div>
+                  {/* Pin circular negro con logo CTP */}
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', backgroundColor: '#0A0A0A', boxShadow: '0 4px 16px rgba(0,0,0,0.5)', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <img src={logo} alt="" style={{ width: '20px', height: '20px', transform: 'rotate(45deg)', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
                   </div>
                 </div>
               ))}
