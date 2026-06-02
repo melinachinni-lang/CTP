@@ -3383,6 +3383,185 @@ function HelpContent() {
   );
 }
 
+function SearchPreferencesSection() {
+  const [saved, setSaved] = React.useState(false);
+  const [alertasActivas, setAlertasActivas] = React.useState(true);
+  const [frecuencia, setFrecuencia] = React.useState<'inmediata' | 'diaria' | 'semanal'>('diaria');
+  const [regiones, setRegiones] = React.useState<string[]>(['Región Metropolitana']);
+  const [presupuestoMin, setPresupuestoMin] = React.useState('');
+  const [presupuestoMax, setPresupuestoMax] = React.useState('');
+  const [superficieMin, setSuperficieMin] = React.useState('');
+  const [superficieMax, setSuperficieMax] = React.useState('');
+  const [caracteristicas, setCaracteristicas] = React.useState<string[]>([]);
+  const [tipoPublicacion, setTipoPublicacion] = React.useState<'parcelas' | 'proyectos' | 'ambos'>('ambos');
+
+  const REGIONES = [
+    'Región Metropolitana','Región de Valparaíso','Región del Biobío',
+    'Región de La Araucanía','Región de Los Lagos','Región de Los Ríos',
+    'Región del Maule','Región de Aysén','Región de Coquimbo',
+  ];
+  const CARACTERISTICAS = [
+    { id: 'agua', label: 'Agua disponible' },
+    { id: 'electricidad', label: 'Electricidad' },
+    { id: 'acceso-pavimentado', label: 'Acceso pavimentado' },
+    { id: 'escritura-lista', label: 'Escritura lista' },
+    { id: 'rol-aprobado', label: 'Rol aprobado' },
+    { id: 'cerca-lago', label: 'Cerca de lago o río' },
+  ];
+
+  const toggleRegion = (r: string) =>
+    setRegiones(prev => prev.includes(r) ? prev.filter(x => x !== r) : [...prev, r]);
+  const toggleCaract = (id: string) =>
+    setCaracteristicas(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+
+  const handleSave = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  const inputStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+    borderColor: '#E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A',
+    borderRadius: '8px', padding: '8px 12px', border: '1px solid #E5E5E5',
+    width: '100%', outline: 'none',
+  };
+  const labelSt: React.CSSProperties = {
+    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
+    fontWeight: 600, color: '#525252', display: 'block', marginBottom: '8px',
+  };
+
+  return (
+    <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-5">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0,107,78,0.08)' }}>
+          <Search className="w-4 h-4" style={{ color: '#006B4E' }} />
+        </div>
+        <div>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+            Preferencias de búsqueda
+          </h2>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '3px' }}>
+            Configura tus criterios predeterminados para encontrar parcelas más rápido
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-5">
+        {/* Tipo de publicación */}
+        <div>
+          <label style={labelSt}>¿Qué estás buscando?</label>
+          <div className="flex gap-2">
+            {([['parcelas','Parcelas'],['proyectos','Proyectos'],['ambos','Ambos']] as const).map(([val, lbl]) => (
+              <button key={val} onClick={() => setTipoPublicacion(val)}
+                className="flex-1 py-2 text-xs rounded-full border transition-colors"
+                style={{ borderColor: tipoPublicacion === val ? '#006B4E' : '#E5E5E5', backgroundColor: tipoPublicacion === val ? '#006B4E' : 'transparent', color: tipoPublicacion === val ? '#fff' : '#525252', fontFamily: 'var(--font-body)', fontWeight: tipoPublicacion === val ? 600 : 400 }}>
+                {lbl}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Regiones */}
+        <div>
+          <label style={labelSt}>Regiones de interés <span style={{ color: '#9CA3AF', fontWeight: 400 }}>(selecciona una o más)</span></label>
+          <div className="flex flex-wrap gap-2">
+            {REGIONES.map(r => (
+              <button key={r} onClick={() => toggleRegion(r)}
+                className="text-xs px-3 py-1.5 rounded-full border transition-colors"
+                style={{ borderColor: regiones.includes(r) ? '#006B4E' : '#E5E5E5', backgroundColor: regiones.includes(r) ? '#EBFEF5' : 'transparent', color: regiones.includes(r) ? '#006B4E' : '#525252', fontFamily: 'var(--font-body)', fontWeight: regiones.includes(r) ? 600 : 400 }}>
+                {r.replace('Región de ', '').replace('Región del ', '').replace('Región Metropolitana', 'Metropolitana')}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Presupuesto */}
+        <div>
+          <label style={labelSt}>Presupuesto (CLP)</label>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <input type="text" value={presupuestoMin} onChange={e => setPresupuestoMin(e.target.value)}
+                placeholder="Mín. ej: 30.000.000" style={inputStyle} />
+            </div>
+            <div>
+              <input type="text" value={presupuestoMax} onChange={e => setPresupuestoMax(e.target.value)}
+                placeholder="Máx. ej: 150.000.000" style={inputStyle} />
+            </div>
+          </div>
+        </div>
+
+        {/* Superficie */}
+        <div>
+          <label style={labelSt}>Superficie (m²)</label>
+          <div className="grid grid-cols-2 gap-3">
+            <input type="text" value={superficieMin} onChange={e => setSuperficieMin(e.target.value)}
+              placeholder="Mín. ej: 5.000" style={inputStyle} />
+            <input type="text" value={superficieMax} onChange={e => setSuperficieMax(e.target.value)}
+              placeholder="Máx. ej: 50.000" style={inputStyle} />
+          </div>
+        </div>
+
+        {/* Características */}
+        <div>
+          <label style={labelSt}>Características deseadas</label>
+          <div className="flex flex-wrap gap-2">
+            {CARACTERISTICAS.map(c => (
+              <button key={c.id} onClick={() => toggleCaract(c.id)}
+                className="text-xs px-3 py-1.5 rounded-full border transition-colors flex items-center gap-1.5"
+                style={{ borderColor: caracteristicas.includes(c.id) ? '#006B4E' : '#E5E5E5', backgroundColor: caracteristicas.includes(c.id) ? '#EBFEF5' : 'transparent', color: caracteristicas.includes(c.id) ? '#006B4E' : '#525252', fontFamily: 'var(--font-body)', fontWeight: caracteristicas.includes(c.id) ? 600 : 400 }}>
+                {caracteristicas.includes(c.id) && <span style={{ fontSize: '10px' }}>✓</span>}
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Alertas */}
+        <div className="rounded-xl p-4" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>
+                Alertas de nuevas parcelas
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
+                Recibe notificaciones cuando haya parcelas que coincidan
+              </p>
+            </div>
+            <button onClick={() => setAlertasActivas(v => !v)}
+              className="flex-shrink-0 w-11 h-6 rounded-full transition-colors relative"
+              style={{ backgroundColor: alertasActivas ? '#006B4E' : '#D1D5DB', minWidth: 44 }}>
+              <div className="w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-all"
+                style={{ left: alertasActivas ? 'calc(100% - 20px)' : 4 }} />
+            </button>
+          </div>
+          {alertasActivas && (
+            <div>
+              <p style={{ ...labelSt, marginBottom: '6px' }}>Frecuencia</p>
+              <div className="flex gap-2">
+                {([['inmediata','Inmediata'],['diaria','Diaria'],['semanal','Semanal']] as const).map(([val, lbl]) => (
+                  <button key={val} onClick={() => setFrecuencia(val)}
+                    className="flex-1 py-1.5 text-xs rounded-full border transition-colors"
+                    style={{ borderColor: frecuencia === val ? '#006B4E' : '#E5E5E5', backgroundColor: frecuencia === val ? '#006B4E' : 'transparent', color: frecuencia === val ? '#fff' : '#525252', fontFamily: 'var(--font-body)', fontWeight: frecuencia === val ? 600 : 400 }}>
+                    {lbl}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Guardar */}
+        <button onClick={handleSave}
+          className="w-full py-2.5 rounded-full transition-all text-center"
+          style={{ backgroundColor: saved ? '#059669' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+          {saved ? '✓ Preferencias guardadas' : 'Guardar preferencias'}
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function SettingsContent() {
   const [isEditing, setIsEditing] = React.useState(false);
   const [nombre, setNombre] = React.useState('María García');
@@ -3741,28 +3920,7 @@ function SettingsContent() {
           </section>
 
           {/* Preferencias de búsqueda */}
-          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
-                <Search className="w-4 h-4" style={{ color: '#006B4E' }} />
-              </div>
-              <div>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-                  Preferencias de búsqueda
-                </h2>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '3px' }}>
-                  Configura tus criterios predeterminados
-                </p>
-              </div>
-            </div>
-            <button className="w-full py-2.5 px-4 rounded-full transition-all text-center"
-              style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
-            >
-              Configurar preferencias
-            </button>
-          </section>
+          <SearchPreferencesSection />
         </div>
 
         {/* Notificaciones */}
