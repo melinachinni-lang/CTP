@@ -2120,8 +2120,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 className="absolute top-2 left-2 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
                                 style={{
                                   backgroundColor:
-                                    parcelaEstados[parcela.id] === 'reservada' ? '#065F46' :
-                                    parcelaEstados[parcela.id] === 'pago-en-validacion' ? '#2563EB' :
+                                    (parcelaEstados[parcela.id] === 'reservada' || parcelaEstados[parcela.id] === 'pago-en-validacion') ? '#065F46' :
                                     '#D97706',
                                   color: '#FFFFFF',
                                   fontFamily: 'var(--font-body)',
@@ -2129,8 +2128,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 }}
                               >
                                 {parcelaEstados[parcela.id] === 'reservandose' && 'Reservándose'}
-                                {parcelaEstados[parcela.id] === 'pago-en-validacion' && 'Pago en validación'}
-                                {parcelaEstados[parcela.id] === 'reservada' && 'Reservada'}
+                                {(parcelaEstados[parcela.id] === 'pago-en-validacion' || parcelaEstados[parcela.id] === 'reservada') && 'Reservada'}
                               </div>
                             )}
                             {/* Botón guardar */}

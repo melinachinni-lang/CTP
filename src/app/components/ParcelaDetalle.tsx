@@ -2791,22 +2791,19 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     {/* Badge de estado de compra (cuando no está disponible) */}
                     {estadoCompra !== 'disponible' && (
                       <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{
-                        backgroundColor: estadoCompra === 'reservandose' ? '#FFFBEB' : estadoCompra === 'pago-en-validacion' ? '#EFF6FF' : '#ECFDF5',
-                        border: `1px solid ${estadoCompra === 'reservandose' ? '#FDE68A' : estadoCompra === 'pago-en-validacion' ? '#BFDBFE' : '#6EE7B7'}`,
+                        backgroundColor: estadoCompra === 'reservandose' ? '#FFFBEB' : '#ECFDF5',
+                        border: `1px solid ${estadoCompra === 'reservandose' ? '#FDE68A' : '#6EE7B7'}`,
                       }}>
                         {estadoCompra === 'reservandose' && <Clock className="w-4 h-4 flex-shrink-0" style={{ color: '#D97706' }} />}
-                        {estadoCompra === 'pago-en-validacion' && <Activity className="w-4 h-4 flex-shrink-0" style={{ color: '#2563EB' }} />}
-                        {estadoCompra === 'reservada' && <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#059669' }} />}
+                        {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#059669' }} />}
                         <div>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: estadoCompra === 'reservandose' ? '#92400E' : estadoCompra === 'pago-en-validacion' ? '#1E40AF' : '#065F46' }}>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: estadoCompra === 'reservandose' ? '#92400E' : '#065F46' }}>
                             {estadoCompra === 'reservandose' && 'Reservándose'}
-                            {estadoCompra === 'pago-en-validacion' && 'Pago en validación'}
-                            {estadoCompra === 'reservada' && 'Reservada'}
+                            {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && 'Reservada'}
                           </p>
                           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>
                             {estadoCompra === 'reservandose' && 'Esperando comprobante de transferencia'}
-                            {estadoCompra === 'pago-en-validacion' && 'Revisando tu comprobante'}
-                            {estadoCompra === 'reservada' && 'Parcela reservada a tu nombre'}
+                            {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && 'Parcela reservada'}
                           </p>
                         </div>
                       </div>

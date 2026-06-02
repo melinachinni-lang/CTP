@@ -98,7 +98,11 @@ export default function App() {
   const handleToggleSaved = (parcelaId: number) => {
     if (!isLoggedIn) {
       setPendingSaveId(parcelaId);
-      setCurrentScreen('entry');
+      showToast({
+        message: 'Iniciá sesión para guardar parcelas favoritas',
+        actionLabel: 'Ingresar',
+        onAction: () => setCurrentScreen('entry'),
+      });
       return;
     }
     const isSaved = savedParcelaIds.includes(parcelaId);

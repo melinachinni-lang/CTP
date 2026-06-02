@@ -786,6 +786,16 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   onMouseLeave={e => e.currentTarget.style.color = '#6B7280'}>
                   ← Cambiar método de pago
                 </button>
+                <a
+                  href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2 transition-colors text-sm flex items-center justify-center gap-1.5"
+                  style={{ fontFamily: 'var(--font-body)', color: '#006B4E', textDecoration: 'none' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#01533E'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#006B4E'}>
+                  Contactar soporte
+                </a>
               </div>
             </div>
           )}
