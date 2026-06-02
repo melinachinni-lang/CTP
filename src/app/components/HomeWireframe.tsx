@@ -675,14 +675,41 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
           <section className="relative pt-8 pb-28 md:pt-12 md:pb-36 lg:pt-16 lg:pb-48 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
-            {/* Background image con Ken Burns + parallax */}
+            {/* Fase 1: Vista terrestre con Ken Burns → fade out */}
             <img
               ref={heroImgRef}
               src={heroBackground}
               alt="Campos rurales"
               className="absolute inset-0 w-full h-full object-cover z-0"
-              style={{ animation: 'kenBurnsHero 12s ease-out forwards', transformOrigin: '55% 45%', willChange: 'transform' }}
+              style={{ animation: 'heroLandscape 13s ease-in-out forwards', transformOrigin: '55% 45%', willChange: 'transform, opacity' }}
             />
+
+            {/* Fase 2: Vista aérea tipo dron → fade in */}
+            <img
+              src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?auto=format&fit=crop&w=1920&q=80"
+              alt="Vista aérea de terrenos"
+              className="absolute inset-0 w-full h-full object-cover z-[1]"
+              style={{ animation: 'heroAerial 13s ease-in-out forwards', transformOrigin: 'center center', willChange: 'transform, opacity' }}
+            />
+
+            {/* Fase 3: Marcadores de parcelas sobre vista aérea */}
+            <div className="absolute inset-0 z-[2] pointer-events-none select-none">
+              {[
+                { top: '18%', left: '5%',  w: '17%', h: '26%', label: '5.200 m²', delay: '8.2s' },
+                { top: '16%', left: '26%', w: '15%', h: '21%', label: '3.800 m²', delay: '8.8s' },
+                { top: '20%', left: '45%', w: '19%', h: '28%', label: '7.100 m²', delay: '9.3s' },
+                { top: '18%', left: '68%', w: '16%', h: '22%', label: '4.900 m²', delay: '9.8s' },
+                { top: '48%', left: '10%', w: '21%', h: '28%', label: '8.500 m²', delay: '10.2s' },
+                { top: '50%', left: '52%', w: '20%', h: '24%', label: '6.300 m²', delay: '10.7s' },
+              ].map((m, i) => (
+                <div key={i} style={{ position: 'absolute', top: m.top, left: m.left, width: m.w, height: m.h, animation: `drawParcel 0.7s ease-out ${m.delay} both` }}>
+                  <div style={{ position: 'absolute', inset: 0, border: '2px dashed rgba(255,255,255,0.75)', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '3px' }} />
+                  <div style={{ position: 'absolute', top: '6px', left: '6px', backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', borderRadius: '4px', padding: '2px 7px', color: 'white', fontSize: '10px', fontFamily: 'var(--font-body)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                    {m.label}
+                  </div>
+                </div>
+              ))}
+            </div>
 
 <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
               {/* Headlines */}
@@ -2886,10 +2913,23 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
           }
         }
 
-        @keyframes kenBurnsHero {
-          0%   { transform: scale(1.22) translate(-3%, -2%); }
-          60%  { transform: scale(1.10) translate(1%, 0.5%); }
-          100% { transform: scale(1.05) translate(2%, 1%); }
+        @keyframes heroLandscape {
+          0%   { opacity: 1; transform: scale(1.22) translate(-3%, -2%); }
+          38%  { opacity: 1; transform: scale(1.10) translate(0.5%, 0%); }
+          58%  { opacity: 0; transform: scale(1.05) translate(2%, 1%); }
+          100% { opacity: 0; transform: scale(1.05) translate(2%, 1%); }
+        }
+
+        @keyframes heroAerial {
+          0%   { opacity: 0; transform: scale(1.7) translateY(-10%); }
+          45%  { opacity: 0; transform: scale(1.7) translateY(-10%); }
+          68%  { opacity: 1; transform: scale(1.18) translateY(-3%); }
+          100% { opacity: 1; transform: scale(1.0) translateY(0); }
+        }
+
+        @keyframes drawParcel {
+          from { opacity: 0; transform: scale(0.88); }
+          to   { opacity: 1; transform: scale(1); }
         }
 
 /* Slick Carousel Styles */
