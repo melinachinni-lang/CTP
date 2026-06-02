@@ -187,6 +187,84 @@ function ClienteForm({ datos, onChange, titulo }: {
   );
 }
 
+type PersonaEmpresa = { rut: string; nombres: string; apellidoPaterno: string; apellidoMaterno: string; sexo: string; estadoCivil: string; nacionalidad: string; profesion: string; telefono: string; email: string };
+
+function PersonaEmpresaCard({ titulo, datos, onChange, inputStyle, labelStyle }: { titulo: string; datos: PersonaEmpresa; onChange: (d: PersonaEmpresa) => void; inputStyle: React.CSSProperties; labelStyle: React.CSSProperties }) {
+  const set = (k: keyof PersonaEmpresa) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => onChange({ ...datos, [k]: e.target.value });
+  return (
+    <div className="space-y-4 p-4 rounded-lg border" style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E5E5' }}>
+      <p style={{ ...labelStyle, marginBottom: 0, color: '#374151', fontWeight: 600 }}>{titulo}</p>
+      <div>
+        <label style={labelStyle}>RUT <span style={{ color: '#DC2626' }}>*</span></label>
+        <input type="text" value={datos.rut} onChange={set('rut')} placeholder="12.345.678-9"
+          className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label style={labelStyle}>Nombres <span style={{ color: '#DC2626' }}>*</span></label>
+          <input type="text" value={datos.nombres} onChange={set('nombres')} placeholder="Nombre(s)"
+            className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+        </div>
+        <div>
+          <label style={labelStyle}>Apellido paterno <span style={{ color: '#DC2626' }}>*</span></label>
+          <input type="text" value={datos.apellidoPaterno} onChange={set('apellidoPaterno')} placeholder="Apellido paterno"
+            className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+        </div>
+      </div>
+      <div>
+        <label style={labelStyle}>Apellido materno</label>
+        <input type="text" value={datos.apellidoMaterno} onChange={set('apellidoMaterno')} placeholder="Apellido materno"
+          className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label style={labelStyle}>Sexo</label>
+          <div className="relative">
+            <select value={datos.sexo} onChange={set('sexo')} className="w-full px-4 py-2.5 rounded-lg border focus:outline-none appearance-none" style={{ ...inputStyle, cursor: 'pointer' }}>
+              <option value="">Sin especificar</option>
+              <option>Masculino</option><option>Femenino</option><option>Otro</option>
+            </select>
+            <ChevronDown className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+          </div>
+        </div>
+        <div>
+          <label style={labelStyle}>Estado civil</label>
+          <div className="relative">
+            <select value={datos.estadoCivil} onChange={set('estadoCivil')} className="w-full px-4 py-2.5 rounded-lg border focus:outline-none appearance-none" style={{ ...inputStyle, cursor: 'pointer' }}>
+              <option value="">Sin especificar</option>
+              <option>Soltero/a</option><option>Casado/a</option><option>Viudo/a</option>
+              <option>Divorciado/a</option><option>Separado/a de hecho</option><option>Conviviente civil</option>
+            </select>
+            <ChevronDown className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+          </div>
+        </div>
+      </div>
+      <div>
+        <label style={labelStyle}>Nacionalidad <span style={{ color: '#DC2626' }}>*</span></label>
+        <input type="text" value={datos.nacionalidad} onChange={set('nacionalidad')} placeholder="Ej: Chilena"
+          className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+      </div>
+      <div>
+        <label style={labelStyle}>Profesión</label>
+        <input type="text" value={datos.profesion} onChange={set('profesion')} placeholder="Ej: Ingeniero/a"
+          className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label style={labelStyle}>Teléfono</label>
+          <input type="tel" value={datos.telefono} onChange={set('telefono')} placeholder="+56 9 1234 5678"
+            className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+        </div>
+        <div>
+          <label style={labelStyle}>Email</label>
+          <input type="email" value={datos.email} onChange={set('email')} placeholder="correo@ejemplo.cl"
+            className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
@@ -269,16 +347,25 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const [masDuenio, setMasDuenio] = useState(false);
   const [datosSegundoDuenio, setDatosSegundoDuenio] = useState<DatosCliente>(DATOS_VACIOS);
   const [esEmpresa, setEsEmpresa] = useState(false);
-  const [nombreEmpresa, setNombreEmpresa] = useState('');
-  const [razonSocial, setRazonSocial] = useState('');
-  const [giroComercia, setGiroComercia] = useState('');
-  const [representanteLegal, setRepresentanteLegal] = useState('');
-  const [rutRepresentante, setRutRepresentante] = useState('');
-  const [cargoRepresentante, setCargoRepresentante] = useState('');
+  // Datos empresa (CRM)
+  const [tipoEmpresa, setTipoEmpresa] = useState('Persona jurídica');
   const [rutEmpresa, setRutEmpresa] = useState('');
+  const [razonSocial, setRazonSocial] = useState('');
   const [emailEmpresa, setEmailEmpresa] = useState('');
   const [telefonoEmpresa, setTelefonoEmpresa] = useState('');
-  const [dirEmpresa, setDirEmpresa] = useState({ direccion: '', ciudad: '', provincia: '', codigoPostal: '' });
+  const [regionEmpresa, setRegionEmpresa] = useState('');
+  const [comunaEmpresa, setComunaEmpresa] = useState('');
+  const [direccionEmpresa, setDireccionEmpresa] = useState('');
+  // Representante legal (CRM)
+  const PERSONA_EMPRESA_VACIA = { rut: '', nombres: '', apellidoPaterno: '', apellidoMaterno: '', sexo: '', estadoCivil: '', nacionalidad: 'Chilena', profesion: '', telefono: '', email: '' };
+  const [repLegal, setRepLegal] = useState({ ...PERSONA_EMPRESA_VACIA });
+  // Encargado de compra (CRM)
+  const [encargado, setEncargado] = useState({ ...PERSONA_EMPRESA_VACIA });
+  // Documentos (CRM)
+  const [docCedulaFrente, setDocCedulaFrente] = useState<string | null>(null);
+  const [docCedulaDorso, setDocCedulaDorso] = useState<string | null>(null);
+  const [docEscritura, setDocEscritura] = useState<string | null>(null);
+  const [docCertificado, setDocCertificado] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -297,10 +384,11 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     setMasDuenio(false);
     setDatosSegundoDuenio(DATOS_VACIOS);
     setEsEmpresa(false);
-    setNombreEmpresa(''); setRazonSocial(''); setGiroComercia('');
-    setRepresentanteLegal(''); setRutRepresentante(''); setCargoRepresentante('');
-    setRutEmpresa(''); setEmailEmpresa(''); setTelefonoEmpresa('');
-    setDirEmpresa({ direccion: '', ciudad: '', provincia: '', codigoPostal: '' });
+    setTipoEmpresa('Persona jurídica'); setRutEmpresa(''); setRazonSocial('');
+    setEmailEmpresa(''); setTelefonoEmpresa(''); setRegionEmpresa('');
+    setComunaEmpresa(''); setDireccionEmpresa('');
+    setRepLegal({ ...PERSONA_EMPRESA_VACIA }); setEncargado({ ...PERSONA_EMPRESA_VACIA });
+    setDocCedulaFrente(null); setDocCedulaDorso(null); setDocEscritura(null); setDocCertificado(null);
     if (timerRef.current) clearInterval(timerRef.current);
   }, [isOpen]);
 
@@ -467,79 +555,120 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 </div>
 
                 {esEmpresa && (
-                  <div className="space-y-4">
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#374151', paddingBottom: '8px', borderBottom: '1px solid #F3F4F6' }}>
-                      Datos de la empresa
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-5">
+
+                    {/* ── Datos de la empresa ── */}
+                    <div className="space-y-4 pt-1">
+                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#374151', paddingBottom: '8px', borderBottom: '1px solid #F3F4F6' }}>
+                        Datos de la empresa
+                      </p>
                       <div>
-                        <label style={labelStyle}>Nombre de fantasía <span style={{ color: '#DC2626' }}>*</span></label>
-                        <input type="text" value={nombreEmpresa} onChange={e => setNombreEmpresa(e.target.value)} placeholder="Ej: Mi Empresa SpA"
+                        <label style={labelStyle}>Tipo <span style={{ color: '#DC2626' }}>*</span></label>
+                        <div className="relative">
+                          <select value={tipoEmpresa} onChange={e => setTipoEmpresa(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900 appearance-none"
+                            style={{ ...inputStyle, cursor: 'pointer' }}>
+                            <option>Persona jurídica</option>
+                            <option>Persona natural (empresa unipersonal)</option>
+                          </select>
+                          <ChevronDown className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+                        </div>
+                      </div>
+                      <div>
+                        <label style={labelStyle}>RUT empresa <span style={{ color: '#DC2626' }}>*</span></label>
+                        <input type="text" value={rutEmpresa} onChange={e => setRutEmpresa(e.target.value)} placeholder="76.123.456-7"
                           className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                       </div>
                       <div>
                         <label style={labelStyle}>Razón social <span style={{ color: '#DC2626' }}>*</span></label>
-                        <input type="text" value={razonSocial} onChange={e => setRazonSocial(e.target.value)} placeholder="Nombre legal completo"
+                        <input type="text" value={razonSocial} onChange={e => setRazonSocial(e.target.value)} placeholder="Inmobiliaria Ejemplo SpA"
                           className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                       </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label style={labelStyle}>RUT empresa <span style={{ color: '#DC2626' }}>*</span></label>
-                        <input type="text" value={rutEmpresa} onChange={e => setRutEmpresa(e.target.value)} placeholder="76.111.111-1"
-                          className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
-                      </div>
-                      <div>
-                        <label style={labelStyle}>Giro comercial <span style={{ color: '#DC2626' }}>*</span></label>
-                        <input type="text" value={giroComercia} onChange={e => setGiroComercia(e.target.value)} placeholder="Ej: Compraventa de bienes raíces"
-                          className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label style={labelStyle}>Email empresa <span style={{ color: '#DC2626' }}>*</span></label>
                         <input type="email" value={emailEmpresa} onChange={e => setEmailEmpresa(e.target.value)} placeholder="contacto@empresa.cl"
                           className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                       </div>
                       <div>
-                        <label style={labelStyle}>Teléfono empresa</label>
+                        <label style={labelStyle}>Teléfono empresa <span style={{ color: '#DC2626' }}>*</span></label>
                         <input type="tel" value={telefonoEmpresa} onChange={e => setTelefonoEmpresa(e.target.value)} placeholder="+56 2 1234 5678"
                           className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                       </div>
-                    </div>
-                    <div className="space-y-3 p-4 rounded-lg border" style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E5E5' }}>
-                      <p style={{ ...labelStyle, marginBottom: 0, color: '#374151' }}>Representante legal</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label style={labelStyle}>Nombre completo <span style={{ color: '#DC2626' }}>*</span></label>
-                          <input type="text" value={representanteLegal} onChange={e => setRepresentanteLegal(e.target.value)} placeholder="Nombre del representante"
-                            className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
+                          <label style={labelStyle}>Región <span style={{ color: '#DC2626' }}>*</span></label>
+                          <div className="relative">
+                            <select value={regionEmpresa} onChange={e => setRegionEmpresa(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900 appearance-none"
+                              style={{ ...inputStyle, cursor: 'pointer' }}>
+                              <option value="">Selecciona...</option>
+                              {['Región Metropolitana','Región de Valparaíso','Región del Biobío','Región de La Araucanía',
+                                'Región de Los Lagos','Región de Los Ríos','Región del Maule','Región de Aysén',
+                                'Región de Coquimbo','Región de Atacama','Región de Antofagasta','Región de Tarapacá',
+                                'Región de Arica y Parinacota','Región de Magallanes','Región de Ñuble',
+                                "Región del Libertador General Bernardo O'Higgins"].map(r => (
+                                <option key={r}>{r}</option>
+                              ))}
+                            </select>
+                            <ChevronDown className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+                          </div>
                         </div>
                         <div>
-                          <label style={labelStyle}>RUT <span style={{ color: '#DC2626' }}>*</span></label>
-                          <input type="text" value={rutRepresentante} onChange={e => setRutRepresentante(e.target.value)} placeholder="11.111.111-1"
+                          <label style={labelStyle}>Comuna <span style={{ color: '#DC2626' }}>*</span></label>
+                          <input type="text" value={comunaEmpresa} onChange={e => setComunaEmpresa(e.target.value)} placeholder="Ej: Santiago"
                             className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                         </div>
                       </div>
                       <div>
-                        <label style={labelStyle}>Cargo <span style={{ color: '#DC2626' }}>*</span></label>
-                        <input type="text" value={cargoRepresentante} onChange={e => setCargoRepresentante(e.target.value)} placeholder="Ej: Gerente General, Director, Socio"
+                        <label style={labelStyle}>Dirección <span style={{ color: '#DC2626' }}>*</span></label>
+                        <input type="text" value={direccionEmpresa} onChange={e => setDireccionEmpresa(e.target.value)} placeholder="Calle, número, dpto"
                           className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
                       </div>
                     </div>
-                    <div>
-                      <label style={labelStyle}>Dirección comercial <span style={{ color: '#9CA3AF', fontWeight: 400, fontSize: '11px' }}>(Código postal es opcional)</span></label>
-                      <input type="text" value={dirEmpresa.direccion} onChange={e => setDirEmpresa({ ...dirEmpresa, direccion: e.target.value })} placeholder="Ingresa la dirección"
-                        className="w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900 mb-2" style={inputStyle} />
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <input type="text" value={dirEmpresa.ciudad} onChange={e => setDirEmpresa({ ...dirEmpresa, ciudad: e.target.value })} placeholder="Ciudad"
-                          className="px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
-                        <input type="text" value={dirEmpresa.provincia} onChange={e => setDirEmpresa({ ...dirEmpresa, provincia: e.target.value })} placeholder="Provincia"
-                          className="px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
-                        <input type="text" value={dirEmpresa.codigoPostal} onChange={e => setDirEmpresa({ ...dirEmpresa, codigoPostal: e.target.value })} placeholder="Cód. postal"
-                          className="px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-900" style={inputStyle} />
-                      </div>
+
+                    {/* ── Representante legal ── */}
+                    <PersonaEmpresaCard titulo="Representante Legal" datos={repLegal} onChange={setRepLegal} inputStyle={inputStyle} labelStyle={labelStyle} />
+
+                    {/* ── Encargado de compra ── */}
+                    <PersonaEmpresaCard titulo="Encargado de compra" datos={encargado} onChange={setEncargado} inputStyle={inputStyle} labelStyle={labelStyle} />
+
+                    {/* ── Documentos ── */}
+                    <div className="space-y-3">
+                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: '#374151', paddingBottom: '8px', borderBottom: '1px solid #F3F4F6' }}>
+                        Documentos
+                      </p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>
+                        Selecciona los archivos. Se adjuntarán al enviar el formulario.
+                      </p>
+                      {[
+                        { label: 'Cédula representante legal (frente)', req: true, value: docCedulaFrente, setter: setDocCedulaFrente },
+                        { label: 'Cédula representante legal (dorso)', req: false, value: docCedulaDorso, setter: setDocCedulaDorso },
+                        { label: 'Escritura pública de constitución', req: true, value: docEscritura, setter: setDocEscritura },
+                        { label: 'Certificado de inscripción Reg. de Comercio', req: true, value: docCertificado, setter: setDocCertificado },
+                      ].map(doc => (
+                        <div key={doc.label} className="flex items-center justify-between p-3 rounded-lg border" style={{ borderColor: doc.value ? '#006B4E' : '#E5E5E5', backgroundColor: doc.value ? '#F0FDF4' : '#FAFAFA' }}>
+                          <div>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: '#0A0A0A' }}>
+                              {doc.label} {doc.req && <span style={{ color: '#DC2626' }}>*</span>}
+                            </p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>PDF o imagen, max 10 MiB</p>
+                          </div>
+                          {doc.value ? (
+                            <div className="flex items-center gap-1.5">
+                              <Check className="w-4 h-4" style={{ color: '#006B4E' }} />
+                              <button onClick={() => doc.setter(null)} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>Quitar</button>
+                            </div>
+                          ) : (
+                            <button onClick={() => doc.setter('archivo_simulado.pdf')}
+                              className="px-3 py-1 rounded-full text-xs border transition-colors hover:bg-gray-100"
+                              style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: '#374151', borderColor: '#D1D5DB' }}>
+                              Subir
+                            </button>
+                          )}
+                        </div>
+                      ))}
                     </div>
+
                   </div>
                 )}
               </div>
