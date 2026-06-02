@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
-import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart } from 'lucide-react';
+import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart, Scale } from 'lucide-react';
 import { useI18n } from '@/app/i18n/i18nContext';
 import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
@@ -36,9 +36,11 @@ interface HomeWireframeProps {
   onNavigateToPublish?: () => void;
   savedParcelaIds?: number[];
   onToggleSaved?: (id: number) => void;
+  compareParcelaIds?: number[];
+  onToggleCompare?: (id: number) => void;
 }
 
-export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onLogout, initialLoadingError = false, onOpenPublishModal, onNavigateToPublish, savedParcelaIds = [], onToggleSaved }: HomeWireframeProps) {
+export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onLogout, initialLoadingError = false, onOpenPublishModal, onNavigateToPublish, savedParcelaIds = [], onToggleSaved, compareParcelaIds = [], onToggleCompare }: HomeWireframeProps) {
   const { t } = useI18n();
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -1411,6 +1413,18 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                             nombre={parcela.nombre}
                           />
                           <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#006B4E', fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', letterSpacing: '0.02em' }}>{t.explore.parcelTag}</span>
+                          {/* Botón comparar */}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); onToggleCompare?.(parcela.id); }}
+                            className="absolute top-3 right-12 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
+                            title="Agregar al comparador"
+                          >
+                            <Scale
+                              className="w-4 h-4"
+                              style={{ color: compareParcelaIds.includes(parcela.id) ? '#006B4E' : '#6B6B6B' }}
+                            />
+                          </button>
+                          {/* Botón guardar */}
                           <button
                             onClick={(e) => { e.stopPropagation(); handleToggleParcela(parcela.id); }}
                             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"

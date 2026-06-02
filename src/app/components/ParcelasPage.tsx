@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon } from 'lucide-react';
+import { ChevronDown, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { VendedorCaptacionSection } from '@/app/components/VendedorCaptacionSection';
@@ -28,9 +28,11 @@ interface ParcelasPageProps {
   savedParcelaIds?: number[];
   onToggleSaved?: (id: number) => void;
   isLoggedIn?: boolean;
+  compareParcelaIds?: number[];
+  onToggleCompare?: (id: number) => void;
 }
 
-export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, savedParcelaIds = [], onToggleSaved, isLoggedIn }: ParcelasPageProps) {
+export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, savedParcelaIds = [], onToggleSaved, isLoggedIn, compareParcelaIds = [], onToggleCompare }: ParcelasPageProps) {
   const { t } = useI18n();
   const [animatingSaveId, setAnimatingSaveId] = useState<number | null>(null);
   const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
@@ -2131,6 +2133,15 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 {(parcelaEstados[parcela.id] === 'pago-en-validacion' || parcelaEstados[parcela.id] === 'reservada') && 'Reservada'}
                               </div>
                             )}
+                            {/* Botón comparar */}
+                            <button
+                              onClick={(e) => { e.stopPropagation(); onToggleCompare?.(parcela.id); }}
+                              className="absolute top-2 right-10 w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                              style={{ backgroundColor: compareParcelaIds.includes(parcela.id) ? '#EBFEF5' : 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
+                              title="Agregar al comparador"
+                            >
+                              <Scale className="w-4 h-4" style={{ color: compareParcelaIds.includes(parcela.id) ? '#006B4E' : '#6B7280' }} />
+                            </button>
                             {/* Botón guardar */}
                             <button
                               onClick={(e) => {

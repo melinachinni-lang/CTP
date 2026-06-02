@@ -82,6 +82,7 @@ export default function App() {
   // Estado de guardados
   const [savedParcelaIds, setSavedParcelaIds] = useState<number[]>([]);
   const [pendingSaveId, setPendingSaveId] = useState<number | null>(null);
+  const [compareParcelaIds, setCompareParcelaIds] = useState<number[]>([]);
 
   // Toast
   type Toast = { message: string; actionLabel?: string; onAction?: () => void; id: number };
@@ -129,6 +130,25 @@ export default function App() {
           setCurrentScreen('person-dashboard');
           setToast(null);
         },
+      });
+    }
+  };
+
+  const handleToggleCompare = (parcelaId: number) => {
+    if (compareParcelaIds.includes(parcelaId)) {
+      setCompareParcelaIds(prev => prev.filter(id => id !== parcelaId));
+      showToast({ message: 'Eliminada del comparador' });
+    } else {
+      if (compareParcelaIds.length >= 3) {
+        showToast({ message: 'Máximo 3 parcelas en el comparador' });
+        return;
+      }
+      setCompareParcelaIds(prev => [...prev, parcelaId]);
+      const next = compareParcelaIds.length + 1;
+      showToast({
+        message: `${next}/3 en comparador`,
+        actionLabel: 'Ver comparador',
+        onAction: () => { setCurrentScreen('person-dashboard'); setToast(null); },
       });
     }
   };
@@ -355,9 +375,9 @@ export default function App() {
 
       {/* Main Content */}
       <div className="pt-8">
-        {currentScreen === 'home' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} />}
-        {currentScreen === 'home-error' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} initialLoadingError={true} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} />}
-        {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} />}
+        {currentScreen === 'home' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
+        {currentScreen === 'home-error' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} initialLoadingError={true} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
+        {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
         {currentScreen === 'parcelas-empty' && <ParcelasPageEmpty onNavigate={handleNavigate} />}
         {currentScreen === 'parcelas-error' && <ParcelasPageError onNavigate={handleNavigate} />}
         {currentScreen === 'inmobiliarias' && <InmobiliariasPage onNavigate={handleNavigate} />}
@@ -366,7 +386,7 @@ export default function App() {
         {currentScreen === 'como-funciona-loading' && <ComoFuncionaPageLoading onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'como-funciona' && <ComoFuncionaPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
         {currentScreen === 'recursos' && <RecursosPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} />}
-        {currentScreen === 'parcela-detalle' && <ParcelaDetalle onNavigate={handleNavigate} parcelaId={selectedParcelaId} estadoCompraInicial={selectedParcelaId !== null ? (parcelaEstados[selectedParcelaId!] || 'disponible') : 'disponible'} onEstadoChange={handleParcelaEstadoChange} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} />}
+        {currentScreen === 'parcela-detalle' && <ParcelaDetalle onNavigate={handleNavigate} parcelaId={selectedParcelaId} estadoCompraInicial={selectedParcelaId !== null ? (parcelaEstados[selectedParcelaId!] || 'disponible') : 'disponible'} onEstadoChange={handleParcelaEstadoChange} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
         {currentScreen === 'proyecto-detalle' && <ProyectoDetalle onNavigate={handleNavigate} proyectoId={selectedProyectoId} />}
         {currentScreen === 'inmobiliaria-profile' && <InmobiliariaProfile onNavigate={handleNavigate} inmobiliariaName={selectedInmobiliaria} />}
         {currentScreen === 'vendedor-particular-profile' && <VendedorParticularProfile onNavigate={handleNavigate} vendedorName={selectedInmobiliaria} />}

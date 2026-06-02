@@ -675,9 +675,11 @@ interface ParcelaDetalleProps {
   savedParcelaIds?: number[];
   onToggleSaved?: (id: number) => void;
   isLoggedIn?: boolean;
+  compareParcelaIds?: number[];
+  onToggleCompare?: (id: number) => void;
 }
 
-export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange, savedParcelaIds = [], onToggleSaved, isLoggedIn }: ParcelaDetalleProps) {
+export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange, savedParcelaIds = [], onToggleSaved, isLoggedIn, compareParcelaIds = [], onToggleCompare }: ParcelaDetalleProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
   const [isDocTecnicaOpen, setIsDocTecnicaOpen] = useState(false);
@@ -981,6 +983,23 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     )}
                   </div>
 
+                  {/* Botón comparar */}
+                  {parcelaId !== null && parcelaId !== undefined && (
+                    <button
+                      onClick={() => onToggleCompare?.(parcelaId as number)}
+                      className="w-10 h-10 rounded-full flex items-center justify-center border transition-all flex-shrink-0"
+                      style={{
+                        backgroundColor: compareParcelaIds.includes(parcelaId as number) ? '#EBFEF5' : '#FFFFFF',
+                        borderColor: compareParcelaIds.includes(parcelaId as number) ? '#A7F3D0' : '#D4D4D4',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+                      }}
+                      title={compareParcelaIds.includes(parcelaId as number) ? 'Quitar del comparador' : 'Agregar al comparador'}
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke={compareParcelaIds.includes(parcelaId as number) ? '#006B4E' : '#6B7280'} strokeWidth={2} style={{ width: '18px', height: '18px' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l9-3 9 3M3 6v12l9 3m-9-3l9 3m0 0l9-3M12 9v12m9-12v12" />
+                      </svg>
+                    </button>
+                  )}
                   {/* Botón guardar */}
                   {parcelaId !== null && parcelaId !== undefined && (
                     <button
