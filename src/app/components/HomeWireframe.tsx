@@ -184,8 +184,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   useEffect(() => {
     const handleScroll = () => {
       if (heroImgRef.current) {
-        const y = window.scrollY * 0.28;
-        heroImgRef.current.style.transform = `translateY(${y}px) scale(1.05)`;
+        const y = window.scrollY * 0.38;
+        heroImgRef.current.style.transform = `translateY(${y}px) scale(1.08)`;
       }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -674,39 +674,45 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       {/* Main Content - with padding for fixed header */}
       <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
-          <section className="relative py-16 pb-32 md:py-24 md:pb-40 lg:py-32 lg:pb-52 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
+          <section className="relative pt-12 pb-44 md:pt-16 md:pb-56 lg:pt-20 lg:pb-72 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
             {/* Background image con Ken Burns + parallax */}
             <img
               ref={heroImgRef}
               src={heroBackground}
               alt="Campos rurales"
               className="absolute inset-0 w-full h-full object-cover z-0"
-              style={{ animation: 'kenBurnsHero 9s ease-out forwards', transformOrigin: 'center center', willChange: 'transform' }}
+              style={{ animation: 'kenBurnsHero 12s ease-out forwards', transformOrigin: '55% 45%', willChange: 'transform' }}
             />
 
-            {/* Pines animados sobre el terreno */}
-            <div className="absolute inset-0 z-[5] pointer-events-none select-none">
+            {/* Zonas de parcelas animadas sobre el terreno */}
+            <div className="absolute inset-0 z-[5] pointer-events-none select-none hidden md:block">
               {[
-                { top: '54%', left: '9%',  label: 'Pirque, RM',    price: '$85.000.000',  delay: '0.5s' },
-                { top: '68%', left: '32%', label: 'Buin, RM',      price: '$95.000.000',  delay: '1.0s' },
-                { top: '50%', left: '60%', label: 'Colina, RM',    price: '$120.000.000', delay: '1.5s' },
-                { top: '62%', left: '82%', label: 'Farellones',    price: '$195.000.000', delay: '2.0s' },
+                { zT: '42%', zL: '5%',  zW: '13%', zH: '22%', label: 'Pirque, RM',   price: '$85.000.000',  delay: '0.6s' },
+                { zT: '55%', zL: '28%', zW: '16%', zH: '20%', label: 'Buin, RM',     price: '$95.000.000',  delay: '1.1s' },
+                { zT: '38%', zL: '57%', zW: '14%', zH: '24%', label: 'Colina, RM',   price: '$120.000.000', delay: '1.6s' },
+                { zT: '50%', zL: '80%', zW: '13%', zH: '18%', label: 'Farellones',   price: '$195.000.000', delay: '2.1s' },
               ].map((pin, i) => (
-                <div key={i} className="absolute flex flex-col items-center" style={{ top: pin.top, left: pin.left, animation: `pinDrop 0.7s cubic-bezier(0.34,1.56,0.64,1) ${pin.delay} both` }}>
-                  {/* Bubble */}
-                  <div style={{ backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(4px)', borderRadius: '10px', padding: '5px 10px', marginBottom: '4px', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', animation: `fadeInPin 0.4s ease ${pin.delay} both` }}>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#0A0A0A', whiteSpace: 'nowrap' }}>{pin.label}</div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500, color: '#006B4E', whiteSpace: 'nowrap' }}>{pin.price}</div>
+                <div key={i} className="absolute" style={{ top: pin.zT, left: pin.zL, width: pin.zW, height: pin.zH, animation: `pinDrop 0.8s cubic-bezier(0.34,1.56,0.64,1) ${pin.delay} both` }}>
+                  {/* Rectángulo de zona */}
+                  <div style={{ position: 'absolute', inset: 0, border: '1.5px dashed rgba(0,0,0,0.6)', backgroundColor: 'rgba(0,0,0,0.07)', borderRadius: '4px' }} />
+
+                  {/* Label dentro de la zona */}
+                  <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)', borderRadius: '6px', padding: '4px 8px', whiteSpace: 'nowrap', animation: `fadeInPin 0.5s ease ${pin.delay} both` }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 700, color: '#FFFFFF' }}>{pin.label}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 500, color: '#86efac' }}>{pin.price}</div>
                   </div>
-                  {/* Pin */}
-                  <div style={{ width: '20px', height: '20px', backgroundColor: '#006B4E', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', boxShadow: '0 3px 10px rgba(0,107,78,0.55)', position: 'relative' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: 'white', borderRadius: '50%', position: 'absolute', top: '6px', left: '6px' }} />
+
+                  {/* Pin negro con logo — sale del borde inferior del rectángulo */}
+                  <div style={{ position: 'absolute', bottom: '-22px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '28px', height: '28px', backgroundColor: '#0A0A0A', borderRadius: '50% 50% 50% 0', transform: 'rotate(-45deg)', boxShadow: '0 4px 14px rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                      <img src={logo} alt="" style={{ width: '16px', height: '16px', transform: 'rotate(45deg)', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center space-y-12 md:space-y-16 lg:space-y-24 z-10 -mt-[40px] md:-mt-[60px] lg:-mt-[80px]">
+            <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
               {/* Headlines */}
               <div className="space-y-3 md:space-y-4">
                 <h1 style={{ color: '#0A0A0A', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1' }}>
@@ -2909,8 +2915,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
         }
 
         @keyframes kenBurnsHero {
-          0%   { transform: scale(1.12) translate(-1.5%, -1%); }
-          100% { transform: scale(1.05) translate(0%, 0%); }
+          0%   { transform: scale(1.22) translate(-3%, -2%); }
+          60%  { transform: scale(1.10) translate(1%, 0.5%); }
+          100% { transform: scale(1.05) translate(2%, 1%); }
         }
 
         @keyframes pinDrop {
