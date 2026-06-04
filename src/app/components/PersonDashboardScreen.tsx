@@ -4,7 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -344,6 +344,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
   const [pub2Paused, setPub2Paused] = React.useState(true);
   const [showPauseConfirm, setShowPauseConfirm] = React.useState(false);
+  const [activeMenuHome, setActiveMenuHome] = React.useState<string | null>(null);
 
   return (
     <main className="px-6 py-6 space-y-6">
@@ -446,50 +447,68 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Publicación 1 */}
-          <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-            <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+          {/* Publicación 1 — mismo diseño que MyPublicationsView */}
+          <div className="rounded-xl overflow-hidden transition-all hover:shadow-lg bg-background" style={{ border: '1px solid var(--border)' }}>
+            <div className="relative aspect-[4/3] overflow-hidden bg-muted">
               <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&h=450&fit=crop&q=80" alt="Parcela Valle del Sol" className="w-full h-full object-cover" />
-              <span className="absolute top-3 left-3 px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(100,126,63,0.9)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, letterSpacing: '0.04em' }}>
-                PUBLICADA
-              </span>
+              <div className="absolute top-3 left-3">
+                <span className="px-3 py-1.5 rounded-full" style={{ backgroundColor: '#DCFCE7', color: '#166534', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }}>
+                  PUBLICADA
+                </span>
+              </div>
+              <div className="absolute top-3 right-3">
+                <button onClick={() => setActiveMenuHome(activeMenuHome === 'pub1' ? null : 'pub1')} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0,0,0,0.1)' }}>
+                  <MoreVertical className="w-4 h-4 text-foreground" />
+                </button>
+                {activeMenuHome === 'pub1' && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setActiveMenuHome(null)} />
+                    <div className="absolute right-0 top-10 z-20 rounded-lg overflow-hidden shadow-lg bg-background" style={{ border: '1px solid var(--border)', minWidth: '200px' }}>
+                      <button onClick={() => { setCurrentSection('listings'); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted">
+                        <Edit className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', whiteSpace: 'nowrap' }}>Editar</span>
+                      </button>
+                      <button onClick={() => { onNavigate('parcela-detalle', 1); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted" style={{ borderTop: '1px solid var(--border)' }}>
+                        <Eye className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', whiteSpace: 'nowrap' }}>Ver publicación</span>
+                      </button>
+                      <button onClick={() => { setShowPauseConfirm(true); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted" style={{ borderTop: '1px solid var(--border)' }}>
+                        <Pause className="w-4 h-4 flex-shrink-0" style={{ color: '#EF4444' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#EF4444', whiteSpace: 'nowrap' }}>Pausar publicación</span>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-            <div className="p-4 flex flex-col flex-1 space-y-3">
-              <div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: '1.3' }}>
-                  Parcela Valle del Sol
-                </h3>
-                <div className="flex items-center gap-1 mt-1">
-                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#737373' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Lampa, RM</span>
-                </div>
+            <div className="p-5 space-y-3">
+              <h4 className="text-foreground" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>Parcela Valle del Sol</h4>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Lampa, RM</span>
               </div>
-              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
+              <div className="flex items-center gap-4">
                 <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Superficie</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>6.000 m²</p>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Superficie</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>6.000 m²</div>
                 </div>
-                <div style={{ width: '1px', height: '28px', backgroundColor: '#E5E5E5' }} />
+                <div className="h-8" style={{ width: '1px', backgroundColor: 'var(--border)' }} />
                 <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Precio</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>$120.000.000</p>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Precio</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-bold)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>$120.000.000</div>
                 </div>
               </div>
-              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
-                <div className="flex items-center gap-1.5">
-                  <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>234 visitas</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>8 consultas</span>
+              <div className="pt-3" style={{ borderTop: '1px solid var(--muted)' }}>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5"><Eye className="w-4 h-4" style={{ color: '#737373' }} /><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>234 visitas</span></div>
+                  <div className="flex items-center gap-1.5"><LinkIcon className="w-4 h-4" style={{ color: '#737373' }} /><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>8 consultas</span></div>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
-                <Calendar className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 3 días</span>
+              <div className="pt-3 flex items-center gap-1.5" style={{ borderTop: '1px solid var(--muted)' }}>
+                <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Última modificación: hace 14 meses</span>
               </div>
-              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid #E5E5E5' }}>
+              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
                 <button onClick={() => setCurrentSection('listings')} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
                   <Edit className="w-3.5 h-3.5" /> Editar
                 </button>
@@ -500,56 +519,81 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             </div>
           </div>
 
-          {/* Publicación 2 */}
-          <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', opacity: pub2Paused ? 0.85 : 1 }}>
-            <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+          {/* Publicación 2 — mismo diseño que MyPublicationsView */}
+          <div className="rounded-xl overflow-hidden transition-all hover:shadow-lg bg-background" style={{ border: '1px solid var(--border)' }}>
+            <div className="relative aspect-[4/3] overflow-hidden bg-muted">
               <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&h=450&fit=crop&q=80" alt="Terreno El Refugio" className="w-full h-full object-cover" />
-              <span className="absolute top-3 left-3 px-3 py-1.5 rounded-full" style={{ backgroundColor: pub2Paused ? 'rgba(107,114,128,0.85)' : 'rgba(100,126,63,0.9)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, letterSpacing: '0.04em' }}>
-                {pub2Paused ? 'PAUSADA' : 'PUBLICADA'}
-              </span>
+              <div className="absolute top-3 left-3">
+                <span className="px-3 py-1.5 rounded-full" style={{ backgroundColor: pub2Paused ? '#F3F4F6' : '#DCFCE7', color: pub2Paused ? '#6B7280' : '#166534', border: `1px solid ${pub2Paused ? '#D1D5DB' : '#86EFAC'}`, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }}>
+                  {pub2Paused ? 'PAUSADA' : 'PUBLICADA'}
+                </span>
+              </div>
+              <div className="absolute top-3 right-3">
+                <button onClick={() => setActiveMenuHome(activeMenuHome === 'pub2' ? null : 'pub2')} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0,0,0,0.1)' }}>
+                  <MoreVertical className="w-4 h-4 text-foreground" />
+                </button>
+                {activeMenuHome === 'pub2' && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setActiveMenuHome(null)} />
+                    <div className="absolute right-0 top-10 z-20 rounded-lg overflow-hidden shadow-lg bg-background" style={{ border: '1px solid var(--border)', minWidth: '200px' }}>
+                      <button onClick={() => { setCurrentSection('listings'); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted">
+                        <Edit className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', whiteSpace: 'nowrap' }}>Editar</span>
+                      </button>
+                      <button onClick={() => { onNavigate('parcela-detalle', 2); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted" style={{ borderTop: '1px solid var(--border)' }}>
+                        <Eye className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', whiteSpace: 'nowrap' }}>Ver publicación</span>
+                      </button>
+                      {pub2Paused ? (
+                        <button onClick={() => { setPub2Paused(false); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted" style={{ borderTop: '1px solid var(--border)' }}>
+                          <Play className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#006B4E', whiteSpace: 'nowrap' }}>Volver a publicar</span>
+                        </button>
+                      ) : (
+                        <button onClick={() => { setShowPauseConfirm(true); setActiveMenuHome(null); }} className="w-full flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted" style={{ borderTop: '1px solid var(--border)' }}>
+                          <Pause className="w-4 h-4 flex-shrink-0" style={{ color: '#EF4444' }} />
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#EF4444', whiteSpace: 'nowrap' }}>Pausar publicación</span>
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-            <div className="p-4 flex flex-col flex-1 space-y-3">
-              <div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: '1.3' }}>
-                  Terreno El Refugio
-                </h3>
-                <div className="flex items-center gap-1 mt-1">
-                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#737373' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Colina, RM</span>
-                </div>
+            <div className="p-5 space-y-3">
+              <h4 className="text-foreground" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>Terreno El Refugio</h4>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Colina, RM</span>
               </div>
-              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
+              <div className="flex items-center gap-4">
                 <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Superficie</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>3.500 m²</p>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Superficie</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>3.500 m²</div>
                 </div>
-                <div style={{ width: '1px', height: '28px', backgroundColor: '#E5E5E5' }} />
+                <div className="h-8" style={{ width: '1px', backgroundColor: 'var(--border)' }} />
                 <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Precio</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>$85.000.000</p>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Precio</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-bold)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>$85.000.000</div>
                 </div>
               </div>
-              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
-                <div className="flex items-center gap-1.5">
-                  <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>113 visitas</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>4 consultas</span>
+              <div className="pt-3" style={{ borderTop: '1px solid var(--muted)' }}>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5"><Eye className="w-4 h-4" style={{ color: '#737373' }} /><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>113 visitas</span></div>
+                  <div className="flex items-center gap-1.5"><LinkIcon className="w-4 h-4" style={{ color: '#737373' }} /><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>4 consultas</span></div>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
-                <Calendar className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 12 días</span>
+              <div className="pt-3 flex items-center gap-1.5" style={{ borderTop: '1px solid var(--muted)' }}>
+                <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Última modificación: hace 12 días</span>
               </div>
-              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid #E5E5E5' }}>
+              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
                 <button onClick={() => setCurrentSection('listings')} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
                   <Edit className="w-3.5 h-3.5" /> Editar
                 </button>
                 {pub2Paused ? (
                   <button onClick={() => setPub2Paused(false)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '1.5px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#DCFCE7'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}>
-                    <Play className="w-3.5 h-3.5" /> Publicar
+                    <Play className="w-3.5 h-3.5" /> Volver a publicar
                   </button>
                 ) : (
                   <button onClick={() => setShowPauseConfirm(true)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}>
