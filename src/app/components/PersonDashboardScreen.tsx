@@ -4,7 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -447,116 +447,116 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Publicación 1 */}
-          <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-            <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="flex items-start gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
-                  <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=80&h=80&fit=crop&q=80" alt="Parcela Valle del Sol" className="w-full h-full object-cover" />
-                </div>
-                <div className="min-w-0">
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-                    Parcela Valle del Sol
-                  </h3>
-                  <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
-                    Lampa, RM · 6.000 m²
-                  </p>
-                </div>
-              </div>
-              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>Activa</span>
-              </div>
+          <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+            <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&h=450&fit=crop&q=80" alt="Parcela Valle del Sol" className="w-full h-full object-cover" />
+              <span className="absolute top-3 left-3 px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(100,126,63,0.9)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, letterSpacing: '0.04em' }}>
+                PUBLICADA
+              </span>
             </div>
-
-            <div className="flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px' }}>
-              <div className="flex items-center gap-4 mb-2">
+            <div className="p-4 flex flex-col flex-1 space-y-3">
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: '1.3' }}>
+                  Parcela Valle del Sol
+                </h3>
+                <div className="flex items-center gap-1 mt-1">
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#737373' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Lampa, RM</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Superficie</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>6.000 m²</p>
+                </div>
+                <div style={{ width: '1px', height: '28px', backgroundColor: '#E5E5E5' }} />
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Precio</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>$120.000.000</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
                 <div className="flex items-center gap-1.5">
                   <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>234 vistas</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>234 visitas</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>8 consultas</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>8 consultas</span>
                 </div>
               </div>
-              <p style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 3 días</p>
-            </div>
-
-            <div className="flex gap-2">
-              <button onClick={() => onNavigate('parcela-detalle', 1)} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                Ver
-              </button>
-              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                <Edit className="w-3.5 h-3.5 flex-shrink-0" />
-                Editar
-              </button>
-              <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '2px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FECACA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
-                <Pause className="w-3.5 h-3.5 flex-shrink-0" />
-                Pausar
-              </button>
+              <div className="flex items-center gap-1.5" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
+                <Calendar className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 3 días</span>
+              </div>
+              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid #E5E5E5' }}>
+                <button onClick={() => setCurrentSection('listings')} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                  <Edit className="w-3.5 h-3.5" /> Editar
+                </button>
+                <button onClick={() => setShowPauseConfirm(true)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}>
+                  <Pause className="w-3.5 h-3.5" /> Pausar
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Publicación 2 */}
-          <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-            <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="flex items-start gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0" style={{ border: '1px solid #E5E5E5' }}>
-                  <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=80&h=80&fit=crop&q=80" alt="Terreno El Refugio" className="w-full h-full object-cover" />
-                </div>
-                <div className="min-w-0">
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-                    Terreno El Refugio
-                  </h3>
-                  <p style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '3px' }}>
-                    Colina, RM · 3.500 m²
-                  </p>
-                </div>
-              </div>
-              <div className="px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: pub2Paused ? '#F3F4F6' : 'rgba(100, 126, 63, 0.1)' }}>
-                <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: pub2Paused ? '#6B7280' : '#647E3F' }}>{pub2Paused ? 'Pausada' : 'Activa'}</span>
-              </div>
+          <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', opacity: pub2Paused ? 0.85 : 1 }}>
+            <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&h=450&fit=crop&q=80" alt="Terreno El Refugio" className="w-full h-full object-cover" />
+              <span className="absolute top-3 left-3 px-3 py-1.5 rounded-full" style={{ backgroundColor: pub2Paused ? 'rgba(107,114,128,0.85)' : 'rgba(100,126,63,0.9)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, letterSpacing: '0.04em' }}>
+                {pub2Paused ? 'PAUSADA' : 'PUBLICADA'}
+              </span>
             </div>
-
-            <div className="flex-1 mb-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '12px', opacity: pub2Paused ? 0.5 : 1 }}>
-              <div className="flex items-center gap-4 mb-2">
+            <div className="p-4 flex flex-col flex-1 space-y-3">
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A', lineHeight: '1.3' }}>
+                  Terreno El Refugio
+                </h3>
+                <div className="flex items-center gap-1 mt-1">
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#737373' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Colina, RM</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Superficie</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>3.500 m²</p>
+                </div>
+                <div style={{ width: '1px', height: '28px', backgroundColor: '#E5E5E5' }} />
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Precio</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>$85.000.000</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
                 <div className="flex items-center gap-1.5">
                   <Eye className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>113 vistas</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>113 visitas</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MessageCircle className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
-                  <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>4 consultas</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>4 consultas</span>
                 </div>
               </div>
-              <p style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 12 días</p>
-            </div>
-
-            <div className="flex gap-2">
-              <button onClick={() => onNavigate('parcela-detalle', 2)} className="flex-1 py-2 px-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                Ver
-              </button>
-              <button onClick={() => setCurrentSection('listings')} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                <Edit className="w-3.5 h-3.5 flex-shrink-0" />
-                Editar
-              </button>
-              {pub2Paused ? (
-                <button onClick={() => setPub2Paused(false)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '2px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DCFCE7'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}>
-                  <Play className="w-3.5 h-3.5 flex-shrink-0" />
-                  Publicar
+              <div className="flex items-center gap-1.5" style={{ borderTop: '1px solid #F5F5F5', paddingTop: '10px' }}>
+                <Calendar className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>Última modificación: hace 12 días</span>
+              </div>
+              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid #E5E5E5' }}>
+                <button onClick={() => setCurrentSection('listings')} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                  <Edit className="w-3.5 h-3.5" /> Editar
                 </button>
-              ) : (
-                <button onClick={() => setShowPauseConfirm(true)} className="flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '2px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FECACA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
-                  <Pause className="w-3.5 h-3.5 flex-shrink-0" />
-                  Pausar
-                </button>
-              )}
+                {pub2Paused ? (
+                  <button onClick={() => setPub2Paused(false)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '1.5px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#DCFCE7'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}>
+                    <Play className="w-3.5 h-3.5" /> Publicar
+                  </button>
+                ) : (
+                  <button onClick={() => setShowPauseConfirm(true)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}>
+                    <Pause className="w-3.5 h-3.5" /> Pausar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
