@@ -6,6 +6,26 @@ interface Props {
   variant?: 'sidebar' | 'header';
 }
 
+function FlagCircle({ code, size = 20 }: { code: string; size?: number }) {
+  return (
+    <div style={{
+      width: size, height: size,
+      borderRadius: '50%',
+      overflow: 'hidden',
+      flexShrink: 0,
+      border: '1px solid rgba(0,0,0,0.1)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      backgroundColor: '#f0f0f0',
+    }}>
+      <img
+        src={`https://flagcdn.com/w40/${code.toLowerCase()}.png`}
+        alt={code}
+        style={{ width: '140%', height: '140%', objectFit: 'cover', objectPosition: 'center' }}
+      />
+    </div>
+  );
+}
+
 export default function LanguageCurrencySelector({ variant = 'header' }: Props) {
   const { language, currency, country, setLanguage, setCurrency, setCountry, t } = useI18n();
   const [open, setOpen] = useState(false);
@@ -40,7 +60,7 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
                   fontWeight: country === code ? 700 : 400,
                 }}
               >
-                <span>{info.flag}</span>
+                <FlagCircle code={code} size={18} />
                 <span>{info.label}</span>
               </button>
             ))}
@@ -96,10 +116,10 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1.5 text-sm px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
         style={{ color: '#374151', fontWeight: 500 }}
       >
-        <span>{currentCountry.flag}</span>
+        <FlagCircle code={country} size={18} />
         <span>{language.toUpperCase()}</span>
         <span className="text-gray-300">|</span>
         <span>{currency}</span>
@@ -117,14 +137,14 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
               <button
                 key={code}
                 onClick={() => { setCountry(code); setOpen(false); }}
-                className="w-full text-left text-sm px-2 py-1.5 rounded-lg flex items-center gap-2 transition-colors"
+                className="w-full text-left text-sm px-2 py-1.5 rounded-lg flex items-center gap-2.5 transition-colors"
                 style={{
                   backgroundColor: country === code ? '#f0fdf4' : 'transparent',
                   color: country === code ? '#006B4E' : '#374151',
                   fontWeight: country === code ? 600 : 400,
                 }}
               >
-                <span>{info.flag}</span>
+                <FlagCircle code={code} size={20} />
                 <span>{info.label}</span>
                 {country === code && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-green-700 inline-block" />}
               </button>
