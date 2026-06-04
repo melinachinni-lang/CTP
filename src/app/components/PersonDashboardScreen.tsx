@@ -244,8 +244,8 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 }`}
                 style={{
                   color: currentSection === item.id ? '#FFFFFF' : 'rgba(255,255,255,0.65)',
-                  backgroundColor: currentSection === item.id ? 'rgba(255,255,255,0.12)' : 'transparent',
-                  borderLeft: currentSection === item.id ? '3px solid #4ADE80' : '3px solid transparent',
+                  backgroundColor: currentSection === item.id ? '#002F23' : 'transparent',
+                  borderLeft: currentSection === item.id ? '3px solid rgba(255,255,255,0.4)' : '3px solid transparent',
                 }}
                 onMouseEnter={(e) => {
                   if (currentSection !== item.id) {
