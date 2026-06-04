@@ -236,7 +236,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
                   setCurrentSection(item.id);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+                className={`w-full flex items-center justify-start gap-3 px-4 py-3 text-sm text-left transition-colors ${
                   currentSection === item.id
                     ? 'font-medium'
                     : ''
@@ -259,9 +259,9 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 }}
               >
                 {renderIcon(item.icon, currentSection === item.id)}
-                <span className="flex-1">{item.label}</span>
+                <span>{item.label}</span>
                 {item.id === 'inquiries' && (
-                  <span className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
+                  <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
                 )}
               </button>
             ))}
