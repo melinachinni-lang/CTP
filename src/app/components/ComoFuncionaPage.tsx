@@ -167,28 +167,44 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
 
   const faqs = [
     {
-      question: '¿Cuánto cuesta publicar una parcela?',
-      answer: 'Contamos con planes flexibles según lo que necesites. Puedes comenzar gratis publicando hasta 3 parcelas, o elegir un plan con más funcionalidades si gestionas varias propiedades. Sin costos ocultos ni sorpresas.'
+      question: '¿Necesito crear una cuenta para explorar parcelas?',
+      answer: 'No, puedes explorar todas las parcelas disponibles sin registrarte. Para guardar favoritos, reservar o contactar vendedores necesitarás crear una cuenta gratuita — el proceso toma menos de 2 minutos.'
     },
     {
-      question: '¿Cómo recibo las consultas de los interesados?',
-      answer: 'Todas las consultas llegan directamente a tu panel de control. Te avisamos por email cada vez que alguien se interesa, y puedes responder desde la plataforma o asignar la conversación a alguien de tu equipo.'
+      question: '¿Cómo sé que la información de una parcela es confiable?',
+      answer: 'Cada publicación pasa por un proceso de validación antes de mostrarse en la plataforma. Verificamos que los documentos legales básicos estén al día (rol de avalúo, titularidad) y que la información declarada sea consistente. Las parcelas con documentación completa se identifican claramente.'
     },
     {
-      question: '¿Puedo gestionar varias parcelas a la vez?',
-      answer: 'Sí, puedes gestionar todas tus propiedades desde un solo lugar. Cada publicación tiene su propio seguimiento independiente: consultas, visitas y estado de venta organizados para que tengas el control total.'
+      question: '¿Cuánto es el valor de la reserva y cómo se paga?',
+      answer: 'El valor de la reserva es de $500.000 (UF 12,9 aproximadamente). Puedes pagar por transferencia bancaria directa o a través de un link de pago con tarjeta de crédito o débito vía Mercado Pago. Una vez confirmado el pago, la parcela queda reservada a tu nombre.'
+    },
+    {
+      question: '¿Qué pasa si mi pago de reserva es rechazado o no puedo completarlo?',
+      answer: 'Si el pago no se completa dentro de los 30 minutos del proceso de reserva, la parcela vuelve a estar disponible para otros compradores. Si fue rechazado por un problema técnico o bancario, puedes intentarlo nuevamente o contactar a nuestro equipo de soporte desde la sección "Mis compras" en tu dashboard.'
+    },
+    {
+      question: '¿Puedo visitar la parcela antes de reservar?',
+      answer: 'Sí, y te lo recomendamos. Puedes solicitar una visita directamente desde el detalle de la parcela. El vendedor o su representante se pondrá en contacto para agendar la fecha y hora que mejor te acomode, sin costo ni compromiso.'
+    },
+    {
+      question: '¿La plataforma funciona para compradores desde el extranjero?',
+      answer: 'Sí. Puedes explorar, comparar y reservar parcelas desde cualquier país. La plataforma muestra precios en CLP y USD según tu preferencia. Para completar la compra es necesario contar con RUT chileno o un representante legal en Chile. Nuestro equipo de asesoría puede orientarte en este proceso sin costo.'
+    },
+    {
+      question: '¿Cuánto cuesta publicar mi parcela?',
+      answer: 'Puedes publicar hasta 3 parcelas de forma completamente gratuita. Si necesitas publicar más o acceder a funciones avanzadas como estadísticas detalladas, publicaciones destacadas o colaboración con brokers, contamos con planes para inmobiliarias y vendedores profesionales. Sin costos ocultos.'
     },
     {
       question: '¿Qué documentos necesito para publicar?',
-      answer: 'No es obligatorio, pero te recomendamos subir documentos como el título de propiedad, planos o certificados de uso de suelo. Más información genera más confianza en los compradores y acelera el proceso de venta.'
+      answer: 'No es obligatorio subir documentos para publicar, pero te recomendamos adjuntar el título de propiedad, certificado de rol de avalúo, planos y certificados de uso de suelo. Las publicaciones con documentación completa generan más confianza y se venden considerablemente más rápido.'
     },
     {
-      question: '¿Puedo trabajar con brokers o inmobiliarias?',
-      answer: 'Por supuesto. Puedes invitar a brokers e inmobiliarias a colaborar en tus publicaciones. Ellos gestionan las consultas y el seguimiento, mientras tú mantienes el control y la visibilidad de todo el proceso.'
+      question: '¿Qué diferencia hay entre una parcela y un proyecto?',
+      answer: 'Una parcela es una propiedad individual disponible para la venta directa. Un proyecto es un desarrollo inmobiliario que agrupa múltiples parcelas bajo una misma urbanización o parcelación, generalmente con infraestructura común y etapas de venta programadas. En ambos casos puedes explorar, comparar y reservar desde la plataforma.'
     },
     {
-      question: '¿Cómo marco una parcela como vendida?',
-      answer: 'Desde tu panel puedes cambiar el estado de cualquier publicación en un clic: "Activa", "Reservada" o "Vendida". Esto actualiza la visibilidad automáticamente y avisa a los interesados que estaban haciendo seguimiento.'
+      question: '¿Cómo contacto a un asesor si necesito ayuda?',
+      answer: 'Nuestro equipo de asesores está disponible de lunes a viernes de 9:00 a 18:00 hrs. Puedes contactarnos por WhatsApp (+569 777 14626), email (contacto@compratuparcela.cl) o usando el chat de la plataforma. Ofrecemos asesoría gratuita para compradores que necesitan orientación en el proceso.'
     }
   ];
 
