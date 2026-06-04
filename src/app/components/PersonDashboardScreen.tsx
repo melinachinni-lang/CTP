@@ -2330,11 +2330,22 @@ function MyPurchasesContent() {
           </div>
         )}
         {compra.estado === 'rechazada' && (
-          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4" /><circle cx="12" cy="16" r="0.5" fill="#DC2626" /></svg>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#B91C1C', lineHeight: '1.5' }}>
-              {t.purchases.msg_rechazada}
-            </p>
+          <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+            <div className="flex items-start gap-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4" /><circle cx="12" cy="16" r="0.5" fill="#DC2626" /></svg>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#B91C1C', lineHeight: '1.5' }}>
+                {t.purchases.msg_rechazada}
+              </p>
+            </div>
+            <a
+              href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full transition-colors"
+              style={{ backgroundColor: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, textDecoration: 'none' }}
+            >
+              Contactar soporte
+            </a>
           </div>
         )}
 
