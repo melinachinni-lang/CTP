@@ -2330,7 +2330,7 @@ function MyPurchasesContent() {
               {/* Acción */}
               <div className="flex items-center justify-between px-5 py-3" style={{ backgroundColor: '#FEF2F2', borderTop: '1px solid #FECACA' }}>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                  ¿Necesitás ayuda con tu pago?
+                  ¿Necesitas ayuda con tu pago?
                 </p>
                 <a
                   href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"

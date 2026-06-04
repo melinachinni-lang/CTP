@@ -534,7 +534,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 margin: '0 auto 64px'
               }}
             >
-              Todas las herramientas que necesitás para gestionar tus propiedades en un solo lugar
+              Todas las herramientas que necesitas para gestionar tus propiedades en un solo lugar
             </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">

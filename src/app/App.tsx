@@ -100,7 +100,7 @@ export default function App() {
     if (!isLoggedIn) {
       setPendingSaveId(parcelaId);
       showToast({
-        message: 'Iniciá sesión para guardar parcelas favoritas',
+        message: 'Inicia sesión para guardar parcelas favoritas',
         actionLabel: 'Ingresar',
         onAction: () => setCurrentScreen('entry'),
       });

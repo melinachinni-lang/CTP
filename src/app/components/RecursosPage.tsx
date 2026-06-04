@@ -20,7 +20,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
   const featuredArticle = {
     id: 1,
     title: 'Guía completa para comprar tu primera parcela en Chile',
-    excerpt: 'Todo lo que necesitás saber antes de invertir en una parcela: aspectos legales, financiamiento, permisos de construcción y errores comunes que debes evitar.',
+    excerpt: 'Todo lo que necesitas saber antes de invertir en una parcela: aspectos legales, financiamiento, permisos de construcción y errores comunes que debes evitar.',
     fullDescription: 'Comprar una parcela es una decisión importante que requiere investigación y planificación. En esta guía completa te explicamos paso a paso todo el proceso, desde la búsqueda inicial hasta la firma de la escritura. Aprenderás a identificar terrenos con buen potencial, verificar la documentación legal, negociar el precio, y obtener el financiamiento necesario.',
     category: 'Guía de compra',
     readTime: '8 min',

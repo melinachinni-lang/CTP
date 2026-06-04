@@ -294,7 +294,7 @@ export function VambeChat({ initialOpen = false, context = 'home', subtle = fals
                       marginBottom: '8px'
                     }}
                   >
-                    ¿Qué necesitás?
+                    ¿Qué necesitas?
                   </p>
                   {quickActions.map((action, index) => {
                     return (

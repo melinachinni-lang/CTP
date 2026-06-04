@@ -12,7 +12,7 @@ const pasos = [
   {
     numero: '01',
     titulo: 'Nos contactás',
-    descripcion: 'Te comunicás con uno de nuestros asesores por WhatsApp o formulario. Nos contás tu idea, presupuesto y en qué región estás pensando invertir.',
+    descripcion: 'Te comunicas con uno de nuestros asesores por WhatsApp o formulario. Nos cuentas tu idea, presupuesto y en qué región estás pensando invertir.',
     icono: MessageCircle,
   },
   {
@@ -99,7 +99,7 @@ export function AsesoriaPage({ onNavigate }: AsesoriaPageProps) {
             Asesoría gratuita para encontrar tu parcela ideal
           </h1>
           <p style={{ color: '#6B6B6B', fontSize: '18px', lineHeight: '1.6', marginBottom: '36px' }}>
-            Te acompañamos en todo el proceso: desde entender qué tipo de terreno necesitás hasta coordinar la visita y guiarte en la compra. Sin costo, sin presión.
+            Te acompañamos en todo el proceso: desde entender qué tipo de terreno necesitas hasta coordinar la visita y guiarte en la compra. Sin costo, sin presión.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <a
