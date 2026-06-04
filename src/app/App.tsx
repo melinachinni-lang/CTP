@@ -187,19 +187,9 @@ export default function App() {
   const handleToggleCompare = (parcelaId: number) => {
     if (compareParcelaIds.includes(parcelaId)) {
       setCompareParcelaIds(prev => prev.filter(id => id !== parcelaId));
-      showToast({ message: 'Eliminada del comparador' });
     } else {
-      if (compareParcelaIds.length >= 3) {
-        showToast({ message: 'Máximo 3 parcelas en el comparador' });
-        return;
-      }
+      if (compareParcelaIds.length >= 3) return;
       setCompareParcelaIds(prev => [...prev, parcelaId]);
-      const next = compareParcelaIds.length + 1;
-      showToast({
-        message: `${next}/3 en comparador`,
-        actionLabel: 'Ver comparador',
-        onAction: () => { handleNavigate('person-dashboard-compare'); setToast(null); },
-      });
     }
   };
 
