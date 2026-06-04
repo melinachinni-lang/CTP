@@ -2337,15 +2337,19 @@ function MyPurchasesContent() {
                 {t.purchases.msg_rechazada}
               </p>
             </div>
-            <a
-              href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full transition-colors"
-              style={{ backgroundColor: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, textDecoration: 'none' }}
-            >
-              Contactar soporte
-            </a>
+            <div className="flex justify-end">
+              <a
+                href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, textDecoration: 'none' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#01533E'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#006B4E'}
+              >
+                Contactar soporte
+              </a>
+            </div>
           </div>
         )}
 
