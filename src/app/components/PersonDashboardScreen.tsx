@@ -157,7 +157,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   return (
     <div className="min-h-screen bg-white flex">
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#065F46' }}>
+      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
           <div className="p-4 mt-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -244,7 +244,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 }`}
                 style={{
                   color: currentSection === item.id ? '#FFFFFF' : 'rgba(255,255,255,0.65)',
-                  backgroundColor: currentSection === item.id ? '#002F23' : 'transparent',
+                  backgroundColor: currentSection === item.id ? '#065F46' : 'transparent',
                   borderLeft: currentSection === item.id ? '3px solid rgba(255,255,255,0.4)' : '3px solid transparent',
                 }}
                 onMouseEnter={(e) => {
