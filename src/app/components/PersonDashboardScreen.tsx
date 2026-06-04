@@ -2266,7 +2266,7 @@ function MyPurchasesContent() {
             {t.purchases.operationTracking}
           </p>
           {compra.estado === 'rechazada' ? (
-            <div className="flex items-start gap-4 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+            <div className="flex items-start gap-4 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #FECACA' }}>
               <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEE2E2' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M15 9l-6 6M9 9l6 6" />
