@@ -78,7 +78,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
-    const color = '#006B4E';
+    const color = isActive ? '#FFFFFF' : 'rgba(255,255,255,0.65)';
     const strokeWidth = isActive ? 2.5 : 2;
 
     switch (iconType) {
@@ -157,11 +157,11 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   return (
     <div className="min-h-screen bg-white flex">
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-56 border-r-2 border-gray-300 bg-gray-50 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20">
+      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#0A2318' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
-          <div className="border-b-2 border-gray-300 p-2 mt-8 flex items-center justify-between">
-            <div className="font-bold text-base text-black">CompraTuParcela</div>
+          <div className="p-4 mt-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="font-bold text-base" style={{ color: '#FFFFFF' }}>CompraTuParcela</div>
           </div>
 
           {/* Notification panel */}
@@ -239,25 +239,24 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
                   setCurrentSection(item.id);
                 }}
-                className={`w-full flex items-center justify-start gap-3 px-4 py-3 text-sm text-left transition-colors ${
-                  currentSection === item.id
-                    ? 'font-medium'
-                    : ''
+                className={`w-full flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
+                  currentSection === item.id ? 'font-medium' : ''
                 }`}
                 style={{
-                  color: '#006B4E',
-                  ...(currentSection === item.id
-                    ? { backgroundColor: '#CDD8DE' }
-                    : { transition: 'background-color 0.2s ease' })
+                  color: currentSection === item.id ? '#FFFFFF' : 'rgba(255,255,255,0.65)',
+                  backgroundColor: currentSection === item.id ? 'rgba(255,255,255,0.12)' : 'transparent',
+                  borderLeft: currentSection === item.id ? '3px solid #4ADE80' : '3px solid transparent',
                 }}
                 onMouseEnter={(e) => {
                   if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.1)';
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = '';
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
                   }
                 }}
               >
@@ -271,12 +270,15 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           </nav>
 
           {/* User Profile Area */}
-          <div className="border-t-2 border-gray-300 p-4">
+          <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm text-gray-700 hover:text-black"
+              className="w-full flex items-center gap-3 text-sm transition-colors"
+              style={{ color: 'rgba(255,255,255,0.65)' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.65)'}
             >
-              <div className="w-8 h-8 border-2 border-gray-400 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -284,14 +286,15 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
               <span className="flex-1 text-left font-medium">{t.nav.myAccount}</span>
             </button>
             {showMenu && (
-              <div className="mt-2 bg-white border-2 border-gray-300">
+              <div className="mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <button
                   onClick={() => onNavigate('entry')}
-                  className="w-full text-left text-xs py-2 px-3"
-                  style={{ transition: 'background-color 0.2s ease' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                  className="w-full text-left text-xs py-2.5 px-3 transition-colors flex items-center gap-2"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = ''; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)'; }}
                 >
+                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
                   {t.nav.signOut}
                 </button>
               </div>
