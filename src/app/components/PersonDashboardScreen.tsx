@@ -2266,13 +2266,28 @@ function MyPurchasesContent() {
             {t.purchases.operationTracking}
           </p>
           {compra.estado === 'rechazada' ? (
-            <div className="flex items-center gap-3 p-4 rounded-xl" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" className="flex-shrink-0">
-                <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M15 9l-6 6M9 9l6 6" />
-              </svg>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#DC2626' }}>{t.purchases.operationRejected}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>{t.purchases.operationRejectedDesc}</p>
+            <div className="flex items-start gap-4 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+              <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEE2E2' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M15 9l-6 6M9 9l6 6" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{t.purchases.operationRejected}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', marginTop: '3px', lineHeight: '1.5' }}>{t.purchases.msg_rechazada}</p>
+                <div className="flex justify-end mt-3">
+                  <a
+                    href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors"
+                    style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, textDecoration: 'none' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#01533E'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#006B4E'}
+                  >
+                    Contactar soporte
+                  </a>
+                </div>
               </div>
             </div>
           ) : (
@@ -2327,29 +2342,6 @@ function MyPurchasesContent() {
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
               {t.purchases.msg_aprobada}
             </p>
-          </div>
-        )}
-        {compra.estado === 'rechazada' && (
-          <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
-            <div className="flex items-start gap-3">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4" /><circle cx="12" cy="16" r="0.5" fill="#DC2626" /></svg>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#B91C1C', lineHeight: '1.5' }}>
-                {t.purchases.msg_rechazada}
-              </p>
-            </div>
-            <div className="flex justify-end">
-              <a
-                href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, textDecoration: 'none' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#01533E'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#006B4E'}
-              >
-                Contactar soporte
-              </a>
-            </div>
           </div>
         )}
 
