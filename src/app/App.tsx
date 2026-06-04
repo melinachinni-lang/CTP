@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Scale, X } from 'lucide-react';
 import '@/styles/index.css';
 import { I18nProvider } from '@/app/i18n/i18nContext';
 import { EntryScreen } from '@/app/components/EntryScreen';
@@ -29,6 +30,89 @@ import { PlanesPage } from '@/app/components/PlanesPage';
 import { ArticuloPage } from '@/app/components/ArticuloPage';
 import { AsesoriaPage } from '@/app/components/AsesoriaPage';
 import { AccesoNoAutorizadoPage } from '@/app/components/AccesoNoAutorizadoPage';
+
+function ComparadorPublico({ onNavigate, compareParcelaIds, onToggleCompare, onClear }: {
+  onNavigate: (screen: string, id?: number) => void;
+  compareParcelaIds: number[];
+  onToggleCompare: (id: number) => void;
+  onClear: () => void;
+}) {
+  if (compareParcelaIds.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-20" style={{ backgroundColor: 'var(--hero-background)' }}>
+        <div className="text-center max-w-md">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: '#EBFEF5' }}>
+            <Scale className="w-8 h-8" style={{ color: '#006B4E' }} />
+          </div>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>
+            Compara parcelas
+          </h2>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', lineHeight: '1.6', marginBottom: '8px' }}>
+            Aún no tienes parcelas seleccionadas para comparar.
+          </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', lineHeight: '1.6', marginBottom: '32px' }}>
+            Para agregar una parcela, haz clic en el ícono <strong style={{ color: '#006B4E' }}>⚖</strong> que aparece en cada card de parcela al explorar el listado. Puedes comparar hasta <strong>3 parcelas</strong> a la vez.
+          </p>
+          <button
+            onClick={() => onNavigate('parcelas')}
+            className="px-6 py-3 rounded-full transition-colors"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+          >
+            Explorar parcelas
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--hero-background)' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A' }}>
+              Comparar parcelas
+            </h1>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '4px' }}>
+              {compareParcelaIds.length} de 3 parcelas seleccionadas
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={onClear}
+              className="px-4 py-2 rounded-full border transition-colors"
+              style={{ borderColor: '#E5E5E5', color: '#6B7280', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#9CA3AF'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#E5E5E5'}
+            >
+              Limpiar comparación
+            </button>
+            <button
+              onClick={() => onNavigate('parcelas')}
+              className="px-4 py-2 rounded-full transition-colors"
+              style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+            >
+              + Agregar parcela
+            </button>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center" style={{ color: '#737373', fontFamily: 'var(--font-body)' }}>
+          <Scale className="w-10 h-10 mx-auto mb-4" style={{ color: '#006B4E' }} />
+          <p style={{ fontSize: 'var(--font-size-body-base)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
+            {compareParcelaIds.length} parcela{compareParcelaIds.length > 1 ? 's' : ''} seleccionada{compareParcelaIds.length > 1 ? 's' : ''}
+          </p>
+          <p style={{ fontSize: 'var(--font-size-body-sm)' }}>
+            IDs: {compareParcelaIds.join(', ')} · La tabla de comparación detallada se muestra aquí
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export interface DashboardRef {
   openPublishModal: () => void;
@@ -368,6 +452,7 @@ export default function App() {
                 <option value="google-account-selector">Login - Selección de cuenta</option>
                 <option value="entry">1. Punto de entrada</option>
                 <option value="completar-perfil">1.1. Completar perfil (post-verificación)</option>
+                <option value="comparador">Comparador público</option>
                 <option value="person-dashboard">7. Dashboard Personal</option>
                 <option value="real-estate-dashboard">10. Dashboard Inmobiliaria</option>
                 <option value="broker-dashboard">11. Dashboard Broker</option>
@@ -381,6 +466,7 @@ export default function App() {
 
       {/* Main Content */}
       <div className="pt-8">
+        {currentScreen === 'comparador' && <ComparadorPublico onNavigate={handleNavigate} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} onClear={() => setCompareParcelaIds([])} />}
         {currentScreen === 'home' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
         {currentScreen === 'home-error' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} initialLoadingError={true} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
         {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
@@ -411,6 +497,44 @@ export default function App() {
         {currentScreen === 'acceso-no-autorizado' && <AccesoNoAutorizadoPage onNavigate={handleNavigate} />}
         {currentScreen === 'completar-perfil' && <CompletarPerfilScreen onNavigate={handleNavigate} />}
       </div>
+
+      {/* Barra flotante del comparador */}
+      {compareParcelaIds.length > 0 && currentScreen !== 'comparador' && (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-[90]"
+          style={{ backgroundColor: '#002F23', borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <Scale className="w-5 h-5 flex-shrink-0" style={{ color: '#86EFAC' }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#FFFFFF', fontWeight: 500 }}>
+                {compareParcelaIds.length} {compareParcelaIds.length === 1 ? 'parcela seleccionada' : 'parcelas seleccionadas'}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setCompareParcelaIds([])}
+                className="flex items-center gap-1 transition-colors"
+                style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.55)' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#FFFFFF'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)'}
+              >
+                <X className="w-3.5 h-3.5" />
+                Limpiar
+              </button>
+              <button
+                onClick={() => handleNavigate('comparador')}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+              >
+                Ver comparador →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast global */}
       {toast && (
