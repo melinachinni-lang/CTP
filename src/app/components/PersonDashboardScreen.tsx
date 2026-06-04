@@ -56,6 +56,9 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         setConsultasDefaultTab('notificaciones');
         setCurrentSection('inquiries');
       },
+      openCompareSection: () => {
+        setCurrentSection('compare');
+      },
     }));
 
   const { t } = useI18n();

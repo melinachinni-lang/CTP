@@ -33,6 +33,7 @@ import { AccesoNoAutorizadoPage } from '@/app/components/AccesoNoAutorizadoPage'
 export interface DashboardRef {
   openPublishModal: () => void;
   openNotificationsSection?: () => void;
+  openCompareSection?: () => void;
 }
 
 type Screen =
@@ -148,7 +149,7 @@ export default function App() {
       showToast({
         message: `${next}/3 en comparador`,
         actionLabel: 'Ver comparador',
-        onAction: () => { setCurrentScreen('person-dashboard'); setToast(null); },
+        onAction: () => { handleNavigate('person-dashboard-compare'); setToast(null); },
       });
     }
   };
@@ -232,6 +233,11 @@ export default function App() {
     if (screen === 'person-dashboard-notifications') {
       setCurrentScreen('person-dashboard');
       setTimeout(() => personDashboardRef.current?.openNotificationsSection?.(), 50);
+      return;
+    }
+    if (screen === 'person-dashboard-compare') {
+      setCurrentScreen('person-dashboard');
+      setTimeout(() => personDashboardRef.current?.openCompareSection?.(), 50);
       return;
     }
     setCurrentScreen(screen as Screen);

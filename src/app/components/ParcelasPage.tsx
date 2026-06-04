@@ -2137,10 +2137,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             <button
                               onClick={(e) => { e.stopPropagation(); onToggleCompare?.(parcela.id); }}
                               className="absolute top-2 right-10 w-8 h-8 rounded-full flex items-center justify-center transition-all"
-                              style={{ backgroundColor: compareParcelaIds.includes(parcela.id) ? '#EBFEF5' : 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
-                              title="Agregar al comparador"
+                              style={{ backgroundColor: compareParcelaIds.includes(parcela.id) ? '#006B4E' : 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
+                              title={compareParcelaIds.includes(parcela.id) ? 'Quitar del comparador' : 'Agregar al comparador'}
                             >
-                              <Scale className="w-4 h-4" style={{ color: compareParcelaIds.includes(parcela.id) ? '#006B4E' : '#6B7280' }} />
+                              <Scale className="w-4 h-4" style={{ color: compareParcelaIds.includes(parcela.id) ? '#FFFFFF' : '#6B7280' }} />
                             </button>
                             {/* Botón guardar */}
                             <button

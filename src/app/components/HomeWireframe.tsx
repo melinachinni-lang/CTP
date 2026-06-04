@@ -1416,12 +1416,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                           {/* Botón comparar */}
                           <button
                             onClick={(e) => { e.stopPropagation(); onToggleCompare?.(parcela.id); }}
-                            className="absolute top-3 right-12 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-colors z-10"
-                            title="Agregar al comparador"
+                            className="absolute top-3 right-12 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors z-10"
+                            style={{ backgroundColor: compareParcelaIds.includes(parcela.id) ? '#006B4E' : 'rgba(255,255,255,0.85)' }}
+                            title={compareParcelaIds.includes(parcela.id) ? 'Quitar del comparador' : 'Agregar al comparador'}
                           >
                             <Scale
                               className="w-4 h-4"
-                              style={{ color: compareParcelaIds.includes(parcela.id) ? '#006B4E' : '#6B6B6B' }}
+                              style={{ color: compareParcelaIds.includes(parcela.id) ? '#FFFFFF' : '#6B6B6B' }}
                             />
                           </button>
                           {/* Botón guardar */}
