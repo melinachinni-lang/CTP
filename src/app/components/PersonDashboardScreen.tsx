@@ -1747,7 +1747,7 @@ function SavedContent({ savedParcelaIds, onToggleSaved, onNavigate }: { savedPar
   );
 }
 
-interface CompareContentProps {
+export interface CompareContentProps {
   onNavigate: (screen: string, id?: number) => void;
 }
 
@@ -1757,7 +1757,7 @@ const COMPARE_ITEMS_INITIAL = [
   { id: 3, nombre: 'Parcela Los Robles', ubicacion: 'Chicureo, RM', img: 'https://images.unsplash.com/photo-1763397929062-eb0582008877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyYWwlMjBsYW5kJTIwZ3JlZW4lMjBmaWVsZHN8ZW58MXx8fHwxNzcwMTMzMjk4fDA&ixlib=rb-4.1.0&q=80&w=1080', precio: '$38.500.000', precioNum: 38500000, tamano: '3.200 m²', tamanoNum: 3200, preciom2: '$12.031/m²', preciom2Num: 12031, agua: 'Pozo profundo', aguaVentaja: false, electricidad: '✓ Disponible', acceso: 'Camino pavimentado', accesoVentaja: true, topografia: 'Irregular', distanciaKm: 28, documentacion: 'Al día' },
 ];
 
-function CompareContent({ onNavigate }: CompareContentProps) {
+export function CompareContent({ onNavigate }: CompareContentProps) {
   const [items, setItems] = React.useState(COMPARE_ITEMS_INITIAL);
   const remove = (id: number) => setItems(prev => prev.filter(i => i.id !== id));
 

@@ -6,7 +6,8 @@ import { EntryScreen } from '@/app/components/EntryScreen';
 import { CompletarPerfilScreen } from '@/app/components/CompletarPerfilScreen';
 import { RealEstateDashboardScreen } from '@/app/components/RealEstateDashboardScreen';
 import { BrokerDashboardScreen } from '@/app/components/BrokerDashboardScreen';
-import { PersonDashboardScreen } from '@/app/components/PersonDashboardScreen';
+import { PersonDashboardScreen, CompareContent } from '@/app/components/PersonDashboardScreen';
+import { Navbar } from '@/app/components/Navbar';
 import { AdminDashboard } from '@/app/components/AdminDashboard';
 import { AdminGeneralDashboard } from '@/app/components/AdminGeneralDashboard';
 import { HomeWireframe } from '@/app/components/HomeWireframe';
@@ -31,85 +32,49 @@ import { ArticuloPage } from '@/app/components/ArticuloPage';
 import { AsesoriaPage } from '@/app/components/AsesoriaPage';
 import { AccesoNoAutorizadoPage } from '@/app/components/AccesoNoAutorizadoPage';
 
-function ComparadorPublico({ onNavigate, compareParcelaIds, onToggleCompare, onClear }: {
+function ComparadorPublico({ onNavigate, compareParcelaIds, onClear, isLoggedIn, currentUser, onLogout }: {
   onNavigate: (screen: string, id?: number) => void;
   compareParcelaIds: number[];
   onToggleCompare: (id: number) => void;
   onClear: () => void;
+  isLoggedIn?: boolean;
+  currentUser?: { name: string; email: string } | null;
+  onLogout?: () => void;
 }) {
-  if (compareParcelaIds.length === 0) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-20" style={{ backgroundColor: 'var(--hero-background)' }}>
-        <div className="text-center max-w-md">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: '#EBFEF5' }}>
-            <Scale className="w-8 h-8" style={{ color: '#006B4E' }} />
-          </div>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>
-            Compara parcelas
-          </h2>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', lineHeight: '1.6', marginBottom: '8px' }}>
-            Aún no tienes parcelas seleccionadas para comparar.
-          </p>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', lineHeight: '1.6', marginBottom: '32px' }}>
-            Para agregar una parcela, haz clic en el ícono <strong style={{ color: '#006B4E' }}>⚖</strong> que aparece en cada card de parcela al explorar el listado. Puedes comparar hasta <strong>3 parcelas</strong> a la vez.
-          </p>
-          <button
-            onClick={() => onNavigate('parcelas')}
-            className="px-6 py-3 rounded-full transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-          >
-            Explorar parcelas
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--hero-background)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A' }}>
-              Comparar parcelas
-            </h1>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '4px' }}>
-              {compareParcelaIds.length} de 3 parcelas seleccionadas
-            </p>
+      <Navbar onNavigate={onNavigate} estado={isLoggedIn ? 'logueado' : 'visitante'} onLogout={onLogout} userName={currentUser?.name} />
+      <main className="pt-28 pb-16">
+        {compareParcelaIds.length === 0 ? (
+          <div className="flex flex-col items-center justify-center px-6 py-20">
+            <div className="text-center max-w-md">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: '#EBFEF5' }}>
+                <Scale className="w-8 h-8" style={{ color: '#006B4E' }} />
+              </div>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>
+                Compara parcelas
+              </h2>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', lineHeight: '1.6', marginBottom: '8px' }}>
+                Aún no tienes parcelas seleccionadas para comparar.
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', lineHeight: '1.6', marginBottom: '32px' }}>
+                Haz clic en el ícono <strong style={{ color: '#006B4E' }}>⚖</strong> en cualquier card de parcela para agregarla. Puedes comparar hasta <strong>3 parcelas</strong> a la vez.
+              </p>
+              <button
+                onClick={() => onNavigate('parcelas')}
+                className="px-6 py-3 rounded-full transition-colors"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+              >
+                Explorar parcelas
+              </button>
+            </div>
           </div>
-          <div className="flex gap-3">
-            <button
-              onClick={onClear}
-              className="px-4 py-2 rounded-full border transition-colors"
-              style={{ borderColor: '#E5E5E5', color: '#6B7280', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = '#9CA3AF'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-            >
-              Limpiar comparación
-            </button>
-            <button
-              onClick={() => onNavigate('parcelas')}
-              className="px-4 py-2 rounded-full transition-colors"
-              style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-            >
-              + Agregar parcela
-            </button>
-          </div>
-        </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center" style={{ color: '#737373', fontFamily: 'var(--font-body)' }}>
-          <Scale className="w-10 h-10 mx-auto mb-4" style={{ color: '#006B4E' }} />
-          <p style={{ fontSize: 'var(--font-size-body-base)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
-            {compareParcelaIds.length} parcela{compareParcelaIds.length > 1 ? 's' : ''} seleccionada{compareParcelaIds.length > 1 ? 's' : ''}
-          </p>
-          <p style={{ fontSize: 'var(--font-size-body-sm)' }}>
-            IDs: {compareParcelaIds.join(', ')} · La tabla de comparación detallada se muestra aquí
-          </p>
-        </div>
-      </div>
+        ) : (
+          <CompareContent onNavigate={onNavigate} />
+        )}
+      </main>
     </div>
   );
 }
@@ -466,7 +431,7 @@ export default function App() {
 
       {/* Main Content */}
       <div className="pt-8">
-        {currentScreen === 'comparador' && <ComparadorPublico onNavigate={handleNavigate} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} onClear={() => setCompareParcelaIds([])} />}
+        {currentScreen === 'comparador' && <ComparadorPublico onNavigate={handleNavigate} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} onClear={() => setCompareParcelaIds([])} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} />}
         {currentScreen === 'home' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
         {currentScreen === 'home-error' && <HomeWireframe onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} initialLoadingError={true} onOpenPublishModal={handleOpenPublishModal} onNavigateToPublish={handleNavigateToPublish} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
         {currentScreen === 'parcelas' && <ParcelasPage onNavigate={handleNavigate} initialFilters={searchFilters} parcelaEstados={parcelaEstados} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} isLoggedIn={isLoggedIn} compareParcelaIds={compareParcelaIds} onToggleCompare={handleToggleCompare} />}
