@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { translations, Language, Currency, Translations } from './translations';
 
-export type Country = 'CL' | 'AR' | 'UY' | 'US' | 'ES';
+export type Country = 'CL' | 'AR' | 'UY' | 'US';
 
 interface I18nContextType {
   language: Language;
@@ -35,7 +35,7 @@ const getInitialCurrency = (): Currency => {
 const getInitialCountry = (): Country => {
   try {
     const stored = localStorage.getItem('ctp_country') as Country;
-    if (['CL', 'AR', 'UY', 'US', 'ES'].includes(stored)) return stored;
+    if (['CL', 'AR', 'UY', 'US'].includes(stored)) return stored;
   } catch {}
   return 'CL';
 };
@@ -63,7 +63,6 @@ export const COUNTRY_DEFAULTS: Record<Country, { language: Language; currency: C
   AR: { language: 'es', currency: 'ARS', label: 'Argentina', flag: '🇦🇷' },
   UY: { language: 'es', currency: 'UYU', label: 'Uruguay',   flag: '🇺🇾' },
   US: { language: 'en', currency: 'USD', label: 'USA',       flag: '🇺🇸' },
-  ES: { language: 'es', currency: 'EUR', label: 'España',    flag: '🇪🇸' },
 };
 
 // Monedas disponibles por país (moneda local + USD siempre)
@@ -72,7 +71,6 @@ export const COUNTRY_CURRENCIES: Record<Country, Currency[]> = {
   AR: ['ARS', 'USD'],
   UY: ['UYU', 'USD'],
   US: ['USD'],
-  ES: ['EUR', 'USD'],
 };
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
