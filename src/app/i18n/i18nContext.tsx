@@ -26,8 +26,8 @@ const getInitialLanguage = (): Language => {
 
 const getInitialCurrency = (): Currency => {
   try {
-    const stored = localStorage.getItem('ctp_currency');
-    if (stored === 'CLP' || stored === 'USD') return stored;
+    const stored = localStorage.getItem('ctp_currency') as Currency;
+    if (['CLP', 'USD', 'ARS', 'UYU', 'EUR'].includes(stored)) return stored;
   } catch {}
   return 'CLP';
 };
@@ -40,15 +40,39 @@ const getInitialCountry = (): Country => {
   return 'CL';
 };
 
-const USD_RATE = 0.0011;
+// Tasas de conversión desde CLP (aproximadas, referencia wireframe)
+const RATES: Record<Currency, number> = {
+  CLP: 1,
+  USD: 0.0011,       // 1 CLP ≈ 0.0011 USD  (~910 CLP/USD)
+  ARS: 1.05,         // 1 CLP ≈ 1.05 ARS
+  UYU: 0.04,         // 1 CLP ≈ 0.04 UYU
+  EUR: 0.00099,      // 1 CLP ≈ 0.00099 EUR  (~1010 CLP/EUR)
+};
 
-// Country → auto language + suggested currency
+const CURRENCY_SYMBOLS: Record<Currency, string> = {
+  CLP: 'CLP', USD: 'USD', ARS: 'ARS', UYU: 'UYU', EUR: 'EUR',
+};
+
+const CURRENCY_LOCALES: Record<Currency, string> = {
+  CLP: 'es-CL', USD: 'en-US', ARS: 'es-AR', UYU: 'es-UY', EUR: 'de-DE',
+};
+
+// País → moneda local por defecto + idioma
 export const COUNTRY_DEFAULTS: Record<Country, { language: Language; currency: Currency; label: string; flag: string }> = {
   CL: { language: 'es', currency: 'CLP', label: 'Chile',     flag: '🇨🇱' },
-  AR: { language: 'es', currency: 'USD', label: 'Argentina', flag: '🇦🇷' },
-  UY: { language: 'es', currency: 'USD', label: 'Uruguay',   flag: '🇺🇾' },
+  AR: { language: 'es', currency: 'ARS', label: 'Argentina', flag: '🇦🇷' },
+  UY: { language: 'es', currency: 'UYU', label: 'Uruguay',   flag: '🇺🇾' },
   US: { language: 'en', currency: 'USD', label: 'USA',       flag: '🇺🇸' },
-  ES: { language: 'es', currency: 'USD', label: 'España',    flag: '🇪🇸' },
+  ES: { language: 'es', currency: 'EUR', label: 'España',    flag: '🇪🇸' },
+};
+
+// Monedas disponibles por país (moneda local + USD siempre)
+export const COUNTRY_CURRENCIES: Record<Country, Currency[]> = {
+  CL: ['CLP', 'USD'],
+  AR: ['ARS', 'USD'],
+  UY: ['UYU', 'USD'],
+  US: ['USD'],
+  ES: ['EUR', 'USD'],
 };
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
@@ -69,18 +93,19 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   const setCountry = (c: Country) => {
     setCountryState(c);
     try { localStorage.setItem('ctp_country', c); } catch {}
-    // Auto-set language and currency based on country
     const defaults = COUNTRY_DEFAULTS[c];
     setLanguage(defaults.language);
     setCurrency(defaults.currency);
   };
 
   const formatPrice = (clpAmount: number): string => {
-    if (currency === 'USD') {
-      const usd = clpAmount * USD_RATE;
-      return `USD ${usd.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    if (currency === 'CLP') {
+      return `CLP ${clpAmount.toLocaleString('es-CL')}`;
     }
-    return `CLP ${clpAmount.toLocaleString('es-CL')}`;
+    const converted = Math.round(clpAmount * RATES[currency]);
+    const symbol = CURRENCY_SYMBOLS[currency];
+    const locale = CURRENCY_LOCALES[currency];
+    return `${symbol} ${converted.toLocaleString(locale)}`;
   };
 
   return (

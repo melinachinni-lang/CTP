@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useI18n, Country, COUNTRY_DEFAULTS } from '../i18n/i18nContext';
+import { useI18n, Country, COUNTRY_DEFAULTS, COUNTRY_CURRENCIES } from '../i18n/i18nContext';
 import { Language, Currency } from '../i18n/translations';
 
 interface Props {
@@ -91,7 +91,7 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
         <div>
           <p className="text-xs text-gray-400 mb-1">{t.selector.currency}</p>
           <div className="flex gap-1">
-            {(['CLP', 'USD'] as Currency[]).map(cur => (
+            {COUNTRY_CURRENCIES[country].map(cur => (
               <button
                 key={cur}
                 onClick={() => setCurrency(cur)}
@@ -178,7 +178,7 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
           <div className="border-t border-gray-100 pt-2">
             <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">{t.selector.currency}</p>
             <div className="space-y-1">
-              {([['CLP', t.selector.clp], ['USD', t.selector.usd]] as [Currency, string][]).map(([cur, label]) => (
+              {(COUNTRY_CURRENCIES[country].map(cur => [cur, t.selector[cur.toLowerCase() as keyof typeof t.selector] || cur] as [Currency, string])).map(([cur, label]) => (
                 <button
                   key={cur}
                   onClick={() => setCurrency(cur)}

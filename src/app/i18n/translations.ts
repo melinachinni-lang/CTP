@@ -1,5 +1,5 @@
 export type Language = 'es' | 'en';
-export type Currency = 'CLP' | 'USD';
+export type Currency = 'CLP' | 'USD' | 'ARS' | 'UYU' | 'EUR';
 
 export interface Translations {
   nav: {
@@ -102,7 +102,7 @@ export interface Translations {
   };
   selector: {
     language: string; currency: string; spanish: string; english: string;
-    clp: string; usd: string;
+    clp: string; usd: string; ars: string; uyu: string; eur: string;
   };
 }
 
@@ -270,7 +270,7 @@ const es: Translations = {
   },
   selector: {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
-    clp: 'CLP — Peso chileno', usd: 'USD — Dólar',
+    clp: 'CLP — Peso chileno', usd: 'USD — Dólar', ars: 'ARS — Peso argentino', uyu: 'UYU — Peso uruguayo', eur: 'EUR — Euro',
   },
 };
 
@@ -438,7 +438,7 @@ const en: Translations = {
   },
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',
-    clp: 'CLP — Chilean peso', usd: 'USD — US Dollar',
+    clp: 'CLP — Chilean peso', usd: 'USD — US Dollar', ars: 'ARS — Argentine peso', uyu: 'UYU — Uruguayan peso', eur: 'EUR — Euro',
   },
 };
 
