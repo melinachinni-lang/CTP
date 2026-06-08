@@ -1418,7 +1418,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                             onClick={(e) => { e.stopPropagation(); onToggleCompare?.(parcela.id); }}
                             className="absolute top-3 right-12 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors z-10"
                             style={{ backgroundColor: compareParcelaIds.includes(parcela.id) ? '#006B4E' : 'rgba(255,255,255,0.85)' }}
-                            title={compareParcelaIds.includes(parcela.id) ? 'Quitar del comparador' : 'Agregar al comparador'}
+                            title={compareParcelaIds.includes(parcela.id) ? t.common.removeFromCompare : t.common.addToCompare}
                           >
                             <Scale
                               className="w-4 h-4"
@@ -2283,17 +2283,17 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               {/* Título */}
               <div>
                 <h2 className="pr-8 mb-2" style={{ color: '#006B4E' }}>
-                  Calculadora de presupuesto
+                  {t.home.budgetTitle}
                 </h2>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Ingresa tu presupuesto y ajusta los parámetros para ver cuánto pagarías mensualmente
+                  {t.home.budgetDesc}
                 </p>
               </div>
 
               {/* Campo de presupuesto */}
               <div className="space-y-3">
                 <label className="block" style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)' }}>
-                  Presupuesto total para la parcela
+                  {t.home.budgetTotal}
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-base">
@@ -2318,14 +2318,14 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               {/* Parámetros del crédito */}
               <div className="space-y-6 border-t border-gray-200 pt-6">
                 <h4 style={{ color: '#0A0A0A' }}>
-                  Parámetros del crédito
+                  {t.home.budgetParams}
                 </h4>
 
                 {/* Pie inicial */}
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <label style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)' }}>
-                      Pie inicial
+                      {t.home.budgetDownPayment}
                     </label>
                     <span style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-sm)' }}>
                       {downPaymentPercent}%
@@ -2345,7 +2345,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   />
                   {budget && (
                     <p className="text-sm text-gray-600">
-                      Pie: {formatCurrency(parseFloat(budget) * downPaymentPercent / 100)} • Crédito: {formatCurrency(parseFloat(budget) * (1 - downPaymentPercent / 100))}
+                      {t.home.budgetDownPaymentDetail
+                        .replace('{pie}', formatCurrency(parseFloat(budget) * downPaymentPercent / 100))
+                        .replace('{credito}', formatCurrency(parseFloat(budget) * (1 - downPaymentPercent / 100)))}
                     </p>
                   )}
                 </div>
@@ -2354,10 +2356,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <label style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)' }}>
-                      Plazo del crédito
+                      {t.home.budgetTerm}
                     </label>
                     <span style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-sm)' }}>
-                      {loanTermYears} años
+                      {loanTermYears} {t.home.budgetTermYears}
                     </span>
                   </div>
                   <input
@@ -2378,7 +2380,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <label style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-sm)' }}>
-                      Tasa de interés anual
+                      {t.home.budgetInterestRate}
                     </label>
                     <span style={{ color: '#0A0A0A', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-sm)' }}>
                       {annualInterestRate}%
@@ -2404,13 +2406,13 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 <div className="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-6">
                   <div className="text-center space-y-2">
                     <p className="text-sm font-medium text-gray-600">
-                      Cuota mensual aproximada
+                      {t.home.budgetMonthlyPayment}
                     </p>
                     <p className="text-4xl font-bold" style={{ color: '#006B4E' }}>
                       {formatCurrency(calculateMonthlyPayment())}
                     </p>
                     <p className="text-xs text-gray-500">
-                      Por {loanTermYears} años ({loanTermYears * 12} cuotas)
+                      {loanTermYears} {t.home.budgetTermYears} ({loanTermYears * 12} {t.home.budgetPerYears})
                     </p>
                   </div>
                 </div>
@@ -2424,12 +2426,12 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 }}
                 className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-4 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
               >
-                Aplicar configuración
+                {t.home.budgetApply}
               </button>
 
               {/* Nota aclaratoria */}
               <p className="text-xs text-gray-500 text-center">
-                Este cálculo es referencial. Las condiciones reales dependen de tu institución financiera.
+                {t.home.budgetNote}
               </p>
             </div>
           </div>
@@ -3049,7 +3051,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 fontSize: 'var(--font-size-h3)',
                 fontWeight: 'var(--font-weight-semibold)'
               }}>
-                Contacto
+                {t.home.contactTitle}
               </h2>
 
               {/* Lista de información de contacto */}
@@ -3092,7 +3094,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       fontFamily: 'var(--font-body)',
                       fontWeight: 'var(--font-weight-medium)'
                     }}>
-                      Teléfono / WhatsApp
+                      {t.home.contactPhone}
                     </p>
                     <a
                       href="https://wa.me/56977714626"
@@ -3121,14 +3123,14 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       fontFamily: 'var(--font-body)',
                       fontWeight: 'var(--font-weight-medium)'
                     }}>
-                      Horario de atención
+                      {t.home.contactHours}
                     </p>
                     <p style={{
                       color: '#0A0A0A',
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-base)'
                     }}>
-                      Lunes a Viernes, 9:00 – 18:00 hrs
+                      {t.home.contactHoursValue}
                     </p>
                   </div>
                 </div>

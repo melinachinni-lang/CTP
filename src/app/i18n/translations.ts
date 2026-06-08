@@ -18,6 +18,7 @@ export interface Translations {
     portonAcceso: string; factibilidadAgua: string;
     reservation: string; purchase: string; paymentMethod: string;
     allDates: string; availableLabel: string; noData: string;
+    addToCompare: string; removeFromCompare: string;
   };
   status: {
     disponible: string; reservada: string; reservandose: string;
@@ -99,6 +100,12 @@ export interface Translations {
     blogTitle1: string; blogTitle2: string; blogTitle3: string;
     blogDesc1: string; blogDesc2: string; blogDesc3: string;
     blogDate1: string; blogDate2: string; blogDate3: string;
+    contactTitle: string; contactPhone: string; contactHours: string; contactHoursValue: string;
+    budgetTitle: string; budgetDesc: string; budgetTotal: string; budgetParams: string;
+    budgetDownPayment: string; budgetDownPaymentDetail: string;
+    budgetTerm: string; budgetTermYears: string;
+    budgetInterestRate: string; budgetMonthlyPayment: string;
+    budgetPerYears: string; budgetApply: string; budgetNote: string;
   };
   selector: {
     language: string; currency: string; spanish: string; english: string;
@@ -126,6 +133,7 @@ const es: Translations = {
     portonAcceso: 'Portón acceso', factibilidadAgua: 'Factibilidad agua',
     reservation: 'Reserva', purchase: 'Compra', paymentMethod: 'Método de pago',
     allDates: 'Todas las fechas', availableLabel: 'Disponible', noData: 'Sin datos disponibles',
+    addToCompare: 'Agregar al comparador', removeFromCompare: 'Quitar del comparador',
   },
   status: {
     disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
@@ -267,6 +275,20 @@ const es: Translations = {
     blogDate1: 'Hace 2 días • 5 min de lectura',
     blogDate2: 'Hace 1 semana • 8 min de lectura',
     blogDate3: 'Hace 2 semanas • 6 min de lectura',
+    contactTitle: 'Contacto', contactPhone: 'Teléfono / WhatsApp',
+    contactHours: 'Horario de atención', contactHoursValue: 'Lunes a Viernes, 9:00 – 18:00 hrs',
+    budgetTitle: 'Calculadora de presupuesto',
+    budgetDesc: 'Ingresa tu presupuesto y ajusta los parámetros para ver cuánto pagarías mensualmente',
+    budgetTotal: 'Presupuesto total para la parcela',
+    budgetParams: 'Parámetros del crédito',
+    budgetDownPayment: 'Pie inicial',
+    budgetDownPaymentDetail: 'Pie: {pie} • Crédito: {credito}',
+    budgetTerm: 'Plazo del crédito', budgetTermYears: 'años',
+    budgetInterestRate: 'Tasa de interés anual',
+    budgetMonthlyPayment: 'Cuota mensual aproximada',
+    budgetPerYears: 'cuotas',
+    budgetApply: 'Aplicar configuración',
+    budgetNote: 'Este cálculo es referencial. Las condiciones reales dependen de tu institución financiera.',
   },
   selector: {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
@@ -294,6 +316,7 @@ const en: Translations = {
     portonAcceso: 'Access gate', factibilidadAgua: 'Water study',
     reservation: 'Reservation', purchase: 'Purchase', paymentMethod: 'Payment method',
     allDates: 'All dates', availableLabel: 'Available', noData: 'No data available',
+    addToCompare: 'Add to compare', removeFromCompare: 'Remove from compare',
   },
   status: {
     disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',
@@ -435,6 +458,20 @@ const en: Translations = {
     blogDate1: '2 days ago • 5 min read',
     blogDate2: '1 week ago • 8 min read',
     blogDate3: '2 weeks ago • 6 min read',
+    contactTitle: 'Contact', contactPhone: 'Phone / WhatsApp',
+    contactHours: 'Business hours', contactHoursValue: 'Monday to Friday, 9:00 – 18:00',
+    budgetTitle: 'Budget calculator',
+    budgetDesc: 'Enter your budget and adjust the parameters to see your estimated monthly payment',
+    budgetTotal: 'Total budget for the parcel',
+    budgetParams: 'Loan parameters',
+    budgetDownPayment: 'Down payment',
+    budgetDownPaymentDetail: 'Down: {pie} • Loan: {credito}',
+    budgetTerm: 'Loan term', budgetTermYears: 'years',
+    budgetInterestRate: 'Annual interest rate',
+    budgetMonthlyPayment: 'Estimated monthly payment',
+    budgetPerYears: 'installments',
+    budgetApply: 'Apply settings',
+    budgetNote: 'This calculation is for reference only. Actual conditions depend on your financial institution.',
   },
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',
