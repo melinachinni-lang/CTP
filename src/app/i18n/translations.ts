@@ -100,6 +100,7 @@ export interface Translations {
     blogTitle1: string; blogTitle2: string; blogTitle3: string;
     blogDesc1: string; blogDesc2: string; blogDesc3: string;
     blogDate1: string; blogDate2: string; blogDate3: string;
+    socialTitle: string; socialSubtitle: string; socialFollow: string;
     contactTitle: string; contactPhone: string; contactHours: string; contactHoursValue: string;
     budgetTitle: string; budgetDesc: string; budgetTotal: string; budgetParams: string;
     budgetDownPayment: string; budgetDownPaymentDetail: string;
@@ -275,6 +276,7 @@ const es: Translations = {
     blogDate1: 'Hace 2 días • 5 min de lectura',
     blogDate2: 'Hace 1 semana • 8 min de lectura',
     blogDate3: 'Hace 2 semanas • 6 min de lectura',
+    socialTitle: 'Síguenos en redes', socialSubtitle: 'Tips, oportunidades y novedades sobre parcelas e inversión inmobiliaria', socialFollow: 'Síguenos en',
     contactTitle: 'Contacto', contactPhone: 'Teléfono / WhatsApp',
     contactHours: 'Horario de atención', contactHoursValue: 'Lunes a Viernes, 9:00 – 18:00 hrs',
     budgetTitle: 'Calculadora de presupuesto',
@@ -458,6 +460,7 @@ const en: Translations = {
     blogDate1: '2 days ago • 5 min read',
     blogDate2: '1 week ago • 8 min read',
     blogDate3: '2 weeks ago • 6 min read',
+    socialTitle: 'Follow us', socialSubtitle: 'Tips, opportunities and news about parcels and real estate investment', socialFollow: 'Follow us on',
     contactTitle: 'Contact', contactPhone: 'Phone / WhatsApp',
     contactHours: 'Business hours', contactHoursValue: 'Monday to Friday, 9:00 – 18:00',
     budgetTitle: 'Budget calculator',

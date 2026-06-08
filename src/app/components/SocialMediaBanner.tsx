@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Instagram, Youtube, Facebook } from 'lucide-react';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface SocialMediaBannerProps {
   className?: string;
@@ -24,6 +25,7 @@ function TikTokIcon({ className, style }: { className?: string; style?: React.CS
 }
 
 export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
+  const { t } = useI18n();
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
   const socialLinks = [
@@ -108,7 +110,7 @@ export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
                     marginBottom: '8px'
                   }}
                 >
-                  Síguenos en redes
+                  {t.home.socialTitle}
                 </h3>
                 <p
                   style={{
@@ -120,7 +122,7 @@ export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
                     maxWidth: '560px'
                   }}
                 >
-                  Tips, oportunidades y novedades sobre parcelas e inversión inmobiliaria
+                  {t.home.socialSubtitle}
                 </p>
               </div>
 
@@ -150,7 +152,7 @@ export function SocialMediaBanner({ className = '' }: SocialMediaBannerProps) {
                       }}
                       onMouseEnter={() => setHoveredIcon(social.name)}
                       onMouseLeave={() => setHoveredIcon(null)}
-                      aria-label={`Síguenos en ${social.name}`}
+                      aria-label={`${t.home.socialFollow} ${social.name}`}
                     >
                       <Icon 
                         className="w-5 h-5" 

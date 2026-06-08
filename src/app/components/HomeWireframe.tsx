@@ -1446,16 +1446,18 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         <div className="p-4 md:p-5 flex flex-col flex-grow">
                           {/* Título y ubicación */}
                           <div className="mb-3">
-                            <h3 
-                              className="line-clamp-1 mb-1" 
-                              style={{ 
-                                color: '#0A0A0A', 
-                                fontSize: 'var(--font-size-h5)', 
-                                fontWeight: 'var(--font-weight-semibold)', 
-                                lineHeight: 'var(--line-height-ui)' 
+                            <h3
+                              className="line-clamp-1 mb-1"
+                              style={{
+                                color: '#0A0A0A',
+                                fontSize: 'var(--font-size-h5)',
+                                fontWeight: 'var(--font-weight-semibold)',
+                                lineHeight: 'var(--line-height-ui)'
                               }}
                             >
-                              {parcela.nombre}
+                              {parcela.nombre.startsWith('Parcela ')
+                                ? `${t.common.parcela} ${parcela.nombre.slice(8)}`
+                                : parcela.nombre}
                             </h3>
                             <p 
                               className="line-clamp-1" 
