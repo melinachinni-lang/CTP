@@ -19,6 +19,8 @@ export interface Translations {
     reservation: string; purchase: string; paymentMethod: string;
     allDates: string; availableLabel: string; noData: string;
     addToCompare: string; removeFromCompare: string;
+    publishedBy: string;
+    vendorInmobiliaria: string; vendorBroker: string; vendorPersona: string;
   };
   status: {
     disponible: string; reservada: string; reservandose: string;
@@ -112,6 +114,18 @@ export interface Translations {
     language: string; currency: string; spanish: string; english: string;
     clp: string; usd: string; ars: string; uyu: string; eur: string;
   };
+  chat: {
+    assistantTitle: string; assistantSubtitle: string;
+    welcomeMsg1: string; welcomeMsg2: string;
+    whatDoYouNeed: string;
+    action1: string; action2: string; action3: string; action4: string;
+    cat1: string; cat2: string; cat3: string; cat4: string; cat5: string;
+    selectCategory: string; describeIssue: string;
+    issuePlaceholder: string; submitInquiry: string;
+    ticketCreated: string; ticketNumber: string; specialistContact: string;
+    responseSearch: string; responseContact: string; responsePayments: string;
+    openChat: string; closeChat: string;
+  };
 }
 
 const es: Translations = {
@@ -135,6 +149,8 @@ const es: Translations = {
     reservation: 'Reserva', purchase: 'Compra', paymentMethod: 'Método de pago',
     allDates: 'Todas las fechas', availableLabel: 'Disponible', noData: 'Sin datos disponibles',
     addToCompare: 'Agregar al comparador', removeFromCompare: 'Quitar del comparador',
+    publishedBy: 'Publicado por',
+    vendorInmobiliaria: 'Inmobiliaria', vendorBroker: 'Broker', vendorPersona: 'Persona natural',
   },
   status: {
     disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
@@ -296,6 +312,27 @@ const es: Translations = {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
     clp: 'CLP — Peso chileno', usd: 'USD — Dólar', ars: 'ARS — Peso argentino', uyu: 'UYU — Peso uruguayo', eur: 'EUR — Euro',
   },
+  chat: {
+    assistantTitle: 'Asistente de soporte', assistantSubtitle: 'Estamos para ayudarte',
+    welcomeMsg1: 'Hola 👋 Estoy para ayudarte con cualquier consulta o problema dentro de CompraTuParcela.',
+    welcomeMsg2: 'Puedes buscar parcelas, hacer una consulta o reportar un inconveniente.',
+    whatDoYouNeed: '¿Qué necesitas?',
+    action1: 'Buscar parcelas', action2: 'Contactar inmobiliaria',
+    action3: 'Reportar un problema', action4: 'Consultas sobre pagos / planes',
+    cat1: 'Publicaciones', cat2: 'Pagos / Planes', cat3: 'Cuenta / Acceso',
+    cat4: 'Equipo / Brokers', cat5: 'Otro',
+    selectCategory: 'Entiendo. Para ayudarte mejor, selecciona la categoría del problema:',
+    describeIssue: 'Perfecto. Ahora describe brevemente el problema:',
+    issuePlaceholder: 'Describe brevemente el problema que estás teniendo',
+    submitInquiry: 'Enviar consulta',
+    ticketCreated: 'Tu ticket de soporte fue creado correctamente',
+    ticketNumber: 'Número de ticket:',
+    specialistContact: 'Un especialista se pondrá en contacto a la brevedad para ayudarte.',
+    responseSearch: 'Puedes explorar todas las parcelas disponibles usando los filtros de búsqueda para encontrar la ideal para ti.',
+    responseContact: 'Puedes contactar directamente a las inmobiliarias desde la página de cada parcela o proyecto.',
+    responsePayments: 'Para consultas sobre planes y pagos, puedes revisar la sección "Plan y límites" en tu perfil o contactarnos por email.',
+    openChat: 'Abrir chat de ayuda', closeChat: 'Cerrar chat',
+  },
 };
 
 const en: Translations = {
@@ -319,6 +356,8 @@ const en: Translations = {
     reservation: 'Reservation', purchase: 'Purchase', paymentMethod: 'Payment method',
     allDates: 'All dates', availableLabel: 'Available', noData: 'No data available',
     addToCompare: 'Add to compare', removeFromCompare: 'Remove from compare',
+    publishedBy: 'Listed by',
+    vendorInmobiliaria: 'Agency', vendorBroker: 'Broker', vendorPersona: 'Private seller',
   },
   status: {
     disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',
@@ -479,6 +518,27 @@ const en: Translations = {
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',
     clp: 'CLP — Chilean peso', usd: 'USD — US Dollar', ars: 'ARS — Argentine peso', uyu: 'UYU — Uruguayan peso', eur: 'EUR — Euro',
+  },
+  chat: {
+    assistantTitle: 'Support assistant', assistantSubtitle: 'We\'re here to help',
+    welcomeMsg1: 'Hello 👋 I\'m here to help you with any question or issue within CompraTuParcela.',
+    welcomeMsg2: 'You can search for parcels, ask a question or report an issue.',
+    whatDoYouNeed: 'What do you need?',
+    action1: 'Search parcels', action2: 'Contact agency',
+    action3: 'Report a problem', action4: 'Payment / plan inquiries',
+    cat1: 'Listings', cat2: 'Payments / Plans', cat3: 'Account / Access',
+    cat4: 'Team / Brokers', cat5: 'Other',
+    selectCategory: 'I understand. To help you better, select the problem category:',
+    describeIssue: 'Got it. Now briefly describe the problem:',
+    issuePlaceholder: 'Briefly describe the issue you\'re experiencing',
+    submitInquiry: 'Submit inquiry',
+    ticketCreated: 'Your support ticket was created successfully',
+    ticketNumber: 'Ticket number:',
+    specialistContact: 'A specialist will contact you shortly to help you.',
+    responseSearch: 'You can explore all available parcels using the search filters to find your ideal one.',
+    responseContact: 'You can contact real estate agencies directly from each parcel or project page.',
+    responsePayments: 'For questions about plans and payments, check the "Plan & limits" section in your profile or contact us by email.',
+    openChat: 'Open help chat', closeChat: 'Close chat',
   },
 };
 
