@@ -469,7 +469,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 7,
     nombre: 'Terreno Río Tranquilo',
-    nombreEn: 'Tranquil River Land',
+    nombreEn: 'Calm River Land',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Sector Río Tranquilo, Cochrane, Región de Aysén',
     precio: '$42.000.000',
