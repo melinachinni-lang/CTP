@@ -126,6 +126,17 @@ export interface Translations {
     responseSearch: string; responseContact: string; responsePayments: string;
     openChat: string; closeChat: string;
   };
+  toast: {
+    loginToSave: string; login: string;
+    removedFromSaved: string; undo: string;
+    limitReached: string;
+    parcelSaved: string; viewSaved: string;
+  };
+  comparator: {
+    title: string; empty: string; hint: string; explore: string;
+    selected: string; selectedPlural: string;
+    clear: string; view: string;
+  };
 }
 
 const es: Translations = {
@@ -333,6 +344,20 @@ const es: Translations = {
     responsePayments: 'Para consultas sobre planes y pagos, puedes revisar la sección "Plan y límites" en tu perfil o contactarnos por email.',
     openChat: 'Abrir chat de ayuda', closeChat: 'Cerrar chat',
   },
+  toast: {
+    loginToSave: 'Inicia sesión para guardar parcelas favoritas', login: 'Ingresar',
+    removedFromSaved: 'Eliminada de guardados', undo: 'Deshacer',
+    limitReached: 'Alcanzaste el límite de 50 guardados. Elimina alguno para agregar más',
+    parcelSaved: 'Parcela guardada', viewSaved: 'Ver guardados',
+  },
+  comparator: {
+    title: 'Compara parcelas',
+    empty: 'Aún no tienes parcelas seleccionadas para comparar.',
+    hint: 'Haz clic en el ícono ⚖ en cualquier card de parcela para agregarla. Puedes comparar hasta 3 parcelas a la vez.',
+    explore: 'Explorar parcelas',
+    selected: 'parcela seleccionada', selectedPlural: 'parcelas seleccionadas',
+    clear: 'Limpiar', view: 'Ver comparador',
+  },
 };
 
 const en: Translations = {
@@ -539,6 +564,20 @@ const en: Translations = {
     responseContact: 'You can contact real estate agencies directly from each parcel or project page.',
     responsePayments: 'For questions about plans and payments, check the "Plan & limits" section in your profile or contact us by email.',
     openChat: 'Open help chat', closeChat: 'Close chat',
+  },
+  toast: {
+    loginToSave: 'Sign in to save favorite parcels', login: 'Sign in',
+    removedFromSaved: 'Removed from saved', undo: 'Undo',
+    limitReached: 'You\'ve reached the 50 saved limit. Remove one to add more',
+    parcelSaved: 'Parcel saved', viewSaved: 'View saved',
+  },
+  comparator: {
+    title: 'Compare parcels',
+    empty: 'You haven\'t selected any parcels to compare yet.',
+    hint: 'Click the ⚖ icon on any parcel card to add it. You can compare up to 3 parcels at a time.',
+    explore: 'Explore parcels',
+    selected: 'parcel selected', selectedPlural: 'parcels selected',
+    clear: 'Clear', view: 'Compare now',
   },
 };
 

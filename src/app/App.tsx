@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Scale, X } from 'lucide-react';
 import '@/styles/index.css';
-import { I18nProvider } from '@/app/i18n/i18nContext';
+import { I18nProvider, useI18n } from '@/app/i18n/i18nContext';
 import { EntryScreen } from '@/app/components/EntryScreen';
 import { CompletarPerfilScreen } from '@/app/components/CompletarPerfilScreen';
 import { RealEstateDashboardScreen } from '@/app/components/RealEstateDashboardScreen';
@@ -41,6 +41,7 @@ function ComparadorPublico({ onNavigate, compareParcelaIds, onClear, isLoggedIn,
   currentUser?: { name: string; email: string } | null;
   onLogout?: () => void;
 }) {
+  const { t } = useI18n();
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--hero-background)' }}>
       <Navbar onNavigate={onNavigate} estado={isLoggedIn ? 'logueado' : 'visitante'} onLogout={onLogout} userName={currentUser?.name} />
@@ -52,13 +53,13 @@ function ComparadorPublico({ onNavigate, compareParcelaIds, onClear, isLoggedIn,
                 <Scale className="w-8 h-8" style={{ color: '#006B4E' }} />
               </div>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>
-                Compara parcelas
+                {t.comparator.title}
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', lineHeight: '1.6', marginBottom: '8px' }}>
-                Aún no tienes parcelas seleccionadas para comparar.
+                {t.comparator.empty}
               </p>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', lineHeight: '1.6', marginBottom: '32px' }}>
-                Haz clic en el ícono <strong style={{ color: '#006B4E' }}>⚖</strong> en cualquier card de parcela para agregarla. Puedes comparar hasta <strong>3 parcelas</strong> a la vez.
+                {t.comparator.hint}
               </p>
               <button
                 onClick={() => onNavigate('parcelas')}
@@ -67,7 +68,7 @@ function ComparadorPublico({ onNavigate, compareParcelaIds, onClear, isLoggedIn,
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
-                Explorar parcelas
+                {t.comparator.explore}
               </button>
             </div>
           </div>
@@ -116,7 +117,8 @@ type Screen =
   | 'acceso-no-autorizado'
   | 'completar-perfil';
 
-export default function App() {
+function AppContent() {
+  const { t } = useI18n();
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedParcelaId, setSelectedParcelaId] = useState<number | null>(null);
   const [selectedProyectoId, setSelectedProyectoId] = useState<number | null>(null);
@@ -150,8 +152,8 @@ export default function App() {
     if (!isLoggedIn) {
       setPendingSaveId(parcelaId);
       showToast({
-        message: 'Inicia sesión para guardar parcelas favoritas',
-        actionLabel: 'Ingresar',
+        message: t.toast.loginToSave,
+        actionLabel: t.toast.login,
         onAction: () => setCurrentScreen('entry'),
       });
       return;
@@ -160,8 +162,8 @@ export default function App() {
     if (isSaved) {
       setSavedParcelaIds(prev => prev.filter(id => id !== parcelaId));
       showToast({
-        message: 'Eliminada de guardados',
-        actionLabel: 'Deshacer',
+        message: t.toast.removedFromSaved,
+        actionLabel: t.toast.undo,
         onAction: () => {
           setSavedParcelaIds(prev => [parcelaId, ...prev]);
           setToast(null);
@@ -169,13 +171,13 @@ export default function App() {
       });
     } else {
       if (savedParcelaIds.length >= 50) {
-        showToast({ message: 'Alcanzaste el límite de 50 guardados. Elimina alguno para agregar más' });
+        showToast({ message: t.toast.limitReached });
         return;
       }
       setSavedParcelaIds(prev => [parcelaId, ...prev]);
       showToast({
-        message: 'Parcela guardada',
-        actionLabel: 'Ver guardados',
+        message: t.toast.parcelSaved,
+        actionLabel: t.toast.viewSaved,
         onAction: () => {
           setCurrentScreen('person-dashboard');
           setToast(null);
@@ -336,8 +338,8 @@ export default function App() {
     if (pendingSaveId !== null) {
       setSavedParcelaIds(prev => prev.includes(pendingSaveId) ? prev : [pendingSaveId, ...prev]);
       showToast({
-        message: 'Parcela guardada',
-        actionLabel: 'Ver guardados',
+        message: t.toast.parcelSaved,
+        actionLabel: t.toast.viewSaved,
         onAction: () => { setCurrentScreen('person-dashboard'); setToast(null); },
       });
       setPendingSaveId(null);
@@ -364,7 +366,6 @@ export default function App() {
   };
 
   return (
-    <I18nProvider>
     <div className="size-full">
       {/* Navigation Bar */}
       <div className="fixed top-0 left-0 right-0 bg-gray-100 border-b border-gray-300 z-[9999]">
@@ -463,7 +464,7 @@ export default function App() {
             <div className="flex items-center gap-2.5">
               <Scale className="w-5 h-5 flex-shrink-0" style={{ color: '#86EFAC' }} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#FFFFFF', fontWeight: 500 }}>
-                {compareParcelaIds.length} {compareParcelaIds.length === 1 ? 'parcela seleccionada' : 'parcelas seleccionadas'}
+                {compareParcelaIds.length} {compareParcelaIds.length === 1 ? t.comparator.selected : t.comparator.selectedPlural}
               </span>
             </div>
             <div className="flex items-center gap-3">
@@ -475,7 +476,7 @@ export default function App() {
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)'}
               >
                 <X className="w-3.5 h-3.5" />
-                Limpiar
+                {t.comparator.clear}
               </button>
               <button
                 onClick={() => handleNavigate('comparador')}
@@ -484,7 +485,7 @@ export default function App() {
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
-                Ver comparador →
+                {t.comparator.view} →
               </button>
             </div>
           </div>
@@ -519,6 +520,13 @@ export default function App() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
     </I18nProvider>
   );
 }
