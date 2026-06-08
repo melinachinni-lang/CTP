@@ -3,6 +3,7 @@ import { Expand, Home, Compass, Mountain } from 'lucide-react';
 export interface Proyecto {
   id: number;
   nombre: string;
+  nombreEn?: string;
   ubicacion: string;
   region: string;
   tipo: 'Residencial' | 'Turístico' | 'Mixto' | 'Agrícola';
@@ -95,6 +96,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 1,
     nombre: 'Parcelas Valle Verde',
+    nombreEn: 'Valle Verde Parcels',
     ubicacion: 'Pucón',
     region: 'La Araucanía',
     tipo: 'Residencial',
@@ -152,6 +154,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 2,
     nombre: 'Condominio Los Robles',
+    nombreEn: 'Los Robles Community',
     ubicacion: 'Villarrica',
     region: 'La Araucanía',
     tipo: 'Turístico',
@@ -201,6 +204,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 3,
     nombre: 'Parcelas Río Claro',
+    nombreEn: 'Río Claro Parcels',
     ubicacion: 'Los Ángeles',
     region: 'Biobío',
     tipo: 'Agrícola',
@@ -250,6 +254,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 4,
     nombre: 'Terrazas del Lago',
+    nombreEn: 'Lakeside Terraces',
     ubicacion: 'Puerto Varas',
     region: 'Los Lagos',
     tipo: 'Mixto',
@@ -306,6 +311,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 5,
     nombre: 'Valle Andino',
+    nombreEn: 'Andean Valley',
     ubicacion: 'San José de Maipo',
     region: 'Metropolitana',
     tipo: 'Residencial',
@@ -340,6 +346,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 6,
     nombre: 'Parcelas Bosque Nativo',
+    nombreEn: 'Native Forest Parcels',
     ubicacion: 'Valdivia',
     region: 'Los Ríos',
     tipo: 'Turístico',

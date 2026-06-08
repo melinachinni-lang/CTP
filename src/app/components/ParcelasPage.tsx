@@ -33,7 +33,7 @@ interface ParcelasPageProps {
 }
 
 export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, savedParcelaIds = [], onToggleSaved, isLoggedIn, compareParcelaIds = [], onToggleCompare }: ParcelasPageProps) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [animatingSaveId, setAnimatingSaveId] = useState<number | null>(null);
   const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
   const [animatingProyectoSaveId, setAnimatingProyectoSaveId] = useState<number | null>(null);
@@ -390,12 +390,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   // Obtener datos dinámicos de parcelas y convertir al formato necesario
   const parcelasData = getAllParcelas().map((parcela, index) => ({
     ...parcela,
+    nombre: language === 'en' && parcela.nombreEn ? parcela.nombreEn : parcela.nombre,
     imagen: parcela.imagenes[0],
     caracteristicas: parcela.destacados,
     inmobiliaria: parcela.inmobiliaria.nombre,
     tipoVendedor: parcela.inmobiliaria.tipoVendedor,
     brokerImagen: parcela.inmobiliaria.logo,
-    fechaPublicacion: new Date(2024, 0, 15 + (index * 3)) // Generar fechas dinámicas
+    fechaPublicacion: new Date(2024, 0, 15 + (index * 3))
   }));
 
   // Función para ordenar parcelas
@@ -2186,7 +2187,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 <div className="mb-2">
                                   <span className="px-2.5 py-0.5 rounded-full" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, backgroundColor: item.estado === 'En venta' ? '#DCFCE7' : item.estado === 'Próximamente' ? '#FEF3C7' : '#E0E7FF', color: item.estado === 'En venta' ? '#166534' : item.estado === 'Próximamente' ? '#854D0E' : '#3730A3', border: `1px solid ${item.estado === 'En venta' ? '#BBF7D0' : item.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}` }}>{item.estado === 'En venta' ? t.status.enVenta : item.estado === 'Próximamente' ? t.status.proximamente : t.status.enConstruccion}</span>
                                 </div>
-                                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '4px' }}>{item.nombre}</h3>
+                                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '4px' }}>{language === 'en' && item.nombreEn ? item.nombreEn : item.nombre}</h3>
                                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '12px' }}>{item.ubicacion}, {item.region}</p>
                                 <div className="space-y-1 mb-3">
                                   <div className="flex justify-between"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{t.explore.disponibles}</span><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0A0A0A' }}>{item.parcelasDisponibles} de {item.totalParcelas}</span></div>
@@ -2360,7 +2361,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 marginBottom: '0.25rem',
                                 lineHeight: 'var(--line-height-heading)'
                               }}>
-                                {proyecto.nombre}
+                                {language === 'en' && proyecto.nombreEn ? proyecto.nombreEn : proyecto.nombre}
                               </h3>
                               <p style={{
                                 fontFamily: 'var(--font-body)',

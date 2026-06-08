@@ -4,6 +4,7 @@ import { Expand, Pickaxe, DoorOpen, FileCheck, FileText, Zap, Droplet, Fence, Do
 export interface Parcela {
   id: number;
   nombre: string;
+  nombreEn?: string;
   ubicacion: string;
   ubicacionCompleta: string;
   precio: string;
@@ -36,6 +37,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 1,
     nombre: 'Parcela Vista al Lago',
+    nombreEn: 'Lake View Parcel',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Camino al Lago, Km 12, Chile Chico, Región de Aysén',
     precio: '$45.000.000',
@@ -103,6 +105,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 2,
     nombre: 'Terreno Cordillera',
+    nombreEn: 'Cordillera Land',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Ruta X-83, Km 8, Cochrane, Región de Aysén',
     precio: '$68.500.000',
@@ -170,6 +173,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 3,
     nombre: 'Parcela Agrícola Valle',
+    nombreEn: 'Valley Agricultural Parcel',
     ubicacion: 'Coyhaique, Aysén',
     ubicacionCompleta: 'Camino a Villa Ortega, Km 5, Coyhaique, Región de Aysén',
     precio: '$95.000.000',
@@ -238,6 +242,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 4,
     nombre: 'Terreno Montaña Vista',
+    nombreEn: 'Mountain View Land',
     ubicacion: 'Puerto Río Tranquilo, Aysén',
     ubicacionCompleta: 'Ruta 7 Sur, Km 223, Puerto Río Tranquilo, Región de Aysén',
     precio: '$52.000.000',
@@ -300,6 +305,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 13,
     nombre: 'Terreno Agrícola El Mirador',
+    nombreEn: 'El Mirador Agricultural Land',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Sector El Mirador, Chile Chico, Región de Aysén',
     precio: '$38.000.000',
@@ -351,6 +357,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 5,
     nombre: 'Parcela Residencial Los Arrayanes',
+    nombreEn: 'Los Arrayanes Residential Parcel',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Condominio Los Arrayanes, Chile Chico, Región de Aysén',
     precio: '$52.000.000',
@@ -406,6 +413,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 6,
     nombre: 'Campo Turístico Valle Verde',
+    nombreEn: 'Valle Verde Tourist Estate',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Valle Verde, km 18, Chile Chico, Región de Aysén',
     precio: '$95.000.000',
@@ -461,6 +469,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 7,
     nombre: 'Terreno Río Tranquilo',
+    nombreEn: 'Río Tranquilo Land',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Sector Río Tranquilo, Cochrane, Región de Aysén',
     precio: '$42.000.000',
@@ -514,6 +523,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 8,
     nombre: 'Parcela Montaña Azul',
+    nombreEn: 'Blue Mountain Parcel',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Camino Montaña Azul, Cochrane, Región de Aysén',
     precio: '$55.000.000',
@@ -567,6 +577,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 9,
     nombre: 'Campo Los Boldos',
+    nombreEn: 'Los Boldos Estate',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Sector Los Boldos, Cochrane, Región de Aysén',
     precio: '$68.000.000',
@@ -621,6 +632,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 10,
     nombre: 'Terreno Turístico Lago General Carrera',
+    nombreEn: 'Lake General Carrera Tourist Land',
     ubicacion: 'Puerto Río Tranquilo, Aysén',
     ubicacionCompleta: 'Ruta 7 Sur, km 223, Puerto Río Tranquilo, Región de Aysén',
     precio: '$78.000.000',
@@ -674,6 +686,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 11,
     nombre: 'Parcela Premium Vista Catedrales',
+    nombreEn: 'Premium Cathedrals View Parcel',
     ubicacion: 'Puerto Río Tranquilo, Aysén',
     ubicacionCompleta: 'Sector Capillas de Mármol, Puerto Río Tranquilo, Región de Aysén',
     precio: '$125.000.000',
@@ -727,6 +740,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 12,
     nombre: 'Campo Vista Cerro Castillo',
+    nombreEn: 'Cerro Castillo View Estate',
     ubicacion: 'Puerto Río Tranquilo, Aysén',
     ubicacionCompleta: 'Camino a Cerro Castillo, Puerto Río Tranquilo, Región de Aysén',
     precio: '$89.000.000',
