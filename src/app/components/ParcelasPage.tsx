@@ -361,10 +361,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       labels.push({ type: 'tipo', label: tipo, value: tipo });
     });
     if (activeFilters.destacadas) {
-      labels.push({ type: 'destacadas', label: 'Destacadas' });
+      labels.push({ type: 'destacadas', label: t.explore.filterFeatured });
     }
     if (activeFilters.nuevas) {
-      labels.push({ type: 'nuevas', label: 'Nuevas' });
+      labels.push({ type: 'nuevas', label: t.explore.filterNew });
     }
     
     return labels;
@@ -775,7 +775,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
               className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label="Abrir menú"
+              aria-label={t.common.openMenu}
             >
               <Menu className="w-6 h-6 text-black" />
             </button>
@@ -1197,10 +1197,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             lineHeight: '1.3'
                           }}
                         >
-                          Calcula tu presupuesto
+                          {t.explore.calculatorTitle}
                         </h3>
-                        <p 
-                          style={{ 
+                        <p
+                          style={{
                             fontFamily: 'Inter, sans-serif',
                             fontSize: '13px',
                             fontWeight: 400,
@@ -1208,7 +1208,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             color: '#0A0A0A'
                           }}
                         >
-                          Conoce qué parcela puedes comprar según tu capacidad
+                          {t.explore.calculatorSubtitle}
                         </p>
                       </div>
                     </div>
@@ -1226,7 +1226,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             fontWeight: 500
                           }}
                         >
-                          Presupuesto disponible
+                          {t.explore.budgetLabel}
                         </label>
                         <input
                           type="text"
@@ -1254,18 +1254,18 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             fontWeight: 500
                           }}
                         >
-                          Cuota mensual aproximada
+                          {t.explore.monthlyPayment}
                         </label>
-                        <div 
-                          className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200" 
-                          style={{ 
-                            color: budget ? '#0A0A0A' : '#a1a1a1', 
+                        <div
+                          className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200"
+                          style={{
+                            color: budget ? '#0A0A0A' : '#a1a1a1',
                             fontFamily: 'Inter, sans-serif',
                             fontSize: '14px',
                             fontWeight: 500
                           }}
                         >
-                          {budget ? formatCurrency(calculateMonthlyPayment()) : 'Ingresá tu presupuesto'}
+                          {budget ? formatCurrency(calculateMonthlyPayment()) : t.explore.enterBudget}
                         </div>
                       </div>
 
@@ -1280,30 +1280,27 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             fontWeight: 500
                           }}
                         >
-                          Zona de interés
+                          {t.explore.zoneLabel}
                         </label>
                         <button
                           onClick={() => setOpenDropdown(openDropdown === 'calcZone' ? null : 'calcZone')}
                           className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                          style={{ 
-                            color: calcZone ? '#0A0A0A' : '#a1a1a1', 
-                            fontFamily: 'Inter, sans-serif', 
+                          style={{
+                            color: calcZone ? '#0A0A0A' : '#a1a1a1',
+                            fontFamily: 'Inter, sans-serif',
                             fontSize: '14px',
                             fontWeight: 400
                           }}
                         >
-                          <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcZone || 'Seleccionar zona'}</span>
+                          <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcZone || t.explore.selectZone}</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
                         </button>
                         {openDropdown === 'calcZone' && (
                           <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
-                            {['Valle del Aconcagua', 'Valle de Casablanca', 'Cordillera de Los Andes', 'Litoral Central', 'Valle Central'].map((zona) => (
+                            {[t.explore.zoneAconcagua, t.explore.zoneCasablanca, t.explore.zoneCordillera, t.explore.zoneLitoral, t.explore.zoneValleCentral].map((zona) => (
                               <button
                                 key={zona}
-                                onClick={() => {
-                                  setCalcZone(zona);
-                                  setOpenDropdown(null);
-                                }}
+                                onClick={() => { setCalcZone(zona); setOpenDropdown(null); }}
                                 className="w-full text-left px-4 py-2.5 hover:bg-gray-100 transition-colors"
                                 style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
                               >
@@ -1325,30 +1322,27 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             fontWeight: 500
                           }}
                         >
-                          Tipo de parcela
+                          {t.filters.parcelType}
                         </label>
                         <button
                           onClick={() => setOpenDropdown(openDropdown === 'calcParcelType' ? null : 'calcParcelType')}
                           className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                          style={{ 
-                            color: calcParcelType ? '#0A0A0A' : '#a1a1a1', 
-                            fontFamily: 'Inter, sans-serif', 
+                          style={{
+                            color: calcParcelType ? '#0A0A0A' : '#a1a1a1',
+                            fontFamily: 'Inter, sans-serif',
                             fontSize: '14px',
                             fontWeight: 400
                           }}
                         >
-                          <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcParcelType || 'Seleccionar tipo'}</span>
+                          <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcParcelType || t.explore.selectType}</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
                         </button>
                         {openDropdown === 'calcParcelType' && (
                           <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
-                            {['Agrícola', 'Agrado/Residencial', 'Forestal', 'Mixta'].map((tipo) => (
+                            {[t.filters.typeAgricultural, t.explore.typeAgrado, t.filters.typeForestry, t.filters.typeMixed].map((tipo) => (
                               <button
                                 key={tipo}
-                                onClick={() => {
-                                  setCalcParcelType(tipo);
-                                  setOpenDropdown(null);
-                                }}
+                                onClick={() => { setCalcParcelType(tipo); setOpenDropdown(null); }}
                                 className="w-full text-left px-4 py-2.5 hover:bg-gray-100 transition-colors"
                                 style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
                               >
@@ -1369,16 +1363,16 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           fontWeight: 500
                         }}
                       >
-                        Calcular
+                        {t.explore.calculate}
                       </button>
                     </div>
                   </div>
 
                   {/* Card de Filtros */}
                   <div className="bg-white rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-200/50 p-6">
-                    <h2 
-                      className="mb-6" 
-                      style={{ 
+                    <h2
+                      className="mb-6"
+                      style={{
                         color: '#006B4E',
                         fontFamily: 'Montserrat, sans-serif',
                         fontSize: '18px',
@@ -1386,7 +1380,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         lineHeight: '1.3'
                       }}
                     >
-                      Filtros
+                      {t.explore.filtersTitle}
                     </h2>
 
                     {/* Ordenar por */}
@@ -1436,20 +1430,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           fontWeight: 500
                         }}
                       >
-                        Precio
+                        {t.explore.price}
                       </label>
                       <div className="space-y-2">
                         <div className="relative">
-                          <select 
-                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                            style={{ 
-                              color: '#0A0A0A',
-                              fontFamily: 'Inter, sans-serif',
-                              fontSize: '13px',
-                              fontWeight: 400
-                            }}
-                          >
-                            <option>Mínimo</option>
+                          <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                            <option>{t.explore.minimum}</option>
                             <option>$10.000.000</option>
                             <option>$30.000.000</option>
                             <option>$50.000.000</option>
@@ -1457,16 +1443,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                         </div>
                         <div className="relative">
-                          <select 
-                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                            style={{ 
-                              color: '#0A0A0A',
-                              fontFamily: 'Inter, sans-serif',
-                              fontSize: '13px',
-                              fontWeight: 400
-                            }}
-                          >
-                            <option>Máximo</option>
+                          <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                            <option>{t.explore.maximum}</option>
                             <option>$100.000.000</option>
                             <option>$200.000.000</option>
                             <option>$500.000.000</option>
@@ -1478,29 +1456,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                     {/* Superficie */}
                     <div className="mb-8">
-                      <label 
-                        className="block mb-3" 
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          fontWeight: 500
-                        }}
-                      >
-                        Superficie
+                      <label className="block mb-3" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
+                        {t.filters.area}
                       </label>
                       <div className="space-y-2">
                         <div className="relative">
-                          <select 
-                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                            style={{ 
-                              color: '#0A0A0A',
-                              fontFamily: 'Inter, sans-serif',
-                              fontSize: '13px',
-                              fontWeight: 400
-                            }}
-                          >
-                            <option>Mínimo</option>
+                          <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                            <option>{t.explore.minimum}</option>
                             <option>1.000 m²</option>
                             <option>5.000 m²</option>
                             <option>10.000 m²</option>
@@ -1508,16 +1470,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                         </div>
                         <div className="relative">
-                          <select 
-                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                            style={{ 
-                              color: '#0A0A0A',
-                              fontFamily: 'Inter, sans-serif',
-                              fontSize: '13px',
-                              fontWeight: 400
-                            }}
-                          >
-                            <option>Máximo</option>
+                          <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                            <option>{t.explore.maximum}</option>
                             <option>50.000 m²</option>
                             <option>100.000 m²</option>
                             <option>500.000 m²</option>
@@ -1529,33 +1483,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                     {/* Tipo de parcela */}
                     <div className="mb-8">
-                      <label 
-                        className="block mb-3" 
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          fontWeight: 500
-                        }}
-                      >
-                        Tipo de parcela
+                      <label className="block mb-3" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
+                        {t.filters.parcelType}
                       </label>
                       <div className="space-y-3">
-                        {['Residencial', 'Agrícola', 'Forestal', 'Mixta'].map((tipo) => (
+                        {[t.filters.typeResidential, t.filters.typeAgricultural, t.filters.typeForestry, t.filters.typeMixed].map((tipo) => (
                           <label key={tipo} className="flex items-center cursor-pointer group">
-                            <input 
-                              type="checkbox" 
-                              className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                            />
-                            <span 
-                              className="ml-3 group-hover:text-black transition-colors"
-                              style={{ 
-                                color: '#0A0A0A',
-                                fontFamily: 'Inter, sans-serif',
-                                fontSize: '14px',
-                                fontWeight: 400
-                              }}
-                            >
+                            <input type="checkbox" className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer" />
+                            <span className="ml-3 group-hover:text-black transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}>
                               {tipo}
                             </span>
                           </label>
@@ -1565,33 +1500,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                     {/* Filtros rápidos */}
                     <div>
-                      <label 
-                        className="block mb-3" 
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          fontWeight: 500
-                        }}
-                      >
-                        Filtros rápidos
+                      <label className="block mb-3" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
+                        {t.explore.quickFilters}
                       </label>
                       <div className="space-y-3">
-                        {['Destacadas', 'Nuevas', 'Terrenos', 'Certificadas'].map((filtro) => (
+                        {[t.explore.filterFeatured, t.explore.filterNew, t.explore.filterLand, t.explore.filterCertified].map((filtro) => (
                           <label key={filtro} className="flex items-center cursor-pointer group">
-                            <input 
-                              type="checkbox" 
-                              className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                            />
-                            <span 
-                              className="ml-3 group-hover:text-black transition-colors"
-                              style={{ 
-                                color: '#0A0A0A',
-                                fontFamily: 'Inter, sans-serif',
-                                fontSize: '14px',
-                                fontWeight: 400
-                              }}
-                            >
+                            <input type="checkbox" className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer" />
+                            <span className="ml-3 group-hover:text-black transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}>
                               {filtro}
                             </span>
                           </label>
@@ -1632,7 +1548,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                   >
                     <SlidersHorizontal className="w-4 h-4" />
-                    Filtros
+                    {t.explore.filtersTitle}
                   </button>
                   <button
                     onClick={() => setIsMobileCalculatorOpen(true)}
@@ -1645,7 +1561,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                   >
                     <Calculator className="w-4 h-4" />
-                    Calculadora
+                    {t.explore.calculator}
                   </button>
                 </div>
 
@@ -1699,7 +1615,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       }}
                     >
                       <SlidersHorizontal className="w-4 h-4" />
-                      Más filtros
+                      {t.explore.moreFilters}
                     </button>
                   </div>
                 </div>
@@ -2129,8 +2045,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                   boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
                                 }}
                               >
-                                {parcelaEstados[parcela.id] === 'reservandose' && 'Reservándose'}
-                                {(parcelaEstados[parcela.id] === 'pago-en-validacion' || parcelaEstados[parcela.id] === 'reservada') && 'Reservada'}
+                                {parcelaEstados[parcela.id] === 'reservandose' && t.status.reservandose}
+                                {(parcelaEstados[parcela.id] === 'pago-en-validacion' || parcelaEstados[parcela.id] === 'reservada') && t.status.reservada}
                               </div>
                             )}
                             {/* Botón comparar */}
@@ -2138,7 +2054,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               onClick={(e) => { e.stopPropagation(); onToggleCompare?.(parcela.id); }}
                               className="absolute top-2 right-10 w-8 h-8 rounded-full flex items-center justify-center transition-all"
                               style={{ backgroundColor: compareParcelaIds.includes(parcela.id) ? '#006B4E' : 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
-                              title={compareParcelaIds.includes(parcela.id) ? 'Quitar del comparador' : 'Agregar al comparador'}
+                              title={compareParcelaIds.includes(parcela.id) ? t.common.removeFromCompare : t.common.addToCompare}
                             >
                               <Scale className="w-4 h-4" style={{ color: compareParcelaIds.includes(parcela.id) ? '#FFFFFF' : '#6B7280' }} />
                             </button>
@@ -2154,7 +2070,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               }}
                               className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all"
                               style={{ backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
-                              title={savedParcelaIds.includes(parcela.id) ? 'Eliminar de guardados' : 'Guardar parcela'}
+                              title={savedParcelaIds.includes(parcela.id) ? t.common.removeFromSaved : t.common.saveParcel}
                             >
                               <svg
                                 viewBox="0 0 24 24"
@@ -2337,7 +2253,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                     className="absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
                     style={{ left: '-20px', border: '1px solid #E5E5E5' }}
-                    aria-label="Anterior"
+                    aria-label={t.common.previous}
                   >
                     <ChevronLeft className="w-5 h-5" style={{ color: '#0A0A0A' }} />
                   </button>
@@ -2392,7 +2308,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 onClick={(e) => { e.stopPropagation(); handleToggleProyecto(proyecto.id); }}
                                 className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10"
                                 style={{ backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
-                                title={savedProyectoIds.includes(proyecto.id) ? 'Eliminar de guardados' : 'Guardar proyecto'}
+                                title={savedProyectoIds.includes(proyecto.id) ? t.common.removeFromSaved : t.common.saveProject}
                               >
                                 <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: savedProyectoIds.includes(proyecto.id) ? '#006B4E' : 'none', stroke: savedProyectoIds.includes(proyecto.id) ? '#006B4E' : '#6B7280', strokeWidth: 2, transform: animatingProyectoSaveId === proyecto.id ? 'scale(1.5)' : 'scale(1)', transition: 'transform 150ms ease, fill 150ms ease' }}>
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -2512,7 +2428,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                     className="absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
                     style={{ right: '-20px', border: '1px solid #E5E5E5' }}
-                    aria-label="Siguiente"
+                    aria-label={t.common.next}
                   >
                     <ChevronRight className="w-5 h-5" style={{ color: '#0A0A0A' }} />
                   </button>
@@ -2596,7 +2512,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     color: '#0A0A0A'
                   }}
                 >
-                  Filtros
+                  {t.explore.filtersTitle}
                 </h3>
                 <button
                   onClick={() => setIsMobileFiltersOpen(false)}
@@ -2620,7 +2536,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     color: '#0A0A0A'
                   }}
                 >
-                  Filtros principales
+                  {t.explore.mainFilters}
                 </h4>
 
                 {/* Ordenar por */}
@@ -2669,20 +2585,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       fontWeight: 500
                     }}
                   >
-                    Precio
+                    {t.explore.price}
                   </label>
                   <div className="space-y-2">
                     <div className="relative">
-                      <select 
-                        className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 400
-                        }}
-                      >
-                        <option>Mínimo</option>
+                      <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                        <option>{t.explore.minimum}</option>
                         <option>$10.000.000</option>
                         <option>$30.000.000</option>
                         <option>$50.000.000</option>
@@ -2690,16 +2598,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     <div className="relative">
-                      <select 
-                        className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 400
-                        }}
-                      >
-                        <option>Máximo</option>
+                      <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                        <option>{t.explore.maximum}</option>
                         <option>$100.000.000</option>
                         <option>$200.000.000</option>
                         <option>$500.000.000</option>
@@ -2711,29 +2611,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 {/* Superficie */}
                 <div className="mb-6">
-                  <label 
-                    className="block mb-3" 
-                    style={{ 
-                      color: '#0A0A0A',
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 500
-                    }}
-                  >
-                    Superficie
+                  <label className="block mb-3" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
+                    {t.filters.area}
                   </label>
                   <div className="space-y-2">
                     <div className="relative">
-                      <select 
-                        className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 400
-                        }}
-                      >
-                        <option>Mínimo</option>
+                      <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                        <option>{t.explore.minimum}</option>
                         <option>1.000 m²</option>
                         <option>5.000 m²</option>
                         <option>10.000 m²</option>
@@ -2741,16 +2625,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     <div className="relative">
-                      <select 
-                        className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors"
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 400
-                        }}
-                      >
-                        <option>Máximo</option>
+                      <select className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-10 py-2.5 rounded-[100px] appearance-none cursor-pointer transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 400 }}>
+                        <option>{t.explore.maximum}</option>
                         <option>50.000 m²</option>
                         <option>100.000 m²</option>
                         <option>500.000 m²</option>
@@ -2762,33 +2638,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 {/* Tipo de parcela */}
                 <div className="mb-6">
-                  <label 
-                    className="block mb-3" 
-                    style={{ 
-                      color: '#0A0A0A',
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 500
-                    }}
-                  >
-                    Tipo de parcela
+                  <label className="block mb-3" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
+                    {t.filters.parcelType}
                   </label>
                   <div className="space-y-3">
-                    {['Residencial', 'Agrícola', 'Forestal', 'Mixta'].map((tipo) => (
+                    {[t.filters.typeResidential, t.filters.typeAgricultural, t.filters.typeForestry, t.filters.typeMixed].map((tipo) => (
                       <label key={tipo} className="flex items-center cursor-pointer group">
-                        <input 
-                          type="checkbox" 
-                          className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                        />
-                        <span 
-                          className="ml-3 group-hover:text-black transition-colors"
-                          style={{ 
-                            color: '#0A0A0A',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 400
-                          }}
-                        >
+                        <input type="checkbox" className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer" />
+                        <span className="ml-3 group-hover:text-black transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}>
                           {tipo}
                         </span>
                       </label>
@@ -2800,53 +2657,23 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
               {/* Card de filtros secundarios - Visible en mobile y tablet */}
               <div className="bg-gray-50 rounded-[16px] p-4">
-                <h4
-                  className="mb-4"
-                  style={{
-                    fontFamily: 'Montserrat, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#0A0A0A'
-                  }}
-                >
-                  Filtros rápidos
+                <h4 className="mb-4" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', fontWeight: 600, color: '#0A0A0A' }}>
+                  {t.explore.quickFilters}
                 </h4>
                 <div className="space-y-3">
-                    <label className="flex items-center cursor-pointer group">
-                      <input 
-                        type="checkbox" 
-                        className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                      />
-                      <span 
-                        className="ml-3 group-hover:text-black transition-colors"
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          fontWeight: 400
-                        }}
-                      >
-                        Publicaciones destacadas
-                      </span>
-                    </label>
-                    <label className="flex items-center cursor-pointer group">
-                      <input 
-                        type="checkbox" 
-                        className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                      />
-                      <span 
-                        className="ml-3 group-hover:text-black transition-colors"
-                        style={{ 
-                          color: '#0A0A0A',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          fontWeight: 400
-                        }}
-                      >
-                        Nuevas publicaciones
-                      </span>
-                    </label>
-                  </div>
+                  <label className="flex items-center cursor-pointer group">
+                    <input type="checkbox" className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer" />
+                    <span className="ml-3 group-hover:text-black transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}>
+                      {t.explore.featuredListings}
+                    </span>
+                  </label>
+                  <label className="flex items-center cursor-pointer group">
+                    <input type="checkbox" className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-0 focus:ring-offset-0 cursor-pointer" />
+                    <span className="ml-3 group-hover:text-black transition-colors" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}>
+                      {t.explore.newListings}
+                    </span>
+                  </label>
+                </div>
               </div>
 
               {/* Botones de acción */}
@@ -2908,7 +2735,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       lineHeight: '1.3'
                     }}
                   >
-                    Calcula tu presupuesto
+                    {t.explore.calculatorTitle}
                   </h3>
                   <p
                     style={{
@@ -2919,7 +2746,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       lineHeight: '1.5'
                     }}
                   >
-                    Conoce qué parcela puedes comprar
+                    {t.explore.calculatorSubtitle}
                   </p>
                 </div>
               </div>
@@ -2944,7 +2771,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Presupuesto disponible
+                  {t.explore.budgetLabel}
                 </label>
                 <input
                   type="text"
@@ -2972,18 +2799,18 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Cuota mensual aproximada
+                  {t.explore.monthlyPayment}
                 </label>
-                <div 
-                  className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200" 
-                  style={{ 
-                    color: budget ? '#0A0A0A' : '#a1a1a1', 
+                <div
+                  className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200"
+                  style={{
+                    color: budget ? '#0A0A0A' : '#a1a1a1',
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
-                  {budget ? formatCurrency(calculateMonthlyPayment()) : 'Ingresá tu presupuesto'}
+                  {budget ? formatCurrency(calculateMonthlyPayment()) : t.explore.enterBudget}
                 </div>
               </div>
 
@@ -2998,24 +2825,24 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Zona de interés
+                  {t.explore.zoneLabel}
                 </label>
                 <button
                   onClick={() => setOpenDropdown(openDropdown === 'calcZone' ? null : 'calcZone')}
                   className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                  style={{ 
-                    color: calcZone ? '#0A0A0A' : '#a1a1a1', 
-                    fontFamily: 'Inter, sans-serif', 
+                  style={{
+                    color: calcZone ? '#0A0A0A' : '#a1a1a1',
+                    fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400
                   }}
                 >
-                  <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcZone || 'Seleccionar zona'}</span>
+                  <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcZone || t.explore.selectZone}</span>
                   <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
                 </button>
                 {openDropdown === 'calcZone' && (
                   <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
-                    {['Valle del Aconcagua', 'Valle de Casablanca', 'Cordillera de Los Andes', 'Litoral Central', 'Valle Central'].map((zona) => (
+                    {[t.explore.zoneAconcagua, t.explore.zoneCasablanca, t.explore.zoneCordillera, t.explore.zoneLitoral, t.explore.zoneValleCentral].map((zona) => (
                       <button
                         key={zona}
                         onClick={() => {
@@ -3043,24 +2870,24 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 500
                   }}
                 >
-                  Tipo de parcela
+                  {t.filters.parcelType}
                 </label>
                 <button
                   onClick={() => setOpenDropdown(openDropdown === 'calcParcelType' ? null : 'calcParcelType')}
                   className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                  style={{ 
-                    color: calcParcelType ? '#0A0A0A' : '#a1a1a1', 
-                    fontFamily: 'Inter, sans-serif', 
+                  style={{
+                    color: calcParcelType ? '#0A0A0A' : '#a1a1a1',
+                    fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400
                   }}
                 >
-                  <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcParcelType || 'Seleccionar tipo'}</span>
+                  <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcParcelType || t.explore.selectType}</span>
                   <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
                 </button>
                 {openDropdown === 'calcParcelType' && (
                   <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
-                    {['Agrícola', 'Agrado/Residencial', 'Forestal', 'Mixta'].map((tipo) => (
+                    {[t.filters.typeAgricultural, t.explore.typeAgrado, t.filters.typeForestry, t.filters.typeMixed].map((tipo) => (
                       <button
                         key={tipo}
                         onClick={() => {
@@ -3078,7 +2905,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
               </div>
 
               {/* Botón Calcular */}
-              <button 
+              <button
                 onClick={() => {
                   handleCalculate();
                   setIsMobileCalculatorOpen(false);
@@ -3090,7 +2917,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   fontWeight: 500
                 }}
               >
-                Calcular
+                {t.explore.calculate}
               </button>
             </div>
           </div>
@@ -3467,7 +3294,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   fontWeight: 600
                 }}
               >
-                Buscar en mapa
+                {t.explore.searchOnMap}
               </h2>
               <button 
                 onClick={() => setShowMap(false)}
@@ -3494,17 +3321,17 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     fontWeight: 600
                   }}
                 >
-                  Vista de mapa
+                  {t.explore.mapView}
                 </h3>
-                <p 
+                <p
                   className="mb-4"
-                  style={{ 
+                  style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
                     color: '#6B6B6B'
                   }}
                 >
-                  Funcionalidad en desarrollo
+                  {t.explore.inDevelopment}
                 </p>
                 <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
                   {parcelas.slice(0, 4).map((parcela) => (
@@ -3572,7 +3399,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 color: '#737373',
                 lineHeight: 'var(--line-height-body)'
               }}>
-                Plataforma especializada en<br />compra y venta de parcelas
+                {t.home.footerDesc}
               </p>
             </div>
             
@@ -3583,105 +3410,105 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 fontWeight: 'var(--font-weight-bold)',
                 color: '#0A0A0A',
                 letterSpacing: 'var(--letter-spacing-wide)'
-              }}>EXPLORAR</div>
+              }}>{t.home.footerExplore.toUpperCase()}</div>
               <div className="space-y-2.5">
-                <div style={{ 
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Parcelas</div>
-                <div style={{ 
+                }}>{t.nav.parcelas}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Inmobiliarias</div>
-                <div style={{ 
+                }}>{t.nav.inmobiliarias}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Blog</div>
+                }}>{t.home.footerBlog}</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div style={{ 
+              <div style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--font-size-body-xs)',
                 fontWeight: 'var(--font-weight-bold)',
                 color: '#0A0A0A',
                 letterSpacing: 'var(--letter-spacing-wide)'
-              }}>PLATAFORMA</div>
+              }}>{t.home.footerPlatform.toUpperCase()}</div>
               <div className="space-y-2.5">
-                <div style={{ 
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Cómo funciona</div>
-                <div style={{ 
+                }}>{t.home.footerHowItWorks}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Publicar propiedad</div>
-                <div style={{ 
+                }}>{t.home.footerPublish}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Planes para inmobiliarias</div>
-                <div style={{ 
+                }}>{t.home.footerPlans}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Para brokers</div>
+                }}>{t.home.footerBrokers}</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div style={{ 
+              <div style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--font-size-body-xs)',
                 fontWeight: 'var(--font-weight-bold)',
                 color: '#0A0A0A',
                 letterSpacing: 'var(--letter-spacing-wide)'
-              }}>SOPORTE</div>
+              }}>{t.home.footerSupport.toUpperCase()}</div>
               <div className="space-y-2.5">
-                <div style={{ 
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Centro de ayuda</div>
-                <div style={{ 
+                }}>{t.home.footerHelp}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Términos y condiciones</div>
-                <div style={{ 
+                }}>{t.home.footerTerms}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Política de privacidad</div>
-                <div style={{ 
+                }}>{t.home.footerPrivacy}</div>
+                <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>Contacto</div>
+                }}>{t.home.footerContact}</div>
               </div>
             </div>
           </div>
 
           <div className="pt-8 border-t border-gray-200 text-center">
             <p className="text-xs text-gray-500">
-              © 2026 Compra Tu Parcela. Todos los derechos reservados.
+              {t.home.footerCopyright}
             </p>
           </div>
         </div>
