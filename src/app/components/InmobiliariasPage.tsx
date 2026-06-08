@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ChevronDown, MapPin, Star, Home, Menu, X } from 'lucide-react';
+import { ChevronDown, MapPin, Star, Menu, X } from 'lucide-react';
 import { ContactModal } from '@/app/components/ContactModal';
 import { useI18n } from '@/app/i18n/i18nContext';
+import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
 
@@ -126,6 +127,9 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
             </div>
 
             <div className="flex items-center justify-end gap-2 lg:gap-3">
+              <div className="hidden lg:block">
+                <LanguageCurrencySelector variant="header" />
+              </div>
               <button className="h-8 bg-[#006B4E] hover:bg-[#01533E] text-white px-3 lg:px-[20px] text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]">
                 <span className="hidden sm:inline">{t.nav.publishProperty}</span>
                 <span className="sm:hidden">{t.nav.publishShort}</span>
@@ -395,6 +399,10 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
               </nav>
 
               <div className="border-t border-gray-200 my-6"></div>
+
+              <div className="mb-4">
+                <LanguageCurrencySelector variant="sidebar" />
+              </div>
 
               <div className="space-y-3">
                 <button
