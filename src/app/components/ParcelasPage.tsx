@@ -229,6 +229,23 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     };
   }, [openDropdown]);
 
+  const featureMap: Record<string, keyof typeof t.features> = {
+    'Portón acceso': 'portonAcceso', 'Rol aprobado': 'rolAprobado', 'Factibilidad agua': 'factibilidadAgua',
+    'Vista cordillera': 'vistaCordillera', 'Luz instalada': 'luzInstalada', 'Pozo propio': 'pozoPropio',
+    'Riego tecnificado': 'riegoTecnificado', 'Luz trifásica': 'luzTrifasica', 'En producción': 'enProduccion',
+    'Zona turística': 'zonaTuristica', 'Sobre Ruta 7': 'sobreRuta7', 'Riego disponible': 'riegoDisponible',
+    'Rol al día': 'rolAlDia', 'Vista al lago': 'vistaAlLago', 'Condominio cerrado': 'condominioCerrado',
+    'Todos los servicios': 'todosLosServicios', 'Potencial turístico': 'potencialTuristico',
+    'Vertiente natural': 'vertienteNatural', 'Acceso al río': 'accesoAlRio', 'Bosque nativo': 'bosqueNativo',
+    'Uso agrícola': 'usoAgricola', 'Agua disponible': 'aguaDisponible',
+    'Alto potencial turístico': 'altoPotencialTuristico', 'Ubicación premium': 'ubicacionPremium',
+    'Vista Cerro Castillo': 'vistaCerroCastillo', 'Potencial ecoturístico': 'potencialEcoturistico',
+  };
+  const translateFeature = (text: string): string => {
+    const key = featureMap[text];
+    return key ? t.features[key] : text;
+  };
+
   // Función para eliminar un filtro
   const proyectos = getAllProyectos();
 
@@ -2099,13 +2116,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 {parcela.caracteristicas?.[0]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
                                     <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[0].icon}</div>
-                                    <span className="font-medium">{parcela.caracteristicas[0].text}</span>
+                                    <span className="font-medium">{translateFeature(parcela.caracteristicas[0].text)}</span>
                                   </div>
                                 )}
                                 {parcela.caracteristicas?.[1]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
                                     <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[1].icon}</div>
-                                    <span className="font-medium">{parcela.caracteristicas[1].text}</span>
+                                    <span className="font-medium">{translateFeature(parcela.caracteristicas[1].text)}</span>
                                   </div>
                                 )}
                               </div>
@@ -2113,13 +2130,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 {parcela.caracteristicas?.[2]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
                                     <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[2].icon}</div>
-                                    <span className="font-medium">{parcela.caracteristicas[2].text}</span>
+                                    <span className="font-medium">{translateFeature(parcela.caracteristicas[2].text)}</span>
                                   </div>
                                 )}
                                 {parcela.caracteristicas?.[3]?.icon && (
                                   <div className="flex items-center gap-2 text-sm" style={{ color: '#0A0A0A' }}>
                                     <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]" style={{ color: '#006B4E' }}>{parcela.caracteristicas[3].icon}</div>
-                                    <span className="font-medium">{parcela.caracteristicas[3].text}</span>
+                                    <span className="font-medium">{translateFeature(parcela.caracteristicas[3].text)}</span>
                                   </div>
                                 )}
                               </div>
@@ -2167,7 +2184,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               </div>
                               <div className="p-4 flex-1 flex flex-col bg-white">
                                 <div className="mb-2">
-                                  <span className="px-2.5 py-0.5 rounded-full" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, backgroundColor: item.estado === 'En venta' ? '#DCFCE7' : item.estado === 'Próximamente' ? '#FEF3C7' : '#E0E7FF', color: item.estado === 'En venta' ? '#166534' : item.estado === 'Próximamente' ? '#854D0E' : '#3730A3', border: `1px solid ${item.estado === 'En venta' ? '#BBF7D0' : item.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}` }}>{item.estado}</span>
+                                  <span className="px-2.5 py-0.5 rounded-full" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, backgroundColor: item.estado === 'En venta' ? '#DCFCE7' : item.estado === 'Próximamente' ? '#FEF3C7' : '#E0E7FF', color: item.estado === 'En venta' ? '#166534' : item.estado === 'Próximamente' ? '#854D0E' : '#3730A3', border: `1px solid ${item.estado === 'En venta' ? '#BBF7D0' : item.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}` }}>{item.estado === 'En venta' ? t.status.enVenta : item.estado === 'Próximamente' ? t.status.proximamente : t.status.enConstruccion}</span>
                                 </div>
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '4px' }}>{item.nombre}</h3>
                                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '12px' }}>{item.ubicacion}, {item.region}</p>
@@ -2331,7 +2348,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                     border: `1px solid ${proyecto.estado === 'En venta' ? '#BBF7D0' : proyecto.estado === 'Próximamente' ? '#FDE68A' : '#C7D2FE'}`
                                   }}
                                 >
-                                  {proyecto.estado}
+                                  {proyecto.estado === 'En venta' ? t.status.enVenta : proyecto.estado === 'Próximamente' ? t.status.proximamente : t.status.enConstruccion}
                                 </span>
                               </div>
                               {/* Nombre y ubicación */}

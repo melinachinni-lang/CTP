@@ -1,28 +1,18 @@
 import React from 'react';
 import { Upload, Eye, MessageCircle } from 'lucide-react';
 import topoBackground from 'figma:asset/1f8d7be2ded66ac9a17238954e64e513a352a1e5.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface VendedorCaptacionSectionProps {
   onPublicarClick?: () => void;
 }
 
 export function VendedorCaptacionSection({ onPublicarClick }: VendedorCaptacionSectionProps) {
+  const { t } = useI18n();
   const features = [
-    {
-      icon: <Upload className="w-7 h-7" />,
-      titulo: 'Publicación en minutos',
-      descripcion: 'Sube tu parcela en menos de 5 minutos y comienza a vender.'
-    },
-    {
-      icon: <Eye className="w-7 h-7" />,
-      titulo: 'Miles de compradores activos',
-      descripcion: 'Tu propiedad vista por personas que buscan activamente.'
-    },
-    {
-      icon: <MessageCircle className="w-7 h-7" />,
-      titulo: 'Sin intermediarios',
-      descripcion: 'Conecta y negocia directamente con los interesados.'
-    }
+    { icon: <Upload className="w-7 h-7" />, titulo: t.home.sellCard1Title, descripcion: t.home.sellCard1Desc },
+    { icon: <Eye className="w-7 h-7" />, titulo: t.home.sellCard2Title, descripcion: t.home.sellCard2Desc },
+    { icon: <MessageCircle className="w-7 h-7" />, titulo: t.home.sellCard3Title, descripcion: t.home.sellCard3Desc },
   ];
 
   return (
@@ -47,9 +37,9 @@ export function VendedorCaptacionSection({ onPublicarClick }: VendedorCaptacionS
             letterSpacing: 'var(--letter-spacing-tight)',
             marginBottom: '1rem'
           }}>
-            ¿Tienes una parcela para vender?
+            {t.home.sellTitle}
           </h2>
-          <p style={{ 
+          <p style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 'var(--font-weight-regular)',
             fontSize: 'var(--font-size-body-lg)',
@@ -58,7 +48,7 @@ export function VendedorCaptacionSection({ onPublicarClick }: VendedorCaptacionS
             maxWidth: '700px',
             margin: '0 auto'
           }}>
-            Llega a miles de compradores interesados en encontrar su parcela ideal.
+            {t.home.sellDesc}
           </p>
         </div>
 
@@ -133,7 +123,7 @@ export function VendedorCaptacionSection({ onPublicarClick }: VendedorCaptacionS
               border: '1px solid rgba(255, 255, 255, 0.2)'
             }}
           >
-            Publicar mi parcela
+            {t.home.sellBtn}
           </button>
         </div>
       </div>

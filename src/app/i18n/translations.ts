@@ -21,12 +21,27 @@ export interface Translations {
     addToCompare: string; removeFromCompare: string;
     publishedBy: string;
     vendorInmobiliaria: string; vendorBroker: string; vendorPersona: string;
+    openMenu: string; previous: string; next: string;
+    saveParcel: string; removeFromSaved: string; saveProject: string;
+  };
+  features: {
+    portonAcceso: string; rolAprobado: string; factibilidadAgua: string;
+    vistaCordillera: string; luzInstalada: string; pozoPropio: string;
+    riegoTecnificado: string; luzTrifasica: string; enProduccion: string;
+    zonaTuristica: string; sobreRuta7: string; riegoDisponible: string;
+    rolAlDia: string; vistaAlLago: string; condominioCerrado: string;
+    todosLosServicios: string; potencialTuristico: string;
+    vertienteNatural: string; accesoAlRio: string; bosqueNativo: string;
+    usoAgricola: string; aguaDisponible: string;
+    altoPotencialTuristico: string; ubicacionPremium: string;
+    vistaCerroCastillo: string; potencialEcoturistico: string;
   };
   status: {
     disponible: string; reservada: string; reservandose: string;
     aprobada: string; rechazada: string; activa: string; pausada: string;
     pendiente: string; aprobado: string; rechazado: string;
     preventa: string; enConstruccion: string; planosAprobados: string; lanzamiento: string;
+    enVenta: string; proximamente: string;
   };
   purchases: {
     title: string; subtitle: string; viewDetail: string; backToList: string;
@@ -48,6 +63,17 @@ export interface Translations {
     noParcelasFound: string; noParcelasFoundDesc: string;
     parcelasFoundSuffix: string;
     projectsTitle: string; projectsDesc: string; viewAllProjects: string;
+    filtersTitle: string; price: string;
+    minimum: string; maximum: string;
+    quickFilters: string; filterFeatured: string; filterNew: string; filterLand: string; filterCertified: string;
+    mainFilters: string; moreFilters: string; calculator: string;
+    featuredListings: string; newListings: string;
+    calculatorTitle: string; calculatorSubtitle: string;
+    budgetLabel: string; monthlyPayment: string; enterBudget: string;
+    zoneLabel: string; selectZone: string;
+    zoneAconcagua: string; zoneCasablanca: string; zoneCordillera: string; zoneLitoral: string; zoneValleCentral: string;
+    typeAgrado: string; selectType: string; calculate: string;
+    searchOnMap: string; mapView: string; inDevelopment: string;
   };
   filters: {
     location: string; area: string; condition: string; priceRange: string;
@@ -93,7 +119,7 @@ export interface Translations {
     footerExplore: string; footerPlatform: string; footerSupport: string;
     footerHowItWorks: string; footerPublish: string; footerPlans: string; footerBrokers: string;
     footerTerms: string; footerPrivacy: string; footerContact: string; footerCopyright: string;
-    footerBlog: string;
+    footerBlog: string; footerHelp: string;
     tabInmobiliarias: string; tabBrokers: string; viewAllFemale: string; viewAllMale: string;
     publishModalTitle: string; publishModalDesc: string;
     createAccountBtn: string; loginBtn: string; publishModalNote: string;
@@ -109,6 +135,10 @@ export interface Translations {
     budgetTerm: string; budgetTermYears: string;
     budgetInterestRate: string; budgetMonthlyPayment: string;
     budgetPerYears: string; budgetApply: string; budgetNote: string;
+    sellTitle: string; sellDesc: string; sellBtn: string;
+    sellCard1Title: string; sellCard1Desc: string;
+    sellCard2Title: string; sellCard2Desc: string;
+    sellCard3Title: string; sellCard3Desc: string;
   };
   selector: {
     language: string; currency: string; spanish: string; english: string;
@@ -162,6 +192,20 @@ const es: Translations = {
     addToCompare: 'Agregar al comparador', removeFromCompare: 'Quitar del comparador',
     publishedBy: 'Publicado por',
     vendorInmobiliaria: 'Inmobiliaria', vendorBroker: 'Broker', vendorPersona: 'Persona natural',
+    openMenu: 'Abrir menú', previous: 'Anterior', next: 'Siguiente',
+    saveParcel: 'Guardar parcela', removeFromSaved: 'Eliminar de guardados', saveProject: 'Guardar proyecto',
+  },
+  features: {
+    portonAcceso: 'Portón acceso', rolAprobado: 'Rol aprobado', factibilidadAgua: 'Factibilidad agua',
+    vistaCordillera: 'Vista cordillera', luzInstalada: 'Luz instalada', pozoPropio: 'Pozo propio',
+    riegoTecnificado: 'Riego tecnificado', luzTrifasica: 'Luz trifásica', enProduccion: 'En producción',
+    zonaTuristica: 'Zona turística', sobreRuta7: 'Sobre Ruta 7', riegoDisponible: 'Riego disponible',
+    rolAlDia: 'Rol al día', vistaAlLago: 'Vista al lago', condominioCerrado: 'Condominio cerrado',
+    todosLosServicios: 'Todos los servicios', potencialTuristico: 'Potencial turístico',
+    vertienteNatural: 'Vertiente natural', accesoAlRio: 'Acceso al río', bosqueNativo: 'Bosque nativo',
+    usoAgricola: 'Uso agrícola', aguaDisponible: 'Agua disponible',
+    altoPotencialTuristico: 'Alto potencial turístico', ubicacionPremium: 'Ubicación premium',
+    vistaCerroCastillo: 'Vista Cerro Castillo', potencialEcoturistico: 'Potencial ecoturístico',
   },
   status: {
     disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
@@ -169,6 +213,7 @@ const es: Translations = {
     pendiente: 'Pendiente', aprobado: 'Aprobado', rechazado: 'Rechazado',
     preventa: 'Pre-venta iniciada', enConstruccion: 'En construcción',
     planosAprobados: 'Planos aprobados', lanzamiento: 'Lanzamiento',
+    enVenta: 'En venta', proximamente: 'Próximamente',
   },
   purchases: {
     title: 'Mis compras',
@@ -202,6 +247,17 @@ const es: Translations = {
     projectsTitle: 'Proyectos disponibles',
     projectsDesc: 'Descubre desarrollos con múltiples parcelas',
     viewAllProjects: 'Ver todos los proyectos',
+    filtersTitle: 'Filtros', price: 'Precio',
+    minimum: 'Mínimo', maximum: 'Máximo',
+    quickFilters: 'Filtros rápidos', filterFeatured: 'Destacadas', filterNew: 'Nuevas', filterLand: 'Terrenos', filterCertified: 'Certificadas',
+    mainFilters: 'Filtros principales', moreFilters: 'Más filtros', calculator: 'Calculadora',
+    featuredListings: 'Publicaciones destacadas', newListings: 'Nuevas publicaciones',
+    calculatorTitle: 'Calcula tu presupuesto', calculatorSubtitle: 'Conoce qué parcela puedes comprar según tu capacidad',
+    budgetLabel: 'Presupuesto disponible', monthlyPayment: 'Cuota mensual aproximada', enterBudget: 'Ingresá tu presupuesto',
+    zoneLabel: 'Zona de interés', selectZone: 'Seleccionar zona',
+    zoneAconcagua: 'Valle del Aconcagua', zoneCasablanca: 'Valle de Casablanca', zoneCordillera: 'Cordillera de Los Andes', zoneLitoral: 'Litoral Central', zoneValleCentral: 'Valle Central',
+    typeAgrado: 'Agrado/Residencial', selectType: 'Seleccionar tipo', calculate: 'Calcular',
+    searchOnMap: 'Buscar en mapa', mapView: 'Vista de mapa', inDevelopment: 'Funcionalidad en desarrollo',
   },
   filters: {
     location: 'Ubicación', area: 'Superficie', condition: 'Condición', priceRange: 'Rango de precio',
@@ -282,7 +338,7 @@ const es: Translations = {
     footerHowItWorks: 'Cómo funciona', footerPublish: 'Publicar propiedad',
     footerPlans: 'Planes para inmobiliarias', footerBrokers: 'Para brokers',
     footerTerms: 'Términos y condiciones', footerPrivacy: 'Política de privacidad',
-    footerContact: 'Contacto', footerBlog: 'Blog',
+    footerContact: 'Contacto', footerBlog: 'Blog', footerHelp: 'Centro de ayuda',
     footerCopyright: '© 2026 Compra Tu Parcela. Todos los derechos reservados.',
     tabInmobiliarias: 'Inmobiliarias', tabBrokers: 'Brokers',
     viewAllFemale: 'Ver todas', viewAllMale: 'Ver todos',
@@ -318,6 +374,12 @@ const es: Translations = {
     budgetPerYears: 'cuotas',
     budgetApply: 'Aplicar configuración',
     budgetNote: 'Este cálculo es referencial. Las condiciones reales dependen de tu institución financiera.',
+    sellTitle: '¿Tienes una parcela para vender?',
+    sellDesc: 'Llega a miles de compradores interesados en encontrar su parcela ideal.',
+    sellBtn: 'Publicar mi parcela',
+    sellCard1Title: 'Publicación en minutos', sellCard1Desc: 'Sube tu parcela en menos de 5 minutos y comienza a vender.',
+    sellCard2Title: 'Miles de compradores activos', sellCard2Desc: 'Tu propiedad vista por personas que buscan activamente.',
+    sellCard3Title: 'Sin intermediarios', sellCard3Desc: 'Conecta y negocia directamente con los interesados.',
   },
   selector: {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
@@ -383,6 +445,20 @@ const en: Translations = {
     addToCompare: 'Add to compare', removeFromCompare: 'Remove from compare',
     publishedBy: 'Listed by',
     vendorInmobiliaria: 'Agency', vendorBroker: 'Broker', vendorPersona: 'Private seller',
+    openMenu: 'Open menu', previous: 'Previous', next: 'Next',
+    saveParcel: 'Save parcel', removeFromSaved: 'Remove from saved', saveProject: 'Save project',
+  },
+  features: {
+    portonAcceso: 'Access gate', rolAprobado: 'Approved title', factibilidadAgua: 'Water study',
+    vistaCordillera: 'Mountain view', luzInstalada: 'Power installed', pozoPropio: 'Private well',
+    riegoTecnificado: 'Drip irrigation', luzTrifasica: 'Three-phase power', enProduccion: 'In production',
+    zonaTuristica: 'Tourist zone', sobreRuta7: 'On Route 7', riegoDisponible: 'Irrigation available',
+    rolAlDia: 'Title up to date', vistaAlLago: 'Lake view', condominioCerrado: 'Gated community',
+    todosLosServicios: 'All utilities', potencialTuristico: 'Tourist potential',
+    vertienteNatural: 'Natural spring', accesoAlRio: 'River access', bosqueNativo: 'Native forest',
+    usoAgricola: 'Agricultural use', aguaDisponible: 'Water available',
+    altoPotencialTuristico: 'High tourist potential', ubicacionPremium: 'Premium location',
+    vistaCerroCastillo: 'Cerro Castillo view', potencialEcoturistico: 'Eco-tourism potential',
   },
   status: {
     disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',
@@ -390,6 +466,7 @@ const en: Translations = {
     pendiente: 'Pending', aprobado: 'Approved', rechazado: 'Rejected',
     preventa: 'Pre-sale started', enConstruccion: 'Under construction',
     planosAprobados: 'Plans approved', lanzamiento: 'Launch',
+    enVenta: 'For sale', proximamente: 'Coming soon',
   },
   purchases: {
     title: 'My purchases',
@@ -423,6 +500,17 @@ const en: Translations = {
     projectsTitle: 'Available projects',
     projectsDesc: 'Discover developments with multiple parcels',
     viewAllProjects: 'View all projects',
+    filtersTitle: 'Filters', price: 'Price',
+    minimum: 'Minimum', maximum: 'Maximum',
+    quickFilters: 'Quick filters', filterFeatured: 'Featured', filterNew: 'New', filterLand: 'Land', filterCertified: 'Certified',
+    mainFilters: 'Main filters', moreFilters: 'More filters', calculator: 'Calculator',
+    featuredListings: 'Featured listings', newListings: 'New listings',
+    calculatorTitle: 'Budget calculator', calculatorSubtitle: 'Find out what parcel you can buy based on your budget',
+    budgetLabel: 'Available budget', monthlyPayment: 'Estimated monthly payment', enterBudget: 'Enter your budget',
+    zoneLabel: 'Zone of interest', selectZone: 'Select zone',
+    zoneAconcagua: 'Valle del Aconcagua', zoneCasablanca: 'Valle de Casablanca', zoneCordillera: 'Cordillera de los Andes', zoneLitoral: 'Central Coast', zoneValleCentral: 'Central Valley',
+    typeAgrado: 'Residential/Leisure', selectType: 'Select type', calculate: 'Calculate',
+    searchOnMap: 'Search on map', mapView: 'Map view', inDevelopment: 'Feature in development',
   },
   filters: {
     location: 'Location', area: 'Area', condition: 'Condition', priceRange: 'Price range',
@@ -503,7 +591,7 @@ const en: Translations = {
     footerHowItWorks: 'How it works', footerPublish: 'List your property',
     footerPlans: 'Plans for agencies', footerBrokers: 'For brokers',
     footerTerms: 'Terms & conditions', footerPrivacy: 'Privacy policy',
-    footerContact: 'Contact', footerBlog: 'Blog',
+    footerContact: 'Contact', footerBlog: 'Blog', footerHelp: 'Help center',
     footerCopyright: '© 2026 CompraTuParcela. All rights reserved.',
     tabInmobiliarias: 'Agencies', tabBrokers: 'Brokers',
     viewAllFemale: 'View all', viewAllMale: 'View all',
@@ -539,6 +627,12 @@ const en: Translations = {
     budgetPerYears: 'installments',
     budgetApply: 'Apply settings',
     budgetNote: 'This calculation is for reference only. Actual conditions depend on your financial institution.',
+    sellTitle: 'Do you have a parcel to sell?',
+    sellDesc: 'Reach thousands of buyers looking for their ideal parcel.',
+    sellBtn: 'List my parcel',
+    sellCard1Title: 'Listed in minutes', sellCard1Desc: 'Upload your parcel in under 5 minutes and start selling.',
+    sellCard2Title: 'Thousands of active buyers', sellCard2Desc: 'Your property seen by people actively searching.',
+    sellCard3Title: 'No middlemen', sellCard3Desc: 'Connect and negotiate directly with interested parties.',
   },
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',
