@@ -305,7 +305,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 13,
     nombre: 'Terreno Agrícola El Mirador',
-    nombreEn: 'El Mirador Agricultural Land',
+    nombreEn: 'The Lookout Agricultural Land',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Sector El Mirador, Chile Chico, Región de Aysén',
     precio: '$38.000.000',
@@ -357,7 +357,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 5,
     nombre: 'Parcela Residencial Los Arrayanes',
-    nombreEn: 'Los Arrayanes Residential Parcel',
+    nombreEn: 'Arrayanes Residential Parcel',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Condominio Los Arrayanes, Chile Chico, Región de Aysén',
     precio: '$52.000.000',
@@ -413,7 +413,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 6,
     nombre: 'Campo Turístico Valle Verde',
-    nombreEn: 'Valle Verde Tourist Estate',
+    nombreEn: 'Green Valley Tourist Estate',
     ubicacion: 'Chile Chico, Aysén',
     ubicacionCompleta: 'Valle Verde, km 18, Chile Chico, Región de Aysén',
     precio: '$95.000.000',
@@ -469,7 +469,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 7,
     nombre: 'Terreno Río Tranquilo',
-    nombreEn: 'Río Tranquilo Land',
+    nombreEn: 'Tranquil River Land',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Sector Río Tranquilo, Cochrane, Región de Aysén',
     precio: '$42.000.000',
@@ -577,7 +577,7 @@ export const PARCELAS_DATA: Parcela[] = [
   {
     id: 9,
     nombre: 'Campo Los Boldos',
-    nombreEn: 'Los Boldos Estate',
+    nombreEn: 'Boldos Estate',
     ubicacion: 'Cochrane, Aysén',
     ubicacionCompleta: 'Sector Los Boldos, Cochrane, Región de Aysén',
     precio: '$68.000.000',

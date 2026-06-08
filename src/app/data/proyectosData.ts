@@ -96,7 +96,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 1,
     nombre: 'Parcelas Valle Verde',
-    nombreEn: 'Valle Verde Parcels',
+    nombreEn: 'Green Valley Parcels',
     ubicacion: 'Pucón',
     region: 'La Araucanía',
     tipo: 'Residencial',
@@ -154,7 +154,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 2,
     nombre: 'Condominio Los Robles',
-    nombreEn: 'Los Robles Community',
+    nombreEn: 'The Oaks Community',
     ubicacion: 'Villarrica',
     region: 'La Araucanía',
     tipo: 'Turístico',
@@ -204,7 +204,7 @@ export const proyectosData: Proyecto[] = [
   {
     id: 3,
     nombre: 'Parcelas Río Claro',
-    nombreEn: 'Río Claro Parcels',
+    nombreEn: 'Clear River Parcels',
     ubicacion: 'Los Ángeles',
     region: 'Biobío',
     tipo: 'Agrícola',
