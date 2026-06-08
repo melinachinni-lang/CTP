@@ -41,7 +41,7 @@ interface HomeWireframeProps {
 }
 
 export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onLogout, initialLoadingError = false, onOpenPublishModal, onNavigateToPublish, savedParcelaIds = [], onToggleSaved, compareParcelaIds = [], onToggleCompare }: HomeWireframeProps) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [savedProyectoIds, setSavedProyectoIds] = useState<number[]>([]);
@@ -453,6 +453,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     {
       id: 1,
       nombre: 'Parcela Vista al Valle',
+      nombreEn: 'Valley View Parcel',
       ubicacion: 'Pirque, Región Metropolitana',
       imagen: 'https://images.unsplash.com/photo-1755439917128-c4cede457fa6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwcGxvdCUyMHJ1cmFsfGVufDF8fHx8MTc2ODg2NTMxMXww&ixlib=rb-4.1.0&q=80&w=1080',
       imagenes: [
@@ -475,6 +476,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     {
       id: 2,
       nombre: 'Parcela Los Robles',
+      nombreEn: 'The Oaks Parcel',
       ubicacion: 'Colina, Región Metropolitana',
       imagen: 'https://images.unsplash.com/photo-1768715825473-1213f87ec005?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3VudHJ5c2lkZSUyMHByb3BlcnR5fGVufDF8fHx8MTc2ODg2NTMxMXww&ixlib=rb-4.1.0&q=80&w=1080',
       imagenes: [
@@ -497,6 +499,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     {
       id: 3,
       nombre: 'Parcela Alto Cordillera',
+      nombreEn: 'High Cordillera Parcel',
       ubicacion: 'Farellones, Región Metropolitana',
       imagen: 'https://images.unsplash.com/photo-1748711243680-1c4ab4f9979f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmR8ZW58MXx8fHwxNzY4ODY1MzExfDA&ixlib=rb-4.1.0&q=80&w=1080',
       superficie: '12.000 m²',
@@ -514,6 +517,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     {
       id: 4,
       nombre: 'Parcela Campo Verde',
+      nombreEn: 'Green Fields Parcel',
       ubicacion: 'Buin, Región Metropolitana',
       imagen: 'https://images.unsplash.com/photo-1588011882503-2e6061ace84d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXJtJTIwdGVycmFpbnxlbnwxfHx8fDE3Njg4NjUzMTJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
       superficie: '6.500 m²',
@@ -531,6 +535,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     {
       id: 5,
       nombre: 'Parcela El Refugio',
+      nombreEn: 'The Refuge Parcel',
       ubicacion: 'San José de Maipo, RM',
       imagen: 'https://images.unsplash.com/photo-1743670477099-88a9de024f04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGVzdGF0ZXxlbnwxfHx8fDE3Njg4NjUzMTJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
       superficie: '10.000 m²',
@@ -548,6 +553,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     {
       id: 6,
       nombre: 'Parcela Vista Panorámica',
+      nombreEn: 'Panoramic View Parcel',
       ubicacion: 'Lampa, Región Metropolitana',
       imagen: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
       superficie: '7.200 m²',
@@ -1455,9 +1461,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                                 lineHeight: 'var(--line-height-ui)'
                               }}
                             >
-                              {parcela.nombre.startsWith('Parcela ')
-                                ? `${t.common.parcela} ${parcela.nombre.slice(8)}`
-                                : parcela.nombre}
+                              {language === 'en' && parcela.nombreEn ? parcela.nombreEn : parcela.nombre}
                             </h3>
                             <p 
                               className="line-clamp-1" 
