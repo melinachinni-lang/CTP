@@ -42,6 +42,19 @@ export interface Translations {
     regionLabel: string; allRegions: string; regionMetropolitana: string;
     reviews: string; contact: string; viewAgency: string; generalInquiry: string;
   };
+  recursos: {
+    pageTitle: string; pageSubtitle: string;
+    moreArticles: string; readLabel: string;
+    featTitle: string; featExcerpt: string; featFullDesc: string;
+    featCategory: string; featDate: string; featAuthor: string;
+    featTag1: string; featTag2: string; featTag3: string;
+    art2Title: string; art2Excerpt: string; art2Category: string; art2Date: string;
+    art3Title: string; art3Excerpt: string; art3Category: string; art3Date: string;
+    art4Title: string; art4Excerpt: string; art4Category: string; art4Date: string;
+    art5Title: string; art5Excerpt: string; art5Category: string; art5Date: string;
+    art6Title: string; art6Excerpt: string; art6Category: string; art6Date: string;
+    art7Title: string; art7Excerpt: string; art7Category: string; art7Date: string;
+  };
   comoFunciona: {
     pageTitle: string; pageSubtitle: string;
     stepsTitle: string; stepsSubtitle: string;
@@ -238,6 +251,33 @@ const es: Translations = {
     usoAgricola: 'Uso agrícola', aguaDisponible: 'Agua disponible',
     altoPotencialTuristico: 'Alto potencial turístico', ubicacionPremium: 'Ubicación premium',
     vistaCerroCastillo: 'Vista Cerro Castillo', potencialEcoturistico: 'Potencial ecoturístico',
+  },
+  recursos: {
+    pageTitle: 'Recursos', pageSubtitle: 'Guías, noticias y consejos prácticos para comprar, vender e invertir en parcelas',
+    moreArticles: 'Más artículos', readLabel: 'de lectura',
+    featTitle: 'Guía completa para comprar tu primera parcela en Chile',
+    featExcerpt: 'Todo lo que necesitas saber antes de invertir en una parcela: aspectos legales, financiamiento, permisos de construcción y errores comunes que debes evitar.',
+    featFullDesc: 'Comprar una parcela es una decisión importante que requiere investigación y planificación. En esta guía completa te explicamos paso a paso todo el proceso, desde la búsqueda inicial hasta la firma de la escritura. Aprenderás a identificar terrenos con buen potencial, verificar la documentación legal, negociar el precio, y obtener el financiamiento necesario.',
+    featCategory: 'Guía de compra', featDate: 'Hace 2 días', featAuthor: 'Equipo CompraTuParcela',
+    featTag1: 'Compra', featTag2: 'Legal', featTag3: 'Financiamiento',
+    art2Title: 'Parcelas de inversión: ¿vale la pena en 2026?',
+    art2Excerpt: 'Analizamos el mercado actual de parcelas en Chile y las perspectivas de rentabilidad para inversionistas.',
+    art2Category: 'Inversión', art2Date: 'Hace 5 días',
+    art3Title: 'Aspectos legales que debes conocer antes de comprar',
+    art3Excerpt: 'Documentación necesaria, inscripciones y trámites legales para una compra segura.',
+    art3Category: 'Legal', art3Date: 'Hace 1 semana',
+    art4Title: 'Cómo financiar la compra de tu parcela',
+    art4Excerpt: 'Opciones de crédito hipotecario, subsidios y alternativas de financiamiento disponibles.',
+    art4Category: 'Financiamiento', art4Date: 'Hace 2 semanas',
+    art5Title: 'Permisos de construcción en terrenos rurales',
+    art5Excerpt: 'Normativas, requisitos y proceso para obtener permisos de edificación en parcelas.',
+    art5Category: 'Construcción', art5Date: 'Hace 3 semanas',
+    art6Title: 'Tendencias del mercado inmobiliario rural 2026',
+    art6Excerpt: 'Precios, demanda y zonas más atractivas para invertir en parcelas este año.',
+    art6Category: 'Mercado', art6Date: 'Hace 1 mes',
+    art7Title: 'Conectividad y servicios básicos en parcelas',
+    art7Excerpt: 'Agua, luz, internet y acceso: qué preguntar antes de comprar una parcela.',
+    art7Category: 'Guía de compra', art7Date: 'Hace 1 mes',
   },
   inmobiliarias: {
     pageTitle: 'Inmobiliarias', pageSubtitle: 'Encontrá inmobiliarias especializadas en parcelas y proyectos',
@@ -558,6 +598,33 @@ const en: Translations = {
     usoAgricola: 'Agricultural use', aguaDisponible: 'Water available',
     altoPotencialTuristico: 'High tourist potential', ubicacionPremium: 'Premium location',
     vistaCerroCastillo: 'Cerro Castillo view', potencialEcoturistico: 'Eco-tourism potential',
+  },
+  recursos: {
+    pageTitle: 'Resources', pageSubtitle: 'Guides, news and practical tips for buying, selling and investing in parcels',
+    moreArticles: 'More articles', readLabel: 'read',
+    featTitle: 'Complete guide to buying your first parcel in Chile',
+    featExcerpt: 'Everything you need to know before investing in a parcel: legal aspects, financing, construction permits and common mistakes to avoid.',
+    featFullDesc: 'Buying a parcel is an important decision that requires research and planning. In this complete guide we explain the entire process step by step, from the initial search to signing the deed. You will learn to identify land with good potential, verify legal documentation, negotiate the price, and secure the necessary financing.',
+    featCategory: 'Buying guide', featDate: '2 days ago', featAuthor: 'CompraTuParcela Team',
+    featTag1: 'Purchase', featTag2: 'Legal', featTag3: 'Financing',
+    art2Title: 'Investment parcels: is it worth it in 2026?',
+    art2Excerpt: 'We analyze the current parcel market in Chile and the return prospects for investors.',
+    art2Category: 'Investment', art2Date: '5 days ago',
+    art3Title: 'Legal aspects you should know before buying',
+    art3Excerpt: 'Required documentation, registrations and legal procedures for a safe purchase.',
+    art3Category: 'Legal', art3Date: '1 week ago',
+    art4Title: 'How to finance the purchase of your parcel',
+    art4Excerpt: 'Mortgage credit options, subsidies and alternative financing available.',
+    art4Category: 'Financing', art4Date: '2 weeks ago',
+    art5Title: 'Construction permits on rural land',
+    art5Excerpt: 'Regulations, requirements and process for obtaining building permits on parcels.',
+    art5Category: 'Construction', art5Date: '3 weeks ago',
+    art6Title: 'Rural real estate market trends 2026',
+    art6Excerpt: 'Prices, demand and the most attractive areas to invest in parcels this year.',
+    art6Category: 'Market', art6Date: '1 month ago',
+    art7Title: 'Connectivity and basic services on parcels',
+    art7Excerpt: 'Water, power, internet and access: what to ask before buying a parcel.',
+    art7Category: 'Buying guide', art7Date: '1 month ago',
   },
   inmobiliarias: {
     pageTitle: 'Agencies', pageSubtitle: 'Find agencies specialized in parcels and projects',

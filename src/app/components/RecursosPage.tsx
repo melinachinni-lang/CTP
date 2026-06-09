@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Clock, Calendar } from 'lucide-react';
+import { Clock, Calendar, X } from 'lucide-react';
 import { Navbar } from '@/app/components/Navbar';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
 import { SocialMediaBanner } from '@/app/components/SocialMediaBanner';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface RecursosPageProps {
   onNavigate: (page: string) => void;
@@ -15,87 +16,39 @@ interface RecursosPageProps {
 }
 
 export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLogout, onOpenPublishModal, onNavigateToPublish }: RecursosPageProps) {
+  const { t } = useI18n();
   const [showPublishModal, setShowPublishModal] = useState(false);
-  // Featured article (la más reciente)
+
   const featuredArticle = {
     id: 1,
-    title: 'Guía completa para comprar tu primera parcela en Chile',
-    excerpt: 'Todo lo que necesitas saber antes de invertir en una parcela: aspectos legales, financiamiento, permisos de construcción y errores comunes que debes evitar.',
-    fullDescription: 'Comprar una parcela es una decisión importante que requiere investigación y planificación. En esta guía completa te explicamos paso a paso todo el proceso, desde la búsqueda inicial hasta la firma de la escritura. Aprenderás a identificar terrenos con buen potencial, verificar la documentación legal, negociar el precio, y obtener el financiamiento necesario.',
-    category: 'Guía de compra',
+    title: t.recursos.featTitle,
+    excerpt: t.recursos.featExcerpt,
+    fullDescription: t.recursos.featFullDesc,
+    category: t.recursos.featCategory,
     readTime: '8 min',
-    date: 'Hace 2 días',
-    author: 'Equipo CompraTuParcela',
+    date: t.recursos.featDate,
+    author: t.recursos.featAuthor,
     image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
-    tags: ['Compra', 'Legal', 'Financiamiento']
+    tags: [t.recursos.featTag1, t.recursos.featTag2, t.recursos.featTag3]
   };
 
-  // Secondary articles
   const articles = [
-    {
-      id: 2,
-      title: 'Parcelas de inversión: ¿vale la pena en 2026?',
-      excerpt: 'Analizamos el mercado actual de parcelas en Chile y las perspectivas de rentabilidad para inversionistas.',
-      category: 'Inversión',
-      readTime: '6 min',
-      date: 'Hace 5 días',
-      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=80'
-    },
-    {
-      id: 3,
-      title: 'Aspectos legales que debes conocer antes de comprar',
-      excerpt: 'Documentación necesaria, inscripciones y trámites legales para una compra segura.',
-      category: 'Legal',
-      readTime: '5 min',
-      date: 'Hace 1 semana',
-      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80'
-    },
-    {
-      id: 4,
-      title: 'Cómo financiar la compra de tu parcela',
-      excerpt: 'Opciones de crédito hipotecario, subsidios y alternativas de financiamiento disponibles.',
-      category: 'Financiamiento',
-      readTime: '7 min',
-      date: 'Hace 2 semanas',
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80'
-    },
-    {
-      id: 5,
-      title: 'Permisos de construcción en terrenos rurales',
-      excerpt: 'Normativas, requisitos y proceso para obtener permisos de edificación en parcelas.',
-      category: 'Construcción',
-      readTime: '6 min',
-      date: 'Hace 3 semanas',
-      image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80'
-    },
-    {
-      id: 6,
-      title: 'Tendencias del mercado inmobiliario rural 2026',
-      excerpt: 'Precios, demanda y zonas más atractivas para invertir en parcelas este año.',
-      category: 'Mercado',
-      readTime: '5 min',
-      date: 'Hace 1 mes',
-      image: 'https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=400&q=80'
-    },
-    {
-      id: 7,
-      title: 'Conectividad y servicios básicos en parcelas',
-      excerpt: 'Agua, luz, internet y acceso: qué preguntar antes de comprar una parcela.',
-      category: 'Guía de compra',
-      readTime: '4 min',
-      date: 'Hace 1 mes',
-      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80'
-    }
+    { id: 2, title: t.recursos.art2Title, excerpt: t.recursos.art2Excerpt, category: t.recursos.art2Category, readTime: '6 min', date: t.recursos.art2Date, image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=80' },
+    { id: 3, title: t.recursos.art3Title, excerpt: t.recursos.art3Excerpt, category: t.recursos.art3Category, readTime: '5 min', date: t.recursos.art3Date, image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=80' },
+    { id: 4, title: t.recursos.art4Title, excerpt: t.recursos.art4Excerpt, category: t.recursos.art4Category, readTime: '7 min', date: t.recursos.art4Date, image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80' },
+    { id: 5, title: t.recursos.art5Title, excerpt: t.recursos.art5Excerpt, category: t.recursos.art5Category, readTime: '6 min', date: t.recursos.art5Date, image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80' },
+    { id: 6, title: t.recursos.art6Title, excerpt: t.recursos.art6Excerpt, category: t.recursos.art6Category, readTime: '5 min', date: t.recursos.art6Date, image: 'https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=400&q=80' },
+    { id: 7, title: t.recursos.art7Title, excerpt: t.recursos.art7Excerpt, category: t.recursos.art7Category, readTime: '4 min', date: t.recursos.art7Date, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80' },
   ];
 
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
-      'Guía de compra': '#006B4E',
-      'Inversión': '#006B4E',
+      'Guía de compra': '#006B4E', 'Buying guide': '#006B4E',
+      'Inversión': '#006B4E', 'Investment': '#006B4E',
       'Legal': '#6B6B6B',
-      'Financiamiento': '#006B4E',
-      'Construcción': '#006B4E',
-      'Mercado': '#6B6B6B'
+      'Financiamiento': '#006B4E', 'Financing': '#006B4E',
+      'Construcción': '#006B4E', 'Construction': '#006B4E',
+      'Mercado': '#6B6B6B', 'Market': '#6B6B6B',
     };
     return colors[category] || '#006B4E';
   };
@@ -146,7 +99,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                 color: '#0A0A0A'
               }}
             >
-              Recursos
+              {t.recursos.pageTitle}
             </h1>
             <p
               className="body-lead"
@@ -160,7 +113,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                 lineHeight: '1.6'
               }}
             >
-              Guías, noticias y consejos prácticos para comprar, vender e invertir en parcelas
+              {t.recursos.pageSubtitle}
             </p>
           </div>
         </section>
@@ -303,7 +256,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                         lineHeight: 'var(--line-height-body)'
                       }}
                     >
-                      {featuredArticle.readTime} de lectura
+                      {featuredArticle.readTime} {t.recursos.readLabel}
                     </span>
                   </div>
                   <span style={{ color: '#DEDEDE' }}>•</span>
@@ -450,7 +403,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                 letterSpacing: 'var(--letter-spacing-normal)'
               }}
             >
-              Más artículos
+              {t.recursos.moreArticles}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -581,43 +534,43 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
             <div className="space-y-4">
               <img src={logo} alt="CompraTuParcela" className="h-16 -ml-4" />
               <p className="text-xs text-gray-600">
-                Plataforma especializada en<br />compra y venta de parcelas
+                {t.home.footerDesc}
               </p>
             </div>
-            
+
             <div className="space-y-3">
-              <div className="text-xs font-bold text-black">EXPLORAR</div>
+              <div className="text-xs font-bold text-black">{t.home.footerExplore.toUpperCase()}</div>
               <div className="space-y-2 text-xs text-gray-600">
-                <div>Parcelas</div>
-                <div>Inmobiliarias</div>
-                <div>Blog</div>
+                <div>{t.nav.parcelas}</div>
+                <div>{t.nav.inmobiliarias}</div>
+                <div>{t.home.footerBlog}</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div className="text-xs font-bold text-black">PLATAFORMA</div>
+              <div className="text-xs font-bold text-black">{t.home.footerPlatform.toUpperCase()}</div>
               <div className="space-y-2 text-xs text-gray-600">
-                <div>Cómo funciona</div>
-                <div>Publicar propiedad</div>
-                <div>Planes para inmobiliarias</div>
-                <div>Para brokers</div>
+                <div>{t.home.footerHowItWorks}</div>
+                <div>{t.home.footerPublish}</div>
+                <div>{t.home.footerPlans}</div>
+                <div>{t.home.footerBrokers}</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div className="text-xs font-bold text-black">SOPORTE</div>
+              <div className="text-xs font-bold text-black">{t.home.footerSupport.toUpperCase()}</div>
               <div className="space-y-2 text-xs text-gray-600">
-                <div>Centro de ayuda</div>
-                <div>Términos y condiciones</div>
-                <div>Política de privacidad</div>
-                <div>Contacto</div>
+                <div>{t.home.footerHelp}</div>
+                <div>{t.home.footerTerms}</div>
+                <div>{t.home.footerPrivacy}</div>
+                <div>{t.home.footerContact}</div>
               </div>
             </div>
           </div>
 
           <div className="pt-8 border-t border-gray-200 text-center">
             <p className="text-xs text-gray-500">
-              © 2026 Compra Tu Parcela. Todos los derechos reservados.
+              {t.home.footerCopyright}
             </p>
           </div>
         </div>
@@ -640,12 +593,12 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
             <div className="p-8 pt-10">
               {/* Título */}
               <h2 className="mb-4 pr-8" style={{ color: '#006B4E', fontSize: 'var(--font-size-h3)' }}>
-                Para publicar tu propiedad, necesitas una cuenta
+                {t.home.publishModalTitle}
               </h2>
 
               {/* Descripción */}
               <p className="text-gray-600 mb-6" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)' }}>
-                Crear una cuenta te permite gestionar tus publicaciones, recibir consultas de compradores reales y avanzar con seguridad durante todo el proceso.
+                {t.home.publishModalDesc}
               </p>
 
               {/* Botones principales */}
@@ -661,7 +614,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                   }}
                   className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
-                  Crear cuenta
+                  {t.home.createAccountBtn}
                 </button>
                 <button
                   onClick={() => {
@@ -674,13 +627,13 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                   }}
                   className="w-full h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-black px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                 >
-                  Iniciar sesión
+                  {t.home.loginBtn}
                 </button>
               </div>
 
               {/* Texto de refuerzo */}
               <p className="text-gray-500 text-center mt-6" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)', fontSize: 'var(--font-size-body-sm)' }}>
-                Es rápido, sin compromiso y te guía paso a paso.
+                {t.home.publishModalNote}
               </p>
             </div>
           </div>
