@@ -25,6 +25,7 @@ const inmobiliariasData = [
   {
     id: 2,
     nombre: 'Propiedades del Sur',
+    nombreEn: 'Southern Properties',
     descripcion: 'Conectamos personas con sus terrenos ideales en la zona sur de Chile',
     descripcionEn: 'Connecting people with their ideal land in southern Chile',
     rating: 4.9,
@@ -35,6 +36,7 @@ const inmobiliariasData = [
   {
     id: 3,
     nombre: 'Inmobiliaria Austral',
+    nombreEn: 'Austral Real Estate',
     descripcion: 'Expertos en parcelas y desarrollos inmobiliarios en la Patagonia',
     descripcionEn: 'Experts in parcels and real estate developments in Patagonia',
     rating: 4.7,
@@ -323,7 +325,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                     {/* Nombre */}
                     <div className="space-y-1">
                       <h3 style={{ color: '#006B4E', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)' }}>
-                        {inmobiliaria.nombre}
+                        {language === 'en' && inmobiliaria.nombreEn ? inmobiliaria.nombreEn : inmobiliaria.nombre}
                       </h3>
                     </div>
                     
