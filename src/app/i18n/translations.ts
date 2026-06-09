@@ -36,6 +36,12 @@ export interface Translations {
     altoPotencialTuristico: string; ubicacionPremium: string;
     vistaCerroCastillo: string; potencialEcoturistico: string;
   };
+  inmobiliarias: {
+    pageTitle: string; pageSubtitle: string;
+    searchByName: string; searchPlaceholder: string;
+    regionLabel: string; allRegions: string; regionMetropolitana: string;
+    reviews: string; contact: string; viewAgency: string; generalInquiry: string;
+  };
   status: {
     disponible: string; reservada: string; reservandose: string;
     aprobada: string; rechazada: string; activa: string; pausada: string;
@@ -206,6 +212,12 @@ const es: Translations = {
     usoAgricola: 'Uso agrícola', aguaDisponible: 'Agua disponible',
     altoPotencialTuristico: 'Alto potencial turístico', ubicacionPremium: 'Ubicación premium',
     vistaCerroCastillo: 'Vista Cerro Castillo', potencialEcoturistico: 'Potencial ecoturístico',
+  },
+  inmobiliarias: {
+    pageTitle: 'Inmobiliarias', pageSubtitle: 'Encontrá inmobiliarias especializadas en parcelas y proyectos',
+    searchByName: 'Buscar por nombre', searchPlaceholder: 'Ej: Patagonia Properties',
+    regionLabel: 'Región / zona', allRegions: 'Todas las regiones', regionMetropolitana: 'Región Metropolitana',
+    reviews: 'reseñas', contact: 'Contactar', viewAgency: 'Ver inmobiliaria', generalInquiry: 'Consulta general',
   },
   status: {
     disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
@@ -459,6 +471,12 @@ const en: Translations = {
     usoAgricola: 'Agricultural use', aguaDisponible: 'Water available',
     altoPotencialTuristico: 'High tourist potential', ubicacionPremium: 'Premium location',
     vistaCerroCastillo: 'Cerro Castillo view', potencialEcoturistico: 'Eco-tourism potential',
+  },
+  inmobiliarias: {
+    pageTitle: 'Agencies', pageSubtitle: 'Find agencies specialized in parcels and projects',
+    searchByName: 'Search by name', searchPlaceholder: 'E.g.: Patagonia Properties',
+    regionLabel: 'Region / area', allRegions: 'All regions', regionMetropolitana: 'Metropolitan Region',
+    reviews: 'reviews', contact: 'Contact', viewAgency: 'View agency', generalInquiry: 'General inquiry',
   },
   status: {
     disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',
