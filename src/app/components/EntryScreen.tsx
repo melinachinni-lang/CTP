@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import entryBackground from 'figma:asset/e5096b94942ada0bf27ee8e61e30034a31f87b4c.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface EntryScreenProps {
   onNavigate: (screen: string) => void;
@@ -89,6 +90,8 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   const [blockedUntil, setBlockedUntil] = React.useState<Date | null>(null);
   const [rememberMe, setRememberMe] = React.useState(false);
 
+  const { t, language } = useI18n();
+
   const googleAccounts = [
     { name: 'María Pérez', email: 'maria.perez@gmail.com' },
     { name: 'Juan Gómez', email: 'juan.gomez@gmail.com' },
@@ -163,23 +166,23 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
     const hasUpper = /[A-Z]/.test(pwd);
     const hasSpecial = /[^A-Za-z0-9]/.test(pwd);
     const score = [hasMin, hasNumber, hasUpper, hasSpecial].filter(Boolean).length;
-    if (score <= 1) return { label: 'Débil', color: '#EF4444', width: '33%' };
-    if (score === 2 || score === 3) return { label: 'Media', color: '#F59E0B', width: '66%' };
-    return { label: 'Fuerte', color: '#16A34A', width: '100%' };
+    if (score <= 1) return { label: t.entry.strengthWeak, color: '#EF4444', width: '33%' };
+    if (score === 2 || score === 3) return { label: t.entry.strengthMedium, color: '#F59E0B', width: '66%' };
+    return { label: t.entry.strengthStrong, color: '#16A34A', width: '100%' };
   };
 
   const validateRegisterForm = (): boolean => {
     const errors: { email?: string; password?: string; confirm?: string } = {};
     if (!validateEmailFormat(registerEmail)) {
-      errors.email = 'El formato del email no es correcto.';
+      errors.email = t.entry.errEmailFormat;
     }
     if (registerPassword.length < 8) {
-      errors.password = 'La contraseña debe tener al menos 8 caracteres.';
+      errors.password = t.entry.errPasswordMin;
     } else if (!/\d/.test(registerPassword)) {
-      errors.password = 'La contraseña debe incluir al menos un número.';
+      errors.password = t.entry.errPasswordNumber;
     }
     if (confirmPassword !== registerPassword) {
-      errors.confirm = 'Las contraseñas no coinciden.';
+      errors.confirm = t.entry.errPasswordConfirm;
     }
     setRegisterErrors(errors);
     return Object.keys(errors).length === 0;
@@ -394,27 +397,27 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const profiles = [
-    { id: 'person', label: 'Personal', description: 'Comprar y/o vender parcelas de forma directa' },
-    { id: 'real-estate', label: 'Inmobiliaria', description: 'Gestiono múltiples propiedades o proyectos' },
-    { id: 'broker', label: 'Broker', description: 'Intermedio entre compradores y vendedores' },
+    { id: 'person', label: t.entry.profilePersonLabel, description: t.entry.profilePersonDesc },
+    { id: 'real-estate', label: t.entry.profileRealEstateLabel, description: t.entry.profileRealEstateDesc },
+    { id: 'broker', label: t.entry.profileBrokerLabel, description: t.entry.profileBrokerDesc },
   ];
 
   const actions = [
-    { id: 'buy', label: 'Comprar una parcela', description: 'Quiero buscar y comprar parcelas' },
-    { id: 'sell', label: 'Vender mi parcela', description: 'Quiero publicar mi propiedad para venderla' },
-    { id: 'both', label: 'Ambas cosas', description: 'Quiero comprar y vender parcelas' },
+    { id: 'buy', label: t.entry.actionBuyLabel, description: t.entry.actionBuyDesc },
+    { id: 'sell', label: t.entry.actionSellLabel, description: t.entry.actionSellDesc },
+    { id: 'both', label: t.entry.actionBothLabel, description: t.entry.actionBothDesc },
   ];
 
   const experienceLevels = [
-    { id: 'experienced', label: 'Sí, ya tengo experiencia', description: 'He comprado o vendido parcelas antes' },
-    { id: 'some-experience', label: 'Tengo algo de experiencia', description: 'Conozco el proceso pero necesito orientación' },
-    { id: 'first-time', label: 'No, es mi primera vez', description: 'Es mi primera experiencia con parcelas' },
+    { id: 'experienced', label: t.entry.expExperiencedLabel, description: t.entry.expExperiencedDesc },
+    { id: 'some-experience', label: t.entry.expSomeLabel, description: t.entry.expSomeDesc },
+    { id: 'first-time', label: t.entry.expFirstLabel, description: t.entry.expFirstDesc },
   ];
 
   const advisoryOptions = [
-    { id: 'yes', label: 'Sí, me gustaría recibir asesoría', description: 'Quiero acompañamiento profesional durante el proceso' },
-    { id: 'maybe', label: 'Tal vez más adelante', description: 'Prefiero evaluar esta opción en el futuro' },
-    { id: 'no', label: 'No, prefiero gestionarlo por mi cuenta', description: 'Me siento cómodo avanzando de forma independiente' },
+    { id: 'yes', label: t.entry.advisoryYesLabel, description: t.entry.advisoryYesDesc },
+    { id: 'maybe', label: t.entry.advisoryMaybeLabel, description: t.entry.advisoryMaybeDesc },
+    { id: 'no', label: t.entry.advisoryNoLabel, description: t.entry.advisoryNoDesc },
   ];
 
   const handleForgotPasswordSubmit = () => {
@@ -491,7 +494,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 }`}
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                Ingresar
+                {t.entry.tabLogin}
               </button>
               <button
                 onClick={() => setActiveTab('register')}
@@ -502,19 +505,17 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 }`}
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                Crear cuenta
+                {t.entry.tabRegister}
               </button>
             </div>
 
             {/* Título y descripción */}
             <div className="text-center space-y-2 mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2' }}>
-                {activeTab === 'login' ? 'Ingresa a tu cuenta' : 'Crea tu cuenta'}
+                {activeTab === 'login' ? t.entry.titleLogin : t.entry.titleRegister}
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                {activeTab === 'login' 
-                  ? 'Explora, compra o vende parcelas'
-                  : 'Es rápido y sin costo'}
+                {activeTab === 'login' ? t.entry.subtitleLogin : t.entry.subtitleRegister}
               </p>
             </div>
 
@@ -542,7 +543,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   {/* Error message - Email format */}
                   {emailFormatError && (
                     <p className="text-sm" style={{ color: 'var(--error)', fontFamily: 'Inter, sans-serif', marginTop: '8px' }}>
-                      El formato del email no es correcto. Revisa que esté bien escrito (ej: usuario@email.com).
+                      {t.entry.emailFormatError}
                     </p>
                   )}
                   {/* Error message - Google account */}
@@ -550,7 +551,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     <div className="flex items-start gap-2 mt-2 p-3 rounded-lg" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
                       <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#3B82F6"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/></svg>
                       <p className="text-sm" style={{ color: '#1D4ED8', fontFamily: 'Inter, sans-serif' }}>
-                        Esta cuenta usa Google. Ingresa con el botón de Google.
+                        {t.entry.googleAccountError}
                       </p>
                     </div>
                   )}
@@ -559,7 +560,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Password Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Contraseña <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.passwordLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -585,15 +586,15 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                         <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
                           <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#EF4444"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
                           <p className="text-sm" style={{ color: '#B91C1C', fontFamily: 'Inter, sans-serif' }}>
-                            Demasiados intentos fallidos. Tu acceso está bloqueado por 15 minutos. Intenta más tarde o usa "Olvidé mi contraseña".
+                            {t.entry.blockedError}
                           </p>
                         </div>
                       ) : (
                         <p className="text-sm" style={{ color: 'var(--error)', fontFamily: 'Inter, sans-serif' }}>
-                          Email o contraseña incorrectos.
+                          {t.entry.loginError}
                           {failedAttempts >= 2 && failedAttempts < 5 && (
                             <span className="block mt-0.5" style={{ color: '#B45309', fontSize: '12px' }}>
-                              {5 - failedAttempts} intento{5 - failedAttempts !== 1 ? 's' : ''} restante{5 - failedAttempts !== 1 ? 's' : ''} antes del bloqueo.
+                              {5 - failedAttempts} {(5 - failedAttempts) !== 1 ? t.entry.attemptsPlural : t.entry.attemptSingular}
                             </span>
                           )}
                         </p>
@@ -611,14 +612,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       onChange={(e) => setRememberMe(e.target.checked)}
                       className="w-4 h-4 rounded accent-[#006B4E]"
                     />
-                    <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>Recordarme</span>
+                    <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>{t.entry.rememberMe}</span>
                   </label>
                   <button
                     className="text-sm text-gray-600 hover:text-black transition-colors"
                     style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
                     onClick={() => setShowForgotPassword(true)}
                   >
-                    Olvidé mi contraseña
+                    {t.entry.forgotPasswordLink}
                   </button>
                 </div>
 
@@ -637,7 +638,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       onMouseEnter={(e) => { if (!isBlocked) e.currentTarget.style.backgroundColor = '#01533E'; }}
                       onMouseLeave={(e) => { if (!isBlocked) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                     >
-                      {isBlocked ? 'Acceso bloqueado temporalmente' : 'Ingresar'}
+                      {isBlocked ? t.entry.accessBlocked : t.entry.loginBtn}
                     </button>
                   );
                 })()}
@@ -663,7 +664,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     <path d="M4.49958 11.9086C4.05958 10.6667 4.05958 9.33801 4.49958 8.09613V5.52109H1.20312C-0.400937 8.73801 -0.400937 12.2667 1.20312 15.4836L4.49958 11.9086Z" fill="#FBBC04"/>
                     <path d="M10.2002 3.95891C11.6823 3.93719 13.1089 4.47266 14.1902 5.45891L17.0317 2.61735C15.1863 0.890469 12.7361 -0.0488281 10.2002 -0.0214844C6.33929 -0.0214844 2.79925 2.32391 1.20312 5.52109L4.49958 8.09613C5.27483 5.71485 7.53958 3.95891 10.2002 3.95891Z" fill="#EA4335"/>
                   </svg>
-                  Ingresar con Google
+                  {t.entry.loginWithGoogle}
                 </button>
               </div>
             )}
@@ -692,7 +693,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Contraseña */}
                 <div className="space-y-1">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Contraseña *
+                    {t.entry.passwordLabel} *
                   </label>
                   <div className="relative">
                     <input
@@ -720,10 +721,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     const hasLower = /[a-z]/.test(registerPassword);
                     const strength = getPasswordStrength(registerPassword);
                     const rules = [
-                      { label: 'Mínimo 8 caracteres', met: hasMin },
-                      { label: 'Al menos 1 número', met: hasNumber },
-                      { label: 'Al menos 1 mayúscula', met: hasUpper },
-                      { label: 'Al menos 1 minúscula', met: hasLower },
+                      { label: t.entry.ruleMin8, met: hasMin },
+                      { label: t.entry.ruleNumber, met: hasNumber },
+                      { label: t.entry.ruleUpper, met: hasUpper },
+                      { label: t.entry.ruleLower, met: hasLower },
                     ];
                     return (
                       <div className="pt-2 space-y-2">
@@ -751,7 +752,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                               <div className="h-1.5 rounded-full transition-all duration-300" style={{ width: strength.width, backgroundColor: strength.color }} />
                             </div>
                             <p className="text-xs" style={{ color: strength.color, fontFamily: 'Inter, sans-serif' }}>
-                              Contraseña {strength.label.toLowerCase()}
+                              {t.entry.strengthPrefix} {strength.label.toLowerCase()}
                             </p>
                           </div>
                         )}
@@ -766,7 +767,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Confirmar contraseña */}
                 <div className="space-y-1">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Confirmar contraseña *
+                    {t.entry.confirmPasswordLabel} *
                   </label>
                   <div className="relative">
                     <input
@@ -789,7 +790,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   {confirmPassword && confirmPassword === registerPassword && (
                     <p className="text-xs flex items-center gap-1" style={{ color: '#16A34A', fontFamily: 'Inter, sans-serif' }}>
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      Las contraseñas coinciden
+                      {t.entry.passwordsMatch}
                     </p>
                   )}
                   {registerErrors.confirm && (
@@ -806,7 +807,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   onMouseEnter={(e) => { if (registerEmail && registerPassword && confirmPassword) e.currentTarget.style.backgroundColor = '#01533E'; }}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
-                  Registrarme
+                  {t.entry.registerBtn}
                 </button>
 
                 {/* Divider */}
@@ -830,7 +831,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     <path d="M4.49958 11.9086C4.05958 10.6667 4.05958 9.33801 4.49958 8.09613V5.52109H1.20312C-0.400937 8.73801 -0.400937 12.2667 1.20312 15.4836L4.49958 11.9086Z" fill="#FBBC04"/>
                     <path d="M10.2002 3.95891C11.6823 3.93719 13.1089 4.47266 14.1902 5.45891L17.0317 2.61735C15.1863 0.890469 12.7361 -0.0488281 10.2002 -0.0214844C6.33929 -0.0214844 2.79925 2.32391 1.20312 5.52109L4.49958 8.09613C5.27483 5.71485 7.53958 3.95891 10.2002 3.95891Z" fill="#EA4335"/>
                   </svg>
-                  Continuar con Google
+                  {t.entry.continueWithGoogle}
                 </button>
               </div>
             )}
@@ -838,7 +839,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
           {/* Nota de seguridad */}
           <p className="text-center text-xs text-white mt-6" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
-            Al continuar, aceptas nuestros términos de servicio y política de privacidad
+            {t.entry.termsNote}
           </p>
         </div>
       </div>
@@ -860,10 +861,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             </div>
 
             <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '26px', fontWeight: 600, color: '#0A0A0A', marginBottom: '12px' }}>
-              Revisa tu email
+              {t.entry.checkEmail}
             </h1>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#6B7280', lineHeight: '1.6', marginBottom: '8px' }}>
-              Te enviamos un link de confirmación a
+              {t.entry.confirmEmailSent}
             </p>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 600, color: '#0A0A0A', marginBottom: '32px' }}>
               {registerEmail}
@@ -871,19 +872,19 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
             <div className="rounded-xl p-4 text-left mb-6" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB' }}>
               <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6B7280', lineHeight: '1.6' }}>
-                Hacé clic en el link del email para activar tu cuenta. El link expira en <strong style={{ color: '#374151' }}>48 horas</strong>.
+                {t.entry.confirmEmailInstructions}
               </p>
             </div>
 
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#9CA3AF', marginBottom: '16px' }}>
-              ¿No recibiste el email? Revisa la carpeta de spam o
+              {t.entry.notReceived}
             </p>
             <button
               onClick={() => {}}
               style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 600, color: '#006B4E' }}
               className="hover:underline"
             >
-              Reenviar email de confirmación
+              {t.entry.resendEmail}
             </button>
 
             <div className="mt-8">
@@ -892,7 +893,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#9CA3AF' }}
                 className="hover:text-gray-600 transition-colors"
               >
-                ← Volver al registro
+                {t.entry.backToRegister}
               </button>
             </div>
           </div>
@@ -913,7 +914,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 fontFamily: 'var(--font-heading)'
               }}
             >
-              Elegí una cuenta
+              {t.entry.chooseAccount}
             </h1>
 
             {/* Lista de cuentas */}
@@ -970,7 +971,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 lineHeight: '1.5'
               }}
             >
-              Al continuar, aceptas los términos de servicio y la política de privacidad de CompraTuParcela.
+              {t.entry.googleTerms}
             </p>
 
             {/* Botón Cancelar */}
@@ -980,7 +981,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 className="text-sm hover:text-black font-medium transition-colors"
                 style={{ color: '#737373', fontFamily: 'var(--font-body)' }}
               >
-                Cancelar
+                {t.entry.cancel}
               </button>
             </div>
           </div>
@@ -997,10 +998,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <>
                 <div className="p-6 border-b border-gray-200">
                   <h3 className="text-xl font-semibold mb-1" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
-                    Recuperar contraseña
+                    {t.entry.forgotPasswordTitle}
                   </h3>
                   <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
-                    Ingresa tu email y te enviamos un link para restablecer tu contraseña.
+                    {t.entry.forgotPasswordDesc}
                   </p>
                 </div>
 
@@ -1022,7 +1023,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
                         <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#3B82F6"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/></svg>
                         <p className="text-sm" style={{ color: '#1D4ED8', fontFamily: 'Inter, sans-serif' }}>
-                          Esta cuenta usa Google. Ingresa con el botón de Google — no necesitas contraseña.
+                          {t.entry.forgotGoogleError}
                         </p>
                       </div>
                     )}
@@ -1031,7 +1032,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D' }}>
                         <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#D97706"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
                         <p className="text-sm" style={{ color: '#92400E', fontFamily: 'Inter, sans-serif' }}>
-                          Has alcanzado el máximo de 3 solicitudes por hora.
+                          {t.entry.rateLimitError}
                         </p>
                       </div>
                     )}
@@ -1044,7 +1045,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 text-sm font-medium rounded-[200px] transition-colors"
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
-                    Volver al login
+                    {t.entry.backToLogin}
                   </button>
                   <button
                     onClick={handleForgotPasswordSubmit}
@@ -1054,7 +1055,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     onMouseEnter={(e) => { if (forgotPasswordEmail && resetRequestCount < 3) e.currentTarget.style.backgroundColor = '#01533E'; }}
                     onMouseLeave={(e) => { if (forgotPasswordEmail && resetRequestCount < 3) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                   >
-                    Enviar link
+                    {t.entry.sendLink}
                   </button>
                 </div>
               </>
@@ -1069,13 +1070,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
-                  Revisa tu email
+                  {t.entry.checkEmail}
                 </h3>
                 <p className="text-sm mb-6" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6' }}>
-                  Si ese email está registrado, te enviamos un link para restablecer tu contraseña. El link expira en 24 horas.
+                  {t.entry.resetEmailSentDesc}
                 </p>
                 <div className="text-xs mb-6 px-4 py-3 rounded-lg" style={{ backgroundColor: '#F3F4F6', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-                  No olvides revisar la carpeta de spam.
+                  {t.entry.checkSpam}
                 </div>
 
                 {/* Simular click en link — solo en wireframe */}
@@ -1086,14 +1087,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
-                  Simular click en el link →
+                  {t.entry.simulateLink}
                 </button>
                 <button
                   onClick={closeForgotPasswordModal}
                   className="w-full h-10 text-sm text-gray-500 hover:text-gray-700 transition-colors"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  Volver al login
+                  {t.entry.backToLogin}
                 </button>
               </div>
             )}
@@ -1105,31 +1106,31 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               const hasUpper = /[A-Z]/.test(newPassword);
               const hasLower = /[a-z]/.test(newPassword);
               const score = [hasMin, hasNumber, hasUpper, hasLower].filter(Boolean).length;
-              const strength = score <= 1 ? { label: 'Débil', color: '#EF4444', width: '33%' }
-                : score <= 3 ? { label: 'Media', color: '#F59E0B', width: '66%' }
-                : { label: 'Fuerte', color: '#16A34A', width: '100%' };
+              const strength = score <= 1 ? { label: t.entry.strengthWeak, color: '#EF4444', width: '33%' }
+                : score <= 3 ? { label: t.entry.strengthMedium, color: '#F59E0B', width: '66%' }
+                : { label: t.entry.strengthStrong, color: '#16A34A', width: '100%' };
               const rules = [
-                { label: 'Mínimo 8 caracteres', met: hasMin },
-                { label: 'Al menos 1 número', met: hasNumber },
-                { label: 'Al menos 1 mayúscula', met: hasUpper },
-                { label: 'Al menos 1 minúscula', met: hasLower },
+                { label: t.entry.ruleMin8, met: hasMin },
+                { label: t.entry.ruleNumber, met: hasNumber },
+                { label: t.entry.ruleUpper, met: hasUpper },
+                { label: t.entry.ruleLower, met: hasLower },
               ];
               const canSubmit = hasMin && hasNumber && hasUpper && hasLower && newPassword === confirmNewPassword && newPassword.length > 0;
               return (
                 <>
                   <div className="p-6 border-b border-gray-200">
                     <h3 className="text-xl font-semibold mb-1" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
-                      Nueva contraseña
+                      {t.entry.newPasswordTitle}
                     </h3>
                     <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
-                      Elige una contraseña segura para tu cuenta.
+                      {t.entry.newPasswordDesc}
                     </p>
                   </div>
 
                   <div className="p-6 space-y-4">
                     {/* Requisitos — siempre visibles */}
                     <div className="p-3 rounded-lg space-y-1.5" style={{ backgroundColor: '#F9FAFB' }}>
-                      <p className="text-xs font-medium mb-2" style={{ color: '#374151', fontFamily: 'Inter, sans-serif' }}>Tu contraseña debe tener:</p>
+                      <p className="text-xs font-medium mb-2" style={{ color: '#374151', fontFamily: 'Inter, sans-serif' }}>{t.entry.passwordMustHave}</p>
                       <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                         {rules.map(rule => (
                           <div key={rule.label} className="flex items-center gap-1.5">
@@ -1150,7 +1151,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
                     {/* Nueva contraseña */}
                     <div className="space-y-2">
-                      <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>Nueva contraseña *</label>
+                      <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>{t.entry.newPasswordLabel} *</label>
                       <div className="relative">
                         <input
                           type={showNewPassword ? 'text' : 'password'}
@@ -1181,7 +1182,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
                     {/* Confirmar contraseña */}
                     <div className="space-y-2">
-                      <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>Confirmar contraseña *</label>
+                      <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>{t.entry.confirmPasswordLabel} *</label>
                       <div className="relative">
                         <input
                           type={showConfirmNewPassword ? 'text' : 'password'}
@@ -1200,7 +1201,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                         </button>
                       </div>
                       {confirmNewPassword && confirmNewPassword !== newPassword && (
-                        <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>Las contraseñas no coinciden.</p>
+                        <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>{t.entry.errPasswordConfirm}</p>
                       )}
                     </div>
                   </div>
@@ -1211,7 +1212,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 text-sm font-medium rounded-[200px] transition-colors"
                       style={{ fontFamily: 'Inter, sans-serif' }}
                     >
-                      Volver al login
+                      {t.entry.backToLogin}
                     </button>
                     <button
                       onClick={handleResetPassword}
@@ -1221,7 +1222,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       onMouseEnter={(e) => { if (canSubmit) e.currentTarget.style.backgroundColor = '#01533E'; }}
                       onMouseLeave={(e) => { if (canSubmit) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                     >
-                      Restablecer contraseña
+                      {t.entry.resetPasswordBtn}
                     </button>
                   </div>
                 </>
@@ -1237,17 +1238,17 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif' }}>
-                  ¡Contraseña restablecida!
+                  {t.entry.passwordResetTitle}
                 </h3>
                 <p className="text-sm mb-6" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6' }}>
-                  Tu contraseña fue actualizada correctamente. Volviendo al login en {resetCountdown} segundo{resetCountdown !== 1 ? 's' : ''}...
+                  {t.entry.passwordResetDesc} {resetCountdown} {resetCountdown !== 1 ? t.entry.secondsPlural : t.entry.secondSingular}...
                 </p>
                 <button
                   onClick={closeForgotPasswordModal}
                   className="w-full h-12 text-sm font-medium rounded-[200px] border transition-colors hover:bg-gray-50"
                   style={{ color: '#0A0A0A', borderColor: '#CDD8DE', fontFamily: 'Inter, sans-serif' }}
                 >
-                  Volver al login ahora
+                  {t.entry.backToLoginNow}
                 </button>
               </div>
             )}
@@ -1264,7 +1265,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Progress Bar – Paso 1 de 5 */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 1 de 5</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>{t.entry.step1of5}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '20%' }}></div>
@@ -1274,10 +1275,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
-                ¿Qué tipo de cuenta quieres crear?
+                {t.entry.profileTitle}
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                Selecciona la opción que mejor se adapte a cómo usarás CompraTuParcela.
+                {t.entry.profileSubtitle}
               </p>
             </div>
 
@@ -1335,7 +1336,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => { if (selectedProfile) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedProfile) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
-              Continuar
+              {t.entry.continuar}
             </button>
           </div>
         </div>
@@ -1354,13 +1355,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {t.entry.back}
             </button>
 
             {/* Progress Bar – Paso 2 de 5 */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 2 de 5</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>{t.entry.step2of5}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '40%' }}></div>
@@ -1370,10 +1371,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
-                ¿Qué quieres hacer?
+                {t.entry.actionTitle}
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                Selecciona la acción que deseas realizar en CompraTuParcela.
+                {t.entry.actionSubtitle}
               </p>
             </div>
 
@@ -1429,7 +1430,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => { if (selectedAction) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedAction) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
-              Continuar
+              {t.entry.continuar}
             </button>
           </div>
         </div>
@@ -1448,13 +1449,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {t.entry.back}
             </button>
 
             {/* Progress Bar – Paso 3 de 5 */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 3 de 5</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>{t.entry.step3of5}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '60%' }}></div>
@@ -1464,10 +1465,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
-                ¿Tienes experiencia comprando o vendiendo parcelas?
+                {t.entry.experienceTitle}
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                Esto nos ayuda a personalizar tu experiencia en la plataforma.
+                {t.entry.experienceSubtitle}
               </p>
             </div>
 
@@ -1523,7 +1524,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => { if (selectedExperience) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedExperience) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
-              Continuar
+              {t.entry.continuar}
             </button>
           </div>
         </div>
@@ -1542,13 +1543,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {t.entry.back}
             </button>
 
             {/* Progress Bar – Paso 4 de 5 */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 4 de 5</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>{t.entry.step4of5}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '80%' }}></div>
@@ -1558,10 +1559,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
-                ¿Te gustaría contar con asesoría durante el proceso?
+                {t.entry.advisoryTitle}
               </h1>
               <p className="text-gray-600" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                Puedes solicitarla más adelante si lo necesitas.
+                {t.entry.advisorySubtitle}
               </p>
             </div>
 
@@ -1617,7 +1618,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => { if (selectedAdvisory) e.currentTarget.style.backgroundColor = '#01533E'; }}
               onMouseLeave={(e) => { if (selectedAdvisory) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
-              Continuar
+              {t.entry.continuar}
             </button>
           </div>
         </div>
@@ -1636,13 +1637,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {t.entry.back}
             </button>
 
             {/* Progress Bar – Paso 5 de 5 */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>Paso 5 de 5</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>{t.entry.step5of5}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '100%' }}></div>
@@ -1652,26 +1653,26 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Header */}
             <div className="mb-8">
               <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '12px' }}>
-                {selectedProfile === 'person' && 'Completa tu perfil'}
-                {selectedProfile === 'real-estate' && 'Datos de la inmobiliaria'}
-                {selectedProfile === 'broker' && 'Datos del broker'}
+                {selectedProfile === 'person' && t.entry.profileFormPersonTitle}
+                {selectedProfile === 'real-estate' && t.entry.profileFormRealEstateTitle}
+                {selectedProfile === 'broker' && t.entry.profileFormBrokerTitle}
               </h1>
               <p className="text-gray-600 mb-4" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, lineHeight: '1.5' }}>
-                {selectedProfile === 'person' && 'Perfil: Personal'}
-                {selectedProfile === 'real-estate' && 'Perfil: Inmobiliaria'}
-                {selectedProfile === 'broker' && 'Perfil: Broker'}
+                {selectedProfile === 'person' && t.entry.profileLabelPerson}
+                {selectedProfile === 'real-estate' && t.entry.profileLabelRealEstate}
+                {selectedProfile === 'broker' && t.entry.profileLabelBroker}
               </p>
               {selectedProfile === 'person' && (
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                   <p className="text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, lineHeight: '1.6' }}>
-                    Estos datos son opcionales. Puedes completarlos ahora o después desde tu perfil. Tu cuenta te permite tanto comprar como vender parcelas.
+                    {t.entry.profileFormPersonInfo}
                   </p>
                 </div>
               )}
               {selectedProfile === 'real-estate' && (
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                   <p className="text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, lineHeight: '1.6' }}>
-                    Configura el perfil de tu inmobiliaria. Podrás gestionar publicaciones y equipo desde un solo lugar.
+                    {t.entry.profileFormRealEstateInfo}
                   </p>
                 </div>
               )}
@@ -1681,7 +1682,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <p className="text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, lineHeight: '1.6' }}>
-                    Como broker, intermedias entre compradores y vendedores. No publicas inventario propio.
+                    {t.entry.profileFormBrokerInfo}
                   </p>
                 </div>
               )}
@@ -1693,11 +1694,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Full Name Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Nombre completo <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.fullNameLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Juan Pérez González"
+                    placeholder={t.entry.fullNamePlaceholder}
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
@@ -1709,7 +1710,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Phone Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Teléfono <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.phoneLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <div className="flex gap-2">
                     <select
@@ -1740,11 +1741,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* City Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Región o comuna <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.regionLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Región Metropolitana, Santiago"
+                    placeholder={t.entry.regionPlaceholder}
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     required
@@ -1760,11 +1761,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Company Name Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Nombre de la inmobiliaria <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.companyNameLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Inmobiliaria Los Andes"
+                    placeholder={t.entry.companyNamePlaceholder}
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     required
@@ -1776,7 +1777,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* RUT Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    RUT de la empresa <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.companyRutLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -1792,7 +1793,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Phone Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Teléfono de contacto <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.contactPhoneLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <div className="flex gap-2">
                     <select
@@ -1823,11 +1824,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Office Address Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Dirección de oficina <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.officeAddressLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Av. Providencia 1234, Providencia"
+                    placeholder={t.entry.officeAddressPlaceholder}
                     value={officeAddress}
                     onChange={(e) => setOfficeAddress(e.target.value)}
                     required
@@ -1839,11 +1840,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Region/City Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Región o comuna <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.regionLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Región Metropolitana, Santiago"
+                    placeholder={t.entry.regionPlaceholder}
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     required
@@ -1855,7 +1856,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Website Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Sitio web <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.websiteLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="url"
@@ -1875,11 +1876,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Full Name Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Nombre completo <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.fullNameLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Juan Pérez González"
+                    placeholder={t.entry.fullNamePlaceholder}
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
@@ -1891,7 +1892,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* RUT Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    RUT <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.rutLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -1907,7 +1908,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Phone Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Teléfono <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.phoneLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="tel"
@@ -1923,7 +1924,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* License Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Matrícula profesional <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.licenseLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -1939,11 +1940,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Operation Zone Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    Zona de operación <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.operationZoneLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Región Metropolitana, Santiago"
+                    placeholder={t.entry.regionPlaceholder}
                     value={operationZone}
                     onChange={(e) => setOperationZone(e.target.value)}
                     required
@@ -1965,7 +1966,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
-              Finalizar registro
+              {t.entry.finishRegistration}
             </button>
           </div>
         </div>
@@ -1984,13 +1985,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {t.entry.back}
             </button>
 
             {/* Step Indicator */}
             <div className="text-center mb-6">
               <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                Paso {onboardingStep} de 3
+                {t.entry.stepOf3} {onboardingStep} {language === 'en' ? 'of' : 'de'} 3
               </p>
             </div>
 
@@ -1998,10 +1999,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {onboardingStep === 1 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  ¿Cómo piensas usar CompraTuParcela?
+                  {t.entry.reOnboard1Title}
                 </h1>
                 <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  Elige la opción que mejor te represente.
+                  {t.entry.reOnboard1Subtitle}
                 </p>
                 <div className="space-y-3 mb-8">
                   <button
@@ -2026,7 +2027,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Publicar pocas propiedades
+                          {t.entry.reOnboard1Opt1}
                         </div>
                       </div>
                     </div>
@@ -2053,7 +2054,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Gestionar varias propiedades
+                          {t.entry.reOnboard1Opt2}
                         </div>
                       </div>
                     </div>
@@ -2080,7 +2081,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Evaluar la plataforma primero
+                          {t.entry.reOnboard1Opt3}
                         </div>
                       </div>
                     </div>
@@ -2092,10 +2093,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {onboardingStep === 2 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  ¿Cuál es tu objetivo principal hoy?
+                  {t.entry.reOnboard2Title}
                 </h1>
                 <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  Vamos a organizar el panel según esto.
+                  {t.entry.reOnboard2Subtitle}
                 </p>
                 <div className="space-y-3 mb-8">
                   <button
@@ -2120,7 +2121,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Publicar inventario
+                          {t.entry.reOnboard2Opt1}
                         </div>
                       </div>
                     </div>
@@ -2147,7 +2148,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Gestionar contactos y consultas
+                          {t.entry.reOnboard2Opt2}
                         </div>
                       </div>
                     </div>
@@ -2174,7 +2175,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Dar visibilidad a mis propiedades
+                          {t.entry.reOnboard2Opt3}
                         </div>
                       </div>
                     </div>
@@ -2186,10 +2187,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {onboardingStep === 3 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  ¿Cómo gestionarás tus propiedades?
+                  {t.entry.reOnboard3Title}
                 </h1>
                 <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  Esto nos ayuda a adaptar las herramientas a tu equipo de trabajo.
+                  {t.entry.reOnboard3Subtitle}
                 </p>
                 <div className="space-y-3 mb-8">
                   <button
@@ -2214,7 +2215,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          La voy a usar solo/a
+                          {t.entry.reOnboard3Opt1}
                         </div>
                       </div>
                     </div>
@@ -2241,7 +2242,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          La usamos entre varias personas
+                          {t.entry.reOnboard3Opt2}
                         </div>
                       </div>
                     </div>
@@ -2268,7 +2269,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Todavía no lo sé
+                          {t.entry.reOnboard3Opt3}
                         </div>
                       </div>
                     </div>
@@ -2313,7 +2314,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 }
               }}
             >
-              Continuar
+              {t.entry.continuar}
             </button>
 
             {/* Skip Link */}
@@ -2323,7 +2324,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 className="text-base text-gray-600 hover:text-black transition-colors underline"
                 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
               >
-                Omitir por ahora
+                {t.entry.skipForNow}
               </button>
             </div>
           </div>
@@ -2343,13 +2344,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {t.entry.back}
             </button>
 
             {/* Step Indicator */}
             <div className="text-center mb-6">
               <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                Paso {brokerOnboardingStep} de 3
+                {t.entry.stepOf3} {brokerOnboardingStep} {language === 'en' ? 'of' : 'de'} 3
               </p>
             </div>
 
@@ -2357,10 +2358,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {brokerOnboardingStep === 1 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  ¿Cuál es tu rol principal dentro de la plataforma?
+                  {t.entry.brokerOnboard1Title}
                 </h1>
                 <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  Esto nos permite mostrarte las herramientas adecuadas.
+                  {t.entry.brokerOnboard1Subtitle}
                 </p>
                 <div className="space-y-3 mb-8">
                   <button
@@ -2385,7 +2386,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Intermediar operaciones
+                          {t.entry.brokerOnboard1Opt1}
                         </div>
                       </div>
                     </div>
@@ -2412,7 +2413,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Gestionar leads y contactos
+                          {t.entry.brokerOnboard1Opt2}
                         </div>
                       </div>
                     </div>
@@ -2439,7 +2440,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Explorar oportunidades
+                          {t.entry.brokerOnboard1Opt3}
                         </div>
                       </div>
                     </div>
@@ -2451,10 +2452,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {brokerOnboardingStep === 2 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  ¿En qué te enfocarás primero?
+                  {t.entry.brokerOnboard2Title}
                 </h1>
                 <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  Puedes cambiar tu enfoque en cualquier momento.
+                  {t.entry.brokerOnboard2Subtitle}
                 </p>
                 <div className="space-y-3 mb-8">
                   <button
@@ -2479,7 +2480,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Contactos
+                          {t.entry.brokerOnboard2Opt1}
                         </div>
                       </div>
                     </div>
@@ -2506,7 +2507,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Oportunidades
+                          {t.entry.brokerOnboard2Opt2}
                         </div>
                       </div>
                     </div>
@@ -2533,7 +2534,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Seguimiento
+                          {t.entry.brokerOnboard2Opt3}
                         </div>
                       </div>
                     </div>
@@ -2545,10 +2546,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {brokerOnboardingStep === 3 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  ¿Qué experiencia tienes como broker?
+                  {t.entry.brokerOnboard3Title}
                 </h1>
                 <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  Nos ayuda a adaptar la plataforma a tu nivel de experiencia.
+                  {t.entry.brokerOnboard3Subtitle}
                 </p>
                 <div className="space-y-3 mb-8">
                   <button
@@ -2573,7 +2574,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Estoy empezando y necesito guía
+                          {t.entry.brokerOnboard3Opt1}
                         </div>
                       </div>
                     </div>
@@ -2600,7 +2601,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Tengo experiencia intermediar operaciones
+                          {t.entry.brokerOnboard3Opt2}
                         </div>
                       </div>
                     </div>
@@ -2627,7 +2628,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                       </div>
                       <div className="flex-1">
                         <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          Tengo mucha experiencia y trabajo de forma autónoma
+                          {t.entry.brokerOnboard3Opt3}
                         </div>
                       </div>
                     </div>
@@ -2672,7 +2673,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 }
               }}
             >
-              Continuar
+              {t.entry.continuar}
             </button>
 
             {/* Skip Link */}
@@ -2682,7 +2683,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 className="text-base text-gray-600 hover:text-black transition-colors underline"
                 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
               >
-                Omitir por ahora
+                {t.entry.skipForNow}
               </button>
             </div>
           </div>
@@ -2701,14 +2702,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               </div>
             </div>
             <h1 className="text-center mb-4" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2' }}>
-              ¡Todo listo!
+              {t.entry.completionTitle}
             </h1>
             <p className="text-center text-gray-600 mb-6" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-              Tu cuenta está configurada. Ahora puedes empezar a usar CompraTuParcela.
+              {t.entry.completionDesc}
             </p>
             <div className="bg-gray-100 p-4 rounded-lg mb-6">
               <p className="text-center text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, lineHeight: '1.6' }}>
-                Estamos preparando tu portal. En unos segundos continuarás automáticamente.
+                {t.entry.completionLoading}
               </p>
             </div>
             <div className="flex justify-center">
@@ -2731,12 +2732,12 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
             {/* Title */}
             <h1 className="text-center mb-3" style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '26px', fontWeight: 700, lineHeight: '1.2' }}>
-              ¡Bienvenido/a{fullName ? `, ${fullName.split(' ')[0]}` : ''}!
+              {t.entry.welcomeTitle}{fullName ? `, ${fullName.split(' ')[0]}` : ''}!
             </h1>
 
             {/* Subtitle */}
             <p className="text-center mb-8" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 400, lineHeight: '1.6' }}>
-              Tu cuenta está lista. Empieza explorando parcelas o publica la tuya.
+              {t.entry.welcomeDesc}
             </p>
 
             {/* Buttons */}
@@ -2746,14 +2747,14 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#006B4E', fontFamily: 'Inter, sans-serif' }}
               >
-                Explorar parcelas
+                {t.entry.exploreParcels}
               </button>
               <button
                 onClick={() => { setShowWelcomeModal(false); onNavigate(welcomeDestination); }}
                 className="w-full py-3 rounded-xl text-sm font-medium border transition-colors hover:bg-gray-50"
                 style={{ color: '#0A0A0A', borderColor: '#CDD8DE', fontFamily: 'Inter, sans-serif' }}
               >
-                Publicar mi parcela
+                {t.entry.publishParcel}
               </button>
             </div>
           </div>

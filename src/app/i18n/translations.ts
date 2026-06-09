@@ -212,6 +212,77 @@ export interface Translations {
     selected: string; selectedPlural: string;
     clear: string; view: string;
   };
+  entry: {
+    tabLogin: string; tabRegister: string;
+    titleLogin: string; titleRegister: string;
+    subtitleLogin: string; subtitleRegister: string;
+    passwordLabel: string; confirmPasswordLabel: string;
+    rememberMe: string; forgotPasswordLink: string;
+    loginBtn: string; accessBlocked: string; loginWithGoogle: string;
+    registerBtn: string; continueWithGoogle: string; continuar: string;
+    termsNote: string;
+    emailFormatError: string; googleAccountError: string;
+    loginError: string; blockedError: string;
+    errEmailFormat: string; errPasswordMin: string; errPasswordNumber: string; errPasswordConfirm: string;
+    passwordsMatch: string;
+    ruleMin8: string; ruleNumber: string; ruleUpper: string; ruleLower: string;
+    strengthWeak: string; strengthMedium: string; strengthStrong: string; strengthPrefix: string;
+    checkEmail: string; confirmEmailSent: string; confirmEmailInstructions: string;
+    notReceived: string; resendEmail: string; backToRegister: string;
+    chooseAccount: string; googleTerms: string; cancel: string;
+    forgotPasswordTitle: string; forgotPasswordDesc: string;
+    forgotGoogleError: string; rateLimitError: string;
+    backToLogin: string; sendLink: string;
+    resetEmailSentDesc: string; checkSpam: string; simulateLink: string;
+    newPasswordTitle: string; newPasswordDesc: string; passwordMustHave: string;
+    newPasswordLabel: string; resetPasswordBtn: string;
+    passwordResetTitle: string; passwordResetDesc: string; backToLoginNow: string;
+    secondSingular: string; secondsPlural: string;
+    back: string;
+    step1of5: string; step2of5: string; step3of5: string; step4of5: string; step5of5: string; stepOf3: string;
+    profileTitle: string; profileSubtitle: string;
+    profilePersonLabel: string; profilePersonDesc: string;
+    profileRealEstateLabel: string; profileRealEstateDesc: string;
+    profileBrokerLabel: string; profileBrokerDesc: string;
+    actionTitle: string; actionSubtitle: string;
+    actionBuyLabel: string; actionBuyDesc: string;
+    actionSellLabel: string; actionSellDesc: string;
+    actionBothLabel: string; actionBothDesc: string;
+    experienceTitle: string; experienceSubtitle: string;
+    expExperiencedLabel: string; expExperiencedDesc: string;
+    expSomeLabel: string; expSomeDesc: string;
+    expFirstLabel: string; expFirstDesc: string;
+    advisoryTitle: string; advisorySubtitle: string;
+    advisoryYesLabel: string; advisoryYesDesc: string;
+    advisoryMaybeLabel: string; advisoryMaybeDesc: string;
+    advisoryNoLabel: string; advisoryNoDesc: string;
+    profileFormPersonTitle: string; profileFormRealEstateTitle: string; profileFormBrokerTitle: string;
+    profileLabelPerson: string; profileLabelRealEstate: string; profileLabelBroker: string;
+    profileFormPersonInfo: string; profileFormRealEstateInfo: string; profileFormBrokerInfo: string;
+    fullNameLabel: string; fullNamePlaceholder: string;
+    phoneLabel: string; contactPhoneLabel: string;
+    regionLabel: string; regionPlaceholder: string;
+    companyNameLabel: string; companyNamePlaceholder: string; companyRutLabel: string;
+    officeAddressLabel: string; officeAddressPlaceholder: string;
+    websiteLabel: string; rutLabel: string; licenseLabel: string; operationZoneLabel: string;
+    finishRegistration: string;
+    reOnboard1Title: string; reOnboard1Subtitle: string;
+    reOnboard1Opt1: string; reOnboard1Opt2: string; reOnboard1Opt3: string;
+    reOnboard2Title: string; reOnboard2Subtitle: string;
+    reOnboard2Opt1: string; reOnboard2Opt2: string; reOnboard2Opt3: string;
+    reOnboard3Title: string; reOnboard3Subtitle: string;
+    reOnboard3Opt1: string; reOnboard3Opt2: string; reOnboard3Opt3: string;
+    skipForNow: string;
+    brokerOnboard1Title: string; brokerOnboard1Subtitle: string;
+    brokerOnboard1Opt1: string; brokerOnboard1Opt2: string; brokerOnboard1Opt3: string;
+    brokerOnboard2Title: string; brokerOnboard2Subtitle: string;
+    brokerOnboard2Opt1: string; brokerOnboard2Opt2: string; brokerOnboard2Opt3: string;
+    brokerOnboard3Title: string; brokerOnboard3Subtitle: string;
+    brokerOnboard3Opt1: string; brokerOnboard3Opt2: string; brokerOnboard3Opt3: string;
+    completionTitle: string; completionDesc: string; completionLoading: string;
+    welcomeTitle: string; welcomeDesc: string; exploreParcels: string; publishParcel: string;
+    attemptSingular: string; attemptsPlural: string;
+  };
 }
 
 const es: Translations = {
@@ -559,6 +630,104 @@ const es: Translations = {
     selected: 'parcela seleccionada', selectedPlural: 'parcelas seleccionadas',
     clear: 'Limpiar', view: 'Ver comparador',
   },
+  entry: {
+    tabLogin: 'Ingresar', tabRegister: 'Crear cuenta',
+    titleLogin: 'Ingresa a tu cuenta', titleRegister: 'Crea tu cuenta',
+    subtitleLogin: 'Explora, compra o vende parcelas', subtitleRegister: 'Es rápido y sin costo',
+    passwordLabel: 'Contraseña', confirmPasswordLabel: 'Confirmar contraseña',
+    rememberMe: 'Recordarme', forgotPasswordLink: 'Olvidé mi contraseña',
+    loginBtn: 'Ingresar', accessBlocked: 'Acceso bloqueado temporalmente',
+    loginWithGoogle: 'Ingresar con Google', registerBtn: 'Registrarme',
+    continueWithGoogle: 'Continuar con Google', continuar: 'Continuar',
+    termsNote: 'Al continuar, aceptas nuestros términos de servicio y política de privacidad',
+    emailFormatError: 'El formato del email no es correcto. Revisa que esté bien escrito (ej: usuario@email.com).',
+    googleAccountError: 'Esta cuenta usa Google. Ingresa con el botón de Google.',
+    loginError: 'Email o contraseña incorrectos.',
+    blockedError: 'Demasiados intentos fallidos. Tu acceso está bloqueado por 15 minutos. Intenta más tarde o usa "Olvidé mi contraseña".',
+    errEmailFormat: 'El formato del email no es correcto.',
+    errPasswordMin: 'La contraseña debe tener al menos 8 caracteres.',
+    errPasswordNumber: 'La contraseña debe incluir al menos un número.',
+    errPasswordConfirm: 'Las contraseñas no coinciden.',
+    passwordsMatch: 'Las contraseñas coinciden',
+    ruleMin8: 'Mínimo 8 caracteres', ruleNumber: 'Al menos 1 número',
+    ruleUpper: 'Al menos 1 mayúscula', ruleLower: 'Al menos 1 minúscula',
+    strengthWeak: 'Débil', strengthMedium: 'Media', strengthStrong: 'Fuerte', strengthPrefix: 'Contraseña',
+    checkEmail: 'Revisa tu email', confirmEmailSent: 'Te enviamos un link de confirmación a',
+    confirmEmailInstructions: 'Hacé clic en el link del email para activar tu cuenta. El link expira en 48 horas.',
+    notReceived: '¿No recibiste el email? Revisa la carpeta de spam o',
+    resendEmail: 'Reenviar email de confirmación', backToRegister: '← Volver al registro',
+    chooseAccount: 'Elegí una cuenta',
+    googleTerms: 'Al continuar, aceptas los términos de servicio y la política de privacidad de CompraTuParcela.',
+    cancel: 'Cancelar',
+    forgotPasswordTitle: 'Recuperar contraseña',
+    forgotPasswordDesc: 'Ingresa tu email y te enviamos un link para restablecer tu contraseña.',
+    forgotGoogleError: 'Esta cuenta usa Google. Ingresa con el botón de Google — no necesitas contraseña.',
+    rateLimitError: 'Has alcanzado el máximo de 3 solicitudes por hora.',
+    backToLogin: 'Volver al login', sendLink: 'Enviar link',
+    resetEmailSentDesc: 'Si ese email está registrado, te enviamos un link para restablecer tu contraseña. El link expira en 24 horas.',
+    checkSpam: 'No olvides revisar la carpeta de spam.',
+    simulateLink: 'Simular click en el link →',
+    newPasswordTitle: 'Nueva contraseña', newPasswordDesc: 'Elige una contraseña segura para tu cuenta.',
+    passwordMustHave: 'Tu contraseña debe tener:', newPasswordLabel: 'Nueva contraseña',
+    resetPasswordBtn: 'Restablecer contraseña', passwordResetTitle: '¡Contraseña restablecida!',
+    passwordResetDesc: 'Tu contraseña fue actualizada correctamente. Volviendo al login en',
+    backToLoginNow: 'Volver al login ahora',
+    secondSingular: 'segundo', secondsPlural: 'segundos',
+    back: 'Atrás',
+    step1of5: 'Paso 1 de 5', step2of5: 'Paso 2 de 5', step3of5: 'Paso 3 de 5',
+    step4of5: 'Paso 4 de 5', step5of5: 'Paso 5 de 5', stepOf3: 'Paso',
+    profileTitle: '¿Qué tipo de cuenta quieres crear?',
+    profileSubtitle: 'Selecciona la opción que mejor se adapte a cómo usarás CompraTuParcela.',
+    profilePersonLabel: 'Personal', profilePersonDesc: 'Comprar y/o vender parcelas de forma directa',
+    profileRealEstateLabel: 'Inmobiliaria', profileRealEstateDesc: 'Gestiono múltiples propiedades o proyectos',
+    profileBrokerLabel: 'Broker', profileBrokerDesc: 'Intermedio entre compradores y vendedores',
+    actionTitle: '¿Qué quieres hacer?',
+    actionSubtitle: 'Selecciona la acción que deseas realizar en CompraTuParcela.',
+    actionBuyLabel: 'Comprar una parcela', actionBuyDesc: 'Quiero buscar y comprar parcelas',
+    actionSellLabel: 'Vender mi parcela', actionSellDesc: 'Quiero publicar mi propiedad para venderla',
+    actionBothLabel: 'Ambas cosas', actionBothDesc: 'Quiero comprar y vender parcelas',
+    experienceTitle: '¿Tienes experiencia comprando o vendiendo parcelas?',
+    experienceSubtitle: 'Esto nos ayuda a personalizar tu experiencia en la plataforma.',
+    expExperiencedLabel: 'Sí, ya tengo experiencia', expExperiencedDesc: 'He comprado o vendido parcelas antes',
+    expSomeLabel: 'Tengo algo de experiencia', expSomeDesc: 'Conozco el proceso pero necesito orientación',
+    expFirstLabel: 'No, es mi primera vez', expFirstDesc: 'Es mi primera experiencia con parcelas',
+    advisoryTitle: '¿Te gustaría contar con asesoría durante el proceso?',
+    advisorySubtitle: 'Puedes solicitarla más adelante si lo necesitas.',
+    advisoryYesLabel: 'Sí, me gustaría recibir asesoría', advisoryYesDesc: 'Quiero acompañamiento profesional durante el proceso',
+    advisoryMaybeLabel: 'Tal vez más adelante', advisoryMaybeDesc: 'Prefiero evaluar esta opción en el futuro',
+    advisoryNoLabel: 'No, prefiero gestionarlo por mi cuenta', advisoryNoDesc: 'Me siento cómodo avanzando de forma independiente',
+    profileFormPersonTitle: 'Completa tu perfil', profileFormRealEstateTitle: 'Datos de la inmobiliaria', profileFormBrokerTitle: 'Datos del broker',
+    profileLabelPerson: 'Perfil: Personal', profileLabelRealEstate: 'Perfil: Inmobiliaria', profileLabelBroker: 'Perfil: Broker',
+    profileFormPersonInfo: 'Estos datos son opcionales. Puedes completarlos ahora o después desde tu perfil. Tu cuenta te permite tanto comprar como vender parcelas.',
+    profileFormRealEstateInfo: 'Configura el perfil de tu inmobiliaria. Podrás gestionar publicaciones y equipo desde un solo lugar.',
+    profileFormBrokerInfo: 'Como broker, intermedias entre compradores y vendedores. No publicas inventario propio.',
+    fullNameLabel: 'Nombre completo', fullNamePlaceholder: 'Juan Pérez González',
+    phoneLabel: 'Teléfono', contactPhoneLabel: 'Teléfono de contacto',
+    regionLabel: 'Región o comuna', regionPlaceholder: 'Región Metropolitana, Santiago',
+    companyNameLabel: 'Nombre de la inmobiliaria', companyNamePlaceholder: 'Inmobiliaria Los Andes',
+    companyRutLabel: 'RUT de la empresa', officeAddressLabel: 'Dirección de oficina',
+    officeAddressPlaceholder: 'Av. Providencia 1234, Providencia',
+    websiteLabel: 'Sitio web', rutLabel: 'RUT', licenseLabel: 'Matrícula profesional',
+    operationZoneLabel: 'Zona de operación', finishRegistration: 'Finalizar registro',
+    reOnboard1Title: '¿Cómo piensas usar CompraTuParcela?', reOnboard1Subtitle: 'Elige la opción que mejor te represente.',
+    reOnboard1Opt1: 'Publicar pocas propiedades', reOnboard1Opt2: 'Gestionar varias propiedades', reOnboard1Opt3: 'Evaluar la plataforma primero',
+    reOnboard2Title: '¿Cuál es tu objetivo principal hoy?', reOnboard2Subtitle: 'Vamos a organizar el panel según esto.',
+    reOnboard2Opt1: 'Publicar inventario', reOnboard2Opt2: 'Gestionar contactos y consultas', reOnboard2Opt3: 'Dar visibilidad a mis propiedades',
+    reOnboard3Title: '¿Cómo gestionarás tus propiedades?', reOnboard3Subtitle: 'Esto nos ayuda a adaptar las herramientas a tu equipo de trabajo.',
+    reOnboard3Opt1: 'La voy a usar solo/a', reOnboard3Opt2: 'La usamos entre varias personas', reOnboard3Opt3: 'Todavía no lo sé',
+    skipForNow: 'Omitir por ahora',
+    brokerOnboard1Title: '¿Cuál es tu rol principal dentro de la plataforma?', brokerOnboard1Subtitle: 'Esto nos permite mostrarte las herramientas adecuadas.',
+    brokerOnboard1Opt1: 'Intermediar operaciones', brokerOnboard1Opt2: 'Gestionar leads y contactos', brokerOnboard1Opt3: 'Explorar oportunidades',
+    brokerOnboard2Title: '¿En qué te enfocarás primero?', brokerOnboard2Subtitle: 'Puedes cambiar tu enfoque en cualquier momento.',
+    brokerOnboard2Opt1: 'Contactos', brokerOnboard2Opt2: 'Oportunidades', brokerOnboard2Opt3: 'Seguimiento',
+    brokerOnboard3Title: '¿Qué experiencia tienes como broker?', brokerOnboard3Subtitle: 'Nos ayuda a adaptar la plataforma a tu nivel de experiencia.',
+    brokerOnboard3Opt1: 'Estoy empezando y necesito guía', brokerOnboard3Opt2: 'Tengo experiencia intermediar operaciones', brokerOnboard3Opt3: 'Tengo mucha experiencia y trabajo de forma autónoma',
+    completionTitle: '¡Todo listo!', completionDesc: 'Tu cuenta está configurada. Ahora puedes empezar a usar CompraTuParcela.',
+    completionLoading: 'Estamos preparando tu portal. En unos segundos continuarás automáticamente.',
+    welcomeTitle: '¡Bienvenido/a', welcomeDesc: 'Tu cuenta está lista. Empieza explorando parcelas o publica la tuya.',
+    exploreParcels: 'Explorar parcelas', publishParcel: 'Publicar mi parcela',
+    attemptSingular: 'intento restante antes del bloqueo.', attemptsPlural: 'intentos restantes antes del bloqueo.',
+  },
 };
 
 const en: Translations = {
@@ -905,6 +1074,104 @@ const en: Translations = {
     explore: 'Explore parcels',
     selected: 'parcel selected', selectedPlural: 'parcels selected',
     clear: 'Clear', view: 'Compare now',
+  },
+  entry: {
+    tabLogin: 'Sign in', tabRegister: 'Create account',
+    titleLogin: 'Sign in to your account', titleRegister: 'Create your account',
+    subtitleLogin: 'Explore, buy or sell parcels', subtitleRegister: 'Quick and free',
+    passwordLabel: 'Password', confirmPasswordLabel: 'Confirm password',
+    rememberMe: 'Remember me', forgotPasswordLink: 'Forgot my password',
+    loginBtn: 'Sign in', accessBlocked: 'Access temporarily blocked',
+    loginWithGoogle: 'Sign in with Google', registerBtn: 'Create account',
+    continueWithGoogle: 'Continue with Google', continuar: 'Continue',
+    termsNote: 'By continuing, you accept our terms of service and privacy policy',
+    emailFormatError: 'The email format is not correct. Check that it is properly written (e.g.: user@email.com).',
+    googleAccountError: 'This account uses Google. Sign in with the Google button.',
+    loginError: 'Incorrect email or password.',
+    blockedError: 'Too many failed attempts. Your access is blocked for 15 minutes. Try later or use "Forgot my password".',
+    errEmailFormat: 'The email format is not correct.',
+    errPasswordMin: 'Password must be at least 8 characters.',
+    errPasswordNumber: 'Password must include at least one number.',
+    errPasswordConfirm: 'Passwords do not match.',
+    passwordsMatch: 'Passwords match',
+    ruleMin8: 'At least 8 characters', ruleNumber: 'At least 1 number',
+    ruleUpper: 'At least 1 uppercase', ruleLower: 'At least 1 lowercase',
+    strengthWeak: 'Weak', strengthMedium: 'Medium', strengthStrong: 'Strong', strengthPrefix: 'Password',
+    checkEmail: 'Check your email', confirmEmailSent: 'We sent a confirmation link to',
+    confirmEmailInstructions: 'Click the link in the email to activate your account. The link expires in 48 hours.',
+    notReceived: 'Didn\'t receive the email? Check your spam folder or',
+    resendEmail: 'Resend confirmation email', backToRegister: '← Back to registration',
+    chooseAccount: 'Choose an account',
+    googleTerms: 'By continuing, you accept the terms of service and privacy policy of CompraTuParcela.',
+    cancel: 'Cancel',
+    forgotPasswordTitle: 'Reset password',
+    forgotPasswordDesc: 'Enter your email and we\'ll send you a link to reset your password.',
+    forgotGoogleError: 'This account uses Google. Sign in with the Google button — you don\'t need a password.',
+    rateLimitError: 'You have reached the maximum of 3 requests per hour.',
+    backToLogin: 'Back to sign in', sendLink: 'Send link',
+    resetEmailSentDesc: 'If that email is registered, we\'ll send you a link to reset your password. The link expires in 24 hours.',
+    checkSpam: 'Don\'t forget to check your spam folder.',
+    simulateLink: 'Simulate link click →',
+    newPasswordTitle: 'New password', newPasswordDesc: 'Choose a secure password for your account.',
+    passwordMustHave: 'Your password must have:', newPasswordLabel: 'New password',
+    resetPasswordBtn: 'Reset password', passwordResetTitle: 'Password reset!',
+    passwordResetDesc: 'Your password was updated successfully. Returning to sign in in',
+    backToLoginNow: 'Back to sign in now',
+    secondSingular: 'second', secondsPlural: 'seconds',
+    back: 'Back',
+    step1of5: 'Step 1 of 5', step2of5: 'Step 2 of 5', step3of5: 'Step 3 of 5',
+    step4of5: 'Step 4 of 5', step5of5: 'Step 5 of 5', stepOf3: 'Step',
+    profileTitle: 'What type of account do you want to create?',
+    profileSubtitle: 'Select the option that best fits how you\'ll use CompraTuParcela.',
+    profilePersonLabel: 'Personal', profilePersonDesc: 'Buy and/or sell parcels directly',
+    profileRealEstateLabel: 'Real estate agency', profileRealEstateDesc: 'I manage multiple properties or projects',
+    profileBrokerLabel: 'Broker', profileBrokerDesc: 'I mediate between buyers and sellers',
+    actionTitle: 'What do you want to do?',
+    actionSubtitle: 'Select the action you want to take on CompraTuParcela.',
+    actionBuyLabel: 'Buy a parcel', actionBuyDesc: 'I want to search and buy parcels',
+    actionSellLabel: 'Sell my parcel', actionSellDesc: 'I want to list my property for sale',
+    actionBothLabel: 'Both', actionBothDesc: 'I want to buy and sell parcels',
+    experienceTitle: 'Do you have experience buying or selling parcels?',
+    experienceSubtitle: 'This helps us personalize your experience on the platform.',
+    expExperiencedLabel: 'Yes, I have experience', expExperiencedDesc: 'I have bought or sold parcels before',
+    expSomeLabel: 'I have some experience', expSomeDesc: 'I know the process but need guidance',
+    expFirstLabel: 'No, this is my first time', expFirstDesc: 'This is my first experience with parcels',
+    advisoryTitle: 'Would you like advisory support during the process?',
+    advisorySubtitle: 'You can request it later if you need it.',
+    advisoryYesLabel: 'Yes, I\'d like advisory support', advisoryYesDesc: 'I want professional guidance during the process',
+    advisoryMaybeLabel: 'Maybe later', advisoryMaybeDesc: 'I prefer to evaluate this option in the future',
+    advisoryNoLabel: 'No, I\'ll manage on my own', advisoryNoDesc: 'I\'m comfortable moving forward independently',
+    profileFormPersonTitle: 'Complete your profile', profileFormRealEstateTitle: 'Agency details', profileFormBrokerTitle: 'Broker details',
+    profileLabelPerson: 'Profile: Personal', profileLabelRealEstate: 'Profile: Agency', profileLabelBroker: 'Profile: Broker',
+    profileFormPersonInfo: 'This information is optional. You can complete it now or later from your profile. Your account lets you both buy and sell parcels.',
+    profileFormRealEstateInfo: 'Set up your agency profile. You\'ll be able to manage listings and your team from one place.',
+    profileFormBrokerInfo: 'As a broker, you mediate between buyers and sellers. You don\'t list your own inventory.',
+    fullNameLabel: 'Full name', fullNamePlaceholder: 'John Smith',
+    phoneLabel: 'Phone', contactPhoneLabel: 'Contact phone',
+    regionLabel: 'Region or city', regionPlaceholder: 'Metropolitan Region, Santiago',
+    companyNameLabel: 'Agency name', companyNamePlaceholder: 'Los Andes Real Estate',
+    companyRutLabel: 'Company tax ID', officeAddressLabel: 'Office address',
+    officeAddressPlaceholder: 'Av. Providencia 1234, Providencia',
+    websiteLabel: 'Website', rutLabel: 'Tax ID', licenseLabel: 'Professional license',
+    operationZoneLabel: 'Operation zone', finishRegistration: 'Finish registration',
+    reOnboard1Title: 'How do you plan to use CompraTuParcela?', reOnboard1Subtitle: 'Choose the option that best represents you.',
+    reOnboard1Opt1: 'List a few properties', reOnboard1Opt2: 'Manage multiple properties', reOnboard1Opt3: 'Evaluate the platform first',
+    reOnboard2Title: 'What is your main goal today?', reOnboard2Subtitle: 'We\'ll organize your dashboard based on this.',
+    reOnboard2Opt1: 'List inventory', reOnboard2Opt2: 'Manage contacts and inquiries', reOnboard2Opt3: 'Increase visibility of my properties',
+    reOnboard3Title: 'How will you manage your properties?', reOnboard3Subtitle: 'This helps us adapt the tools to your team.',
+    reOnboard3Opt1: 'I\'ll use it on my own', reOnboard3Opt2: 'We\'ll use it as a team', reOnboard3Opt3: 'I\'m not sure yet',
+    skipForNow: 'Skip for now',
+    brokerOnboard1Title: 'What is your main role on the platform?', brokerOnboard1Subtitle: 'This lets us show you the right tools.',
+    brokerOnboard1Opt1: 'Intermediate transactions', brokerOnboard1Opt2: 'Manage leads and contacts', brokerOnboard1Opt3: 'Explore opportunities',
+    brokerOnboard2Title: 'What will you focus on first?', brokerOnboard2Subtitle: 'You can change your focus at any time.',
+    brokerOnboard2Opt1: 'Contacts', brokerOnboard2Opt2: 'Opportunities', brokerOnboard2Opt3: 'Follow-up',
+    brokerOnboard3Title: 'What experience do you have as a broker?', brokerOnboard3Subtitle: 'Helps us adapt the platform to your experience level.',
+    brokerOnboard3Opt1: 'I\'m just starting and need guidance', brokerOnboard3Opt2: 'I have experience intermediating transactions', brokerOnboard3Opt3: 'I have a lot of experience and work independently',
+    completionTitle: 'All set!', completionDesc: 'Your account is configured. You can now start using CompraTuParcela.',
+    completionLoading: 'We\'re setting up your portal. You\'ll continue automatically in a few seconds.',
+    welcomeTitle: 'Welcome', welcomeDesc: 'Your account is ready. Start exploring parcels or list yours.',
+    exploreParcels: 'Explore parcels', publishParcel: 'List my parcel',
+    attemptSingular: 'attempt remaining before lockout.', attemptsPlural: 'attempts remaining before lockout.',
   },
 };
 
