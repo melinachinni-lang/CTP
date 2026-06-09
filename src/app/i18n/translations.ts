@@ -42,6 +42,32 @@ export interface Translations {
     regionLabel: string; allRegions: string; regionMetropolitana: string;
     reviews: string; contact: string; viewAgency: string; generalInquiry: string;
   };
+  comoFunciona: {
+    pageTitle: string; pageSubtitle: string;
+    stepsTitle: string; stepsSubtitle: string;
+    step1Title: string; step1Desc: string;
+    step2Title: string; step2Desc: string;
+    step3Title: string; step3Desc: string;
+    step4Title: string; step4Desc: string;
+    featuresTitle: string; featuresSubtitle: string;
+    feat1Title: string; feat1Desc: string; feat1Intro: string; feat1Benefits: string[]; feat1Cta: string;
+    feat2Title: string; feat2Desc: string; feat2Intro: string; feat2Benefits: string[]; feat2Cta: string;
+    feat3Title: string; feat3Desc: string; feat3Intro: string; feat3Benefits: string[]; feat3Cta: string;
+    feat4Title: string; feat4Desc: string; feat4Intro: string; feat4Benefits: string[]; feat4Cta: string;
+    feat5Title: string; feat5Desc: string; feat5Intro: string; feat5Benefits: string[]; feat5Cta: string;
+    modalFeaturesTitle: string; modalStartBtn: string;
+    supportTitle: string; supportSubtitle: string;
+    chatTitle: string; chatDesc: string; chatHours: string;
+    emailTitle: string; emailDesc: string;
+    helpTitle: string; helpDesc: string; viewArticles: string;
+    faqTitle: string; faqSubtitle: string;
+    faq1Q: string; faq1A: string; faq2Q: string; faq2A: string;
+    faq3Q: string; faq3A: string; faq4Q: string; faq4A: string;
+    faq5Q: string; faq5A: string; faq6Q: string; faq6A: string;
+    faq7Q: string; faq7A: string; faq8Q: string; faq8A: string;
+    faq9Q: string; faq9A: string; faq10Q: string; faq10A: string;
+    ctaTitle: string; ctaSubtitle: string; viewParcels: string;
+  };
   status: {
     disponible: string; reservada: string; reservandose: string;
     aprobada: string; rechazada: string; activa: string; pausada: string;
@@ -218,6 +244,67 @@ const es: Translations = {
     searchByName: 'Buscar por nombre', searchPlaceholder: 'Ej: Patagonia Properties',
     regionLabel: 'Región / zona', allRegions: 'Todas las regiones', regionMetropolitana: 'Región Metropolitana',
     reviews: 'reseñas', contact: 'Contactar', viewAgency: 'Ver inmobiliaria', generalInquiry: 'Consulta general',
+  },
+  comoFunciona: {
+    pageTitle: 'Cómo funciona CompraTuParcela',
+    pageSubtitle: 'Publica, gestiona y vende parcelas de forma simple y segura',
+    stepsTitle: 'El proceso paso a paso',
+    stepsSubtitle: 'Desde crear tu publicación hasta cerrar la venta, seguí estos pasos simples',
+    step1Title: 'Publica tu parcela', step1Desc: 'Completa un formulario simple con datos, fotos y ubicación. Todo en un solo lugar.',
+    step2Title: 'Recibe consultas', step2Desc: 'Los interesados te contactan directamente. Cada consulta llega a tu panel en tiempo real.',
+    step3Title: 'Gestiona el seguimiento', step3Desc: 'Sigue cada conversación, responde consultas y organiza visitas desde un solo lugar.',
+    step4Title: 'Cierra la venta', step4Desc: 'Actualiza el estado de tu parcela y mantenla visible hasta concretar la operación.',
+    featuresTitle: 'Qué puedes hacer desde la plataforma',
+    featuresSubtitle: 'Todas las herramientas que necesitas para gestionar tus propiedades en un solo lugar',
+    feat1Title: 'Publicaciones', feat1Desc: 'Administra tus propiedades y mantenlas actualizadas',
+    feat1Intro: 'Crea y gestiona todas tus publicaciones de parcelas desde un panel centralizado.',
+    feat1Benefits: ['Editor intuitivo para cargar fotos, videos y documentos', 'Campos personalizables con información clave (superficie, precio, ubicación)', 'Actualizaciones en tiempo real visibles para todos los interesados', 'Historial completo de cambios y versiones anteriores'],
+    feat1Cta: 'Publica tu primera parcela en menos de 5 minutos',
+    feat2Title: 'Consultas y leads', feat2Desc: 'Todos los interesados organizados en un solo lugar',
+    feat2Intro: 'Centraliza todas las consultas y gestiona cada lead de forma eficiente.',
+    feat2Benefits: ['Bandeja unificada con todas las conversaciones organizadas', 'Notificaciones instantáneas vía email y en la plataforma', 'Etiquetas y filtros para priorizar consultas importantes', 'Respuestas rápidas con plantillas personalizables'],
+    feat2Cta: 'Nunca pierdas una oportunidad de venta',
+    feat3Title: 'Rendimiento', feat3Desc: 'Visualiza métricas clave de tus publicaciones',
+    feat3Intro: 'Analiza el desempeño de tus propiedades con métricas claras y accionables.',
+    feat3Benefits: ['Estadísticas de visualizaciones, consultas y conversiones', 'Gráficos de tendencia para identificar patrones de interés', 'Comparativas entre propiedades para optimizar precios', 'Reportes exportables en PDF para compartir con tu equipo'],
+    feat3Cta: 'Toma decisiones basadas en datos reales',
+    feat4Title: 'Equipo y brokers', feat4Desc: 'Invita a tu equipo a colaborar en las ventas',
+    feat4Intro: 'Colabora con tu equipo o brokers externos de forma ordenada y transparente.',
+    feat4Benefits: ['Invitaciones por email con permisos personalizados', 'Asignación de consultas específicas a cada miembro', 'Visibilidad compartida del pipeline de ventas', 'Registro de actividad para seguimiento y accountability'],
+    feat4Cta: 'Escala tu operación con el equipo adecuado',
+    feat5Title: 'Planes y pagos', feat5Desc: 'Elige el plan que mejor se ajuste a tu operación',
+    feat5Intro: 'Planes flexibles que crecen con tu negocio, sin sorpresas ni costos ocultos.',
+    feat5Benefits: ['Plan gratuito para hasta 3 publicaciones activas', 'Planes escalables según volumen de propiedades', 'Pagos seguros con tarjeta o transferencia bancaria', 'Cambio de plan en cualquier momento sin penalizaciones'],
+    feat5Cta: 'Comienza gratis, escala cuando lo necesites',
+    modalFeaturesTitle: 'Características principales', modalStartBtn: 'Comenzar ahora',
+    supportTitle: 'Ayuda y soporte', supportSubtitle: 'Nuestro equipo está listo para ayudarte cuando lo necesites',
+    chatTitle: 'Chat en vivo', chatDesc: 'Conversa con nuestro equipo de soporte en tiempo real', chatHours: 'Lun - Vie: 9:00 - 18:00',
+    emailTitle: 'Correo electrónico', emailDesc: 'Escríbenos y te respondemos en menos de 24 horas',
+    helpTitle: 'Centro de ayuda', helpDesc: 'Encuentra respuestas en nuestra base de conocimiento', viewArticles: 'Ver artículos',
+    faqTitle: 'Preguntas frecuentes', faqSubtitle: 'Resolvemos las dudas más comunes sobre cómo funciona la plataforma',
+    faq1Q: '¿Necesito crear una cuenta para explorar parcelas?',
+    faq1A: 'No, puedes explorar todas las parcelas disponibles sin registrarte. Para guardar favoritos, reservar o contactar vendedores necesitarás crear una cuenta gratuita — el proceso toma menos de 2 minutos.',
+    faq2Q: '¿Cómo sé que la información de una parcela es confiable?',
+    faq2A: 'Cada publicación pasa por un proceso de validación antes de mostrarse en la plataforma. Verificamos que los documentos legales básicos estén al día (rol de avalúo, titularidad) y que la información declarada sea consistente. Las parcelas con documentación completa se identifican claramente.',
+    faq3Q: '¿Cuánto es el valor de la reserva y cómo se paga?',
+    faq3A: 'El valor de la reserva es de $500.000 (UF 12,9 aproximadamente). Puedes pagar por transferencia bancaria directa o a través de un link de pago con tarjeta de crédito o débito vía Mercado Pago. Una vez confirmado el pago, la parcela queda reservada a tu nombre.',
+    faq4Q: '¿Qué pasa si mi pago de reserva es rechazado o no puedo completarlo?',
+    faq4A: 'Si el pago no se completa dentro de los 30 minutos del proceso de reserva, la parcela vuelve a estar disponible para otros compradores. Si fue rechazado por un problema técnico o bancario, puedes intentarlo nuevamente o contactar a nuestro equipo de soporte desde la sección "Mis compras" en tu dashboard.',
+    faq5Q: '¿Puedo visitar la parcela antes de reservar?',
+    faq5A: 'Sí, y te lo recomendamos. Puedes solicitar una visita directamente desde el detalle de la parcela. El vendedor o su representante se pondrá en contacto para agendar la fecha y hora que mejor te acomode, sin costo ni compromiso.',
+    faq6Q: '¿La plataforma funciona para compradores desde el extranjero?',
+    faq6A: 'Sí. Puedes explorar, comparar y reservar parcelas desde cualquier país. La plataforma muestra precios en CLP y USD según tu preferencia. Para completar la compra es necesario contar con RUT chileno o un representante legal en Chile. Nuestro equipo de asesoría puede orientarte en este proceso sin costo.',
+    faq7Q: '¿Cuánto cuesta publicar mi parcela?',
+    faq7A: 'Puedes publicar hasta 3 parcelas de forma completamente gratuita. Si necesitas publicar más o acceder a funciones avanzadas como estadísticas detalladas, publicaciones destacadas o colaboración con brokers, contamos con planes para inmobiliarias y vendedores profesionales. Sin costos ocultos.',
+    faq8Q: '¿Qué documentos necesito para publicar?',
+    faq8A: 'No es obligatorio subir documentos para publicar, pero te recomendamos adjuntar el título de propiedad, certificado de rol de avalúo, planos y certificados de uso de suelo. Las publicaciones con documentación completa generan más confianza y se venden considerablemente más rápido.',
+    faq9Q: '¿Qué diferencia hay entre una parcela y un proyecto?',
+    faq9A: 'Una parcela es una propiedad individual disponible para la venta directa. Un proyecto es un desarrollo inmobiliario que agrupa múltiples parcelas bajo una misma urbanización o parcelación, generalmente con infraestructura común y etapas de venta programadas. En ambos casos puedes explorar, comparar y reservar desde la plataforma.',
+    faq10Q: '¿Cómo contacto a un asesor si necesito ayuda?',
+    faq10A: 'Nuestro equipo de asesores está disponible de lunes a viernes de 9:00 a 18:00 hrs. Puedes contactarnos por WhatsApp (+569 777 14626), email (contacto@compratuparcela.cl) o usando el chat de la plataforma. Ofrecemos asesoría gratuita para compradores que necesitan orientación en el proceso.',
+    ctaTitle: '¿Listo para empezar?',
+    ctaSubtitle: 'Publica tu primera parcela gratis o explora las propiedades disponibles',
+    viewParcels: 'Ver parcelas disponibles',
   },
   status: {
     disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
@@ -477,6 +564,67 @@ const en: Translations = {
     searchByName: 'Search by name', searchPlaceholder: 'E.g.: Patagonia Properties',
     regionLabel: 'Region / area', allRegions: 'All regions', regionMetropolitana: 'Metropolitan Region',
     reviews: 'reviews', contact: 'Contact', viewAgency: 'View agency', generalInquiry: 'General inquiry',
+  },
+  comoFunciona: {
+    pageTitle: 'How CompraTuParcela works',
+    pageSubtitle: 'List, manage and sell parcels simply and securely',
+    stepsTitle: 'The step-by-step process',
+    stepsSubtitle: 'From creating your listing to closing the sale, follow these simple steps',
+    step1Title: 'List your parcel', step1Desc: 'Complete a simple form with details, photos and location. All in one place.',
+    step2Title: 'Receive inquiries', step2Desc: 'Interested buyers contact you directly. Every inquiry arrives in your dashboard in real time.',
+    step3Title: 'Manage follow-up', step3Desc: 'Follow every conversation, answer inquiries and organize visits from one place.',
+    step4Title: 'Close the sale', step4Desc: 'Update the status of your parcel and keep it visible until the deal is done.',
+    featuresTitle: 'What you can do from the platform',
+    featuresSubtitle: 'All the tools you need to manage your properties in one place',
+    feat1Title: 'Listings', feat1Desc: 'Manage your properties and keep them up to date',
+    feat1Intro: 'Create and manage all your parcel listings from a centralized dashboard.',
+    feat1Benefits: ['Intuitive editor to upload photos, videos and documents', 'Customizable fields with key information (area, price, location)', 'Real-time updates visible to all interested parties', 'Complete history of changes and previous versions'],
+    feat1Cta: 'List your first parcel in under 5 minutes',
+    feat2Title: 'Inquiries & leads', feat2Desc: 'All interested buyers organized in one place',
+    feat2Intro: 'Centralize all inquiries and manage each lead efficiently.',
+    feat2Benefits: ['Unified inbox with all organized conversations', 'Instant notifications via email and on the platform', 'Tags and filters to prioritize important inquiries', 'Quick replies with customizable templates'],
+    feat2Cta: 'Never miss a sales opportunity',
+    feat3Title: 'Performance', feat3Desc: 'Visualize key metrics for your listings',
+    feat3Intro: 'Analyze the performance of your properties with clear, actionable metrics.',
+    feat3Benefits: ['Views, inquiries and conversion statistics', 'Trend charts to identify interest patterns', 'Property comparisons to optimize pricing', 'Exportable PDF reports to share with your team'],
+    feat3Cta: 'Make decisions based on real data',
+    feat4Title: 'Team & brokers', feat4Desc: 'Invite your team to collaborate on sales',
+    feat4Intro: 'Collaborate with your team or external brokers in an organized and transparent way.',
+    feat4Benefits: ['Email invitations with custom permissions', 'Assignment of specific inquiries to each member', 'Shared visibility of the sales pipeline', 'Activity log for tracking and accountability'],
+    feat4Cta: 'Scale your operation with the right team',
+    feat5Title: 'Plans & payments', feat5Desc: 'Choose the plan that best fits your operation',
+    feat5Intro: 'Flexible plans that grow with your business, no surprises or hidden costs.',
+    feat5Benefits: ['Free plan for up to 3 active listings', 'Scalable plans based on property volume', 'Secure payments by card or bank transfer', 'Plan changes at any time without penalties'],
+    feat5Cta: 'Start free, scale when you need it',
+    modalFeaturesTitle: 'Key features', modalStartBtn: 'Get started',
+    supportTitle: 'Help & support', supportSubtitle: 'Our team is ready to help you whenever you need it',
+    chatTitle: 'Live chat', chatDesc: 'Chat with our support team in real time', chatHours: 'Mon - Fri: 9:00 - 18:00',
+    emailTitle: 'Email', emailDesc: 'Write to us and we\'ll reply within 24 hours',
+    helpTitle: 'Help center', helpDesc: 'Find answers in our knowledge base', viewArticles: 'View articles',
+    faqTitle: 'Frequently asked questions', faqSubtitle: 'Answering the most common questions about how the platform works',
+    faq1Q: 'Do I need to create an account to explore parcels?',
+    faq1A: 'No, you can explore all available parcels without registering. To save favorites, reserve or contact sellers you will need to create a free account — the process takes less than 2 minutes.',
+    faq2Q: 'How do I know the information on a parcel is reliable?',
+    faq2A: 'Each listing goes through a validation process before appearing on the platform. We verify that the basic legal documents are up to date (tax roll, ownership) and that the declared information is consistent. Parcels with complete documentation are clearly identified.',
+    faq3Q: 'How much is the reservation fee and how is it paid?',
+    faq3A: 'The reservation fee is $500,000 CLP (approximately UF 12.9). You can pay by direct bank transfer or through a payment link with credit or debit card via Mercado Pago. Once payment is confirmed, the parcel is reserved in your name.',
+    faq4Q: 'What happens if my reservation payment is rejected or I cannot complete it?',
+    faq4A: 'If payment is not completed within 30 minutes of the reservation process, the parcel becomes available again for other buyers. If it was rejected due to a technical or banking issue, you can try again or contact our support team from the "My purchases" section in your dashboard.',
+    faq5Q: 'Can I visit the parcel before reserving?',
+    faq5A: 'Yes, and we recommend it. You can request a visit directly from the parcel detail page. The seller or their representative will get in touch to schedule the date and time that works best for you, at no cost or commitment.',
+    faq6Q: 'Does the platform work for buyers from abroad?',
+    faq6A: 'Yes. You can explore, compare and reserve parcels from any country. The platform shows prices in CLP and USD according to your preference. To complete the purchase you need a Chilean RUT or a legal representative in Chile. Our advisory team can guide you through this process at no cost.',
+    faq7Q: 'How much does it cost to list my parcel?',
+    faq7A: 'You can list up to 3 parcels completely free. If you need to list more or access advanced features such as detailed analytics, featured listings or broker collaboration, we have plans for real estate agencies and professional sellers. No hidden costs.',
+    faq8Q: 'What documents do I need to list?',
+    faq8A: 'Uploading documents is not required to list, but we recommend attaching the title deed, property tax certificate, plans and land use certificates. Listings with complete documentation generate more trust and sell considerably faster.',
+    faq9Q: 'What is the difference between a parcel and a project?',
+    faq9A: 'A parcel is an individual property available for direct sale. A project is a real estate development that groups multiple parcels under the same urbanization or subdivision, generally with shared infrastructure and planned sales phases. In both cases you can explore, compare and reserve from the platform.',
+    faq10Q: 'How do I contact an advisor if I need help?',
+    faq10A: 'Our advisory team is available Monday to Friday from 9:00 to 18:00. You can contact us via WhatsApp (+569 777 14626), email (contacto@compratuparcela.cl) or using the platform chat. We offer free advisory for buyers who need guidance through the process.',
+    ctaTitle: 'Ready to get started?',
+    ctaSubtitle: 'List your first parcel for free or explore available properties',
+    viewParcels: 'View available parcels',
   },
   status: {
     disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',

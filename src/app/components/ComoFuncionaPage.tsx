@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, MessageSquare, ClipboardList, CheckCircle, FileText, BarChart3, Users, CreditCard, MessageCircle, Mail, ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Navbar } from '@/app/components/Navbar';
+import { useI18n } from '@/app/i18n/i18nContext';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -16,6 +17,7 @@ interface ComoFuncionaPageProps {
 }
 
 export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, onLogout, onOpenPublishModal, onNavigateToPublish }: ComoFuncionaPageProps) {
+  const { t } = useI18n();
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,29 +31,29 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
     {
       number: '1',
       icon: Upload,
-      title: 'Publica tu parcela',
-      description: 'Completa un formulario simple con datos, fotos y ubicación. Todo en un solo lugar.',
+      title: t.comoFunciona.step1Title,
+      description: t.comoFunciona.step1Desc,
       image: 'https://images.unsplash.com/photo-1705508216613-be1715a31212?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYXB0b3AlMjBmb3JtJTIwdXBsb2FkfGVufDF8fHx8MTc3MDE0NzMyNXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
     },
     {
       number: '2',
       icon: MessageSquare,
-      title: 'Recibe consultas',
-      description: 'Los interesados te contactan directamente. Cada consulta llega a tu panel en tiempo real.',
+      title: t.comoFunciona.step2Title,
+      description: t.comoFunciona.step2Desc,
       image: 'https://images.unsplash.com/photo-1609162554108-6490759499ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWFydHBob25lJTIwbm90aWZpY2F0aW9ucyUyMG1lc3NhZ2VzfGVufDF8fHx8MTc3MDE0NzMyNXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
     },
     {
       number: '3',
       icon: ClipboardList,
-      title: 'Gestiona el seguimiento',
-      description: 'Sigue cada conversación, responde consultas y organiza visitas desde un solo lugar.',
+      title: t.comoFunciona.step3Title,
+      description: t.comoFunciona.step3Desc,
       image: 'https://images.unsplash.com/photo-1763038311036-6d18805537e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXNoYm9hcmQlMjBhbmFseXRpY3MlMjBtYW5hZ2VtZW50fGVufDF8fHx8MTc3MDE0NzMyNnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
     },
     {
       number: '4',
       icon: CheckCircle,
-      title: 'Cierra la venta',
-      description: 'Actualiza el estado de tu parcela y mantenla visible hasta concretar la operación.',
+      title: t.comoFunciona.step4Title,
+      description: t.comoFunciona.step4Desc,
       image: 'https://images.unsplash.com/photo-1758519288905-38b7b00c1023?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdWNjZXNzJTIwaGFuZHNoYWtlJTIwZGVhbHxlbnwxfHx8fDE3NzAxNDczMjZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
     }
   ];
@@ -80,132 +82,57 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
   const features = [
     {
       icon: FileText,
-      title: 'Publicaciones',
-      description: 'Administra tus propiedades y mantenlas actualizadas',
+      title: t.comoFunciona.feat1Title,
+      description: t.comoFunciona.feat1Desc,
       color: '#006B4E',
       lightColor: 'rgba(0, 107, 78, 0.1)',
-      detailedInfo: {
-        intro: 'Crea y gestiona todas tus publicaciones de parcelas desde un panel centralizado.',
-        benefits: [
-          'Editor intuitivo para cargar fotos, videos y documentos',
-          'Campos personalizables con información clave (superficie, precio, ubicación)',
-          'Actualizaciones en tiempo real visibles para todos los interesados',
-          'Historial completo de cambios y versiones anteriores'
-        ],
-        cta: 'Publica tu primera parcela en menos de 5 minutos'
-      }
+      detailedInfo: { intro: t.comoFunciona.feat1Intro, benefits: t.comoFunciona.feat1Benefits, cta: t.comoFunciona.feat1Cta }
     },
     {
       icon: MessageSquare,
-      title: 'Consultas y leads',
-      description: 'Todos los interesados organizados en un solo lugar',
+      title: t.comoFunciona.feat2Title,
+      description: t.comoFunciona.feat2Desc,
       color: '#006B4E',
       lightColor: 'rgba(0, 107, 78, 0.1)',
-      detailedInfo: {
-        intro: 'Centraliza todas las consultas y gestiona cada lead de forma eficiente.',
-        benefits: [
-          'Bandeja unificada con todas las conversaciones organizadas',
-          'Notificaciones instantáneas vía email y en la plataforma',
-          'Etiquetas y filtros para priorizar consultas importantes',
-          'Respuestas rápidas con plantillas personalizables'
-        ],
-        cta: 'Nunca pierdas una oportunidad de venta'
-      }
+      detailedInfo: { intro: t.comoFunciona.feat2Intro, benefits: t.comoFunciona.feat2Benefits, cta: t.comoFunciona.feat2Cta }
     },
     {
       icon: BarChart3,
-      title: 'Rendimiento',
-      description: 'Visualiza métricas clave de tus publicaciones',
+      title: t.comoFunciona.feat3Title,
+      description: t.comoFunciona.feat3Desc,
       color: '#006B4E',
       lightColor: 'rgba(0, 107, 78, 0.1)',
-      detailedInfo: {
-        intro: 'Analiza el desempeño de tus propiedades con métricas claras y accionables.',
-        benefits: [
-          'Estadísticas de visualizaciones, consultas y conversiones',
-          'Gráficos de tendencia para identificar patrones de interés',
-          'Comparativas entre propiedades para optimizar precios',
-          'Reportes exportables en PDF para compartir con tu equipo'
-        ],
-        cta: 'Toma decisiones basadas en datos reales'
-      }
+      detailedInfo: { intro: t.comoFunciona.feat3Intro, benefits: t.comoFunciona.feat3Benefits, cta: t.comoFunciona.feat3Cta }
     },
     {
       icon: Users,
-      title: 'Equipo y brokers',
-      description: 'Invita a tu equipo a colaborar en las ventas',
+      title: t.comoFunciona.feat4Title,
+      description: t.comoFunciona.feat4Desc,
       color: '#006B4E',
       lightColor: 'rgba(0, 107, 78, 0.1)',
-      detailedInfo: {
-        intro: 'Colabora con tu equipo o brokers externos de forma ordenada y transparente.',
-        benefits: [
-          'Invitaciones por email con permisos personalizados',
-          'Asignación de consultas específicas a cada miembro',
-          'Visibilidad compartida del pipeline de ventas',
-          'Registro de actividad para seguimiento y accountability'
-        ],
-        cta: 'Escala tu operación con el equipo adecuado'
-      }
+      detailedInfo: { intro: t.comoFunciona.feat4Intro, benefits: t.comoFunciona.feat4Benefits, cta: t.comoFunciona.feat4Cta }
     },
     {
       icon: CreditCard,
-      title: 'Planes y pagos',
-      description: 'Elige el plan que mejor se ajuste a tu operación',
+      title: t.comoFunciona.feat5Title,
+      description: t.comoFunciona.feat5Desc,
       color: '#006B4E',
       lightColor: 'rgba(0, 107, 78, 0.1)',
-      detailedInfo: {
-        intro: 'Planes flexibles que crecen con tu negocio, sin sorpresas ni costos ocultos.',
-        benefits: [
-          'Plan gratuito para hasta 3 publicaciones activas',
-          'Planes escalables según volumen de propiedades',
-          'Pagos seguros con tarjeta o transferencia bancaria',
-          'Cambio de plan en cualquier momento sin penalizaciones'
-        ],
-        cta: 'Comienza gratis, escala cuando lo necesites'
-      }
+      detailedInfo: { intro: t.comoFunciona.feat5Intro, benefits: t.comoFunciona.feat5Benefits, cta: t.comoFunciona.feat5Cta }
     }
   ];
 
   const faqs = [
-    {
-      question: '¿Necesito crear una cuenta para explorar parcelas?',
-      answer: 'No, puedes explorar todas las parcelas disponibles sin registrarte. Para guardar favoritos, reservar o contactar vendedores necesitarás crear una cuenta gratuita — el proceso toma menos de 2 minutos.'
-    },
-    {
-      question: '¿Cómo sé que la información de una parcela es confiable?',
-      answer: 'Cada publicación pasa por un proceso de validación antes de mostrarse en la plataforma. Verificamos que los documentos legales básicos estén al día (rol de avalúo, titularidad) y que la información declarada sea consistente. Las parcelas con documentación completa se identifican claramente.'
-    },
-    {
-      question: '¿Cuánto es el valor de la reserva y cómo se paga?',
-      answer: 'El valor de la reserva es de $500.000 (UF 12,9 aproximadamente). Puedes pagar por transferencia bancaria directa o a través de un link de pago con tarjeta de crédito o débito vía Mercado Pago. Una vez confirmado el pago, la parcela queda reservada a tu nombre.'
-    },
-    {
-      question: '¿Qué pasa si mi pago de reserva es rechazado o no puedo completarlo?',
-      answer: 'Si el pago no se completa dentro de los 30 minutos del proceso de reserva, la parcela vuelve a estar disponible para otros compradores. Si fue rechazado por un problema técnico o bancario, puedes intentarlo nuevamente o contactar a nuestro equipo de soporte desde la sección "Mis compras" en tu dashboard.'
-    },
-    {
-      question: '¿Puedo visitar la parcela antes de reservar?',
-      answer: 'Sí, y te lo recomendamos. Puedes solicitar una visita directamente desde el detalle de la parcela. El vendedor o su representante se pondrá en contacto para agendar la fecha y hora que mejor te acomode, sin costo ni compromiso.'
-    },
-    {
-      question: '¿La plataforma funciona para compradores desde el extranjero?',
-      answer: 'Sí. Puedes explorar, comparar y reservar parcelas desde cualquier país. La plataforma muestra precios en CLP y USD según tu preferencia. Para completar la compra es necesario contar con RUT chileno o un representante legal en Chile. Nuestro equipo de asesoría puede orientarte en este proceso sin costo.'
-    },
-    {
-      question: '¿Cuánto cuesta publicar mi parcela?',
-      answer: 'Puedes publicar hasta 3 parcelas de forma completamente gratuita. Si necesitas publicar más o acceder a funciones avanzadas como estadísticas detalladas, publicaciones destacadas o colaboración con brokers, contamos con planes para inmobiliarias y vendedores profesionales. Sin costos ocultos.'
-    },
-    {
-      question: '¿Qué documentos necesito para publicar?',
-      answer: 'No es obligatorio subir documentos para publicar, pero te recomendamos adjuntar el título de propiedad, certificado de rol de avalúo, planos y certificados de uso de suelo. Las publicaciones con documentación completa generan más confianza y se venden considerablemente más rápido.'
-    },
-    {
-      question: '¿Qué diferencia hay entre una parcela y un proyecto?',
-      answer: 'Una parcela es una propiedad individual disponible para la venta directa. Un proyecto es un desarrollo inmobiliario que agrupa múltiples parcelas bajo una misma urbanización o parcelación, generalmente con infraestructura común y etapas de venta programadas. En ambos casos puedes explorar, comparar y reservar desde la plataforma.'
-    },
-    {
-      question: '¿Cómo contacto a un asesor si necesito ayuda?',
-      answer: 'Nuestro equipo de asesores está disponible de lunes a viernes de 9:00 a 18:00 hrs. Puedes contactarnos por WhatsApp (+569 777 14626), email (contacto@compratuparcela.cl) o usando el chat de la plataforma. Ofrecemos asesoría gratuita para compradores que necesitan orientación en el proceso.'
-    }
+    { question: t.comoFunciona.faq1Q, answer: t.comoFunciona.faq1A },
+    { question: t.comoFunciona.faq2Q, answer: t.comoFunciona.faq2A },
+    { question: t.comoFunciona.faq3Q, answer: t.comoFunciona.faq3A },
+    { question: t.comoFunciona.faq4Q, answer: t.comoFunciona.faq4A },
+    { question: t.comoFunciona.faq5Q, answer: t.comoFunciona.faq5A },
+    { question: t.comoFunciona.faq6Q, answer: t.comoFunciona.faq6A },
+    { question: t.comoFunciona.faq7Q, answer: t.comoFunciona.faq7A },
+    { question: t.comoFunciona.faq8Q, answer: t.comoFunciona.faq8A },
+    { question: t.comoFunciona.faq9Q, answer: t.comoFunciona.faq9A },
+    { question: t.comoFunciona.faq10Q, answer: t.comoFunciona.faq10A },
   ];
 
   return (
@@ -254,7 +181,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 color: '#0A0A0A'
               }}
             >
-              Cómo funciona CompraTuParcela
+              {t.comoFunciona.pageTitle}
             </h1>
             <p
               className="body-lead"
@@ -268,7 +195,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 lineHeight: '1.6'
               }}
             >
-              Publica, gestiona y vende parcelas de forma simple y segura
+              {t.comoFunciona.pageSubtitle}
             </p>
           </div>
         </section>
@@ -290,7 +217,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
             >
-              El proceso paso a paso
+              {t.comoFunciona.stepsTitle}
             </h2>
             <p
               className="text-center mb-16"
@@ -304,7 +231,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 margin: '0 auto 64px'
               }}
             >
-              Desde crear tu publicación hasta cerrar la venta, seguí estos pasos simples
+              {t.comoFunciona.stepsSubtitle}
             </p>
 
             {/* Carrusel Container */}
@@ -514,7 +441,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                       border: 'none',
                       cursor: 'pointer'
                     }}
-                    aria-label={`Ir al paso ${index + 1}`}
+                    aria-label={`${index + 1}`}
                   />
                 ))}
               </div>
@@ -536,7 +463,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
             >
-              Qué puedes hacer desde la plataforma
+              {t.comoFunciona.featuresTitle}
             </h2>
             <p
               className="text-center mb-16"
@@ -550,7 +477,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 margin: '0 auto 64px'
               }}
             >
-              Todas las herramientas que necesitas para gestionar tus propiedades en un solo lugar
+              {t.comoFunciona.featuresSubtitle}
             </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -636,7 +563,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
             >
-              Ayuda y soporte
+              {t.comoFunciona.supportTitle}
             </h2>
             <p
               className="text-center mb-16"
@@ -650,7 +577,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 margin: '0 auto 64px'
               }}
             >
-              Nuestro equipo está listo para ayudarte cuando lo necesites
+              {t.comoFunciona.supportSubtitle}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -681,7 +608,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-heading)'
                   }}
                 >
-                  Chat en vivo
+                  {t.comoFunciona.chatTitle}
                 </h3>
                 <p
                   className="mb-4"
@@ -693,7 +620,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-body)'
                   }}
                 >
-                  Conversa con nuestro equipo de soporte en tiempo real
+                  {t.comoFunciona.chatDesc}
                 </p>
                 <p
                   style={{
@@ -704,7 +631,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-body)'
                   }}
                 >
-                  Lun - Vie: 9:00 - 18:00
+                  {t.comoFunciona.chatHours}
                 </p>
               </div>
 
@@ -735,7 +662,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-heading)'
                   }}
                 >
-                  Correo electrónico
+                  {t.comoFunciona.emailTitle}
                 </h3>
                 <p
                   className="mb-4"
@@ -747,7 +674,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-body)'
                   }}
                 >
-                  Escríbenos y te respondemos en menos de 24 horas
+                  {t.comoFunciona.emailDesc}
                 </p>
                 <p
                   style={{
@@ -789,7 +716,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-heading)'
                   }}
                 >
-                  Centro de ayuda
+                  {t.comoFunciona.helpTitle}
                 </h3>
                 <p
                   className="mb-4"
@@ -801,7 +728,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     lineHeight: 'var(--line-height-body)'
                   }}
                 >
-                  Encuentra respuestas en nuestra base de conocimiento
+                  {t.comoFunciona.helpDesc}
                 </p>
                 <button
                   className="px-4 py-2 rounded-lg transition-colors"
@@ -820,7 +747,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     e.currentTarget.style.backgroundColor = '#FAFAFA';
                   }}
                 >
-                  Ver artículos
+                  {t.comoFunciona.viewArticles}
                 </button>
               </div>
             </div>
@@ -841,7 +768,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
             >
-              Preguntas frecuentes
+              {t.comoFunciona.faqTitle}
             </h2>
             <p
               className="text-center mb-16"
@@ -855,7 +782,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 margin: '0 auto 64px'
               }}
             >
-              Resolvemos las dudas más comunes sobre cómo funciona la plataforma
+              {t.comoFunciona.faqSubtitle}
             </p>
 
             <div className="space-y-3">
@@ -949,7 +876,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 letterSpacing: 'var(--letter-spacing-tight)'
               }}
             >
-              ¿Listo para empezar?
+              {t.comoFunciona.ctaTitle}
             </h2>
             <p
               className="mb-10"
@@ -961,7 +888,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                 lineHeight: 'var(--line-height-body)'
               }}
             >
-              Publica tu primera parcela gratis o explora las propiedades disponibles
+              {t.comoFunciona.ctaSubtitle}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
@@ -982,7 +909,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                Crear cuenta
+                {t.home.createAccountBtn}
               </button>
               <button
                 onClick={() => onNavigate('parcelas')}
@@ -994,7 +921,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                Ver parcelas disponibles
+                {t.comoFunciona.viewParcels}
               </button>
             </div>
           </div>
@@ -1015,43 +942,43 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
             <div className="space-y-4">
               <img src={logo} alt="CompraTuParcela" className="h-16 -ml-4" />
               <p className="text-xs text-gray-600">
-                Plataforma especializada en<br />compra y venta de parcelas
+                {t.home.footerDesc}
               </p>
             </div>
-            
+
             <div className="space-y-3">
-              <div className="text-xs font-bold text-black">EXPLORAR</div>
+              <div className="text-xs font-bold text-black">{t.home.footerExplore.toUpperCase()}</div>
               <div className="space-y-2 text-xs text-gray-600">
-                <div>Parcelas</div>
-                <div>Inmobiliarias</div>
-                <div>Blog</div>
+                <div>{t.nav.parcelas}</div>
+                <div>{t.nav.inmobiliarias}</div>
+                <div>{t.home.footerBlog}</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div className="text-xs font-bold text-black">PLATAFORMA</div>
+              <div className="text-xs font-bold text-black">{t.home.footerPlatform.toUpperCase()}</div>
               <div className="space-y-2 text-xs text-gray-600">
-                <div>Cómo funciona</div>
-                <div>Publicar propiedad</div>
-                <div>Planes para inmobiliarias</div>
-                <div>Para brokers</div>
+                <div>{t.home.footerHowItWorks}</div>
+                <div>{t.home.footerPublish}</div>
+                <div>{t.home.footerPlans}</div>
+                <div>{t.home.footerBrokers}</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div className="text-xs font-bold text-black">SOPORTE</div>
+              <div className="text-xs font-bold text-black">{t.home.footerSupport.toUpperCase()}</div>
               <div className="space-y-2 text-xs text-gray-600">
-                <div>Centro de ayuda</div>
-                <div>Términos y condiciones</div>
-                <div>Política de privacidad</div>
-                <div>Contacto</div>
+                <div>{t.home.footerHelp}</div>
+                <div>{t.home.footerTerms}</div>
+                <div>{t.home.footerPrivacy}</div>
+                <div>{t.home.footerContact}</div>
               </div>
             </div>
           </div>
 
           <div className="pt-8 border-t border-gray-200 text-center">
             <p className="text-xs text-gray-500">
-              © 2026 Compra Tu Parcela. Todos los derechos reservados.
+              {t.home.footerCopyright}
             </p>
           </div>
         </div>
@@ -1170,7 +1097,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                   lineHeight: 'var(--line-height-heading)'
                 }}
               >
-                Características principales
+                {t.comoFunciona.modalFeaturesTitle}
               </h4>
               <ul className="space-y-3 mb-8">
                 {features[selectedFeature].detailedInfo.benefits.map((benefit, idx) => (
@@ -1248,7 +1175,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                     e.currentTarget.style.boxShadow = `0 4px 12px ${features[selectedFeature].color}40`;
                   }}
                 >
-                  Comenzar ahora
+                  {t.comoFunciona.modalStartBtn}
                 </button>
               </div>
             </div>
@@ -1273,12 +1200,12 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
             <div className="p-8 pt-10">
               {/* Título */}
               <h2 className="mb-4 pr-8" style={{ color: '#006B4E', fontSize: 'var(--font-size-h3)' }}>
-                Para publicar tu propiedad, necesitas una cuenta
+                {t.home.publishModalTitle}
               </h2>
 
               {/* Descripción */}
               <p className="text-gray-600 mb-6" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)' }}>
-                Crear una cuenta te permite gestionar tus publicaciones, recibir consultas de compradores reales y avanzar con seguridad durante todo el proceso.
+                {t.home.publishModalDesc}
               </p>
 
               {/* Botones principales */}
@@ -1294,7 +1221,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                   }}
                   className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                 >
-                  Crear cuenta
+                  {t.home.createAccountBtn}
                 </button>
                 <button
                   onClick={() => {
@@ -1307,13 +1234,13 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
                   }}
                   className="w-full h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-black px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                 >
-                  Iniciar sesión
+                  {t.home.loginBtn}
                 </button>
               </div>
 
               {/* Texto de refuerzo */}
               <p className="text-gray-500 text-center mt-6" style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-light)', fontSize: 'var(--font-size-body-sm)' }}>
-                Es rápido, sin compromiso y te guía paso a paso.
+                {t.home.publishModalNote}
               </p>
             </div>
           </div>
