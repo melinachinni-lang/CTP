@@ -2,6 +2,7 @@ import React from 'react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import entryBackground from 'figma:asset/e5096b94942ada0bf27ee8e61e30034a31f87b4c.png';
 import { useI18n } from '@/app/i18n/i18nContext';
+import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 
 interface EntryScreenProps {
   onNavigate: (screen: string) => void;
@@ -473,6 +474,9 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
       {/* Header con logo */}
       <header className="relative z-10 pt-8 pb-2">
         <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-end mb-2">
+            <LanguageCurrencySelector variant="header" />
+          </div>
           <img src={logo} alt="CompraTuParcela" className="h-32 mx-auto mb-4" />
         </div>
       </header>
