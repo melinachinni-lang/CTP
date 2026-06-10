@@ -533,7 +533,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   </label>
                   <input
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder={t.entry.emailPlaceholder}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -683,7 +683,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   </label>
                   <input
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder={t.entry.emailPlaceholder}
                     value={registerEmail}
                     onChange={(e) => { setRegisterEmail(e.target.value); setRegisterErrors(prev => ({ ...prev, email: undefined })); }}
                     className="w-full bg-white border-2 py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
@@ -1016,7 +1016,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     </label>
                     <input
                       type="email"
-                      placeholder="tu@email.com"
+                      placeholder={t.entry.emailPlaceholder}
                       value={forgotPasswordEmail}
                       onChange={(e) => { setForgotPasswordEmail(e.target.value); setForgotPasswordGoogleError(false); }}
                       className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"

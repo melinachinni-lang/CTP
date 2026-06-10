@@ -157,7 +157,7 @@ export function Navbar({
                         style={{ color: '#0A0A0A' }}
                       >
                         <User className="w-4 h-4" style={{ color: '#006B4E' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Mi perfil</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>{t.nav.myProfile}</span>
                       </button>
 
                       <button
@@ -169,7 +169,7 @@ export function Navbar({
                         style={{ color: '#0A0A0A' }}
                       >
                         <Bell className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Notificaciones</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>{t.nav.notifications}</span>
                         {unreadNotificationsCount > 0 && (
                           <span className="ml-auto w-2 h-2 bg-red-500 rounded-full" />
                         )}
@@ -186,7 +186,7 @@ export function Navbar({
                         style={{ color: '#0A0A0A' }}
                       >
                         <Settings className="w-4 h-4" style={{ color: '#006B4E' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Configuración</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>{t.nav.settings}</span>
                       </button>
                       
                       <div className="border-t" style={{ borderColor: '#CDD8DE' }}></div>
@@ -197,7 +197,7 @@ export function Navbar({
                         style={{ color: '#DC2626' }}
                       >
                         <LogOut className="w-4 h-4" />
-                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>Cerrar sesión</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>{t.nav.signOut}</span>
                       </button>
                     </div>
                   )}
@@ -376,7 +376,7 @@ export function Navbar({
                         color: '#DC2626'
                       }}
                     >
-                      Cerrar sesión
+                      {t.nav.signOut}
                     </button>
                   </>
                 )}

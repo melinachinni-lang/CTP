@@ -6,6 +6,7 @@ export interface Translations {
     home: string; explore: string; listings: string; saved: string;
     inquiries: string; calendarios: string; compare: string; purchases: string;
     plan: string; help: string; settings: string; myAccount: string; signOut: string;
+    myProfile: string; notifications: string;
     parcelas: string; inmobiliarias: string; howItWorks: string; resources: string;
     publishProperty: string; publishShort: string; login: string;
   };
@@ -282,6 +283,7 @@ export interface Translations {
     completionTitle: string; completionDesc: string; completionLoading: string;
     welcomeTitle: string; welcomeDesc: string; exploreParcels: string; publishParcel: string;
     attemptSingular: string; attemptsPlural: string;
+    emailPlaceholder: string;
   };
 }
 
@@ -291,6 +293,7 @@ const es: Translations = {
     saved: 'Guardados', inquiries: 'Consultas', calendarios: 'Calendarios',
     compare: 'Comparar', purchases: 'Mis compras', plan: 'Plan y límites',
     help: 'Ayuda', settings: 'Configuración', myAccount: 'Mi cuenta', signOut: 'Cerrar sesión',
+    myProfile: 'Mi perfil', notifications: 'Notificaciones',
     parcelas: 'Parcelas', inmobiliarias: 'Inmobiliarias',
     howItWorks: 'Cómo funciona', resources: 'Recursos',
     publishProperty: 'Publicar propiedad', publishShort: 'Publicar', login: 'Ingresar',
@@ -727,6 +730,7 @@ const es: Translations = {
     welcomeTitle: '¡Bienvenido/a', welcomeDesc: 'Tu cuenta está lista. Empieza explorando parcelas o publica la tuya.',
     exploreParcels: 'Explorar parcelas', publishParcel: 'Publicar mi parcela',
     attemptSingular: 'intento restante antes del bloqueo.', attemptsPlural: 'intentos restantes antes del bloqueo.',
+    emailPlaceholder: 'tu@email.com',
   },
 };
 
@@ -736,6 +740,7 @@ const en: Translations = {
     saved: 'Saved', inquiries: 'Inquiries', calendarios: 'Calendars',
     compare: 'Compare', purchases: 'My purchases', plan: 'Plan & limits',
     help: 'Help', settings: 'Settings', myAccount: 'My account', signOut: 'Sign out',
+    myProfile: 'My profile', notifications: 'Notifications',
     parcelas: 'Parcels', inmobiliarias: 'Real estate agencies',
     howItWorks: 'How it works', resources: 'Resources',
     publishProperty: 'List your property', publishShort: 'List', login: 'Log in',
@@ -1172,6 +1177,7 @@ const en: Translations = {
     welcomeTitle: 'Welcome', welcomeDesc: 'Your account is ready. Start exploring parcels or list yours.',
     exploreParcels: 'Explore parcels', publishParcel: 'List my parcel',
     attemptSingular: 'attempt remaining before lockout.', attemptsPlural: 'attempts remaining before lockout.',
+    emailPlaceholder: 'your@email.com',
   },
 };
 
