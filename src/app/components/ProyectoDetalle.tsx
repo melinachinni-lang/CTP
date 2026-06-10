@@ -1,4 +1,5 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
+import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -60,6 +61,7 @@ const getTipoIcon = (tipo: string) => {
 };
 
 export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps) {
+  const { t } = useI18n();
   const [selectedImage, setSelectedImage] = useState(0);
   const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'mapa'>('mapa');
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
@@ -199,7 +201,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
             }}
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Volver a parcelas</span>
+            <span>{t.detail.backToParcels}</span>
           </button>
 
           {/* Layout: 2 columnas */}
@@ -296,7 +298,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         border: '1px solid #E5E5E5',
                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
                       }}
-                      aria-label="Imagen anterior"
+                      aria-label={t.detail.prevImage}
                     >
                       <ChevronLeft className="w-5 h-5" style={{ color: '#0A0A0A' }} />
                     </button>
@@ -312,7 +314,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         border: '1px solid #E5E5E5',
                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
                       }}
-                      aria-label="Imagen siguiente"
+                      aria-label={t.detail.nextImage}
                     >
                       <ChevronRight className="w-5 h-5" style={{ color: '#0A0A0A' }} />
                     </button>
@@ -350,7 +352,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   color: '#0A0A0A',
                   marginBottom: '24px'
                 }}>
-                  Información general
+                  {t.detail.generalInfo}
                 </h2>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -365,7 +367,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
                       }}>
-                        Total parcelas
+                        {t.detail.totalParcels}
                       </span>
                     </div>
                     <div style={{
@@ -389,7 +391,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
                       }}>
-                        Disponibles
+                        {t.detail.availableCount}
                       </span>
                     </div>
                     <div style={{
@@ -413,7 +415,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
                       }}>
-                        Superficie desde
+                        {t.detail.surfaceFrom}
                       </span>
                     </div>
                     <div style={{
@@ -437,7 +439,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
                       }}>
-                        Superficie hasta
+                        {t.detail.surfaceTo}
                       </span>
                     </div>
                     <div style={{
@@ -461,7 +463,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   color: '#0A0A0A',
                   marginBottom: '16px'
                 }}>
-                  Sobre el proyecto
+                  {t.detail.aboutProject}
                 </h2>
                 <p style={{ 
                   fontFamily: 'var(--font-body)',
@@ -484,7 +486,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     color: '#0A0A0A',
                     marginBottom: '2rem'
                   }}>
-                    Características
+                    {t.detail.characteristics}
                   </h2>
 
                   <div className="space-y-6">
@@ -498,7 +500,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           color: '#0A0A0A',
                           marginBottom: '1.5rem'
                         }}>
-                          Terreno
+                          {t.detail.land}
                         </h3>
                         <div className="flex gap-4">
                           {proyecto.caracteristicasTerreno.map((carac, index) => (
@@ -548,7 +550,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           color: '#0A0A0A',
                           marginBottom: '1.5rem'
                         }}>
-                          Servicios
+                          {t.detail.services}
                         </h3>
                         <div className="flex gap-4">
                           {proyecto.caracteristicasServicios.map((carac, index) => (
@@ -598,7 +600,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           color: '#0A0A0A',
                           marginBottom: '1.5rem'
                         }}>
-                          Estado Legal
+                          {t.detail.legalStatus}
                         </h3>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                           {proyecto.caracteristicasLegal.map((carac, index) => (
@@ -652,7 +654,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       color: '#0A0A0A',
                       margin: 0
                     }}>
-                      Planos y documentos
+                      {t.detail.plansDocuments}
                     </h2>
                     {proyecto.documentos && proyecto.documentos.length > 0 && (
                       <button
@@ -665,7 +667,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           fontWeight: 'var(--font-weight-medium)'
                         }}
                       >
-                        <span>{isDocumentosOpen ? 'Ocultar documentos' : 'Ver documentos disponibles'}</span>
+                        <span>{isDocumentosOpen ? t.detail.hideDocuments : t.detail.showDocuments}</span>
                         {isDocumentosOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </button>
                     )}
@@ -714,7 +716,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                 }}
                               >
                                 <Download className="w-4 h-4" />
-                                <span>Descargar</span>
+                                <span>{t.common.download}</span>
                               </button>
                             ) : (
                               <span style={{ 
@@ -722,7 +724,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                 color: '#A3A3A3',
                                 fontSize: 'var(--font-size-xs)'
                               }}>
-                                No disponible
+                                {t.detail.notAvailable}
                               </span>
                             )}
                           </div>
@@ -753,9 +755,9 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     fontSize: 'var(--font-size-h3)',
                     color: '#0A0A0A'
                   }}>
-                    Masterplan
+                    {t.detail.masterplan}
                   </h2>
-                  <button 
+                  <button
                     className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
                     style={{
                       fontFamily: 'var(--font-body)',
@@ -764,7 +766,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     }}
                   >
                     <Download className="w-4 h-4" />
-                    Descargar
+                    {t.common.download}
                   </button>
                 </div>
 
@@ -786,7 +788,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   color: '#0A0A0A',
                   marginBottom: '24px'
                 }}>
-                  Ubicación
+                  {t.detail.location}
                 </h2>
 
                 {/* Dirección */}
@@ -813,7 +815,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       borderBottom: ubicacionTab === 'mapa' ? '2px solid #0A0A0A' : 'none'
                     }}
                   >
-                    Mapa
+                    {t.detail.map}
                   </button>
                   <button
                     onClick={() => setUbicacionTab('panoramica')}
@@ -826,7 +828,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       borderBottom: ubicacionTab === 'panoramica' ? '2px solid #0A0A0A' : 'none'
                     }}
                   >
-                    Entorno
+                    {t.detail.environment}
                   </button>
                 </div>
 
@@ -858,10 +860,10 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 <div className="mt-16 pt-12" style={{ borderTop: '1px solid #E5E5E5' }}>
                   <div className="mb-8">
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', color: '#0A0A0A', marginBottom: '0.5rem' }}>
-                      Información del entorno
+                      {t.detail.surroundingInfo}
                     </h2>
                     <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-body-sm)', lineHeight: 'var(--line-height-body)' }}>
-                      Conoce más sobre el área y contexto de este proyecto
+                      {t.detail.knowMoreArea}
                     </p>
                   </div>
 
@@ -872,13 +874,13 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <Navigation className="w-5 h-5 text-gray-700" />
                         </div>
                         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
-                          Accesos y conectividad
+                          {t.detail.accessConnectivity}
                         </h3>
                       </div>
                       <div className="space-y-5">
                         <div>
                           <div className="flex items-end justify-between mb-2">
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>Tiempo al centro</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.timeToCenter}</span>
                             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>{proyecto.entorno.accesos.tiempoAlCentro}</span>
                           </div>
                           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -887,7 +889,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <p style={{ fontFamily: 'var(--font-body)', color: '#A3A3A3', fontSize: 'var(--font-size-xs)', marginTop: '0.5rem' }}>{proyecto.entorno.accesos.ciudadCercana}</p>
                         </div>
                         <div>
-                          <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.75rem' }}>Tipo de acceso</span>
+                          <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.75rem' }}>{t.detail.accessType}</span>
                           <div className="flex items-center gap-2">
                             {[1, 2, 3, 4].map((bar) => (<div key={bar} className={`flex-1 h-2 rounded-full ${bar <= proyecto.entorno!.accesos.calidadAcceso ? 'bg-gray-900' : 'bg-gray-100'}`} />))}
                           </div>
@@ -907,14 +909,14 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
                           <ShoppingBag className="w-5 h-5 text-gray-700" />
                         </div>
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>Servicios cercanos</h3>
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{t.detail.nearbyServices}</h3>
                       </div>
                       <div className="space-y-4">
                         <div>
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <School className="w-4 h-4 text-gray-500" />
-                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>Educación</span>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.education}</span>
                             </div>
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.educacion.nivel}</span>
                           </div>
@@ -926,7 +928,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <ShoppingBag className="w-4 h-4 text-gray-500" />
-                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>Comercio</span>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.commerce}</span>
                             </div>
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.comercio.nivel}</span>
                           </div>
@@ -938,7 +940,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <Home className="w-4 h-4 text-gray-500" />
-                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>Salud</span>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.health}</span>
                             </div>
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.salud.nivel}</span>
                           </div>
@@ -950,7 +952,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <TreePine className="w-4 h-4 text-gray-500" />
-                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>Recreación</span>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.recreation}</span>
                             </div>
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.recreacion.nivel}</span>
                           </div>
@@ -966,12 +968,12 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
                           <TreePine className="w-5 h-5 text-gray-700" />
                         </div>
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>Entorno natural</h3>
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{t.detail.naturalSurroundings}</h3>
                       </div>
                       <div className="space-y-5">
                         <div>
                           <div className="flex items-center justify-between mb-3">
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>Naturaleza</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.nature}</span>
                             <div className="flex gap-1">
                               {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className={`w-2 h-8 rounded-sm ${bar <= proyecto.entorno!.naturaleza.nivel ? 'bg-gray-900' : 'bg-gray-100'}`} />))}
                             </div>
@@ -980,7 +982,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         </div>
                         <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
                           <div className="flex items-center justify-between mb-3">
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>Vistas</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.views}</span>
                             <div className="flex gap-1">
                               {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className={`w-2 h-8 rounded-sm ${bar <= proyecto.entorno!.naturaleza.vistas ? 'bg-gray-900' : 'bg-gray-100'}`} />))}
                             </div>
@@ -990,11 +992,11 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.25rem' }}>Temp. promedio</span>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.25rem' }}>{t.detail.avgTemp}</span>
                               <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h4)', color: '#0A0A0A' }}>{proyecto.entorno.naturaleza.temperaturaPromedio}</span>
                             </div>
                             <div>
-                              <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.25rem' }}>Precipitaciones</span>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.25rem' }}>{t.detail.rainfall}</span>
                               <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}>{proyecto.entorno.naturaleza.precipitaciones}</span>
                             </div>
                           </div>
@@ -1007,18 +1009,18 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
                           <TrendingUp className="w-5 h-5 text-gray-700" />
                         </div>
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>Contexto del área</h3>
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{t.detail.areaContext}</h3>
                       </div>
                       <div className="space-y-5">
                         <div>
-                          <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.5rem' }}>Población aproximada</span>
+                          <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.5rem' }}>{t.detail.approxPop}</span>
                           <div className="flex items-baseline gap-2">
                             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h2)', color: '#0A0A0A' }}>{proyecto.entorno.contexto.poblacion}</span>
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#A3A3A3', fontSize: 'var(--font-size-xs)' }}>habitantes</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#A3A3A3', fontSize: 'var(--font-size-xs)' }}>{t.detail.inhabitants}</span>
                           </div>
                         </div>
                         <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
-                          <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.75rem' }}>Actividades principales</span>
+                          <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.75rem' }}>{t.detail.mainActivities}</span>
                           <div className="space-y-2">
                             {proyecto.entorno.contexto.actividadesPrincipales.map((actividad, index) => (
                               <div key={index} className="flex items-center gap-3">
@@ -1036,7 +1038,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                   <div className="mt-6 p-5 rounded-xl bg-gray-50 border border-gray-200">
                     <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', lineHeight: 'var(--line-height-body)' }}>
-                      <strong style={{ color: '#525252' }}>Nota:</strong> La información presentada en esta sección es de carácter referencial y busca aportar contexto general sobre el área. Te recomendamos verificar detalles específicos directamente con el publicador o mediante visita al terreno.
+                      {t.detail.referenceNote}
                     </p>
                   </div>
                 </div>
@@ -1056,7 +1058,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       color: 'var(--foreground)',
                       margin: 0
                     }}>
-                      Stock y disponibilidad
+                      {t.detail.stockAvailability}
                     </h2>
                   </div>
                   <button
@@ -1069,7 +1071,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       fontWeight: 'var(--font-weight-medium)'
                     }}
                   >
-                    <span>{isStockOpen ? 'Ocultar parcelas' : 'Ver parcelas disponibles'}</span>
+                    <span>{isStockOpen ? t.detail.hideParcels : t.detail.showAvailableParcels}</span>
                     {isStockOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>
@@ -1203,7 +1205,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               color: '#0A0A0A'
                             }}
                           >
-                            Ver parcela
+                            {t.detail.viewParcel}
                           </button>
                         </div>
                       </div>
@@ -1230,7 +1232,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         letterSpacing: '0.05em',
                         marginBottom: '0.5rem'
                       }}>
-                        Precio base por parcela
+                        {t.detail.basePricePerParcel}
                       </p>
                       <div className="flex items-baseline gap-3">
                         <span style={{
@@ -1238,7 +1240,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           fontSize: 'var(--font-size-body-sm)',
                           color: '#737373'
                         }}>
-                          Desde
+                          {t.common.from}
                         </span>
                         <PrecioDisplay 
                           precioCLP={proyecto.precioDesde}
@@ -1251,7 +1253,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           fontSize: 'var(--font-size-body-sm)',
                           color: '#737373'
                         }}>
-                          hasta {proyecto.precioHasta}
+                          {t.detail.priceTo} {proyecto.precioHasta}
                         </span>
                       </div>
                     </div>
@@ -1268,7 +1270,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         fontSize: 'var(--font-size-body-base)'
                       }}
                     >
-                      Reservar visita
+                      {t.detail.bookVisit}
                     </button>
 
                     {/* CTA secundario */}
@@ -1285,7 +1287,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       }}
                     >
                       <MessageSquare className="w-4 h-4" />
-                      Consulta online
+                      {t.detail.onlineConsult}
                     </button>
                   </div>
                 </div>

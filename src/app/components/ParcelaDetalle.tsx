@@ -1,4 +1,5 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
+import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, FileCheck, Download, MapPin, Phone, Mail, ExternalLink, Zap, Droplet, FileText, TreePine, School, ShoppingBag, Navigation, TrendingUp, Users, Home, Compass, Mountain, CheckCircle, Fence, DoorClosed, ChevronDown, ChevronUp, Map, Maximize2, FileImage, DollarSign, MessageSquare, Package, X, ShoppingCart, Sparkles, ThumbsUp, AlertCircle, Clock, Activity, FileBadge, Settings, MapPinOff, Image as ImageIcon, Upload, Info } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -84,14 +85,15 @@ interface GeolocalizacionMapProps {
   onNavigate: (screen: string, id?: number) => void;
 }
 
-function GeolocalizacionMap({ 
-  parcelaActualId, 
-  hoveredParcela, 
+function GeolocalizacionMap({
+  parcelaActualId,
+  hoveredParcela,
   setHoveredParcela,
   mapZoom,
   setMapZoom,
   onNavigate
 }: GeolocalizacionMapProps) {
+  const { t } = useI18n();
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -120,10 +122,10 @@ function GeolocalizacionMap({
 
   const getEstadoLabel = (estado: string) => {
     switch (estado) {
-      case 'disponible': return 'Disponible';
-      case 'reservandose': return 'Reservándose';
-      case 'reservado': return 'Reservado';
-      case 'vendido': return 'Vendido';
+      case 'disponible': return t.status.disponible;
+      case 'reservandose': return t.status.reservandose;
+      case 'reservado': return t.status.reservada;
+      case 'vendido': return t.detail.vendido;
       default: return '';
     }
   };
@@ -532,7 +534,7 @@ function GeolocalizacionMap({
             color: '#525252',
             fontWeight: 'var(--font-weight-medium)'
           }}>
-            Explora el terreno interactivamente
+            {t.detail.exploreInteractively}
           </span>
         </div>
       )}
@@ -552,8 +554,8 @@ function GeolocalizacionMap({
               cursor: mapZoom >= 3 ? 'not-allowed' : 'pointer',
               opacity: mapZoom >= 3 ? 0.5 : 1
             }}
-            aria-label="Acercar"
-            title="Acercar"
+            aria-label={t.detail.zoomIn}
+            title={t.detail.zoomIn}
             disabled={mapZoom >= 3}
           >
             <span style={{ 
@@ -575,8 +577,8 @@ function GeolocalizacionMap({
               cursor: mapZoom <= 0.5 ? 'not-allowed' : 'pointer',
               opacity: mapZoom <= 0.5 ? 0.5 : 1
             }}
-            aria-label="Alejar"
-            title="Alejar"
+            aria-label={t.detail.zoomOut}
+            title={t.detail.zoomOut}
             disabled={mapZoom <= 0.5}
           >
             <span style={{ 
@@ -601,8 +603,8 @@ function GeolocalizacionMap({
               cursor: mapZoom === 1 && panOffset.x === 0 && panOffset.y === 0 ? 'not-allowed' : 'pointer',
               opacity: mapZoom === 1 && panOffset.x === 0 && panOffset.y === 0 ? 0.5 : 1
             }}
-            aria-label="Restablecer vista"
-            title="Restablecer vista"
+            aria-label={t.detail.resetView}
+            title={t.detail.resetView}
             disabled={mapZoom === 1 && panOffset.x === 0 && panOffset.y === 0}
           >
             <div className="[&_svg]:stroke-[#0A0A0A] [&_path]:fill-none [&_path]:stroke-[#0A0A0A] [&_circle]:fill-none [&_circle]:stroke-[#0A0A0A] [&_rect]:fill-none [&_rect]:stroke-[#0A0A0A] [&_line]:stroke-[#0A0A0A] [&_polyline]:stroke-[#0A0A0A]">
@@ -645,19 +647,19 @@ function GeolocalizacionMap({
               className="w-4 h-4 rounded-full flex items-center justify-center"
               style={{ backgroundColor: '#FFFFFF', border: '2px solid #10B981' }}
             ></div>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Disponible</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>{t.status.disponible}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#F59E0B' }}></div>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Reservándose</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>{t.status.reservandose}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#006B4E' }}></div>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Reservado</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>{t.status.reservada}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#EF4444' }}></div>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>Vendido</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>{t.detail.vendido}</span>
           </div>
         </div>
       </div>
@@ -680,6 +682,7 @@ interface ParcelaDetalleProps {
 }
 
 export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange, savedParcelaIds = [], onToggleSaved, isLoggedIn, compareParcelaIds = [], onToggleCompare }: ParcelaDetalleProps) {
+  const { t } = useI18n();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
   const [isDocTecnicaOpen, setIsDocTecnicaOpen] = useState(false);
@@ -839,65 +842,65 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     fontWeight: 'var(--font-weight-medium)'
                   }}
                 >
-                  Parcelas
+                  {t.nav.parcelas}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('inmobiliarias')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Inmobiliarias
+                  {t.nav.inmobiliarias}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('como-funciona')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Cómo funciona
+                  {t.nav.howItWorks}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('recursos')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Recursos
+                  {t.nav.resources}
                 </button>
               </nav>
             </div>
 
             {/* Botones de acción */}
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 className="px-5 py-2 text-sm rounded-full transition-colors"
-                style={{ 
+                style={{
                   fontFamily: 'var(--font-body)',
                   backgroundColor: '#0A0A0A',
                   color: '#FFFFFF',
                   fontWeight: 'var(--font-weight-medium)'
                 }}
               >
-                Publicar propiedad
+                {t.nav.publishProperty}
               </button>
-              <button 
+              <button
                 onClick={() => onNavigate('entry')}
                 className="px-5 py-2 text-sm rounded-full transition-colors"
-                style={{ 
+                style={{
                   fontFamily: 'var(--font-body)',
                   backgroundColor: '#F5F5F5',
                   color: '#0A0A0A',
                   fontWeight: 'var(--font-weight-medium)'
                 }}
               >
-                Ingresar
+                {t.nav.login}
               </button>
             </div>
           </div>
@@ -920,7 +923,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
             <div className="[&_svg]:stroke-[#737373] [&_path]:fill-none [&_path]:stroke-[#737373] [&_circle]:fill-none [&_circle]:stroke-[#737373] [&_rect]:fill-none [&_rect]:stroke-[#737373] [&_line]:stroke-[#737373] [&_polyline]:stroke-[#737373]">
               <ChevronLeft className="w-4 h-4" />
             </div>
-            <span>Volver a resultados</span>
+            <span>{t.detail.backToResults}</span>
           </button>
 
           {/* Layout: 2 columnas */}
@@ -958,7 +961,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         transform: hoveredAnalisisButton ? 'translateY(-2px) scale(1.05)' : 'translateY(0) scale(1)',
                         animation: 'vambeAttention 3s ease-in-out infinite'
                       }}
-                      aria-label="Ver análisis de mercado con IA"
+                      aria-label={t.detail.marketAnalysis}
                     >
                       <div className="[&_svg]:stroke-[#525252] [&_path]:fill-none [&_path]:stroke-[#525252] [&_circle]:fill-none [&_circle]:stroke-[#525252] [&_rect]:fill-none [&_rect]:stroke-[#525252] [&_line]:stroke-[#525252] [&_polyline]:stroke-[#525252]">
                         <Sparkles 
@@ -978,7 +981,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           fontWeight: 'var(--font-weight-medium)'
                         }}
                       >
-                        Ver análisis de mercado con IA
+                        {t.detail.marketAnalysis}
                       </div>
                     )}
                   </div>
@@ -993,7 +996,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         borderColor: compareParcelaIds.includes(parcelaId as number) ? '#A7F3D0' : '#D4D4D4',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
                       }}
-                      title={compareParcelaIds.includes(parcelaId as number) ? 'Quitar del comparador' : 'Agregar al comparador'}
+                      title={compareParcelaIds.includes(parcelaId as number) ? t.detail.removeFromCompare : t.detail.addToCompare}
                     >
                       <svg viewBox="0 0 24 24" fill="none" stroke={compareParcelaIds.includes(parcelaId as number) ? '#006B4E' : '#6B7280'} strokeWidth={2} style={{ width: '18px', height: '18px' }}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l9-3 9 3M3 6v12l9 3m-9-3l9 3m0 0l9-3M12 9v12m9-12v12" />
@@ -1010,7 +1013,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         borderColor: savedParcelaIds.includes(parcelaId as number) ? '#A7F3D0' : '#D4D4D4',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
                       }}
-                      title={savedParcelaIds.includes(parcelaId as number) ? 'Eliminar de guardados' : 'Guardar parcela'}
+                      title={savedParcelaIds.includes(parcelaId as number) ? t.detail.removeFromSaved : t.detail.saveParcel}
                     >
                       <svg viewBox="0 0 24 24" style={{
                         width: '18px', height: '18px',
@@ -1056,7 +1059,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       {/* Botón expandir - siempre visible en hover */}
                       <button
                         onClick={() => openLightbox(selectedImage)}
-                        aria-label="Ver en pantalla completa"
+                        aria-label={t.detail.viewFullscreen}
                         className="absolute top-3 right-3 w-9 h-9 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
                         style={{ backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
                       >
@@ -1087,7 +1090,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               border: '1px solid #E5E5E5',
                               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
                             }}
-                            aria-label="Imagen anterior"
+                            aria-label={t.detail.prevImage}
                           >
                             <div className="[&_svg]:stroke-[#0A0A0A] [&_path]:fill-none [&_path]:stroke-[#0A0A0A] [&_circle]:fill-none [&_circle]:stroke-[#0A0A0A] [&_rect]:fill-none [&_rect]:stroke-[#0A0A0A] [&_line]:stroke-[#0A0A0A] [&_polyline]:stroke-[#0A0A0A]">
                               <ChevronLeft className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -1105,7 +1108,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               border: '1px solid #E5E5E5',
                               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
                             }}
-                            aria-label="Imagen siguiente"
+                            aria-label={t.detail.nextImage}
                           >
                             <div className="[&_svg]:stroke-[#0A0A0A] [&_path]:fill-none [&_path]:stroke-[#0A0A0A] [&_circle]:fill-none [&_circle]:stroke-[#0A0A0A] [&_rect]:fill-none [&_rect]:stroke-[#0A0A0A] [&_line]:stroke-[#0A0A0A] [&_polyline]:stroke-[#0A0A0A]">
                               <ChevronRight className="w-5 h-5" style={{ color: '#0A0A0A' }} />
@@ -1153,17 +1156,17 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         marginBottom: '0.5rem'
                       }}
                     >
-                      Sin imágenes disponibles
+                      {t.detail.noImages}
                     </p>
-                    <p 
-                      style={{ 
+                    <p
+                      style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-xs)', 
+                        fontSize: 'var(--font-size-xs)',
                         color: '#D1D5DB',
                         fontWeight: 'var(--font-weight-regular)'
                       }}
                     >
-                      Esta publicación no cuenta con fotografías en este momento
+                      {t.detail.noImagesDesc}
                     </p>
                   </div>
                 )}
@@ -1178,7 +1181,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   color: '#0A0A0A',
                   marginBottom: '1rem'
                 }}>
-                  Descripción
+                  {t.detail.description}
                 </h2>
                 <div style={{ 
                   fontFamily: 'var(--font-body)',
@@ -1213,7 +1216,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontWeight: 'var(--font-weight-medium)'
                       }}
                     >
-                      <span>{isDescripcionExpanded ? 'Ver menos' : 'Ver más'}</span>
+                      <span>{isDescripcionExpanded ? t.detail.showLess : t.detail.showMore}</span>
                       <div className="[&_svg]:stroke-currentColor [&_path]:fill-none [&_path]:stroke-currentColor [&_circle]:fill-none [&_circle]:stroke-currentColor [&_rect]:fill-none [&_rect]:stroke-currentColor [&_line]:stroke-currentColor [&_polyline]:stroke-currentColor]">
                         {isDescripcionExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </div>
@@ -1231,9 +1234,9 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   color: '#0A0A0A',
                   marginBottom: '1.5rem'
                 }}>
-                  Ubicación
+                  {t.detail.location}
                 </h2>
-                
+
                 <div className="space-y-6">
                   {/* Dirección */}
                   <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-50">
@@ -1276,17 +1279,17 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#0A0A0A',
                           marginBottom: '0.5rem'
                         }}>
-                          Ubicación no disponible
+                          {t.detail.locationUnavailable}
                         </h3>
-                        
+
                         {/* Texto descriptivo */}
-                        <p style={{ 
+                        <p style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
                           color: '#737373',
                           lineHeight: '1.6'
                         }}>
-                          El propietario no ha proporcionado una ubicación exacta para esta parcela, por lo que el mapa no está disponible.
+                          {t.detail.noLocationDesc}
                         </p>
                       </div>
                     </div>
@@ -1328,7 +1331,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                 whiteSpace: 'normal'
                               }}
                             >
-                              Este contenido no está disponible para esta publicación.
+                              {t.detail.contentNotAvailable}
                               <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                             </div>
                           )}
@@ -1354,7 +1357,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             }}
                           >
                             <FileText className="w-4 h-4" />
-                            Plano
+                            {t.detail.plan}
                           </button>
                           
                           {/* Tooltip para disabled */}
@@ -1367,7 +1370,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                 whiteSpace: 'normal'
                               }}
                             >
-                              Este contenido no está disponible para esta publicación.
+                              {t.detail.contentNotAvailable}
                               <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                             </div>
                           )}
@@ -1387,7 +1390,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           }}
                         >
                           <MapPin className="w-4 h-4" />
-                          Mapa
+                          {t.detail.map}
                         </button>
                       </div>
                       
@@ -1426,7 +1429,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                     color: '#0A0A0A',
                                     marginBottom: '8px'
                                   }}>
-                                    Plano no disponible
+                                    {t.detail.planUnavailable}
                                   </p>
                                   <p style={{
                                     fontFamily: 'var(--font-body)',
@@ -1434,7 +1437,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                     color: '#737373',
                                     lineHeight: 'var(--line-height-body)'
                                   }}>
-                                    El propietario no ha proporcionado un plano para esta parcela.
+                                    {t.detail.noPlanDesc}
                                   </p>
                                 </div>
                               </div>
@@ -1468,20 +1471,20 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   color: '#0A0A0A',
                   marginBottom: '2rem'
                 }}>
-                  Características
+                  {t.detail.characteristics}
                 </h2>
 
                 <div className="space-y-6">
                   {/* Grupo: Terreno */}
                   <div className="bg-gray-50 rounded-xl p-6">
-                    <h3 style={{ 
+                    <h3 style={{
                       fontFamily: 'var(--font-heading)',
                       fontWeight: 'var(--font-weight-medium)',
                       fontSize: 'var(--font-size-body-lg)',
                       color: '#0A0A0A',
                       marginBottom: '1.5rem'
                     }}>
-                      Terreno
+                      {t.detail.land}
                     </h3>
                     <div className="flex gap-4">
                       {parcela.caracteristicasTerreno.map((carac, index) => (
@@ -1522,14 +1525,14 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
 
                   {/* Grupo: Servicios */}
                   <div className="bg-gray-50 rounded-xl p-6">
-                    <h3 style={{ 
+                    <h3 style={{
                       fontFamily: 'var(--font-heading)',
                       fontWeight: 'var(--font-weight-medium)',
                       fontSize: 'var(--font-size-body-lg)',
                       color: '#0A0A0A',
                       marginBottom: '1.5rem'
                     }}>
-                      Servicios
+                      {t.detail.services}
                     </h3>
                     <div className="flex gap-4">
                       {parcela.caracteristicasServicios.map((carac, index) => (
@@ -1570,14 +1573,14 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
 
                   {/* Grupo: Estado Legal */}
                   <div className="bg-gray-50 rounded-xl p-6">
-                    <h3 style={{ 
+                    <h3 style={{
                       fontFamily: 'var(--font-heading)',
                       fontWeight: 'var(--font-weight-medium)',
                       fontSize: 'var(--font-size-body-lg)',
                       color: '#0A0A0A',
                       marginBottom: '1.5rem'
                     }}>
-                      Estado Legal
+                      {t.detail.legalStatus}
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                       {parcela.caracteristicasLegal.map((carac, index) => (
@@ -1628,15 +1631,15 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     color: '#0A0A0A',
                     marginBottom: '0.5rem'
                   }}>
-                    Información del entorno
+                    {t.detail.surroundingInfo}
                   </h2>
-                  <p style={{ 
+                  <p style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373',
                     fontSize: 'var(--font-size-body-sm)',
                     lineHeight: 'var(--line-height-body)'
                   }}>
-                    Conoce más sobre el área y contexto de esta propiedad
+                    {t.detail.knowMoreArea}
                   </p>
                 </div>
 
@@ -1655,7 +1658,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontSize: 'var(--font-size-body-lg)',
                         color: '#0A0A0A'
                       }}>
-                        Accesos y conectividad
+                        {t.detail.accessConnectivity}
                       </h3>
                     </div>
 
@@ -1668,7 +1671,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#737373',
                             fontSize: 'var(--font-size-xs)'
                           }}>
-                            Tiempo al centro
+                            {t.detail.timeToCenter}
                           </span>
                           <span style={{ 
                             fontFamily: 'var(--font-heading)',
@@ -1704,7 +1707,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           display: 'block',
                           marginBottom: '0.75rem'
                         }}>
-                          Tipo de acceso
+                          {t.detail.accessType}
                         </span>
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-2 rounded-full" style={{ backgroundColor: '#006B4E' }} />
@@ -1760,7 +1763,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontSize: 'var(--font-size-body-lg)',
                         color: '#0A0A0A'
                       }}>
-                        Servicios cercanos
+                        {t.detail.nearbyServices}
                       </h3>
                     </div>
 
@@ -1775,7 +1778,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-xs)'
                             }}>
-                              Educación
+                              {t.detail.education}
                             </span>
                           </div>
                           <span style={{ 
@@ -1805,7 +1808,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-xs)'
                             }}>
-                              Comercio
+                              {t.detail.commerce}
                             </span>
                           </div>
                           <span style={{ 
@@ -1835,7 +1838,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-xs)'
                             }}>
-                              Salud
+                              {t.detail.health}
                             </span>
                           </div>
                           <span style={{ 
@@ -1865,7 +1868,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-xs)'
                             }}>
-                              Recreación
+                              {t.detail.recreation}
                             </span>
                           </div>
                           <span style={{ 
@@ -1901,7 +1904,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontSize: 'var(--font-size-body-lg)',
                         color: '#0A0A0A'
                       }}>
-                        Entorno natural
+                        {t.detail.naturalSurroundings}
                       </h3>
                     </div>
 
@@ -1914,7 +1917,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#737373',
                             fontSize: 'var(--font-size-xs)'
                           }}>
-                            Naturaleza
+                            {t.detail.nature}
                           </span>
                           <div className="flex gap-1">
                             <div className="w-2 h-8 rounded-sm" style={{ backgroundColor: '#647E3F' }} />
@@ -1941,7 +1944,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#737373',
                             fontSize: 'var(--font-size-xs)'
                           }}>
-                            Vistas
+                            {t.detail.views}
                           </span>
                           <div className="flex gap-1">
                             <div className="w-2 h-8 rounded-sm" style={{ backgroundColor: '#647E3F' }} />
@@ -1971,7 +1974,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               display: 'block',
                               marginBottom: '0.25rem'
                             }}>
-                              Temp. promedio
+                              {t.detail.avgTemp}
                             </span>
                             <span style={{ 
                               fontFamily: 'var(--font-heading)',
@@ -1990,7 +1993,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               display: 'block',
                               marginBottom: '0.25rem'
                             }}>
-                              Precipitaciones
+                              {t.detail.rainfall}
                             </span>
                             <span style={{ 
                               fontFamily: 'var(--font-body)',
@@ -2020,7 +2023,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontSize: 'var(--font-size-body-lg)',
                         color: '#0A0A0A'
                       }}>
-                        Contexto del área
+                        {t.detail.areaContext}
                       </h3>
                     </div>
 
@@ -2034,7 +2037,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           display: 'block',
                           marginBottom: '0.5rem'
                         }}>
-                          Población aproximada
+                          {t.detail.approxPop}
                         </span>
                         <div className="flex items-baseline gap-2">
                           <span style={{ 
@@ -2050,7 +2053,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#A3A3A3',
                             fontSize: 'var(--font-size-xs)'
                           }}>
-                            habitantes
+                            {t.detail.inhabitants}
                           </span>
                         </div>
                       </div>
@@ -2064,7 +2067,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           display: 'block',
                           marginBottom: '0.75rem'
                         }}>
-                          Actividades principales
+                          {t.detail.mainActivities}
                         </span>
                         <div className="space-y-2">
                           <div className="flex items-center gap-3">
@@ -2153,7 +2156,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       marginBottom: '1.5rem',
                       marginLeft: '3.25rem'
                     }}>
-                      Obtén información para realizar la mejor compra
+                      {t.detail.savingsInfo}
                     </p>
 
                     {/* Gráfico de Plusvalía */}
@@ -2267,7 +2270,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     fontSize: 'var(--font-size-xs)',
                     lineHeight: 'var(--line-height-body)'
                   }}>
-                    <strong style={{ color: '#525252' }}>Nota:</strong> La información presentada en esta sección es de carácter referencial y busca aportar contexto general sobre el área. Te recomendamos verificar detalles específicos directamente con el publicador o mediante visita al terreno.
+                    {t.detail.referenceNote}
                   </p>
                 </div>
               </div>
@@ -2291,7 +2294,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#0A0A0A',
                       margin: 0
                     }}>
-                      Planos y documentos
+                      {t.detail.plansDocuments}
                     </h2>
                   </div>
                   <button
@@ -2304,7 +2307,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       fontWeight: 'var(--font-weight-medium)'
                     }}
                   >
-                    <span>{isDocumentosOpen ? 'Ocultar planos y documentos' : 'Ver planos y documentos'}</span>
+                    <span>{isDocumentosOpen ? t.detail.hidePlans : t.detail.showPlans}</span>
                     <div className="[&_svg]:stroke-currentColor [&_path]:fill-none [&_path]:stroke-currentColor [&_circle]:fill-none [&_circle]:stroke-currentColor [&_rect]:fill-none [&_rect]:stroke-currentColor [&_line]:stroke-currentColor [&_polyline]:stroke-currentColor]">
                       {isDocumentosOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </div>
@@ -2632,7 +2635,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#0A0A0A',
                       margin: 0
                     }}>
-                      Stock y disponibilidad
+                      {t.detail.stockAvailability}
                     </h2>
                   </div>
                   <button
@@ -2645,7 +2648,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       fontWeight: 'var(--font-weight-medium)'
                     }}
                   >
-                    <span>{isStockOpen ? 'Ocultar parcelas' : 'Ver parcelas disponibles'}</span>
+                    <span>{isStockOpen ? t.detail.hideParcels : t.detail.showAvailableParcels}</span>
                     {isStockOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>
@@ -2817,12 +2820,12 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#059669' }} />}
                         <div>
                           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: estadoCompra === 'reservandose' ? '#92400E' : '#065F46' }}>
-                            {estadoCompra === 'reservandose' && 'Reservándose'}
-                            {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && 'Reservada'}
+                            {estadoCompra === 'reservandose' && t.status.reservandose}
+                            {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && t.status.reservada}
                           </p>
                           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>
-                            {estadoCompra === 'reservandose' && 'Esperando comprobante de transferencia'}
-                            {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && 'Parcela reservada'}
+                            {estadoCompra === 'reservandose' && t.detail.waitingReceipt}
+                            {(estadoCompra === 'pago-en-validacion' || estadoCompra === 'reservada') && t.detail.parcelReserved}
                           </p>
                         </div>
                       </div>
@@ -2864,7 +2867,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         <div className="[&_svg]:stroke-white [&_path]:fill-none [&_path]:stroke-white [&_circle]:fill-none [&_circle]:stroke-white [&_rect]:fill-none [&_rect]:stroke-white [&_line]:stroke-white [&_polyline]:stroke-white">
                           <Upload className="w-4 h-4" />
                         </div>
-                        Subir comprobante
+                        {t.detail.uploadReceipt}
                       </button>
                     )}
 
@@ -2878,7 +2881,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     {estadoCompra === 'reservada' && (
                       <div className="w-full px-6 py-3 rounded-full flex items-center justify-center gap-2" style={{ backgroundColor: '#ECFDF5', border: '1px solid #6EE7B7' }}>
                         <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', color: '#065F46', fontWeight: 600, fontSize: 'var(--font-size-body-sm)' }}>Parcela reservada</span>
+                        <span style={{ fontFamily: 'var(--font-body)', color: '#065F46', fontWeight: 600, fontSize: 'var(--font-size-body-sm)' }}>{t.detail.parcelReserved}</span>
                       </div>
                     )}
 
@@ -2955,7 +2958,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                 padding: '2px',
                                 marginTop: '-2px'
                               }}
-                              aria-label={isPublicadoPorExpanded ? 'Ocultar información' : 'Ver más información'}
+                              aria-label={isPublicadoPorExpanded ? t.detail.hideInfo : t.detail.viewMoreInfo}
                             >
                               {isPublicadoPorExpanded ? (
                                 <div className="[&_svg]:stroke-[#737373] [&_path]:fill-none [&_path]:stroke-[#737373] [&_circle]:fill-none [&_circle]:stroke-[#737373] [&_rect]:fill-none [&_rect]:stroke-[#737373] [&_line]:stroke-[#737373] [&_polyline]:stroke-[#737373]">
@@ -3079,7 +3082,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
               color: '#0A0A0A',
               marginBottom: '2rem'
             }}>
-              Parcelas similares
+              {t.detail.similarParcels}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {parcelasSimilares.map((parcelaSimilar) => (
@@ -3528,7 +3531,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#0A0A0A',
                         marginBottom: '0.25rem'
                       }}>
-                        Ubicación privilegiada
+                        {t.detail.privilegedLocation}
                       </p>
                       <p style={{ 
                         fontFamily: 'var(--font-body)',
@@ -3716,7 +3719,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   color: '#737373',
                   lineHeight: 'var(--line-height-body)'
                 }}>
-                  <strong style={{ color: '#525252' }}>Nota:</strong> Este análisis es de carácter referencial y se basa en datos públicos y tendencias del mercado. Te recomendamos realizar tu propia evaluación y consultar con profesionales antes de tomar decisiones de inversión.
+                  {t.detail.marketNote}
                   </p>
                 </div>
               </div>

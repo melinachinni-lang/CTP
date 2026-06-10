@@ -285,6 +285,45 @@ export interface Translations {
     attemptSingular: string; attemptsPlural: string;
     emailPlaceholder: string;
   };
+  detail: {
+    backToResults: string; backToParcels: string;
+    prevImage: string; nextImage: string;
+    noImages: string; noImagesDesc: string;
+    viewFullscreen: string;
+    map: string; plan: string; environment: string;
+    contentNotAvailable: string;
+    zoomIn: string; zoomOut: string; resetView: string;
+    exploreInteractively: string;
+    description: string; showMore: string; showLess: string;
+    location: string; locationUnavailable: string; noLocationDesc: string;
+    planUnavailable: string; noPlanDesc: string;
+    characteristics: string; land: string; services: string; legalStatus: string;
+    surroundingInfo: string; accessConnectivity: string;
+    plansDocuments: string; hidePlans: string; showPlans: string;
+    hideParcels: string; showAvailableParcels: string;
+    hideInfo: string; viewMoreInfo: string;
+    savingsInfo: string;
+    waitingReceipt: string; parcelReserved: string; uploadReceipt: string;
+    similarParcels: string; privilegedLocation: string;
+    marketAnalysis: string; marketNote: string;
+    addToCompare: string; removeFromCompare: string;
+    saveParcel: string; removeFromSaved: string;
+    generalInfo: string; totalParcels: string;
+    availableCount: string; surfaceFrom: string; surfaceTo: string;
+    aboutProject: string; masterplan: string;
+    hideDocuments: string; showDocuments: string;
+    notAvailable: string;
+    timeToCenter: string; accessType: string;
+    nearbyServices: string; education: string; commerce: string; health: string; recreation: string;
+    naturalSurroundings: string; nature: string; views: string;
+    avgTemp: string; rainfall: string;
+    areaContext: string; approxPop: string; inhabitants: string; mainActivities: string;
+    knowMoreArea: string; referenceNote: string;
+    stockAvailability: string; availableParcels: string; viewParcel: string;
+    basePricePerParcel: string; priceTo: string;
+    bookVisit: string; onlineConsult: string;
+    vendido: string;
+  };
 }
 
 const es: Translations = {
@@ -732,6 +771,49 @@ const es: Translations = {
     attemptSingular: 'intento restante antes del bloqueo.', attemptsPlural: 'intentos restantes antes del bloqueo.',
     emailPlaceholder: 'tu@email.com',
   },
+  detail: {
+    backToResults: 'Volver a resultados', backToParcels: 'Volver a parcelas',
+    prevImage: 'Imagen anterior', nextImage: 'Imagen siguiente',
+    noImages: 'Sin imágenes disponibles', noImagesDesc: 'Esta publicación no cuenta con fotografías en este momento.',
+    viewFullscreen: 'Ver en pantalla completa',
+    map: 'Mapa', plan: 'Plano', environment: 'Entorno',
+    contentNotAvailable: 'Este contenido no está disponible para esta publicación.',
+    zoomIn: 'Acercar', zoomOut: 'Alejar', resetView: 'Restablecer vista',
+    exploreInteractively: 'Explora el terreno interactivamente',
+    description: 'Descripción', showMore: 'Ver más', showLess: 'Ver menos',
+    location: 'Ubicación', locationUnavailable: 'Ubicación no disponible',
+    noLocationDesc: 'El propietario no ha proporcionado una ubicación exacta para esta parcela, por lo que el mapa no está disponible.',
+    planUnavailable: 'Plano no disponible',
+    noPlanDesc: 'El propietario no ha proporcionado un plano para esta parcela.',
+    characteristics: 'Características', land: 'Terreno', services: 'Servicios', legalStatus: 'Estado Legal',
+    surroundingInfo: 'Información del entorno', accessConnectivity: 'Accesos y conectividad',
+    plansDocuments: 'Planos y documentos', hidePlans: 'Ocultar planos y documentos', showPlans: 'Ver planos y documentos',
+    hideParcels: 'Ocultar parcelas', showAvailableParcels: 'Ver parcelas disponibles',
+    hideInfo: 'Ocultar información', viewMoreInfo: 'Ver más información',
+    savingsInfo: 'Obtén información para realizar la mejor compra',
+    waitingReceipt: 'Esperando comprobante de transferencia', parcelReserved: 'Parcela reservada', uploadReceipt: 'Subir comprobante',
+    similarParcels: 'Parcelas similares', privilegedLocation: 'Ubicación privilegiada',
+    marketAnalysis: 'Ver análisis de mercado con IA',
+    marketNote: 'Nota: Este análisis es de carácter referencial y se basa en datos públicos y tendencias del mercado. Te recomendamos realizar tu propia evaluación y consultar con profesionales antes de tomar decisiones de inversión.',
+    addToCompare: 'Agregar al comparador', removeFromCompare: 'Quitar del comparador',
+    saveParcel: 'Guardar parcela', removeFromSaved: 'Eliminar de guardados',
+    generalInfo: 'Información general', totalParcels: 'Total parcelas',
+    availableCount: 'Disponibles', surfaceFrom: 'Superficie desde', surfaceTo: 'Superficie hasta',
+    aboutProject: 'Sobre el proyecto', masterplan: 'Masterplan',
+    hideDocuments: 'Ocultar documentos', showDocuments: 'Ver documentos disponibles',
+    notAvailable: 'No disponible',
+    timeToCenter: 'Tiempo al centro', accessType: 'Tipo de acceso',
+    nearbyServices: 'Servicios cercanos', education: 'Educación', commerce: 'Comercio', health: 'Salud', recreation: 'Recreación',
+    naturalSurroundings: 'Entorno natural', nature: 'Naturaleza', views: 'Vistas',
+    avgTemp: 'Temp. promedio', rainfall: 'Precipitaciones',
+    areaContext: 'Contexto del área', approxPop: 'Población aproximada', inhabitants: 'habitantes', mainActivities: 'Actividades principales',
+    knowMoreArea: 'Conoce más sobre el área y contexto de este proyecto',
+    referenceNote: 'Nota: La información presentada en esta sección es de carácter referencial y busca aportar contexto general sobre el área. Te recomendamos verificar detalles específicos directamente con el publicador o mediante visita al terreno.',
+    stockAvailability: 'Stock y disponibilidad', availableParcels: 'Parcelas disponibles', viewParcel: 'Ver parcela',
+    basePricePerParcel: 'Precio base por parcela', priceTo: 'hasta',
+    bookVisit: 'Reservar visita', onlineConsult: 'Consulta online',
+    vendido: 'Vendido',
+  },
 };
 
 const en: Translations = {
@@ -1178,6 +1260,49 @@ const en: Translations = {
     exploreParcels: 'Explore parcels', publishParcel: 'List my parcel',
     attemptSingular: 'attempt remaining before lockout.', attemptsPlural: 'attempts remaining before lockout.',
     emailPlaceholder: 'your@email.com',
+  },
+  detail: {
+    backToResults: 'Back to results', backToParcels: 'Back to parcels',
+    prevImage: 'Previous image', nextImage: 'Next image',
+    noImages: 'No images available', noImagesDesc: 'This listing does not have photos at this time.',
+    viewFullscreen: 'View fullscreen',
+    map: 'Map', plan: 'Plan', environment: 'Environment',
+    contentNotAvailable: 'This content is not available for this listing.',
+    zoomIn: 'Zoom in', zoomOut: 'Zoom out', resetView: 'Reset view',
+    exploreInteractively: 'Explore the land interactively',
+    description: 'Description', showMore: 'Show more', showLess: 'Show less',
+    location: 'Location', locationUnavailable: 'Location unavailable',
+    noLocationDesc: 'The owner has not provided an exact location for this parcel, so the map is not available.',
+    planUnavailable: 'Plan unavailable',
+    noPlanDesc: 'The owner has not provided a plan for this parcel.',
+    characteristics: 'Characteristics', land: 'Land', services: 'Services', legalStatus: 'Legal Status',
+    surroundingInfo: 'Surrounding information', accessConnectivity: 'Access and connectivity',
+    plansDocuments: 'Plans and documents', hidePlans: 'Hide plans and documents', showPlans: 'View plans and documents',
+    hideParcels: 'Hide parcels', showAvailableParcels: 'View available parcels',
+    hideInfo: 'Hide information', viewMoreInfo: 'View more information',
+    savingsInfo: 'Get information to make the best purchase',
+    waitingReceipt: 'Waiting for transfer receipt', parcelReserved: 'Parcel reserved', uploadReceipt: 'Upload receipt',
+    similarParcels: 'Similar parcels', privilegedLocation: 'Privileged location',
+    marketAnalysis: 'View AI market analysis',
+    marketNote: 'Note: This analysis is for reference purposes and is based on public data and market trends. We recommend conducting your own evaluation and consulting with professionals before making investment decisions.',
+    addToCompare: 'Add to compare', removeFromCompare: 'Remove from compare',
+    saveParcel: 'Save parcel', removeFromSaved: 'Remove from saved',
+    generalInfo: 'General information', totalParcels: 'Total parcels',
+    availableCount: 'Available', surfaceFrom: 'Surface from', surfaceTo: 'Surface to',
+    aboutProject: 'About the project', masterplan: 'Masterplan',
+    hideDocuments: 'Hide documents', showDocuments: 'View available documents',
+    notAvailable: 'Not available',
+    timeToCenter: 'Time to center', accessType: 'Access type',
+    nearbyServices: 'Nearby services', education: 'Education', commerce: 'Commerce', health: 'Health', recreation: 'Recreation',
+    naturalSurroundings: 'Natural surroundings', nature: 'Nature', views: 'Views',
+    avgTemp: 'Avg. temperature', rainfall: 'Rainfall',
+    areaContext: 'Area context', approxPop: 'Approximate population', inhabitants: 'inhabitants', mainActivities: 'Main activities',
+    knowMoreArea: 'Learn more about the area and context of this project',
+    referenceNote: 'Note: The information presented in this section is for reference purposes and aims to provide general context about the area. We recommend verifying specific details directly with the publisher or through a site visit.',
+    stockAvailability: 'Stock and availability', availableParcels: 'Available parcels', viewParcel: 'View parcel',
+    basePricePerParcel: 'Base price per parcel', priceTo: 'to',
+    bookVisit: 'Book a visit', onlineConsult: 'Online consultation',
+    vendido: 'Sold',
   },
 };
 
