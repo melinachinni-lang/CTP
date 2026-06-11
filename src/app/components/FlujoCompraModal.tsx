@@ -376,8 +376,10 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     setMetodoPago('transferencia');
     setAceptoTyC(false);
     setTodoCopiado(false);
-    setLinkCopiado(false);
     setArchivo(null);
+    setMpMetodo('credito');
+    setMpTarjeta({ numero: '', vencimiento: '', cvv: '', nombre: '' });
+    setMpProcesando(false);
     setDragOver(false);
     setEnviando(false);
     setEnviado(false);
