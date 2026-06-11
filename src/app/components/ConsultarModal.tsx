@@ -16,7 +16,7 @@ interface ConsultarModalProps {
   onReservarVisita: () => void;
   onWhatsApp: () => void;
   onVideollamada: () => void;
-  onEnviarConsulta: (data: ConsultaFormData) => void;
+  onEnviarConsulta?: (data: ConsultaFormData) => void;
   parcelaNombre: string;
 }
 
@@ -222,35 +222,37 @@ export function ConsultarModal({
                   </div>
                 </button>
 
-                {/* Enviar consulta — nueva opción */}
-                <button
-                  onClick={() => setPaso('formulario')}
-                  className="w-full p-5 rounded-xl border-2 transition-all text-left"
-                  style={{
-                    borderColor: '#006B4E',
-                    backgroundColor: '#F0FDF4',
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DCFCE7';
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#F0FDF4';
-                  }}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#006B4E' }}>
-                      <FileText className="w-6 h-6" style={{ color: '#FFFFFF' }} />
+                {/* Enviar consulta — solo para vendedor particular */}
+                {onEnviarConsulta && (
+                  <button
+                    onClick={() => setPaso('formulario')}
+                    className="w-full p-5 rounded-xl border-2 transition-all text-left"
+                    style={{
+                      borderColor: '#006B4E',
+                      backgroundColor: '#F0FDF4',
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DCFCE7';
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#F0FDF4';
+                    }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#006B4E' }}>
+                        <FileText className="w-6 h-6" style={{ color: '#FFFFFF' }} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)', color: '#006B4E', marginBottom: '0.375rem' }}>
+                          Enviar consulta
+                        </h3>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
+                          Completá un formulario y el vendedor te responde
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)', color: '#006B4E', marginBottom: '0.375rem' }}>
-                        Enviar consulta
-                      </h3>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
-                        Completá un formulario y el vendedor te responde
-                      </p>
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                )}
               </div>
             </div>
 

@@ -3870,7 +3870,9 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
           setIsConsultarOpen(false);
           setIsConsultaOnlineOpen(true);
         }}
-        onEnviarConsulta={handleEnviarConsulta}
+        {...(parcela.inmobiliaria.tipoVendedor.toLowerCase().includes('particular') && {
+          onEnviarConsulta: handleEnviarConsulta,
+        })}
         parcelaNombre={parcela.nombre}
       />
 
