@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info } from 'lucide-react';
+import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag } from 'lucide-react';
 
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
@@ -8,7 +8,7 @@ interface ConsultasViewProps {
 }
 
 type EstadoConsulta = 'pendiente' | 'confirmada' | 'reprogramada' | 'cancelada' | 'expirada';
-type TipoContacto = 'visita' | 'videollamada' | 'whatsapp';
+type TipoContacto = 'visita' | 'videollamada' | 'whatsapp' | 'formulario';
 
 interface Consulta {
   id: string;
@@ -19,7 +19,12 @@ interface Consulta {
   hora?: string;
   estado: EstadoConsulta;
   notas?: string;
-  motivo?: string; // razón de cancelación
+  motivo?: string;
+  // campos específicos de formulario
+  mensaje?: string;
+  tipoInteres?: string;
+  cuandoVisitar?: string;
+  respuesta?: string;
 }
 
 const RECIBIDAS: Consulta[] = [
@@ -44,12 +49,14 @@ const RECIBIDAS: Consulta[] = [
   },
   {
     id: 'r3',
-    tipo: 'whatsapp',
+    tipo: 'formulario',
     parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
     otroUsuario: { nombre: 'Sofía Ramírez' },
     fecha: '2026-05-03',
-    estado: 'confirmada',
-    notas: 'Consulta sobre disponibilidad y precio',
+    estado: 'pendiente',
+    mensaje: 'Hola, vi tu publicación y me interesa mucho la parcela. ¿Sigue disponible? ¿Tiene acceso a agua potable y luz eléctrica?',
+    tipoInteres: 'Uso propio / vivir ahí',
+    cuandoVisitar: '2026-05-20',
   },
   {
     id: 'r4',
@@ -113,6 +120,11 @@ function TipoIcon({ tipo }: { tipo: TipoContacto }) {
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.362a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
     </svg>
   );
+  if (tipo === 'formulario') return (
+    <svg viewBox="0 0 24 24" style={style}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+  );
   return (
     <svg viewBox="0 0 24 24" style={style}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
@@ -129,13 +141,14 @@ function formatFecha(fecha?: string, hora?: string) {
 }
 
 function TipoLabel({ tipo }: { tipo: TipoContacto }) {
-  const labels = { visita: 'Visita presencial', videollamada: 'Videollamada', whatsapp: 'WhatsApp' };
+  const labels: Record<TipoContacto, string> = { visita: 'Visita presencial', videollamada: 'Videollamada', whatsapp: 'WhatsApp', formulario: 'Consulta por formulario' };
   return <span>{labels[tipo]}</span>;
 }
 
 const NOTIFICACIONES_MOCK = [
   { id: 'n1', type: 'consulta' as const, text: 'Pedro Soto envió una consulta sobre "Parcela Vista Cordillera"', time: 'Hace 5 min', read: false },
   { id: 'n2', type: 'visita' as const, text: 'Visita confirmada para el 15 de mayo a las 10:00 hrs', time: 'Hace 1 hora', read: false },
+  { id: 'nwa', type: 'whatsapp' as const, text: 'Sofía Ramírez hizo click en "Consultar por WhatsApp" para tu Parcela Vista Cordillera. Revisá tu WhatsApp.', time: 'Hace 2 horas', read: false },
   { id: 'n3', type: 'sistema' as const, text: 'Tu publicación "Parcela Vista Cordillera" fue vista 50 veces', time: 'Hace 3 horas', read: false },
   { id: 'n4', type: 'consulta' as const, text: 'Ana Torres respondió a tu consulta sobre "Parcela Lago Ranco"', time: 'Ayer', read: true },
   { id: 'n5', type: 'sistema' as const, text: 'Recuerda completar tu perfil para más visibilidad', time: 'Hace 2 días', read: true },
@@ -157,6 +170,8 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [repHora, setRepHora] = useState('');
   const [cancelMotivo, setCancelMotivo] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [replyOpenId, setReplyOpenId] = useState<string | null>(null);
+  const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
 
   const showFeedback = (msg: string) => {
     setFeedback(msg);
@@ -187,8 +202,29 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   };
 
   const lista = activeTab === 'recibidas' ? consultas.recibidas : activeTab === 'enviadas' ? consultas.enviadas : [];
-  const canManage = (c: Consulta) => activeTab === 'recibidas' && (c.estado === 'pendiente' || c.estado === 'confirmada') && c.tipo !== 'whatsapp';
+  const canManage = (c: Consulta) => activeTab === 'recibidas' && (c.estado === 'pendiente' || c.estado === 'confirmada') && c.tipo !== 'whatsapp' && c.tipo !== 'formulario';
+  const canManageFormulario = (c: Consulta) => activeTab === 'recibidas' && c.tipo === 'formulario' && c.estado !== 'cancelada';
   const unreadNotifCount = notificaciones.filter(n => !n.read).length;
+
+  const handleSendReply = (id: string) => {
+    const texto = replyTexts[id]?.trim();
+    if (!texto) return;
+    setConsultas(prev => ({
+      ...prev,
+      recibidas: prev.recibidas.map(c => c.id === id ? { ...c, estado: 'confirmada' as EstadoConsulta, respuesta: texto } : c),
+    }));
+    setReplyOpenId(null);
+    setReplyTexts(prev => ({ ...prev, [id]: '' }));
+    showFeedback('Respuesta enviada correctamente.');
+  };
+
+  const handleMarcarRecibido = (id: string) => {
+    setConsultas(prev => ({
+      ...prev,
+      recibidas: prev.recibidas.map(c => c.id === id ? { ...c, estado: 'confirmada' as EstadoConsulta } : c),
+    }));
+    showFeedback('Consulta marcada como recibida.');
+  };
 
   return (
     <main className="px-6 py-6 space-y-6">
@@ -284,6 +320,11 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                   {notif.type === 'visita' && (
                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DBEAFE' }}>
                       <Calendar className="w-5 h-5 text-blue-600" />
+                    </div>
+                  )}
+                  {notif.type === 'whatsapp' && (
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
+                      <MessageCircle className="w-5 h-5" style={{ color: '#25D366' }} />
                     </div>
                   )}
                   {notif.type === 'sistema' && (
@@ -407,7 +448,66 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                       </div>
                     )}
 
-                    {/* Botones del vendedor */}
+                    {/* Campos específicos de formulario */}
+                    {c.tipo === 'formulario' && (
+                      <div className="space-y-3">
+                        {(c.tipoInteres || c.cuandoVisitar) && (
+                          <div className="grid grid-cols-2 gap-3">
+                            {c.tipoInteres && (
+                              <div className="p-3 rounded-xl border" style={{ backgroundColor: '#FAFAFA', borderColor: '#E5E5E5' }}>
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '3px' }}>Tipo de interés</p>
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{c.tipoInteres}</p>
+                              </div>
+                            )}
+                            {c.cuandoVisitar && (
+                              <div className="p-3 rounded-xl border" style={{ backgroundColor: '#FAFAFA', borderColor: '#E5E5E5' }}>
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '3px' }}>Disponible para visitar</p>
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{formatFecha(c.cuandoVisitar)}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {c.mensaje && (
+                          <div className="px-3 py-2.5 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>Mensaje</p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.5' }}>{c.mensaje}</p>
+                          </div>
+                        )}
+                        {c.respuesta && (
+                          <div className="px-3 py-2.5 rounded-xl border-l-4" style={{ backgroundColor: '#F0FDF4', borderLeftColor: '#006B4E' }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#006B4E', fontWeight: 600, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Tu respuesta</p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>{c.respuesta}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Reply textarea para formulario */}
+                    {c.tipo === 'formulario' && replyOpenId === c.id && !c.respuesta && (
+                      <div className="rounded-xl border p-3 space-y-2" style={{ borderColor: '#006B4E', backgroundColor: '#F0FDF4' }}>
+                        <textarea
+                          rows={3}
+                          value={replyTexts[c.id] ?? ''}
+                          onChange={e => setReplyTexts(prev => ({ ...prev, [c.id]: e.target.value }))}
+                          placeholder="Escribí tu respuesta..."
+                          autoFocus
+                          style={{ width: '100%', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #BBF7D0', borderRadius: '8px', padding: '8px 12px', resize: 'none', lineHeight: '1.5', outline: 'none' }}
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <button onClick={() => setReplyOpenId(null)} className="px-3 py-1.5 rounded-full text-xs" style={{ fontFamily: 'var(--font-body)', color: '#525252', backgroundColor: '#FFFFFF', border: '1px solid #D1D5DB' }}>Cancelar</button>
+                          <button
+                            onClick={() => handleSendReply(c.id)}
+                            disabled={!(replyTexts[c.id]?.trim())}
+                            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs transition-all"
+                            style={{ fontFamily: 'var(--font-body)', fontWeight: 500, backgroundColor: replyTexts[c.id]?.trim() ? '#006B4E' : '#D1D5DB', color: '#FFFFFF', cursor: replyTexts[c.id]?.trim() ? 'pointer' : 'not-allowed' }}
+                          >
+                            <Send className="w-3 h-3" />Enviar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Botones del vendedor — visita/videollamada */}
                     {canAct && (
                       <div className="flex gap-2 pt-1">
                         <button
@@ -430,6 +530,35 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                           <X className="w-3.5 h-3.5" />
                           Cancelar visita
                         </button>
+                      </div>
+                    )}
+
+                    {/* Botones del vendedor — formulario */}
+                    {canManageFormulario(c) && !replyOpenId && !c.respuesta && (
+                      <div className="flex gap-2 pt-1">
+                        <button
+                          onClick={() => setReplyOpenId(c.id)}
+                          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                          style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#333333'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0A0A0A'}
+                        >
+                          <Reply className="w-3.5 h-3.5" />
+                          Responder
+                        </button>
+                        {c.estado === 'pendiente' && (
+                          <button
+                            onClick={() => handleMarcarRecibido(c.id)}
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border-2 transition-all"
+                            style={{ borderColor: '#E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', backgroundColor: '#FFFFFF' }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#0A0A0A'; e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                            title="Ya la vi, la voy a contactar por email o WhatsApp"
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                            Recibido
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
