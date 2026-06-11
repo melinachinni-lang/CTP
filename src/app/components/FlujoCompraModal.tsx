@@ -335,7 +335,8 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const [archivo, setArchivo] = useState<string | null>(null);
   // MP Checkout Pro state
   const [mpMetodo, setMpMetodo] = useState<'credito' | 'debito'>('credito');
-  const [mpTarjeta, setMpTarjeta] = useState({ numero: '', vencimiento: '', cvv: '', nombre: '' });
+  const [mpTarjeta, setMpTarjeta] = useState({ numero: '', vencimiento: '', cvv: '', nombre: '', rut: '' });
+  const [mpCuotas, setMpCuotas] = useState('1');
   const [mpProcesando, setMpProcesando] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -378,7 +379,8 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     setTodoCopiado(false);
     setArchivo(null);
     setMpMetodo('credito');
-    setMpTarjeta({ numero: '', vencimiento: '', cvv: '', nombre: '' });
+    setMpTarjeta({ numero: '', vencimiento: '', cvv: '', nombre: '', rut: '' });
+    setMpCuotas('1');
     setMpProcesando(false);
     setDragOver(false);
     setEnviando(false);
@@ -464,7 +466,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
   const montoPago = tipoCompra === 'comprar' ? precio : '$500.000';
   const montoPagoLabel = tipoCompra === 'comprar' ? precio : '$500.000 (UF 12,9)';
-  const mpFormValido = mpTarjeta.numero.trim() && mpTarjeta.vencimiento.trim() && mpTarjeta.cvv.trim() && mpTarjeta.nombre.trim();
+  const mpFormValido = mpTarjeta.numero.trim() && mpTarjeta.vencimiento.trim() && mpTarjeta.cvv.trim() && mpTarjeta.nombre.trim() && mpTarjeta.rut.trim();
   const pasoLabels = ['Tus datos', 'Método de pago', metodoPago === 'transferencia' ? 'Comprobante' : 'Pago online'];
 
   const handleIntentoCerrar = () => {
@@ -730,9 +732,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                     <div>
                       <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>Mercado Pago</p>
                       <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Tarjeta de crédito o débito</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '9px', fontWeight: 700, color: '#009EE3', letterSpacing: '-0.02em' }}>Checkout Pro</span>
-                      </div>
                     </div>
                   </button>
                 </div>
@@ -941,6 +940,30 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                     style={inputStyle}
                   />
                 </div>
+                <div>
+                  <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>RUT del titular <span style={{ color: '#DC2626' }}>*</span></label>
+                  <input
+                    type="text" value={mpTarjeta.rut} placeholder="12.345.678-9"
+                    onChange={e => setMpTarjeta(t => ({ ...t, rut: e.target.value }))}
+                    className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+                    style={inputStyle}
+                  />
+                </div>
+                {mpMetodo === 'credito' && (
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Cuotas <span style={{ color: '#DC2626' }}>*</span></label>
+                    <select value={mpCuotas} onChange={e => setMpCuotas(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+                      style={{ ...inputStyle, cursor: 'pointer', appearance: 'auto' }}>
+                      <option value="1">1 cuota sin interés</option>
+                      <option value="3">3 cuotas</option>
+                      <option value="6">6 cuotas</option>
+                      <option value="12">12 cuotas</option>
+                      <option value="18">18 cuotas</option>
+                      <option value="24">24 cuotas</option>
+                    </select>
+                  </div>
+                )}
               </div>
 
               {/* Pay button */}
