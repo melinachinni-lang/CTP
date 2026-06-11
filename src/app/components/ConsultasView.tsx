@@ -250,7 +250,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
       <div className="flex gap-1 p-1 rounded-xl" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
         {[
           { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
-          { id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length },
+          ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
           { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
         ].map(tab => (
           <button
