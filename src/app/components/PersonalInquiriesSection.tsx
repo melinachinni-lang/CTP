@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MessageCircle, X, Clock, MapPin, ChevronRight, CheckCircle, Circle, User } from 'lucide-react';
+import { Mail, Phone, MessageCircle, X, Clock, MapPin, ChevronRight, CheckCircle, Circle, User, Send, Reply, Tag, Calendar } from 'lucide-react';
 
 interface Inquiry {
   id: number;
@@ -14,9 +14,21 @@ interface Inquiry {
   fecha: Date;
   estado: 'nueva' | 'contactada' | 'cerrada';
   leida: boolean;
+  tipoInteres?: string;
+  cuandoVisitar?: string;
+  respuesta?: {
+    texto: string;
+    fecha: Date;
+  };
 }
 
-// Datos de ejemplo - consultas recibidas por un vendedor particular
+const tiposInteresLabels: Record<string, string> = {
+  'inversion': 'Inversión',
+  'uso-propio': 'Uso propio / vivir ahí',
+  'segunda-vivienda': 'Segunda vivienda / descanso',
+  'otro': 'Otro',
+};
+
 const mockInquiries: Inquiry[] = [
   {
     id: 1,
@@ -30,7 +42,9 @@ const mockInquiries: Inquiry[] = [
     mensaje: 'Hola! Me encantó tu parcela. ¿Todavía está disponible? Me gustaría visitarla este fin de semana si es posible. ¿Cuál sería el mejor día para ti?',
     fecha: new Date(2025, 0, 27, 14, 30),
     estado: 'nueva',
-    leida: false
+    leida: false,
+    tipoInteres: 'uso-propio',
+    cuandoVisitar: '2025-02-01',
   },
   {
     id: 2,
@@ -44,7 +58,8 @@ const mockInquiries: Inquiry[] = [
     mensaje: 'Buenos días. Vi tu publicación y me interesa mucho. ¿Tiene agua y luz? ¿Aceptas pago con crédito hipotecario?',
     fecha: new Date(2025, 0, 27, 10, 15),
     estado: 'nueva',
-    leida: false
+    leida: false,
+    tipoInteres: 'inversion',
   },
   {
     id: 3,
@@ -58,7 +73,13 @@ const mockInquiries: Inquiry[] = [
     mensaje: 'Hola, quedé muy interesado en la parcela. ¿Podríamos hablar por teléfono? Te dejé mi número.',
     fecha: new Date(2025, 0, 26, 16, 45),
     estado: 'contactada',
-    leida: true
+    leida: true,
+    tipoInteres: 'segunda-vivienda',
+    cuandoVisitar: '2025-02-05',
+    respuesta: {
+      texto: '¡Hola Roberto! Claro, con mucho gusto. Te llamo este viernes por la tarde. Saludos!',
+      fecha: new Date(2025, 0, 26, 18, 0),
+    },
   },
   {
     id: 4,
@@ -72,7 +93,8 @@ const mockInquiries: Inquiry[] = [
     mensaje: 'Hola! Fui a ver la parcela ayer y me gustó mucho. ¿Hay alguna posibilidad de negociar el precio?',
     fecha: new Date(2025, 0, 25, 11, 20),
     estado: 'contactada',
-    leida: true
+    leida: true,
+    tipoInteres: 'uso-propio',
   },
   {
     id: 5,
@@ -86,7 +108,8 @@ const mockInquiries: Inquiry[] = [
     mensaje: 'Gracias por responder. Al final decidí comprar otra propiedad más cerca de mi trabajo. ¡Mucha suerte con la venta!',
     fecha: new Date(2025, 0, 22, 9, 30),
     estado: 'cerrada',
-    leida: true
+    leida: true,
+    tipoInteres: 'inversion',
   }
 ];
 
@@ -94,35 +117,70 @@ export function PersonalInquiriesSection() {
   const [selectedFilter, setSelectedFilter] = useState<'todas' | 'nueva' | 'contactada' | 'cerrada'>('todas');
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [inquiries, setInquiries] = useState<Inquiry[]>(mockInquiries);
+  const [showReplyBox, setShowReplyBox] = useState(false);
+  const [replyText, setReplyText] = useState('');
+  const [replySent, setReplySent] = useState(false);
 
-  // Filtrar consultas según el filtro seleccionado
-  const filteredInquiries = selectedFilter === 'todas' 
-    ? inquiries 
+  const filteredInquiries = selectedFilter === 'todas'
+    ? inquiries
     : inquiries.filter(inq => inq.estado === selectedFilter);
 
-  // Marcar consulta como leída
   const markAsRead = (id: number) => {
-    setInquiries(prev => prev.map(inq => 
+    setInquiries(prev => prev.map(inq =>
       inq.id === id ? { ...inq, leida: true } : inq
     ));
   };
 
-  // Cambiar estado de consulta
   const changeStatus = (id: number, newStatus: 'nueva' | 'contactada' | 'cerrada') => {
-    setInquiries(prev => prev.map(inq => 
-      inq.id === id ? { ...inq, estado: newStatus } : inq
+    setInquiries(prev => prev.map(inq =>
+      inq.id === id ? { ...inq, estado: newStatus, leida: true } : inq
     ));
   };
 
-  // Abrir detalle y marcar como leída
-  const openInquiry = (inquiry: Inquiry) => {
-    setSelectedInquiry(inquiry);
-    if (!inquiry.leida) {
-      markAsRead(inquiry.id);
+  const saveReply = (id: number, texto: string) => {
+    const now = new Date();
+    setInquiries(prev => prev.map(inq =>
+      inq.id === id
+        ? { ...inq, estado: 'contactada', leida: true, respuesta: { texto, fecha: now } }
+        : inq
+    ));
+    if (selectedInquiry?.id === id) {
+      setSelectedInquiry(prev => prev
+        ? { ...prev, estado: 'contactada', leida: true, respuesta: { texto, fecha: now } }
+        : prev
+      );
     }
   };
 
-  // Formatear fecha relativa
+  const openInquiry = (inquiry: Inquiry) => {
+    setSelectedInquiry(inquiry);
+    setShowReplyBox(false);
+    setReplyText('');
+    setReplySent(false);
+    if (!inquiry.leida) markAsRead(inquiry.id);
+  };
+
+  const handleSendReply = () => {
+    if (!selectedInquiry || !replyText.trim()) return;
+    saveReply(selectedInquiry.id, replyText.trim());
+    setReplyText('');
+    setShowReplyBox(false);
+    setReplySent(true);
+  };
+
+  const handleRecibido = () => {
+    if (!selectedInquiry) return;
+    changeStatus(selectedInquiry.id, 'contactada');
+    setSelectedInquiry(prev => prev ? { ...prev, estado: 'contactada', leida: true } : prev);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedInquiry(null);
+    setShowReplyBox(false);
+    setReplyText('');
+    setReplySent(false);
+  };
+
   const formatRelativeDate = (date: Date) => {
     const now = new Date();
     const diffInMs = now.getTime() - date.getTime();
@@ -143,14 +201,19 @@ export function PersonalInquiriesSection() {
     }
   };
 
-  // Obtener badge de estado
+  const formatDateShort = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-');
+    const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+  };
+
   const getStatusBadge = (estado: 'nueva' | 'contactada' | 'cerrada') => {
     switch (estado) {
       case 'nueva':
         return (
-          <span 
+          <span
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-            style={{ 
+            style={{
               backgroundColor: '#EBFEF5',
               color: '#006B4E',
               fontFamily: 'var(--font-body)',
@@ -164,9 +227,9 @@ export function PersonalInquiriesSection() {
         );
       case 'contactada':
         return (
-          <span 
+          <span
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-            style={{ 
+            style={{
               backgroundColor: '#F0FDF4',
               color: '#15803D',
               fontFamily: 'var(--font-body)',
@@ -175,14 +238,14 @@ export function PersonalInquiriesSection() {
             }}
           >
             <CheckCircle className="w-3 h-3" />
-            Contactada
+            Recibida
           </span>
         );
       case 'cerrada':
         return (
-          <span 
+          <span
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-            style={{ 
+            style={{
               backgroundColor: '#F5F5F5',
               color: '#737373',
               fontFamily: 'var(--font-body)',
@@ -197,24 +260,22 @@ export function PersonalInquiriesSection() {
     }
   };
 
-  // Contar consultas por estado
-  const getCounts = () => {
-    return {
-      todas: inquiries.length,
-      nueva: inquiries.filter(i => i.estado === 'nueva').length,
-      contactada: inquiries.filter(i => i.estado === 'contactada').length,
-      cerrada: inquiries.filter(i => i.estado === 'cerrada').length
-    };
-  };
+  const getCounts = () => ({
+    todas: inquiries.length,
+    nueva: inquiries.filter(i => i.estado === 'nueva').length,
+    contactada: inquiries.filter(i => i.estado === 'contactada').length,
+    cerrada: inquiries.filter(i => i.estado === 'cerrada').length
+  });
 
   const counts = getCounts();
+  const isRecibido = selectedInquiry && selectedInquiry.estado !== 'nueva';
 
   return (
     <main className="px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 
-          style={{ 
+        <h1
+          style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 'var(--font-weight-semibold)',
             fontSize: 'var(--font-size-h1)',
@@ -224,8 +285,8 @@ export function PersonalInquiriesSection() {
         >
           Consultas
         </h1>
-        <p 
-          style={{ 
+        <p
+          style={{
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-base)',
             color: '#737373'
@@ -237,66 +298,30 @@ export function PersonalInquiriesSection() {
 
       {/* Filtros */}
       <div className="flex gap-3 mb-6 pb-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
-        <button
-          onClick={() => setSelectedFilter('todas')}
-          className={`px-4 py-2 rounded-full transition-all ${
-            selectedFilter === 'todas' 
-              ? 'bg-[#0A0A0A] text-white' 
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)'
-          }}
-        >
-          Todas ({counts.todas})
-        </button>
-        <button
-          onClick={() => setSelectedFilter('nueva')}
-          className={`px-4 py-2 rounded-full transition-all ${
-            selectedFilter === 'nueva' 
-              ? 'bg-[#0A0A0A] text-white' 
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)'
-          }}
-        >
-          Nuevas ({counts.nueva})
-        </button>
-        <button
-          onClick={() => setSelectedFilter('contactada')}
-          className={`px-4 py-2 rounded-full transition-all ${
-            selectedFilter === 'contactada' 
-              ? 'bg-[#0A0A0A] text-white' 
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)'
-          }}
-        >
-          Contactadas ({counts.contactada})
-        </button>
-        <button
-          onClick={() => setSelectedFilter('cerrada')}
-          className={`px-4 py-2 rounded-full transition-all ${
-            selectedFilter === 'cerrada' 
-              ? 'bg-[#0A0A0A] text-white' 
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)'
-          }}
-        >
-          Cerradas ({counts.cerrada})
-        </button>
+        {(['todas', 'nueva', 'contactada', 'cerrada'] as const).map(f => {
+          const labels: Record<string, string> = {
+            todas: `Todas (${counts.todas})`,
+            nueva: `Nuevas (${counts.nueva})`,
+            contactada: `Recibidas (${counts.contactada})`,
+            cerrada: `Cerradas (${counts.cerrada})`,
+          };
+          return (
+            <button
+              key={f}
+              onClick={() => setSelectedFilter(f)}
+              className="px-4 py-2 rounded-full transition-all"
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--font-size-body-sm)',
+                fontWeight: 'var(--font-weight-medium)',
+                backgroundColor: selectedFilter === f ? '#0A0A0A' : '#F5F5F5',
+                color: selectedFilter === f ? '#FFFFFF' : '#525252',
+              }}
+            >
+              {labels[f]}
+            </button>
+          );
+        })}
       </div>
 
       {/* Lista de consultas */}
@@ -306,9 +331,9 @@ export function PersonalInquiriesSection() {
             <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <MessageCircle className="w-8 h-8 text-gray-400" />
             </div>
-            <h3 
+            <h3
               className="mb-2"
-              style={{ 
+              style={{
                 fontFamily: 'var(--font-heading)',
                 fontWeight: 'var(--font-weight-semibold)',
                 fontSize: 'var(--font-size-h4)',
@@ -317,16 +342,16 @@ export function PersonalInquiriesSection() {
             >
               {selectedFilter === 'todas' ? 'Aún no tienes consultas' : 'No hay consultas en este estado'}
             </h3>
-            <p 
-              style={{ 
+            <p
+              style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--font-size-body-sm)',
                 color: '#737373'
               }}
             >
-              {selectedFilter === 'todas' 
+              {selectedFilter === 'todas'
                 ? 'Cuando alguien se interese en tu parcela, recibirás una consulta aquí'
-                : `No tienes consultas "${selectedFilter}s" en este momento`}
+                : 'No hay consultas en este estado por el momento'}
             </p>
           </div>
         ) : (
@@ -337,44 +362,55 @@ export function PersonalInquiriesSection() {
               className="bg-white rounded-xl border border-gray-200 p-5 hover:border-gray-400 hover:shadow-md transition-all cursor-pointer"
             >
               <div className="flex items-start gap-4">
-                {/* Indicador de no leído */}
-                <div className="flex-shrink-0 pt-1">
-                  {!inquiry.leida && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#006B4E]" />
-                  )}
-                  {inquiry.leida && (
-                    <div className="w-2.5 h-2.5" />
-                  )}
+                {/* Punto de no leído */}
+                <div className="flex-shrink-0 pt-1.5">
+                  <div
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ backgroundColor: !inquiry.leida ? '#006B4E' : 'transparent' }}
+                  />
                 </div>
 
-                {/* Contenido principal */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4 mb-3">
+                  <div className="flex items-start justify-between gap-4 mb-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <User className="w-4 h-4 text-gray-600" />
-                        <h3 
-                          style={{ 
-                            fontFamily: 'var(--font-heading)',
+                        <User className="w-4 h-4 text-gray-500" />
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-body)',
                             fontWeight: inquiry.leida ? 'var(--font-weight-medium)' : 'var(--font-weight-semibold)',
-                            fontSize: 'var(--font-size-body-lg)',
+                            fontSize: 'var(--font-size-body-base)',
                             color: '#0A0A0A'
                           }}
                         >
                           {inquiry.nombre}
-                        </h3>
+                        </span>
+                        {inquiry.tipoInteres && (
+                          <span
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                            style={{
+                              backgroundColor: '#F5F5F5',
+                              color: '#525252',
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--font-size-xs)',
+                            }}
+                          >
+                            <Tag className="w-3 h-3" />
+                            {tiposInteresLabels[inquiry.tipoInteres] ?? inquiry.tipoInteres}
+                          </span>
+                        )}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-gray-500" />
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-gray-400" />
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
                           {inquiry.parcela.ubicacion}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-shrink-0">
                       {getStatusBadge(inquiry.estado)}
-                      <div className="flex items-center gap-1.5 text-gray-500">
-                        <Clock className="w-4 h-4" />
+                      <div className="flex items-center gap-1 text-gray-400">
+                        <Clock className="w-3.5 h-3.5" />
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
                           {formatRelativeDate(inquiry.fecha)}
                         </span>
@@ -382,37 +418,36 @@ export function PersonalInquiriesSection() {
                     </div>
                   </div>
 
-                  {/* Extracto del mensaje */}
-                  <p 
-                    className="line-clamp-2 mb-3"
-                    style={{ 
+                  <p
+                    className="line-clamp-2 mb-2"
+                    style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
                       color: '#525252',
-                      lineHeight: 'var(--line-height-body)'
+                      lineHeight: '1.6'
                     }}
                   >
                     {inquiry.mensaje}
                   </p>
 
-                  {/* Información de contacto */}
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-gray-600">
+                    <div className="flex items-center gap-1.5 text-gray-500">
                       <Mail className="w-3.5 h-3.5" />
                       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
                         {inquiry.email}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-gray-600">
-                      <Phone className="w-3.5 h-3.5" />
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
-                        {inquiry.telefono}
-                      </span>
-                    </div>
+                    {inquiry.telefono && (
+                      <div className="flex items-center gap-1.5 text-gray-500">
+                        <Phone className="w-3.5 h-3.5" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
+                          {inquiry.telefono}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Icono de acción */}
                 <div className="flex-shrink-0 pt-1">
                   <ChevronRight className="w-5 h-5 text-gray-400" />
                 </div>
@@ -422,42 +457,49 @@ export function PersonalInquiriesSection() {
         )}
       </div>
 
-      {/* Modal de detalle */}
+      {/* ─── Modal de detalle ─── */}
       {selectedInquiry && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]"
-          onClick={() => setSelectedInquiry(null)}
+          onClick={handleCloseModal}
         >
-          <div 
+          <div
             className="bg-white rounded-[24px] shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header del modal */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 
-                style={{ 
-                  fontFamily: 'var(--font-heading)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  fontSize: 'var(--font-size-h3)',
-                  color: '#0A0A0A'
-                }}
-              >
-                Detalle de consulta
-              </h3>
-              <button 
-                onClick={() => setSelectedInquiry(null)}
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
+              <div>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontWeight: 'var(--font-weight-semibold)',
+                    fontSize: 'var(--font-size-h3)',
+                    color: '#0A0A0A',
+                    marginBottom: '0.2rem',
+                  }}
+                >
+                  Consulta recibida
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                  {selectedInquiry.parcela.nombre}
+                </p>
+              </div>
+              <button
+                onClick={handleCloseModal}
                 className="hover:bg-gray-100 p-2 rounded-full transition-colors"
               >
-                <X className="w-6 h-6" style={{ color: '#0A0A0A' }} />
+                <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
 
-            {/* Contenido del modal */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            {/* Contenido scrollable */}
+            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5">
+
               {/* Estado y fecha */}
               <div className="flex items-center justify-between">
                 {getStatusBadge(selectedInquiry.estado)}
-                <div className="flex items-center gap-1.5 text-gray-500">
+                <div className="flex items-center gap-1.5 text-gray-400">
                   <Clock className="w-4 h-4" />
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>
                     {formatRelativeDate(selectedInquiry.fecha)}
@@ -465,186 +507,398 @@ export function PersonalInquiriesSection() {
                 </div>
               </div>
 
-              {/* Datos del comprador */}
+              {/* Persona interesada */}
               <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                <h4 
+                <h4
                   className="mb-4"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-xs)',
                     color: '#737373',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.06em',
                     fontWeight: 'var(--font-weight-semibold)'
                   }}
                 >
                   Persona interesada
                 </h4>
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-600" />
-                    <p 
-                      style={{ 
-                        fontFamily: 'var(--font-heading)',
+                    <User className="w-4 h-4 text-gray-500" />
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-body)',
                         fontWeight: 'var(--font-weight-semibold)',
-                        fontSize: 'var(--font-size-body-lg)',
+                        fontSize: 'var(--font-size-body-base)',
                         color: '#0A0A0A'
                       }}
                     >
                       {selectedInquiry.nombre}
-                    </p>
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Mail className="w-4 h-4" />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-gray-500" />
+                    <a
+                      href={`mailto:${selectedInquiry.email}`}
+                      onClick={e => e.stopPropagation()}
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        color: '#006B4E',
+                        textDecoration: 'underline',
+                      }}
+                    >
                       {selectedInquiry.email}
-                    </span>
+                    </a>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Phone className="w-4 h-4" />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>
-                      {selectedInquiry.telefono}
-                    </span>
-                  </div>
+                  {selectedInquiry.telefono && (
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-gray-500" />
+                      <a
+                        href={`https://wa.me/${selectedInquiry.telefono.replace(/\s/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={e => e.stopPropagation()}
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
+                          color: '#006B4E',
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        {selectedInquiry.telefono}
+                        <span style={{ color: '#737373', marginLeft: '6px', textDecoration: 'none', fontSize: 'var(--font-size-xs)' }}>
+                          (WhatsApp)
+                        </span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Parcela relacionada */}
-              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                <h4 
-                  className="mb-4"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-xs)',
-                    color: '#737373',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    fontWeight: 'var(--font-weight-semibold)'
-                  }}
-                >
-                  Tu parcela
-                </h4>
-                <p 
-                  style={{ 
-                    fontFamily: 'var(--font-heading)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    fontSize: 'var(--font-size-body-base)',
-                    color: '#0A0A0A',
-                    marginBottom: '0.5rem'
-                  }}
-                >
-                  {selectedInquiry.parcela.nombre}
-                </p>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}>
-                    {selectedInquiry.parcela.ubicacion}
-                  </span>
+              {/* Detalles adicionales del formulario */}
+              {(selectedInquiry.tipoInteres || selectedInquiry.cuandoVisitar) && (
+                <div className="grid grid-cols-2 gap-3">
+                  {selectedInquiry.tipoInteres && (
+                    <div
+                      className="p-4 rounded-xl border"
+                      style={{ backgroundColor: '#FAFAFA', borderColor: '#E5E5E5' }}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Tag className="w-3.5 h-3.5 text-gray-400" />
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--font-size-xs)',
+                            color: '#737373',
+                            fontWeight: 'var(--font-weight-semibold)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                          }}
+                        >
+                          Tipo de interés
+                        </span>
+                      </div>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          color: '#0A0A0A',
+                        }}
+                      >
+                        {tiposInteresLabels[selectedInquiry.tipoInteres] ?? selectedInquiry.tipoInteres}
+                      </p>
+                    </div>
+                  )}
+                  {selectedInquiry.cuandoVisitar && (
+                    <div
+                      className="p-4 rounded-xl border"
+                      style={{ backgroundColor: '#FAFAFA', borderColor: '#E5E5E5' }}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--font-size-xs)',
+                            color: '#737373',
+                            fontWeight: 'var(--font-weight-semibold)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                          }}
+                        >
+                          Disponible para visitar
+                        </span>
+                      </div>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          color: '#0A0A0A',
+                        }}
+                      >
+                        {formatDateShort(selectedInquiry.cuandoVisitar)}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
 
-              {/* Mensaje completo */}
+              {/* Mensaje */}
               <div>
-                <h4 
+                <h4
                   className="mb-3"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-xs)',
                     color: '#737373',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.06em',
                     fontWeight: 'var(--font-weight-semibold)'
                   }}
                 >
                   Mensaje
                 </h4>
-                <p 
-                  style={{ 
+                <p
+                  style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-body-base)',
                     color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-body)',
+                    lineHeight: '1.7',
                     whiteSpace: 'pre-wrap'
                   }}
                 >
                   {selectedInquiry.mensaje}
                 </p>
               </div>
+
+              {/* Respuesta enviada (si existe) */}
+              {selectedInquiry.respuesta && (
+                <div
+                  className="p-4 rounded-xl border-l-4"
+                  style={{ backgroundColor: '#F0FDF4', borderLeftColor: '#006B4E' }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Reply className="w-4 h-4" style={{ color: '#006B4E' }} />
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-xs)',
+                        fontWeight: 'var(--font-weight-semibold)',
+                        color: '#006B4E',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      Tu respuesta
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
+                      · {formatRelativeDate(selectedInquiry.respuesta.fecha)}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      color: '#166534',
+                      lineHeight: '1.6',
+                    }}
+                  >
+                    {selectedInquiry.respuesta.texto}
+                  </p>
+                </div>
+              )}
+
+              {/* Textarea de respuesta (solo si showReplyBox) */}
+              {showReplyBox && !selectedInquiry.respuesta && (
+                <div
+                  className="rounded-xl border p-4 space-y-3"
+                  style={{ borderColor: '#006B4E', backgroundColor: '#F0FDF4' }}
+                >
+                  <label
+                    style={{
+                      display: 'block',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: 'var(--font-weight-medium)',
+                      color: '#166534',
+                      marginBottom: '6px',
+                    }}
+                  >
+                    Tu respuesta para {selectedInquiry.nombre.split(' ')[0]}
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={replyText}
+                    onChange={e => setReplyText(e.target.value)}
+                    placeholder="Escribí tu respuesta..."
+                    autoFocus
+                    style={{
+                      width: '100%',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      color: '#0A0A0A',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #BBF7D0',
+                      borderRadius: '10px',
+                      padding: '10px 14px',
+                      resize: 'none',
+                      lineHeight: '1.6',
+                      outline: 'none',
+                    }}
+                  />
+                  <div className="flex gap-2 justify-end">
+                    <button
+                      onClick={() => { setShowReplyBox(false); setReplyText(''); }}
+                      className="px-4 py-2 rounded-full text-sm transition-colors"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        color: '#525252',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #D1D5DB',
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={handleSendReply}
+                      disabled={!replyText.trim()}
+                      className="flex items-center gap-2 px-5 py-2 rounded-full transition-all"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        backgroundColor: replyText.trim() ? '#006B4E' : '#D1D5DB',
+                        color: '#FFFFFF',
+                        cursor: replyText.trim() ? 'pointer' : 'not-allowed',
+                      }}
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      Enviar
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Confirmación de respuesta enviada en esta sesión */}
+              {replySent && (
+                <div
+                  className="flex items-center gap-3 p-4 rounded-xl"
+                  style={{ backgroundColor: '#DCFCE7', border: '1px solid #BBF7D0' }}
+                >
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#006B4E' }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534' }}>
+                    Tu respuesta fue enviada a {selectedInquiry.nombre.split(' ')[0]}.
+                  </p>
+                </div>
+              )}
+
             </div>
 
-            {/* Footer con botones de acción */}
-            <div className="p-6 border-t border-gray-200 space-y-3">
-              {/* Botones de contacto */}
-              <div className="grid grid-cols-2 gap-3">
-                <a
-                  href={`https://wa.me/${selectedInquiry.telefono.replace(/\s/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-colors"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    backgroundColor: '#25D366',
-                    color: '#FFFFFF'
-                  }}
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  WhatsApp
-                </a>
-                <a
-                  href={`mailto:${selectedInquiry.email}`}
-                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-colors border-2 border-gray-200 hover:bg-gray-50"
-                  style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    color: '#0A0A0A'
-                  }}
-                >
-                  <Mail className="w-4 h-4" />
-                  Email
-                </a>
-              </div>
+            {/* ─── Footer: Responder + Recibido ─── */}
+            <div
+              className="px-6 py-5 border-t"
+              style={{ borderColor: '#E5E5E5', backgroundColor: '#FAFAFA' }}
+            >
+              {!showReplyBox && (
+                <div className="flex gap-3">
+                  {/* Responder */}
+                  {!selectedInquiry.respuesta ? (
+                    <button
+                      onClick={() => setShowReplyBox(true)}
+                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-full transition-all"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-base)',
+                        fontWeight: 'var(--font-weight-semibold)',
+                        backgroundColor: '#0A0A0A',
+                        color: '#FFFFFF',
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#333333')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#0A0A0A')}
+                    >
+                      <Reply className="w-4 h-4" />
+                      Responder
+                    </button>
+                  ) : (
+                    <div
+                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-full"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-base)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        backgroundColor: '#F5F5F5',
+                        color: '#A3A3A3',
+                      }}
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      Respondida
+                    </div>
+                  )}
 
-              {/* Cambiar estado */}
-              <div className="flex gap-2">
-                {selectedInquiry.estado !== 'contactada' && (
-                  <button
-                    onClick={() => {
-                      changeStatus(selectedInquiry.id, 'contactada');
-                      setSelectedInquiry({ ...selectedInquiry, estado: 'contactada' });
-                    }}
-                    className="flex-1 px-6 py-3 rounded-full transition-colors"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-base)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      backgroundColor: '#0A0A0A',
-                      color: '#FFFFFF'
-                    }}
-                  >
-                    Marcar como contactada
-                  </button>
-                )}
-                {selectedInquiry.estado !== 'cerrada' && (
-                  <button
-                    onClick={() => {
-                      changeStatus(selectedInquiry.id, 'cerrada');
-                      setSelectedInquiry({ ...selectedInquiry, estado: 'cerrada' });
-                    }}
-                    className="flex-1 px-6 py-3 rounded-full transition-colors border-2 border-gray-200 hover:bg-gray-50"
-                    style={{ 
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-base)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A'
-                    }}
-                  >
-                    Cerrar consulta
-                  </button>
-                )}
-              </div>
+                  {/* Recibido */}
+                  {!isRecibido ? (
+                    <button
+                      onClick={handleRecibido}
+                      title="Marcar como recibida: ya la vi, voy a contactarlo por WhatsApp o email"
+                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-full border-2 transition-all"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-base)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        borderColor: '#E5E5E5',
+                        color: '#0A0A0A',
+                        backgroundColor: '#FFFFFF',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = '#0A0A0A';
+                        e.currentTarget.style.backgroundColor = '#F9FAFB';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = '#E5E5E5';
+                        e.currentTarget.style.backgroundColor = '#FFFFFF';
+                      }}
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      Recibido
+                    </button>
+                  ) : (
+                    <div
+                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-full border-2"
+                      title="Ya marcaste esta consulta como recibida"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-base)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        borderColor: '#D1FAE5',
+                        color: '#006B4E',
+                        backgroundColor: '#F0FDF4',
+                      }}
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      Recibido ✓
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Nota aclaratoria */}
+              <p
+                className="mt-3 text-center"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-xs)',
+                  color: '#A3A3A3',
+                  lineHeight: '1.5',
+                }}
+              >
+                {!isRecibido
+                  ? '"Recibido" indica que ya viste la consulta y vas a contactar al interesado por tu cuenta.'
+                  : 'También podés contactar por email o WhatsApp directamente desde los links de contacto arriba.'}
+              </p>
             </div>
           </div>
         </div>

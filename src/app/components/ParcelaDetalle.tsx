@@ -707,6 +707,9 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
     if (parcelaId && onEstadoChange) onEstadoChange(parcelaId, estado);
   };
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
+  const handleEnviarConsulta = (_data: { nombre: string; email: string; telefono: string; tipoInteres: string; cuandoVisitar: string; mensaje: string }) => {
+    setIsConsultarOpen(false);
+  };
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [isPublicadoPorExpanded, setIsPublicadoPorExpanded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -3867,6 +3870,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
           setIsConsultarOpen(false);
           setIsConsultaOnlineOpen(true);
         }}
+        onEnviarConsulta={handleEnviarConsulta}
         parcelaNombre={parcela.nombre}
       />
 
