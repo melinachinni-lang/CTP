@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, MessageCircle, Video, Send, ChevronLeft, CheckCircle, FileText } from 'lucide-react';
+import { X, Calendar, MessageCircle, Video, Send, ChevronLeft, ChevronDown, CheckCircle, FileText } from 'lucide-react';
 
 interface ConsultaFormData {
   nombre: string;
@@ -222,31 +222,30 @@ export function ConsultarModal({
                   </div>
                 </button>
 
-                {/* Enviar consulta — solo para vendedor particular */}
+                {/* Enviar formulario — solo para vendedor particular */}
                 {onEnviarConsulta && (
                   <button
                     onClick={() => setPaso('formulario')}
                     className="w-full p-5 rounded-xl border-2 transition-all text-left"
-                    style={{
-                      borderColor: '#006B4E',
-                      backgroundColor: '#F0FDF4',
-                    }}
+                    style={{ borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' }}
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DCFCE7';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#0A0A0A';
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#F9FAFB';
                     }}
                     onMouseLeave={e => {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#F0FDF4';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#E5E5E5';
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#FFFFFF';
                     }}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#006B4E' }}>
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#525252' }}>
                         <FileText className="w-6 h-6" style={{ color: '#FFFFFF' }} />
                       </div>
                       <div className="flex-1">
-                        <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)', color: '#006B4E', marginBottom: '0.375rem' }}>
-                          Enviar consulta
+                        <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-body-base)', color: '#0A0A0A', marginBottom: '0.375rem' }}>
+                          Enviar formulario
                         </h3>
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5' }}>
                           Completá un formulario y el vendedor te responde
                         </p>
                       </div>
@@ -323,29 +322,35 @@ export function ConsultarModal({
                 <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
                   Tipo de interés <span style={{ color: '#EF4444' }}>*</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {tiposInteres.map(tipo => (
-                    <button
-                      key={tipo.value}
-                      type="button"
-                      onClick={() => setForm(f => ({ ...f, tipoInteres: tipo.value }))}
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-body-sm)',
-                        fontWeight: form.tipoInteres === tipo.value ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
-                        padding: '10px 12px',
-                        borderRadius: '10px',
-                        border: `1.5px solid ${form.tipoInteres === tipo.value ? '#006B4E' : '#E5E5E5'}`,
-                        backgroundColor: form.tipoInteres === tipo.value ? '#F0FDF4' : '#FFFFFF',
-                        color: form.tipoInteres === tipo.value ? '#006B4E' : '#525252',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s',
-                      }}
-                    >
-                      {tipo.label}
-                    </button>
-                  ))}
+                <div style={{ position: 'relative' }}>
+                  <select
+                    value={form.tipoInteres}
+                    onChange={e => setForm(f => ({ ...f, tipoInteres: e.target.value }))}
+                    style={{
+                      ...inputBase,
+                      border: `1px solid ${errors.tipoInteres ? '#EF4444' : '#E5E5E5'}`,
+                      appearance: 'none',
+                      paddingRight: '40px',
+                      cursor: 'pointer',
+                      color: form.tipoInteres ? '#0A0A0A' : '#A3A3A3',
+                    }}
+                  >
+                    <option value="" disabled>Seleccioná una opción</option>
+                    {tiposInteres.map(tipo => (
+                      <option key={tipo.value} value={tipo.value}>{tipo.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    className="w-4 h-4"
+                    style={{
+                      position: 'absolute',
+                      right: '14px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#737373',
+                      pointerEvents: 'none',
+                    }}
+                  />
                 </div>
                 {errors.tipoInteres && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#EF4444', marginTop: '4px' }}>{errors.tipoInteres}</p>}
               </div>
