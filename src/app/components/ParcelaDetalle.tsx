@@ -708,7 +708,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
   };
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
   const handleEnviarConsulta = (_data: { nombre: string; email: string; telefono: string; tipoInteres: string; cuandoVisitar: string; mensaje: string }) => {
-    setIsConsultarOpen(false);
+    // el modal avanza a la pantalla de confirmación internamente; se cierra cuando el usuario toca "Cerrar"
   };
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [isPublicadoPorExpanded, setIsPublicadoPorExpanded] = useState(false);
