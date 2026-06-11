@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Copy, CheckCircle, Check, AlertCircle, ChevronLeft, ExternalLink, Building2, Link, Upload, FileText, Clock, ChevronDown } from 'lucide-react';
+import { X, Copy, CheckCircle, Check, AlertCircle, ChevronLeft, Building2, CreditCard, Upload, FileText, Clock, ChevronDown, Lock } from 'lucide-react';
 
 const DATOS_BANCARIOS = [
   { label: 'Nombre', value: 'Inmobiliaria Isla SPA' },
@@ -328,12 +328,15 @@ interface FlujoCompraModalProps {
 }
 
 export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoCompra, onEstadoChange }: FlujoCompraModalProps) {
-  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'expirado' | 'error'>(1);
-  const [metodoPago, setMetodoPago] = useState<'transferencia' | 'link'>('transferencia');
+  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'mp-checkout' | 'mp-success' | 'expirado' | 'error'>(1);
+  const [metodoPago, setMetodoPago] = useState<'transferencia' | 'mercadopago'>('transferencia');
   const [aceptoTyC, setAceptoTyC] = useState(false);
   const [todoCopiado, setTodoCopiado] = useState(false);
-  const [linkCopiado, setLinkCopiado] = useState(false);
   const [archivo, setArchivo] = useState<string | null>(null);
+  // MP Checkout Pro state
+  const [mpMetodo, setMpMetodo] = useState<'credito' | 'debito'>('credito');
+  const [mpTarjeta, setMpTarjeta] = useState({ numero: '', vencimiento: '', cvv: '', nombre: '' });
+  const [mpProcesando, setMpProcesando] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
@@ -409,7 +412,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   }, []);
 
   useEffect(() => {
-    if (segundosTimer === 0 && (paso === 2 || paso === 3)) {
+    if (segundosTimer === 0 && (paso === 2 || paso === 3 || paso === 'mp-checkout')) {
       setPaso('expirado');
       onEstadoChange?.('disponible');
     }
@@ -426,10 +429,13 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     setTimeout(() => setTodoCopiado(false), 2000);
   };
 
-  const handleCopiarLink = () => {
-    navigator.clipboard.writeText(LINK_PAGO_MOCK).catch(() => {});
-    setLinkCopiado(true);
-    setTimeout(() => setLinkCopiado(false), 1500);
+  const handleMpPagar = async () => {
+    setMpProcesando(true);
+    await new Promise(r => setTimeout(r, 2000));
+    setMpProcesando(false);
+    setPaso('mp-success');
+    onEstadoChange?.('pago-en-validacion');
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
   const handleArchivo = (file: File) => {
@@ -454,10 +460,13 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
+  const montoPago = tipoCompra === 'comprar' ? precio : '$500.000';
+  const montoPagoLabel = tipoCompra === 'comprar' ? precio : '$500.000 (UF 12,9)';
+  const mpFormValido = mpTarjeta.numero.trim() && mpTarjeta.vencimiento.trim() && mpTarjeta.cvv.trim() && mpTarjeta.nombre.trim();
   const pasoLabels = ['Tus datos', 'Método de pago', metodoPago === 'transferencia' ? 'Comprobante' : 'Pago online'];
 
   const handleIntentoCerrar = () => {
-    if (enviado) { onClose(); return; }
+    if (enviado || paso === 'mp-success') { onClose(); return; }
     setShowExitWarning(true);
   };
 
@@ -471,7 +480,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
 
         {/* Header */}
-        {!enviado && paso !== 'expirado' && paso !== 'error' && (
+        {!enviado && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && (
           <div className="px-6 py-5 border-b bg-white z-10" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -492,7 +501,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
               <div className="flex items-center gap-2">
                 {pasoLabels.map((label, i) => {
                   const num = (i + 1) as 1 | 2 | 3;
-                  const pasoNum = paso === 1 ? 1 : (paso as number);
+                  const pasoNum = typeof paso === 'number' ? paso : (paso === 'mp-checkout' ? 3 : 1);
                   return (
                     <React.Fragment key={num}>
                       {i > 0 && <div className="flex-1 h-px" style={{ backgroundColor: pasoNum > i ? '#0A0A0A' : '#E5E5E5' }} />}
@@ -512,7 +521,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             )}
 
             {/* Timer — visible y fijo en el header durante los pasos 2 y 3 */}
-            {(paso === 2 || paso === 3) && (
+            {(paso === 2 || paso === 3 || paso === 'mp-checkout') && (
               <div className="mt-4">
                 <CountdownTimer segundos={segundosTimer} />
               </div>
@@ -709,19 +718,18 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                     </div>
                   </button>
 
-                  <button onClick={() => setMetodoPago('link')}
+                  <button onClick={() => setMetodoPago('mercadopago')}
                     className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left"
-                    style={{ borderColor: metodoPago === 'link' ? '#006B4E' : '#E5E5E5', backgroundColor: metodoPago === 'link' ? '#EBFEF5' : '#FFFFFF' }}>
+                    style={{ borderColor: metodoPago === 'mercadopago' ? '#009EE3' : '#E5E5E5', backgroundColor: metodoPago === 'mercadopago' ? '#EFF9FF' : '#FFFFFF' }}>
                     <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: metodoPago === 'link' ? '#006B4E' : '#F5F5F5' }}>
-                      <Link className="w-4 h-4" style={{ color: metodoPago === 'link' ? '#FFFFFF' : '#737373' }} />
+                      style={{ backgroundColor: metodoPago === 'mercadopago' ? '#009EE3' : '#F5F5F5' }}>
+                      <CreditCard className="w-4 h-4" style={{ color: metodoPago === 'mercadopago' ? '#FFFFFF' : '#737373' }} />
                     </div>
                     <div>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>Link de pago</p>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Paga online con tarjeta</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>Mercado Pago</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Tarjeta de crédito o débito</p>
                       <div className="flex items-center gap-1 mt-1">
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '9px', color: '#9CA3AF' }}>con</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 700, color: '#009EE3' }}>Mercado Pago</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '9px', fontWeight: 700, color: '#009EE3', letterSpacing: '-0.02em' }}>Checkout Pro</span>
                       </div>
                     </div>
                   </button>
@@ -788,39 +796,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 </>
               )}
 
-              {metodoPago === 'link' && (
-                <div className="rounded-xl p-5 space-y-3" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#15803D' }}>
-                    Link de pago generado
-                  </p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', lineHeight: '1.5' }}>
-                    Usa este link para pagar con tarjeta. Una vez completado, sube el comprobante.
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 px-3 py-2.5 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-                      <code style={{ fontFamily: 'monospace', fontSize: '12px', color: '#374151', whiteSpace: 'nowrap', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {LINK_PAGO_MOCK}
-                      </code>
-                    </div>
-                    <button onClick={handleCopiarLink}
-                      className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-xs font-medium flex-shrink-0"
-                      style={{ backgroundColor: linkCopiado ? '#D1FAE5' : '#F5F5F5', color: linkCopiado ? '#065F46' : '#6B7280', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }}>
-                      {linkCopiado ? <><CheckCircle className="w-3 h-3" /> Copiado</> : <><Copy className="w-3 h-3" /> Copiar</>}
-                    </button>
-                  </div>
-                  <a href={LINK_PAGO_MOCK} target="_blank" rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center w-full py-2.5 rounded-lg text-sm font-medium"
-                    style={{ backgroundColor: '#009EE3', color: '#FFFFFF', fontFamily: 'var(--font-body)', textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#0082C2'}
-                    onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#009EE3'}>
-                    <div className="flex items-center gap-2">
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Pagar con Mercado Pago</span>
-                    </div>
-                    <span style={{ fontSize: '10px', opacity: 0.8, fontWeight: 400 }}>Tarjetas de crédito, débito y más</span>
-                  </a>
-                </div>
-              )}
 
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#0A0A0A', marginBottom: '4px' }}>
@@ -861,6 +836,196 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             </div>
           )}
 
+          {/* ── MERCADO PAGO CHECKOUT PRO ── */}
+          {paso === 'mp-checkout' && (
+            <div className="space-y-5">
+              {/* MP branding header */}
+              <div className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ backgroundColor: '#009EE3' }}>
+                <div className="flex items-center gap-2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="12" fill="white" fillOpacity="0.2" />
+                    <path d="M6 12.5C6 9.46 8.46 7 11.5 7S17 9.46 17 12.5 14.54 18 11.5 18" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M14 10l3 2.5-3 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>mercado pago</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5" style={{ color: 'rgba(255,255,255,0.85)' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: 'rgba(255,255,255,0.85)' }}>Pago seguro</span>
+                </div>
+              </div>
+
+              {/* Order summary */}
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0369A1', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
+                  Resumen del pago
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#1E40AF', marginBottom: '4px' }}>
+                  {tipoCompra === 'reservar' ? 'Reserva — ' : 'Compra — '}{parcelaNombre}
+                </p>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 700, color: '#009EE3' }}>
+                  {montoPago}
+                </p>
+                {tipoCompra === 'reservar' && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', marginTop: '2px' }}>UF 12,9</p>
+                )}
+              </div>
+
+              {/* Payment method selector */}
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#111827', marginBottom: '10px' }}>
+                  ¿Cómo querés pagar?
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {([
+                    { id: 'credito', label: 'Tarjeta de crédito' },
+                    { id: 'debito', label: 'Tarjeta de débito' },
+                  ] as const).map(m => (
+                    <button key={m.id} onClick={() => setMpMetodo(m.id)}
+                      className="flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left"
+                      style={{ borderColor: mpMetodo === m.id ? '#009EE3' : '#E5E5E5', backgroundColor: mpMetodo === m.id ? '#EFF9FF' : '#FFFFFF' }}>
+                      <CreditCard className="w-4 h-4 flex-shrink-0" style={{ color: mpMetodo === m.id ? '#009EE3' : '#9CA3AF' }} />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: mpMetodo === m.id ? 600 : 400, color: '#374151' }}>{m.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Card form */}
+              <div className="space-y-3">
+                <div>
+                  <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Número de tarjeta <span style={{ color: '#DC2626' }}>*</span></label>
+                  <input
+                    type="text" maxLength={19} value={mpTarjeta.numero} placeholder="0000 0000 0000 0000"
+                    onChange={e => {
+                      const raw = e.target.value.replace(/\D/g, '').slice(0, 16);
+                      const formatted = raw.replace(/(.{4})/g, '$1 ').trim();
+                      setMpTarjeta(t => ({ ...t, numero: formatted }));
+                    }}
+                    className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+                    style={{ ...inputStyle, '--tw-ring-color': '#009EE3' } as React.CSSProperties}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Vencimiento <span style={{ color: '#DC2626' }}>*</span></label>
+                    <input
+                      type="text" maxLength={5} value={mpTarjeta.vencimiento} placeholder="MM/AA"
+                      onChange={e => {
+                        const raw = e.target.value.replace(/\D/g, '').slice(0, 4);
+                        const formatted = raw.length > 2 ? raw.slice(0, 2) + '/' + raw.slice(2) : raw;
+                        setMpTarjeta(t => ({ ...t, vencimiento: formatted }));
+                      }}
+                      className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>CVV <span style={{ color: '#DC2626' }}>*</span></label>
+                    <input
+                      type="text" maxLength={4} value={mpTarjeta.cvv} placeholder="123"
+                      onChange={e => setMpTarjeta(t => ({ ...t, cvv: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
+                      className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+                      style={inputStyle}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Nombre en la tarjeta <span style={{ color: '#DC2626' }}>*</span></label>
+                  <input
+                    type="text" value={mpTarjeta.nombre} placeholder="NOMBRE APELLIDO"
+                    onChange={e => setMpTarjeta(t => ({ ...t, nombre: e.target.value.toUpperCase() }))}
+                    className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+
+              {/* Pay button */}
+              <div className="space-y-3 pt-1">
+                <button onClick={handleMpPagar} disabled={mpProcesando || !mpFormValido}
+                  className="w-full py-3 rounded-full font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  style={{ backgroundColor: '#009EE3', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)' }}
+                  onMouseEnter={e => { if (!mpProcesando && mpFormValido) e.currentTarget.style.backgroundColor = '#0082C2'; }}
+                  onMouseLeave={e => { if (!mpProcesando && mpFormValido) e.currentTarget.style.backgroundColor = '#009EE3'; }}>
+                  {mpProcesando
+                    ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Procesando...</>
+                    : `Pagar ${montoPago}`}
+                </button>
+                <div className="flex items-center justify-center gap-1.5">
+                  <Lock className="w-3 h-3" style={{ color: '#9CA3AF' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>Operación segura procesada por Mercado Pago</span>
+                </div>
+                <button onClick={() => setPaso(2)}
+                  className="w-full py-2 text-sm transition-colors"
+                  style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#374151'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
+                  ← Cambiar método de pago
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ── MP PAGO CONFIRMADO ── */}
+          {paso === 'mp-success' && (
+            <div className="py-4 text-center space-y-6">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: '#EFF9FF', border: '4px solid #BAE6FD' }}>
+                <CheckCircle className="w-9 h-9" style={{ color: '#009EE3' }} />
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>
+                  ¡Pago confirmado!
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', marginTop: '6px', lineHeight: '1.5' }}>
+                  Tu pago fue procesado exitosamente por Mercado Pago.
+                </p>
+              </div>
+
+              <div className="rounded-xl overflow-hidden text-left" style={{ border: '1px solid #E5E5E5' }}>
+                <div className="px-4 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Resumen de la operación
+                  </p>
+                </div>
+                {[
+                  { label: 'Tipo', value: tipoCompra === 'reservar' ? 'Reserva de parcela' : 'Compra de parcela' },
+                  { label: 'Parcela', value: parcelaNombre },
+                  { label: 'Monto pagado', value: montoPagoLabel },
+                  { label: 'Método', value: 'Mercado Pago' },
+                  { label: 'Fecha', value: new Date().toLocaleDateString('es-CL', { day: '2-digit', month: 'long', year: 'numeric' }) },
+                ].map((item, i, arr) => (
+                  <div key={item.label} className="flex items-center justify-between px-4 py-3"
+                    style={{ borderBottom: i < arr.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{item.label}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>{item.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DBEAFE' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#1E40AF', marginBottom: '2px' }}>Revisa tu casilla de email</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#3B82F6', lineHeight: '1.5' }}>
+                    Recibirás la confirmación de tu operación. Una vez procesada, la parcela pasará a estado {tipoCompra === 'reservar' ? '"Reservada"' : '"Vendida"'}.
+                  </p>
+                </div>
+              </div>
+
+              <button onClick={onClose} className="w-full py-3 rounded-full text-sm font-semibold transition-all"
+                style={{ backgroundColor: '#009EE3', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0082C2'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#009EE3'}>
+                Entendido
+              </button>
+            </div>
+          )}
+
           {/* ── ENVIADO ── */}
           {enviado && (
             <div className="py-4 text-center space-y-6">
@@ -883,8 +1048,8 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 {[
                   { label: 'Tipo', value: tipoCompra === 'reservar' ? 'Reserva de parcela' : 'Compra de parcela' },
                   { label: 'Parcela', value: parcelaNombre },
-                  { label: 'Monto pagado', value: '$500.000 (UF 12,9)' },
-                  { label: 'Método', value: metodoPago === 'transferencia' ? 'Transferencia bancaria' : 'Mercado Pago' },
+                  { label: 'Monto pagado', value: montoPagoLabel },
+                  { label: 'Método', value: 'Transferencia bancaria' },
                   { label: 'Fecha', value: new Date().toLocaleDateString('es-CL', { day: '2-digit', month: 'long', year: 'numeric' }) },
                 ].map((item, i, arr) => (
                   <div key={item.label} className="flex items-center justify-between px-4 py-3"
@@ -1000,7 +1165,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
               </div>
               <div className="space-y-2">
                 <button
-                  onClick={() => setPaso(3)}
+                  onClick={() => setPaso(metodoPago === 'mercadopago' ? 'mp-checkout' : 3)}
                   className="w-full py-3 rounded-full font-semibold transition-all"
                   style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
@@ -1032,7 +1197,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
         </div>
 
         {/* Footer */}
-        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && (
+        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-checkout' && paso !== 'mp-success' && (
           <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             {paso !== 1 ? (
               <button
@@ -1055,7 +1220,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             )}
 
             {paso === 2 && (
-              <button onClick={() => setPaso(3)} disabled={!aceptoTyC}
+              <button onClick={() => setPaso(metodoPago === 'mercadopago' ? 'mp-checkout' : 3)} disabled={!aceptoTyC}
                 className="px-6 py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)' }}>
                 Siguiente →
