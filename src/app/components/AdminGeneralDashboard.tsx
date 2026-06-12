@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign } from 'lucide-react';
+import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -17,7 +17,7 @@ interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -210,6 +210,69 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
   ]);
 
   const [isLoading, setIsLoading] = React.useState(false);
+
+  // Estado módulo Recursos
+  type Recurso = { id: string; titulo: string; descripcion: string; topico: string; estado: 'activo' | 'inactivo'; fecha: string; imagen: string };
+  const [recursos, setRecursos] = useState<Recurso[]>([
+    { id: 'r1', titulo: 'Cómo invertir en parcelas en Chile: guía completa', descripcion: 'Una guía paso a paso para entender el mercado de parcelas y tomar decisiones informadas al momento de invertir.', topico: 'Inversión', estado: 'activo', fecha: '10 jun 2026', imagen: '' },
+    { id: 'r2', titulo: 'Aspectos legales que debes conocer antes de comprar un terreno', descripcion: 'Todo lo que necesitas saber sobre escrituras, roles de avalúo, restricciones de uso de suelo y trámites notariales.', topico: 'Legal', estado: 'activo', fecha: '5 jun 2026', imagen: '' },
+    { id: 'r3', titulo: 'Mercado inmobiliario rural 2026: tendencias y oportunidades', descripcion: 'Análisis del mercado de terrenos rurales y proyecciones para el segundo semestre del año.', topico: 'Mercado', estado: 'activo', fecha: '1 jun 2026', imagen: '' },
+    { id: 'r4', titulo: 'Diferencias entre parcela de agrado y agrícola', descripcion: 'Explicamos las principales diferencias legales y prácticas entre estos dos tipos de terreno.', topico: 'Guías', estado: 'inactivo', fecha: '22 may 2026', imagen: '' },
+    { id: 'r5', titulo: 'CTP lanza nueva funcionalidad de reserva online', descripcion: 'Ahora puedes reservar tu parcela directamente desde la plataforma con pago integrado a Mercado Pago.', topico: 'Noticias', estado: 'activo', fecha: '15 may 2026', imagen: '' },
+  ]);
+  const [recursosLoading, setRecursosLoading] = useState(false);
+  const [recursosSearch, setRecursosSearch] = useState('');
+  const [recursosFiltroTopico, setRecursosFiltroTopico] = useState('todos');
+  const [recursosFiltroEstado, setRecursosFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos');
+  const [showRecursoModal, setShowRecursoModal] = useState(false);
+  const [recursoEditing, setRecursoEditing] = useState<Recurso | null>(null);
+  const [recursoForm, setRecursoForm] = useState({ titulo: '', descripcion: '', topico: 'Inversión', imagen: '' });
+  const [recursoFormErrors, setRecursoFormErrors] = useState({ titulo: false, descripcion: false });
+  const [recursoSaveSuccess, setRecursoSaveSuccess] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const topicosRecurso = ['Inversión', 'Legal', 'Mercado', 'Guías', 'Noticias'];
+
+  const openCrearRecurso = () => {
+    setRecursoEditing(null);
+    setRecursoForm({ titulo: '', descripcion: '', topico: 'Inversión', imagen: '' });
+    setRecursoFormErrors({ titulo: false, descripcion: false });
+    setRecursoSaveSuccess(false);
+    setShowRecursoModal(true);
+  };
+  const openEditarRecurso = (r: Recurso) => {
+    setRecursoEditing(r);
+    setRecursoForm({ titulo: r.titulo, descripcion: r.descripcion, topico: r.topico, imagen: r.imagen });
+    setRecursoFormErrors({ titulo: false, descripcion: false });
+    setRecursoSaveSuccess(false);
+    setShowRecursoModal(true);
+  };
+  const guardarRecurso = () => {
+    const errors = { titulo: !recursoForm.titulo.trim(), descripcion: !recursoForm.descripcion.trim() };
+    setRecursoFormErrors(errors);
+    if (errors.titulo || errors.descripcion) return;
+    if (recursoEditing) {
+      setRecursos(prev => prev.map(r => r.id === recursoEditing.id ? { ...r, ...recursoForm } : r));
+    } else {
+      const nuevo: Recurso = { id: `r${Date.now()}`, ...recursoForm, estado: 'activo', fecha: '12 jun 2026', imagen: recursoForm.imagen };
+      setRecursos(prev => [nuevo, ...prev]);
+    }
+    setRecursoSaveSuccess(true);
+    setTimeout(() => { setShowRecursoModal(false); setRecursoSaveSuccess(false); }, 1200);
+  };
+  const toggleEstadoRecurso = (id: string) => {
+    setRecursos(prev => prev.map(r => r.id === id ? { ...r, estado: r.estado === 'activo' ? 'inactivo' : 'activo' } : r));
+  };
+  const eliminarRecurso = (id: string) => {
+    setRecursos(prev => prev.filter(r => r.id !== id));
+    setDeleteConfirmId(null);
+  };
+  const recursosFiltrados = recursos.filter(r => {
+    const matchSearch = r.titulo.toLowerCase().includes(recursosSearch.toLowerCase());
+    const matchTopico = recursosFiltroTopico === 'todos' || r.topico === recursosFiltroTopico;
+    const matchEstado = recursosFiltroEstado === 'todos' || r.estado === recursosFiltroEstado;
+    return matchSearch && matchTopico && matchEstado;
+  });
+
   const handleRefresh = () => {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 1800);
@@ -368,6 +431,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
     { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
+    { id: 'recursos' as NavItem, icon: BookOpen, label: 'Recursos & Blog' },
     { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
     { id: 'configuracion' as NavItem, icon: Settings, label: 'Configuración' }
   ];
@@ -666,6 +730,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'whatsapp' && 'Números telefónicos asignados a publicaciones de parcelas y proyectos'}
                   {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
+                  {activeNav === 'recursos' && 'Publicación y gestión de recursos informativos y noticias'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
                   {activeNav === 'configuracion' && 'Configuración general del sistema'}
                 </p>
@@ -3596,6 +3661,417 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </div>
                 </div>
               </section>
+            </>
+          )}
+
+          {/* ── RECURSOS & BLOG ── */}
+          {activeNav === 'recursos' && (
+            <>
+              {/* Toolbar */}
+              <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
+                  <input
+                    type="text"
+                    placeholder="Buscar recurso..."
+                    value={recursosSearch}
+                    onChange={e => setRecursosSearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm transition-all outline-none"
+                    style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }}
+                  />
+                </div>
+                <select
+                  value={recursosFiltroTopico}
+                  onChange={e => setRecursosFiltroTopico(e.target.value)}
+                  className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer"
+                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '140px' }}
+                >
+                  <option value="todos">Todos los tópicos</option>
+                  {topicosRecurso.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+                <select
+                  value={recursosFiltroEstado}
+                  onChange={e => setRecursosFiltroEstado(e.target.value as 'todos' | 'activo' | 'inactivo')}
+                  className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer"
+                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '130px' }}
+                >
+                  <option value="todos">Todos los estados</option>
+                  <option value="activo">Activo</option>
+                  <option value="inactivo">Inactivo</option>
+                </select>
+                <button
+                  onClick={openCrearRecurso}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex-shrink-0"
+                  style={{ backgroundColor: '#3D5E28', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}
+                >
+                  <Plus className="w-4 h-4" />
+                  Nuevo recurso
+                </button>
+              </div>
+
+              {/* Tabla / lista */}
+              <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' }}>
+                {/* Header tabla */}
+                <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #F0F0F0' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                    {recursosFiltrados.length} recurso{recursosFiltrados.length !== 1 ? 's' : ''}
+                  </p>
+                  <button
+                    onClick={() => { setRecursosLoading(true); setTimeout(() => setRecursosLoading(false), 1400); }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all"
+                    style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28', fontFamily: 'var(--font-body)' }}
+                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}
+                  >
+                    <Activity className={`w-3.5 h-3.5 ${recursosLoading ? 'animate-spin' : ''}`} />
+                    Actualizar
+                  </button>
+                </div>
+
+                {/* Skeleton loading */}
+                {recursosLoading ? (
+                  <div className="divide-y divide-gray-50">
+                    {[1,2,3,4].map(i => (
+                      <div key={i} className="px-6 py-4 flex items-center gap-4 animate-pulse">
+                        <div className="w-12 h-12 rounded-xl flex-shrink-0" style={{ backgroundColor: '#F0F0F0' }} />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-3.5 rounded-full w-2/3" style={{ backgroundColor: '#F0F0F0' }} />
+                          <div className="h-3 rounded-full w-1/3" style={{ backgroundColor: '#F5F5F5' }} />
+                        </div>
+                        <div className="h-6 w-16 rounded-full" style={{ backgroundColor: '#F0F0F0' }} />
+                        <div className="h-6 w-20 rounded-full" style={{ backgroundColor: '#F5F5F5' }} />
+                        <div className="flex gap-2">
+                          <div className="h-8 w-8 rounded-lg" style={{ backgroundColor: '#F0F0F0' }} />
+                          <div className="h-8 w-8 rounded-lg" style={{ backgroundColor: '#F0F0F0' }} />
+                          <div className="h-8 w-8 rounded-lg" style={{ backgroundColor: '#F0F0F0' }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                /* Empty state */
+                ) : recursosFiltrados.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}>
+                      <BookOpen className="w-8 h-8" style={{ color: '#3D5E28' }} />
+                    </div>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', marginBottom: '8px' }}>
+                      {recursosSearch || recursosFiltroTopico !== 'todos' || recursosFiltroEstado !== 'todos'
+                        ? 'Sin resultados para esta búsqueda'
+                        : 'Aún no hay recursos publicados'}
+                    </h3>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '24px', maxWidth: '360px' }}>
+                      {recursosSearch || recursosFiltroTopico !== 'todos' || recursosFiltroEstado !== 'todos'
+                        ? 'Probá con otros filtros o términos de búsqueda.'
+                        : 'Creá tu primer recurso informativo para que aparezca en el portal público.'}
+                    </p>
+                    {!(recursosSearch || recursosFiltroTopico !== 'todos' || recursosFiltroEstado !== 'todos') && (
+                      <button
+                        onClick={openCrearRecurso}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium"
+                        style={{ backgroundColor: '#3D5E28', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                      >
+                        <Plus className="w-4 h-4" />
+                        Crear primer recurso
+                      </button>
+                    )}
+                  </div>
+
+                /* Listado */
+                ) : (
+                  <div className="divide-y" style={{ borderColor: '#F5F5F5' }}>
+                    {/* Cabeceras columnas */}
+                    <div className="hidden md:grid px-6 py-3" style={{ gridTemplateColumns: '1fr 110px 100px 110px 120px', gap: '16px' }}>
+                      {['Recurso', 'Tópico', 'Estado', 'Publicado', 'Acciones'].map(col => (
+                        <span key={col} style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          {col}
+                        </span>
+                      ))}
+                    </div>
+
+                    {recursosFiltrados.map((recurso) => (
+                      <div
+                        key={recurso.id}
+                        className="px-6 py-4 flex flex-col md:grid md:items-center gap-3 md:gap-4 transition-colors"
+                        style={{ gridTemplateColumns: '1fr 110px 100px 110px 120px', backgroundColor: '#FFFFFF' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                      >
+                        {/* Recurso: imagen + título + descripción */}
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#F0F5EB', border: '1px solid #E2EDCC' }}>
+                            <BookOpen className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="truncate" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>
+                              {recurso.titulo}
+                            </p>
+                            <p className="truncate mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
+                              {recurso.descripcion.substring(0, 80)}...
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Tópico */}
+                        <div>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>
+                            <Tag className="w-3 h-3" />
+                            {recurso.topico}
+                          </span>
+                        </div>
+
+                        {/* Estado */}
+                        <div>
+                          {recurso.estado === 'activo' ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>
+                              <Globe className="w-3 h-3" />
+                              Activo
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)' }}>
+                              <EyeOff className="w-3 h-3" />
+                              Inactivo
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Fecha */}
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>{recurso.fecha}</p>
+
+                        {/* Acciones */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            title="Editar"
+                            onClick={() => openEditarRecurso(recurso)}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: '#F5F5F5', color: '#737373' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            title={recurso.estado === 'activo' ? 'Desactivar' : 'Activar'}
+                            onClick={() => toggleEstadoRecurso(recurso.id)}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5', color: recurso.estado === 'activo' ? '#3D5E28' : '#A3A3A3' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#E2EDCC' : '#E5E5E5'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5'; }}
+                          >
+                            {recurso.estado === 'activo' ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                          </button>
+                          <button
+                            title="Eliminar"
+                            onClick={() => setDeleteConfirmId(recurso.id)}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              {/* Modal crear/editar recurso */}
+              {showRecursoModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+                    {/* Header modal */}
+                    <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
+                      <div>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>
+                          {recursoEditing ? 'Editar recurso' : 'Nuevo recurso'}
+                        </h2>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
+                          {recursoEditing ? 'Modificá los datos del recurso' : 'Completá los campos para publicar el recurso'}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setShowRecursoModal(false)}
+                        className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                        style={{ backgroundColor: '#F5F5F5', color: '#737373' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {/* Body modal */}
+                    <div className="px-6 py-6 space-y-5 overflow-y-auto" style={{ maxHeight: '70vh' }}>
+
+                      {/* Título */}
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                          Título <span style={{ color: '#EF4444' }}>*</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ej: Cómo invertir en parcelas en Chile"
+                          value={recursoForm.titulo}
+                          onChange={e => setRecursoForm(f => ({ ...f, titulo: e.target.value }))}
+                          className="w-full px-4 py-3 rounded-xl outline-none transition-all"
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--font-size-body-sm)',
+                            color: '#0A0A0A',
+                            backgroundColor: '#FAFAFA',
+                            border: `1px solid ${recursoFormErrors.titulo ? '#EF4444' : '#E5E5E5'}`
+                          }}
+                          onFocus={e => { e.target.style.borderColor = '#3D5E28'; e.target.style.backgroundColor = '#FFFFFF'; }}
+                          onBlur={e => { e.target.style.borderColor = recursoFormErrors.titulo ? '#EF4444' : '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+                        />
+                        {recursoFormErrors.titulo && (
+                          <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#EF4444' }}>
+                            <AlertCircle className="w-3 h-3" /> El título es obligatorio
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Descripción */}
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                          Descripción / Contenido <span style={{ color: '#EF4444' }}>*</span>
+                        </label>
+                        <textarea
+                          placeholder="Escribí el contenido o descripción del recurso..."
+                          value={recursoForm.descripcion}
+                          onChange={e => setRecursoForm(f => ({ ...f, descripcion: e.target.value }))}
+                          rows={5}
+                          className="w-full px-4 py-3 rounded-xl outline-none transition-all resize-none"
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--font-size-body-sm)',
+                            color: '#0A0A0A',
+                            backgroundColor: '#FAFAFA',
+                            border: `1px solid ${recursoFormErrors.descripcion ? '#EF4444' : '#E5E5E5'}`,
+                            lineHeight: 'var(--line-height-body)'
+                          }}
+                          onFocus={e => { e.target.style.borderColor = '#3D5E28'; e.target.style.backgroundColor = '#FFFFFF'; }}
+                          onBlur={e => { e.target.style.borderColor = recursoFormErrors.descripcion ? '#EF4444' : '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+                        />
+                        {recursoFormErrors.descripcion && (
+                          <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#EF4444' }}>
+                            <AlertCircle className="w-3 h-3" /> La descripción es obligatoria
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Tópico */}
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                          Tópico
+                        </label>
+                        <select
+                          value={recursoForm.topico}
+                          onChange={e => setRecursoForm(f => ({ ...f, topico: e.target.value }))}
+                          className="w-full px-4 py-3 rounded-xl outline-none cursor-pointer"
+                          style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}
+                        >
+                          {topicosRecurso.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                      </div>
+
+                      {/* Imagen destacada */}
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                          Imagen destacada
+                        </label>
+                        <div
+                          className="w-full rounded-xl flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors"
+                          style={{ border: '2px dashed #C5D9A8', backgroundColor: '#F0F5EB', padding: '32px 16px', minHeight: '130px' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}
+                        >
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
+                            <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                          </div>
+                          <div className="text-center">
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#3D5E28' }}>
+                              Subir imagen
+                            </p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
+                              PNG, JPG o WEBP · Máx 5 MB · Recomendado 1200×630px
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer modal */}
+                    <div className="flex items-center justify-between px-6 py-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+                      <button
+                        onClick={() => setShowRecursoModal(false)}
+                        className="px-4 py-2.5 rounded-xl text-sm transition-colors"
+                        style={{ fontFamily: 'var(--font-body)', color: '#737373', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={guardarRecurso}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all"
+                        style={{ backgroundColor: recursoSaveSuccess ? '#166534' : '#3D5E28', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                        onMouseEnter={e => { if (!recursoSaveSuccess) e.currentTarget.style.backgroundColor = '#2E4A1E'; }}
+                        onMouseLeave={e => { if (!recursoSaveSuccess) e.currentTarget.style.backgroundColor = '#3D5E28'; }}
+                      >
+                        {recursoSaveSuccess ? (
+                          <><Check className="w-4 h-4" /> Guardado</>
+                        ) : (
+                          <><Save className="w-4 h-4" /> {recursoEditing ? 'Guardar cambios' : 'Publicar recurso'}</>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Modal confirmación eliminar */}
+              {deleteConfirmId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="w-full max-w-sm rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+                    <div className="p-6">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#FEF2F2' }}>
+                        <Trash2 className="w-6 h-6" style={{ color: '#EF4444' }} />
+                      </div>
+                      <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', marginBottom: '8px' }}>
+                        ¿Eliminar este recurso?
+                      </h3>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)', marginBottom: '24px' }}>
+                        Esta acción no se puede deshacer. El recurso dejará de estar disponible en el portal público de forma inmediata.
+                      </p>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setDeleteConfirmId(null)}
+                          className="flex-1 py-2.5 rounded-xl text-sm transition-colors"
+                          style={{ fontFamily: 'var(--font-body)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={() => eliminarRecurso(deleteConfirmId)}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                          style={{ fontFamily: 'var(--font-body)', color: '#FFFFFF', backgroundColor: '#EF4444' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DC2626'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#EF4444'; }}
+                        >
+                          Sí, eliminar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
