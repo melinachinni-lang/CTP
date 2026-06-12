@@ -530,19 +530,18 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
         className="fixed left-0 top-0 h-full flex flex-col"
         style={{
           width: '256px',
-          backgroundColor: '#FAFAFA',
-          borderRight: '1px solid #E5E5E5',
+          backgroundColor: '#002F23',
           zIndex: 50
         }}
       >
         {/* Logo */}
-        <div className="px-6 py-8" style={{ borderBottom: '1px solid #E5E5E5' }}>
+        <div className="px-6 py-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <h2
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: 'var(--font-weight-semibold)',
               fontSize: 'var(--font-size-h4)',
-              color: '#0A0A0A',
+              color: '#FFFFFF',
               lineHeight: 'var(--line-height-heading)'
             }}
           >
@@ -561,8 +560,9 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 onClick={() => setActiveNav(item.id)}
                 className="w-full flex items-center gap-3 px-6 py-3 transition-all"
                 style={{
-                  backgroundColor: isActive ? '#CDD8DE' : 'transparent',
-                  color: '#006B4E',
+                  backgroundColor: isActive ? '#065F46' : 'transparent',
+                  borderLeft: isActive ? '3px solid rgba(255,255,255,0.4)' : '3px solid transparent',
+                  color: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.65)',
                   fontFamily: 'var(--font-body)',
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-body-sm)',
@@ -570,12 +570,14 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.1)';
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
                   }
                 }}
               >
@@ -587,28 +589,28 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
         </div>
 
         {/* User Info */}
-        <div className="px-6 py-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+        <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="w-full flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E7E6', border: '1px solid #E5E5E5' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
               <span style={{
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'var(--font-size-body-base)',
                 fontWeight: 'var(--font-weight-semibold)',
-                color: '#737373'
+                color: '#FFFFFF'
               }}>A</span>
             </div>
             <div className="flex-1 text-left">
-              <div style={{ 
+              <div style={{
                 fontWeight: 'var(--font-weight-medium)',
-                color: '#0A0A0A',
+                color: '#FFFFFF',
                 fontSize: 'var(--font-size-body-sm)',
                 fontFamily: 'var(--font-body)'
               }}>
                 Admin General
               </div>
-              <div style={{ 
+              <div style={{
                 fontSize: 'var(--font-size-xs)',
-                color: '#737373',
+                color: 'rgba(255,255,255,0.5)',
                 marginTop: '2px',
                 fontFamily: 'var(--font-body)'
               }}>
