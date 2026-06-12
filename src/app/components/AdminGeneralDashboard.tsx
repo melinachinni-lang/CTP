@@ -209,12 +209,18 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     }
   ]);
 
+  const [isLoading, setIsLoading] = React.useState(false);
+  const handleRefresh = () => {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 1800);
+  };
+
   // KPIs principales
   const kpis = [
     {
-      label: 'Leads generados',
-      value: '1,247',
-      change: '+18.5%',
+      label: 'Visitas',
+      value: '45,820',
+      change: '+22.4%',
       trending: 'up' as const
     },
     {
@@ -224,16 +230,15 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       trending: 'up' as const
     },
     {
-      label: 'Brokers activos',
-      value: '62',
-      total: '80',
-      change: '-18',
-      trending: 'down' as const
+      label: 'Reservas',
+      value: '47',
+      change: '+8.2%',
+      trending: 'up' as const
     },
     {
-      label: 'Leads sin asignar',
-      value: '143',
-      change: '+8',
+      label: 'Ventas realizadas',
+      value: '23',
+      change: '+15.0%',
       trending: 'up' as const
     }
   ];
@@ -262,13 +267,13 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     { name: 'Patricia Silva', leadsAsignados: 32, contactos: 27, ultimaInteraccion: '1 hora', estado: 'activo' }
   ];
 
-  // Proyectos con mayor interés
+  // Proyectos más vendidos
   const topProyectos = [
-    { name: 'Parcelas Valle Hermoso', visitas: 2845, contactos: 124, trend: 'up' },
-    { name: 'Condominio Los Arrayanes', visitas: 2234, contactos: 98, trend: 'up' },
-    { name: 'Parcelas Río Claro', visitas: 1876, contactos: 87, trend: 'down' },
-    { name: 'Proyecto Colina Verde', visitas: 1654, contactos: 72, trend: 'up' },
-    { name: 'Parcelas La Montaña', visitas: 1432, contactos: 65, trend: 'up' }
+    { name: 'Parcelas Valle Hermoso', ventas: 12, reservas: 8, trend: 'up' },
+    { name: 'Condominio Los Arrayanes', ventas: 9, reservas: 6, trend: 'up' },
+    { name: 'Parcelas Río Claro', ventas: 7, reservas: 4, trend: 'down' },
+    { name: 'Proyecto Colina Verde', ventas: 5, reservas: 3, trend: 'up' },
+    { name: 'Parcelas La Montaña', ventas: 4, reservas: 3, trend: 'up' }
   ];
 
   // Origen del tráfico
@@ -766,91 +771,70 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {activeNav === 'inicio' && (
             <>
               {/* KPIs Section */}
-              <section className="grid grid-cols-4 gap-6 mb-8">
-                {kpis.map((kpi, index) => (
-                  <div
-                    key={index}
-                    className="rounded-2xl p-6 flex flex-col"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E5E5',
-                      boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                      minHeight: '140px'
-                    }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-xs)',
-                          fontWeight: 'var(--font-weight-medium)',
-                          color: '#6B6B6B',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.06em',
-                          lineHeight: '1.2'
-                        }}
-                      >
-                        {kpi.label}
-                      </p>
-                      <div
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-full flex-shrink-0"
-                        style={{
-                          backgroundColor: kpi.trending === 'up' ? '#DCFCE7' : '#FEE2E2'
-                        }}
-                      >
-                        {kpi.trending === 'up' ? (
-                          <ArrowUpRight className="w-3 h-3 flex-shrink-0" style={{ color: '#16A34A' }} />
-                        ) : (
-                          <ArrowDownRight className="w-3 h-3 flex-shrink-0" style={{ color: '#DC2626' }} />
-                        )}
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 'var(--font-weight-semibold)',
-                            color: kpi.trending === 'up' ? '#16A34A' : '#DC2626',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {kpi.change}
-                        </span>
+              <div className="flex items-center justify-between mb-6">
+                <div />
+                <button
+                  onClick={handleRefresh}
+                  disabled={isLoading}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all disabled:opacity-50"
+                  style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}
+                  onMouseEnter={e => { if (!isLoading) e.currentTarget.style.backgroundColor = '#F0F0F0'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                >
+                  <Activity className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                  {isLoading ? 'Actualizando...' : 'Actualizar datos'}
+                </button>
+              </div>
+              <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {isLoading ? (
+                  Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', minHeight: '140px' }}>
+                      <div className="animate-pulse space-y-4">
+                        <div className="h-3 rounded-full w-24" style={{ backgroundColor: '#F0F0F0' }} />
+                        <div className="h-10 rounded-lg w-20 mt-auto" style={{ backgroundColor: '#F0F0F0' }} />
+                        <div className="h-5 rounded-full w-16" style={{ backgroundColor: '#F0F0F0' }} />
                       </div>
                     </div>
-                    <div className="flex items-baseline gap-2">
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: '40px',
-                          fontWeight: 'var(--font-weight-light)',
-                          color: '#0A0A0A',
-                          lineHeight: '1',
-                          marginTop: 'auto'
-                        }}
-                      >
+                  ))
+                ) : (
+                  kpis.map((kpi, index) => (
+                    <div
+                      key={index}
+                      className="rounded-2xl p-6 flex flex-col"
+                      style={{
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E5E5',
+                        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        minHeight: '140px'
+                      }}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', lineHeight: '1.2' }}>
+                          {kpi.label}
+                        </p>
+                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: kpi.trending === 'up' ? '#DCFCE7' : '#FEE2E2' }}>
+                          {kpi.trending === 'up' ? (
+                            <ArrowUpRight className="w-3 h-3 flex-shrink-0" style={{ color: '#16A34A' }} />
+                          ) : (
+                            <ArrowDownRight className="w-3 h-3 flex-shrink-0" style={{ color: '#DC2626' }} />
+                          )}
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', color: kpi.trending === 'up' ? '#16A34A' : '#DC2626', whiteSpace: 'nowrap' }}>
+                            {kpi.change}
+                          </span>
+                        </div>
+                      </div>
+                      <p style={{ fontFamily: 'var(--font-heading)', fontSize: '40px', fontWeight: 'var(--font-weight-light)', color: '#0A0A0A', lineHeight: '1', marginTop: 'auto' }}>
                         {kpi.value}
                       </p>
-                      {kpi.total && (
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            color: '#737373',
-                            fontWeight: 'var(--font-weight-regular)',
-                            lineHeight: '1'
-                          }}
-                        >
-                          / {kpi.total}
-                        </span>
-                      )}
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </section>
 
-              <div className="grid grid-cols-12 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Proceso de conversión */}
                 <section
-                  className="col-span-7 rounded-2xl p-6"
+                  className="lg:col-span-7 rounded-2xl p-6"
                   style={{
                     backgroundColor: '#FFFFFF',
                     border: '1px solid #E5E5E5',
@@ -1015,49 +999,113 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </div>
                 </section>
 
-                {/* Proyectos con mayor interés */}
-                <section className="col-span-5 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-                  <h2
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'var(--font-size-h4)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      lineHeight: 'var(--line-height-heading)',
-                      marginBottom: '24px'
-                    }}
-                  >
-                    Proyectos con mayor interés
+                {/* Proyectos más vendidos */}
+                <section className="lg:col-span-5 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                  <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '24px' }}>
+                    Proyectos más vendidos
                   </h2>
-                  <div className="space-y-3">
-                    {topProyectos.map((proyecto, index) => (
-                      <div key={index} className="p-4 rounded-lg" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-                        <div className="flex items-start justify-between mb-3">
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', flex: 1 }}>{proyecto.name}</span>
-                          {proyecto.trend === 'up' ? (
-                            <TrendingUp className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
-                          ) : (
-                            <TrendingDown className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Visitas: </span>
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>{proyecto.visitas.toLocaleString()}</span>
-                          </div>
-                          <div>
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Contactos: </span>
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>{proyecto.contactos}</span>
+                  {isLoading ? (
+                    <div className="space-y-3">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <div key={i} className="p-4 rounded-lg animate-pulse" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+                          <div className="h-3 rounded w-3/4 mb-3" style={{ backgroundColor: '#F0F0F0' }} />
+                          <div className="flex gap-4">
+                            <div className="h-3 rounded w-16" style={{ backgroundColor: '#F0F0F0' }} />
+                            <div className="h-3 rounded w-16" style={{ backgroundColor: '#F0F0F0' }} />
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : topProyectos.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                      <BarChart3 className="w-10 h-10 mb-3" style={{ color: '#D1D5DB' }} />
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>Sin ventas registradas aún</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {topProyectos.map((proyecto, index) => (
+                        <div key={index} className="p-4 rounded-lg" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3' }}>#{index + 1}</span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>{proyecto.name}</span>
+                            </div>
+                            {proyecto.trend === 'up' ? (
+                              <TrendingUp className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
+                            ) : (
+                              <TrendingDown className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Ventas: </span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>{proyecto.ventas}</span>
+                            </div>
+                            <div>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Reservas: </span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>{proyecto.reservas}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </section>
               </div>
 
+              {/* Origen del tráfico + Actividad de Brokers */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+
+              {/* Origen del tráfico */}
+              <section className="lg:col-span-5 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '24px' }}>
+                  Origen del tráfico
+                </h2>
+                {isLoading ? (
+                  <div className="space-y-5 animate-pulse">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="space-y-2">
+                        <div className="flex justify-between">
+                          <div className="h-3 rounded w-20" style={{ backgroundColor: '#F0F0F0' }} />
+                          <div className="h-3 rounded w-10" style={{ backgroundColor: '#F0F0F0' }} />
+                        </div>
+                        <div className="h-2 rounded-full w-full" style={{ backgroundColor: '#F0F0F0' }} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-5">
+                    {trafficSources.map((source, index) => {
+                      const colors = ['#0A0A0A', '#647E3F', '#737373', '#C3C3C3'];
+                      return (
+                        <div key={index}>
+                          <div className="flex items-center justify-between mb-2">
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>{source.origen}</span>
+                            <div className="flex items-center gap-3">
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{source.valor.toLocaleString()}</span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: colors[index], minWidth: '36px', textAlign: 'right' }}>{source.porcentaje}%</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-2 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
+                            <div className="h-2 rounded-full transition-all" style={{ width: `${source.porcentaje}%`, backgroundColor: colors[index] }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div className="pt-4 mt-2" style={{ borderTop: '1px solid #F5F5F5' }}>
+                      <div className="flex items-center justify-between">
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Total visitas</span>
+                        <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>
+                          {trafficSources.reduce((sum, s) => sum + s.valor, 0).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </section>
+
               {/* Actividad de Brokers */}
-              <section className="rounded-2xl p-6 mt-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+              <section className="lg:col-span-7 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
                 <h2
                   style={{
                     fontFamily: 'var(--font-heading)',
@@ -1116,6 +1164,8 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </table>
                 </div>
               </section>
+
+              </div>{/* end grid tráfico + brokers */}
             </>
           )}
 
