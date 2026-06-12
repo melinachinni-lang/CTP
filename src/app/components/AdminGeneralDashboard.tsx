@@ -217,30 +217,10 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
   // KPIs principales
   const kpis = [
-    {
-      label: 'Visitas',
-      value: '45,820',
-      change: '+22.4%',
-      trending: 'up' as const
-    },
-    {
-      label: 'Contactos generados',
-      value: '856',
-      change: '+12.3%',
-      trending: 'up' as const
-    },
-    {
-      label: 'Reservas',
-      value: '47',
-      change: '+8.2%',
-      trending: 'up' as const
-    },
-    {
-      label: 'Ventas realizadas',
-      value: '23',
-      change: '+15.0%',
-      trending: 'up' as const
-    }
+    { label: 'Visitas', value: '45,820', change: '+22.4%', trending: 'up' as const, accent: '#B5CC89', icon: Eye },
+    { label: 'Contactos generados', value: '856', change: '+12.3%', trending: 'up' as const, accent: '#647E3F', icon: MessageSquare },
+    { label: 'Reservas', value: '47', change: '+8.2%', trending: 'up' as const, accent: '#3D5E28', icon: Calendar },
+    { label: 'Ventas realizadas', value: '23', change: '+15.0%', trending: 'up' as const, accent: '#0A0A0A', icon: DollarSign },
   ];
 
   // Datos del embudo digital
@@ -797,37 +777,46 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     </div>
                   ))
                 ) : (
-                  kpis.map((kpi, index) => (
-                    <div
-                      key={index}
-                      className="rounded-2xl p-6 flex flex-col"
-                      style={{
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #E5E5E5',
-                        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                        minHeight: '140px'
-                      }}
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', lineHeight: '1.2' }}>
-                          {kpi.label}
-                        </p>
-                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: kpi.trending === 'up' ? '#DCFCE7' : '#FEE2E2' }}>
-                          {kpi.trending === 'up' ? (
-                            <ArrowUpRight className="w-3 h-3 flex-shrink-0" style={{ color: '#16A34A' }} />
-                          ) : (
-                            <ArrowDownRight className="w-3 h-3 flex-shrink-0" style={{ color: '#DC2626' }} />
-                          )}
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', color: kpi.trending === 'up' ? '#16A34A' : '#DC2626', whiteSpace: 'nowrap' }}>
-                            {kpi.change}
-                          </span>
+                  kpis.map((kpi, index) => {
+                    const KpiIcon = kpi.icon;
+                    return (
+                      <div
+                        key={index}
+                        className="rounded-2xl p-6 flex flex-col"
+                        style={{
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #E5E5E5',
+                          borderTop: `3px solid ${kpi.accent}`,
+                          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                          minHeight: '148px'
+                        }}
+                      >
+                        <div className="flex items-start justify-between mb-5">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: kpi.accent + '18' }}>
+                              <KpiIcon className="w-4 h-4" style={{ color: kpi.accent }} />
+                            </div>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em', lineHeight: '1.2' }}>
+                              {kpi.label}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 px-2.5 py-1 rounded-full flex-shrink-0" style={{ backgroundColor: kpi.trending === 'up' ? '#DCFCE7' : '#FEE2E2' }}>
+                            {kpi.trending === 'up' ? (
+                              <ArrowUpRight className="w-3 h-3 flex-shrink-0" style={{ color: '#16A34A' }} />
+                            ) : (
+                              <ArrowDownRight className="w-3 h-3 flex-shrink-0" style={{ color: '#DC2626' }} />
+                            )}
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', color: kpi.trending === 'up' ? '#16A34A' : '#DC2626', whiteSpace: 'nowrap' }}>
+                              {kpi.change}
+                            </span>
+                          </div>
                         </div>
+                        <p style={{ fontFamily: 'var(--font-heading)', fontSize: '40px', fontWeight: 'var(--font-weight-light)', color: '#0A0A0A', lineHeight: '1', marginTop: 'auto' }}>
+                          {kpi.value}
+                        </p>
                       </div>
-                      <p style={{ fontFamily: 'var(--font-heading)', fontSize: '40px', fontWeight: 'var(--font-weight-light)', color: '#0A0A0A', lineHeight: '1', marginTop: 'auto' }}>
-                        {kpi.value}
-                      </p>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </section>
 
@@ -868,128 +857,86 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     </div>
                   </div>
 
-                  {/* Funnel visual vertical */}
+                  {/* Funnel rediseñado */}
                   <div className="flex flex-col gap-0">
                     {funnelData.map((etapa, index) => {
                       const isMayorCaida = index === mayorCaidaIndex;
-                      const tasaConversion = index > 0 
+                      const tasaConversion = index > 0
                         ? ((etapa.valor / funnelData[index - 1].valor) * 100).toFixed(1)
                         : '100.0';
-                      
-                      // Calcular el ancho del embudo (100% -> 50% de forma proporcional)
-                      const anchoMax = 100;
-                      const anchoMin = 50;
-                      const anchoEtapa = anchoMax - ((anchoMax - anchoMin) * (index / (funnelData.length - 1)));
-                      
+                      const barWidth = (etapa.valor / funnelData[0].valor) * 100;
+                      const stageColors = ['#B5CC89', '#8CA96A', '#647E3F', '#3D5E28', '#0A0A0A'];
+                      const color = stageColors[index];
+                      const isLastStage = color === '#0A0A0A';
+
                       return (
-                        <div key={index} className="relative">
-                          {/* Conector visual entre etapas */}
+                        <div key={index}>
+                          {/* Separador entre etapas con drop-off */}
                           {index > 0 && (
-                            <div className="flex items-center relative" style={{ height: '32px', paddingLeft: '0' }}>
-                              {/* Línea de caída/pérdida */}
-                              <div className="flex items-center">
-                                <div 
-                                  className="rounded-full px-3 py-1"
-                                  style={{
-                                    backgroundColor: isMayorCaida ? '#FEF3C7' : '#F5F5F5',
-                                    border: `1px solid ${isMayorCaida ? '#FDE68A' : '#E5E5E5'}`
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: '11px',
-                                      fontWeight: 'var(--font-weight-semibold)',
-                                      color: isMayorCaida ? '#CA8A04' : '#737373',
-                                      letterSpacing: '0.02em'
-                                    }}
-                                  >
-                                    -{etapa.caida.toFixed(1)}%
-                                  </span>
-                                </div>
+                            <div className="flex items-center gap-2 py-2 pl-2">
+                              <div className="w-px self-stretch" style={{ backgroundColor: '#E5E5E5', minHeight: '20px', marginLeft: '15px' }} />
+                              <div
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full ml-1"
+                                style={{
+                                  backgroundColor: isMayorCaida ? '#FEF3C7' : '#F5F5F5',
+                                  border: `1px solid ${isMayorCaida ? '#FDE68A' : '#E5E5E5'}`
+                                }}
+                              >
+                                {isMayorCaida && <AlertTriangle className="w-3 h-3" style={{ color: '#CA8A04' }} />}
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', color: isMayorCaida ? '#CA8A04' : '#9CA3AF' }}>
+                                  ↓ {etapa.caida.toFixed(1)}% de caída{isMayorCaida ? ' — mayor drop-off' : ''}
+                                </span>
                               </div>
                             </div>
                           )}
-                          
-                          {/* Etapa del embudo */}
-                          <div 
-                            style={{ width: `${anchoEtapa}%` }}
+
+                          {/* Etapa */}
+                          <div
+                            className="rounded-xl p-4"
+                            style={{
+                              backgroundColor: `${color}12`,
+                              border: `1px solid ${color}30`,
+                            }}
                           >
-                            <div
-                              className="rounded-xl px-5 py-4"
-                              style={{
-                                backgroundColor: isMayorCaida ? '#FFFBEB' : '#FAFAFA',
-                                border: `1px solid ${isMayorCaida ? '#FDE68A' : '#E5E5E5'}`,
-                                boxShadow: isMayorCaida ? '0 1px 3px 0 rgba(202, 138, 4, 0.1)' : 'none'
-                              }}
-                            >
-                              <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-2">
-                                  <h3
-                                    style={{
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 'var(--font-size-body-sm)',
-                                      fontWeight: 'var(--font-weight-semibold)',
-                                      color: '#0A0A0A',
-                                      lineHeight: '1.2'
-                                    }}
-                                  >
-                                    {etapa.etapa}
-                                  </h3>
-                                  {isMayorCaida && (
-                                    <AlertTriangle 
-                                      className="w-3.5 h-3.5 flex-shrink-0" 
-                                      style={{ color: '#CA8A04' }} 
-                                    />
-                                  )}
-                                </div>
-                                {index > 0 && (
-                                  <div
-                                    className="rounded-md px-2 py-1"
-                                    style={{
-                                      backgroundColor: '#FFFFFF',
-                                      border: '1px solid #E5E5E5'
-                                    }}
-                                  >
-                                    <span
-                                      style={{
-                                        fontFamily: 'var(--font-body)',
-                                        fontSize: '11px',
-                                        fontWeight: 'var(--font-weight-semibold)',
-                                        color: '#16A34A',
-                                        whiteSpace: 'nowrap'
-                                      }}
-                                    >
-                                      {tasaConversion}% conversión
-                                    </span>
-                                  </div>
-                                )}
+                            <div className="flex items-center gap-3">
+                              {/* Número de etapa */}
+                              <div
+                                className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                                style={{ backgroundColor: color }}
+                              >
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, color: isLastStage ? '#FFFFFF' : '#FFFFFF' }}>
+                                  {index + 1}
+                                </span>
                               </div>
-                              
-                              <div className="flex items-baseline gap-2">
-                                <p
-                                  style={{
-                                    fontFamily: 'var(--font-heading)',
-                                    fontSize: '32px',
-                                    fontWeight: 'var(--font-weight-light)',
-                                    color: '#0A0A0A',
-                                    lineHeight: '1'
-                                  }}
-                                >
-                                  {etapa.valor.toLocaleString()}
-                                </p>
-                                {index > 0 && (
-                                  <span
-                                    style={{
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 'var(--font-size-xs)',
-                                      color: '#A3A3A3',
-                                      lineHeight: '1'
-                                    }}
-                                  >
-                                    ({etapa.porcentaje}% del total)
+
+                              {/* Contenido */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between mb-2">
+                                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>
+                                    {etapa.etapa}
                                   </span>
-                                )}
+                                  <div className="flex items-center gap-3 flex-shrink-0 ml-4">
+                                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 'var(--font-weight-light)', color: '#0A0A0A', lineHeight: '1' }}>
+                                      {etapa.valor.toLocaleString()}
+                                    </span>
+                                    {index > 0 ? (
+                                      <div className="rounded-full px-2.5 py-1" style={{ backgroundColor: '#DCFCE7' }}>
+                                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, color: '#16A34A' }}>
+                                          {tasaConversion}%
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#A3A3A3' }}>base</span>
+                                    )}
+                                  </div>
+                                </div>
+                                {/* Barra de progreso proporcional */}
+                                <div className="h-1.5 rounded-full" style={{ backgroundColor: `${color}25` }}>
+                                  <div
+                                    className="h-1.5 rounded-full"
+                                    style={{ width: `${barWidth}%`, backgroundColor: color, transition: 'width 0.6s ease' }}
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
