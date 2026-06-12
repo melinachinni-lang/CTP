@@ -828,13 +828,13 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     boxShadow: '0 4px 16px 0 rgba(0,0,0,0.12)'
                   }}
                 >
-                  {/* Header oscuro */}
-                  <div className="px-6 py-5 flex items-start justify-between" style={{ backgroundColor: '#0A0A0A' }}>
+                  {/* Header verde CTP */}
+                  <div className="px-6 py-5 flex items-start justify-between" style={{ backgroundColor: '#3D5E28' }}>
                     <div>
                       <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
                         Proceso de conversión
                       </h2>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A8C47A', lineHeight: 'var(--line-height-body)' }}>
                         Datos correspondientes al período seleccionado
                       </p>
                     </div>
