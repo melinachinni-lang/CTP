@@ -213,9 +213,9 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               {/* Toolbar */}
               <div className="flex items-center gap-1 px-4 py-2 flex-wrap" style={{ backgroundColor: '#F8F8F8', borderTop: '1px solid #F0F0F0', borderBottom: '1px solid #F0F0F0' }}>
                 {[
-                  { label: 'P', title: 'Párrafo', action: () => execCmd('formatBlock', 'p') },
-                  { label: 'H2', title: 'Título H2', action: () => execCmd('formatBlock', 'h2') },
-                  { label: 'H3', title: 'Subtítulo H3', action: () => execCmd('formatBlock', 'h3') },
+                  { label: 'P', title: 'Párrafo', action: () => execCmd('formatBlock', '<p>') },
+                  { label: 'H2', title: 'Título H2', action: () => execCmd('formatBlock', '<h2>') },
+                  { label: 'H3', title: 'Subtítulo H3', action: () => execCmd('formatBlock', '<h3>') },
                 ].map(btn => (
                   <button key={btn.label} title={btn.title} onMouseDown={e => { e.preventDefault(); btn.action(); }} className="px-2 py-1 rounded text-xs font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#737373', minWidth: '32px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; e.currentTarget.style.color = '#0A0A0A'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#737373'; }}>
                     {btn.label}
