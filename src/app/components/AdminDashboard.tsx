@@ -67,6 +67,30 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const [selectedLead, setSelectedLead] = useState<LeadData | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  // Estado módulo Leads
+  const [leadsLoading, setLeadsLoading] = useState(false);
+  const [leadsSearch, setLeadsSearch] = useState('');
+  const [leadsFiltroEstado, setLeadsFiltroEstado] = useState('todos');
+  const [leadsFiltroOrigen, setLeadsFiltroOrigen] = useState('todos');
+  const [leadParaAsignar, setLeadParaAsignar] = useState<LeadData | null>(null);
+  const [brokerSeleccionadoId, setBrokerSeleccionadoId] = useState<number | null>(null);
+  const [asignarSuccessId, setAsignarSuccessId] = useState<number | null>(null);
+
+  const brokersDisponibles = [
+    { id: 1, nombre: 'María González', rol: 'Broker Senior', leads: 45, disponible: true },
+    { id: 2, nombre: 'Carlos Pérez', rol: 'Broker', leads: 42, disponible: true },
+    { id: 3, nombre: 'Ana Silva', rol: 'Broker', leads: 38, disponible: true },
+    { id: 4, nombre: 'Luis Rodríguez', rol: 'Broker', leads: 35, disponible: false },
+  ];
+
+  const confirmarAsignacion = () => {
+    if (!leadParaAsignar || !brokerSeleccionadoId) return;
+    const broker = brokersDisponibles.find(b => b.id === brokerSeleccionadoId);
+    if (!broker) return;
+    setAsignarSuccessId(leadParaAsignar.id);
+    setTimeout(() => { setLeadParaAsignar(null); setBrokerSeleccionadoId(null); setAsignarSuccessId(null); }, 1400);
+  };
+
   // Estados para Publicaciones
   const [heroHome, setHeroHome] = useState<HeroHome>({
     id: 1,
@@ -1779,38 +1803,41 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
                   }}
                 >
-                  <div className="flex items-center justify-between mb-6">
-                    <h2
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 'var(--font-size-h4)',
-                        fontWeight: 'var(--font-weight-medium)',
-                        color: '#0A0A0A',
-                        lineHeight: 'var(--line-height-heading)'
-                      }}
-                    >
-                      Gestión de leads
-                    </h2>
-                    <button
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-full transition-all"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-body-sm)',
-                        fontWeight: 'var(--font-weight-medium)',
-                        color: '#0A0A0A',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #DEDEDE'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#FAFAFA';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#FFFFFF';
-                      }}
-                    >
-                      <Download className="w-4 h-4" />
-                      Exportar
-                    </button>
+                  {/* Header + filtros */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>Gestión de leads</h2>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>{leadsData.length} leads registrados</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => { setLeadsLoading(true); setTimeout(() => setLeadsLoading(false), 1600); }} className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#3D5E28', backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
+                        <Activity className={`w-3.5 h-3.5 ${leadsLoading ? 'animate-spin' : ''}`} /> Actualizar
+                      </button>
+                      <button className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                        <Download className="w-3.5 h-3.5" /> Exportar
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-3 mb-6">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
+                      <input type="text" placeholder="Buscar por nombre o email..." value={leadsSearch} onChange={e => setLeadsSearch(e.target.value)} className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }} onFocus={e => { e.target.style.borderColor = '#3D5E28'; e.target.style.backgroundColor = '#FFFFFF'; }} onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }} />
+                    </div>
+                    <select value={leadsFiltroEstado} onChange={e => setLeadsFiltroEstado(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '150px' }}>
+                      <option value="todos">Todos los estados</option>
+                      <option value="nuevo">Nuevo</option>
+                      <option value="asignado">Asignado</option>
+                      <option value="contactado">Contactado</option>
+                      <option value="cerrado">Cerrado</option>
+                      <option value="no-interesado">No interesado</option>
+                    </select>
+                    <select value={leadsFiltroOrigen} onChange={e => setLeadsFiltroOrigen(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '130px' }}>
+                      <option value="todos">Todos los orígenes</option>
+                      <option value="Web">Web</option>
+                      <option value="Meta">Meta</option>
+                      <option value="Google">Google</option>
+                      <option value="WhatsApp">WhatsApp</option>
+                    </select>
                   </div>
 
               <div className="overflow-x-auto">
@@ -1911,7 +1938,33 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     </tr>
                   </thead>
                   <tbody>
-                    {leadsData.map((lead) => {
+                    {leadsLoading ? (
+                      [1,2,3,4,5].map(i => (
+                        <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                          {[180,160,90,80,100,80,120].map((w,j) => (
+                            <td key={j} className="px-6 py-4">
+                              <div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px`, maxWidth: '100%' }} />
+                            </td>
+                          ))}
+                        </tr>
+                      ))
+                    ) : (() => {
+                      const filtrados = leadsData.filter(lead => {
+                        const matchSearch = lead.nombre.toLowerCase().includes(leadsSearch.toLowerCase()) || lead.email.toLowerCase().includes(leadsSearch.toLowerCase());
+                        const matchEstado = leadsFiltroEstado === 'todos' || lead.estado === leadsFiltroEstado;
+                        const matchOrigen = leadsFiltroOrigen === 'todos' || lead.origen === leadsFiltroOrigen;
+                        return matchSearch && matchEstado && matchOrigen;
+                      });
+                      if (filtrados.length === 0) return (
+                        <tr><td colSpan={7}>
+                          <div className="flex flex-col items-center justify-center py-16 text-center">
+                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}><Users className="w-7 h-7" style={{ color: '#3D5E28' }} /></div>
+                            <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '6px' }}>{leadsSearch || leadsFiltroEstado !== 'todos' || leadsFiltroOrigen !== 'todos' ? 'Sin resultados' : 'Aún no hay leads'}</p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{leadsSearch || leadsFiltroEstado !== 'todos' || leadsFiltroOrigen !== 'todos' ? 'Probá con otros filtros.' : 'Los leads aparecerán aquí una vez que lleguen.'}</p>
+                          </div>
+                        </td></tr>
+                      );
+                      return filtrados.map((lead) => {
                       const statusStyle = getStatusColor(lead.estado);
                       return (
                         <tr
@@ -2019,35 +2072,19 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                               {lead.fecha}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-center">
-                            <button
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full transition-all"
-                              style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 'var(--font-size-xs)',
-                                fontWeight: 'var(--font-weight-medium)',
-                                color: '#0A0A0A',
-                                backgroundColor: '#FAFAFA',
-                                border: '1px solid #E5E5E5'
-                              }}
-                              onClick={() => {
-                                setSelectedLead(lead);
-                                setIsDrawerOpen(true);
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#E8E7E6';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#FAFAFA';
-                              }}
-                            >
-                              <Eye className="w-3.5 h-3.5" />
-                              Ver detalle
-                            </button>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); }} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full transition-all text-xs font-medium" style={{ fontFamily: 'var(--font-body)', color: '#3D5E28', backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
+                                <UserPlus className="w-3.5 h-3.5" />{lead.broker === '-' ? 'Asignar' : 'Reasignar'}
+                              </button>
+                              <button onClick={() => { setSelectedLead(lead); setIsDrawerOpen(true); }} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full transition-all text-xs font-medium" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                                <Eye className="w-3.5 h-3.5" />Ver detalle
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
-                    })}
+                    })})()}
                   </tbody>
                 </table>
               </div>
@@ -2061,6 +2098,45 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     setSelectedLead(null);
                   }}
                 />
+              )}
+
+              {/* Modal asignar broker */}
+              {leadParaAsignar && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+                    <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
+                      <div>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A' }}>Asignar broker</h2>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>Lead: <strong>{leadParaAsignar.nombre}</strong></p>
+                      </div>
+                      <button onClick={() => setLeadParaAsignar(null)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><X className="w-4 h-4" /></button>
+                    </div>
+                    <div className="px-6 py-5 space-y-2">
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', marginBottom: '12px' }}>Seleccioná un broker disponible</p>
+                      {brokersDisponibles.map(broker => (
+                        <button key={broker.id} onClick={() => { if (broker.disponible) setBrokerSeleccionadoId(broker.id); }} className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left" style={{ border: `1px solid ${brokerSeleccionadoId === broker.id ? '#3D5E28' : '#E5E5E5'}`, backgroundColor: brokerSeleccionadoId === broker.id ? '#F0F5EB' : '#FAFAFA', opacity: broker.disponible ? 1 : 0.5, cursor: broker.disponible ? 'pointer' : 'not-allowed' }}>
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0" style={{ backgroundColor: brokerSeleccionadoId === broker.id ? '#3D5E28' : '#E5E5E5', color: brokerSeleccionadoId === broker.id ? '#FFFFFF' : '#737373', fontFamily: 'var(--font-body)' }}>{broker.nombre.charAt(0)}</div>
+                            <div>
+                              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>{broker.nombre}</p>
+                              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{broker.rol} · {broker.leads} leads asignados</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: broker.disponible ? '#DCFCE7' : '#F5F5F5', color: broker.disponible ? '#166534' : '#737373', fontFamily: 'var(--font-body)' }}>{broker.disponible ? 'Disponible' : 'Inactivo'}</span>
+                            {brokerSeleccionadoId === broker.id && <Check className="w-4 h-4" style={{ color: '#3D5E28' }} />}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between px-6 py-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+                      <button onClick={() => setLeadParaAsignar(null)} className="px-4 py-2.5 rounded-xl text-sm" style={{ fontFamily: 'var(--font-body)', color: '#737373', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
+                      <button onClick={confirmarAsignacion} disabled={!brokerSeleccionadoId} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all" style={{ fontFamily: 'var(--font-body)', backgroundColor: asignarSuccessId === leadParaAsignar.id ? '#166534' : brokerSeleccionadoId ? '#3D5E28' : '#C5D9A8', color: '#FFFFFF', cursor: brokerSeleccionadoId ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (brokerSeleccionadoId && asignarSuccessId !== leadParaAsignar.id) e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { if (asignarSuccessId !== leadParaAsignar.id) e.currentTarget.style.backgroundColor = brokerSeleccionadoId ? '#3D5E28' : '#C5D9A8'; }}>
+                        {asignarSuccessId === leadParaAsignar.id ? <><Check className="w-4 h-4" /> Asignado</> : <><UserPlus className="w-4 h-4" /> Confirmar asignación</>}
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </>
           )}

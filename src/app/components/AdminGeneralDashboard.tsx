@@ -212,6 +212,24 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
   const [isLoading, setIsLoading] = React.useState(false);
 
+  // Estado módulo Brokers
+  const [brokersLoading, setBrokersLoading] = useState(false);
+  const [confirmDesactivarId, setConfirmDesactivarId] = useState<number | null>(null);
+
+  // Estado módulo Asignaciones
+  const [asignacionesLoading, setAsignacionesLoading] = useState(false);
+  const [leadParaAsignar, setLeadParaAsignar] = useState<Lead | null>(null);
+  const [brokerSeleccionadoId, setBrokerSeleccionadoId] = useState<number | null>(null);
+  const [asignarSuccess, setAsignarSuccess] = useState(false);
+
+  const confirmarAsignacionLead = () => {
+    if (!leadParaAsignar || !brokerSeleccionadoId) return;
+    const broker = brokers.find(b => b.id === brokerSeleccionadoId);
+    if (!broker) return;
+    assignLeadToBroker(leadParaAsignar.id, broker.name);
+    setAsignarSuccess(true);
+    setTimeout(() => { setLeadParaAsignar(null); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }, 1200);
+  };
 
   const handleRefresh = () => {
     setIsLoading(true);
@@ -410,11 +428,18 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
   // Funciones de acciones
   const toggleBrokerEstado = (brokerId: number) => {
-    setBrokers(brokers.map(broker => 
-      broker.id === brokerId 
-        ? { ...broker, estado: broker.estado === 'activo' ? 'inactivo' : 'activo' }
-        : broker
-    ));
+    const broker = brokers.find(b => b.id === brokerId);
+    if (broker?.estado === 'activo') {
+      setConfirmDesactivarId(brokerId);
+    } else {
+      setBrokers(brokers.map(b => b.id === brokerId ? { ...b, estado: 'activo' as const } : b));
+    }
+  };
+
+  const confirmarDesactivacion = () => {
+    if (!confirmDesactivarId) return;
+    setBrokers(brokers.map(b => b.id === confirmDesactivarId ? { ...b, estado: 'inactivo' as const } : b));
+    setConfirmDesactivarId(null);
   };
 
   const toggleUsuarioEstado = (usuarioId: number) => {
@@ -1166,15 +1191,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </select>
                 </div>
 
-                {/* Contador */}
-                <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-sm)',
-                    color: '#737373'
-                  }}
-                >
-                  {filteredBrokers.length} broker{filteredBrokers.length !== 1 ? 's' : ''}
+                <div className="flex items-center gap-3">
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{filteredBrokers.length} broker{filteredBrokers.length !== 1 ? 's' : ''}</span>
+                  <button onClick={() => { setBrokersLoading(true); setTimeout(() => setBrokersLoading(false), 1500); }} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-all" style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: '500' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
+                    <Activity className={`w-3.5 h-3.5 ${brokersLoading ? 'animate-spin' : ''}`} /> Actualizar
+                  </button>
                 </div>
               </div>
 
@@ -1193,7 +1214,25 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredBrokers.map((broker, index) => (
+                    {brokersLoading ? (
+                      [1,2,3,4].map(i => (
+                        <tr key={i} style={{ borderBottom: '1px solid #F5F5F5' }}>
+                          {[200,90,70,70,90,70,100].map((w,j) => (
+                            <td key={j} className="px-6 py-4 text-center">
+                              <div className="h-3 rounded-full animate-pulse mx-auto" style={{ backgroundColor: '#F0F0F0', width: `${w}px`, maxWidth: '100%' }} />
+                            </td>
+                          ))}
+                        </tr>
+                      ))
+                    ) : filteredBrokers.length === 0 ? (
+                      <tr><td colSpan={7}>
+                        <div className="flex flex-col items-center justify-center py-16 text-center">
+                          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}><Users className="w-7 h-7" style={{ color: '#3D5E28' }} /></div>
+                          <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '6px' }}>{brokerSearchQuery || brokerFilter !== 'todos' ? 'Sin resultados' : 'No hay brokers registrados'}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{brokerSearchQuery || brokerFilter !== 'todos' ? 'Probá con otros filtros.' : 'Los brokers aparecerán aquí una vez que se registren.'}</p>
+                        </div>
+                      </td></tr>
+                    ) : filteredBrokers.map((broker, index) => (
                       <tr key={broker.id} style={{ borderBottom: index < filteredBrokers.length - 1 ? '1px solid #F5F5F5' : 'none' }}>
                         <td className="px-6 py-4">
                           <div>
@@ -1264,6 +1303,29 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </tbody>
                 </table>
               </div>
+
+              {/* Modal confirmar desactivación */}
+              {confirmDesactivarId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="w-full max-w-sm rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+                    <div className="p-6">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#FEF3C7' }}>
+                        <AlertTriangle className="w-6 h-6" style={{ color: '#CA8A04' }} />
+                      </div>
+                      <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
+                        ¿Desactivar este broker?
+                      </h3>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)', marginBottom: '24px' }}>
+                        El broker quedará como inactivo y no podrá recibir nuevos leads hasta que sea reactivado. Los leads ya asignados no se verán afectados.
+                      </p>
+                      <div className="flex gap-3">
+                        <button onClick={() => setConfirmDesactivarId(null)} className="flex-1 py-2.5 rounded-xl text-sm transition-colors" style={{ fontFamily: 'var(--font-body)', fontWeight: '500', color: '#0A0A0A', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
+                        <button onClick={confirmarDesactivacion} className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#FFFFFF', backgroundColor: '#CA8A04' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#A16207'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#CA8A04'; }}>Sí, desactivar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
@@ -1328,7 +1390,25 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredLeads.map((lead, index) => (
+                    {asignacionesLoading ? (
+                      [1,2,3,4].map(i => (
+                        <tr key={i} style={{ borderBottom: '1px solid #F5F5F5' }}>
+                          {[180,140,90,80,130,110].map((w,j) => (
+                            <td key={j} className="px-6 py-4 text-center">
+                              <div className="h-3 rounded-full animate-pulse mx-auto" style={{ backgroundColor: '#F0F0F0', width: `${w}px`, maxWidth: '100%' }} />
+                            </td>
+                          ))}
+                        </tr>
+                      ))
+                    ) : filteredLeads.length === 0 ? (
+                      <tr><td colSpan={6}>
+                        <div className="flex flex-col items-center justify-center py-16 text-center">
+                          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}><UserPlus className="w-7 h-7" style={{ color: '#3D5E28' }} /></div>
+                          <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '6px' }}>{leadSearchQuery || assignmentFilter !== 'todos' ? 'Sin resultados' : 'No hay leads pendientes'}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{leadSearchQuery || assignmentFilter !== 'todos' ? 'Probá con otros filtros.' : 'Los leads sin asignación aparecerán aquí.'}</p>
+                        </div>
+                      </td></tr>
+                    ) : filteredLeads.map((lead, index) => (
                       <tr key={lead.id} style={{ borderBottom: index < filteredLeads.length - 1 ? '1px solid #F5F5F5' : 'none' }}>
                         <td className="px-6 py-4">
                           <div>
@@ -1365,49 +1445,13 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                           )}
                         </td>
                         <td className="text-center px-6 py-4">
-                          {lead.estado === 'sin-asignar' && (
-                            <button
-                              onClick={() => assignLeadToBroker(lead.id, 'María González')}
-                              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors"
-                              style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 'var(--font-size-xs)',
-                                fontWeight: 'var(--font-weight-medium)',
-                                color: '#FFFFFF',
-                                backgroundColor: '#006B4E',
-                                border: 'none'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#01533E';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#006B4E';
-                              }}
-                            >
-                              <UserPlus className="w-4 h-4" />
-                              Asignar
+                          {lead.estado === 'sin-asignar' ? (
+                            <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', backgroundColor: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
+                              <UserPlus className="w-4 h-4" /> Asignar
                             </button>
-                          )}
-                          {lead.estado !== 'sin-asignar' && (
-                            <button
-                              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors"
-                              style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 'var(--font-size-xs)',
-                                fontWeight: 'var(--font-weight-medium)',
-                                color: '#0A0A0A',
-                                backgroundColor: '#FAFAFA',
-                                border: '1px solid #E5E5E5'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#E8E7E6';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#FAFAFA';
-                              }}
-                            >
-                              <Edit2 className="w-4 h-4" />
-                              Reasignar
+                          ) : (
+                            <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                              <Edit2 className="w-4 h-4" /> Reasignar
                             </button>
                           )}
                         </td>
@@ -1416,6 +1460,45 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </tbody>
                 </table>
               </div>
+
+              {/* Modal seleccionar broker */}
+              {leadParaAsignar && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+                    <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
+                      <div>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A' }}>{leadParaAsignar.estado === 'sin-asignar' ? 'Asignar broker' : 'Reasignar broker'}</h2>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>Lead: <strong>{leadParaAsignar.nombre}</strong> · {leadParaAsignar.proyecto}</p>
+                      </div>
+                      <button onClick={() => setLeadParaAsignar(null)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><X className="w-4 h-4" /></button>
+                    </div>
+                    <div className="px-6 py-5 space-y-2">
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', marginBottom: '10px' }}>Seleccioná un broker activo</p>
+                      {brokers.filter(b => b.estado === 'activo').map(broker => (
+                        <button key={broker.id} onClick={() => setBrokerSeleccionadoId(broker.id)} className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left" style={{ border: `1px solid ${brokerSeleccionadoId === broker.id ? '#3D5E28' : '#E5E5E5'}`, backgroundColor: brokerSeleccionadoId === broker.id ? '#F0F5EB' : '#FAFAFA' }}>
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0" style={{ backgroundColor: brokerSeleccionadoId === broker.id ? '#3D5E28' : '#E5E5E5', color: brokerSeleccionadoId === broker.id ? '#FFFFFF' : '#737373', fontFamily: 'var(--font-body)' }}>{broker.name.charAt(0)}</div>
+                            <div>
+                              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>{broker.name}</p>
+                              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{broker.rol} · {broker.leadsAsignados} leads · última act. {broker.ultimaInteraccion}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)' }}>Activo</span>
+                            {brokerSeleccionadoId === broker.id && <Check className="w-4 h-4" style={{ color: '#3D5E28' }} />}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between px-6 py-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+                      <button onClick={() => setLeadParaAsignar(null)} className="px-4 py-2.5 rounded-xl text-sm" style={{ fontFamily: 'var(--font-body)', color: '#737373', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
+                      <button onClick={confirmarAsignacionLead} disabled={!brokerSeleccionadoId} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all" style={{ fontFamily: 'var(--font-body)', backgroundColor: asignarSuccess ? '#166534' : brokerSeleccionadoId ? '#3D5E28' : '#C5D9A8', color: '#FFFFFF', cursor: brokerSeleccionadoId ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (brokerSeleccionadoId && !asignarSuccess) e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { if (!asignarSuccess) e.currentTarget.style.backgroundColor = brokerSeleccionadoId ? '#3D5E28' : '#C5D9A8'; }}>
+                        {asignarSuccess ? <><Check className="w-4 h-4" /> Asignado</> : <><UserPlus className="w-4 h-4" /> Confirmar asignación</>}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
 

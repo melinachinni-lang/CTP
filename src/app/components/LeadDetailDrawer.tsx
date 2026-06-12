@@ -179,6 +179,22 @@ export function LeadDetailDrawer({ lead, isOpen, onClose }: LeadDetailDrawerProp
             </p>
           </div>
         </div>
+
+        {/* Acciones comerciales rápidas */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <a href={`tel:${lead.telefono}`} className="inline-flex items-center gap-2 px-3 py-2 rounded-xl transition-all text-sm font-medium" style={{ fontFamily: 'var(--font-body)', color: '#3D5E28', backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', textDecoration: 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
+            <Phone className="w-3.5 h-3.5" /> Llamar
+          </a>
+          <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-2 px-3 py-2 rounded-xl transition-all text-sm font-medium" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', textDecoration: 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+            <Mail className="w-3.5 h-3.5" /> Email
+          </a>
+          <button className="inline-flex items-center gap-2 px-3 py-2 rounded-xl transition-all text-sm font-medium" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+            <User className="w-3.5 h-3.5" /> {lead.broker === '-' ? 'Asignar broker' : 'Reasignar broker'}
+          </button>
+          <span className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm" style={{ fontFamily: 'var(--font-body)', backgroundColor: statusStyle.bg, color: statusStyle.text, fontWeight: '500' }}>
+            {statusStyle.label}
+          </span>
+        </div>
       </div>
 
       {/* Grid de 2 columnas: Info básica + Resumen */}
