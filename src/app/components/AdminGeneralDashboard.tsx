@@ -831,7 +831,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   }}
                 >
                   {/* Header verde CTP */}
-                  <div className="px-6 py-5 flex items-start justify-between" style={{ backgroundColor: '#3D5E28' }}>
+                  <div className="px-6 py-5 flex items-start justify-between" style={{ backgroundColor: '#002F23' }}>
                     <div>
                       <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
                         Proceso de conversión
