@@ -4,7 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2 } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -2594,396 +2594,118 @@ function MyPurchasesContent() {
 
 // Plan y límites Section Component
 function PlanContent() {
-  const maxPublications = 1;
-  const currentPublications = 1;
+  const plans = [
+    {
+      id: 'bronce',
+      name: 'Bronce',
+      description: 'Ideal para iniciar con más capacidad',
+      features: [
+        { name: 'Hasta 10 parcelas publicadas', included: true },
+        { name: '2 publicaciones destacadas', included: true },
+        { name: 'Visibilidad estándar', included: true },
+        { name: 'Estadísticas básicas', included: true },
+        { name: 'Soporte por email', included: true },
+        { name: 'Panel de equipo y brokers', included: false },
+        { name: 'Asesor comercial dedicado', included: false },
+      ]
+    },
+    {
+      id: 'plata',
+      name: 'Plata',
+      description: 'Para vendedores con mayor volumen',
+      features: [
+        { name: 'Hasta 30 parcelas publicadas', included: true },
+        { name: '5 publicaciones destacadas', included: true },
+        { name: 'Visibilidad alta', included: true },
+        { name: 'Estadísticas avanzadas', included: true },
+        { name: 'Soporte prioritario', included: true },
+        { name: 'Panel de equipo y brokers', included: true },
+        { name: 'Asesor comercial dedicado', included: false },
+      ]
+    },
+    {
+      id: 'oro',
+      name: 'Oro',
+      description: 'Máxima exposición y herramientas',
+      features: [
+        { name: 'Publicaciones ilimitadas', included: true },
+        { name: '15 publicaciones destacadas', included: true },
+        { name: 'Visibilidad premium', included: true },
+        { name: 'Estadísticas completas + exportación', included: true },
+        { name: 'Soporte 24/7', included: true },
+        { name: 'Panel completo de equipo y brokers', included: true },
+        { name: 'Asesor comercial dedicado', included: true },
+      ]
+    }
+  ];
+
+  const currentFeatures = [
+    { name: '1 parcela publicada activa', included: true },
+    { name: 'Publicaciones destacadas (pago único)', included: true },
+    { name: 'Visibilidad estándar', included: true },
+    { name: 'Estadísticas básicas', included: true },
+    { name: 'Soporte por email', included: true },
+    { name: 'Panel de equipo y brokers', included: false },
+    { name: 'Asesor comercial dedicado', included: false },
+  ];
 
   return (
     <main className="px-8 py-8 space-y-8">
-      {/* Header */}
       <div>
-        <h1 style={{ 
-          fontFamily: 'var(--font-heading)',
-          fontWeight: 'var(--font-weight-regular)',
-          fontSize: 'var(--font-size-h2)',
-          lineHeight: 'var(--line-height-heading)',
-          color: '#0A0A0A'
-        }}>
-          Plan y límites
-        </h1>
-        <p style={{ 
-          fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-base)',
-          color: '#737373',
-          marginTop: '8px'
-        }}>
-          Conoce las características de tu perfil y qué puedes hacer
-        </p>
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)' }}>Plan y facturación</h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '8px' }}>Gestiona tu plan y compara opciones</p>
       </div>
 
-      {/* Estado del perfil */}
-      <section className="rounded-2xl p-8" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+      <section className="rounded-2xl p-8" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF' }}>
         <div className="flex items-start justify-between mb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-                <svg className="w-5 h-5" fill="none" stroke="#0A0A0A" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <span style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-xs)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#6B6B6B',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em'
-              }}>
-                Tu perfil
-              </span>
+              <Award className="w-6 h-6" style={{ color: '#FFFFFF' }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Tu plan actual</span>
             </div>
-            <h2 style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'var(--font-size-h2)',
-              fontWeight: 'var(--font-weight-semibold)',
-              lineHeight: 'var(--line-height-heading)',
-              color: '#0A0A0A'
-            }}>
-              Vendedor particular
-            </h2>
-            <p style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-body-base)',
-              color: '#737373',
-              marginTop: '8px'
-            }}>
-              Perfil gratuito para vender parcelas de forma directa
-            </p>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>Vendedor Particular</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>Perfil: Personal · Gratuito</p>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-            <svg className="w-4 h-4" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            <span style={{ 
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-semibold)',
-              color: '#647E3F',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em'
-            }}>
-              Activo
-            </span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: '#16A34A' }}>
+            <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+            <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
           </div>
         </div>
-
-        <div className="rounded-xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <div className="flex items-center justify-between mb-3">
-            <span style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#0A0A0A'
-            }}>
-              Publicaciones activas
-            </span>
-            <span style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'var(--font-size-h3)',
-              fontWeight: 'var(--font-weight-semibold)',
-              color: '#0A0A0A'
-            }}>
-              {currentPublications} / {maxPublications}
-            </span>
-          </div>
-          <div className="w-full h-2 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
-            <div 
-              className="h-2 rounded-full transition-all" 
-              style={{ 
-                backgroundColor: '#0A0A0A',
-                width: `${(currentPublications / maxPublications) * 100}%`
-              }}
-            />
-          </div>
-          <p style={{ 
-            fontSize: 'var(--font-size-xs)',
-            color: '#737373',
-            marginTop: '8px'
-          }}>
-            Tienes {maxPublications - currentPublications} {maxPublications - currentPublications === 1 ? 'publicación disponible' : 'publicaciones disponibles'}
-          </p>
-        </div>
-
-        <div className="rounded-xl p-4 mt-4 flex items-start gap-3" style={{ backgroundColor: 'rgba(100, 126, 63, 0.05)', border: '1px solid rgba(100, 126, 63, 0.2)' }}>
-          <Info className="w-5 h-5 flex-shrink-0" style={{ color: '#647E3F', marginTop: '2px' }} />
-          <div>
-            <p style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#0A0A0A',
-              lineHeight: '1.5'
-            }}>
-              Este perfil no requiere plan mensual
-            </p>
-            <p style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              color: '#6B6B6B',
-              marginTop: '4px',
-              lineHeight: '1.5'
-            }}>
-              Puedes publicar hasta 1 propiedad de forma gratuita. Si necesitas más publicaciones o funcionalidades avanzadas, explora los planes profesionales.
-            </p>
-          </div>
-        </div>
+        <button className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver planes profesionales</button>
       </section>
-
-      {/* Límites y capacidades del perfil */}
       <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <h3 style={{ 
-          fontFamily: 'var(--font-heading)',
-          fontWeight: 'var(--font-weight-medium)',
-          fontSize: 'var(--font-size-h3)',
-          lineHeight: 'var(--line-height-heading)',
-          color: '#0A0A0A',
-          marginBottom: '24px'
-        }}>
-          Qué incluye tu perfil
-        </h3>
-
-        <div className="space-y-6">
-          {/* Publicaciones */}
-          <div className="flex items-start gap-4 pb-6" style={{ borderBottom: '1px solid #F5F5F5' }}>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5' }}>
-              <FileText className="w-5 h-5" style={{ color: '#0A0A0A' }} />
-            </div>
-            <div className="flex-1">
-              <h4 style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A',
-                marginBottom: '6px'
-              }}>
-                Publicaciones gratuitas
-              </h4>
-              <p style={{ 
-                fontSize: 'var(--font-size-body-sm)',
-                color: '#737373',
-                lineHeight: '1.6'
-              }}>
-                Publica hasta <strong>1 parcela activa</strong> sin costo. Tus publicaciones permanecen visibles mientras estén activas.
-              </p>
-            </div>
-          </div>
-
-          {/* Destacar publicaciones */}
-          <div className="flex items-start gap-4 pb-6" style={{ borderBottom: '1px solid #F5F5F5' }}>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FEF3C7' }}>
-              <Zap className="w-5 h-5" style={{ color: '#CA8A04' }} />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <h4 style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-base)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#0A0A0A'
-                }}>
-                  Publicaciones destacadas
-                </h4>
-                <span className="px-2 py-0.5 rounded-full" style={{ 
-                  backgroundColor: '#FEF3C7',
-                  color: '#CA8A04',
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}>
-                  Pago único
-                </span>
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Beneficios de tu plan</h3>
+        <div className="grid grid-cols-2 gap-6">
+          {currentFeatures.map((feature, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: feature.included ? 'rgba(100, 126, 63, 0.1)' : '#FAFAFA', marginTop: '2px' }}>
+                {feature.included ? <Check className="w-3.5 h-3.5" style={{ color: '#647E3F' }} /> : <X className="w-3.5 h-3.5" style={{ color: '#C3C3C3' }} />}
               </div>
-              <p style={{ 
-                fontSize: 'var(--font-size-body-sm)',
-                color: '#737373',
-                lineHeight: '1.6',
-                marginBottom: '8px'
-              }}>
-                Destaca cualquiera de tus publicaciones con un <strong>pago único por publicación</strong>. Las publicaciones destacadas aparecen primero en las búsquedas y tienen mayor visibilidad.
-              </p>
-              <p style={{ 
-                fontSize: 'var(--font-size-xs)',
-                color: '#A3A3A3',
-                lineHeight: '1.5'
-              }}>
-                💡 Puedes destacar una publicación desde su panel de gestión
-              </p>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: feature.included ? 'var(--foreground)' : '#A3A3A3', lineHeight: '1.5' }}>{feature.name}</span>
             </div>
-          </div>
-
-          {/* Visibilidad */}
-          <div className="flex items-start gap-4 pb-6" style={{ borderBottom: '1px solid #F5F5F5' }}>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5' }}>
-              <Eye className="w-5 h-5" style={{ color: '#0A0A0A' }} />
-            </div>
-            <div className="flex-1">
-              <h4 style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A',
-                marginBottom: '6px'
-              }}>
-                Visibilidad estándar
-              </h4>
-              <p style={{ 
-                fontSize: 'var(--font-size-body-sm)',
-                color: '#737373',
-                lineHeight: '1.6'
-              }}>
-                Tus publicaciones aparecen en los resultados de búsqueda junto con todas las demás. Para mayor visibilidad, considera destacar tus publicaciones.
-              </p>
-            </div>
-          </div>
-
-          {/* Estadísticas */}
-          <div className="flex items-start gap-4 pb-6" style={{ borderBottom: '1px solid #F5F5F5' }}>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5' }}>
-              <svg className="w-5 h-5" fill="none" stroke="#0A0A0A" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h4 style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A',
-                marginBottom: '6px'
-              }}>
-                Estadísticas básicas
-              </h4>
-              <p style={{ 
-                fontSize: 'var(--font-size-body-sm)',
-                color: '#737373',
-                lineHeight: '1.6'
-              }}>
-                Visualiza métricas esenciales: visualizaciones totales, consultas recibidas y estado de tus publicaciones.
-              </p>
-            </div>
-          </div>
-
-          {/* Gestión de consultas */}
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#0A0A0A' }} />
-            </div>
-            <div className="flex-1">
-              <h4 style={{ 
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#0A0A0A',
-                marginBottom: '6px'
-              }}>
-                Gestión de consultas
-              </h4>
-              <p style={{ 
-                fontSize: 'var(--font-size-body-sm)',
-                color: '#737373',
-                lineHeight: '1.6'
-              }}>
-                Recibe y responde consultas de compradores interesados en tus parcelas. Comunícate directamente desde la plataforma.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
-
-      {/* Upsell a planes profesionales */}
-      <section className="rounded-2xl p-8" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-start gap-6">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0A0A0A' }}>
-            <svg className="w-8 h-8" fill="none" stroke="#FFFFFF" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h3 style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'var(--font-size-h3)',
-              fontWeight: 'var(--font-weight-semibold)',
-              lineHeight: 'var(--line-height-heading)',
-              color: '#0A0A0A',
-              marginBottom: '12px'
-            }}>
-              ¿Necesitas más capacidad?
-            </h3>
-            <p style={{ 
-              fontSize: 'var(--font-size-body-base)',
-              color: '#737373',
-              lineHeight: '1.6',
-              marginBottom: '16px'
-            }}>
-              Si trabajas con múltiples propiedades o necesitas herramientas profesionales, explora nuestros planes para Brokers e Inmobiliarias.
-            </p>
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>
-                  Publicaciones ilimitadas o límites superiores
-                </span>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>
-                  Múltiples publicaciones destacadas incluidas
-                </span>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>
-                  Visibilidad premium y prioridad en búsquedas
-                </span>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>
-                  Estadísticas avanzadas y exportación de datos
-                </span>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="#647E3F" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span style={{ fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>
-                  Gestión de equipo y brokers (Inmobiliarias)
-                </span>
-              </li>
-            </ul>
-            <button className="py-2.5 px-6 transition-all" style={{ 
-              backgroundColor: '#006B4E',
-              color: '#FFFFFF',
-              borderRadius: '200px',
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-body-sm)',
-              fontWeight: 'var(--font-weight-medium)',
-              letterSpacing: 'var(--letter-spacing-wide)',
-              lineHeight: 'var(--line-height-ui)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
-            >
-              Ver planes profesionales
-            </button>
-          </div>
+      <section>
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
+        <div className="grid grid-cols-3 gap-6">
+          {plans.map((plan) => (
+            <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+              <div className="mb-6">
+                <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '8px' }}>{plan.name}</h4>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5' }}>{plan.description}</p>
+              </div>
+              <div className="flex-1 space-y-3 mb-6">
+                {plan.features.map((feature, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <div className="flex-shrink-0" style={{ marginTop: '2px' }}>{feature.included ? <Check className="w-4 h-4" style={{ color: '#647E3F' }} /> : <X className="w-4 h-4" style={{ color: '#C3C3C3' }} />}</div>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: feature.included ? 'var(--foreground)' : '#A3A3A3', lineHeight: '1.5' }}>{feature.name}</span>
+                  </div>
+                ))}
+              </div>
+              <button className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
+            </div>
+          ))}
         </div>
       </section>
     </main>
