@@ -681,17 +681,17 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
                         fontWeight: 'var(--font-weight-medium)',
-                        color: '#0A0A0A',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #E5E5E5',
+                        color: '#3D5E28',
+                        backgroundColor: '#F0F5EB',
+                        border: '1px solid #C5D9A8',
                         lineHeight: 'var(--line-height-ui)',
                         letterSpacing: 'var(--letter-spacing-wide)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#FAFAFA';
+                        e.currentTarget.style.backgroundColor = '#E2EDCC';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#FFFFFF';
+                        e.currentTarget.style.backgroundColor = '#F0F5EB';
                       }}
                     >
                       <option value="ultimos-7-dias">Últimos 7 días</option>
@@ -701,7 +701,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     </select>
                     <Calendar
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
-                      style={{ color: '#737373' }}
+                      style={{ color: '#3D5E28' }}
                     />
                   </div>
 
@@ -757,9 +757,9 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   onClick={handleRefresh}
                   disabled={isLoading}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all disabled:opacity-50"
-                  style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}
-                  onMouseEnter={e => { if (!isLoading) e.currentTarget.style.backgroundColor = '#F0F0F0'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#3D5E28' }}
+                  onMouseEnter={e => { if (!isLoading) e.currentTarget.style.backgroundColor = '#E2EDCC'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}
                 >
                   <Activity className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
                   {isLoading ? 'Actualizando...' : 'Actualizar datos'}
