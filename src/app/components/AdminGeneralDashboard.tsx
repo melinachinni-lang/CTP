@@ -217,8 +217,8 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
   // KPIs principales
   const kpis = [
-    { label: 'Visitas', value: '45,820', change: '+22.4%', trending: 'up' as const, accent: '#B5CC89', icon: Eye },
-    { label: 'Contactos generados', value: '856', change: '+12.3%', trending: 'up' as const, accent: '#647E3F', icon: MessageSquare },
+    { label: 'Visitas', value: '45,820', change: '+22.4%', trending: 'up' as const, accent: '#647E3F', icon: Eye },
+    { label: 'Contactos generados', value: '856', change: '+12.3%', trending: 'up' as const, accent: '#006B4E', icon: MessageSquare },
     { label: 'Reservas', value: '47', change: '+8.2%', trending: 'up' as const, accent: '#3D5E28', icon: Calendar },
     { label: 'Ventas realizadas', value: '23', change: '+15.0%', trending: 'up' as const, accent: '#0A0A0A', icon: DollarSign },
   ];
@@ -786,8 +786,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         style={{
                           backgroundColor: '#FFFFFF',
                           border: '1px solid #E5E5E5',
-                          borderTop: `3px solid ${kpi.accent}`,
-                          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                          boxShadow: `4px 4px 0 0 ${kpi.accent}`,
                           minHeight: '148px'
                         }}
                       >
@@ -820,42 +819,29 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 )}
               </section>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
                 {/* Proceso de conversión */}
                 <section
-                  className="lg:col-span-7 rounded-2xl p-6"
+                  className="lg:col-span-7 rounded-2xl overflow-hidden"
                   style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #E5E5E5',
-                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                    border: '1px solid #1A1A1A',
+                    boxShadow: '0 4px 16px 0 rgba(0,0,0,0.12)'
                   }}
                 >
-                  <div className="flex items-start justify-between mb-6">
+                  {/* Header oscuro */}
+                  <div className="px-6 py-5 flex items-start justify-between" style={{ backgroundColor: '#0A0A0A' }}>
                     <div>
-                      <h2
-                        style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: 'var(--font-size-h4)',
-                          fontWeight: 'var(--font-weight-medium)',
-                          color: '#0A0A0A',
-                          lineHeight: 'var(--line-height-heading)',
-                          marginBottom: '4px'
-                        }}
-                      >
+                      <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
                         Proceso de conversión
                       </h2>
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-xs)',
-                          color: '#A3A3A3',
-                          lineHeight: 'var(--line-height-body)'
-                        }}
-                      >
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>
                         Datos correspondientes al período seleccionado
                       </p>
                     </div>
                   </div>
+
+                  {/* Contenido del funnel */}
+                  <div className="p-6" style={{ backgroundColor: '#FFFFFF' }}>
 
                   {/* Funnel rediseñado */}
                   <div className="flex flex-col gap-0">
@@ -865,7 +851,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         ? ((etapa.valor / funnelData[index - 1].valor) * 100).toFixed(1)
                         : '100.0';
                       const barWidth = (etapa.valor / funnelData[0].valor) * 100;
-                      const stageColors = ['#B5CC89', '#8CA96A', '#647E3F', '#3D5E28', '#0A0A0A'];
+                      const stageColors = ['#647E3F', '#4A6B30', '#3D5E28', '#1E3F10', '#0A0A0A'];
                       const color = stageColors[index];
                       const isLastStage = color === '#0A0A0A';
 
@@ -944,6 +930,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       );
                     })}
                   </div>
+                  </div>{/* end contenido funnel */}
                 </section>
 
                 {/* Proyectos más vendidos */}
@@ -1001,7 +988,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               </div>
 
               {/* Origen del tráfico + Actividad de Brokers */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 mt-6">
 
               {/* Origen del tráfico */}
               <section className="lg:col-span-5 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
