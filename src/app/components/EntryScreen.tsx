@@ -61,6 +61,26 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   const [operationZone, setOperationZone] = React.useState('');
   const [phoneCountryCode, setPhoneCountryCode] = React.useState('+56');
 
+  // Real estate email contact
+  const [contactEmail, setContactEmail] = React.useState('');
+
+  // Inmobiliaria search for broker (E4)
+  const [inmobiliariaSearch, setInmobiliariaSearch] = React.useState('');
+  const [selectedInmobiliaria, setSelectedInmobiliaria] = React.useState<{ id: number; nombre: string; ciudad: string } | null>(null);
+  const [inmobiliariaError, setInmobiliariaError] = React.useState(false);
+  const [showInmobiliariaDropdown, setShowInmobiliariaDropdown] = React.useState(false);
+
+  const inmobiliariasRegistradas = [
+    { id: 1, nombre: 'Inmobiliaria Los Andes', ciudad: 'Santiago' },
+    { id: 2, nombre: 'Parcelas del Sur', ciudad: 'Concepción' },
+    { id: 3, nombre: 'Tierras del Valle', ciudad: 'Rancagua' },
+    { id: 4, nombre: 'PropiedadesNorte SpA', ciudad: 'Antofagasta' },
+  ];
+
+  const inmobiliariasFiltradas = inmobiliariasRegistradas.filter(i =>
+    i.nombre.toLowerCase().includes(inmobiliariaSearch.toLowerCase())
+  );
+
   // Onboarding states for Real Estate profile
   const [showRealEstateOnboarding, setShowRealEstateOnboarding] = React.useState(false);
   const [onboardingStep, setOnboardingStep] = React.useState(1);
@@ -254,9 +274,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const handleProfileContinue = () => {
-    if (selectedProfile) {
+    if (!selectedProfile) return;
+    setShowProfileSelection(false);
+    if (selectedProfile === 'person') {
       setShowPersonAction(true);
-      setShowProfileSelection(false);
+    } else {
+      // Real estate and broker go directly to their profile form
+      setShowProfileForm(true);
     }
   };
 
@@ -318,17 +342,25 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const handleProfileFormSubmit = () => {
-    if (pendingGoogleAccount && onSelectGoogleAccount) {
-      onSelectGoogleAccount(pendingGoogleAccount, true);
+    if (selectedProfile === 'broker') {
+      if (!selectedInmobiliaria) {
+        setInmobiliariaError(true);
+        return;
+      }
+      setShowProfileForm(false);
+      setShowBrokerOnboarding(true);
+    } else if (selectedProfile === 'real-estate') {
+      setShowProfileForm(false);
+      setShowRealEstateOnboarding(true);
+    } else {
+      // person
+      if (pendingGoogleAccount && onSelectGoogleAccount) {
+        onSelectGoogleAccount(pendingGoogleAccount, true);
+      }
+      setShowProfileForm(false);
+      setWelcomeDestination('person-dashboard');
+      setShowWelcomeModal(true);
     }
-    setShowProfileForm(false);
-    const dest = selectedProfile === 'real-estate'
-      ? 'real-estate-dashboard'
-      : selectedProfile === 'broker'
-      ? 'broker-dashboard'
-      : 'person-dashboard';
-    setWelcomeDestination(dest);
-    setShowWelcomeModal(true);
   };
 
   const handleOnboardingContinue = () => {
@@ -345,7 +377,6 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const handleOnboardingSkip = () => {
-    // Mostrar modal de completado
     setShowRealEstateOnboarding(false);
     setShowCompletion(true);
     setCompletionProfile('real-estate');
@@ -378,7 +409,6 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
   };
 
   const handleBrokerOnboardingSkip = () => {
-    // Mostrar modal de completado
     setShowBrokerOnboarding(false);
     setShowCompletion(true);
     setCompletionProfile('broker');
@@ -386,14 +416,11 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
   const handleBrokerOnboardingBack = () => {
     if (brokerOnboardingStep === 1) {
-      // Volver al formulario de datos
       setShowBrokerOnboarding(false);
       setShowProfileForm(true);
       setBrokerOnboardingStep(1);
-    } else if (brokerOnboardingStep === 2) {
-      setBrokerOnboardingStep(1);
-    } else if (brokerOnboardingStep === 3) {
-      setBrokerOnboardingStep(2);
+    } else {
+      setBrokerOnboardingStep(step => step - 1);
     }
   };
 
@@ -1631,10 +1658,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
       {/* Profile Form Modal */}
       {showProfileForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-          <div className="bg-white/95 backdrop-blur-sm w-full max-w-2xl rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] p-10">
+          <div className="bg-white/95 backdrop-blur-sm w-full max-w-2xl rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.3)] p-10 overflow-y-auto max-h-screen">
             {/* Back Button */}
             <button
-              onClick={handleBackToPersonAction}
+              onClick={selectedProfile === 'person' ? handleBackToPersonAction : handleBackToProfileSelectionFromForm}
               className="flex items-center gap-2 text-sm mb-4"
               style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
             >
@@ -1644,13 +1671,15 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               {t.entry.back}
             </button>
 
-            {/* Progress Bar – Paso 5 de 5 */}
+            {/* Progress Bar */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>{t.entry.step5of5}</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>
+                  {selectedProfile === 'person' ? t.entry.step5of5 : (language === 'en' ? 'Step 2 of 4' : 'Paso 2 de 4')}
+                </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
-                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: '100%' }}></div>
+                <div className="h-1.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', width: selectedProfile === 'person' ? '100%' : '50%' }}></div>
               </div>
             </div>
 
@@ -1778,6 +1807,22 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                   />
                 </div>
 
+                {/* Contact Email */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
+                    {language === 'en' ? 'Contact email' : 'Email de contacto'} <span style={{ color: '#0A0A0A' }}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="contacto@inmobiliaria.cl"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    required
+                    className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
+                  />
+                </div>
+
                 {/* RUT Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
@@ -1860,14 +1905,13 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Website Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    {t.entry.websiteLabel} <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.websiteLabel}
                   </label>
                   <input
                     type="url"
                     placeholder="https://www.inmobiliarialosandes.cl"
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
-                    required
                     className="w-full bg-white border-2 border-gray-300 focus:border-black py-3 px-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
                     style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
                   />
@@ -1956,13 +2000,127 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                     style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px' }}
                   />
                 </div>
+
+                {/* Inmobiliaria association (E4) */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
+                    {language === 'en' ? 'Associated real estate agency' : 'Inmobiliaria a la que perteneces'} <span style={{ color: '#0A0A0A' }}>*</span>
+                  </label>
+                  <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                    {language === 'en'
+                      ? 'Search for your real estate agency registered in the platform'
+                      : 'Buscá tu inmobiliaria registrada en la plataforma'}
+                  </p>
+
+                  {selectedInmobiliaria ? (
+                    <div className="flex items-center justify-between p-3 rounded-lg border-2" style={{ borderColor: '#006B4E', backgroundColor: '#EBFEF5' }}>
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="#006B4E" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div>
+                          <p className="font-medium text-sm" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>{selectedInmobiliaria.nombre}</p>
+                          <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>{selectedInmobiliaria.ciudad}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setSelectedInmobiliaria(null); setInmobiliariaSearch(''); setInmobiliariaError(false); }}
+                        className="text-xs underline"
+                        style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+                      >
+                        {language === 'en' ? 'Change' : 'Cambiar'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <div className="relative">
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" fill="none" stroke="#9CA3AF" strokeWidth={2} viewBox="0 0 24 24">
+                          <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input
+                          type="text"
+                          placeholder={language === 'en' ? 'e.g. Real Estate Los Andes...' : 'Ej. Inmobiliaria Los Andes...'}
+                          value={inmobiliariaSearch}
+                          onChange={(e) => {
+                            setInmobiliariaSearch(e.target.value);
+                            setShowInmobiliariaDropdown(true);
+                            setInmobiliariaError(false);
+                          }}
+                          onFocus={() => setShowInmobiliariaDropdown(true)}
+                          className="w-full bg-white border-2 py-3 pl-10 pr-4 rounded-lg text-black placeholder:text-gray-400 focus:outline-none transition-colors"
+                          style={{
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '16px',
+                            borderColor: inmobiliariaError ? '#EF4444' : '#D1D5DB'
+                          }}
+                        />
+                      </div>
+
+                      {/* Dropdown results */}
+                      {showInmobiliariaDropdown && inmobiliariaSearch.length > 0 && (
+                        <div className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+                          {inmobiliariasFiltradas.length > 0 ? (
+                            inmobiliariasFiltradas.map(i => (
+                              <button
+                                key={i.id}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedInmobiliaria(i);
+                                  setInmobiliariaSearch(i.nombre);
+                                  setShowInmobiliariaDropdown(false);
+                                  setInmobiliariaError(false);
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                              >
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0F5EB' }}>
+                                  <svg className="w-4 h-4" fill="none" stroke="#647E3F" strokeWidth={2} viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>{i.nombre}</p>
+                                  <p className="text-xs" style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>{i.ciudad}</p>
+                                </div>
+                              </button>
+                            ))
+                          ) : (
+                            <div className="p-4" style={{ backgroundColor: '#FEF3C7' }}>
+                              <div className="flex items-start gap-3">
+                                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="#D97706">
+                                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                <div>
+                                  <p className="text-sm font-semibold mb-1" style={{ color: '#92400E', fontFamily: 'Inter, sans-serif' }}>
+                                    {language === 'en' ? 'Agency not found' : 'Inmobiliaria no encontrada'}
+                                  </p>
+                                  <p className="text-xs" style={{ color: '#78350F', fontFamily: 'Inter, sans-serif', lineHeight: '1.5' }}>
+                                    {language === 'en'
+                                      ? 'The real estate agency must be registered first. Ask your agency admin to register in CompraTuParcela before you can join.'
+                                      : 'La inmobiliaria debe estar registrada primero. Pedile al administrador de tu empresa que se registre en CompraTuParcela antes de que puedas unirte.'}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {inmobiliariaError && !selectedInmobiliaria && (
+                    <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>
+                      {language === 'en' ? 'You must select a registered real estate agency to continue.' : 'Debés seleccionar una inmobiliaria registrada para continuar.'}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
 
             {/* Continue Button */}
             <button
               onClick={handleProfileFormSubmit}
-              style={{ 
+              style={{
                 fontFamily: 'Inter, sans-serif',
                 backgroundColor: '#006B4E'
               }}
@@ -1970,7 +2128,9 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
-              {t.entry.finishRegistration}
+              {selectedProfile === 'person'
+                ? t.entry.finishRegistration
+                : (language === 'en' ? 'Continue' : 'Continuar')}
             </button>
           </div>
         </div>
