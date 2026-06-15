@@ -1,5 +1,5 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, MapPin, Phone, Mail, CheckCircle, FileCheck, TrendingUp, Building2, Scale, FileText, Handshake, Shield, Users, CreditCard, X, ChevronRight, Star } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { getAllParcelas } from '@/app/data/parcelasData';
@@ -16,6 +16,7 @@ interface InmobiliariaProfileProps {
 
 export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: InmobiliariaProfileProps) {
   const [activeTab, setActiveTab] = useState('sobre');
+  const [isLoading, setIsLoading] = useState(true);
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [showTestimoniosModal, setShowTestimoniosModal] = useState(false);
   const tabContentRef = useRef<HTMLDivElement>(null);
@@ -75,6 +76,11 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const handleTestimoniosMouseLeave = () => {
     setIsDraggingTestimonios(false);
   };
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 1300);
+    return () => clearTimeout(t);
+  }, []);
 
   const parcelasPublicadas = getAllParcelas().filter(
     parcela => parcela.inmobiliaria.nombre === inmobiliariaName
@@ -329,6 +335,24 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               <span style={{ fontSize: 'var(--font-size-body-sm)', fontFamily: 'var(--font-body)' }}>Volver a Inmobiliarias</span>
             </button>
 
+            {isLoading ? (
+              <div className="flex flex-col md:flex-row gap-8 items-start max-w-5xl animate-pulse">
+                <div className="w-32 h-32 rounded-[16px] flex-shrink-0" style={{ backgroundColor: '#E5E7EB' }} />
+                <div className="flex-1 space-y-4 pt-2">
+                  <div className="h-10 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '55%' }} />
+                  <div className="flex gap-3">
+                    <div className="h-7 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '160px' }} />
+                    <div className="h-7 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '120px' }} />
+                  </div>
+                  <div className="h-5 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '70%' }} />
+                  <div className="h-5 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '50%' }} />
+                  <div className="flex gap-3 pt-2">
+                    <div className="h-10 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '120px' }} />
+                    <div className="h-10 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '140px' }} />
+                  </div>
+                </div>
+              </div>
+            ) : (
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-5xl">
               <div className="w-32 h-32 bg-white rounded-[16px] overflow-hidden border-4 border-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex-shrink-0">
                 <ImageWithFallback 
@@ -412,6 +436,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                 </div>
               </div>
             </div>
+            )}
           </div>
         </section>
 
@@ -427,7 +452,47 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
         {/* TAB CONTENT */}
         <div className="bg-white py-12" ref={tabContentRef}>
           <div className="max-w-7xl mx-auto px-6">
-            {activeTab === 'sobre' && (
+            {isLoading ? (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="grid grid-cols-3 gap-4">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="rounded-xl p-6" style={{ border: '2px solid #E5E7EB', minHeight: '120px' }}>
+                        <div className="w-12 h-12 rounded-full mb-3" style={{ backgroundColor: '#E5E7EB' }} />
+                        <div className="h-8 rounded-full mb-2" style={{ backgroundColor: '#E5E7EB', width: '50%' }} />
+                        <div className="h-3 rounded-full" style={{ backgroundColor: '#F3F4F6', width: '70%' }} />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="rounded-xl p-6" style={{ border: '2px solid #E5E7EB' }}>
+                    <div className="h-5 rounded-full mb-4" style={{ backgroundColor: '#E5E7EB', width: '30%' }} />
+                    <div className="grid grid-cols-2 gap-4">
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-16 rounded-xl" style={{ backgroundColor: '#F3F4F6' }} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <div className="rounded-xl p-6" style={{ border: '2px solid #E5E7EB', minHeight: '200px' }}>
+                    <div className="h-5 rounded-full mb-4" style={{ backgroundColor: '#E5E7EB', width: '50%' }} />
+                    <div className="space-y-2">
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-3 rounded-full" style={{ backgroundColor: '#F3F4F6', width: i % 2 === 0 ? '65%' : '85%' }} />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rounded-xl p-6" style={{ border: '2px solid #E5E7EB', minHeight: '160px' }}>
+                    <div className="h-5 rounded-full mb-4" style={{ backgroundColor: '#E5E7EB', width: '40%' }} />
+                    <div className="flex gap-3">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="w-16 h-16 rounded-full" style={{ backgroundColor: '#F3F4F6' }} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : activeTab === 'sobre' && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Columna principal */}
                 <div className="lg:col-span-2 space-y-6">
@@ -962,7 +1027,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               </div>
             )}
 
-            {activeTab === 'parcelas' && (
+            {!isLoading && activeTab === 'parcelas' && (
               <div>
                 <h2 style={{ 
                   marginBottom: '2rem',
@@ -1031,7 +1096,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               </div>
             )}
 
-            {activeTab === 'brokers' && (
+            {!isLoading && activeTab === 'brokers' && (
               <div>
                 <h2 style={{ 
                   marginBottom: '2rem',
