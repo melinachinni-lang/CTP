@@ -19,7 +19,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const [isLoading, setIsLoading] = useState(true);
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [showContactBrokerModal, setShowContactBrokerModal] = useState(false);
-  const [selectedBroker, setSelectedBroker] = useState<typeof profileData.brokers[0] | null>(null);
+  const [selectedBroker, setSelectedBroker] = useState<{ nombre: string; rol: string; imagen: string; zona: string; parcelasActivas: number; estado: string } | null>(null);
   const [contactForm, setContactForm] = useState({ nombre: '', email: '', mensaje: '' });
   const [contactSent, setContactSent] = useState(false);
   const [showTestimoniosModal, setShowTestimoniosModal] = useState(false);
@@ -1458,7 +1458,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
       {/* MODAL CONTACTAR BROKER */}
       {showContactBrokerModal && selectedBroker && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center"
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
           style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
           onClick={(e) => { if (e.target === e.currentTarget) { setShowContactBrokerModal(false); } }}
         >
