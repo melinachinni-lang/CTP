@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag } from 'lucide-react';
+import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck } from 'lucide-react';
 
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
@@ -14,12 +14,14 @@ interface Consulta {
   id: string;
   tipo: TipoContacto;
   parcela: { id: number; nombre: string; ubicacion: string; imagen: string; };
-  otroUsuario: { nombre: string; avatar?: string; };
+  otroUsuario: { nombre: string; avatar?: string; email?: string; telefono?: string; };
   fecha?: string;
   hora?: string;
   estado: EstadoConsulta;
   notas?: string;
   motivo?: string;
+  origen?: string;
+  brokerAsignado?: string;
   // campos específicos de formulario
   mensaje?: string;
   tipoInteres?: string;
@@ -32,28 +34,32 @@ const RECIBIDAS: Consulta[] = [
     id: 'r1',
     tipo: 'visita',
     parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
-    otroUsuario: { nombre: 'Carlos Muñoz' },
+    otroUsuario: { nombre: 'Carlos Muñoz', email: 'carlos.munoz@gmail.com', telefono: '+56 9 8821 4433' },
     fecha: '2026-05-10',
     hora: '10:00',
     estado: 'pendiente',
+    origen: 'Portal web',
     notas: 'Interesado en ver el acceso al predio y el sistema de agua',
   },
   {
     id: 'r2',
     tipo: 'videollamada',
     parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
-    otroUsuario: { nombre: 'María González' },
+    otroUsuario: { nombre: 'María González', email: 'mgonzalez@outlook.com', telefono: '+56 9 7734 2291' },
     fecha: '2026-05-07',
     hora: '15:30',
     estado: 'confirmada',
+    origen: 'Portal web',
+    brokerAsignado: 'Ana Silva',
   },
   {
     id: 'r3',
     tipo: 'formulario',
     parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
-    otroUsuario: { nombre: 'Sofía Ramírez' },
+    otroUsuario: { nombre: 'Sofía Ramírez', email: 'sofia.r@icloud.com', telefono: '+56 9 6612 9988' },
     fecha: '2026-05-03',
     estado: 'pendiente',
+    origen: 'Formulario de contacto',
     mensaje: 'Hola, vi tu publicación y me interesa mucho la parcela. ¿Sigue disponible? ¿Tiene acceso a agua potable y luz eléctrica?',
     tipoInteres: 'Uso propio / vivir ahí',
     cuandoVisitar: '2026-05-20',
@@ -62,11 +68,21 @@ const RECIBIDAS: Consulta[] = [
     id: 'r4',
     tipo: 'visita',
     parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
-    otroUsuario: { nombre: 'Pedro Flores' },
+    otroUsuario: { nombre: 'Pedro Flores', email: 'pf.flores@yahoo.com', telefono: '+56 9 5541 7762' },
     fecha: '2026-04-20',
     hora: '11:00',
     estado: 'cancelada',
+    origen: 'Portal web',
     motivo: 'No pude coordinar el transporte para ese día',
+  },
+  {
+    id: 'r5',
+    tipo: 'whatsapp',
+    parcela: { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400' },
+    otroUsuario: { nombre: 'Lucía Fernández', email: 'lucia.f@gmail.com', telefono: '+56 9 9923 4401' },
+    fecha: '2026-05-12',
+    estado: 'pendiente',
+    origen: 'WhatsApp',
   },
 ];
 
@@ -145,6 +161,13 @@ function TipoLabel({ tipo }: { tipo: TipoContacto }) {
   return <span>{labels[tipo]}</span>;
 }
 
+const BROKERS_MOCK = [
+  { id: 1, nombre: 'Ana Silva', rol: 'Broker Senior', disponible: true },
+  { id: 2, nombre: 'Carlos Pérez', rol: 'Broker', disponible: true },
+  { id: 3, nombre: 'Rodrigo Mena', rol: 'Broker', disponible: false },
+  { id: 4, nombre: 'Valentina Rojas', rol: 'Broker', disponible: true },
+];
+
 const NOTIFICACIONES_MOCK = [
   { id: 'n1', type: 'consulta' as const, text: 'Pedro Soto envió una consulta sobre "Parcela Vista Cordillera"', time: 'Hace 5 min', read: false },
   { id: 'n2', type: 'visita' as const, text: 'Visita confirmada para el 15 de mayo a las 10:00 hrs', time: 'Hace 1 hora', read: false },
@@ -157,6 +180,12 @@ const NOTIFICACIONES_MOCK = [
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
   const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones'>(defaultTab);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   React.useEffect(() => {
     setActiveTab(defaultTab);
@@ -166,6 +195,8 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [notificaciones, setNotificaciones] = useState(NOTIFICACIONES_MOCK);
   const [showReprogramar, setShowReprogramar] = useState<string | null>(null);
   const [showCancelar, setShowCancelar] = useState<string | null>(null);
+  const [showAsignarBroker, setShowAsignarBroker] = useState<string | null>(null);
+  const [brokerSeleccionado, setBrokerSeleccionado] = useState('');
   const [repFecha, setRepFecha] = useState('');
   const [repHora, setRepHora] = useState('');
   const [cancelMotivo, setCancelMotivo] = useState('');
@@ -226,6 +257,17 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
     showFeedback('Consulta marcada como recibida.');
   };
 
+  const handleAsignarBroker = (id: string) => {
+    if (!brokerSeleccionado) return;
+    setConsultas(prev => ({
+      ...prev,
+      recibidas: prev.recibidas.map(c => c.id === id ? { ...c, brokerAsignado: brokerSeleccionado } : c),
+    }));
+    setShowAsignarBroker(null);
+    setBrokerSeleccionado('');
+    showFeedback(`Broker asignado correctamente. Se notificó a ${brokerSeleccionado}.`);
+  };
+
   return (
     <main className="px-6 py-6 space-y-6">
       {/* Feedback toast */}
@@ -250,7 +292,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
       <div className="flex gap-1 p-1 rounded-xl" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
         {[
           { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
-          ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
+          { id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length },
           { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
         ].map(tab => (
           <button
@@ -351,7 +393,22 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
       )}
 
       {/* Lista (Recibidas / Enviadas) */}
-      {activeTab !== 'notificaciones' && (lista.length === 0 ? (
+      {activeTab !== 'notificaciones' && (isLoading ? (
+        <div className="space-y-3">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-center gap-4 p-4">
+                <div className="w-14 h-14 rounded-xl flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }} />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3.5 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '60%' }} />
+                  <div className="h-3 rounded-full" style={{ backgroundColor: '#F3F4F6', width: '40%' }} />
+                </div>
+                <div className="h-6 w-20 rounded-full flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : lista.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
             <MessageCircle className="w-8 h-8" style={{ color: '#D1D5DB' }} />
@@ -369,6 +426,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
             const statusCfg = ESTADO_CONFIG[c.estado];
             const isExpanded = expandedId === c.id;
             const canAct = canManage(c);
+            const showContactInfo = (viewType === 'inmobiliaria' || viewType === 'broker') && activeTab === 'recibidas';
             return (
               <div key={c.id} className="rounded-xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
                 {/* Row */}
@@ -402,6 +460,28 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                         </span>
                       )}
                     </div>
+                    {showContactInfo && (
+                      <div className="flex items-center gap-3 mt-1 flex-wrap">
+                        {c.otroUsuario.email && (
+                          <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                            <Mail className="w-3 h-3" style={{ color: '#9CA3AF' }} />
+                            {c.otroUsuario.email}
+                          </span>
+                        )}
+                        {c.otroUsuario.telefono && (
+                          <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                            <Phone className="w-3 h-3" style={{ color: '#9CA3AF' }} />
+                            {c.otroUsuario.telefono}
+                          </span>
+                        )}
+                        {c.origen && (
+                          <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                            <Tag className="w-3 h-3" style={{ color: '#9CA3AF' }} />
+                            {c.origen}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Badge + chevron */}
@@ -433,6 +513,44 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                         </div>
                       )}
                     </div>
+
+                    {/* Datos de contacto del lead — solo para inmobiliaria/broker */}
+                    {(viewType === 'inmobiliaria' || viewType === 'broker') && activeTab === 'recibidas' && (
+                      <div className="grid grid-cols-2 gap-3">
+                        {c.otroUsuario.email && (
+                          <div className="p-3 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>Correo</p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151', fontWeight: 500 }}>{c.otroUsuario.email}</p>
+                          </div>
+                        )}
+                        {c.otroUsuario.telefono && (
+                          <div className="p-3 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '2px' }}>Teléfono</p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151', fontWeight: 500 }}>{c.otroUsuario.telefono}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Broker asignado — solo para inmobiliaria */}
+                    {viewType === 'inmobiliaria' && activeTab === 'recibidas' && (
+                      <div className="flex items-center justify-between p-3 rounded-xl" style={{ backgroundColor: c.brokerAsignado ? '#F0FDF4' : '#FAFAFA', border: `1px solid ${c.brokerAsignado ? '#BBF7D0' : '#E5E5E5'}` }}>
+                        <div>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: c.brokerAsignado ? '#15803D' : '#9CA3AF', marginBottom: '2px' }}>Broker asignado</p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: c.brokerAsignado ? '#166534' : '#737373', fontWeight: c.brokerAsignado ? 500 : 400 }}>
+                            {c.brokerAsignado ?? 'Sin asignar'}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => { setShowAsignarBroker(c.id); setBrokerSeleccionado(c.brokerAsignado ?? ''); }}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                          style={{ backgroundColor: c.brokerAsignado ? '#DCFCE7' : '#0A0A0A', color: c.brokerAsignado ? '#166534' : '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                        >
+                          <UserCheck className="w-3.5 h-3.5" />
+                          {c.brokerAsignado ? 'Reasignar' : 'Asignar broker'}
+                        </button>
+                      </div>
+                    )}
 
                     {c.notas && (
                       <div className="px-3 py-2.5 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
@@ -620,6 +738,67 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
         </div>
       )}
 
+      {/* Modal Asignar Broker */}
+      {showAsignarBroker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm mx-4 space-y-4" style={{ border: '1px solid #E5E5E5' }}>
+            <div className="flex items-center justify-between">
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Asignar broker</h3>
+              <button onClick={() => setShowAsignarBroker(null)} className="p-1 rounded-lg hover:bg-gray-100">
+                <X className="w-4 h-4" style={{ color: '#6B7280' }} />
+              </button>
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', lineHeight: '1.5' }}>
+              Elegí el broker que se encargará de esta consulta. Recibirá una notificación con los datos del contacto.
+            </p>
+            <div className="space-y-2">
+              {BROKERS_MOCK.map(b => (
+                <button
+                  key={b.id}
+                  onClick={() => b.disponible && setBrokerSeleccionado(b.nombre)}
+                  disabled={!b.disponible}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all"
+                  style={{
+                    border: `1.5px solid ${brokerSeleccionado === b.nombre ? '#006B4E' : '#E5E5E5'}`,
+                    backgroundColor: brokerSeleccionado === b.nombre ? '#F0FDF4' : b.disponible ? '#FFFFFF' : '#F9FAFB',
+                    opacity: b.disponible ? 1 : 0.5,
+                    cursor: b.disponible ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: brokerSeleccionado === b.nombre ? '#DCFCE7' : '#F3F4F6' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: brokerSeleccionado === b.nombre ? '#166534' : '#6B7280' }}>
+                      {b.nombre.charAt(0)}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{b.nombre}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: b.disponible ? '#737373' : '#D1D5DB' }}>
+                      {b.rol} · {b.disponible ? 'Disponible' : 'No disponible'}
+                    </p>
+                  </div>
+                  {brokerSeleccionado === b.nombre && (
+                    <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                  )}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-3 pt-1">
+              <button onClick={() => setShowAsignarBroker(null)} className="px-4 py-2.5 rounded-full text-sm font-medium"
+                style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
+                Cancelar
+              </button>
+              <button
+                onClick={() => handleAsignarBroker(showAsignarBroker)}
+                disabled={!brokerSeleccionado}
+                className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+                style={{ backgroundColor: brokerSeleccionado ? '#006B4E' : '#E5E5E5', color: brokerSeleccionado ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: brokerSeleccionado ? 'pointer' : 'not-allowed' }}>
+                Confirmar asignación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal Cancelar */}
       {showCancelar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -666,14 +845,3 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
 // Export legacy interface for backward compatibility
 export type { ConsultasViewProps };
-export interface Consulta {
-  id: string;
-  tipo: TipoContacto;
-  parcela: { id: number; nombre: string; ubicacion: string; imagen: string; };
-  otroUsuario: { nombre: string; avatar?: string; };
-  fecha?: string;
-  hora?: string;
-  estado: EstadoConsulta;
-  notas?: string;
-  motivo?: string;
-}
