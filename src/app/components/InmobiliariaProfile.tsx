@@ -1456,7 +1456,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
         </div>
       )}
       {/* MODAL CONTACTAR BROKER */}
-      {showContactBrokerModal && selectedBroker && (
+      {showContactBrokerModal && (
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center"
           style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
@@ -1467,14 +1467,14 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
             <div className="flex items-center justify-between px-6 pt-6 pb-4" style={{ borderBottom: '1px solid #E5E7EB' }}>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ border: '2px solid #E5E7EB' }}>
-                  <ImageWithFallback src={selectedBroker.imagen} alt={selectedBroker.nombre} className="w-full h-full object-cover" />
+                  <ImageWithFallback src={selectedBroker?.imagen ?? ''} alt={selectedBroker?.nombre ?? ''} className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#0A0A0A', marginBottom: '2px' }}>
-                    {selectedBroker.nombre}
+                    {selectedBroker?.nombre}
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                    {selectedBroker.rol} · {selectedBroker.zona}
+                    {selectedBroker?.rol} · {selectedBroker?.zona}
                   </p>
                 </div>
               </div>
@@ -1493,7 +1493,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     ¡Consulta enviada!
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                    {selectedBroker.nombre} recibirá tu mensaje y te responderá a la brevedad.
+                    {selectedBroker?.nombre} recibirá tu mensaje y te responderá a la brevedad.
                   </p>
                   <button onClick={() => setShowContactBrokerModal(false)} className="mt-6 h-10 px-8 rounded-full text-white transition-colors" style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
                     Cerrar
