@@ -19,7 +19,8 @@ const inmobiliariasData = [
     descripcionEn: 'Specialists in properties and projects in Chilean Patagonia',
     rating: 4.8,
     numResenas: 120,
-    ubicacion: 'Aysén · Patagonia',
+    zonas: ['Aysén', 'Patagonia', 'Coyhaique'],
+    region: 'aysen',
     imagen: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwb2ZmaWNlfGVufDF8fHx8MTc2OTM2OTQ4M3ww&ixlib=rb-4.1.0&q=80&w=1080',
   },
   {
@@ -30,7 +31,8 @@ const inmobiliariasData = [
     descripcionEn: 'Connecting people with their ideal land in southern Chile',
     rating: 4.9,
     numResenas: 87,
-    ubicacion: 'Los Lagos · Sur de Chile',
+    zonas: ['Los Lagos', 'Puerto Montt', 'Osorno'],
+    region: 'los-lagos',
     imagen: 'https://images.unsplash.com/photo-1694702740570-0a31ee1525c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBvZmZpY2UlMjBidWlsZGluZ3xlbnwxfHx8fDE3Njk0NDIwNjd8MA&ixlib=rb-4.1.0&q=80&w=1080',
   },
   {
@@ -41,18 +43,68 @@ const inmobiliariasData = [
     descripcionEn: 'Experts in parcels and real estate developments in Patagonia',
     rating: 4.7,
     numResenas: 156,
-    ubicacion: 'Aysén · Chile Chico',
+    zonas: ['Aysén', 'Chile Chico', 'Cochrane'],
+    region: 'aysen',
     imagen: 'https://images.unsplash.com/photo-1425421669292-0c3da3b8f529?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzc3xlbnwxfHx8fDE3Njk0NDQ5MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+  },
+  {
+    id: 4,
+    nombre: 'Tierras del Valle',
+    nombreEn: 'Valley Lands',
+    descripcion: 'Parcelas agrícolas y residenciales en los valles del centro-sur de Chile',
+    descripcionEn: 'Agricultural and residential parcels in the central-south valleys of Chile',
+    rating: 4.6,
+    numResenas: 64,
+    zonas: ['Araucanía', 'Temuco', 'Villarrica'],
+    region: 'araucania',
+    imagen: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+  },
+  {
+    id: 5,
+    nombre: 'InmoCentro SpA',
+    descripcion: 'Especialistas en inversión inmobiliaria y terrenos rurales en la región metropolitana',
+    descripcionEn: 'Real estate investment and rural land specialists in the metropolitan region',
+    rating: 4.5,
+    numResenas: 203,
+    zonas: ['Metropolitana', 'Santiago', 'Melipilla'],
+    region: 'metropolitana',
+    imagen: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+  },
+  {
+    id: 6,
+    nombre: 'Sur Verde Propiedades',
+    descripcion: 'Tu aliado en la búsqueda de terrenos naturales con acceso a ríos y bosques en Los Ríos',
+    descripcionEn: 'Your partner in finding natural land with river and forest access in Los Ríos',
+    rating: 4.8,
+    numResenas: 91,
+    zonas: ['Los Ríos', 'Valdivia', 'Panguipulli'],
+    region: 'los-rios',
+    imagen: 'https://images.unsplash.com/photo-1448630360428-65456885c650?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
   },
 ];
 
 export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
   const { t, language } = useI18n();
   const [searchText, setSearchText] = useState('');
+  const [searchApplied, setSearchApplied] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [selectedInmobiliaria, setSelectedInmobiliaria] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 1400);
+    return () => clearTimeout(t);
+  }, []);
+
+  const filteredInmobiliarias = inmobiliariasData.filter(i => {
+    const matchesSearch = !searchApplied || i.nombre.toLowerCase().includes(searchApplied.toLowerCase());
+    const matchesRegion = !selectedRegion || i.region === selectedRegion;
+    return matchesSearch && matchesRegion;
+  });
+
+  const handleBuscar = () => setSearchApplied(searchText);
 
   const handleContactar = (nombre: string) => {
     setSelectedInmobiliaria(nombre);
@@ -282,7 +334,8 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                   </div>
 
                   {/* Botón Buscar - Responsive */}
-                  <button 
+                  <button
+                    onClick={handleBuscar}
                     className="w-full md:w-auto bg-[#006B4E] hover:bg-[#01533E] text-white px-6 md:px-8 py-2.5 md:py-3 rounded-[200px] flex items-center justify-center whitespace-nowrap transition-colors text-sm md:text-base"
                     style={{
                       fontFamily: 'Inter, sans-serif',
@@ -298,104 +351,138 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
           </div>
         </section>
 
-        {/* Resultados Section - Responsive */}
+        {/* Resultados Section */}
         <section className="relative -mt-24 md:-mt-32 pb-12 md:pb-20" style={{ backgroundColor: 'var(--hero-background)' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            {/* Grid de inmobiliarias - Responsive: 1 col mobile, 2 col tablet, 3 col desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {inmobiliariasData.map((inmobiliaria) => (
-                <div 
-                  key={inmobiliaria.id}
-                  className="h-full flex flex-col border border-gray-200 rounded-xl shadow-sm hover:border-gray-400 hover:shadow-md transition-all duration-300 cursor-pointer group overflow-hidden bg-white"
-                  onClick={() => handleVerDetalle(inmobiliaria.nombre)}
-                >
-                  {/* Imagen */}
-                  <div className="relative flex-shrink-0">
-                    <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-                      <img 
-                        src={inmobiliaria.imagen}
-                        alt={inmobiliaria.nombre}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+
+            {/* Estado de carga — skeleton */}
+            {isLoading && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="rounded-xl overflow-hidden border border-gray-200 bg-white animate-pulse">
+                    <div className="aspect-[4/3] bg-gray-200" />
+                    <div className="p-5 space-y-3">
+                      <div className="h-5 bg-gray-200 rounded w-3/4" />
+                      <div className="h-4 bg-gray-200 rounded w-full" />
+                      <div className="h-4 bg-gray-200 rounded w-2/3" />
+                      <div className="flex gap-2 pt-1">
+                        <div className="h-5 bg-gray-200 rounded-full w-16" />
+                        <div className="h-5 bg-gray-200 rounded-full w-20" />
+                        <div className="h-5 bg-gray-200 rounded-full w-14" />
+                      </div>
+                      <div className="pt-3 border-t border-gray-200 space-y-2">
+                        <div className="h-10 bg-gray-200 rounded-full" />
+                        <div className="h-10 bg-gray-200 rounded-full" />
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+            )}
 
-                  {/* Contenido de la card */}
-                  <div className="p-4 md:p-5 space-y-3 md:space-y-4 bg-white flex-grow flex flex-col">
-                    {/* Nombre */}
-                    <div className="space-y-1">
-                      <h3 style={{ color: '#006B4E', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)' }}>
-                        {language === 'en' && inmobiliaria.nombreEn ? inmobiliaria.nombreEn : inmobiliaria.nombre}
-                      </h3>
+            {/* Estado vacío */}
+            {!isLoading && filteredInmobiliarias.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ backgroundColor: '#F0F5EB' }}>
+                  <Home className="w-8 h-8" style={{ color: '#647E3F' }} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Montserrat, sans-serif', color: '#0A0A0A' }}>
+                  {language === 'en' ? 'No agencies found' : 'No encontramos inmobiliarias'}
+                </h3>
+                <p className="text-gray-500 mb-6 max-w-sm" style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', lineHeight: '1.6' }}>
+                  {language === 'en'
+                    ? 'Try a different name or select another region.'
+                    : 'Probá con otro nombre o seleccioná otra región.'}
+                </p>
+                <button
+                  onClick={() => { setSearchText(''); setSearchApplied(''); setSelectedRegion(''); }}
+                  className="px-5 py-2.5 rounded-full border-2 text-sm font-medium transition-colors hover:bg-gray-50"
+                  style={{ borderColor: '#C5D9A8', color: '#3D5E28', fontFamily: 'Inter, sans-serif' }}
+                >
+                  {language === 'en' ? 'Clear filters' : 'Limpiar filtros'}
+                </button>
+              </div>
+            )}
+
+            {/* Grid de inmobiliarias */}
+            {!isLoading && filteredInmobiliarias.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {filteredInmobiliarias.map((inmobiliaria) => (
+                  <div
+                    key={inmobiliaria.id}
+                    className="h-full flex flex-col border border-gray-200 rounded-xl shadow-sm hover:border-gray-400 hover:shadow-md transition-all duration-300 cursor-pointer group overflow-hidden bg-white"
+                    onClick={() => handleVerDetalle(inmobiliaria.nombre)}
+                  >
+                    {/* Imagen */}
+                    <div className="relative flex-shrink-0">
+                      <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
+                        <img
+                          src={inmobiliaria.imagen}
+                          alt={inmobiliaria.nombre}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
                     </div>
-                    
-                    {/* Descripción */}
-                    <p className="text-sm text-gray-600 line-clamp-2" style={{ fontSize: 'var(--font-size-body-sm)', lineHeight: 'var(--line-height-body)' }}>
-                      {language === 'en' && inmobiliaria.descripcionEn ? inmobiliaria.descripcionEn : inmobiliaria.descripcion}
-                    </p>
 
-                    {/* Rating y ubicación */}
-                    <div className="space-y-2 flex-grow">
+                    {/* Contenido */}
+                    <div className="p-4 md:p-5 space-y-3 bg-white flex-grow flex flex-col">
+                      {/* Nombre */}
+                      <h3 style={{ color: '#006B4E', fontSize: 'var(--font-size-body-lg)', fontWeight: 'var(--font-weight-semibold)', fontFamily: 'Montserrat, sans-serif' }}>
+                        {language === 'en' && (inmobiliaria as any).nombreEn ? (inmobiliaria as any).nombreEn : inmobiliaria.nombre}
+                      </h3>
+
+                      {/* Descripción */}
+                      <p className="text-sm text-gray-600 line-clamp-2 flex-grow" style={{ fontSize: 'var(--font-size-body-sm)', lineHeight: 'var(--line-height-body)' }}>
+                        {language === 'en' && (inmobiliaria as any).descripcionEn ? (inmobiliaria as any).descripcionEn : inmobiliaria.descripcion}
+                      </p>
+
                       {/* Rating */}
                       <div className="flex items-center gap-2">
                         <div className="flex gap-0.5">
                           {renderStars(inmobiliaria.rating)}
                         </div>
-                        <span className="text-sm text-gray-600" style={{ fontSize: 'var(--font-size-xs)' }}>
+                        <span style={{ fontSize: 'var(--font-size-xs)', color: '#525252', fontFamily: 'Inter, sans-serif' }}>
                           {inmobiliaria.rating.toFixed(1)} · {inmobiliaria.numResenas} {t.inmobiliarias.reviews}
                         </span>
                       </div>
 
-                      {/* Ubicación */}
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
-                        <span className="text-sm text-gray-500" style={{ fontSize: 'var(--font-size-xs)', lineHeight: 'var(--line-height-ui)' }}>
-                          {inmobiliaria.ubicacion}
-                        </span>
+                      {/* Zonas de operación — badges */}
+                      <div className="flex flex-wrap gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                        {inmobiliaria.zonas.map(zona => (
+                          <span
+                            key={zona}
+                            className="px-2 py-0.5 rounded-full text-xs"
+                            style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+                          >
+                            {zona}
+                          </span>
+                        ))}
                       </div>
-                    </div>
 
-                    {/* Botones */}
-                    <div className="pt-3 border-t border-gray-200">
-                      <div className="flex flex-col gap-2">
-                        {/* Botón primario - Contactar */}
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleContactar(inmobiliaria.nombre);
-                          }}
-                          className="w-full bg-[#006B4E] hover:bg-[#01533E] text-white px-4 py-2.5 rounded-[200px] transition-colors text-sm"
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 500,
-                            lineHeight: '1.3'
-                          }}
+                      {/* CTAs */}
+                      <div className="pt-3 border-t border-gray-200 flex flex-col gap-2">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleContactar(inmobiliaria.nombre); }}
+                          className="w-full bg-[#006B4E] hover:bg-[#01533E] text-white px-4 py-2.5 rounded-[200px] transition-colors text-sm font-medium"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
                         >
                           {t.inmobiliarias.contact}
                         </button>
-
-                        {/* Botón secundario - Ver inmobiliaria */}
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleVerDetalle(inmobiliaria.nombre);
-                          }}
-                          className="w-full bg-white hover:bg-gray-50 text-black border-2 border-gray-200 hover:border-gray-300 px-4 py-2.5 rounded-[200px] transition-colors text-sm"
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 500,
-                            lineHeight: '1.3',
-                            color: '#0A0A0A'
-                          }}
+                          onClick={(e) => { e.stopPropagation(); handleVerDetalle(inmobiliaria.nombre); }}
+                          className="w-full bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-gray-300 px-4 py-2.5 rounded-[200px] transition-colors text-sm font-medium"
+                          style={{ fontFamily: 'Inter, sans-serif', color: '#0A0A0A' }}
                         >
                           {t.inmobiliarias.viewAgency}
                         </button>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
+
           </div>
         </section>
       </main>
