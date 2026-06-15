@@ -20,6 +20,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [showTestimoniosModal, setShowTestimoniosModal] = useState(false);
   const tabContentRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
   const equipoScrollRef = useRef<HTMLDivElement>(null);
   const testimoniosScrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -409,7 +410,13 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                 </p>
 
                 <div className="flex gap-3 flex-wrap pt-3">
-                  <button 
+                  <button
+                    onClick={() => {
+                      if (activeTab !== 'sobre') setActiveTab('sobre');
+                      setTimeout(() => {
+                        contactRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, activeTab !== 'sobre' ? 150 : 0);
+                    }}
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
@@ -768,7 +775,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   </div>
 
                   {/* INFORMACIÓN DE CONTACTO */}
-                  <div className="rounded-xl border-2 p-8" style={{ 
+                  <div ref={contactRef} className="rounded-xl border-2 p-8" style={{
                     backgroundColor: 'var(--input-background)',
                     borderColor: 'var(--border)'
                   }}>
