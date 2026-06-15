@@ -1,5 +1,6 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronLeft, MapPin, Phone, Mail, CheckCircle, FileCheck, TrendingUp, Building2, Scale, FileText, Handshake, Shield, Users, CreditCard, X, ChevronRight, Star } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { getAllParcelas } from '@/app/data/parcelasData';
@@ -1456,9 +1457,9 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
         </div>
       )}
       {/* MODAL CONTACTAR BROKER */}
-      {showContactBrokerModal && (
+      {showContactBrokerModal && createPortal(
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          className="fixed inset-0 z-[99999] flex items-center justify-center"
           style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
           onClick={(e) => { if (e.target === e.currentTarget) { setShowContactBrokerModal(false); } }}
         >
@@ -1554,7 +1555,8 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <SiteFooter onNavigate={onNavigate} />
