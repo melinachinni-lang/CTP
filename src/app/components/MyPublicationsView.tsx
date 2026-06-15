@@ -45,6 +45,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const [sincronizando, setSincronizando] = useState(false);
   const handleSincronizar = () => { setSincronizando(true); setTimeout(() => setSincronizando(false), 2000); };
   const [showPublicationLimitModal, setShowPublicationLimitModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Efecto para abrir el modal cuando cambia autoOpenModal
   useEffect(() => {
@@ -57,6 +58,11 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       }
     }
   }, [autoOpenModal, userType]);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   // Mock data - datos de ejemplo (solo 1 parcela para dashboard personal)
   const [publications, setPublications] = useState<Publication[]>([
@@ -745,7 +751,6 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
             </div>
           )}
         </div>
-      
 
       {/* Filters */}
       <div className="px-6 py-4 bg-background" style={{ borderBottom: '1px solid var(--border)' }}>
@@ -788,7 +793,24 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
 
       {/* Publications Grid */}
       <div className="px-6 py-6">
-        {filteredPublications.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ border: '1px solid #E5E5E5' }}>
+                <div style={{ aspectRatio: '4/3', backgroundColor: '#F3F4F6' }} />
+                <div className="p-4 space-y-3">
+                  <div className="h-3 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '40%' }} />
+                  <div className="h-4 rounded-full" style={{ backgroundColor: '#E5E7EB', width: '80%' }} />
+                  <div className="h-3 rounded-full" style={{ backgroundColor: '#F3F4F6', width: '60%' }} />
+                  <div className="flex gap-3 pt-2">
+                    <div className="h-3 rounded-full" style={{ backgroundColor: '#F3F4F6', width: '30%' }} />
+                    <div className="h-3 rounded-full" style={{ backgroundColor: '#F3F4F6', width: '30%' }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredPublications.length === 0 ? (
           <div className="text-center py-16">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-muted">
               <Plus className="w-8 h-8 text-muted-foreground" />
