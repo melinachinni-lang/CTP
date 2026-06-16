@@ -4,7 +4,7 @@ import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, Aler
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
   onFeedback?: (msg: string) => void;
-  defaultTab?: 'recibidas' | 'enviadas' | 'notificaciones';
+  defaultTab?: 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas';
 }
 
 type EstadoConsulta = 'pendiente' | 'confirmada' | 'reprogramada' | 'cancelada' | 'expirada';
@@ -168,6 +168,52 @@ const BROKERS_MOCK = [
   { id: 4, nombre: 'Valentina Rojas', rol: 'Broker', disponible: true },
 ];
 
+const RESERVAS_MOCK: Consulta[] = [
+  {
+    id: 'res1',
+    tipo: 'visita',
+    parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
+    otroUsuario: { nombre: 'Martín Castillo', email: 'mcastillo@gmail.com', telefono: '+56 9 8811 2233' },
+    fecha: '2026-06-20',
+    hora: '10:00',
+    estado: 'confirmada',
+    origen: 'Portal web',
+    notas: 'Quiere ver el acceso vehicular y el sistema de agua',
+    brokerAsignado: 'Ana Silva',
+  },
+  {
+    id: 'res2',
+    tipo: 'videollamada',
+    parcela: { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400' },
+    otroUsuario: { nombre: 'Isabel Moreno', email: 'imoreno@outlook.com', telefono: '+56 9 7712 9944' },
+    fecha: '2026-06-22',
+    hora: '15:00',
+    estado: 'confirmada',
+    origen: 'Portal web',
+  },
+  {
+    id: 'res3',
+    tipo: 'visita',
+    parcela: { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
+    otroUsuario: { nombre: 'Roberto Vega', email: 'rvega@yahoo.com', telefono: '+56 9 6623 5577' },
+    fecha: '2026-06-18',
+    hora: '09:30',
+    estado: 'reprogramada',
+    origen: 'Portal web',
+    notas: 'Pidió visita grupal con su familia',
+  },
+  {
+    id: 'res4',
+    tipo: 'visita',
+    parcela: { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400' },
+    otroUsuario: { nombre: 'Camila Reyes', email: 'creyes@gmail.com', telefono: '+56 9 5534 8821' },
+    fecha: '2026-06-25',
+    hora: '11:00',
+    estado: 'confirmada',
+    origen: 'Portal web',
+  },
+];
+
 const NOTIFICACIONES_MOCK = [
   { id: 'n1', type: 'consulta' as const, text: 'Pedro Soto envió una consulta sobre "Parcela Vista Cordillera"', time: 'Hace 5 min', read: false },
   { id: 'n2', type: 'visita' as const, text: 'Visita confirmada para el 15 de mayo a las 10:00 hrs', time: 'Hace 1 hora', read: false },
@@ -178,7 +224,7 @@ const NOTIFICACIONES_MOCK = [
 ];
 
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
-  const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones' | 'reservas'>(defaultTab);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -192,6 +238,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
     setExpandedId(null);
   }, [defaultTab]);
   const [consultas, setConsultas] = useState<{ recibidas: Consulta[]; enviadas: Consulta[] }>({ recibidas: RECIBIDAS, enviadas: ENVIADAS });
+  const [reservas, setReservas] = useState<Consulta[]>(RESERVAS_MOCK);
   const [notificaciones, setNotificaciones] = useState(NOTIFICACIONES_MOCK);
   const [showReprogramar, setShowReprogramar] = useState<string | null>(null);
   const [showCancelar, setShowCancelar] = useState<string | null>(null);
@@ -212,10 +259,14 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
   const handleReprogramar = (id: string) => {
     if (!repFecha || !repHora) return;
-    setConsultas(prev => ({
-      ...prev,
-      recibidas: prev.recibidas.map(c => c.id === id ? { ...c, estado: 'reprogramada' as EstadoConsulta, fecha: repFecha, hora: repHora } : c),
-    }));
+    if (activeTab === 'reservas') {
+      setReservas(prev => prev.map(c => c.id === id ? { ...c, estado: 'reprogramada' as EstadoConsulta, fecha: repFecha, hora: repHora } : c));
+    } else {
+      setConsultas(prev => ({
+        ...prev,
+        recibidas: prev.recibidas.map(c => c.id === id ? { ...c, estado: 'reprogramada' as EstadoConsulta, fecha: repFecha, hora: repHora } : c),
+      }));
+    }
     setShowReprogramar(null);
     setRepFecha('');
     setRepHora('');
@@ -223,17 +274,25 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   };
 
   const handleCancelar = (id: string) => {
-    setConsultas(prev => ({
-      ...prev,
-      recibidas: prev.recibidas.map(c => c.id === id ? { ...c, estado: 'cancelada' as EstadoConsulta, motivo: cancelMotivo } : c),
-    }));
+    if (activeTab === 'reservas') {
+      setReservas(prev => prev.map(c => c.id === id ? { ...c, estado: 'cancelada' as EstadoConsulta, motivo: cancelMotivo } : c));
+    } else {
+      setConsultas(prev => ({
+        ...prev,
+        recibidas: prev.recibidas.map(c => c.id === id ? { ...c, estado: 'cancelada' as EstadoConsulta, motivo: cancelMotivo } : c),
+      }));
+    }
     setShowCancelar(null);
     setCancelMotivo('');
     showFeedback('Visita cancelada. Se notificó al comprador.');
   };
 
-  const lista = activeTab === 'recibidas' ? consultas.recibidas : activeTab === 'enviadas' ? consultas.enviadas : [];
-  const canManage = (c: Consulta) => activeTab === 'recibidas' && (c.estado === 'pendiente' || c.estado === 'confirmada') && c.tipo !== 'whatsapp' && c.tipo !== 'formulario';
+  const lista = activeTab === 'recibidas' ? consultas.recibidas : activeTab === 'enviadas' ? consultas.enviadas : activeTab === 'reservas' ? reservas : [];
+  const canManage = (c: Consulta) => {
+    const manageable = c.tipo !== 'whatsapp' && c.tipo !== 'formulario';
+    if (activeTab === 'reservas') return manageable && (c.estado === 'confirmada' || c.estado === 'reprogramada');
+    return activeTab === 'recibidas' && manageable && (c.estado === 'pendiente' || c.estado === 'confirmada');
+  };
   const canManageFormulario = (c: Consulta) => activeTab === 'recibidas' && c.tipo === 'formulario' && c.estado !== 'cancelada';
   const unreadNotifCount = notificaciones.filter(n => !n.read).length;
 
@@ -289,15 +348,16 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-xl" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
+      <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
         {[
           { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
           ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
+          ...(viewType !== 'personal' ? [{ id: 'reservas', label: 'Reservas', count: reservas.filter(r => r.estado !== 'cancelada').length }] : []),
           { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones'); setExpandedId(null); }}
+            onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas'); setExpandedId(null); }}
             className="px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1"
             style={{
               fontFamily: 'var(--font-body)',
@@ -414,10 +474,10 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
             <MessageCircle className="w-8 h-8" style={{ color: '#D1D5DB' }} />
           </div>
           <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
-            {activeTab === 'recibidas' ? 'No recibiste consultas aún' : 'No enviaste consultas aún'}
+            {activeTab === 'recibidas' ? 'No recibiste consultas aún' : activeTab === 'reservas' ? 'No hay reservas aún' : 'No enviaste consultas aún'}
           </h3>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '280px', lineHeight: '1.6' }}>
-            {activeTab === 'recibidas' ? 'Las consultas de compradores sobre tus parcelas aparecerán acá.' : 'Cuando contactes a un vendedor, el historial aparecerá acá.'}
+            {activeTab === 'recibidas' ? 'Las consultas de compradores sobre tus parcelas aparecerán acá.' : activeTab === 'reservas' ? 'Los agendamientos confirmados aparecerán acá.' : 'Cuando contactes a un vendedor, el historial aparecerá acá.'}
           </p>
         </div>
       ) : (
