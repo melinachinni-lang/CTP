@@ -5,6 +5,7 @@ import { PublicacionPublicaView } from '@/app/components/PublicacionPublicaView'
 import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { NewProjectFlow } from '@/app/components/NewProjectFlow';
 import { AddProjectPlotsFlow } from '@/app/components/AddProjectPlotsFlow';
+import { Tabs } from '@/app/components/Tabs';
 
 interface Publication extends PublicationData {
   id: string;
@@ -37,6 +38,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const [viewingPublicPublication, setViewingPublicPublication] = useState<Publication | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const [filterStatus, setFilterStatus] = useState<'all' | PublicationStatus>('all');
+  const [activePublicationType, setActivePublicationType] = useState<'parcelas' | 'proyectos'>('parcelas');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [newlyPublishedId, setNewlyPublishedId] = useState<string | null>(null);
   const [successLinkCopied, setSuccessLinkCopied] = useState(false);
@@ -94,6 +96,38 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       views: 234,
       inquiries: 12,
     },
+    ...(userType === 'inmobiliaria' ? [{
+      id: 'pub-project-1',
+      status: 'published' as PublicationStatus,
+      publisherType: userType,
+      publisherId: userId,
+      title: 'Proyecto Parcelas Los Robles',
+      lotNumber: 'Etapa 1',
+      surface: '60000',
+      typology: 'residencial' as const,
+      price: '45000000',
+      priceType: 'fixed' as const,
+      availability: 'available' as const,
+      region: 'Región Metropolitana',
+      comuna: 'San José de Maipo',
+      sector: 'Cajón del Maipo',
+      hasApprovedRole: true,
+      readyForDeed: false,
+      roadExecuted: true,
+      hasGate: false,
+      mainImage: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=800',
+      galleryImages: [],
+      description: 'Proyecto de 12 parcelas en el Cajón del Maipo con acceso pavimentado.',
+      documents: [],
+      stockUnits: [
+        { id: 'lot-1', code: 'L01', surface: '5000', price: '45000000', status: 'available' as const },
+        { id: 'lot-2', code: 'L02', surface: '4800', price: '43000000', status: 'reserved' as const },
+        { id: 'lot-3', code: 'L03', surface: '5200', price: '47000000', status: 'sold' as const },
+      ],
+      lastEdited: '2025-03-10',
+      views: 312,
+      inquiries: 18,
+    }] : []),
   ]);
 
   const handleNewPublication = () => {
@@ -300,9 +334,15 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
     return labels[availability as keyof typeof labels] || availability;
   };
 
-  const filteredPublications = filterStatus === 'all' 
-    ? publications 
-    : publications.filter(pub => pub.status === filterStatus);
+  const isProyecto = (pub: Publication) => pub.stockUnits && pub.stockUnits.length > 0;
+
+  const typeFilteredPublications = userType === 'inmobiliaria'
+    ? publications.filter(pub => activePublicationType === 'proyectos' ? isProyecto(pub) : !isProyecto(pub))
+    : publications;
+
+  const filteredPublications = filterStatus === 'all'
+    ? typeFilteredPublications
+    : typeFilteredPublications.filter(pub => pub.status === filterStatus);
 
   if (showWizard) {
     return (
@@ -750,6 +790,20 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tabs parcelas / proyectos — solo inmobiliaria */}
+      {userType === 'inmobiliaria' && (
+        <div className="px-6 py-4 bg-background flex justify-center" style={{ borderBottom: '1px solid var(--border)' }}>
+          <Tabs
+            tabs={[
+              { id: 'parcelas', label: 'Parcelas' },
+              { id: 'proyectos', label: 'Proyectos' },
+            ]}
+            activeTab={activePublicationType}
+            onTabChange={(tab) => setActivePublicationType(tab as 'parcelas' | 'proyectos')}
+          />
         </div>
       )}
 
