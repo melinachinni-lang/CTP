@@ -240,11 +240,14 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
                   setCurrentSection(item.id);
                 }}
-                className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all rounded-lg mx-2 ${
+                className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
                   currentSection === item.id ? 'font-medium' : ''
                 }`}
                 style={{
-                  width: 'calc(100% - 16px)',
+                  width: currentSection === item.id ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
+                  marginLeft: '8px',
+                  marginRight: currentSection === item.id ? '0px' : '8px',
+                  borderRadius: currentSection === item.id ? '8px 0 0 8px' : '8px',
                   color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
                   backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
                 }}
@@ -305,7 +308,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
       </aside>
 
       {/* Main Content Area */}
-      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: 'calc(224px + 8px)', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
+      <div className="fixed overflow-y-auto bg-white rounded-r-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '224px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {/* Topbar con campana */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-3 flex justify-end">
           <button

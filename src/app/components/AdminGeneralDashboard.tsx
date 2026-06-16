@@ -588,12 +588,14 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className="mx-2 flex items-center gap-3 px-4 py-3 transition-all"
+                className="flex items-center gap-3 px-4 py-3 transition-all"
                 style={{
                   backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                   color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  borderRadius: '8px',
-                  width: 'calc(100% - 16px)',
+                  borderRadius: isActive ? '8px 0 0 8px' : '8px',
+                  width: isActive ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
+                  marginLeft: '8px',
+                  marginRight: isActive ? '0px' : '8px',
                   fontFamily: 'var(--font-body)',
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-body-sm)',
@@ -653,7 +655,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       </nav>
 
       {/* Main Content */}
-      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: 'calc(256px + 8px)', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
+      <div className="fixed overflow-y-auto bg-white rounded-r-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '256px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {/* Header */}
         <div
           className="sticky top-0 z-40"
