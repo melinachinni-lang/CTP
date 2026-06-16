@@ -78,7 +78,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                     fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                     fontSize: 'var(--font-size-body-sm)',
                     lineHeight: 'var(--line-height-ui)',
-                    borderRadius: isActive ? '8px 0 0 8px' : '8px',
+                    borderRadius: '8px',
                     marginLeft: '8px',
                     marginRight: isActive ? '0px' : '8px',
                     width: isActive ? 'calc(100% - 8px)' : 'calc(100% - 16px)'

@@ -592,7 +592,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 style={{
                   backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                   color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  borderRadius: isActive ? '8px 0 0 8px' : '8px',
+                  borderRadius: '8px',
                   width: isActive ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
                   marginLeft: '8px',
                   marginRight: isActive ? '0px' : '8px',

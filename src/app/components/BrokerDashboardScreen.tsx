@@ -121,7 +121,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
                   width: currentSection === item.id ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
                   marginLeft: '8px',
                   marginRight: currentSection === item.id ? '0px' : '8px',
-                  borderRadius: currentSection === item.id ? '8px 0 0 8px' : '8px',
+                  borderRadius: '8px',
                   ...(currentSection === item.id
                     ? { backgroundColor: '#FFFFFF' }
                     : { transition: 'background-color 0.2s ease' })

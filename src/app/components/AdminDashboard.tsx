@@ -574,7 +574,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-body-sm)',
                   lineHeight: 'var(--line-height-ui)',
-                  borderRadius: isActive ? '8px 0 0 8px' : '8px'
+                  borderRadius: '8px'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
