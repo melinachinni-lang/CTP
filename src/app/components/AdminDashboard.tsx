@@ -555,7 +555,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         </div>
 
         {/* Nav Items */}
-        <div className="flex-1 py-4 overflow-y-auto">
+        <div className="flex-1 py-4 overflow-y-auto scrollbar-hide">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeNav === item.id;

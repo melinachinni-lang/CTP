@@ -108,7 +108,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 py-4 overflow-y-auto">
+          <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
             {navItems.map((item) => (
               <button
                 key={item.id}

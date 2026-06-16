@@ -232,7 +232,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           )}
 
           {/* Navigation Items */}
-          <nav className="flex-1 py-4 overflow-y-auto">
+          <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
             {navItems.map((item) => (
               <button
                 key={item.id}
