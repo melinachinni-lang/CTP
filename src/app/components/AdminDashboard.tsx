@@ -630,7 +630,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       </nav>
 
       {/* Main Content */}
-      <div className="fixed overflow-y-auto bg-white rounded-r-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '256px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
+      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '256px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {/* Header */}
         <div
           className="sticky top-0 z-40"
