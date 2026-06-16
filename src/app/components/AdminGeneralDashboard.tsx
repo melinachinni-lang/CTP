@@ -94,17 +94,6 @@ interface BloqueHome {
 export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps) {
   const [activeNav, setActiveNav] = useState<NavItem>('inicio');
   const [dateRange, setDateRange] = useState('ultimos-30-dias');
-  const sidebarRef = React.useRef<HTMLElement>(null);
-  const activeButtonRef = React.useRef<HTMLButtonElement>(null);
-  const [notchPos, setNotchPos] = React.useState({ top: 0, height: 0 });
-
-  React.useLayoutEffect(() => {
-    if (activeButtonRef.current && sidebarRef.current) {
-      const btn = activeButtonRef.current.getBoundingClientRect();
-      const bar = sidebarRef.current.getBoundingClientRect();
-      setNotchPos({ top: btn.top - bar.top, height: btn.height });
-    }
-  }, [activeNav]);
   const [deviceFilter, setDeviceFilter] = useState<'todos' | 'mobile' | 'desktop'>('todos');
   
   // Estados para Brokers
@@ -568,7 +557,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Sidebar */}
       <nav
-        ref={sidebarRef}
         className="fixed left-0 top-0 h-full flex flex-col"
         style={{
           width: '256px',
@@ -598,17 +586,16 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
             const isActive = activeNav === item.id;
             return (
               <button
-                ref={isActive ? activeButtonRef : null}
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
                 className="flex items-center gap-3 px-4 py-3 transition-all"
                 style={{
                   backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                   color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  borderRadius: isActive ? '8px 0 0 8px' : '8px',
-                  width: isActive ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
+                  borderRadius: '8px',
+                  width: 'calc(100% - 16px)',
                   marginLeft: '8px',
-                  marginRight: isActive ? '0px' : '8px',
+                  marginRight: '8px',
                   fontFamily: 'var(--font-body)',
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-body-sm)',
@@ -665,12 +652,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
             </div>
           </div>
         </div>
-        {notchPos.top > 0 && (
-          <>
-            <div style={{ position: 'absolute', top: notchPos.top - 8, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 100%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', top: notchPos.top + notchPos.height, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 0%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
-          </>
-        )}
       </nav>
 
       {/* Main Content */}

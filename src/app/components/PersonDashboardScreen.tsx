@@ -33,9 +33,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
       { id: 5, type: 'system', text: 'Recuerda completar tu perfil para más visibilidad', time: 'Hace 2 días', read: true },
     ]);
     const notifRef = React.useRef<HTMLDivElement>(null);
-    const sidebarRef = React.useRef<HTMLElement>(null);
-    const activeButtonRef = React.useRef<HTMLButtonElement>(null);
-    const [notchPos, setNotchPos] = React.useState({ top: 0, height: 0 });
     const unreadCount = notifications.filter(n => !n.read).length;
 
     React.useEffect(() => {
@@ -48,14 +45,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
       document.addEventListener('mousedown', handler);
       return () => document.removeEventListener('mousedown', handler);
     }, [showNotifications]);
-
-    React.useLayoutEffect(() => {
-      if (activeButtonRef.current && sidebarRef.current) {
-        const btn = activeButtonRef.current.getBoundingClientRect();
-        const bar = sidebarRef.current.getBoundingClientRect();
-        setNotchPos({ top: btn.top - bar.top, height: btn.height });
-      }
-    }, [currentSection]);
 
     // Exponer función para abrir modal de publicación
     React.useImperativeHandle(ref, () => ({
@@ -169,7 +158,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     <>
       <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Nav Rail - Left Sidebar */}
-      <aside ref={sidebarRef} className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
+      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
           <div className="p-4 mt-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -246,7 +235,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
             {navItems.map((item) => (
               <button
-                ref={currentSection === item.id ? activeButtonRef : null}
                 key={item.id}
                 onClick={() => {
                   if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
@@ -256,10 +244,10 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   currentSection === item.id ? 'font-medium' : ''
                 }`}
                 style={{
-                  width: currentSection === item.id ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
+                  width: 'calc(100% - 16px)',
                   marginLeft: '8px',
-                  marginRight: currentSection === item.id ? '0px' : '8px',
-                  borderRadius: currentSection === item.id ? '8px 0 0 8px' : '8px',
+                  marginRight: '8px',
+                  borderRadius: '8px',
                   color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
                   backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
                 }}
@@ -317,12 +305,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
             )}
           </div>
         </div>
-        {notchPos.top > 0 && (
-          <>
-            <div style={{ position: 'absolute', top: notchPos.top - 8, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 100%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', top: notchPos.top + notchPos.height, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 0%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
-          </>
-        )}
       </aside>
 
       {/* Main Content Area */}
