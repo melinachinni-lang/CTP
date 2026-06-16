@@ -26,6 +26,18 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       }
     }));
 
+    const sidebarRef = React.useRef<HTMLElement>(null);
+    const activeButtonRef = React.useRef<HTMLButtonElement>(null);
+    const [notchPos, setNotchPos] = React.useState({ top: 0, height: 0 });
+
+    React.useLayoutEffect(() => {
+      if (activeButtonRef.current && sidebarRef.current) {
+        const btn = activeButtonRef.current.getBoundingClientRect();
+        const bar = sidebarRef.current.getBoundingClientRect();
+        setNotchPos({ top: btn.top - bar.top, height: btn.height });
+      }
+    }, [currentSection]);
+
   const navItems = [
     { id: 'home', label: 'Inicio', icon: 'home' },
     { id: 'listings', label: 'Mis publicaciones', icon: 'list' },
@@ -100,7 +112,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     <>
       <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
+      <aside ref={sidebarRef} className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
           <div className="p-2 mt-8">
@@ -113,6 +125,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
               <button
                 key={item.id}
                 onClick={() => setCurrentSection(item.id)}
+                ref={currentSection === item.id ? activeButtonRef : null}
                 className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
                   currentSection === item.id ? 'font-medium' : ''
                 }`}
@@ -121,7 +134,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
                   width: currentSection === item.id ? 'calc(100% - 8px)' : 'calc(100% - 16px)',
                   marginLeft: '8px',
                   marginRight: currentSection === item.id ? '0px' : '8px',
-                  borderRadius: '8px',
+                  borderRadius: currentSection === item.id ? '8px 0 0 8px' : '8px',
                   ...(currentSection === item.id
                     ? { backgroundColor: '#FFFFFF' }
                     : { transition: 'background-color 0.2s ease' })
@@ -179,6 +192,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
             )}
           </div>
         </div>
+        {notchPos.top > 0 && (
+          <>
+            <div style={{ position: 'absolute', top: notchPos.top - 8, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 100%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: notchPos.top + notchPos.height, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 0%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
+          </>
+        )}
       </aside>
 
       {/* Main Content Area */}

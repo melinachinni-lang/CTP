@@ -29,6 +29,18 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       }
     }));
 
+    const sidebarRef = React.useRef<HTMLElement>(null);
+    const activeButtonRef = React.useRef<HTMLButtonElement>(null);
+    const [notchPos, setNotchPos] = React.useState({ top: 0, height: 0 });
+
+    React.useLayoutEffect(() => {
+      if (activeButtonRef.current && sidebarRef.current) {
+        const btn = activeButtonRef.current.getBoundingClientRect();
+        const bar = sidebarRef.current.getBoundingClientRect();
+        setNotchPos({ top: btn.top - bar.top, height: btn.height });
+      }
+    }, [currentSection]);
+
   const navItems = [
     { id: 'home', label: 'Inicio', icon: Home },
     { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
@@ -45,7 +57,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     <>
       <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-64 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
+      <aside ref={sidebarRef} className="w-64 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
           <div className="px-6 py-8">
@@ -68,6 +80,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
               
               return (
                 <button
+                  ref={isActive ? activeButtonRef : null}
                   key={item.id}
                   onClick={() => setCurrentSection(item.id)}
                   className="w-full flex items-center gap-3 px-4 py-3 transition-all"
@@ -78,7 +91,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                     fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                     fontSize: 'var(--font-size-body-sm)',
                     lineHeight: 'var(--line-height-ui)',
-                    borderRadius: '8px',
+                    borderRadius: isActive ? '8px 0 0 8px' : '8px',
                     marginLeft: '8px',
                     marginRight: isActive ? '0px' : '8px',
                     width: isActive ? 'calc(100% - 8px)' : 'calc(100% - 16px)'
@@ -155,6 +168,12 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
             )}
           </div>
         </div>
+        {notchPos.top > 0 && (
+          <>
+            <div style={{ position: 'absolute', top: notchPos.top - 8, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 100%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: notchPos.top + notchPos.height, right: -8, width: 8, height: 8, background: 'radial-gradient(circle at 0% 0%, transparent 8px, #002F23 8px)', pointerEvents: 'none' }} />
+          </>
+        )}
       </aside>
 
       {/* Main Content Area */}
