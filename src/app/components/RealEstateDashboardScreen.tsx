@@ -42,17 +42,18 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
   ];
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: '#FFFFFF' }}>
+    <>
+      <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-64 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ borderRight: '1px solid #DEDEDE', backgroundColor: '#FAFAFA' }}>
+      <aside className="w-64 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
-          <div className="px-6 py-8" style={{ borderBottom: '1px solid #DEDEDE' }}>
-            <h2 style={{ 
-              fontFamily: 'var(--font-heading)', 
+          <div className="px-6 py-8">
+            <h2 style={{
+              fontFamily: 'var(--font-heading)',
               fontWeight: 'var(--font-weight-semibold)',
               fontSize: 'var(--font-size-h4)',
-              color: '#0A0A0A',
+              color: '#FFFFFF',
               lineHeight: 'var(--line-height-heading)'
             }}>
               CompraTuParcela
@@ -69,27 +70,32 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                 <button
                   key={item.id}
                   onClick={() => setCurrentSection(item.id)}
-                  className="w-full flex items-center gap-3 px-6 py-3 transition-all"
+                  className="w-full flex items-center gap-3 px-4 py-3 transition-all"
                   style={{
-                    backgroundColor: isActive ? '#CDD8DE' : 'transparent',
-                    color: '#006B4E',
+                    backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                    color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
                     fontFamily: 'var(--font-body)',
                     fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                     fontSize: 'var(--font-size-body-sm)',
-                    lineHeight: 'var(--line-height-ui)'
+                    lineHeight: 'var(--line-height-ui)',
+                    borderRadius: '8px',
+                    margin: '0 8px',
+                    width: 'calc(100% - 16px)'
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.1)';
+                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                      e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) {
                       e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
                     }
                   }}
                 >
-                  <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2 }} />
+                  <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
                   <span>{item.label}</span>
                 </button>
               );
@@ -97,32 +103,32 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
           </nav>
 
           {/* User Profile Area */}
-          <div className="px-6 py-4" style={{ borderTop: '1px solid #DEDEDE' }}>
+          <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
             <button
               onClick={() => setShowMenu(!showMenu)}
               className="w-full flex items-center gap-3 transition-colors"
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--font-size-body-sm)',
-                color: '#737373'
+                color: 'rgba(255,255,255,0.65)'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#0A0A0A'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#737373'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
             >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E7E6', border: '1px solid #DEDEDE' }}>
-                <User className="w-5 h-5" style={{ color: '#737373' }} />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                <User className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.65)' }} />
               </div>
               <div className="flex-1 text-left">
-                <div style={{ 
+                <div style={{
                   fontWeight: 'var(--font-weight-medium)',
-                  color: '#0A0A0A',
+                  color: '#FFFFFF',
                   fontSize: 'var(--font-size-body-sm)'
                 }}>
                   Mi cuenta
                 </div>
-                <div style={{ 
+                <div style={{
                   fontSize: 'var(--font-size-xs)',
-                  color: '#737373',
+                  color: 'rgba(255,255,255,0.5)',
                   marginTop: '2px'
                 }}>
                   Plan Profesional
@@ -151,7 +157,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 ml-64">
+      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: 'calc(256px + 8px)', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="inmobiliaria" />}
@@ -162,7 +168,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'help' && <HelpContent />}
         {currentSection === 'settings' && <SettingsContent />}
       </div>
-    </div>
+    </>
   );
 });
 

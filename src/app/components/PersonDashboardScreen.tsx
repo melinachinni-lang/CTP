@@ -78,7 +78,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
-    const color = isActive ? '#FFFFFF' : 'rgba(255,255,255,0.65)';
+    const color = isActive ? '#002F23' : 'rgba(255,255,255,0.65)';
     const strokeWidth = isActive ? 2.5 : 2;
 
     switch (iconType) {
@@ -240,13 +240,13 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                   if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
                   setCurrentSection(item.id);
                 }}
-                className={`w-full flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
+                className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all rounded-lg mx-2 ${
                   currentSection === item.id ? 'font-medium' : ''
                 }`}
                 style={{
-                  color: currentSection === item.id ? '#FFFFFF' : 'rgba(255,255,255,0.65)',
-                  backgroundColor: currentSection === item.id ? '#065F46' : 'transparent',
-                  borderLeft: currentSection === item.id ? '3px solid rgba(255,255,255,0.4)' : '3px solid transparent',
+                  width: 'calc(100% - 16px)',
+                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                  backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
                 }}
                 onMouseEnter={(e) => {
                   if (currentSection !== item.id) {
@@ -302,23 +302,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
             )}
           </div>
         </div>
-        {/* CTP Logo decorative background illustration */}
-        <svg
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ position: 'absolute', bottom: '20px', left: 'calc(50% - 52px)', width: '104px', height: '104px', opacity: 0.05, pointerEvents: 'none', zIndex: -1 }}
-        >
-          <circle cx="50" cy="50" r="46" stroke="white" strokeWidth="3"/>
-          <path d="M 50 11 L 90 47 L 82 47 L 50 25 L 18 47 L 10 47 Z" stroke="white" strokeWidth="2" strokeLinejoin="round" fill="none"/>
-          <rect x="43" y="48" width="5" height="5" stroke="white" strokeWidth="1.5"/>
-          <rect x="51" y="48" width="5" height="5" stroke="white" strokeWidth="1.5"/>
-          <rect x="43" y="56" width="5" height="5" stroke="white" strokeWidth="1.5"/>
-          <rect x="51" y="56" width="5" height="5" stroke="white" strokeWidth="1.5"/>
-          <line x1="50" y1="62" x2="50" y2="70" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-          <path d="M 50 70 C 44 70 12 65 10 78 C 10 91 45 89 50 84" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
-          <path d="M 50 70 C 56 70 88 65 90 78 C 90 91 55 89 50 84" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
-        </svg>
       </aside>
 
       {/* Main Content Area */}

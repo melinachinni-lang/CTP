@@ -553,7 +553,8 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
   };
 
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
+    <>
+      <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Sidebar */}
       <nav
         className="fixed left-0 top-0 h-full flex flex-col"
@@ -587,11 +588,12 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className="w-full flex items-center gap-3 px-6 py-3 transition-all"
+                className="mx-2 flex items-center gap-3 px-6 py-3 transition-all"
                 style={{
-                  backgroundColor: isActive ? '#065F46' : 'transparent',
-                  borderLeft: isActive ? '3px solid rgba(255,255,255,0.4)' : '3px solid transparent',
-                  color: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.65)',
+                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                  color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                  borderRadius: '8px',
+                  width: 'calc(100% - 16px)',
                   fontFamily: 'var(--font-body)',
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-body-sm)',
@@ -610,7 +612,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   }
                 }}
               >
-                <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2 }} />
+                <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
                 <span>{item.label}</span>
               </button>
             );
@@ -651,7 +653,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       </nav>
 
       {/* Main Content */}
-      <div className="flex-1" style={{ marginLeft: '256px' }}>
+      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: 'calc(256px + 8px)', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {/* Header */}
         <div
           className="sticky top-0 z-40"
@@ -3691,6 +3693,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {activeNav === 'recursos' && <AdminRecursosModule />}
         </div>
       </div>
-    </div>
+    </>
   );
 }

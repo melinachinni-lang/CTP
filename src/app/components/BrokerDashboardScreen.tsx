@@ -97,13 +97,14 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
   };
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <>
+      <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-56 border-r-2 border-gray-300 bg-gray-50 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20">
+      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
-          <div className="border-b-2 border-gray-300 p-2 mt-8">
-            <div className="font-bold text-base text-black">CompraTuParcela</div>
+          <div className="p-2 mt-8">
+            <div className="font-bold text-base" style={{ color: '#FFFFFF' }}>CompraTuParcela</div>
           </div>
 
           {/* Navigation Items */}
@@ -112,25 +113,28 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
               <button
                 key={item.id}
                 onClick={() => setCurrentSection(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors mx-2 ${
                   currentSection === item.id
-                    ? 'font-medium'
+                    ? 'font-medium rounded-lg'
                     : ''
                 }`}
                 style={{
-                  color: '#006B4E',
+                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                  width: 'calc(100% - 16px)',
                   ...(currentSection === item.id
-                    ? { backgroundColor: '#CDD8DE' }
+                    ? { backgroundColor: '#FFFFFF', borderRadius: '8px' }
                     : { transition: 'background-color 0.2s ease' })
                 }}
                 onMouseEnter={(e) => {
                   if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(100, 126, 63, 0.1)';
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (currentSection !== item.id) {
                     e.currentTarget.style.backgroundColor = '';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
                   }
                 }}
               >
@@ -141,12 +145,15 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
           </nav>
 
           {/* User Profile Area */}
-          <div className="border-t-2 border-gray-300 p-4">
+          <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm text-gray-700 hover:text-black"
+              className="w-full flex items-center gap-3 text-sm"
+              style={{ color: 'rgba(255,255,255,0.65)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
             >
-              <div className="w-8 h-8 border-2 border-gray-400 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -154,13 +161,16 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
               <span className="flex-1 text-left font-medium">Mi cuenta</span>
             </button>
             <div className="mt-2 pl-11">
-              <span className="text-xs text-gray-600">Plan Básico</span>
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>Plan Básico</span>
             </div>
             {showMenu && (
-              <div className="mt-2 bg-white border-2 border-gray-300">
+              <div className="mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
                 <button
                   onClick={() => onNavigate('entry')}
-                  className="w-full text-left text-xs py-2 px-3 hover:bg-gray-100"
+                  className="w-full text-left text-xs py-2 px-3"
+                  style={{ color: 'rgba(255,255,255,0.8)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ''; }}
                 >
                   Cerrar sesión
                 </button>
@@ -171,7 +181,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 ml-56">
+      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: 'calc(224px + 8px)', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="broker" userId="broker-456" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'leads' && <ConsultasView viewType="broker" />}
@@ -185,7 +195,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         {currentSection === 'help' && <HelpContent />}
         {currentSection === 'settings' && <SettingsContent />}
       </div>
-    </div>
+    </>
   );
 });
 
