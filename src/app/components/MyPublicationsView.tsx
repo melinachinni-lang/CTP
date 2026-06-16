@@ -829,7 +829,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
             <button
               key={filter.id}
               onClick={() => setFilterStatus(filter.id as any)}
-              className="px-4 py-2 rounded-lg transition-colors"
+              className="px-4 py-2 rounded-full transition-colors"
               style={{
                 backgroundColor: filterStatus === filter.id ? 'var(--foreground)' : 'var(--background)',
                 color: filterStatus === filter.id ? 'var(--background)' : '#737373',

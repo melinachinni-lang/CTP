@@ -298,7 +298,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
           <button
             key={tab.id}
             onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones'); setExpandedId(null); }}
-            className="px-5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1"
+            className="px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1"
             style={{
               fontFamily: 'var(--font-body)',
               backgroundColor: activeTab === tab.id ? '#FFFFFF' : 'transparent',

@@ -282,12 +282,12 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             </p>
           </div>
           {/* Period selector */}
-          <div className="flex gap-1 p-1 rounded-xl" style={{ backgroundColor: '#F3F4F6' }}>
+          <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
             {(['7d', '30d', '90d'] as Periodo[]).map(p => (
               <button
                 key={p}
                 onClick={() => handlePeriodo(p)}
-                className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
+                className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
                 style={{
                   fontFamily: 'var(--font-body)',
                   backgroundColor: periodo === p ? '#FFFFFF' : 'transparent',
