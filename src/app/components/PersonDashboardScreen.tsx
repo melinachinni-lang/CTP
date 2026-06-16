@@ -307,16 +307,17 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           viewBox="0 0 100 100"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{ position: 'absolute', bottom: '24px', right: '8px', width: '160px', height: '160px', opacity: 0.07, pointerEvents: 'none', zIndex: -1 }}
+          style={{ position: 'absolute', bottom: '20px', left: 'calc(50% - 52px)', width: '104px', height: '104px', opacity: 0.05, pointerEvents: 'none', zIndex: -1 }}
         >
           <circle cx="50" cy="50" r="46" stroke="white" strokeWidth="3"/>
-          <polyline points="20,46 50,18 80,46" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <rect x="36" y="44" width="28" height="22" rx="1" stroke="white" strokeWidth="3"/>
-          <line x1="50" y1="44" x2="50" y2="66" stroke="white" strokeWidth="2"/>
-          <line x1="36" y1="55" x2="64" y2="55" stroke="white" strokeWidth="2"/>
-          <line x1="50" y1="66" x2="50" y2="74" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-          <path d="M 50 74 Q 34 70 30 82 Q 40 90 50 78" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-          <path d="M 50 74 Q 66 70 70 82 Q 60 90 50 78" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+          <path d="M 50 11 L 90 47 L 82 47 L 50 25 L 18 47 L 10 47 Z" stroke="white" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+          <rect x="43" y="48" width="5" height="5" stroke="white" strokeWidth="1.5"/>
+          <rect x="51" y="48" width="5" height="5" stroke="white" strokeWidth="1.5"/>
+          <rect x="43" y="56" width="5" height="5" stroke="white" strokeWidth="1.5"/>
+          <rect x="51" y="56" width="5" height="5" stroke="white" strokeWidth="1.5"/>
+          <line x1="50" y1="62" x2="50" y2="70" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+          <path d="M 50 70 C 44 70 12 65 10 78 C 10 91 45 89 50 84" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+          <path d="M 50 70 C 56 70 88 65 90 78 C 90 91 55 89 50 84" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
         </svg>
       </aside>
 
