@@ -155,7 +155,8 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   };
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <>
+      <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
       {/* Nav Rail - Left Sidebar */}
       <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
@@ -301,10 +302,26 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
             )}
           </div>
         </div>
+        {/* CTP Logo decorative background illustration */}
+        <svg
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ position: 'absolute', bottom: '24px', right: '8px', width: '160px', height: '160px', opacity: 0.07, pointerEvents: 'none', zIndex: -1 }}
+        >
+          <circle cx="50" cy="50" r="46" stroke="white" strokeWidth="3"/>
+          <polyline points="20,46 50,18 80,46" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <rect x="36" y="44" width="28" height="22" rx="1" stroke="white" strokeWidth="3"/>
+          <line x1="50" y1="44" x2="50" y2="66" stroke="white" strokeWidth="2"/>
+          <line x1="36" y1="55" x2="64" y2="55" stroke="white" strokeWidth="2"/>
+          <line x1="50" y1="66" x2="50" y2="74" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+          <path d="M 50 74 Q 34 70 30 82 Q 40 90 50 78" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+          <path d="M 50 74 Q 66 70 70 82 Q 60 90 50 78" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 ml-56 overflow-y-auto h-screen">
+      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: 'calc(224px + 8px)', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {/* Topbar con campana */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-3 flex justify-end">
           <button
@@ -332,7 +349,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'help' && <HelpContent />}
         {currentSection === 'settings' && <SettingsContent />}
       </div>
-    </div>
+    </>
   );
 });
 
