@@ -588,7 +588,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className="mx-2 flex items-center gap-3 px-6 py-3 transition-all"
+                className="mx-2 flex items-center gap-3 px-4 py-3 transition-all"
                 style={{
                   backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                   color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
