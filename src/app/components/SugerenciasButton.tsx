@@ -131,24 +131,35 @@ export function SugerenciasButton() {
               <div className="p-6 space-y-5">
                 {/* Selector de tipo */}
                 <div>
-                  <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  <p className="mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
                     ¿Qué tipo de feedback es?
                   </p>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-1.5">
                     {(Object.entries(tipoConfig) as [TipoFeedback, typeof tipoConfig['sugerencia']][]).map(([key, cfg]) => (
                       <button
                         key={key}
                         onClick={() => setTipo(key)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-medium transition-all"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-left"
                         style={{
-                          border: `1.5px solid ${tipo === key ? cfg.border : '#E5E5E5'}`,
-                          backgroundColor: tipo === key ? cfg.bg : '#FAFAFA',
-                          color: tipo === key ? cfg.color : '#6B7280',
+                          border: `1.5px solid ${tipo === key ? cfg.border : '#EBEBEB'}`,
+                          backgroundColor: tipo === key ? cfg.bg : 'transparent',
                           fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
                         }}
                       >
-                        {cfg.icon}
-                        {cfg.label}
+                        <span style={{ color: tipo === key ? cfg.color : '#9CA3AF', flexShrink: 0 }}>{cfg.icon}</span>
+                        <span style={{ color: tipo === key ? cfg.color : '#374151', fontWeight: tipo === key ? 500 : 400 }}>{cfg.label}</span>
+                        <span className="ml-auto flex-shrink-0">
+                          <span
+                            className="w-4 h-4 rounded-full flex items-center justify-center"
+                            style={{
+                              border: `2px solid ${tipo === key ? cfg.color : '#D1D5DB'}`,
+                              backgroundColor: tipo === key ? cfg.color : 'transparent',
+                            }}
+                          >
+                            {tipo === key && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                          </span>
+                        </span>
                       </button>
                     ))}
                   </div>
