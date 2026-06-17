@@ -35,9 +35,9 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     { id: 'calendarios', label: 'Calendarios', icon: 'calendar' },
     { id: 'performance', label: 'Mi rendimiento', icon: 'chart' },
     { id: 'plan', label: 'Plan y facturación', icon: 'card' },
-    { id: 'help', label: 'Ayuda', icon: 'help' },
     { id: 'profile', label: 'Perfil', icon: 'profile' },
     { id: 'settings', label: 'Configuración', icon: 'settings' },
+    { id: 'help', label: 'Ayuda', icon: 'help' },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -152,11 +152,8 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
                 <span>{item.label}</span>
               </button>
             ))}
-          </nav>
-
-          <div className="px-4 pb-3">
             <SugerenciasButton />
-          </div>
+          </nav>
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>

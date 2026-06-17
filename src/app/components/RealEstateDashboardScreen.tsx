@@ -38,9 +38,9 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
     { id: 'team', label: 'Equipo / Brokers', icon: Users },
     { id: 'plan', label: 'Plan y facturación', icon: CreditCard },
-    { id: 'help', label: 'Ayuda', icon: HelpCircle },
     { id: 'profile', label: 'Perfil', icon: User },
     { id: 'settings', label: 'Configuración', icon: Settings },
+    { id: 'help', label: 'Ayuda', icon: HelpCircle },
   ];
 
   return (
@@ -103,11 +103,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                 </button>
               );
             })}
-          </nav>
-
-          <div className="px-6 pb-3">
             <SugerenciasButton />
-          </div>
+          </nav>
 
           {/* User Profile Area */}
           <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>

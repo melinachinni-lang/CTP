@@ -56,29 +56,30 @@ export function SugerenciasButton() {
 
   return (
     <>
-      {/* Sidebar button */}
+      {/* Sidebar button — same style as nav items */}
       <button
         onClick={() => setOpen(true)}
-        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all"
+        className="flex items-center gap-3 px-4 py-3 text-sm transition-colors"
         style={{
-          color: 'rgba(255,255,255,0.55)',
+          color: 'rgba(255,255,255,0.65)',
           backgroundColor: 'transparent',
           fontFamily: 'var(--font-body)',
           fontSize: 'var(--font-size-body-sm)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          width: 'calc(100% - 16px)',
+          marginLeft: '8px',
+          marginRight: '8px',
+          borderRadius: '8px',
         }}
         onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-          e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
+          e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
         }}
         onMouseLeave={e => {
           e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.color = 'rgba(255,255,255,0.55)';
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+          e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
         }}
       >
-        <Lightbulb className="w-4 h-4 flex-shrink-0" />
+        <Lightbulb className="w-5 h-5 flex-shrink-0" />
         <span>Sugerencias</span>
       </button>
 

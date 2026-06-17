@@ -75,9 +75,9 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'compare', label: t.nav.compare, icon: 'chart', group: 'buy' },
     { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag', group: 'buy' },
     { id: 'plan', label: t.nav.plan, icon: 'credit-card', group: 'sell' },
-    { id: 'help', label: t.nav.help, icon: 'help' },
     { id: 'profile', label: t.nav.profile, icon: 'profile' },
     { id: 'settings', label: t.nav.settings, icon: 'settings' },
+    { id: 'help', label: t.nav.help, icon: 'help' },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -280,11 +280,8 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 )}
               </button>
             ))}
-          </nav>
-
-          <div className="px-4 pb-3">
             <SugerenciasButton />
-          </div>
+          </nav>
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
