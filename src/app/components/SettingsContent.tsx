@@ -109,6 +109,24 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [hasAvatarPersonal, setHasAvatarPersonal] = useState(false);
   const [hasBannerPersonal, setHasBannerPersonal] = useState(false);
 
+  // — Perfil broker state
+  const [perfilBroker, setPerfilBroker] = useState({
+    nombre: 'Carlos Andrés Muñoz',
+    especialidad: 'Broker especializado en parcelas de agrado',
+    descripcion: 'Más de 8 años conectando familias con su terreno ideal. Especializado en la zona central y sur de Chile.',
+    ciudad: 'Santiago',
+    region: 'Metropolitana',
+    telefono: '+56 9 8765 4321',
+    email: 'carlos.munoz@vallecentral.cl',
+    experiencia: '8',
+  });
+  const [hasAvatarBroker, setHasAvatarBroker] = useState(false);
+  const [hasBannerBroker, setHasBannerBroker] = useState(false);
+  const [idiomas, setIdiomas] = useState(['Español', 'Inglés']);
+  const [newIdioma, setNewIdioma] = useState('');
+  const [certificacionesBroker, setCertificacionesBroker] = useState(['Certificado CChC', 'Mediador Inmobiliario']);
+  const [newCertificacionBroker, setNewCertificacionBroker] = useState('');
+
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
   const [idioma, setIdioma] = useState('es-CL');
@@ -216,7 +234,11 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
           {mode === 'profile' ? 'Perfil' : 'Configuración'}
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', lineHeight: 'var(--line-height-body)' }}>
-          {mode === 'profile' ? 'Información pública de tu inmobiliaria' : 'Seguridad, notificaciones y equipo'}
+          {mode === 'profile'
+            ? userType === 'broker' ? 'Tu perfil profesional visible para compradores e inmobiliarias'
+            : userType === 'personal' ? 'Información pública de tu perfil'
+            : 'Información pública de tu inmobiliaria'
+            : 'Seguridad, notificaciones y equipo'}
         </p>
       </div>
 
@@ -508,7 +530,229 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
           </div>
         )}
 
-        {activeTab === 'profile' && userType !== 'personal' && (
+        {/* ── Tab: Perfil Broker ───────────────────────────────────────────── */}
+        {activeTab === 'profile' && userType === 'broker' && (
+          <div className="p-6 space-y-6">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
+              Tu perfil de broker
+            </h2>
+
+            {/* Banner */}
+            <div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Banner</p>
+              {hasBannerBroker ? (
+                <div className="relative w-full rounded-xl overflow-hidden" style={{ height: '128px' }}>
+                  <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #002F23 0%, #006B4E 100%)' }}>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#FFFFFF', opacity: 0.6 }}>Banner — {perfilBroker.nombre}</span>
+                  </div>
+                  <button onClick={() => setHasBannerBroker(false)} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.7)'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)'}>
+                    <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+                  </button>
+                </div>
+              ) : (
+                <button onClick={() => setHasBannerBroker(true)} className="w-full flex flex-col items-center justify-center gap-2 rounded-xl transition-all" style={{ height: '128px', border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                  <Image className="w-6 h-6" style={{ color: '#9CA3AF' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>Subir banner</span>
+                </button>
+              )}
+              <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>Recomendado: 1200×300 px, máximo 5 MB</p>
+            </div>
+
+            {/* Foto de perfil */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Foto de perfil</p>
+              <div className="flex items-center gap-4">
+                {hasAvatarBroker ? (
+                  <div className="relative w-20 h-20 flex-shrink-0">
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DBEAFE' }}>
+                      <span style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 700, color: '#1E40AF' }}>{getInitials(perfilBroker.nombre)}</span>
+                    </div>
+                    <button onClick={() => setHasAvatarBroker(false)} className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DC2626' }}>
+                      <X className="w-3 h-3" style={{ color: '#FFFFFF' }} />
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={() => setHasAvatarBroker(true)} className="w-20 h-20 rounded-full flex flex-col items-center justify-center flex-shrink-0 transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                    <Upload className="w-5 h-5" style={{ color: '#9CA3AF' }} />
+                  </button>
+                )}
+                <div className="space-y-1">
+                  <button onClick={() => setHasAvatarBroker(true)} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all" style={{ border: '1.5px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', backgroundColor: '#FFFFFF' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F9FAFB'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
+                    <Upload className="w-4 h-4" /> Subir foto
+                  </button>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>PNG o JPG, máximo 2 MB</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Nombre + Especialidad */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Nombre completo <span style={{ color: '#DC2626' }}>*</span></label>
+                  <input type="text" value={perfilBroker.nombre} onChange={e => setPerfilBroker(p => ({ ...p, nombre: e.target.value }))} className="w-full px-4 py-3 rounded-xl text-sm transition-colors" style={{ border: `1.5px solid ${perfilBroker.nombre ? '#E5E5E5' : '#DC2626'}`, fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = perfilBroker.nombre ? '#E5E5E5' : '#DC2626'} />
+                </div>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Especialidad</label>
+                  <input type="text" value={perfilBroker.especialidad} onChange={e => setPerfilBroker(p => ({ ...p, especialidad: e.target.value }))} placeholder="Ej: Broker en parcelas de agrado" className="w-full px-4 py-3 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                </div>
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div>
+              <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Descripción / Bio</label>
+              <textarea rows={3} value={perfilBroker.descripcion} onChange={e => setPerfilBroker(p => ({ ...p, descripcion: e.target.value }))} placeholder="Contá tu experiencia y qué te hace diferente como broker..." className="w-full px-4 py-3 rounded-xl text-sm resize-none transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', lineHeight: '1.6' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+              <p className="mt-1 text-right" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{perfilBroker.descripcion.length}/300 caracteres</p>
+            </div>
+
+            {/* Zona de trabajo + Experiencia */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Zona de trabajo</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 140px', gap: '12px' }}>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Ciudad</label>
+                  <input type="text" value={perfilBroker.ciudad} onChange={e => setPerfilBroker(p => ({ ...p, ciudad: e.target.value }))} placeholder="Ej: Santiago" className="w-full px-4 py-3 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                </div>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Región</label>
+                  <input type="text" value={perfilBroker.region} onChange={e => setPerfilBroker(p => ({ ...p, region: e.target.value }))} placeholder="Ej: Metropolitana" className="w-full px-4 py-3 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                </div>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Años de exp.</label>
+                  <input type="number" min="0" max="50" value={perfilBroker.experiencia} onChange={e => setPerfilBroker(p => ({ ...p, experiencia: e.target.value }))} className="w-full px-4 py-3 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                </div>
+              </div>
+            </div>
+
+            {/* Contacto */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <Phone className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Contacto</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Teléfono</label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                    <input type="tel" value={perfilBroker.telefono} onChange={e => setPerfilBroker(p => ({ ...p, telefono: e.target.value }))} placeholder="+56 9 1234 5678" className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                  </div>
+                </div>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                    <input type="email" value={perfilBroker.email} onChange={e => setPerfilBroker(p => ({ ...p, email: e.target.value }))} placeholder="tu@email.cl" className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }} onFocus={e => e.target.style.borderColor = '#006B4E'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Idiomas */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Globe className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Idiomas</p>
+              </div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Idiomas en los que podés atender a tus clientes</p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {idiomas.map((id, i) => (
+                  <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#1E40AF' }}>{id}</span>
+                    <button onClick={() => setIdiomas(prev => prev.filter((_, idx) => idx !== i))} className="flex items-center justify-center w-4 h-4 rounded-full transition-colors" style={{ color: '#93C5FD' }} onMouseEnter={e => e.currentTarget.style.color = '#1E40AF'} onMouseLeave={e => e.currentTarget.style.color = '#93C5FD'}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+                {idiomas.length === 0 && <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#D1D5DB' }}>Sin idiomas agregados</p>}
+              </div>
+              <div className="flex gap-2">
+                <input type="text" value={newIdioma} onChange={e => setNewIdioma(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && newIdioma.trim()) { setIdiomas(prev => [...prev, newIdioma.trim()]); setNewIdioma(''); } }} placeholder="Ej: Español, Inglés, Portugués..." className="flex-1 px-4 py-2.5 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', maxWidth: '280px' }} onFocus={e => e.target.style.borderColor = '#1D4ED8'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                <button onClick={() => { if (newIdioma.trim()) { setIdiomas(prev => [...prev, newIdioma.trim()]); setNewIdioma(''); } }} className="flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: newIdioma.trim() ? '#1D4ED8' : '#E5E5E5', color: newIdioma.trim() ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: newIdioma.trim() ? 'pointer' : 'not-allowed' }}>
+                  <Plus className="w-3.5 h-3.5" /> Agregar
+                </button>
+              </div>
+            </div>
+
+            {/* Certificaciones broker */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Award className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Certificaciones</p>
+              </div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Acreditaciones y certificaciones profesionales</p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {certificacionesBroker.map((c, i) => (
+                  <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ backgroundColor: '#F5F3FF', border: '1px solid #DDD6FE' }}>
+                    <Award className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#7C3AED' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6D28D9' }}>{c}</span>
+                    <button onClick={() => setCertificacionesBroker(prev => prev.filter((_, idx) => idx !== i))} className="flex items-center justify-center w-4 h-4 rounded-full transition-colors" style={{ color: '#C4B5FD' }} onMouseEnter={e => e.currentTarget.style.color = '#6D28D9'} onMouseLeave={e => e.currentTarget.style.color = '#C4B5FD'}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+                {certificacionesBroker.length === 0 && <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#D1D5DB' }}>Sin certificaciones</p>}
+              </div>
+              <div className="flex gap-2">
+                <input type="text" value={newCertificacionBroker} onChange={e => setNewCertificacionBroker(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && newCertificacionBroker.trim()) { setCertificacionesBroker(prev => [...prev, newCertificacionBroker.trim()]); setNewCertificacionBroker(''); } }} placeholder="Ej: Certificado CChC, Mediador..." className="flex-1 px-4 py-2.5 rounded-xl text-sm transition-colors" style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', maxWidth: '280px' }} onFocus={e => e.target.style.borderColor = '#7C3AED'} onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+                <button onClick={() => { if (newCertificacionBroker.trim()) { setCertificacionesBroker(prev => [...prev, newCertificacionBroker.trim()]); setNewCertificacionBroker(''); } }} className="flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: newCertificacionBroker.trim() ? '#7C3AED' : '#E5E5E5', color: newCertificacionBroker.trim() ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: newCertificacionBroker.trim() ? 'pointer' : 'not-allowed' }}>
+                  <Plus className="w-3.5 h-3.5" /> Agregar
+                </button>
+              </div>
+            </div>
+
+            {/* Inmobiliaria asociada (read-only) */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Building2 className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Inmobiliaria asociada</p>
+              </div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Se actualiza automáticamente según tu vinculación en la plataforma</p>
+              <div className="flex items-center gap-3 p-4 rounded-xl" style={{ border: '1.5px solid #BBF7D0', backgroundColor: '#F0FDF4' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DCFCE7' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '13px', fontWeight: 700, color: '#166534' }}>VC</span>
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>Inmobiliaria Valle Central</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Broker activo · Desde enero 2024</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Verificaciones (read-only) */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <ShieldCheck className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Verificaciones</p>
+              </div>
+              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Insignias gestionadas por CompraTuParcela que aparecen en tu perfil público</p>
+              <div className="space-y-2">
+                {[
+                  { label: 'Identidad verificada', icon: BadgeCheck, done: true },
+                  { label: 'Documentación cargada', icon: FileText, done: true },
+                  { label: 'Rol aprobado', icon: ShieldCheck, done: true },
+                ].map(v => {
+                  const VIcon = v.icon;
+                  return (
+                    <div key={v.label} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ border: `1.5px solid ${v.done ? '#BBF7D0' : '#E5E5E5'}`, backgroundColor: v.done ? '#F0FDF4' : '#FAFAFA' }}>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: v.done ? '#DCFCE7' : '#F3F4F6' }}>
+                        <VIcon className="w-4 h-4" style={{ color: v.done ? '#166534' : '#9CA3AF' }} />
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: v.done ? '#166534' : '#6B7280', fontWeight: v.done ? 500 : 400 }}>{v.label}</span>
+                      {v.done && <Check className="w-4 h-4 ml-auto flex-shrink-0" style={{ color: '#16A34A' }} />}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'profile' && userType === 'inmobiliaria' && (
           <div className="p-6 space-y-6">
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
               Perfil de la inmobiliaria
@@ -1334,7 +1578,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
           <button
             onClick={() => {
               if (activeTab === 'profile' && userType === 'personal') setPerfilPersonal({ nombre: 'Carlos Muñoz', descripcion: 'Propietario directo - Sin intermediarios', ciudad: 'Coyhaique', region: 'Aysén', telefono: '+56 9 5555 1234', email: 'carlos.munoz@email.cl', whatsapp: '+56 9 5555 1234' });
-              if (activeTab === 'profile' && userType !== 'personal') setPerfil({ nombre: 'Inmobiliaria Valle Central', descripcion: 'Inmobiliaria especializada en parcelas de agrado en la zona central de Chile. Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales.', email: 'contacto@vallecentral.cl', telefono: '+56 9 8765 4321', whatsapp: '+56 9 8765 4321', web: 'www.vallecentral.cl', direccion: 'Av. Principal 1234, Santiago' });
+              if (activeTab === 'profile' && userType === 'broker') setPerfilBroker({ nombre: 'Carlos Andrés Muñoz', especialidad: 'Broker especializado en parcelas de agrado', descripcion: 'Más de 8 años conectando familias con su terreno ideal. Especializado en la zona central y sur de Chile.', ciudad: 'Santiago', region: 'Metropolitana', telefono: '+56 9 8765 4321', email: 'carlos.munoz@vallecentral.cl', experiencia: '8' });
+              if (activeTab === 'profile' && userType === 'inmobiliaria') setPerfil({ nombre: 'Inmobiliaria Valle Central', descripcion: 'Inmobiliaria especializada en parcelas de agrado en la zona central de Chile. Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales.', email: 'contacto@vallecentral.cl', telefono: '+56 9 8765 4321', whatsapp: '+56 9 8765 4321', web: 'www.vallecentral.cl', direccion: 'Av. Principal 1234, Santiago' });
             }}
             className="px-6 py-2.5 rounded-full text-sm font-medium transition-all"
             style={{ backgroundColor: '#FFFFFF', color: '#374151', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)' }}
@@ -1345,7 +1590,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
           </button>
           <button
             onClick={handleSave}
-            disabled={saveState === 'saving' || (activeTab === 'profile' && userType === 'personal' && !perfilPersonal.nombre) || (activeTab === 'profile' && userType !== 'personal' && !perfil.nombre)}
+            disabled={saveState === 'saving' || (activeTab === 'profile' && userType === 'personal' && !perfilPersonal.nombre) || (activeTab === 'profile' && userType === 'broker' && !perfilBroker.nombre) || (activeTab === 'profile' && userType === 'inmobiliaria' && !perfil.nombre)}
             className="flex items-center gap-2 px-8 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm"
             style={{
               backgroundColor: saveState === 'saving' ? '#E5E5E5' : '#006B4E',
