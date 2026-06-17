@@ -528,12 +528,15 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
             {/* Estadísticas — solo inmobiliaria */}
             {userType === 'inmobiliaria' && (
               <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-1">
                   <BarChart2 className="w-4 h-4" style={{ color: '#6B7280' }} />
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
                     Estadísticas de perfil
                   </p>
                 </div>
+                <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                  Se calculan automáticamente en base a la actividad de tu perfil público. Son distintas a las métricas generales del dashboard.
+                </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                   {[
                     { label: 'Visitas al perfil', value: '1.248', sub: 'Últimos 30 días', color: '#006B4E', border: '#BBF7D0', bg: '#F0FDF4' },
