@@ -343,7 +343,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
         {currentSection === 'profile' && <SettingsContent mode="profile" userType="personal" />}
-        {currentSection === 'settings' && <SettingsContent mode="settings" userType="personal" />}
+        {currentSection === 'settings' && <PersonSettingsContent />}
       </div>
     </>
   );
@@ -3365,7 +3365,7 @@ function SearchPreferencesSection() {
   );
 }
 
-function SettingsContent() {
+function PersonSettingsContent() {
   const [isEditing, setIsEditing] = React.useState(false);
   const [nombre, setNombre] = React.useState('María García');
   const [editNombre, setEditNombre] = React.useState('María García');
