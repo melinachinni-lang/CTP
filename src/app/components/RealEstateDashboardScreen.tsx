@@ -8,6 +8,7 @@ import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { TeamContent } from '@/app/components/TeamContent';
 import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
+import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -34,6 +35,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     { id: 'home', label: 'Inicio', icon: Home },
     { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
     { id: 'inquiries', label: 'Consultas', icon: MessageCircle },
+    { id: 'reservas', label: 'Reservas', icon: FileText },
     { id: 'calendarios', label: 'Calendarios', icon: Calendar },
     { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
     { id: 'team', label: 'Equipo / Brokers', icon: Users },
@@ -165,6 +167,15 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="inmobiliaria" />}
+        {currentSection === 'reservas' && (
+          <div className="p-8">
+            <div className="mb-6">
+              <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 600, color: '#0A0A0A' }}>Reservas</h1>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>Gestión de comprobantes y confirmación de reservas</p>
+            </div>
+            <ReservasAdminView />
+          </div>
+        )}
         {currentSection === 'calendarios' && <CalendariosView />}
         {currentSection === 'performance' && <RendimientoView viewType="inmobiliaria" />}
         {currentSection === 'team' && <TeamContent />}
