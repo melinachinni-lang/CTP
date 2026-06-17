@@ -149,6 +149,17 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [editingUser, setEditingUser] = useState<{ id: number; nombre: string; rol: 'Admin' | 'Broker' } | null>(null);
   const [newRol, setNewRol] = useState<'Admin' | 'Broker'>('Broker');
 
+  // — Invitaciones broker state
+  const [invitacionesBroker, setInvitacionesBroker] = useState([
+    { id: 'inv1', email: 'pedro.soto@gmail.com', fecha: 'Hace 2 días', mensaje: '' },
+    { id: 'inv2', email: 'andrea.leon@broker.cl', fecha: 'Hace 5 días', mensaje: 'Te invito a unirte como broker de nuestra inmobiliaria.' },
+  ]);
+  const [showInviteBrokerModal, setShowInviteBrokerModal] = useState(false);
+  const [inviteBrokerEmail, setInviteBrokerEmail] = useState('');
+  const [inviteBrokerMensaje, setInviteBrokerMensaje] = useState('');
+  const [inviteBrokerError, setInviteBrokerError] = useState('');
+  const [inviteBrokerSent, setInviteBrokerSent] = useState(false);
+
   // — Seguridad state
   const [currentPass, setCurrentPass] = useState('');
   const [newPass, setNewPass]         = useState('');
@@ -211,6 +222,22 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     setUsuarios(prev => [...prev, newUser]);
     setInviteEmail(''); setInviteRol('Broker'); setInviteError('');
     setShowInviteModal(false);
+  };
+
+  const handleInviteBroker = () => {
+    if (!inviteBrokerEmail.trim() || !inviteBrokerEmail.includes('@')) {
+      setInviteBrokerError('Ingresá un email válido');
+      return;
+    }
+    setInvitacionesBroker(prev => [...prev, { id: `inv${Date.now()}`, email: inviteBrokerEmail.trim(), fecha: 'Ahora mismo', mensaje: inviteBrokerMensaje.trim() }]);
+    setInviteBrokerSent(true);
+    setTimeout(() => {
+      setInviteBrokerSent(false);
+      setShowInviteBrokerModal(false);
+      setInviteBrokerEmail('');
+      setInviteBrokerMensaje('');
+      setInviteBrokerError('');
+    }, 1800);
   };
 
   const handleRolChange = () => {
@@ -1351,106 +1378,169 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
 
         {/* ── Tab: Usuarios ────────────────────────────────────────────────── */}
         {activeTab === 'users' && (
-          <div className="p-6 space-y-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
-                  Usuarios y permisos
-                </h2>
-                <p className="mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                  {usuarios.length} {usuarios.length === 1 ? 'usuario' : 'usuarios'} en tu equipo
-                </p>
-              </div>
-              <button
-                onClick={() => setShowInviteModal(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                <Plus className="w-4 h-4" /> Invitar usuario
-              </button>
-            </div>
+          <div className="p-6 space-y-8">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
+              Usuarios y permisos
+            </h2>
 
-            {usuarios.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
-                  <User className="w-7 h-7" style={{ color: '#D1D5DB' }} />
+            {/* ── Sección: Brokers asociados ── */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Brokers asociados</p>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#DCFCE7', color: '#166534', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)' }}>
+                    {usuarios.filter(u => u.rol === 'Broker').length} activos
+                  </span>
+                  {invitacionesBroker.length > 0 && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEF9C3', color: '#854D0E', border: '1px solid #FDE68A', fontFamily: 'var(--font-body)' }}>
+                      {invitacionesBroker.length} pendientes
+                    </span>
+                  )}
                 </div>
-                <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '6px' }}>
-                  Sin usuarios aún
-                </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                  Invitá a los miembros de tu equipo para empezar.
-                </p>
+                <button
+                  onClick={() => setShowInviteBrokerModal(true)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                >
+                  <Plus className="w-4 h-4" /> Invitar broker
+                </button>
               </div>
-            ) : (
-              <div className="space-y-2">
-                {usuarios.map(user => {
-                  const color = getColor(user.nombre);
-                  const isAdmin = user.rol === 'Admin';
-                  return (
-                    <div
-                      key={user.id}
-                      className="flex items-center justify-between p-4 rounded-xl transition-colors"
-                      style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
-                      onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#F3F4F6'}
-                      onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#FAFAFA'}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 700, color: color.text }}>
-                            {getInitials(user.nombre)}
-                          </span>
+
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                Los brokers se asocian a tu inmobiliaria mediante invitación. Aceptada la invitación, pueden gestionar publicaciones y consultas asignadas.
+              </p>
+
+              {/* Brokers activos */}
+              {usuarios.filter(u => u.rol === 'Broker').map(user => {
+                const color = getColor(user.nombre);
+                return (
+                  <div key={user.id} className="flex items-center justify-between p-4 rounded-xl transition-colors" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#F3F4F6'}
+                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#FAFAFA'}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 700, color: color.text }}>{getInitials(user.nombre)}</span>
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{user.nombre}</p>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>{user.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#DCFCE7', color: '#166534', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)' }}>Activo</span>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#A3A3A3' }}>{user.ultimoAcceso}</p>
+                      <button
+                        onClick={() => setUsuarios(prev => prev.filter(u => u.id !== user.id))}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                        style={{ border: '1px solid #FCA5A5', color: '#DC2626', backgroundColor: '#FFF1F1', fontFamily: 'var(--font-body)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFF1F1'}
+                      >
+                        Desvincular
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {usuarios.filter(u => u.rol === 'Broker').length === 0 && invitacionesBroker.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-10 text-center rounded-xl" style={{ border: '1.5px dashed #E5E5E5' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#F5F5F5' }}>
+                    <User className="w-6 h-6" style={{ color: '#D1D5DB' }} />
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>Sin brokers aún</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Invitá brokers para que gestionen publicaciones bajo tu inmobiliaria.</p>
+                </div>
+              )}
+
+              {/* Invitaciones pendientes */}
+              {invitacionesBroker.length > 0 && (
+                <div className="space-y-2">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Invitaciones pendientes</p>
+                  {invitacionesBroker.map(inv => (
+                    <div key={inv.id} className="flex items-center justify-between p-4 rounded-xl" style={{ border: '1.5px solid #FDE68A', backgroundColor: '#FFFBEB' }}>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FEF3C7' }}>
+                          <Mail className="w-4 h-4" style={{ color: '#92400E' }} />
                         </div>
                         <div>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
-                            {user.nombre}
-                          </p>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                            {user.email}
-                          </p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{inv.email}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Invitación enviada · {inv.fecha}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <span
-                            className="px-2.5 py-1 rounded-full text-xs font-medium"
-                            style={{
-                              backgroundColor: isAdmin ? '#F5F3FF' : '#DCFCE7',
-                              color: isAdmin ? '#6D28D9' : '#166534',
-                              border: `1px solid ${isAdmin ? '#DDD6FE' : '#86EFAC'}`,
-                              fontFamily: 'var(--font-body)',
-                            }}
-                          >
-                            {user.rol}
-                          </span>
-                          <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#A3A3A3' }}>
-                            {user.ultimoAcceso}
-                          </p>
-                        </div>
+                      <div className="flex items-center gap-3">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEF9C3', color: '#854D0E', border: '1px solid #FDE68A', fontFamily: 'var(--font-body)' }}>Pendiente</span>
                         <button
-                          onClick={() => { setEditingUser({ id: user.id, nombre: user.nombre, rol: user.rol }); setNewRol(user.rol); }}
+                          onClick={() => setInvitacionesBroker(prev => prev.filter(i => i.id !== inv.id))}
                           className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
-                          style={{ border: '1px solid #E5E5E5', color: '#374151', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                          style={{ border: '1px solid #E5E5E5', color: '#6B7280', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
                           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'}
                           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
                         >
-                          Editar rol
+                          Cancelar
                         </button>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
 
-            {/* Leyenda de roles */}
-            <div className="p-4 rounded-xl" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#374151', lineHeight: '1.6' }}>
-                <strong style={{ color: '#166534' }}>Admin:</strong> Acceso completo a todas las funciones y configuración.{' '}
-                <strong style={{ color: '#166534' }}>Broker:</strong> Puede gestionar publicaciones y consultas asignadas.
-              </p>
+            {/* ── Sección: Equipo administrativo ── */}
+            <div className="space-y-4" style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Equipo administrativo</p>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F5F3FF', color: '#6D28D9', border: '1px solid #DDD6FE', fontFamily: 'var(--font-body)' }}>
+                    {usuarios.filter(u => u.rol === 'Admin').length} admins
+                  </span>
+                </div>
+                <button
+                  onClick={() => { setInviteRol('Admin'); setShowInviteModal(true); }}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                  style={{ border: '1.5px solid #E5E5E5', color: '#374151', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                >
+                  <Plus className="w-4 h-4" /> Agregar admin
+                </button>
+              </div>
+
+              {usuarios.filter(u => u.rol === 'Admin').map(user => {
+                const color = getColor(user.nombre);
+                return (
+                  <div key={user.id} className="flex items-center justify-between p-4 rounded-xl transition-colors" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#F3F4F6'}
+                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#FAFAFA'}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 700, color: color.text }}>{getInitials(user.nombre)}</span>
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{user.nombre}</p>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>{user.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#F5F3FF', color: '#6D28D9', border: '1px solid #DDD6FE', fontFamily: 'var(--font-body)' }}>Admin</span>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#A3A3A3' }}>{user.ultimoAcceso}</p>
+                      <button
+                        onClick={() => { setEditingUser({ id: user.id, nombre: user.nombre, rol: user.rol }); setNewRol(user.rol); }}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                        style={{ border: '1px solid #E5E5E5', color: '#374151', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                      >
+                        Editar
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -1789,6 +1879,89 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 Enviar invitación
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Invitar broker */}
+      {showInviteBrokerModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 space-y-5" style={{ border: '1px solid #E5E5E5' }}>
+            <div className="flex items-center justify-between">
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Invitar broker</h3>
+              <button onClick={() => { setShowInviteBrokerModal(false); setInviteBrokerEmail(''); setInviteBrokerMensaje(''); setInviteBrokerError(''); setInviteBrokerSent(false); }} className="p-1 rounded-lg hover:bg-gray-100">
+                <X className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+              </button>
+            </div>
+
+            {inviteBrokerSent ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center space-y-3">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
+                  <Check className="w-7 h-7" style={{ color: '#166534' }} />
+                </div>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>¡Invitación enviada!</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>
+                  Le llegará un email a <strong>{inviteBrokerEmail}</strong> con el link de invitación.
+                </p>
+              </div>
+            ) : (
+              <>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B6B6B', lineHeight: '1.5' }}>
+                  El broker recibirá un email con una invitación para asociarse a tu inmobiliaria. Una vez aceptada, podrá gestionar publicaciones y consultas.
+                </p>
+
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                    Email del broker <span style={{ color: '#DC2626' }}>*</span>
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                    <input
+                      type="email"
+                      value={inviteBrokerEmail}
+                      onChange={e => { setInviteBrokerEmail(e.target.value); setInviteBrokerError(''); }}
+                      placeholder="broker@ejemplo.cl"
+                      className="w-full pl-9 pr-4 py-3 rounded-xl text-sm"
+                      style={{ border: `1.5px solid ${inviteBrokerError ? '#DC2626' : '#E5E5E5'}`, fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                      onFocus={e => { if (!inviteBrokerError) e.target.style.borderColor = '#006B4E'; }}
+                      onBlur={e => { if (!inviteBrokerError) e.target.style.borderColor = '#E5E5E5'; }}
+                    />
+                  </div>
+                  {inviteBrokerError && <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626' }}>{inviteBrokerError}</p>}
+                </div>
+
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                    Mensaje personal <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', fontWeight: 400 }}>(opcional)</span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={inviteBrokerMensaje}
+                    onChange={e => setInviteBrokerMensaje(e.target.value)}
+                    placeholder="Ej: Te invito a unirte como broker de nuestra inmobiliaria..."
+                    className="w-full px-4 py-3 rounded-xl text-sm resize-none"
+                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', lineHeight: '1.6' }}
+                    onFocus={e => e.target.style.borderColor = '#006B4E'}
+                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-1">
+                  <button onClick={() => { setShowInviteBrokerModal(false); setInviteBrokerEmail(''); setInviteBrokerMensaje(''); setInviteBrokerError(''); }} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleInviteBroker}
+                    className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+                    style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                  >
+                    Enviar invitación
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
