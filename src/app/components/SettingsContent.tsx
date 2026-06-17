@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image } from 'lucide-react';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -70,9 +70,15 @@ export function SettingsContent() {
     descripcion: 'Inmobiliaria especializada en parcelas de agrado en la zona central de Chile. Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales.',
     email: 'contacto@vallecentral.cl',
     telefono: '+56 9 8765 4321',
+    whatsapp: '+56 9 8765 4321',
     web: 'www.vallecentral.cl',
     direccion: 'Av. Principal 1234, Santiago',
   });
+  const [hasBanner, setHasBanner] = useState(false);
+  const [servicios, setServicios] = useState(['Tasación de propiedades', 'Asesoramiento legal', 'Financiamiento', 'Gestión de proyectos']);
+  const [certificaciones, setCertificaciones] = useState(['Miembro CCHC', 'ISO 9001:2015']);
+  const [newServicio, setNewServicio] = useState('');
+  const [newCertificacion, setNewCertificacion] = useState('');
 
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
@@ -231,8 +237,47 @@ export function SettingsContent() {
               Perfil de la inmobiliaria
             </h2>
 
-            {/* Logo */}
+            {/* Banner */}
             <div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                Banner
+              </p>
+              {hasBanner ? (
+                <div className="relative w-full rounded-xl overflow-hidden" style={{ height: '128px', backgroundColor: '#D1FAE5' }}>
+                  <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #006B4E 0%, #34D399 100%)' }}>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#FFFFFF', opacity: 0.6 }}>
+                      Banner — Inmobiliaria Valle Central
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setHasBanner(false)}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center transition-all"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.7)'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)'}
+                  >
+                    <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setHasBanner(true)}
+                  className="w-full flex flex-col items-center justify-center gap-2 rounded-xl transition-all"
+                  style={{ height: '128px', border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                >
+                  <Image className="w-6 h-6" style={{ color: '#9CA3AF' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>Subir banner</span>
+                </button>
+              )}
+              <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                Se mostrará en la parte superior de tu perfil público. Recomendado: 1200×300 px, máximo 5 MB
+              </p>
+            </div>
+
+            {/* Logo */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
               <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
                 Logo de la empresa
               </p>
@@ -257,7 +302,7 @@ export function SettingsContent() {
             </div>
 
             {/* Nombre */}
-            <div>
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
               <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
                 Nombre comercial <span style={{ color: '#DC2626' }}>*</span>
               </label>
@@ -295,29 +340,167 @@ export function SettingsContent() {
             </div>
 
             {/* Contacto grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-              {([
-                { key: 'email',     label: 'Email de contacto', type: 'email', placeholder: 'contacto@empresa.cl' },
-                { key: 'telefono',  label: 'Teléfono',          type: 'tel',   placeholder: '+56 9 1234 5678' },
-                { key: 'web',       label: 'Sitio web',         type: 'url',   placeholder: 'www.empresa.cl' },
-                { key: 'direccion', label: 'Dirección',         type: 'text',  placeholder: 'Av. Principal 1234, Santiago' },
-              ] as const).map(field => (
-                <div key={field.key}>
-                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                    {field.label}
-                  </label>
-                  <input
-                    type={field.type}
-                    value={perfil[field.key]}
-                    placeholder={field.placeholder}
-                    onChange={e => setPerfil(p => ({ ...p, [field.key]: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
-                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
-                    onFocus={e => e.target.style.borderColor = '#006B4E'}
-                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-                  />
-                </div>
-              ))}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                Información de contacto
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                {([
+                  { key: 'email',     label: 'Email de contacto', type: 'email', placeholder: 'contacto@empresa.cl' },
+                  { key: 'telefono',  label: 'Teléfono',          type: 'tel',   placeholder: '+56 9 1234 5678' },
+                  { key: 'web',       label: 'Sitio web',         type: 'url',   placeholder: 'www.empresa.cl' },
+                  { key: 'direccion', label: 'Dirección',         type: 'text',  placeholder: 'Av. Principal 1234, Santiago' },
+                ] as const).map(field => (
+                  <div key={field.key}>
+                    <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      value={perfil[field.key]}
+                      placeholder={field.placeholder}
+                      onChange={e => setPerfil(p => ({ ...p, [field.key]: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
+                      style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                      onFocus={e => e.target.style.borderColor = '#006B4E'}
+                      onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* WhatsApp oficial */}
+              <div className="mt-4">
+                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  WhatsApp oficial
+                </label>
+                <input
+                  type="tel"
+                  value={perfil.whatsapp}
+                  placeholder="+56 9 1234 5678"
+                  onChange={e => setPerfil(p => ({ ...p, whatsapp: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
+                  style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', maxWidth: '320px' }}
+                  onFocus={e => e.target.style.borderColor = '#006B4E'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+                <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                  Este número se usa para el botón "Consultar por WhatsApp" en tu perfil público
+                </p>
+              </div>
+            </div>
+
+            {/* Servicios */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Briefcase className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                  Servicios
+                </p>
+              </div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                Mostrá qué servicios ofrece tu inmobiliaria en tu perfil público
+              </p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {servicios.map((s, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                    style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}
+                  >
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#166534' }}>{s}</span>
+                    <button
+                      onClick={() => setServicios(prev => prev.filter((_, idx) => idx !== i))}
+                      className="flex items-center justify-center w-4 h-4 rounded-full transition-colors"
+                      style={{ color: '#6EE7B7' }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#166534'}
+                      onMouseLeave={e => e.currentTarget.style.color = '#6EE7B7'}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+                {servicios.length === 0 && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#D1D5DB' }}>Sin servicios agregados</p>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newServicio}
+                  onChange={e => setNewServicio(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && newServicio.trim()) { setServicios(prev => [...prev, newServicio.trim()]); setNewServicio(''); } }}
+                  placeholder="Ej: Tasación, Asesoramiento legal..."
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm transition-colors"
+                  style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', maxWidth: '320px' }}
+                  onFocus={e => e.target.style.borderColor = '#006B4E'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+                <button
+                  onClick={() => { if (newServicio.trim()) { setServicios(prev => [...prev, newServicio.trim()]); setNewServicio(''); } }}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: newServicio.trim() ? '#006B4E' : '#E5E5E5', color: newServicio.trim() ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: newServicio.trim() ? 'pointer' : 'not-allowed' }}
+                >
+                  <Plus className="w-3.5 h-3.5" /> Agregar
+                </button>
+              </div>
+            </div>
+
+            {/* Certificaciones */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Award className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                  Certificaciones
+                </p>
+              </div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                Agregá certificaciones o membresías que acrediten la calidad de tu inmobiliaria
+              </p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {certificaciones.map((c, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                    style={{ backgroundColor: '#F5F3FF', border: '1px solid #DDD6FE' }}
+                  >
+                    <Award className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#7C3AED' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6D28D9' }}>{c}</span>
+                    <button
+                      onClick={() => setCertificaciones(prev => prev.filter((_, idx) => idx !== i))}
+                      className="flex items-center justify-center w-4 h-4 rounded-full transition-colors"
+                      style={{ color: '#C4B5FD' }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#6D28D9'}
+                      onMouseLeave={e => e.currentTarget.style.color = '#C4B5FD'}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+                {certificaciones.length === 0 && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#D1D5DB' }}>Sin certificaciones agregadas</p>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newCertificacion}
+                  onChange={e => setNewCertificacion(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && newCertificacion.trim()) { setCertificaciones(prev => [...prev, newCertificacion.trim()]); setNewCertificacion(''); } }}
+                  placeholder="Ej: Miembro CCHC, ISO 9001..."
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm transition-colors"
+                  style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', maxWidth: '320px' }}
+                  onFocus={e => e.target.style.borderColor = '#7C3AED'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+                <button
+                  onClick={() => { if (newCertificacion.trim()) { setCertificaciones(prev => [...prev, newCertificacion.trim()]); setNewCertificacion(''); } }}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: newCertificacion.trim() ? '#7C3AED' : '#E5E5E5', color: newCertificacion.trim() ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: newCertificacion.trim() ? 'pointer' : 'not-allowed' }}
+                >
+                  <Plus className="w-3.5 h-3.5" /> Agregar
+                </button>
+              </div>
             </div>
           </div>
         )}
