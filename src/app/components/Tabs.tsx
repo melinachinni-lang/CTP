@@ -3,6 +3,7 @@ import React from 'react';
 interface Tab {
   id: string;
   label: string;
+  count?: number;
 }
 
 interface TabsProps {
@@ -34,6 +35,18 @@ export function Tabs({
             }}
           >
             {tab.label}
+            {tab.count !== undefined && (
+              <span
+                className="ml-1.5 px-1.5 py-0.5 rounded-full text-xs"
+                style={{
+                  backgroundColor: isActive ? '#F0F0F0' : '#E5E5E5',
+                  color: isActive ? '#0A0A0A' : '#9CA3AF',
+                  fontWeight: 500,
+                }}
+              >
+                {tab.count}
+              </span>
+            )}
           </button>
         );
       })}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ChevronRight, X, CheckCircle, XCircle, Clock, FileText, MapPin, DollarSign, User, Mail, Phone, Calendar, Eye, AlertTriangle } from 'lucide-react';
+import { Tabs } from '@/app/components/Tabs';
 
 type EstadoReserva = 'por-revisar' | 'reservada' | 'rechazada';
 
@@ -363,31 +364,11 @@ export function ReservasAdminView() {
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         {/* Tabs */}
-        <div className="flex gap-1 p-1 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setFiltroEstado(tab.id)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all"
-              style={{
-                backgroundColor: filtroEstado === tab.id ? '#FFFFFF' : 'transparent',
-                color: filtroEstado === tab.id ? '#006B4E' : '#6B7280',
-                fontFamily: 'var(--font-body)',
-                boxShadow: filtroEstado === tab.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-              }}
-            >
-              {tab.label}
-              {tab.count !== undefined && (
-                <span className="px-1.5 py-0.5 rounded-full text-xs" style={{
-                  backgroundColor: filtroEstado === tab.id ? '#EBFEF5' : '#E5E5E5',
-                  color: filtroEstado === tab.id ? '#006B4E' : '#9CA3AF',
-                }}>
-                  {tab.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          tabs={TABS}
+          activeTab={filtroEstado}
+          onTabChange={(id) => setFiltroEstado(id as typeof filtroEstado)}
+        />
 
         {/* Búsqueda */}
         <div className="relative">
