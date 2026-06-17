@@ -484,22 +484,39 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
                       <span style={{ fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A' }}>Trabaja en:</span> {broker.inmobiliaria}
                     </p>
 
-                    {/* Botón contactar */}
-                    <button
-                      onClick={() => handleContactar(broker.nombre)}
-                      className="w-full py-2.5 rounded-full transition-all duration-300"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-body-sm)',
-                        fontWeight: 'var(--font-weight-medium)',
-                        backgroundColor: '#006B4E',
-                        color: '#FFFFFF'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                    >
-                      Contactar
-                    </button>
+                    {/* Botones */}
+                    <div className="flex gap-2">
+                      <button
+                        className="flex-1 py-2.5 rounded-full transition-all duration-300"
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          border: '1.5px solid #E5E5E5',
+                          backgroundColor: '#FFFFFF',
+                          color: '#0A0A0A'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                      >
+                        Ver perfil
+                      </button>
+                      <button
+                        onClick={() => handleContactar(broker.nombre)}
+                        className="flex-1 py-2.5 rounded-full transition-all duration-300"
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-body-sm)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          backgroundColor: '#006B4E',
+                          color: '#FFFFFF'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
+                      >
+                        Contactar
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

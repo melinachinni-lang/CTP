@@ -1214,19 +1214,35 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                           </div>
                         </div>
 
-                        {/* CTA */}
-                        <button
-                          onClick={() => { setSelectedBroker(broker); setContactForm({ nombre: '', email: '', mensaje: '' }); setContactSent(false); setShowContactBrokerModal(true); }}
-                          className="w-full h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] rounded-[200px] transition-colors flex items-center justify-center gap-2"
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            fontWeight: 'var(--font-weight-medium)'
-                          }}
-                        >
-                          <Mail className="w-4 h-4" />
-                          Contactar broker
-                        </button>
+                        {/* CTAs */}
+                        <div className="space-y-2">
+                          <button
+                            onClick={() => { setSelectedBroker(broker); setContactForm({ nombre: '', email: '', mensaje: '' }); setContactSent(false); setShowContactBrokerModal(true); }}
+                            className="w-full h-10 rounded-[200px] transition-colors flex items-center justify-center gap-2"
+                            style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--font-size-body-sm)',
+                              fontWeight: 'var(--font-weight-medium)',
+                              backgroundColor: '#006B4E',
+                              color: '#FFFFFF'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                          >
+                            <Mail className="w-4 h-4" />
+                            Contactar
+                          </button>
+                          <button
+                            className="w-full h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] rounded-[200px] transition-colors flex items-center justify-center gap-2"
+                            style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--font-size-body-sm)',
+                              fontWeight: 'var(--font-weight-medium)'
+                            }}
+                          >
+                            Ver perfil
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1316,17 +1332,33 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     }}>
                       {miembro.rol}
                     </p>
-                    <button 
-                      className="w-full h-9 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] rounded-[200px] transition-colors flex items-center justify-center gap-2"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--font-size-xs)',
-                        fontWeight: 'var(--font-weight-medium)'
-                      }}
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      Contactar
-                    </button>
+                    <div className="space-y-1.5">
+                      <button
+                        className="w-full h-9 rounded-[200px] transition-colors flex items-center justify-center gap-2"
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-xs)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          backgroundColor: '#006B4E',
+                          color: '#FFFFFF'
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                        Contactar
+                      </button>
+                      <button
+                        className="w-full h-9 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] rounded-[200px] transition-colors flex items-center justify-center"
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--font-size-xs)',
+                          fontWeight: 'var(--font-weight-medium)'
+                        }}
+                      >
+                        Ver perfil
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
