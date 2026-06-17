@@ -443,7 +443,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
                 Esta información aparecerá en los botones "Llamar" y "WhatsApp" de tu perfil público
               </p>
-              <div className="space-y-4" style={{ maxWidth: '420px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 {([
                   { key: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 1234 5678', icon: Phone },
                   { key: 'email', label: 'Email de contacto', type: 'email', placeholder: 'tu@email.cl', icon: Mail },
