@@ -9,6 +9,8 @@ interface ParcelaReserva {
   ubicacion: string;
   precio: string;
   superficie: string;
+  tipo: 'individual' | 'proyecto';
+  proyecto?: string;
   estado: EstadoReserva;
   comprobante: {
     monto: string;
@@ -33,6 +35,8 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     ubicacion: 'Chile Chico, Aysén',
     precio: '$45.000.000',
     superficie: '5.000 m²',
+    tipo: 'proyecto',
+    proyecto: 'Proyecto Patagonia Sur',
     estado: 'por-revisar',
     comprobante: { monto: '$45.000.000', fecha: '2026-04-25', referencia: '000123456789', archivo: 'comprobante_transferencia.pdf', mensaje: 'Transferí ayer al mediodía, quedo atento.' },
     usuario: { nombre: 'Sebastián Torres', email: 'sebastian.torres@gmail.com', telefono: '+56 9 8765 4321' },
@@ -44,6 +48,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     ubicacion: 'San Clemente, Maule',
     precio: '$32.000.000',
     superficie: '8.500 m²',
+    tipo: 'individual',
     estado: 'por-revisar',
     comprobante: { monto: '$32.000.000', fecha: '2026-04-24', referencia: '000987654321', archivo: 'transferencia_banco_estado.jpg' },
     usuario: { nombre: 'Valentina Morales', email: 'vmorales@outlook.com', telefono: '+56 9 6543 2109' },
@@ -55,6 +60,8 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     ubicacion: 'Colbún, Maule',
     precio: '$28.500.000',
     superficie: '6.200 m²',
+    tipo: 'proyecto',
+    proyecto: 'Proyecto Lomas del Sur',
     estado: 'reservada',
     comprobante: { monto: '$28.500.000', fecha: '2026-04-20', referencia: '000456123789', archivo: 'comprobante.pdf' },
     usuario: { nombre: 'Andrés Fuentes', email: 'afuentes@gmail.com', telefono: '+56 9 1234 5678' },
@@ -66,6 +73,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     ubicacion: 'Pirque, Región Metropolitana',
     precio: '$120.000.000',
     superficie: '12.000 m²',
+    tipo: 'individual',
     estado: 'reservada',
     comprobante: { monto: '$120.000.000', fecha: '2026-04-18', referencia: '000741852963', archivo: 'pago_parcela_pirque.pdf', mensaje: 'Pago realizado en cuotas según acuerdo.' },
     usuario: { nombre: 'Camila Reyes', email: 'camila.reyes@empresa.cl', telefono: '+56 9 9876 5432' },
@@ -77,6 +85,8 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     ubicacion: 'Melipilla, Región Metropolitana',
     precio: '$55.000.000',
     superficie: '9.000 m²',
+    tipo: 'proyecto',
+    proyecto: 'Proyecto Valle Verde',
     estado: 'rechazada',
     comprobante: { monto: '$50.000.000', fecha: '2026-04-15', referencia: '000369258147', archivo: 'comprobante_parcial.pdf' },
     usuario: { nombre: 'Roberto Soto', email: 'rsoto@correo.cl', telefono: '+56 9 5555 4444' },
@@ -134,7 +144,18 @@ function DetalleDrawer({ reserva, onClose, onValidar, onRechazar }: {
           <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Parcela</p>
             <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{reserva.nombre}</p>
-            <div className="flex items-center gap-4 flex-wrap">
+            <div className="mt-1">
+              {reserva.tipo === 'proyecto' ? (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', fontFamily: 'var(--font-body)' }}>
+                  Proyecto · {reserva.proyecto}
+                </span>
+              ) : (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F5F5F0', color: '#6B7280', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }}>
+                  Parcela individual
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-4 flex-wrap mt-2">
               <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>
                 <MapPin className="w-3.5 h-3.5" /> {reserva.ubicacion}
               </span>
@@ -411,9 +432,20 @@ export function ReservasAdminView() {
               {/* Parcela */}
               <div className="col-span-3 pr-2">
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#111827' }}>{reserva.nombre}</p>
-                <p className="flex items-center gap-1 mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                  <MapPin className="w-3 h-3" />{reserva.ubicacion}
-                </p>
+                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                  {reserva.tipo === 'proyecto' ? (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', fontFamily: 'var(--font-body)' }}>
+                      Proyecto · {reserva.proyecto}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F5F5F0', color: '#6B7280', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }}>
+                      Parcela individual
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                    <MapPin className="w-3 h-3" />{reserva.ubicacion}
+                  </span>
+                </div>
               </div>
 
               {/* Comprador */}
