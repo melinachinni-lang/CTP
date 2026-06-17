@@ -447,7 +447,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 {([
                   { key: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 1234 5678', icon: Phone },
                   { key: 'email', label: 'Email de contacto', type: 'email', placeholder: 'tu@email.cl', icon: Mail },
-                  { key: 'whatsapp', label: 'WhatsApp', type: 'tel', placeholder: '+56 9 1234 5678', icon: Phone },
                 ] as const).map(field => {
                   const FieldIcon = field.icon;
                   return (
