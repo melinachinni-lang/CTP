@@ -4,6 +4,7 @@ import { BrokerInquiriesSection } from '@/app/components/BrokerInquiriesSection'
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { RendimientoView } from '@/app/components/RendimientoView';
+import { SettingsContent } from '@/app/components/SettingsContent';
 import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -34,6 +35,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     { id: 'performance', label: 'Mi rendimiento', icon: 'chart' },
     { id: 'plan', label: 'Plan y facturación', icon: 'card' },
     { id: 'help', label: 'Ayuda', icon: 'help' },
+    { id: 'profile', label: 'Perfil', icon: 'profile' },
     { id: 'settings', label: 'Configuración', icon: 'settings' },
   ];
 
@@ -82,6 +84,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         return (
           <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        );
+      case 'profile':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         );
       case 'settings':
@@ -194,7 +202,8 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         {currentSection === 'performance' && <RendimientoView viewType="broker" />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
-        {currentSection === 'settings' && <SettingsContent />}
+        {currentSection === 'profile' && <SettingsContent mode="profile" />}
+        {currentSection === 'settings' && <SettingsContent mode="settings" />}
       </div>
     </>
   );

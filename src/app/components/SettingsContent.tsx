@@ -60,8 +60,10 @@ function RequirementRow({ met, label }: { met: boolean; label: string }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function SettingsContent() {
-  const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security'>('profile');
+export function SettingsContent({ mode = 'settings' }: { mode?: 'profile' | 'settings' }) {
+  const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security'>(
+    mode === 'profile' ? 'profile' : 'preferences'
+  );
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'success'>('idle');
 
   // — Perfil form state
@@ -163,12 +165,11 @@ export function SettingsContent() {
     setShowCloseAllConfirm(false);
   };
 
-  const showSaveCTA = activeTab === 'profile' || activeTab === 'preferences';
+  const showSaveCTA = mode === 'profile' || activeTab === 'preferences';
 
   // ─── Render ────────────────────────────────────────────────────────────────
 
   const tabs = [
-    { id: 'profile',     label: 'Perfil',              icon: Building2 },
     { id: 'preferences', label: 'Preferencias',         icon: Bell },
     { id: 'users',       label: 'Usuarios y permisos',  icon: User },
     { id: 'security',    label: 'Seguridad',             icon: Shield },
@@ -180,10 +181,10 @@ export function SettingsContent() {
       {/* Header */}
       <div className="space-y-1">
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-          Configuración
+          {mode === 'profile' ? 'Perfil' : 'Configuración'}
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', lineHeight: 'var(--line-height-body)' }}>
-          Gestioná tu perfil institucional, equipo y seguridad
+          {mode === 'profile' ? 'Información pública de tu inmobiliaria' : 'Seguridad, notificaciones y equipo'}
         </p>
       </div>
 
@@ -203,29 +204,31 @@ export function SettingsContent() {
         </div>
       )}
 
-      {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-2xl overflow-x-auto" style={{ backgroundColor: '#F3F4F6' }}>
-        {tabs.map(tab => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap"
-              style={{
-                fontFamily: 'var(--font-body)',
-                backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                color: isActive ? '#0A0A0A' : '#6B7280',
-                boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-              }}
-            >
-              <Icon className="w-4 h-4" />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* Tabs — solo en modo settings */}
+      {mode === 'settings' && (
+        <div className="flex gap-1 p-1 rounded-2xl overflow-x-auto" style={{ backgroundColor: '#F3F4F6' }}>
+          {tabs.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                  color: isActive ? '#0A0A0A' : '#6B7280',
+                  boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                }}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Content card */}
       <div className="rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>

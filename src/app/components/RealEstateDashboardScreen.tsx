@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, Building2 } from 'lucide-react';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
@@ -38,6 +38,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     { id: 'team', label: 'Equipo / Brokers', icon: Users },
     { id: 'plan', label: 'Plan y facturación', icon: CreditCard },
     { id: 'help', label: 'Ayuda', icon: HelpCircle },
+    { id: 'profile', label: 'Perfil', icon: Building2 },
     { id: 'settings', label: 'Configuración', icon: Settings },
   ];
 
@@ -167,7 +168,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
-        {currentSection === 'settings' && <SettingsContent />}
+        {currentSection === 'profile' && <SettingsContent mode="profile" />}
+        {currentSection === 'settings' && <SettingsContent mode="settings" />}
       </div>
     </>
   );

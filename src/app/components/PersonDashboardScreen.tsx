@@ -4,6 +4,7 @@ import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
+import { SettingsContent } from '@/app/components/SettingsContent';
 import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -74,6 +75,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag', group: 'buy' },
     { id: 'plan', label: t.nav.plan, icon: 'credit-card', group: 'sell' },
     { id: 'help', label: t.nav.help, icon: 'help' },
+    { id: 'profile', label: t.nav.profile, icon: 'profile' },
     { id: 'settings', label: t.nav.settings, icon: 'settings' },
   ];
 
@@ -140,6 +142,12 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         return (
           <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3v-8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+        );
+      case 'profile':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         );
       case 'settings':
@@ -334,7 +342,8 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'purchases' && <MyPurchasesContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
-        {currentSection === 'settings' && <SettingsContent />}
+        {currentSection === 'profile' && <SettingsContent mode="profile" />}
+        {currentSection === 'settings' && <SettingsContent mode="settings" />}
       </div>
     </>
   );

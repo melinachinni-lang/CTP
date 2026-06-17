@@ -5,7 +5,7 @@ export interface Translations {
   nav: {
     home: string; explore: string; listings: string; saved: string;
     inquiries: string; calendarios: string; compare: string; purchases: string;
-    plan: string; help: string; settings: string; myAccount: string; signOut: string;
+    plan: string; help: string; settings: string; profile: string; myAccount: string; signOut: string;
     myProfile: string; notifications: string;
     parcelas: string; inmobiliarias: string; howItWorks: string; resources: string;
     publishProperty: string; publishShort: string; login: string;
@@ -331,7 +331,7 @@ const es: Translations = {
     home: 'Inicio', explore: 'Explorar parcelas', listings: 'Mis publicaciones',
     saved: 'Guardados', inquiries: 'Consultas', calendarios: 'Calendarios',
     compare: 'Comparar', purchases: 'Mis compras', plan: 'Plan y límites',
-    help: 'Ayuda', settings: 'Configuración', myAccount: 'Mi cuenta', signOut: 'Cerrar sesión',
+    help: 'Ayuda', settings: 'Configuración', profile: 'Perfil', myAccount: 'Mi cuenta', signOut: 'Cerrar sesión',
     myProfile: 'Mi perfil', notifications: 'Notificaciones',
     parcelas: 'Parcelas', inmobiliarias: 'Inmobiliarias',
     howItWorks: 'Cómo funciona', resources: 'Recursos',
@@ -821,7 +821,7 @@ const en: Translations = {
     home: 'Home', explore: 'Explore parcels', listings: 'My listings',
     saved: 'Saved', inquiries: 'Inquiries', calendarios: 'Calendars',
     compare: 'Compare', purchases: 'My purchases', plan: 'Plan & limits',
-    help: 'Help', settings: 'Settings', myAccount: 'My account', signOut: 'Sign out',
+    help: 'Help', settings: 'Settings', profile: 'Profile', myAccount: 'My account', signOut: 'Sign out',
     myProfile: 'My profile', notifications: 'Notifications',
     parcelas: 'Parcels', inmobiliarias: 'Real estate agencies',
     howItWorks: 'How it works', resources: 'Resources',
