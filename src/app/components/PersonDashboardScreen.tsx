@@ -342,8 +342,8 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'purchases' && <MyPurchasesContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
-        {currentSection === 'profile' && <SettingsContent mode="profile" />}
-        {currentSection === 'settings' && <SettingsContent mode="settings" />}
+        {currentSection === 'profile' && <SettingsContent mode="profile" userType="personal" />}
+        {currentSection === 'settings' && <SettingsContent mode="settings" userType="personal" />}
       </div>
     </>
   );

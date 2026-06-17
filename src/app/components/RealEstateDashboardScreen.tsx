@@ -168,8 +168,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
-        {currentSection === 'profile' && <SettingsContent mode="profile" />}
-        {currentSection === 'settings' && <SettingsContent mode="settings" />}
+        {currentSection === 'profile' && <SettingsContent mode="profile" userType="inmobiliaria" />}
+        {currentSection === 'settings' && <SettingsContent mode="settings" userType="inmobiliaria" />}
       </div>
     </>
   );

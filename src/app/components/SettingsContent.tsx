@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users } from 'lucide-react';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -19,6 +19,18 @@ function getColor(name: string) {
 }
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
+
+const TESTIMONIOS_INIT = [
+  { id: 1, nombre: 'Rodrigo Fuentes', fecha: 'Mayo 2026', estrellas: 5, texto: 'Excelente atención, muy profesionales. Nos ayudaron a encontrar la parcela perfecta en tiempo récord.', visible: true },
+  { id: 2, nombre: 'Camila Torres', fecha: 'Abril 2026', estrellas: 5, texto: 'Proceso muy transparente y el equipo siempre disponible para resolver dudas. Muy recomendable.', visible: true },
+  { id: 3, nombre: 'Sebastián Mora', fecha: 'Marzo 2026', estrellas: 4, texto: 'Buena experiencia general. El trámite tomó un poco más de lo esperado pero el resultado fue excelente.', visible: false },
+];
+
+const EQUIPO_MOCK = [
+  { id: 1, nombre: 'Carlos Andrés Muñoz', rol: 'Broker Senior', publicaciones: 12 },
+  { id: 2, nombre: 'Javiera Paz Rojas', rol: 'Broker', publicaciones: 7 },
+  { id: 3, nombre: 'Felipe Castillo', rol: 'Broker', publicaciones: 4 },
+];
 
 const USUARIOS_INIT = [
   { id: 1, nombre: 'María Fernanda González', email: 'mfernanda@vallecentral.cl', rol: 'Admin' as const,  ultimoAcceso: 'Hace 2 horas' },
@@ -60,7 +72,7 @@ function RequirementRow({ met, label }: { met: boolean; label: string }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function SettingsContent({ mode = 'settings' }: { mode?: 'profile' | 'settings' }) {
+export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }: { mode?: 'profile' | 'settings'; userType?: 'inmobiliaria' | 'broker' | 'personal' }) {
   const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security'>(
     mode === 'profile' ? 'profile' : 'preferences'
   );
@@ -81,6 +93,8 @@ export function SettingsContent({ mode = 'settings' }: { mode?: 'profile' | 'set
   const [certificaciones, setCertificaciones] = useState(['Miembro CCHC', 'ISO 9001:2015']);
   const [newServicio, setNewServicio] = useState('');
   const [newCertificacion, setNewCertificacion] = useState('');
+  const [testimonios, setTestimonios] = useState(TESTIMONIOS_INIT);
+  const [linkCopiado, setLinkCopiado] = useState(false);
 
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
@@ -131,6 +145,11 @@ export function SettingsContent({ mode = 'settings' }: { mode?: 'profile' | 'set
     setPasswordSaved(true);
     setCurrentPass(''); setNewPass(''); setConfirmPass('');
     setTimeout(() => setPasswordSaved(false), 3500);
+  };
+
+  const handleCopiarLink = () => {
+    setLinkCopiado(true);
+    setTimeout(() => setLinkCopiado(false), 2500);
   };
 
   const handleInviteUser = () => {
@@ -505,6 +524,137 @@ export function SettingsContent({ mode = 'settings' }: { mode?: 'profile' | 'set
                 </button>
               </div>
             </div>
+
+            {/* Estadísticas — solo inmobiliaria */}
+            {userType === 'inmobiliaria' && (
+              <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+                <div className="flex items-center gap-2 mb-4">
+                  <BarChart2 className="w-4 h-4" style={{ color: '#6B7280' }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                    Estadísticas de perfil
+                  </p>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                  {[
+                    { label: 'Visitas al perfil', value: '1.248', sub: 'Últimos 30 días', color: '#006B4E', border: '#BBF7D0', bg: '#F0FDF4' },
+                    { label: 'Consultas recibidas', value: '87', sub: 'Últimos 30 días', color: '#1D4ED8', border: '#BFDBFE', bg: '#EFF6FF' },
+                    { label: 'Publicaciones activas', value: '14', sub: 'En este momento', color: '#7C3AED', border: '#DDD6FE', bg: '#F5F3FF' },
+                  ].map(stat => (
+                    <div key={stat.label} className="p-4 rounded-xl" style={{ backgroundColor: stat.bg, border: `1px solid ${stat.border}` }}>
+                      <p style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: stat.color }}>{stat.value}</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 500, color: '#374151', marginTop: '2px' }}>{stat.label}</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{stat.sub}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Testimonios — solo inmobiliaria */}
+            {userType === 'inmobiliaria' && (
+              <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4" style={{ color: '#6B7280' }} />
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                      Testimonios de clientes
+                    </p>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0', fontFamily: 'var(--font-body)' }}>
+                      {testimonios.length}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleCopiarLink}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                    style={{ backgroundColor: linkCopiado ? '#F0FDF4' : '#006B4E', color: linkCopiado ? '#166534' : '#FFFFFF', border: linkCopiado ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)' }}
+                    onMouseEnter={e => { if (!linkCopiado) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                    onMouseLeave={e => { if (!linkCopiado) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                  >
+                    {linkCopiado ? <><Check className="w-3.5 h-3.5" /> ¡Link copiado!</> : <><Copy className="w-3.5 h-3.5" /> Compartir link</>}
+                  </button>
+                </div>
+                <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                  Compartí el link para que tus clientes puedan dejar su testimonio en tu perfil público
+                </p>
+                <div className="space-y-3">
+                  {testimonios.map(t => {
+                    const color = getColor(t.nombre);
+                    return (
+                      <div key={t.id} className="p-4 rounded-xl" style={{ border: `1.5px solid ${t.visible ? '#E5E5E5' : '#F3F4F6'}`, backgroundColor: t.visible ? '#FAFAFA' : '#F9FAFB', opacity: t.visible ? 1 : 0.6 }}>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-3 flex-1">
+                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, color: color.text }}>{getInitials(t.nombre)}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{t.nombre}</p>
+                                <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{t.fecha}</p>
+                              </div>
+                              <div className="flex gap-0.5 mb-2">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star key={i} className="w-3.5 h-3.5" fill={i < t.estrellas ? '#F59E0B' : 'none'} style={{ color: i < t.estrellas ? '#F59E0B' : '#E5E7EB' }} />
+                                ))}
+                              </div>
+                              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#374151', lineHeight: '1.5' }}>{t.texto}</p>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: t.visible ? '#166534' : '#9CA3AF' }}>
+                              {t.visible ? 'Visible' : 'Oculto'}
+                            </span>
+                            <button
+                              onClick={() => setTestimonios(prev => prev.map(x => x.id === t.id ? { ...x, visible: !x.visible } : x))}
+                              className="relative flex-shrink-0"
+                              style={{ width: '36px', height: '20px', borderRadius: '200px', backgroundColor: t.visible ? '#006B4E' : '#D1D5DB', padding: '2px', transition: 'background-color 0.2s' }}
+                            >
+                              <div
+                                style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: '#FFFFFF', position: 'absolute', top: '2px', left: t.visible ? 'calc(100% - 18px)' : '2px', transition: 'left 0.2s' }}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Equipo — solo inmobiliaria */}
+            {userType === 'inmobiliaria' && (
+              <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <Users className="w-4 h-4" style={{ color: '#6B7280' }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                    Equipo
+                  </p>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontFamily: 'var(--font-body)' }}>
+                    {EQUIPO_MOCK.length} brokers
+                  </span>
+                </div>
+                <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                  Se actualiza automáticamente a medida que agregás brokers desde Configuración → Usuarios
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                  {EQUIPO_MOCK.map(broker => {
+                    const color = getColor(broker.nombre);
+                    return (
+                      <div key={broker.id} className="p-4 rounded-xl text-center" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: color.bg }}>
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 700, color: color.text }}>{getInitials(broker.nombre)}</span>
+                        </div>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{broker.nombre}</p>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{broker.rol}</p>
+                        <span className="mt-2 px-2 py-0.5 rounded-full text-xs inline-block" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0', fontFamily: 'var(--font-body)' }}>
+                          {broker.publicaciones} publicaciones
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

@@ -202,8 +202,8 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         {currentSection === 'performance' && <RendimientoView viewType="broker" />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
-        {currentSection === 'profile' && <SettingsContent mode="profile" />}
-        {currentSection === 'settings' && <SettingsContent mode="settings" />}
+        {currentSection === 'profile' && <SettingsContent mode="profile" userType="broker" />}
+        {currentSection === 'settings' && <SettingsContent mode="settings" userType="broker" />}
       </div>
     </>
   );
