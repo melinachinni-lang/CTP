@@ -5,6 +5,7 @@ import { ConsultasView } from '@/app/components/ConsultasView';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { RendimientoView } from '@/app/components/RendimientoView';
 import { SettingsContent } from '@/app/components/SettingsContent';
+import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -152,6 +153,10 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
               </button>
             ))}
           </nav>
+
+          <div className="px-4 pb-3">
+            <SugerenciasButton />
+          </div>
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>

@@ -9,6 +9,7 @@ import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, A
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
+import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { getAllParcelas } from '@/app/data/parcelasData';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 import { useI18n } from '@/app/i18n/i18nContext';
@@ -280,6 +281,10 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
               </button>
             ))}
           </nav>
+
+          <div className="px-4 pb-3">
+            <SugerenciasButton />
+          </div>
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>

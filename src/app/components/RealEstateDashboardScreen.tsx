@@ -8,6 +8,7 @@ import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { TeamContent } from '@/app/components/TeamContent';
 import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
+import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
 
@@ -103,6 +104,10 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
               );
             })}
           </nav>
+
+          <div className="px-6 pb-3">
+            <SugerenciasButton />
+          </div>
 
           {/* User Profile Area */}
           <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
