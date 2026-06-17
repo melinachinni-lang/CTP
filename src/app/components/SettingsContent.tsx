@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck } from 'lucide-react';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -95,6 +95,18 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [newCertificacion, setNewCertificacion] = useState('');
   const [testimonios, setTestimonios] = useState(TESTIMONIOS_INIT);
   const [linkCopiado, setLinkCopiado] = useState(false);
+
+  // — Perfil personal state
+  const [perfilPersonal, setPerfilPersonal] = useState({
+    nombre: 'Carlos Muñoz',
+    descripcion: 'Propietario directo - Sin intermediarios',
+    ciudad: 'Coyhaique',
+    region: 'Aysén',
+    telefono: '+56 9 5555 1234',
+    email: 'carlos.munoz@email.cl',
+    whatsapp: '+56 9 5555 1234',
+  });
+  const [hasAvatarPersonal, setHasAvatarPersonal] = useState(false);
 
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
@@ -253,7 +265,211 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
       <div className="rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
 
         {/* ── Tab: Perfil ──────────────────────────────────────────────────── */}
-        {activeTab === 'profile' && (
+        {activeTab === 'profile' && userType === 'personal' && (
+          <div className="p-6 space-y-6">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
+              Tu perfil público
+            </h2>
+
+            {/* Foto de perfil */}
+            <div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                Foto de perfil
+              </p>
+              <div className="flex items-center gap-4">
+                {hasAvatarPersonal ? (
+                  <div className="relative w-20 h-20 flex-shrink-0">
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
+                      <span style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 700, color: '#166534' }}>
+                        {getInitials(perfilPersonal.nombre)}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setHasAvatarPersonal(false)}
+                      className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#DC2626' }}
+                    >
+                      <X className="w-3 h-3" style={{ color: '#FFFFFF' }} />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setHasAvatarPersonal(true)}
+                    className="w-20 h-20 rounded-full flex flex-col items-center justify-center flex-shrink-0 transition-all"
+                    style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  >
+                    <Upload className="w-5 h-5" style={{ color: '#9CA3AF' }} />
+                  </button>
+                )}
+                <div className="space-y-1">
+                  <button
+                    onClick={() => setHasAvatarPersonal(true)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                    style={{ border: '1.5px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', backgroundColor: '#FFFFFF' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                  >
+                    <Upload className="w-4 h-4" /> Subir foto
+                  </button>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>PNG o JPG, máximo 2 MB</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Nombre */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                Nombre completo <span style={{ color: '#DC2626' }}>*</span>
+              </label>
+              <input
+                type="text"
+                value={perfilPersonal.nombre}
+                onChange={e => setPerfilPersonal(p => ({ ...p, nombre: e.target.value }))}
+                className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
+                style={{ border: `1.5px solid ${perfilPersonal.nombre ? '#E5E5E5' : '#DC2626'}`, fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                onFocus={e => e.target.style.borderColor = '#006B4E'}
+                onBlur={e => e.target.style.borderColor = perfilPersonal.nombre ? '#E5E5E5' : '#DC2626'}
+              />
+            </div>
+
+            {/* Descripción corta */}
+            <div>
+              <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                Descripción corta
+              </label>
+              <textarea
+                rows={2}
+                value={perfilPersonal.descripcion}
+                onChange={e => setPerfilPersonal(p => ({ ...p, descripcion: e.target.value }))}
+                placeholder="Ej: Propietario directo - Sin intermediarios"
+                className="w-full px-4 py-3 rounded-xl text-sm resize-none transition-colors"
+                style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', lineHeight: '1.6' }}
+                onFocus={e => e.target.style.borderColor = '#006B4E'}
+                onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+              />
+              <p className="mt-1 text-right" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                {perfilPersonal.descripcion.length}/160 caracteres
+              </p>
+            </div>
+
+            {/* Ubicación */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                  Ubicación
+                </p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Ciudad</label>
+                  <input
+                    type="text"
+                    value={perfilPersonal.ciudad}
+                    onChange={e => setPerfilPersonal(p => ({ ...p, ciudad: e.target.value }))}
+                    placeholder="Ej: Santiago"
+                    className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
+                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                    onFocus={e => e.target.style.borderColor = '#006B4E'}
+                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>Región</label>
+                  <input
+                    type="text"
+                    value={perfilPersonal.region}
+                    onChange={e => setPerfilPersonal(p => ({ ...p, region: e.target.value }))}
+                    placeholder="Ej: Metropolitana"
+                    className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
+                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                    onFocus={e => e.target.style.borderColor = '#006B4E'}
+                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Información de contacto */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <Phone className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                  Información de contacto
+                </p>
+              </div>
+              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                Esta información aparecerá en los botones "Llamar" y "WhatsApp" de tu perfil público
+              </p>
+              <div className="space-y-4" style={{ maxWidth: '420px' }}>
+                {([
+                  { key: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 1234 5678', icon: Phone },
+                  { key: 'email', label: 'Email de contacto', type: 'email', placeholder: 'tu@email.cl', icon: Mail },
+                  { key: 'whatsapp', label: 'WhatsApp', type: 'tel', placeholder: '+56 9 1234 5678', icon: Phone },
+                ] as const).map(field => {
+                  const FieldIcon = field.icon;
+                  return (
+                    <div key={field.key}>
+                      <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                        {field.label}
+                      </label>
+                      <div className="relative">
+                        <FieldIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                        <input
+                          type={field.type}
+                          value={perfilPersonal[field.key]}
+                          placeholder={field.placeholder}
+                          onChange={e => setPerfilPersonal(p => ({ ...p, [field.key]: e.target.value }))}
+                          className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors"
+                          style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                          onFocus={e => e.target.style.borderColor = '#006B4E'}
+                          onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Verificaciones (read-only) */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <ShieldCheck className="w-4 h-4" style={{ color: '#6B7280' }} />
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
+                  Verificaciones
+                </p>
+              </div>
+              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                Estas insignias se muestran en tu perfil público y son gestionadas por CompraTuParcela
+              </p>
+              <div className="space-y-2">
+                {[
+                  { label: 'Identidad verificada', icon: BadgeCheck, done: true },
+                  { label: 'Documentación cargada', icon: FileText, done: true },
+                  { label: 'Rol aprobado', icon: ShieldCheck, done: true },
+                ].map(v => {
+                  const VIcon = v.icon;
+                  return (
+                    <div key={v.label} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ border: `1.5px solid ${v.done ? '#BBF7D0' : '#E5E5E5'}`, backgroundColor: v.done ? '#F0FDF4' : '#FAFAFA' }}>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: v.done ? '#DCFCE7' : '#F3F4F6' }}>
+                        <VIcon className="w-4 h-4" style={{ color: v.done ? '#166534' : '#9CA3AF' }} />
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: v.done ? '#166534' : '#6B7280', fontWeight: v.done ? 500 : 400 }}>
+                        {v.label}
+                      </span>
+                      {v.done && <Check className="w-4 h-4 ml-auto flex-shrink-0" style={{ color: '#16A34A' }} />}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'profile' && userType !== 'personal' && (
           <div className="p-6 space-y-6">
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
               Perfil de la inmobiliaria
@@ -1078,7 +1294,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
         <div className="flex items-center justify-end gap-3 sticky bottom-6">
           <button
             onClick={() => {
-              if (activeTab === 'profile') setPerfil({ nombre: 'Inmobiliaria Valle Central', descripcion: 'Inmobiliaria especializada en parcelas de agrado en la zona central de Chile. Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales.', email: 'contacto@vallecentral.cl', telefono: '+56 9 8765 4321', web: 'www.vallecentral.cl', direccion: 'Av. Principal 1234, Santiago' });
+              if (activeTab === 'profile' && userType === 'personal') setPerfilPersonal({ nombre: 'Carlos Muñoz', descripcion: 'Propietario directo - Sin intermediarios', ciudad: 'Coyhaique', region: 'Aysén', telefono: '+56 9 5555 1234', email: 'carlos.munoz@email.cl', whatsapp: '+56 9 5555 1234' });
+              if (activeTab === 'profile' && userType !== 'personal') setPerfil({ nombre: 'Inmobiliaria Valle Central', descripcion: 'Inmobiliaria especializada en parcelas de agrado en la zona central de Chile. Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales.', email: 'contacto@vallecentral.cl', telefono: '+56 9 8765 4321', whatsapp: '+56 9 8765 4321', web: 'www.vallecentral.cl', direccion: 'Av. Principal 1234, Santiago' });
             }}
             className="px-6 py-2.5 rounded-full text-sm font-medium transition-all"
             style={{ backgroundColor: '#FFFFFF', color: '#374151', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)' }}
@@ -1089,16 +1306,16 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
           </button>
           <button
             onClick={handleSave}
-            disabled={saveState === 'saving' || (activeTab === 'profile' && !perfil.nombre)}
+            disabled={saveState === 'saving' || (activeTab === 'profile' && userType === 'personal' && !perfilPersonal.nombre) || (activeTab === 'profile' && userType !== 'personal' && !perfil.nombre)}
             className="flex items-center gap-2 px-8 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm"
             style={{
-              backgroundColor: saveState === 'saving' || (activeTab === 'profile' && !perfil.nombre) ? '#E5E5E5' : '#006B4E',
-              color: saveState === 'saving' || (activeTab === 'profile' && !perfil.nombre) ? '#9CA3AF' : '#FFFFFF',
+              backgroundColor: saveState === 'saving' ? '#E5E5E5' : '#006B4E',
+              color: saveState === 'saving' ? '#9CA3AF' : '#FFFFFF',
               fontFamily: 'var(--font-body)',
               cursor: saveState === 'saving' ? 'not-allowed' : 'pointer',
             }}
-            onMouseEnter={e => { if (saveState === 'idle' && perfil.nombre) e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={e => { if (saveState === 'idle' && perfil.nombre) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+            onMouseEnter={e => { if (saveState === 'idle') e.currentTarget.style.backgroundColor = '#01533E'; }}
+            onMouseLeave={e => { if (saveState === 'idle') e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             {saveState === 'saving' ? (
               <>
