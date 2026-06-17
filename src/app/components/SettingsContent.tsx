@@ -107,6 +107,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     whatsapp: '+56 9 5555 1234',
   });
   const [hasAvatarPersonal, setHasAvatarPersonal] = useState(false);
+  const [hasBannerPersonal, setHasBannerPersonal] = useState(false);
 
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
@@ -271,8 +272,47 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               Tu perfil público
             </h2>
 
-            {/* Foto de perfil */}
+            {/* Banner */}
             <div>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                Banner
+              </p>
+              {hasBannerPersonal ? (
+                <div className="relative w-full rounded-xl overflow-hidden" style={{ height: '128px' }}>
+                  <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #4a90a4 100%)' }}>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#FFFFFF', opacity: 0.6 }}>
+                      Banner — Carlos Muñoz
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setHasBannerPersonal(false)}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.7)'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)'}
+                  >
+                    <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setHasBannerPersonal(true)}
+                  className="w-full flex flex-col items-center justify-center gap-2 rounded-xl transition-all"
+                  style={{ height: '128px', border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                >
+                  <Image className="w-6 h-6" style={{ color: '#9CA3AF' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>Subir banner</span>
+                </button>
+              )}
+              <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                Se mostrará como fondo en tu perfil público. Recomendado: 1200×300 px, máximo 5 MB
+              </p>
+            </div>
+
+            {/* Foto de perfil */}
+            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
               <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
                 Foto de perfil
               </p>
