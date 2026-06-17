@@ -498,6 +498,7 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
                         }}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                        onClick={() => onNavigate('broker-profile', undefined, broker.nombre)}
                       >
                         Ver perfil
                       </button>

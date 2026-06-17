@@ -1239,6 +1239,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                               fontSize: 'var(--font-size-body-sm)',
                               fontWeight: 'var(--font-weight-medium)'
                             }}
+                            onClick={() => onNavigate('broker-profile', undefined, broker.nombre)}
                           >
                             Ver perfil
                           </button>
@@ -1355,6 +1356,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                           fontSize: 'var(--font-size-xs)',
                           fontWeight: 'var(--font-weight-medium)'
                         }}
+                        onClick={() => { setShowTeamModal(false); onNavigate('broker-profile', undefined, miembro.nombre); }}
                       >
                         Ver perfil
                       </button>
