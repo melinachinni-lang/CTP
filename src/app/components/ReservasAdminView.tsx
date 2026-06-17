@@ -225,7 +225,7 @@ function DetalleDrawer({ reserva, onClose, onValidar, onRechazar }: {
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
             >
-              Validar pago
+              Confirmar reserva
             </button>
           </div>
         )}
