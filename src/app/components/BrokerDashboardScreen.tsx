@@ -1929,7 +1929,7 @@ function HelpContent() {
 }
 
 // Settings Section Component
-function SettingsContent() {
+function BrokerLocalSettingsContent() {
   return (
     <main className="px-6 py-6 space-y-6">
       {/* Header */}
