@@ -5,6 +5,7 @@ import { ConsultasView } from '@/app/components/ConsultasView';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { RendimientoView } from '@/app/components/RendimientoView';
 import { SettingsContent } from '@/app/components/SettingsContent';
+import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -28,16 +29,23 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       }
     }));
 
-  const navItems = [
-    { id: 'home', label: 'Inicio', icon: 'home' },
-    { id: 'listings', label: 'Mis publicaciones', icon: 'list' },
-    { id: 'leads', label: 'Consultas / Leads', icon: 'message' },
-    { id: 'calendarios', label: 'Calendarios', icon: 'calendar' },
-    { id: 'performance', label: 'Mi rendimiento', icon: 'chart' },
-    { id: 'plan', label: 'Plan y facturación', icon: 'card' },
-    { id: 'profile', label: 'Perfil', icon: 'profile' },
-    { id: 'settings', label: 'Configuración', icon: 'settings' },
-    { id: 'help', label: 'Ayuda', icon: 'help' },
+  const navGroups = [
+    [
+      { id: 'home', label: 'Inicio', icon: 'home' },
+      { id: 'listings', label: 'Mis publicaciones', icon: 'list' },
+      { id: 'inquiries', label: 'Consultas', icon: 'message' },
+      { id: 'reservas', label: 'Reservas', icon: 'file' },
+      { id: 'calendarios', label: 'Calendarios', icon: 'calendar' },
+    ],
+    [
+      { id: 'performance', label: 'Rendimiento', icon: 'chart' },
+      { id: 'plan', label: 'Plan y facturación', icon: 'card' },
+    ],
+    [
+      { id: 'profile', label: 'Perfil', icon: 'profile' },
+      { id: 'settings', label: 'Configuración', icon: 'settings' },
+      { id: 'help', label: 'Ayuda', icon: 'help' },
+    ],
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -100,6 +108,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         );
+      case 'file':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        );
       default:
         return null;
     }
@@ -118,39 +132,46 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
 
           {/* Navigation Items */}
           <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setCurrentSection(item.id)}
-                className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
-                  currentSection === item.id ? 'font-medium' : ''
-                }`}
-                style={{
-                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  width: 'calc(100% - 16px)',
-                  marginLeft: '8px',
-                  marginRight: '8px',
-                  borderRadius: '8px',
-                  ...(currentSection === item.id
-                    ? { backgroundColor: '#FFFFFF' }
-                    : { transition: 'background-color 0.2s ease' })
-                }}
-                onMouseEnter={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = '';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                  }
-                }}
-              >
-                {renderIcon(item.icon, currentSection === item.id)}
-                <span>{item.label}</span>
-              </button>
+            {navGroups.map((group, groupIdx) => (
+              <React.Fragment key={groupIdx}>
+                {groupIdx > 0 && (
+                  <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+                )}
+                {group.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setCurrentSection(item.id)}
+                    className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+                      currentSection === item.id ? 'font-medium' : ''
+                    }`}
+                    style={{
+                      color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                      width: 'calc(100% - 16px)',
+                      marginLeft: '8px',
+                      marginRight: '8px',
+                      borderRadius: '8px',
+                      ...(currentSection === item.id
+                        ? { backgroundColor: '#FFFFFF' }
+                        : { transition: 'background-color 0.2s ease' })
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentSection !== item.id) {
+                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentSection !== item.id) {
+                        e.currentTarget.style.backgroundColor = '';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+                      }
+                    }}
+                  >
+                    {renderIcon(item.icon, currentSection === item.id)}
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </React.Fragment>
             ))}
             <SugerenciasButton />
           </nav>
@@ -195,7 +216,16 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '224px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent />}
         {currentSection === 'listings' && <MyPublicationsView userType="broker" userId="broker-456" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
-        {currentSection === 'leads' && <ConsultasView viewType="broker" />}
+        {currentSection === 'inquiries' && <ConsultasView viewType="broker" />}
+        {currentSection === 'reservas' && (
+          <div className="p-8">
+            <div className="mb-6">
+              <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 600, color: '#0A0A0A' }}>Reservas</h1>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>Gestión de comprobantes y confirmación de reservas</p>
+            </div>
+            <ReservasAdminView />
+          </div>
+        )}
         {currentSection === 'calendarios' && (
           <div className="flex flex-col" style={{ height: 'calc(100vh - 32px)' }}>
             <CalendariosView />

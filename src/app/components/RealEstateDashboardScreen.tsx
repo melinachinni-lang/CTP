@@ -31,18 +31,24 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       }
     }));
 
-  const navItems = [
-    { id: 'home', label: 'Inicio', icon: Home },
-    { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
-    { id: 'inquiries', label: 'Consultas', icon: MessageCircle },
-    { id: 'reservas', label: 'Reservas', icon: FileText },
-    { id: 'calendarios', label: 'Calendarios', icon: Calendar },
-    { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
-    { id: 'team', label: 'Equipo / Brokers', icon: Users },
-    { id: 'plan', label: 'Plan y facturación', icon: CreditCard },
-    { id: 'profile', label: 'Perfil', icon: User },
-    { id: 'settings', label: 'Configuración', icon: Settings },
-    { id: 'help', label: 'Ayuda', icon: HelpCircle },
+  const navGroups = [
+    [
+      { id: 'home', label: 'Inicio', icon: Home },
+      { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
+      { id: 'inquiries', label: 'Consultas', icon: MessageCircle },
+      { id: 'reservas', label: 'Reservas', icon: FileText },
+      { id: 'calendarios', label: 'Calendarios', icon: Calendar },
+    ],
+    [
+      { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
+      { id: 'team', label: 'Equipo', icon: Users },
+      { id: 'plan', label: 'Plan y facturación', icon: CreditCard },
+    ],
+    [
+      { id: 'profile', label: 'Perfil', icon: User },
+      { id: 'settings', label: 'Configuración', icon: Settings },
+      { id: 'help', label: 'Ayuda', icon: HelpCircle },
+    ],
   ];
 
   return (
@@ -66,45 +72,51 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
 
           {/* Navigation Items */}
           <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentSection === item.id;
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setCurrentSection(item.id)}
-                  className="w-full flex items-center gap-3 px-4 py-3 transition-all"
-                  style={{
-                    backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                    color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
-                    fontSize: 'var(--font-size-body-sm)',
-                    lineHeight: 'var(--line-height-ui)',
-                    borderRadius: '8px',
-                    marginLeft: '8px',
-                    marginRight: '8px',
-                    width: 'calc(100% - 16px)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                    }
-                  }}
-                >
-                  <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+            {navGroups.map((group, groupIdx) => (
+              <React.Fragment key={groupIdx}>
+                {groupIdx > 0 && (
+                  <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+                )}
+                {group.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = currentSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setCurrentSection(item.id)}
+                      className="w-full flex items-center gap-3 px-4 py-3 transition-all"
+                      style={{
+                        backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                        color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        lineHeight: 'var(--line-height-ui)',
+                        borderRadius: '8px',
+                        marginLeft: '8px',
+                        marginRight: '8px',
+                        width: 'calc(100% - 16px)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                          e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+                        }
+                      }}
+                    >
+                      <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </React.Fragment>
+            ))}
             <SugerenciasButton />
           </nav>
 
