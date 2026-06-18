@@ -362,24 +362,23 @@ export function ReservasAdminView() {
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        {/* Tabs */}
+      <div className="flex flex-row gap-3 items-center justify-between">
         <Tabs
           tabs={TABS}
           activeTab={filtroEstado}
           onTabChange={(id) => setFiltroEstado(id as typeof filtroEstado)}
         />
-
-        {/* Búsqueda */}
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
           <input
             type="text"
             placeholder="Buscar parcela o comprador..."
             value={busqueda}
             onChange={e => setBusqueda(e.target.value)}
-            className="pl-9 pr-4 py-2 rounded-lg text-sm"
-            style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '240px' }}
+            className="pl-9 pr-4 py-2 text-sm"
+            style={{ border: '1px solid #E5E5E5', backgroundColor: '#F9FAFB', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '260px', borderRadius: '200px' }}
+            onFocus={e => e.target.style.borderColor = '#006B4E'}
+            onBlur={e => e.target.style.borderColor = '#E5E5E5'}
           />
         </div>
       </div>
@@ -388,7 +387,7 @@ export function ReservasAdminView() {
       <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
         {/* Header */}
         <div className="grid grid-cols-12 px-4 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-          {['Parcela', 'Comprador', 'Precio', 'Superficie', 'Fecha solicitud', 'Estado', ''].map((h, i) => (
+          {['Parcela', 'Comprador', 'Precio', 'Superficie', 'Fecha', 'Estado', ''].map((h, i) => (
             <div key={i} className={['col-span-3', 'col-span-2', 'col-span-2', 'col-span-1', 'col-span-1', 'col-span-2', 'col-span-1'][i]}>
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</span>
             </div>
