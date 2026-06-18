@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, MoreVertical, Edit2, Share2, Trash2, Calendar, MapPin, Maximize2, Eye, Link as LinkIcon, Check, Copy, FileText, Building2, CheckCircle2, X, Pause, Play, FileSpreadsheet, RefreshCw, ExternalLink } from 'lucide-react';
+import { Plus, MoreVertical, Edit2, Share2, Trash2, Calendar, MapPin, Maximize2, Eye, Link as LinkIcon, MessageCircle, Check, Copy, FileText, Building2, CheckCircle2, X, Pause, Play, FileSpreadsheet, RefreshCw, ExternalLink } from 'lucide-react';
 import { PublicationWizard, PublicationData, PublicationStatus, StockUnit } from '@/app/components/PublicationWizard';
 import { PublicacionPublicaView } from '@/app/components/PublicacionPublicaView';
 import { NewListingFlow } from '@/app/components/NewListingFlow';
