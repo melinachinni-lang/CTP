@@ -1301,7 +1301,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                           )}
                           {pub.inquiries !== undefined && (
                             <div className="flex items-center gap-1.5">
-                              <LinkIcon className="w-4 h-4" style={{ color: '#737373' }} />
+                              <MessageCircle className="w-4 h-4" style={{ color: '#737373' }} />
                               <span style={{
                                 fontFamily: 'var(--font-body)',
                                 fontSize: 'var(--font-size-xs)',
@@ -1353,43 +1353,6 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                       </div>
                     )}
 
-                    {/* Action buttons */}
-                    <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
-                      <button
-                        onClick={() => handleEditPublication(pub)}
-                        className="flex items-center gap-1.5 px-3 py-2 transition-colors"
-                        style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                        Editar
-                      </button>
-                      {pub.status === 'published' && (
-                        <button
-                          onClick={() => setShowPauseConfirm(pub.id)}
-                          className="flex items-center gap-1.5 px-3 py-2 transition-colors"
-                          style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}
-                        >
-                          <Pause className="w-3.5 h-3.5" />
-                          Pausar
-                        </button>
-                      )}
-                      {pub.status === 'paused' && (
-                        <button
-                          onClick={() => handleTogglePublicationStatus(pub.id)}
-                          className="flex items-center gap-1.5 px-3 py-2 transition-colors"
-                          style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '1.5px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#DCFCE7'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}
-                        >
-                          <Play className="w-3.5 h-3.5" />
-                          Volver a publicar
-                        </button>
-                      )}
-                    </div>
                   </div>
                 </div>
               );
