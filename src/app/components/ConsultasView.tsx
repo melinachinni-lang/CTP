@@ -352,7 +352,6 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
         {[
           { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
           ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
-          ...(viewType !== 'personal' ? [{ id: 'reservas', label: 'Reservas', count: reservas.filter(r => r.estado !== 'cancelada').length }] : []),
           { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
         ].map(tab => (
           <button
