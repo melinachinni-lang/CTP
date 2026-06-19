@@ -696,26 +696,23 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               />
             </div>
 
-            {/* Pins de ubicación dispersos — staggered fade-in */}
+            {/* Pins de ubicación — solo en la zona del paisaje (parte baja del hero) */}
             {[
-              { left: '7%',  top: '22%', delay: 0.6 },
-              { left: '19%', top: '58%', delay: 1.0 },
-              { left: '31%', top: '16%', delay: 0.8 },
-              { left: '44%', top: '70%', delay: 1.4 },
-              { left: '57%', top: '20%', delay: 0.5 },
-              { left: '68%', top: '62%', delay: 1.2 },
-              { left: '80%', top: '28%', delay: 0.9 },
-              { left: '91%', top: '55%', delay: 1.6 },
+              { left: '6%',  top: '68%', delay: 0.7 },
+              { left: '22%', top: '78%', delay: 1.1 },
+              { left: '50%', top: '84%', delay: 1.4 },
+              { left: '74%', top: '72%', delay: 0.9 },
+              { left: '90%', top: '80%', delay: 1.2 },
             ].map((pin, i) => (
               <motion.div
                 key={i}
                 className="absolute pointer-events-none z-[3]"
                 style={{ left: pin.left, top: pin.top, transform: 'translateX(-50%)' }}
                 initial={{ y: -18, opacity: 0, scale: 0.4 }}
-                animate={{ y: 0, opacity: 0.92, scale: 1 }}
+                animate={{ y: 0, opacity: 0.9, scale: 1 }}
                 transition={{ delay: pin.delay, type: 'spring', stiffness: 280, damping: 14 }}
               >
-                <svg width="26" height="34" viewBox="0 0 26 34" fill="none" style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.45))' }}>
+                <svg width="26" height="34" viewBox="0 0 26 34" fill="none" style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))' }}>
                   <path d="M13 0C5.82 0 0 5.82 0 13c0 4.3 2.07 8.12 5.27 10.52L13 34l7.73-10.48C23.93 21.12 26 17.3 26 13 26 5.82 20.18 0 13 0z" fill="#006B4E"/>
                   <circle cx="13" cy="12.5" r="5" fill="white"/>
                 </svg>
