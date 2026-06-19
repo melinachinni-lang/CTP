@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff } from 'lucide-react';
+import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -93,6 +93,7 @@ interface BloqueHome {
 
 export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps) {
   const [activeNav, setActiveNav] = useState<NavItem>('inicio');
+  const [showMenu, setShowMenu] = useState(false);
   const [dateRange, setDateRange] = useState('ultimos-30-dias');
   const [deviceFilter, setDeviceFilter] = useState<'todos' | 'mobile' | 'desktop'>('todos');
   
@@ -377,21 +378,29 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     disclaimerPublicaciones: { activo: true, ultimaActualizacion: '20 dic 2025' }
   };
 
-  const navItems = [
-    { id: 'inicio' as NavItem, icon: Home, label: 'Inicio' },
-    { id: 'analitica' as NavItem, icon: BarChart3, label: 'Analítica' },
-    { id: 'embudo' as NavItem, icon: FilterX, label: 'Embudo' },
-    { id: 'brokers' as NavItem, icon: Users, label: 'Brokers' },
-    { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
-    { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
-    { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
-    { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
-    { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
-    { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
-    { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
-    { id: 'recursos' as NavItem, icon: BookOpen, label: 'Recursos & Blog' },
-    { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
-    { id: 'configuracion' as NavItem, icon: Settings, label: 'Configuración' }
+  const navGroups = [
+    [
+      { id: 'inicio' as NavItem, icon: Home, label: 'Inicio' },
+      { id: 'analitica' as NavItem, icon: BarChart3, label: 'Analítica' },
+      { id: 'embudo' as NavItem, icon: FilterX, label: 'Embudo' },
+    ],
+    [
+      { id: 'brokers' as NavItem, icon: Users, label: 'Brokers' },
+      { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
+      { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
+      { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
+      { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
+    ],
+    [
+      { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
+      { id: 'recursos' as NavItem, icon: BookOpen, label: 'Recursos & Blog' },
+      { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
+      { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
+    ],
+    [
+      { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
+      { id: 'configuracion' as NavItem, icon: Settings, label: 'Configuración' },
+    ],
   ];
 
   // Funciones de filtrado
@@ -581,76 +590,103 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
         {/* Navigation */}
         <div className="flex-1 py-4 overflow-y-auto scrollbar-hide">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeNav === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveNav(item.id)}
-                className="flex items-center gap-3 px-4 py-3 transition-all"
-                style={{
-                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                  color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  borderRadius: '8px',
-                  width: 'calc(100% - 16px)',
-                  marginLeft: '8px',
-                  marginRight: '8px',
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  lineHeight: 'var(--line-height-ui)'
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                  }
-                }}
-              >
-                <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+          {navGroups.map((group, groupIdx) => (
+            <React.Fragment key={groupIdx}>
+              {groupIdx > 0 && (
+                <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+              )}
+              {group.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeNav === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveNav(item.id)}
+                    className="flex items-center gap-3 px-4 py-3 transition-all"
+                    style={{
+                      backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                      color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                      borderRadius: '8px',
+                      width: 'calc(100% - 16px)',
+                      marginLeft: '8px',
+                      marginRight: '8px',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      lineHeight: 'var(--line-height-ui)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+                      }
+                    }}
+                  >
+                    <Icon className="w-5 h-5" style={{ strokeWidth: isActive ? 2.5 : 2, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </React.Fragment>
+          ))}
         </div>
 
         {/* User Info */}
-        <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div className="w-full flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
-              <span style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'var(--font-size-body-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                color: '#FFFFFF'
-              }}>A</span>
+        <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="w-full flex items-center gap-3 text-sm transition-colors rounded-lg px-2 py-2"
+            style={{ color: 'rgba(255,255,255,0.65)', backgroundColor: 'transparent' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
+          >
+            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
+              <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF' }}>A</span>
             </div>
             <div className="flex-1 text-left">
-              <div style={{
-                fontWeight: 'var(--font-weight-medium)',
-                color: '#FFFFFF',
-                fontSize: 'var(--font-size-body-sm)',
-                fontFamily: 'var(--font-body)'
-              }}>
-                Admin General
-              </div>
-              <div style={{
-                fontSize: 'var(--font-size-xs)',
-                color: 'rgba(255,255,255,0.5)',
-                marginTop: '2px',
-                fontFamily: 'var(--font-body)'
-              }}>
-                Administrador
-              </div>
+              <div style={{ fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', fontSize: 'var(--font-size-body-sm)', fontFamily: 'var(--font-body)' }}>Admin General</div>
+              <div style={{ fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.5)', marginTop: '2px', fontFamily: 'var(--font-body)' }}>Administrador</div>
             </div>
-          </div>
+            <ChevronRight className="w-4 h-4 flex-shrink-0 transition-transform duration-200" style={{ color: 'rgba(255,255,255,0.4)', transform: showMenu ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+          </button>
+          {showMenu && (
+            <div className="mt-1.5 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <button onClick={() => setShowMenu(false)}
+                className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                style={{ color: 'rgba(255,255,255,0.65)' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <User className="w-3.5 h-3.5 flex-shrink-0" />
+                Mi perfil
+              </button>
+              <button onClick={() => { setActiveNav('configuracion'); setShowMenu(false); }}
+                className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                style={{ color: 'rgba(255,255,255,0.65)' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <Settings className="w-3.5 h-3.5 flex-shrink-0" />
+                Configuración
+              </button>
+              <div style={{ height: '1px', margin: '2px 8px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
+              <button onClick={() => onNavigate('entry')}
+                className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                style={{ color: 'rgba(255,255,255,0.65)' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
+                Cerrar sesión
+              </button>
+            </div>
+          )}
         </div>
       </nav>
 
