@@ -714,7 +714,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                     marginBottom: '4px'
                   }}
                 >
-                  {navItems.find(item => item.id === activeNav)?.label}
+                  {navGroups.flat().find(item => item.id === activeNav)?.label}
                 </h1>
                 <p
                   style={{
