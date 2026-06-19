@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, useMotionValue, useTransform, animate } from 'motion/react';
 import Slider from 'react-slick';
 import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart, Scale } from 'lucide-react';
 import { useI18n } from '@/app/i18n/i18nContext';
@@ -20,6 +20,83 @@ import ilustracionPersonas from 'figma:asset/cea3a2e78c2e93998f554eac9d05a789f2a
 import ilustracionCheck from 'figma:asset/3941caca813963d29f797c0f3077415648af33f4.png';
 
 const heroBackgroundFallback = 'https://images.unsplash.com/photo-1761170570787-04bcab4609a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGxhbmQlMjB2YWxsZXl8ZW58MXx8fHwxNzY5MTExODc2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral';
+
+const HERO_PINS = [
+  { left: '6%',  top: '68%', delay: 1.8, ha: 8.5  },
+  { left: '22%', top: '76%', delay: 2.3, ha: 12.0 },
+  { left: '50%', top: '82%', delay: 2.8, ha: 5.2  },
+  { left: '74%', top: '70%', delay: 3.3, ha: 18.0 },
+  { left: '90%', top: '78%', delay: 3.8, ha: 7.8  },
+];
+
+function HeroPinGlass({ left, top, delay, ha }: { left: string; top: string; delay: number; ha: number }) {
+  const count = useMotionValue(0);
+  const displayHa = useTransform(count, (v) => v.toFixed(1));
+
+  useEffect(() => {
+    const controls = animate(count, ha, { duration: 1.4, delay: delay + 0.5, ease: 'easeOut' });
+    return controls.stop;
+  }, []);
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none z-[3]"
+      style={{ left, top, transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}
+      initial={{ y: -16, opacity: 0, scale: 0.4 }}
+      animate={{ y: 0, opacity: 1, scale: 1 }}
+      transition={{ delay, type: 'spring', stiffness: 280, damping: 18 }}
+    >
+      {/* Teardrop glass pin */}
+      <div style={{
+        width: '28px', height: '28px',
+        borderRadius: '50% 50% 50% 0',
+        transform: 'rotate(-45deg)',
+        background: 'rgba(255,255,255,0.16)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.4)',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.45)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'relative' as const, overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E")`,
+          backgroundSize: '60px 60px', borderRadius: 'inherit', pointerEvents: 'none',
+        }} />
+        <div style={{
+          transform: 'rotate(45deg)', width: '7px', height: '7px',
+          borderRadius: '50%', background: '#006B4E',
+          boxShadow: '0 0 0 2px rgba(255,255,255,0.65)', zIndex: 1,
+        }} />
+      </div>
+
+      {/* Hectáreas badge con contador */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: delay + 0.45, duration: 0.3, ease: 'easeOut' }}
+        style={{
+          background: 'rgba(255,255,255,0.16)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255,255,255,0.35)',
+          borderRadius: '20px',
+          padding: '2px 7px',
+          color: 'white',
+          fontSize: '10px',
+          fontWeight: 600,
+          letterSpacing: '0.02em',
+          whiteSpace: 'nowrap' as const,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+          textShadow: '0 1px 3px rgba(0,0,0,0.25)',
+        }}
+      >
+        <motion.span>{displayHa}</motion.span> ha
+      </motion.div>
+    </motion.div>
+  );
+}
 
 interface HomeWireframeProps {
   onNavigate: (screen: string, id?: number, data?: string | {
@@ -696,69 +773,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               />
             </div>
 
-            {/* Pins glass+noise — distribuidos en el hero */}
-            {[
-              { left: '6%',  top: '68%', delay: 0.7 },
-              { left: '22%', top: '78%', delay: 1.1 },
-              { left: '50%', top: '84%', delay: 1.4 },
-              { left: '74%', top: '72%', delay: 0.9 },
-              { left: '90%', top: '80%', delay: 1.2 },
-            ].map((pin, i) => (
-              <motion.div
-                key={i}
-                className="absolute pointer-events-none z-[3]"
-                style={{ left: pin.left, top: pin.top, transform: 'translateX(-50%)' }}
-                initial={{ y: -20, opacity: 0, scale: 0.3 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                transition={{ delay: pin.delay, type: 'spring', stiffness: 260, damping: 16 }}
-              >
-                {/* Teardrop glassmorphism: border-radius 50%/50%/50%/0 + rotate -45° */}
-                <div style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50% 50% 50% 0',
-                  transform: 'rotate(-45deg)',
-                  background: 'rgba(255, 255, 255, 0.18)',
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.45)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.55)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative' as const,
-                  overflow: 'hidden',
-                }}>
-                  {/* Noise layer */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E")`,
-                    backgroundSize: '80px 80px',
-                    pointerEvents: 'none',
-                    borderRadius: 'inherit',
-                  }} />
-                  {/* Highlight top-left */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '3px', left: '3px', right: '40%', bottom: '40%',
-                    borderRadius: '50% 30% 30% 0',
-                    background: 'rgba(255,255,255,0.25)',
-                    pointerEvents: 'none',
-                  }} />
-                  {/* Inner dot (rotated back to upright) */}
-                  <div style={{
-                    transform: 'rotate(45deg)',
-                    width: '11px',
-                    height: '11px',
-                    borderRadius: '50%',
-                    background: '#006B4E',
-                    boxShadow: '0 0 0 2.5px rgba(255,255,255,0.7)',
-                    zIndex: 1,
-                    flexShrink: 0,
-                  }} />
-                </div>
-              </motion.div>
+            {/* Pins glass — aparecen de a uno después del fade del título */}
+            {HERO_PINS.map((pin, i) => (
+              <HeroPinGlass key={i} {...pin} />
             ))}
 
 <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
@@ -769,10 +786,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
               >
-                <h1 style={{ color: '#0A0A0A', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1' }}>
+                <h1 style={{ color: '#FFFFFF', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1', textShadow: '0 2px 12px rgba(0,0,0,0.35)' }}>
                   {t.home.heroTitle}
                 </h1>
-                <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: '#0A0A0A' }}>
+                <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: 'rgba(255,255,255,0.88)', textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>
                   {t.home.heroSubtitle}
                 </p>
               </motion.div>
