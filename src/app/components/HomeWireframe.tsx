@@ -701,61 +701,59 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 preserveAspectRatio="xMidYMid slice"
                 aria-hidden="true"
               >
+                {/* Fill sutil — como overlay de parcela en mapa */}
+                <motion.path
+                  d="M 760,355 L 1310,330 L 1295,590 L 745,610 Z"
+                  fill="rgba(0, 107, 78, 0.09)"
+                  stroke="none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 3.2 }}
+                />
+
                 {/* Límite de parcela — dibujado progresivamente */}
                 <motion.path
-                  d="M 210,105 L 1215,80 L 1175,510 L 185,535 Z"
+                  d="M 760,355 L 1310,330 L 1295,590 L 745,610 Z"
                   fill="none"
-                  stroke="rgba(255,255,255,0.88)"
+                  stroke="rgba(255,255,255,0.92)"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeDasharray="12 9"
                   initial={{ pathLength: 0, opacity: 0 }}
                   animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 3.0, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                  style={{ filter: 'drop-shadow(0 0 5px rgba(0,0,0,0.55))' }}
+                  transition={{ duration: 2.8, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.5))' }}
                 />
 
                 {/* Vértice marcadores */}
                 {[
-                  { cx: 210,  cy: 105, delay: 3.6 },
-                  { cx: 1215, cy: 80,  delay: 3.75 },
-                  { cx: 1175, cy: 510, delay: 3.9 },
-                  { cx: 185,  cy: 535, delay: 4.05 },
+                  { cx: 760,  cy: 355, delay: 3.4 },
+                  { cx: 1310, cy: 330, delay: 3.55 },
+                  { cx: 1295, cy: 590, delay: 3.7 },
+                  { cx: 745,  cy: 610, delay: 3.85 },
                 ].map((v, i) => (
                   <motion.circle
                     key={i}
                     cx={v.cx} cy={v.cy} r={5}
                     fill="white"
-                    style={{ filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.4))' }}
+                    style={{ filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.45))' }}
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: v.delay, type: 'spring', stiffness: 320, damping: 14 }}
                   />
                 ))}
 
-                {/* Pin 1 — borde superior (zona destacada) */}
+                {/* Pin principal — borde superior de la parcela */}
                 <motion.g
                   initial={{ y: -22, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 3.8, type: 'spring', stiffness: 260, damping: 13 }}
+                  transition={{ delay: 3.6, type: 'spring', stiffness: 260, damping: 13 }}
                 >
-                  <circle cx="712" cy="70" r="14" fill="#006B4E" stroke="white" strokeWidth="2.5"
-                    style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }} />
-                  <circle cx="712" cy="70" r="6" fill="white" />
-                  <line x1="712" y1="84" x2="712" y2="106" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                </motion.g>
-
-                {/* Pin 2 — zona interior (a la derecha) */}
-                <motion.g
-                  initial={{ y: -22, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 4.2, type: 'spring', stiffness: 260, damping: 13 }}
-                >
-                  <circle cx="960" cy="340" r="14" fill="#006B4E" stroke="white" strokeWidth="2.5"
-                    style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }} />
-                  <circle cx="960" cy="340" r="6" fill="white" />
-                  <line x1="960" y1="354" x2="960" y2="376" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                  <circle cx="1035" cy="335" r="15" fill="#006B4E" stroke="white" strokeWidth="2.5"
+                    style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.45))' }} />
+                  <circle cx="1035" cy="335" r="6" fill="white" />
+                  <line x1="1035" y1="350" x2="1035" y2="372" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
                 </motion.g>
               </svg>
             </div>
