@@ -696,7 +696,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               />
             </div>
 
-            {/* Pins de ubicación — solo en la zona del paisaje (parte baja del hero) */}
+            {/* Pins glass+noise — distribuidos en el hero */}
             {[
               { left: '6%',  top: '68%', delay: 0.7 },
               { left: '22%', top: '78%', delay: 1.1 },
@@ -708,14 +708,56 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 key={i}
                 className="absolute pointer-events-none z-[3]"
                 style={{ left: pin.left, top: pin.top, transform: 'translateX(-50%)' }}
-                initial={{ y: -18, opacity: 0, scale: 0.4 }}
-                animate={{ y: 0, opacity: 0.9, scale: 1 }}
-                transition={{ delay: pin.delay, type: 'spring', stiffness: 280, damping: 14 }}
+                initial={{ y: -20, opacity: 0, scale: 0.3 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                transition={{ delay: pin.delay, type: 'spring', stiffness: 260, damping: 16 }}
               >
-                <svg width="26" height="34" viewBox="0 0 26 34" fill="none" style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))' }}>
-                  <path d="M13 0C5.82 0 0 5.82 0 13c0 4.3 2.07 8.12 5.27 10.52L13 34l7.73-10.48C23.93 21.12 26 17.3 26 13 26 5.82 20.18 0 13 0z" fill="#006B4E"/>
-                  <circle cx="13" cy="12.5" r="5" fill="white"/>
-                </svg>
+                {/* Teardrop glassmorphism: border-radius 50%/50%/50%/0 + rotate -45° */}
+                <div style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50% 50% 50% 0',
+                  transform: 'rotate(-45deg)',
+                  background: 'rgba(255, 255, 255, 0.18)',
+                  backdropFilter: 'blur(14px)',
+                  WebkitBackdropFilter: 'blur(14px)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.45)',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.55)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative' as const,
+                  overflow: 'hidden',
+                }}>
+                  {/* Noise layer */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E")`,
+                    backgroundSize: '80px 80px',
+                    pointerEvents: 'none',
+                    borderRadius: 'inherit',
+                  }} />
+                  {/* Highlight top-left */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '3px', left: '3px', right: '40%', bottom: '40%',
+                    borderRadius: '50% 30% 30% 0',
+                    background: 'rgba(255,255,255,0.25)',
+                    pointerEvents: 'none',
+                  }} />
+                  {/* Inner dot (rotated back to upright) */}
+                  <div style={{
+                    transform: 'rotate(45deg)',
+                    width: '11px',
+                    height: '11px',
+                    borderRadius: '50%',
+                    background: '#006B4E',
+                    boxShadow: '0 0 0 2.5px rgba(255,255,255,0.7)',
+                    zIndex: 1,
+                    flexShrink: 0,
+                  }} />
+                </div>
               </motion.div>
             ))}
 
