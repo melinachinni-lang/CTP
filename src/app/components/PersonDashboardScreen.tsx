@@ -65,19 +65,25 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
   const { t } = useI18n();
 
-  const navItems = [
-    { id: 'home', label: t.nav.home, icon: 'home' },
-    { id: 'explore', label: t.nav.explore, icon: 'search', group: 'buy' },
-    { id: 'listings', label: t.nav.listings, icon: 'list', group: 'sell' },
-    { id: 'saved', label: t.nav.saved, icon: 'heart', group: 'buy' },
-    { id: 'inquiries', label: t.nav.inquiries, icon: 'message', group: 'sell' },
-    { id: 'calendarios', label: t.nav.calendarios, icon: 'calendar', group: 'sell' },
-    { id: 'compare', label: t.nav.compare, icon: 'chart', group: 'buy' },
-    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag', group: 'buy' },
-    { id: 'plan', label: t.nav.plan, icon: 'credit-card', group: 'sell' },
-    { id: 'profile', label: t.nav.profile, icon: 'profile' },
-    { id: 'settings', label: t.nav.settings, icon: 'settings' },
-    { id: 'help', label: t.nav.help, icon: 'help' },
+  const navGroups = [
+    [
+      { id: 'home', label: t.nav.home, icon: 'home' },
+      { id: 'explore', label: t.nav.explore, icon: 'search' },
+      { id: 'saved', label: t.nav.saved, icon: 'heart' },
+      { id: 'compare', label: t.nav.compare, icon: 'chart' },
+      { id: 'inquiries', label: t.nav.inquiries, icon: 'message' },
+      { id: 'calendarios', label: t.nav.calendarios, icon: 'calendar' },
+      { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
+    ],
+    [
+      { id: 'listings', label: t.nav.listings, icon: 'list' },
+    ],
+    [
+      { id: 'plan', label: t.nav.plan, icon: 'credit-card' },
+      { id: 'profile', label: t.nav.profile, icon: 'profile' },
+      { id: 'settings', label: t.nav.settings, icon: 'settings' },
+      { id: 'help', label: t.nav.help, icon: 'help' },
+    ],
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -242,43 +248,50 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
           {/* Navigation Items */}
           <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
-                  setCurrentSection(item.id);
-                }}
-                className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
-                  currentSection === item.id ? 'font-medium' : ''
-                }`}
-                style={{
-                  width: 'calc(100% - 16px)',
-                  marginLeft: '8px',
-                  marginRight: '8px',
-                  borderRadius: '8px',
-                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                  }
-                }}
-              >
-                {renderIcon(item.icon, currentSection === item.id)}
-                <span>{item.label}</span>
-                {item.id === 'inquiries' && (
-                  <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
+            {navGroups.map((group, groupIdx) => (
+              <React.Fragment key={groupIdx}>
+                {groupIdx > 0 && (
+                  <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
                 )}
-              </button>
+                {group.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
+                      setCurrentSection(item.id);
+                    }}
+                    className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
+                      currentSection === item.id ? 'font-medium' : ''
+                    }`}
+                    style={{
+                      width: 'calc(100% - 16px)',
+                      marginLeft: '8px',
+                      marginRight: '8px',
+                      borderRadius: '8px',
+                      color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                      backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentSection !== item.id) {
+                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentSection !== item.id) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+                      }
+                    }}
+                  >
+                    {renderIcon(item.icon, currentSection === item.id)}
+                    <span>{item.label}</span>
+                    {item.id === 'inquiries' && (
+                      <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
+                    )}
+                  </button>
+                ))}
+              </React.Fragment>
             ))}
             <SugerenciasButton />
           </nav>
