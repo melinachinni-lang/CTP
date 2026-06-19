@@ -798,6 +798,11 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               />
             </div>
 
+            {/* Gradient overlay — sombra sutil para destacar el texto */}
+            <div className="absolute inset-0 z-[1] pointer-events-none" style={{
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0) 100%)'
+            }} />
+
             {/* Pins glass — aparecen de a uno después del fade del título */}
             {HERO_PINS.map((pin, i) => (
               <HeroPinGlass key={i} {...pin} />
@@ -805,19 +810,25 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
 <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
               {/* Headlines */}
-              <motion.div
-                className="space-y-3 md:space-y-4"
-                initial={{ y: 22 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.55, delay: 0.1, ease: [0.4, 0, 0.2, 1] }}
-              >
-                <h1 style={{ color: '#FFFFFF', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, lineHeight: '1.1', textShadow: '0 2px 14px rgba(0,0,0,0.4)' }}>
-                  <TypewriterText text={String(t.home.heroTitle)} delay={0.25} speed={0.042} />
-                </h1>
-                <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: 'rgba(255,255,255,0.88)', textShadow: '0 1px 6px rgba(0,0,0,0.3)', minHeight: '1.6em' }}>
-                  <TypewriterText text={String(t.home.heroSubtitle)} delay={1.9} speed={0.032} />
-                </p>
-              </motion.div>
+              <div className="space-y-3 md:space-y-4">
+                <motion.h1
+                  style={{ color: '#FFFFFF', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, lineHeight: '1.1', textShadow: '0 2px 14px rgba(0,0,0,0.35)' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.85, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                >
+                  {t.home.heroTitle}
+                </motion.h1>
+                <motion.p
+                  className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg"
+                  style={{ color: 'rgba(255,255,255,0.88)', textShadow: '0 1px 6px rgba(0,0,0,0.25)' }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.55, ease: [0.4, 0, 0.2, 1] }}
+                >
+                  {t.home.heroSubtitle}
+                </motion.p>
+              </div>
 
               {/* Buscador - Mobile/Tablet: Inline con selects | Desktop: Filtros inline con dropdowns */}
               
