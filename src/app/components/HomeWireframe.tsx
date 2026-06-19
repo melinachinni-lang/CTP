@@ -13,7 +13,7 @@ import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 import { ParcelaCardImage } from '@/app/components/ParcelaCardImage';
 import { ProjectCardImage } from '@/app/components/ProjectCardImage';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
-import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
+import heroBackground from '@/assets/hero ctp.png';
 import topoBackground from 'figma:asset/1f8d7be2ded66ac9a17238954e64e513a352a1e5.png';
 import ilustracionDocumento from 'figma:asset/e580ccb68b7f2064ee0b1464681e6594dcb5a797.png';
 import ilustracionPersonas from 'figma:asset/cea3a2e78c2e93998f554eac9d05a789f2a4689a.png';
