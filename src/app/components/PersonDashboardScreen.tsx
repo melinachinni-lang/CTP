@@ -3408,398 +3408,257 @@ function SearchPreferencesSection() {
 }
 
 function PersonSettingsContent() {
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [nombre, setNombre] = React.useState('María García');
-  const [editNombre, setEditNombre] = React.useState('María García');
-  const [telefono, setTelefono] = React.useState('9 1234 5678');
-  const [editTelefono, setEditTelefono] = React.useState('9 1234 5678');
-  const [phoneCode, setPhoneCode] = React.useState('+56 (CL)');
-  const [region, setRegion] = React.useState('Región Metropolitana');
-  const [editRegion, setEditRegion] = React.useState('Región Metropolitana');
-  const [avatarPreview, setAvatarPreview] = React.useState<string | null>(null);
-  const [editAvatarPreview, setEditAvatarPreview] = React.useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = React.useState(false);
-  const [emailNotifConsultas, setEmailNotifConsultas] = React.useState(true);
-  const [showPasswordSection, setShowPasswordSection] = React.useState(false);
+  // Notificaciones
+  const [notifConsultas, setNotifConsultas] = React.useState(true);
+  const [notifReservas, setNotifReservas] = React.useState(true);
+  const [notifPrecios, setNotifPrecios] = React.useState(false);
+  const [notifParcelas, setNotifParcelas] = React.useState(false);
+  const [notifTips, setNotifTips] = React.useState(false);
+
+  // Seguridad
+  const [showPasswordForm, setShowPasswordForm] = React.useState(false);
   const [currentPassword, setCurrentPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [showCurrentPwd, setShowCurrentPwd] = React.useState(false);
   const [showNewPwd, setShowNewPwd] = React.useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = React.useState(false);
-  const [showEmailTooltip, setShowEmailTooltip] = React.useState(false);
-  const avatarInputRef = React.useRef<HTMLInputElement>(null);
-  const isGoogleAccount = false; // simular cuenta de email
+  const [twoFactor, setTwoFactor] = React.useState(false);
+  const [pwdSaved, setPwdSaved] = React.useState(false);
 
-  const email = 'maria.garcia@gmail.com';
-  const regiones = [
-    'Región de Arica y Parinacota','Región de Tarapacá','Región de Antofagasta',
-    'Región de Atacama','Región de Coquimbo','Región de Valparaíso',
-    'Región Metropolitana','Región del Libertador General Bernardo O\'Higgins',
-    'Región del Maule','Región de Ñuble','Región del Biobío',
-    'Región de La Araucanía','Región de Los Ríos','Región de Los Lagos',
-    'Región de Aysén','Región de Magallanes',
-  ];
-  const phoneCodes = ['+56 (CL)','+54 (AR)','+55 (BR)','+51 (PE)','+57 (CO)','+52 (MX)','+34 (ES)','+1 (US)'];
+  // Privacidad
+  const [visibilidad, setVisibilidad] = React.useState<'publico' | 'registrados' | 'privado'>('publico');
+  const [permitirContacto, setPermitirContacto] = React.useState(true);
 
-  const handleStartEdit = () => {
-    setEditNombre(nombre);
-    setEditTelefono(telefono);
-    setEditRegion(region);
-    setEditAvatarPreview(avatarPreview);
-    setIsEditing(true);
+  const handleSavePwd = () => {
+    if (!currentPassword || !newPassword || newPassword !== confirmPassword) return;
+    setPwdSaved(true);
+    setShowPasswordForm(false);
+    setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
+    setTimeout(() => setPwdSaved(false), 3000);
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    setShowPasswordSection(false);
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-  };
+  const Toggle = ({ active, onToggle }: { active: boolean; onToggle: () => void }) => (
+    <button onClick={onToggle} className="flex-shrink-0 w-11 h-6 rounded-full transition-colors relative" style={{ backgroundColor: active ? '#006B4E' : '#D1D5DB', minWidth: 44 }}>
+      <div className="w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-all" style={{ left: active ? 'calc(100% - 20px)' : 4 }} />
+    </button>
+  );
 
-  const handleSave = () => {
-    if (!editNombre.trim()) return;
-    setNombre(editNombre.trim());
-    setTelefono(editTelefono);
-    setRegion(editRegion);
-    setAvatarPreview(editAvatarPreview);
-    setIsEditing(false);
-    setShowPasswordSection(false);
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3500);
-  };
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) return;
-    const reader = new FileReader();
-    reader.onload = ev => setEditAvatarPreview(ev.target?.result as string);
-    reader.readAsDataURL(file);
-  };
-
-  const getInitials = (name: string) => name.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
-
-  const canSave = editNombre.trim().length > 0;
+  const sectionCard = 'rounded-2xl p-5 space-y-4';
+  const sectionBorder = { backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' };
+  const h2Style: React.CSSProperties = { fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' };
+  const rowLabel: React.CSSProperties = { fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' };
+  const rowDesc: React.CSSProperties = { fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' };
 
   return (
     <main className="px-4 py-6 sm:px-6 space-y-5">
-      {/* Toast éxito */}
-      {showSuccess && (
+      {pwdSaved && (
         <div className="fixed bottom-6 left-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', minWidth: '260px' }}>
           <svg viewBox="0 0 24 24" style={{ width: '18px', height: '18px', fill: 'none', stroke: '#86EFAC', strokeWidth: 2.5, flexShrink: 0 }}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
-          Perfil actualizado correctamente
+          Contraseña actualizada
         </div>
       )}
 
-      {/* Header */}
       <div className="space-y-1">
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
           Configuración
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B' }}>
-          Administra tu cuenta y preferencias
+          Notificaciones, seguridad y privacidad de tu cuenta
         </p>
       </div>
 
-      {/* Información de perfil — ancho completo */}
-      <section className="rounded-2xl p-5 space-y-5" style={{ backgroundColor: '#FFFFFF', border: isEditing ? '1px solid #006B4E' : '1px solid #E5E5E5' }}>
-        <div className="flex items-center justify-between">
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-            Información de perfil
-          </h2>
-          {!isEditing && (
-            <button
-              onClick={handleStartEdit}
-              className="w-11 h-11 flex items-center justify-center rounded-lg transition-all"
-              style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}
-              title="Editar perfil"
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-            >
-              <svg viewBox="0 0 24 24" style={{ width: '14px', height: '14px', fill: 'none', stroke: '#374151', strokeWidth: 2 }}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button>
-          )}
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
 
-        {/* Avatar */}
-        <div className="flex items-center gap-4">
-          <div className="relative flex-shrink-0">
-            <div
-              onClick={() => { if (isEditing) avatarInputRef.current?.click(); }}
-              className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center"
-              style={{ backgroundColor: '#006B4E', cursor: isEditing ? 'pointer' : 'default', position: 'relative' }}
-            >
-              {(isEditing ? editAvatarPreview : avatarPreview) ? (
-                <img src={(isEditing ? editAvatarPreview : avatarPreview)!} alt="Avatar" className="w-full h-full object-cover" />
-              ) : (
-                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 600, color: '#FFFFFF' }}>{getInitials(nombre)}</span>
-              )}
-              {isEditing && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
-                  <svg viewBox="0 0 24 24" style={{ width: '18px', height: '18px', fill: 'none', stroke: '#FFFFFF', strokeWidth: 2 }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+        {/* Columna izquierda: Notificaciones + Privacidad */}
+        <div className="space-y-5">
+
+          {/* Notificaciones */}
+          <section className={sectionCard} style={sectionBorder}>
+            <h2 style={h2Style}>Notificaciones</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '-8px' }}>
+              Elige qué información querés recibir por email
+            </p>
+            <div style={{ borderTop: '1px solid #F5F5F5' }}>
+              {([
+                { label: 'Consultas y respuestas', desc: 'Cuando alguien te escribe o responde una consulta', active: notifConsultas, toggle: setNotifConsultas },
+                { label: 'Reservas y visitas', desc: 'Confirmaciones y cambios en tus visitas o reservas', active: notifReservas, toggle: setNotifReservas },
+                { label: 'Cambios de precio', desc: 'Si baja el precio de una parcela guardada', active: notifPrecios, toggle: setNotifPrecios },
+                { label: 'Nuevas parcelas', desc: 'Alertas según tus preferencias de búsqueda', active: notifParcelas, toggle: setNotifParcelas },
+                { label: 'Tips y novedades', desc: 'Guías, consejos y actualizaciones de la plataforma', active: notifTips, toggle: setNotifTips },
+              ] as const).map(item => (
+                <div key={item.label} className="flex items-start justify-between py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
+                  <div className="pr-4">
+                    <p style={rowLabel}>{item.label}</p>
+                    <p style={rowDesc}>{item.desc}</p>
+                  </div>
+                  <Toggle active={item.active} onToggle={() => item.toggle(v => !v)} />
                 </div>
-              )}
+              ))}
             </div>
-            <input ref={avatarInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleAvatarChange} />
-          </div>
-          <div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}>{nombre}</p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '2px' }}>Cuenta personal</p>
-            {isEditing && (
-              <button onClick={() => avatarInputRef.current?.click()} className="mt-1.5 text-xs underline" style={{ color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                Cambiar foto
-              </button>
-            )}
-            {isEditing && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginTop: '2px' }}>JPG, PNG o WEBP · Máx. 5 MB</p>}
-          </div>
+          </section>
+
+          {/* Privacidad */}
+          <section className={sectionCard} style={sectionBorder}>
+            <h2 style={h2Style}>Privacidad</h2>
+            <div style={{ borderTop: '1px solid #F5F5F5' }}>
+              {/* Visibilidad del perfil */}
+              <div className="py-4" style={{ borderBottom: '1px solid #F5F5F5' }}>
+                <p style={rowLabel}>Visibilidad del perfil</p>
+                <p style={rowDesc}>¿Quién puede ver tu información de contacto?</p>
+                <div className="flex gap-2 mt-3">
+                  {([['publico', 'Público'], ['registrados', 'Solo registrados'], ['privado', 'Privado']] as const).map(([val, lbl]) => (
+                    <button key={val} onClick={() => setVisibilidad(val)}
+                      className="flex-1 py-1.5 text-xs rounded-full border transition-colors"
+                      style={{ borderColor: visibilidad === val ? '#006B4E' : '#E5E5E5', backgroundColor: visibilidad === val ? '#006B4E' : 'transparent', color: visibilidad === val ? '#FFFFFF' : '#525252', fontFamily: 'var(--font-body)', fontWeight: visibilidad === val ? 600 : 400 }}>
+                      {lbl}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Permitir contacto */}
+              <div className="flex items-start justify-between py-3.5">
+                <div className="pr-4">
+                  <p style={rowLabel}>Permitir que me contacten</p>
+                  <p style={rowDesc}>Otros usuarios pueden enviarte consultas directas</p>
+                </div>
+                <Toggle active={permitirContacto} onToggle={() => setPermitirContacto(v => !v)} />
+              </div>
+            </div>
+          </section>
+
         </div>
 
-        {/* Campos — 2 columnas en desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Nombre */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              Nombre completo {isEditing && <span style={{ color: '#DC2626' }}>*</span>}
-            </label>
-            {isEditing ? (
-              <input type="text" value={editNombre} onChange={e => setEditNombre(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl text-sm"
-                style={{ border: `1px solid ${editNombre.trim() ? '#E5E5E5' : '#FCA5A5'}`, backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-              />
-            ) : (
-              <div onClick={handleStartEdit} className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
-                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              >{nombre}</div>
-            )}
-          </div>
+        {/* Columna derecha: Seguridad + Preferencias de búsqueda */}
+        <div className="space-y-5">
 
-          {/* Teléfono */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              Teléfono
-            </label>
-            {isEditing ? (
-              <div className="flex gap-2">
-                <select value={phoneCode} onChange={e => setPhoneCode(e.target.value)}
-                  className="px-2 py-2.5 rounded-xl text-sm"
-                  style={{ width: '110px', flexShrink: 0, border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', outline: 'none' }}
+          {/* Seguridad */}
+          <section className={sectionCard} style={sectionBorder}>
+            <h2 style={h2Style}>Seguridad</h2>
+            <div style={{ borderTop: '1px solid #F5F5F5' }}>
+
+              {/* Cambiar contraseña */}
+              <div className="py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
+                <button onClick={() => setShowPasswordForm(v => !v)}
+                  className="w-full flex items-center justify-between"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.75'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
                 >
-                  {phoneCodes.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-                <input type="tel" value={editTelefono} onChange={e => setEditTelefono(e.target.value)} placeholder="9 1234 5678"
-                  className="flex-1 px-4 py-2.5 rounded-xl text-sm"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-                />
-              </div>
-            ) : (
-              <div onClick={handleStartEdit} className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
-                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: telefono ? '#0A0A0A' : '#9CA3AF' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              >{telefono ? `${phoneCode} ${telefono}` : 'Sin teléfono'}</div>
-            )}
-          </div>
-
-          {/* Email */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              Correo electrónico
-            </label>
-            <div className="relative">
-              <div onMouseEnter={() => setShowEmailTooltip(true)} onMouseLeave={() => setShowEmailTooltip(false)}
-                className="px-4 py-2.5 rounded-xl flex items-center justify-between"
-                style={{ backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', cursor: 'not-allowed' }}
-              >
-                <span>{email}</span>
-                <svg viewBox="0 0 24 24" style={{ width: '14px', height: '14px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2, flexShrink: 0 }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              {showEmailTooltip && (
-                <div className="absolute left-0 -top-9 px-3 py-1.5 rounded-lg whitespace-nowrap z-10" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
-                  El email no se puede modificar
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Región */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              Región
-            </label>
-            {isEditing ? (
-              <select value={editRegion} onChange={e => setEditRegion(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl text-sm"
-                style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-              >
-                <option value="">Sin especificar</option>
-                {regiones.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            ) : (
-              <div onClick={handleStartEdit} className="px-4 py-2.5 rounded-xl cursor-pointer transition-colors"
-                style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: region ? '#0A0A0A' : '#9CA3AF' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              >{region || 'Sin especificar'}</div>
-            )}
-          </div>
-        </div>
-
-        {/* Contraseña */}
-        {!isGoogleAccount && isEditing && (
-          <div>
-            <button onClick={() => setShowPasswordSection(!showPasswordSection)}
-              className="flex items-center gap-2 text-sm"
-              style={{ color: '#006B4E', fontFamily: 'var(--font-body)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              <svg viewBox="0 0 24 24" style={{ width: '15px', height: '15px', fill: 'none', stroke: '#006B4E', strokeWidth: 2, transform: showPasswordSection ? 'rotate(90deg)' : 'none', transition: 'transform 150ms' }}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-              Cambiar contraseña
-            </button>
-            {showPasswordSection && (
-              <div className="mt-4 space-y-3 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
-                {[
-                  { label: 'Contraseña actual', value: currentPassword, setter: setCurrentPassword, show: showCurrentPwd, toggleShow: () => setShowCurrentPwd(v => !v) },
-                  { label: 'Nueva contraseña', value: newPassword, setter: setNewPassword, show: showNewPwd, toggleShow: () => setShowNewPwd(v => !v) },
-                  { label: 'Confirmar nueva contraseña', value: confirmPassword, setter: setConfirmPassword, show: showConfirmPwd, toggleShow: () => setShowConfirmPwd(v => !v) },
-                ].map(({ label, value, setter, show, toggleShow }) => (
-                  <div key={label}>
-                    <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>{label}</label>
-                    <div className="relative">
-                      <input type={show ? 'text' : 'password'} value={value} onChange={e => setter(e.target.value)}
-                        className="w-full px-4 py-2.5 pr-10 rounded-xl text-sm"
-                        style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-                      />
-                      <button type="button" onClick={toggleShow} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                        <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2 }}>
-                          {show ? <><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></> : <><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></>}
-                        </svg>
+                  <div className="flex items-center gap-3 text-left">
+                    <Lock className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                    <div>
+                      <p style={rowLabel}>Cambiar contraseña</p>
+                      <p style={rowDesc}>Última modificación: nunca</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 flex-shrink-0 transition-transform" style={{ color: '#A3A3A3', transform: showPasswordForm ? 'rotate(90deg)' : 'none' }} />
+                </button>
+                {showPasswordForm && (
+                  <div className="mt-4 space-y-3 p-4 rounded-xl" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                    {([
+                      { label: 'Contraseña actual', value: currentPassword, setter: setCurrentPassword, show: showCurrentPwd, toggleShow: () => setShowCurrentPwd(v => !v) },
+                      { label: 'Nueva contraseña', value: newPassword, setter: setNewPassword, show: showNewPwd, toggleShow: () => setShowNewPwd(v => !v) },
+                      { label: 'Confirmar nueva contraseña', value: confirmPassword, setter: setConfirmPassword, show: showConfirmPwd, toggleShow: () => setShowConfirmPwd(v => !v) },
+                    ]).map(({ label, value, setter, show, toggleShow }) => (
+                      <div key={label}>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>{label}</label>
+                        <div className="relative">
+                          <input type={show ? 'text' : 'password'} value={value} onChange={e => setter(e.target.value)}
+                            className="w-full px-4 py-2.5 pr-10 rounded-xl text-sm"
+                            style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+                          />
+                          <button type="button" onClick={toggleShow} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                            <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: 'none', stroke: '#9CA3AF', strokeWidth: 2 }}>
+                              {show ? <><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></> : <><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></>}
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    {newPassword && confirmPassword && newPassword !== confirmPassword && (
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626' }}>Las contraseñas no coinciden</p>
+                    )}
+                    <div className="flex gap-2 pt-1">
+                      <button onClick={() => { setShowPasswordForm(false); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); }}
+                        className="px-4 py-2 rounded-full text-xs font-medium"
+                        style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
+                        Cancelar
+                      </button>
+                      <button onClick={handleSavePwd}
+                        disabled={!currentPassword || !newPassword || newPassword !== confirmPassword}
+                        className="flex-1 py-2 rounded-full text-xs font-medium"
+                        style={{ backgroundColor: (!currentPassword || !newPassword || newPassword !== confirmPassword) ? '#E5E5E5' : '#006B4E', color: (!currentPassword || !newPassword || newPassword !== confirmPassword) ? '#9CA3AF' : '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
+                        Guardar contraseña
                       </button>
                     </div>
                   </div>
-                ))}
-                {newPassword && confirmPassword && newPassword !== confirmPassword && (
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626' }}>Las contraseñas no coinciden</p>
                 )}
               </div>
-            )}
-          </div>
-        )}
 
-        {/* Guardar / Cancelar */}
-        {isEditing && (
-          <div className="flex gap-3 pt-1">
-            <button onClick={handleCancel} className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
-              style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-            >
-              Cancelar
-            </button>
-            <button onClick={handleSave} disabled={!canSave} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-              style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: canSave ? 'pointer' : 'not-allowed' }}
-              onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
-              onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-            >
-              Guardar cambios
-            </button>
-          </div>
-        )}
+              {/* 2FA */}
+              <div className="flex items-start justify-between py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
+                <div className="flex items-center gap-3 pr-4">
+                  <Shield className="w-4 h-4 flex-shrink-0" style={{ color: '#737373' }} />
+                  <div>
+                    <p style={rowLabel}>Verificación en dos pasos</p>
+                    <p style={rowDesc}>Capa extra de seguridad al iniciar sesión</p>
+                  </div>
+                </div>
+                <Toggle active={twoFactor} onToggle={() => setTwoFactor(v => !v)} />
+              </div>
+
+              {/* Sesiones activas */}
+              <div className="flex items-center justify-between py-3.5">
+                <div className="flex items-center gap-3">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="#737373" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <p style={rowLabel}>Sesiones activas</p>
+                    <p style={rowDesc}>1 sesión · Chrome · Santiago, Chile</p>
+                  </div>
+                </div>
+                <button className="text-xs font-medium" style={{ color: '#DC2626', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                  Cerrar todas
+                </button>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Preferencias de búsqueda */}
+          <SearchPreferencesSection />
+
+        </div>
+      </div>
+
+      {/* Zona de peligro — ancho completo */}
+      <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFBFB', border: '1px solid #FEE2E2' }}>
+        <h2 style={{ ...h2Style, color: '#DC2626', marginBottom: '4px' }}>Zona de peligro</h2>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', marginBottom: '16px' }}>
+          Estas acciones son permanentes o requieren volver a ingresar.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <button className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
+            style={{ backgroundColor: 'transparent', color: '#374151', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5', cursor: 'pointer' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = '#D1D5DB'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = '#E5E5E5'}
+          >
+            Desactivar cuenta temporalmente
+          </button>
+          <button className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
+            style={{ backgroundColor: 'transparent', color: '#DC2626', fontFamily: 'var(--font-body)', border: '1px solid #FECACA', cursor: 'pointer' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; e.currentTarget.style.borderColor = '#FCA5A5'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#FECACA'; }}
+          >
+            Eliminar cuenta
+          </button>
+        </div>
       </section>
 
-      {/* Grid inferior: Cuenta + Notificaciones | Preferencias */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-
-        {/* Columna izquierda: Cuenta + Notificaciones */}
-        <div className="space-y-5">
-          {/* Cuenta */}
-          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '8px' }}>
-              Cuenta
-            </h2>
-            <div style={{ borderTop: '1px solid #F5F5F5' }}>
-              {[
-                { label: 'Cambiar contraseña', icon: <Lock className="w-4 h-4" />, color: '#374151' },
-                { label: 'Privacidad y datos', icon: <Shield className="w-4 h-4" />, color: '#374151' },
-              ].map(item => (
-                <button key={item.label} className="w-full flex items-center justify-between py-3.5 transition-colors"
-                  style={{ borderBottom: '1px solid #F5F5F5', background: 'none', cursor: 'pointer' }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-                >
-                  <div className="flex items-center gap-3">
-                    <span style={{ color: '#737373' }}>{item.icon}</span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: item.color }}>{item.label}</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4" style={{ color: '#A3A3A3' }} />
-                </button>
-              ))}
-              <button className="w-full flex items-center justify-between py-3.5 transition-colors"
-                style={{ background: 'none', cursor: 'pointer' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-              >
-                <div className="flex items-center gap-3">
-                  <LogOut className="w-4 h-4" style={{ color: '#EF4444' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#EF4444' }}>Cerrar sesión</span>
-                </div>
-                <ChevronRight className="w-4 h-4" style={{ color: '#FCA5A5' }} />
-              </button>
-            </div>
-          </section>
-
-          {/* Notificaciones */}
-          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)', marginBottom: '16px' }}>
-              Notificaciones
-            </h2>
-            <div style={{ borderTop: '1px solid #F5F5F5' }}>
-              {[
-                { label: 'Consultas y visitas por correo', desc: 'Recibir notificaciones al email sobre nuevas consultas', toggle: true, active: emailNotifConsultas, onToggle: () => setEmailNotifConsultas(v => !v) },
-                { label: 'Nuevas parcelas', desc: 'Recibir alertas de nuevas publicaciones', toggle: false },
-                { label: 'Cambios de precio', desc: 'Notificar si cambia el precio de favoritos', toggle: false },
-                { label: 'Consejos y recomendaciones', desc: 'Recibir tips para compradores', toggle: false },
-              ].map(item => (
-                <div key={item.label} className="flex items-center justify-between py-3.5" style={{ borderBottom: '1px solid #F5F5F5' }}>
-                  <div className="pr-4">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{item.label}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>{item.desc}</p>
-                  </div>
-                  {item.toggle ? (
-                    <button onClick={item.onToggle} className="flex-shrink-0 w-11 h-6 rounded-full transition-colors relative" style={{ backgroundColor: item.active ? '#006B4E' : '#D1D5DB', minWidth: 44 }}>
-                      <div className="w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-all" style={{ left: item.active ? 'calc(100% - 20px)' : 4 }} />
-                    </button>
-                  ) : (
-                    <div className="flex-shrink-0 w-11 h-6 rounded-full" style={{ backgroundColor: '#E5E5E5', minWidth: 44 }}>
-                      <div className="w-4 h-4 bg-white rounded-full shadow mt-1 ml-1" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        {/* Columna derecha: Preferencias de búsqueda */}
-        <SearchPreferencesSection />
-
-      </div>
     </main>
   );
 }
