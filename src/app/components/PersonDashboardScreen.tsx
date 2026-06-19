@@ -5,7 +5,7 @@ import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSect
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -23,6 +23,7 @@ interface PersonDashboardScreenProps {
 export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashboardScreenProps>(
   ({ onNavigate, savedParcelaIds = [], onToggleSaved }, ref) => {
     const [showMenu, setShowMenu] = React.useState(false);
+    const [showSugerencias, setShowSugerencias] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
     const [consultasDefaultTab, setConsultasDefaultTab] = React.useState<'recibidas' | 'enviadas' | 'notificaciones'>('recibidas');
@@ -65,24 +66,15 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
   const { t } = useI18n();
 
-  const navGroups = [
-    [
-      { id: 'home', label: t.nav.home, icon: 'home' },
-      { id: 'saved', label: t.nav.saved, icon: 'heart' },
-      { id: 'compare', label: t.nav.compare, icon: 'chart' },
-      { id: 'inquiries', label: t.nav.inquiries, icon: 'message' },
-      { id: 'calendarios', label: t.nav.calendarios, icon: 'calendar' },
-      { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
-    ],
-    [
-      { id: 'listings', label: t.nav.listings, icon: 'list' },
-    ],
-    [
-      { id: 'plan', label: t.nav.plan, icon: 'credit-card' },
-      { id: 'profile', label: t.nav.profile, icon: 'profile' },
-      { id: 'settings', label: t.nav.settings, icon: 'settings' },
-      { id: 'help', label: t.nav.help, icon: 'help' },
-    ],
+  const navItems = [
+    { id: 'home', label: t.nav.home, icon: 'home' },
+    { id: 'saved', label: t.nav.saved, icon: 'heart' },
+    { id: 'compare', label: t.nav.compare, icon: 'chart' },
+    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
+    { id: 'listings', label: t.nav.listings, icon: 'list' },
+    { id: 'inquiries', label: t.nav.inquiries, icon: 'message' },
+    { id: 'calendarios', label: t.nav.calendarios, icon: 'calendar' },
+    { id: 'plan', label: t.nav.plan, icon: 'credit-card' },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -247,78 +239,113 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
           {/* Navigation Items */}
           <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
-            {navGroups.map((group, groupIdx) => (
-              <React.Fragment key={groupIdx}>
-                {groupIdx > 0 && (
-                  <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
+                  setCurrentSection(item.id);
+                }}
+                className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
+                  currentSection === item.id ? 'font-medium' : ''
+                }`}
+                style={{
+                  width: 'calc(100% - 16px)',
+                  marginLeft: '8px',
+                  marginRight: '8px',
+                  borderRadius: '8px',
+                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                  backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
+                }}
+                onMouseEnter={(e) => {
+                  if (currentSection !== item.id) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (currentSection !== item.id) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+                  }
+                }}
+              >
+                {renderIcon(item.icon, currentSection === item.id)}
+                <span>{item.label}</span>
+                {item.id === 'inquiries' && (
+                  <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
                 )}
-                {group.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
-                      setCurrentSection(item.id);
-                    }}
-                    className={`flex items-center justify-start gap-3 px-4 py-2.5 text-sm text-left transition-all ${
-                      currentSection === item.id ? 'font-medium' : ''
-                    }`}
-                    style={{
-                      width: 'calc(100% - 16px)',
-                      marginLeft: '8px',
-                      marginRight: '8px',
-                      borderRadius: '8px',
-                      color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                      backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentSection !== item.id) {
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentSection !== item.id) {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                      }
-                    }}
-                  >
-                    {renderIcon(item.icon, currentSection === item.id)}
-                    <span>{item.label}</span>
-                    {item.id === 'inquiries' && (
-                      <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
-                    )}
-                  </button>
-                ))}
-              </React.Fragment>
+              </button>
             ))}
-            <SugerenciasButton />
           </nav>
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm transition-colors"
-              style={{ color: 'rgba(255,255,255,0.65)' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.65)'}
+              className="w-full flex items-center gap-3 text-sm transition-colors rounded-lg px-2 py-2"
+              style={{ color: 'rgba(255,255,255,0.65)', backgroundColor: 'transparent' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
             >
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
+                <User className="w-4 h-4" />
               </div>
-              <span className="flex-1 text-left font-medium">{t.nav.myAccount}</span>
+              <span className="flex-1 text-left font-medium text-sm">{t.nav.myAccount}</span>
+              <ChevronRight
+                className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
+                style={{ transform: showMenu ? 'rotate(90deg)' : 'rotate(0deg)' }}
+              />
             </button>
             {showMenu && (
-              <div className="mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div className="mt-1.5 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <button
+                  onClick={() => { setCurrentSection('profile'); setShowMenu(false); }}
+                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+                >
+                  <User className="w-3.5 h-3.5 flex-shrink-0" />
+                  Mi perfil
+                </button>
+                <button
+                  onClick={() => { setCurrentSection('settings'); setShowMenu(false); }}
+                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+                >
+                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />
+                  Configuración
+                </button>
+                <button
+                  onClick={() => { setShowMenu(false); setShowSugerencias(true); }}
+                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+                >
+                  <Lightbulb className="w-3.5 h-3.5 flex-shrink-0" />
+                  Sugerencias
+                </button>
+                <button
+                  onClick={() => { setCurrentSection('help'); setShowMenu(false); }}
+                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+                >
+                  <HelpCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                  Ayuda
+                </button>
+                <div style={{ height: '1px', margin: '2px 8px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
                 <button
                   onClick={() => onNavigate('entry')}
-                  className="w-full text-left text-xs py-2.5 px-3 transition-colors flex items-center gap-2"
+                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
                   style={{ color: 'rgba(255,255,255,0.65)' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = ''; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)'; }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
                 >
                   <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
                   {t.nav.signOut}
@@ -359,6 +386,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'profile' && <SettingsContent mode="profile" userType="personal" />}
         {currentSection === 'settings' && <PersonSettingsContent />}
       </div>
+      <SugerenciasButton open={showSugerencias} onClose={() => setShowSugerencias(false)} />
     </>
   );
 });

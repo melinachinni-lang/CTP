@@ -3,8 +3,15 @@ import { X, Check, Paperclip, Lightbulb, AlertCircle, ChevronRight } from 'lucid
 
 type TipoFeedback = 'sugerencia' | 'error' | 'otro';
 
-export function SugerenciasButton() {
-  const [open, setOpen] = useState(false);
+interface SugerenciasButtonProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function SugerenciasButton({ open: controlledOpen, onClose: controlledOnClose }: SugerenciasButtonProps = {}) {
+  const isControlled = controlledOpen !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = isControlled ? controlledOpen! : internalOpen;
   const [tipo, setTipo] = useState<TipoFeedback>('sugerencia');
   const [descripcion, setDescripcion] = useState('');
   const [adjunto, setAdjunto] = useState<string | null>(null);
@@ -39,7 +46,7 @@ export function SugerenciasButton() {
     setSent(true);
     setTimeout(() => {
       setSent(false);
-      setOpen(false);
+      if (isControlled) { controlledOnClose?.(); } else { setInternalOpen(false); }
       setDescripcion('');
       setAdjunto(null);
       setTipo('sugerencia');
@@ -47,7 +54,7 @@ export function SugerenciasButton() {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    if (isControlled) { controlledOnClose?.(); } else { setInternalOpen(false); }
     setDescripcion('');
     setAdjunto(null);
     setTipo('sugerencia');
@@ -56,9 +63,9 @@ export function SugerenciasButton() {
 
   return (
     <>
-      {/* Sidebar button — same style as nav items */}
-      <button
-        onClick={() => setOpen(true)}
+      {/* Sidebar button — only rendered in uncontrolled mode */}
+      {!isControlled && <button
+        onClick={() => setInternalOpen(true)}
         className="flex items-center gap-3 px-4 py-3 text-sm transition-colors"
         style={{
           color: 'rgba(255,255,255,0.65)',
@@ -81,7 +88,7 @@ export function SugerenciasButton() {
       >
         <Lightbulb className="w-5 h-5 flex-shrink-0" />
         <span>Sugerencias</span>
-      </button>
+      </button>}
 
       {/* Modal */}
       {open && (
