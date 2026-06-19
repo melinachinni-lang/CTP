@@ -131,3 +131,15 @@ a[style*="006B4E"]:active,
 a[style*="01533E"]:active {
   background-color: #002F23 !important;
 }
+
+/* Hero Ken Burns — zoom lento en loop */
+@keyframes kenBurnsHero {
+  0%   { transform: scale(1)    translate(0,    0);    }
+  100% { transform: scale(1.12) translate(-2%, -1.5%); }
+}
+
+/* Hero text fade + slide-up */
+@keyframes heroTextIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}

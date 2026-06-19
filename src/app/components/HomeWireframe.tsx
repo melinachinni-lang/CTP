@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'motion/react';
 import Slider from 'react-slick';
 import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart, Scale } from 'lucide-react';
 import { useI18n } from '@/app/i18n/i18nContext';
@@ -683,25 +684,97 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
           <section className="relative pt-8 pb-28 md:pt-12 md:pb-36 lg:pt-16 lg:pb-48 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
-            {/* Background image con Ken Burns + parallax */}
+            {/* Background image con Ken Burns */}
             <img
               ref={heroImgRef}
               src={heroBackground}
               alt="Campos rurales"
               className="absolute inset-0 w-full h-full object-cover z-0"
-              style={{ animation: 'kenBurnsHero 12s ease-out forwards', transformOrigin: '55% 45%', willChange: 'transform' }}
+              style={{ animation: 'kenBurnsHero 20s ease-in-out infinite alternate', transformOrigin: '55% 45%', willChange: 'transform' }}
             />
+
+            {/* SVG: límite de parcela animado + pins */}
+            <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
+              <svg
+                viewBox="0 0 1440 700"
+                className="absolute w-full h-full"
+                preserveAspectRatio="xMidYMid slice"
+                aria-hidden="true"
+              >
+                {/* Límite de parcela — dibujado progresivamente */}
+                <motion.path
+                  d="M 210,105 L 1215,80 L 1175,510 L 185,535 Z"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.88)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="12 9"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ duration: 3.0, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ filter: 'drop-shadow(0 0 5px rgba(0,0,0,0.55))' }}
+                />
+
+                {/* Vértice marcadores */}
+                {[
+                  { cx: 210,  cy: 105, delay: 3.6 },
+                  { cx: 1215, cy: 80,  delay: 3.75 },
+                  { cx: 1175, cy: 510, delay: 3.9 },
+                  { cx: 185,  cy: 535, delay: 4.05 },
+                ].map((v, i) => (
+                  <motion.circle
+                    key={i}
+                    cx={v.cx} cy={v.cy} r={5}
+                    fill="white"
+                    style={{ filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.4))' }}
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: v.delay, type: 'spring', stiffness: 320, damping: 14 }}
+                  />
+                ))}
+
+                {/* Pin 1 — borde superior (zona destacada) */}
+                <motion.g
+                  initial={{ y: -22, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 3.8, type: 'spring', stiffness: 260, damping: 13 }}
+                >
+                  <circle cx="712" cy="70" r="14" fill="#006B4E" stroke="white" strokeWidth="2.5"
+                    style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }} />
+                  <circle cx="712" cy="70" r="6" fill="white" />
+                  <line x1="712" y1="84" x2="712" y2="106" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                </motion.g>
+
+                {/* Pin 2 — zona interior (a la derecha) */}
+                <motion.g
+                  initial={{ y: -22, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 4.2, type: 'spring', stiffness: 260, damping: 13 }}
+                >
+                  <circle cx="960" cy="340" r="14" fill="#006B4E" stroke="white" strokeWidth="2.5"
+                    style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }} />
+                  <circle cx="960" cy="340" r="6" fill="white" />
+                  <line x1="960" y1="354" x2="960" y2="376" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                </motion.g>
+              </svg>
+            </div>
 
 <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
               {/* Headlines */}
-              <div className="space-y-3 md:space-y-4">
+              <motion.div
+                className="space-y-3 md:space-y-4"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.85, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
+              >
                 <h1 style={{ color: '#0A0A0A', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1' }}>
                   {t.home.heroTitle}
                 </h1>
                 <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: '#0A0A0A' }}>
                   {t.home.heroSubtitle}
                 </p>
-              </div>
+              </motion.div>
 
               {/* Buscador - Mobile/Tablet: Inline con selects | Desktop: Filtros inline con dropdowns */}
               
