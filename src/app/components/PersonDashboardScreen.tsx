@@ -3529,6 +3529,30 @@ function PersonSettingsContent() {
             </div>
           </section>
 
+          {/* Zona de peligro */}
+          <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFBFB', border: '1px solid #FEE2E2' }}>
+            <h2 style={{ ...h2Style, color: '#DC2626', marginBottom: '4px' }}>Zona de peligro</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', marginBottom: '16px' }}>
+              Estas acciones son permanentes o requieren volver a ingresar.
+            </p>
+            <div className="flex flex-col gap-2">
+              <button className="w-full px-5 py-2.5 rounded-full text-sm font-medium transition-all text-left"
+                style={{ backgroundColor: 'transparent', color: '#374151', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5', cursor: 'pointer' }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = '#D1D5DB'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = '#E5E5E5'}
+              >
+                Desactivar cuenta temporalmente
+              </button>
+              <button className="w-full px-5 py-2.5 rounded-full text-sm font-medium transition-all text-left"
+                style={{ backgroundColor: 'transparent', color: '#DC2626', fontFamily: 'var(--font-body)', border: '1px solid #FECACA', cursor: 'pointer' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; e.currentTarget.style.borderColor = '#FCA5A5'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#FECACA'; }}
+              >
+                Eliminar cuenta
+              </button>
+            </div>
+          </section>
+
         </div>
 
         {/* Columna derecha: Seguridad + Preferencias de búsqueda */}
@@ -3634,30 +3658,6 @@ function PersonSettingsContent() {
 
         </div>
       </div>
-
-      {/* Zona de peligro — ancho completo */}
-      <section className="rounded-2xl p-5" style={{ backgroundColor: '#FFFBFB', border: '1px solid #FEE2E2' }}>
-        <h2 style={{ ...h2Style, color: '#DC2626', marginBottom: '4px' }}>Zona de peligro</h2>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', marginBottom: '16px' }}>
-          Estas acciones son permanentes o requieren volver a ingresar.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <button className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
-            style={{ backgroundColor: 'transparent', color: '#374151', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5', cursor: 'pointer' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = '#D1D5DB'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-          >
-            Desactivar cuenta temporalmente
-          </button>
-          <button className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
-            style={{ backgroundColor: 'transparent', color: '#DC2626', fontFamily: 'var(--font-body)', border: '1px solid #FECACA', cursor: 'pointer' }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; e.currentTarget.style.borderColor = '#FCA5A5'; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = '#FECACA'; }}
-          >
-            Eliminar cuenta
-          </button>
-        </div>
-      </section>
 
     </main>
   );
