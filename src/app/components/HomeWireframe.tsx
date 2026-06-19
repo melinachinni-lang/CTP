@@ -29,6 +29,31 @@ const HERO_PINS = [
   { left: '90%', top: '78%', delay: 3.8, ha: 7.8  },
 ];
 
+function TypewriterText({ text, delay = 0, speed = 0.042, style, className }: {
+  text: string; delay?: number; speed?: number;
+  style?: React.CSSProperties; className?: string;
+}) {
+  return (
+    <motion.span
+      className={className}
+      style={{ display: 'inline', ...style }}
+      initial="hidden"
+      animate="visible"
+      variants={{ visible: { transition: { staggerChildren: speed, delayChildren: delay } } }}
+    >
+      {String(text).split('').map((char, i) => (
+        <motion.span
+          key={i}
+          style={{ display: 'inline' }}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+        >
+          {char === ' ' ? ' ' : char}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+}
+
 function HeroPinGlass({ left, top, delay, ha }: { left: string; top: string; delay: number; ha: number }) {
   const count = useMotionValue(0);
   const displayHa = useTransform(count, (v) => v.toFixed(1));
@@ -782,15 +807,15 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               {/* Headlines */}
               <motion.div
                 className="space-y-3 md:space-y-4"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.85, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
+                initial={{ y: 22 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.55, delay: 0.1, ease: [0.4, 0, 0.2, 1] }}
               >
-                <h1 style={{ color: '#FFFFFF', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 'var(--font-weight-medium)', lineHeight: '1.1', textShadow: '0 2px 12px rgba(0,0,0,0.35)' }}>
-                  {t.home.heroTitle}
+                <h1 style={{ color: '#FFFFFF', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, lineHeight: '1.1', textShadow: '0 2px 14px rgba(0,0,0,0.4)' }}>
+                  <TypewriterText text={String(t.home.heroTitle)} delay={0.25} speed={0.042} />
                 </h1>
-                <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: 'rgba(255,255,255,0.88)', textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>
-                  {t.home.heroSubtitle}
+                <p className="body-lead max-w-4xl mx-auto text-sm md:text-base lg:text-lg" style={{ color: 'rgba(255,255,255,0.88)', textShadow: '0 1px 6px rgba(0,0,0,0.3)', minHeight: '1.6em' }}>
+                  <TypewriterText text={String(t.home.heroSubtitle)} delay={1.9} speed={0.032} />
                 </p>
               </motion.div>
 
