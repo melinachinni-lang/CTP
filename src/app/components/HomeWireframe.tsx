@@ -75,6 +75,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
   const heroImgRef = useRef<HTMLImageElement>(null);
+  const heroParallaxRef = useRef<HTMLDivElement>(null);
   const [selectedTab, setSelectedTab] = useState<'inmobiliarias' | 'brokers'>('inmobiliarias');
   const [isScrolling, setIsScrolling] = useState(false);
   const [includeProjects, setIncludeProjects] = useState(false);
@@ -183,12 +184,12 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     };
   }, []);
 
-  // Parallax del hero
+  // Parallax del hero — solo mueve el wrapper, Ken Burns maneja el scale en el img
   useEffect(() => {
     const handleScroll = () => {
-      if (heroImgRef.current) {
-        const y = window.scrollY * 0.38;
-        heroImgRef.current.style.transform = `translateY(${y}px) scale(1.08)`;
+      if (heroParallaxRef.current) {
+        const y = window.scrollY * 0.35;
+        heroParallaxRef.current.style.transform = `translateY(${y}px)`;
       }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -684,79 +685,42 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
           <section className="relative pt-8 pb-28 md:pt-12 md:pb-36 lg:pt-16 lg:pb-48 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
-            {/* Background image con Ken Burns */}
-            <img
-              ref={heroImgRef}
-              src={heroBackground}
-              alt="Campos rurales"
-              className="absolute inset-0 w-full h-full object-cover z-0"
-              style={{ animation: 'kenBurnsHero 20s ease-in-out infinite alternate', transformOrigin: '55% 45%', willChange: 'transform' }}
-            />
-
-            {/* SVG: límite de parcela animado + pins */}
-            <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
-              <svg
-                viewBox="0 0 1440 700"
-                className="absolute w-full h-full"
-                preserveAspectRatio="xMidYMid slice"
-                aria-hidden="true"
-              >
-                {/* Fill sutil — como overlay de parcela en mapa */}
-                <motion.path
-                  d="M 760,355 L 1310,330 L 1295,590 L 745,610 Z"
-                  fill="rgba(0, 107, 78, 0.09)"
-                  stroke="none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 3.2 }}
-                />
-
-                {/* Límite de parcela — dibujado progresivamente */}
-                <motion.path
-                  d="M 760,355 L 1310,330 L 1295,590 L 745,610 Z"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.92)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="12 9"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 2.8, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                  style={{ filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.5))' }}
-                />
-
-                {/* Vértice marcadores */}
-                {[
-                  { cx: 760,  cy: 355, delay: 3.4 },
-                  { cx: 1310, cy: 330, delay: 3.55 },
-                  { cx: 1295, cy: 590, delay: 3.7 },
-                  { cx: 745,  cy: 610, delay: 3.85 },
-                ].map((v, i) => (
-                  <motion.circle
-                    key={i}
-                    cx={v.cx} cy={v.cy} r={5}
-                    fill="white"
-                    style={{ filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.45))' }}
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: v.delay, type: 'spring', stiffness: 320, damping: 14 }}
-                  />
-                ))}
-
-                {/* Pin principal — borde superior de la parcela */}
-                <motion.g
-                  initial={{ y: -22, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 3.6, type: 'spring', stiffness: 260, damping: 13 }}
-                >
-                  <circle cx="1035" cy="335" r="15" fill="#006B4E" stroke="white" strokeWidth="2.5"
-                    style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.45))' }} />
-                  <circle cx="1035" cy="335" r="6" fill="white" />
-                  <line x1="1035" y1="350" x2="1035" y2="372" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                </motion.g>
-              </svg>
+            {/* Parallax wrapper — translateY via JS, sin tocar el scale del Ken Burns */}
+            <div ref={heroParallaxRef} className="absolute inset-0 z-0 overflow-hidden" style={{ willChange: 'transform' }}>
+              <img
+                ref={heroImgRef}
+                src={heroBackground}
+                alt="Campos rurales"
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ animation: 'kenBurnsHero 20s ease-in-out infinite alternate', transformOrigin: '55% 45%', willChange: 'transform' }}
+              />
             </div>
+
+            {/* Pins de ubicación dispersos — staggered fade-in */}
+            {[
+              { left: '7%',  top: '22%', delay: 0.6 },
+              { left: '19%', top: '58%', delay: 1.0 },
+              { left: '31%', top: '16%', delay: 0.8 },
+              { left: '44%', top: '70%', delay: 1.4 },
+              { left: '57%', top: '20%', delay: 0.5 },
+              { left: '68%', top: '62%', delay: 1.2 },
+              { left: '80%', top: '28%', delay: 0.9 },
+              { left: '91%', top: '55%', delay: 1.6 },
+            ].map((pin, i) => (
+              <motion.div
+                key={i}
+                className="absolute pointer-events-none z-[3]"
+                style={{ left: pin.left, top: pin.top, transform: 'translateX(-50%)' }}
+                initial={{ y: -18, opacity: 0, scale: 0.4 }}
+                animate={{ y: 0, opacity: 0.92, scale: 1 }}
+                transition={{ delay: pin.delay, type: 'spring', stiffness: 280, damping: 14 }}
+              >
+                <svg width="26" height="34" viewBox="0 0 26 34" fill="none" style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.45))' }}>
+                  <path d="M13 0C5.82 0 0 5.82 0 13c0 4.3 2.07 8.12 5.27 10.52L13 34l7.73-10.48C23.93 21.12 26 17.3 26 13 26 5.82 20.18 0 13 0z" fill="#006B4E"/>
+                  <circle cx="13" cy="12.5" r="5" fill="white"/>
+                </svg>
+              </motion.div>
+            ))}
 
 <div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
               {/* Headlines */}
