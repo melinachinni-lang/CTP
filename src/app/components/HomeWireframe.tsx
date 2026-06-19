@@ -22,11 +22,11 @@ import ilustracionCheck from 'figma:asset/3941caca813963d29f797c0f3077415648af33
 const heroBackgroundFallback = 'https://images.unsplash.com/photo-1761170570787-04bcab4609a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGxhbmQlMjB2YWxsZXl8ZW58MXx8fHwxNzY5MTExODc2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral';
 
 const HERO_PINS = [
-  { left: '6%',  top: '68%', delay: 1.8, ha: 8.5  },
-  { left: '22%', top: '76%', delay: 2.3, ha: 12.0 },
-  { left: '50%', top: '82%', delay: 2.8, ha: 5.2  },
-  { left: '74%', top: '70%', delay: 3.3, ha: 18.0 },
-  { left: '90%', top: '78%', delay: 3.8, ha: 7.8  },
+  { left: '6%',  top: '68%', delay: 3.0, ha: 8.5  },
+  { left: '22%', top: '76%', delay: 3.55, ha: 12.0 },
+  { left: '50%', top: '82%', delay: 4.1,  ha: 5.2  },
+  { left: '74%', top: '70%', delay: 4.65, ha: 18.0 },
+  { left: '90%', top: '78%', delay: 5.2,  ha: 7.8  },
 ];
 
 function TypewriterText({ text, delay = 0, speed = 0.042, style, className }: {
@@ -833,7 +833,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               {/* Buscador - Mobile/Tablet: Inline con selects | Desktop: Filtros inline con dropdowns */}
               
               {/* Buscador Mobile/Tablet - Inline con selects nativos (igual a ParcelasPage) */}
-              <div className="lg:hidden bg-white p-4 sm:p-6 w-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[20px] sm:rounded-[24px] border-2 border-gray-200 transition-all duration-300 mx-auto max-w-3xl">
+              <div className="lg:hidden bg-white p-4 sm:p-6 w-full rounded-[20px] sm:rounded-[24px] border border-gray-100 transition-all duration-300 mx-auto max-w-3xl" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1)' }}>
                 <div className="flex flex-wrap items-end gap-3 sm:gap-4">
                   {/* Select Ubicación */}
                   <div className="space-y-2.5 w-full md:w-auto">
@@ -980,7 +980,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
               {/* Buscador completo desktop */}
               <div 
-                className="hidden lg:block bg-white/95 backdrop-blur-sm p-6 xl:p-8 max-w-fit mx-auto shadow-[0_20px_80px_rgba(0,0,0,0.25)] rounded-[24px] border border-white/20 transition-all duration-500 ease-out"
+                className="hidden lg:block bg-white/95 backdrop-blur-sm p-6 xl:p-8 max-w-fit mx-auto rounded-[24px] border border-white/30 transition-all duration-500 ease-out"
+                style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.32), 0 8px 24px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.12)' }}
                 style={{
                   maxHeight: isSmartSearchExpanded ? '400px' : '120px',
                   overflow: openDropdown ? 'visible' : 'hidden'
