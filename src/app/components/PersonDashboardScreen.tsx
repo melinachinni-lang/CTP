@@ -68,7 +68,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
   const navGroups = [
     [
       { id: 'home', label: t.nav.home, icon: 'home' },
-      { id: 'explore', label: t.nav.explore, icon: 'search' },
       { id: 'saved', label: t.nav.saved, icon: 'heart' },
       { id: 'compare', label: t.nav.compare, icon: 'chart' },
       { id: 'inquiries', label: t.nav.inquiries, icon: 'message' },
