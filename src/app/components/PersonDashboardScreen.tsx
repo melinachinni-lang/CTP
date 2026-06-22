@@ -5,7 +5,7 @@ import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSect
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -569,14 +569,6 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Última modificación: hace 14 meses</span>
               </div>
-              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
-                <button onClick={() => setCurrentSection('listings')} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-                  <Edit className="w-3.5 h-3.5" /> Editar
-                </button>
-                <button onClick={() => setShowPauseConfirm(true)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}>
-                  <Pause className="w-3.5 h-3.5" /> Pausar
-                </button>
-              </div>
             </div>
           </div>
 
@@ -647,20 +639,6 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               <div className="pt-3 flex items-center gap-1.5" style={{ borderTop: '1px solid var(--muted)' }}>
                 <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>Última modificación: hace 12 días</span>
-              </div>
-              <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
-                <button onClick={() => setCurrentSection('listings')} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#374151', border: '1.5px solid #E5E5E5', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-                  <Edit className="w-3.5 h-3.5" /> Editar
-                </button>
-                {pub2Paused ? (
-                  <button onClick={() => setPub2Paused(false)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#F0FDF4', color: '#006B4E', border: '1.5px solid #A7F3D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#DCFCE7'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0FDF4'}>
-                    <Play className="w-3.5 h-3.5" /> Volver a publicar
-                  </button>
-                ) : (
-                  <button onClick={() => setShowPauseConfirm(true)} className="flex items-center gap-1.5 px-3 py-2 transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444', border: '1.5px solid #FECACA', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FECACA'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}>
-                    <Pause className="w-3.5 h-3.5" /> Pausar
-                  </button>
-                )}
               </div>
             </div>
           </div>
@@ -2649,10 +2627,24 @@ function MyPurchasesContent() {
 
 // Plan y límites Section Component
 function PlanContent() {
+  const [showUpgradeModal, setShowUpgradeModal] = React.useState(false);
+  const [pendingPlan, setPendingPlan] = React.useState<string | null>(null);
+  const [planChanged, setPlanChanged] = React.useState(false);
+
+  const handleUpgrade = () => {
+    if (pendingPlan) {
+      setPendingPlan(null);
+      setShowUpgradeModal(false);
+      setPlanChanged(true);
+      setTimeout(() => setPlanChanged(false), 3500);
+    }
+  };
+
   const plans = [
     {
       id: 'bronce',
       name: 'Bronce',
+      price: '$29.990',
       description: 'Ideal para iniciar con más capacidad',
       features: [
         { name: 'Hasta 10 parcelas publicadas', included: true },
@@ -2667,6 +2659,7 @@ function PlanContent() {
     {
       id: 'plata',
       name: 'Plata',
+      price: '$49.990',
       description: 'Para vendedores con mayor volumen',
       features: [
         { name: 'Hasta 30 parcelas publicadas', included: true },
@@ -2681,6 +2674,7 @@ function PlanContent() {
     {
       id: 'oro',
       name: 'Oro',
+      price: '$89.990',
       description: 'Máxima exposición y herramientas',
       features: [
         { name: 'Publicaciones ilimitadas', included: true },
@@ -2704,8 +2698,18 @@ function PlanContent() {
     { name: 'Asesor comercial dedicado', included: false },
   ];
 
+  const pendingPlanData = plans.find(p => p.id === pendingPlan);
+
   return (
     <main className="px-8 py-8 space-y-8">
+      {planChanged && (
+        <div className="flex items-center gap-3 px-5 py-4 rounded-xl" style={{ backgroundColor: '#DCFCE7', border: '1px solid #86EFAC' }}>
+          <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16A34A' }} />
+          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#15803D' }}>
+            ¡Plan contratado correctamente! Ya podés disfrutar los beneficios de tu nuevo plan.
+          </span>
+        </div>
+      )}
       <div>
         <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)' }}>Plan y facturación</h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '8px' }}>Gestiona tu plan y compara opciones</p>
@@ -2726,7 +2730,7 @@ function PlanContent() {
             <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
           </div>
         </div>
-        <button className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver planes profesionales</button>
+        <button onClick={() => document.getElementById('person-compara-planes')?.scrollIntoView({ behavior: 'smooth' })} className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver planes profesionales</button>
       </section>
       <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Beneficios de tu plan</h3>
@@ -2741,7 +2745,7 @@ function PlanContent() {
           ))}
         </div>
       </section>
-      <section>
+      <section id="person-compara-planes">
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
         <div className="grid grid-cols-3 gap-6">
           {plans.map((plan) => (
@@ -2758,11 +2762,47 @@ function PlanContent() {
                   </div>
                 ))}
               </div>
-              <button className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
+              <button onClick={() => { setPendingPlan(plan.id); setShowUpgradeModal(true); }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
             </div>
           ))}
         </div>
       </section>
+      {showUpgradeModal && pendingPlanData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => { setShowUpgradeModal(false); setPendingPlan(null); }}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full" style={{ border: '1px solid #E5E5E5', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={(e) => e.stopPropagation()}>
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0FDF4' }}>
+                  <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
+                </div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#006B4E', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Contratar plan</span>
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
+                Plan {pendingPlanData.name}
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                {pendingPlanData.price}/mes · {pendingPlanData.description}
+              </p>
+            </div>
+            <div className="rounded-xl p-4 mb-6 space-y-2" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Incluido en este plan</p>
+              {pendingPlanData.features.filter(f => f.included).map((f, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#15803D' }}>{f.name}</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '24px', lineHeight: '1.5' }}>
+              El plan se activará inmediatamente y el primer cobro se realizará hoy.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => { setShowUpgradeModal(false); setPendingPlan(null); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
+              <button onClick={handleUpgrade} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: '2px solid #006B4E', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}>Confirmar contratación</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

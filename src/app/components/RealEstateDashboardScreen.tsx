@@ -909,12 +909,16 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
 function PlanContent() {
   const [showCancelModal, setShowCancelModal] = React.useState(false);
-  const currentPlan = 'oro';
+  const [currentPlan, setCurrentPlan] = React.useState('plata');
+  const [showUpgradeModal, setShowUpgradeModal] = React.useState(false);
+  const [pendingPlan, setPendingPlan] = React.useState<string | null>(null);
+  const [planChanged, setPlanChanged] = React.useState(false);
 
   const plans = [
     {
       id: 'bronce',
       name: 'Bronce',
+      price: '$29.990',
       description: 'Ideal para inmobiliarias que inician',
       features: [
         { name: 'Hasta 10 parcelas publicadas', included: true },
@@ -929,6 +933,7 @@ function PlanContent() {
     {
       id: 'plata',
       name: 'Plata',
+      price: '$49.990',
       description: 'Para inmobiliarias en crecimiento',
       features: [
         { name: 'Hasta 30 parcelas publicadas', included: true },
@@ -943,6 +948,7 @@ function PlanContent() {
     {
       id: 'oro',
       name: 'Oro',
+      price: '$89.990',
       description: 'Máxima exposición para empresas',
       features: [
         { name: 'Publicaciones ilimitadas', included: true },
@@ -968,7 +974,16 @@ function PlanContent() {
   ];
 
   const handleDownload = (invoiceId: string) => console.log(`Descargando factura ${invoiceId}`);
-  const handleCancelPlan = () => { console.log('Cancelando plan...'); setShowCancelModal(false); };
+  const handleCancelPlan = () => { setShowCancelModal(false); };
+  const handleUpgrade = () => {
+    if (pendingPlan) {
+      setCurrentPlan(pendingPlan);
+      setPendingPlan(null);
+      setShowUpgradeModal(false);
+      setPlanChanged(true);
+      setTimeout(() => setPlanChanged(false), 3500);
+    }
+  };
   const getReasonBadgeStyle = (type: string) => {
     switch (type) {
       case 'subscription': return { backgroundColor: '#E8E7E6', color: 'var(--foreground)' };
@@ -978,8 +993,22 @@ function PlanContent() {
     }
   };
 
+  const pendingPlanData = plans.find(p => p.id === pendingPlan);
+  const currentPlanFeatures = plans.find(p => p.id === currentPlan)?.features || [];
+  const newBenefits = pendingPlanData?.features.filter(
+    f => f.included && !currentPlanFeatures.find(cf => cf.name === f.name && cf.included)
+  ) || [];
+
   return (
     <main className="px-8 py-8 space-y-8">
+      {planChanged && (
+        <div className="flex items-center gap-3 px-5 py-4 rounded-xl" style={{ backgroundColor: '#DCFCE7', border: '1px solid #86EFAC' }}>
+          <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16A34A' }} />
+          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#15803D' }}>
+            ¡Plan actualizado correctamente! Ya podés disfrutar los beneficios de tu nuevo plan.
+          </span>
+        </div>
+      )}
       <div>
         <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)' }}>Plan y facturación</h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '8px' }}>Gestiona tu plan y compara opciones</p>
@@ -999,7 +1028,7 @@ function PlanContent() {
             <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
           </div>
         </div>
-        <button className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver otros planes</button>
+        <button onClick={() => document.getElementById('re-compara-planes')?.scrollIntoView({ behavior: 'smooth' })} className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver otros planes</button>
       </section>
       <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Beneficios de tu plan</h3>
@@ -1014,7 +1043,7 @@ function PlanContent() {
           ))}
         </div>
       </section>
-      <section>
+      <section id="re-compara-planes">
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
         <div className="grid grid-cols-3 gap-6">
           {plans.map((plan) => {
@@ -1035,7 +1064,7 @@ function PlanContent() {
                     </div>
                   ))}
                 </div>
-                <button disabled={isActive} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#006B4E' : '#FFFFFF', color: isActive ? '#A3A3A3' : isHigher ? '#FFFFFF' : 'var(--foreground)', border: isActive ? '2px solid #E5E5E5' : isHigher ? 'none' : '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: isActive ? 'not-allowed' : 'pointer' }} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#01533E' : '#FAFAFA'; }} onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; }}>{isActive ? 'Plan activo' : isHigher ? 'Mejorar plan' : 'Cambiar a este plan'}</button>
+                <button disabled={isActive} onClick={() => { if (!isActive) { setPendingPlan(plan.id); setShowUpgradeModal(true); } }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#006B4E' : '#FFFFFF', color: isActive ? '#A3A3A3' : isHigher ? '#FFFFFF' : 'var(--foreground)', border: isActive ? '2px solid #E5E5E5' : isHigher ? 'none' : '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: isActive ? 'not-allowed' : 'pointer' }} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#01533E' : '#FAFAFA'; }} onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; }}>{isActive ? 'Plan activo' : isHigher ? 'Mejorar plan' : 'Cambiar a este plan'}</button>
               </div>
             );
           })}
@@ -1081,6 +1110,44 @@ function PlanContent() {
             <div className="flex gap-3">
               <button onClick={() => setShowCancelModal(false)} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: '2px solid #006B4E', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; e.currentTarget.style.borderColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.borderColor = '#006B4E'; }}>Mantener plan</button>
               <button onClick={handleCancelPlan} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#DC2626', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.borderColor = '#DC2626'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#DEDEDE'; }}>Sí, cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showUpgradeModal && pendingPlanData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => { setShowUpgradeModal(false); setPendingPlan(null); }}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full" style={{ border: '1px solid #E5E5E5', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={(e) => e.stopPropagation()}>
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0FDF4' }}>
+                  <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
+                </div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#006B4E', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Cambio de plan</span>
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
+                Pasá al Plan {pendingPlanData.name}
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                {pendingPlanData.price}/mes · {pendingPlanData.description}
+              </p>
+            </div>
+            {newBenefits.length > 0 && (
+              <div className="rounded-xl p-4 mb-6 space-y-2" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Lo que ganás con este plan</p>
+                {newBenefits.map((f, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#15803D' }}>{f.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '24px', lineHeight: '1.5' }}>
+              El cambio se aplicará inmediatamente y el nuevo monto se reflejará en tu próximo ciclo de facturación.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => { setShowUpgradeModal(false); setPendingPlan(null); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
+              <button onClick={handleUpgrade} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: '2px solid #006B4E', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}>Confirmar cambio</button>
             </div>
           </div>
         </div>

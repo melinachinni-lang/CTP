@@ -784,9 +784,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       />
 
       {/* Main Content - with padding for fixed header */}
-      <main className="relative pt-20 md:pt-24 lg:pt-28" style={{ backgroundColor: 'var(--hero-background)' }}>
+      <main className="relative pt-14 md:pt-14 lg:pt-14" style={{ backgroundColor: 'var(--hero-background)' }}>
           {/* 2. Hero + Buscador */}
-          <section className="relative pt-8 pb-28 md:pt-12 md:pb-36 lg:pt-16 lg:pb-48 overflow-hidden" style={{ backgroundColor: 'var(--hero-background)' }}>
+          <section className="relative pt-8 pb-6 md:pt-12 md:pb-20 lg:pt-16 lg:pb-48 overflow-hidden min-h-[480px] sm:min-h-[540px] lg:min-h-0" style={{ backgroundColor: 'var(--hero-background)' }}>
             {/* Parallax wrapper — translateY via JS, sin tocar el scale del Ken Burns */}
             <div ref={heroParallaxRef} className="absolute inset-0 z-0 overflow-hidden" style={{ willChange: 'transform' }}>
               <img
@@ -803,12 +803,14 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               background: 'linear-gradient(to bottom, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0) 100%)'
             }} />
 
-            {/* Pins glass — aparecen de a uno después del fade del título */}
+            {/* Pins glass — solo desktop (en mobile caen sobre el buscador) */}
             {HERO_PINS.map((pin, i) => (
-              <HeroPinGlass key={i} {...pin} />
+              <div key={i} className="hidden lg:block">
+                <HeroPinGlass {...pin} />
+              </div>
             ))}
 
-<div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(48px, 8vw, 96px)' }}>
+<div className="relative max-w-[1650px] mx-auto px-4 sm:px-6 text-center z-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(16px, 5vw, 96px)' }}>
               {/* Headlines */}
               <div className="space-y-3 md:space-y-4">
                 <motion.h1
@@ -836,7 +838,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               <div className="lg:hidden bg-white p-4 sm:p-6 w-full rounded-[20px] sm:rounded-[24px] border border-gray-100 transition-all duration-300 mx-auto max-w-3xl" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1)' }}>
                 <div className="flex flex-wrap items-end gap-3 sm:gap-4">
                   {/* Select Ubicación */}
-                  <div className="space-y-2.5 w-full md:w-auto">
+                  <div className="space-y-2.5 w-[calc(50%-6px)] sm:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
                       {t.filters.location}
                     </label>
@@ -859,7 +861,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   </div>
 
                   {/* Select Superficie */}
-                  <div className="space-y-2.5 w-full md:w-auto">
+                  <div className="space-y-2.5 w-[calc(50%-6px)] sm:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
                       {t.filters.area}
                     </label>
@@ -882,7 +884,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   </div>
 
                   {/* Select Condición */}
-                  <div className="space-y-2.5 w-full md:w-auto">
+                  <div className="space-y-2.5 w-[calc(50%-6px)] sm:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
                       {t.filters.condition}
                     </label>
@@ -905,7 +907,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   </div>
 
                   {/* Select Precio */}
-                  <div className="space-y-2.5 w-full md:w-auto">
+                  <div className="space-y-2.5 w-[calc(50%-6px)] sm:w-auto">
                     <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>
                       {t.filters.priceRange}
                     </label>

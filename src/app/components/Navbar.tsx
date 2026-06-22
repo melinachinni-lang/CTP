@@ -62,8 +62,8 @@ export function Navbar({
 
   return (
     <>
-      <header className="fixed top-8 left-0 right-0 z-50" style={{ backgroundColor: 'var(--hero-background)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <header className="fixed top-0 left-0 right-0 z-50" style={{ backgroundColor: 'var(--hero-background)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
           <div className="flex items-center justify-between">
             {/* Hamburger Menu - Mobile/Tablet only */}
             <button
@@ -79,7 +79,7 @@ export function Navbar({
               <img
                 src={logo}
                 alt="CompraTuParcela"
-                className="h-10 sm:h-12 lg:h-14 cursor-pointer"
+                className="h-8 sm:h-9 lg:h-10 cursor-pointer"
                 onClick={() => onNavigate('home')}
               />
 
