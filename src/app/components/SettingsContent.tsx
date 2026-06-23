@@ -1022,7 +1022,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </div>
 
               {/* WhatsApp oficial */}
-              <div className="mt-4">
+              <div className="mt-4" style={{ maxWidth: 'calc(50% - 8px)' }}>
                 <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
                   WhatsApp oficial
                 </label>
