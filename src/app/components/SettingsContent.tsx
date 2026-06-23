@@ -1032,7 +1032,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   placeholder="+56 9 1234 5678"
                   onChange={e => setPerfil(p => ({ ...p, whatsapp: e.target.value }))}
                   className="w-full px-4 py-3 rounded-xl text-sm transition-colors"
-                  style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', maxWidth: '320px' }}
+                  style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
                   onFocus={e => e.target.style.borderColor = '#006B4E'}
                   onBlur={e => e.target.style.borderColor = '#E5E5E5'}
                 />

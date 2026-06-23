@@ -364,24 +364,7 @@ function HomeContent() {
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            border: '2px solid #DEDEDE',
-            borderRadius: '200px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)',
-            letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-          >
-            <Share2 className="w-4 h-4" />
-            Compartir propiedad
-          </button>
-          <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{ 
+          <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{
             backgroundColor: '#006B4E',
             color: '#FFFFFF',
             borderRadius: '200px',
@@ -1651,7 +1634,7 @@ function PlanContent() {
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#006B4E', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Cambio de plan</span>
               </div>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>
-                Pasá al Plan {pendingPlanData.name}
+                Cambia al Plan {pendingPlanData.name}
               </h3>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
                 {pendingPlanData.price}/mes · {pendingPlanData.description}
@@ -1659,7 +1642,7 @@ function PlanContent() {
             </div>
             {newBenefits.length > 0 && (
               <div className="rounded-xl p-4 mb-6 space-y-2" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Lo que ganás con este plan</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Lo que ganas con este plan</p>
                 {newBenefits.map((f, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
