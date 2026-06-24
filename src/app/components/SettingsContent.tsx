@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2 } from 'lucide-react';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -95,6 +95,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [newCertificacion, setNewCertificacion] = useState('');
   const [testimonios, setTestimonios] = useState(TESTIMONIOS_INIT);
   const [linkCopiado, setLinkCopiado] = useState(false);
+  const [showCompartirModal, setShowCompartirModal] = useState(false);
+  const [showCompartirModalBroker, setShowCompartirModalBroker] = useState(false);
   const [testimoniosBroker, setTestimoniosBroker] = useState([
     { id: 1, nombre: 'María González', fecha: 'Mayo 2026', estrellas: 5, texto: 'Excelente profesional, me ayudó a encontrar la parcela perfecta para mi familia. Muy transparente y dedicado.', visible: true },
     { id: 2, nombre: 'Carlos Muñoz', fecha: 'Abril 2026', estrellas: 5, texto: 'Súper recomendado. Conoce muy bien el mercado y fue muy honesto con todas mis consultas.', visible: true },
@@ -197,15 +199,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     setTimeout(() => setPasswordSaved(false), 3500);
   };
 
-  const handleCopiarLink = () => {
-    setLinkCopiado(true);
-    setTimeout(() => setLinkCopiado(false), 2500);
-  };
-
-  const handleCopiarLinkBroker = () => {
-    setLinkCopiadoBroker(true);
-    setTimeout(() => setLinkCopiadoBroker(false), 2500);
-  };
+  const handleCopiarLink = () => setShowCompartirModal(true);
+  const handleCopiarLinkBroker = () => setShowCompartirModalBroker(true);
 
   const handleInviteUser = () => {
     if (!inviteEmail.trim() || !inviteEmail.includes('@')) {
@@ -2020,6 +2015,81 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Confirmar cambio
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Modal compartir link — inmobiliaria */}
+      {showCompartirModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={() => setShowCompartirModal(false)}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DCFCE7' }}>
+                  <Link2 className="w-5 h-5" style={{ color: '#006B4E' }} />
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A' }}>Compartir link de testimonios</h3>
+              </div>
+              <button onClick={() => setShowCompartirModal(false)} className="p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <X className="w-5 h-5" style={{ color: '#737373' }} />
+              </button>
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373', marginBottom: '20px', lineHeight: '1.5' }}>
+              Compartí este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                readOnly
+                value="compratuparcela.cl/testimonial/valle-central"
+                className="flex-1 px-4 py-3 rounded-xl text-sm"
+                style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', outline: 'none' }}
+              />
+              <button
+                onClick={() => { setLinkCopiado(true); setTimeout(() => setLinkCopiado(false), 2500); }}
+                className="px-4 py-3 rounded-xl flex items-center gap-2 transition-all flex-shrink-0"
+                style={{ backgroundColor: linkCopiado ? '#F0FDF4' : '#006B4E', color: linkCopiado ? '#166534' : '#FFFFFF', border: linkCopiado ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500 }}
+              >
+                {linkCopiado ? <><Check className="w-4 h-4" />Copiado</> : <><Copy className="w-4 h-4" />Copiar</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal compartir link — broker */}
+      {showCompartirModalBroker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={() => setShowCompartirModalBroker(false)}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DCFCE7' }}>
+                  <Link2 className="w-5 h-5" style={{ color: '#006B4E' }} />
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A' }}>Compartir link de testimonios</h3>
+              </div>
+              <button onClick={() => setShowCompartirModalBroker(false)} className="p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <X className="w-5 h-5" style={{ color: '#737373' }} />
+              </button>
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373', marginBottom: '20px', lineHeight: '1.5' }}>
+              Compartí este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                readOnly
+                value="compratuparcela.cl/testimonial/broker/carlos-rodriguez"
+                className="flex-1 px-4 py-3 rounded-xl text-sm"
+                style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', outline: 'none' }}
+              />
+              <button
+                onClick={() => { setLinkCopiadoBroker(true); setTimeout(() => setLinkCopiadoBroker(false), 2500); }}
+                className="px-4 py-3 rounded-xl flex items-center gap-2 transition-all flex-shrink-0"
+                style={{ backgroundColor: linkCopiadoBroker ? '#F0FDF4' : '#006B4E', color: linkCopiadoBroker ? '#166534' : '#FFFFFF', border: linkCopiadoBroker ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500 }}
+              >
+                {linkCopiadoBroker ? <><Check className="w-4 h-4" />Copiado</> : <><Copy className="w-4 h-4" />Copiar</>}
               </button>
             </div>
           </div>
