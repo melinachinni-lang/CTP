@@ -1,6 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, MapPin, Phone, Mail, Star, Shield } from 'lucide-react';
+import { ContactModal } from '@/app/components/ContactModal';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { getAllParcelas } from '@/app/data/parcelasData';
 import { ParcelaCard } from '@/app/components/ParcelaCard';
@@ -14,6 +15,7 @@ interface BrokerProfileProps {
 
 export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
   const [activeTab, setActiveTab] = useState('sobre');
+  const [showContactModal, setShowContactModal] = useState(false);
   const tabContentRef = useRef<HTMLDivElement>(null);
 
   const parcelasPublicadas = getAllParcelas().filter(
@@ -193,8 +195,8 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 </p>
 
                 <div className="flex gap-3 flex-wrap pt-3">
-                  <a
-                    href={`tel:${brokerData.telefono}`}
+                  <button
+                    onClick={() => setShowContactModal(true)}
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
@@ -202,12 +204,12 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       backgroundColor: '#006B4E'
                     }}
                     className="h-10 text-white px-[32px] rounded-[200px] transition-colors flex items-center justify-center gap-2 shadow-sm"
-                    onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#01533E'}
-                    onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#006B4E'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     <Phone className="w-4 h-4" />
                     Contactar
-                  </a>
+                  </button>
                   <button
                     onClick={() => handleTabChange('parcelas')}
                     className="h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[32px] rounded-[200px] transition-colors flex items-center justify-center"
@@ -515,6 +517,15 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
       </main>
 
       <SiteFooter onNavigate={onNavigate} />
+
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        parcelaNombre="Consulta general"
+        parcelaUbicacion=""
+        vendedorNombre={brokerData.nombre}
+        vendedorTipo="broker"
+      />
     </div>
   );
 }

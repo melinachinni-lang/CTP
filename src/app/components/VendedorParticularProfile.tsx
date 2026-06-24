@@ -1,6 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import React, { useState } from 'react';
 import { ChevronLeft, MapPin, Phone, Mail, CheckCircle, Shield, FileCheck, Clock, User, TrendingUp } from 'lucide-react';
+import { ContactModal } from '@/app/components/ContactModal';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { getAllParcelas } from '@/app/data/parcelasData';
 import { ParcelaCard } from '@/app/components/ParcelaCard';
@@ -14,6 +15,7 @@ interface VendedorParticularProfileProps {
 
 export function VendedorParticularProfile({ onNavigate, vendedorName }: VendedorParticularProfileProps) {
   const [activeTab, setActiveTab] = useState('sobre');
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const parcelasPublicadas = getAllParcelas().filter(
     parcela => parcela.inmobiliaria.nombre === vendedorName
@@ -162,7 +164,8 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                 </p>
 
                 <div className="flex gap-3 flex-wrap pt-3">
-                  <button 
+                  <button
+                    onClick={() => setShowContactModal(true)}
                     style={{ backgroundColor: '#006B4E' }}
                     className="h-10 text-white px-[32px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm"
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
@@ -432,6 +435,15 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
         </div>
       </main>
       <SiteFooter onNavigate={onNavigate} />
+
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        parcelaNombre="Consulta general"
+        parcelaUbicacion=""
+        vendedorNombre={vendedor.nombre}
+        vendedorTipo="particular"
+      />
     </div>
   );
 }

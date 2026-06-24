@@ -8,7 +8,7 @@ interface ContactModalProps {
   parcelaNombre: string;
   parcelaUbicacion: string;
   vendedorNombre: string;
-  vendedorTipo?: 'inmobiliaria' | 'particular';
+  vendedorTipo?: 'inmobiliaria' | 'particular' | 'broker';
 }
 
 export function ContactModal({ 
@@ -155,8 +155,8 @@ export function ContactModal({
 
   // Detectar si es una consulta general (desde página de inmobiliarias)
   const isGeneralInquiry = parcelaNombre === 'Consulta general';
-  const headerTitle = isGeneralInquiry ? 'Contactar inmobiliaria' : 'Contactar al vendedor';
-  const headerSubtitle = isGeneralInquiry ? 'Envía tu consulta a la inmobiliaria' : 'Envía tu consulta sobre esta propiedad';
+  const headerTitle = vendedorTipo === 'broker' ? 'Contactar broker' : isGeneralInquiry ? 'Contactar inmobiliaria' : 'Contactar al vendedor';
+  const headerSubtitle = vendedorTipo === 'broker' ? 'Envía tu consulta al broker' : isGeneralInquiry ? 'Envía tu consulta a la inmobiliaria' : 'Envía tu consulta sobre esta propiedad';
 
   return (
     <div 
