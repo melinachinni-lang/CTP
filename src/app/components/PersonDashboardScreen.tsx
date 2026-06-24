@@ -1,5 +1,4 @@
 import React from 'react';
-import { CalendariosView } from '@/app/components/CalendariosView';
 import { NewListingFlow } from '@/app/components/NewListingFlow';
 import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSection';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
@@ -73,7 +72,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
     { id: 'listings', label: t.nav.listings, icon: 'list' },
     { id: 'inquiries', label: t.nav.inquiries, icon: 'message' },
-    { id: 'calendarios', label: t.nav.calendarios, icon: 'calendar' },
     { id: 'plan', label: t.nav.plan, icon: 'credit-card' },
   ];
 
@@ -378,7 +376,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'listings' && <MyPublicationsView userType="vendedor_particular" userId="person-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'saved' && <SavedContent savedParcelaIds={savedParcelaIds} onToggleSaved={onToggleSaved} onNavigate={onNavigate} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="personal" defaultTab={consultasDefaultTab} />}
-        {currentSection === 'calendarios' && <CalendariosView />}
         {currentSection === 'compare' && <CompareContent onNavigate={onNavigate} />}
         {currentSection === 'purchases' && <MyPurchasesContent />}
         {currentSection === 'plan' && <PlanContent />}
