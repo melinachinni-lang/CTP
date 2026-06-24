@@ -96,7 +96,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       views: 234,
       inquiries: 12,
     },
-    ...(userType === 'inmobiliaria' ? [{
+    ...((userType === 'inmobiliaria' || userType === 'broker') ? [{
       id: 'pub-project-1',
       status: 'published' as PublicationStatus,
       publisherType: userType,
@@ -140,8 +140,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       }
     }
     
-    // Solo inmobiliarias ven el modal de selección, otros van directo a parcela individual
-    if (userType === 'inmobiliaria') {
+    // Inmobiliarias y brokers ven el modal de selección de tipo
+    if (userType === 'inmobiliaria' || userType === 'broker') {
       setShowTypeSelectionModal(true);
     } else {
       setShowListingFlow(true);
@@ -336,7 +336,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
 
   const isProyecto = (pub: Publication) => pub.stockUnits && pub.stockUnits.length > 0;
 
-  const typeFilteredPublications = userType === 'inmobiliaria'
+  const typeFilteredPublications = (userType === 'inmobiliaria' || userType === 'broker')
     ? publications.filter(pub => activePublicationType === 'proyectos' ? isProyecto(pub) : !isProyecto(pub))
     : publications;
 
@@ -793,8 +793,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
         </div>
       )}
 
-      {/* Tabs parcelas / proyectos — solo inmobiliaria */}
-      {userType === 'inmobiliaria' && (
+      {/* Tabs parcelas / proyectos — inmobiliaria y broker */}
+      {(userType === 'inmobiliaria' || userType === 'broker') && (
         <div className="px-6 py-4 bg-background flex justify-center" style={{ borderBottom: '1px solid var(--border)' }}>
           <Tabs
             tabs={[
