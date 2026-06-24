@@ -82,9 +82,9 @@ function BannerModal({
 
         <div className="px-6 py-5 space-y-5">
           {/* Toggle vista */}
-          <div className="flex gap-2 p-1 rounded-xl" style={{ backgroundColor: '#F5F5F5' }}>
-            <button onClick={() => setPreview(false)} className="flex-1 py-1.5 rounded-lg text-sm font-medium transition-all" style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>Editar</button>
-            <button onClick={() => setPreview(true)} className="flex-1 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5" style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
+          <div className="flex gap-2 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
+            <button onClick={() => setPreview(false)} className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>Editar</button>
+            <button onClick={() => setPreview(true)} className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1.5" style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
               <Eye className="w-3.5 h-3.5" /> Previsualizar
             </button>
           </div>
@@ -205,14 +205,14 @@ function BannerModal({
 
         {/* Footer */}
         <div className="flex gap-3 px-6 py-5" style={{ borderTop: '1px solid #E5E5E5' }}>
-          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
+          <button onClick={onClose} className="flex-1 py-2.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
             Cancelar
           </button>
           <button
             onClick={() => { if (canSave) onSave({ titulo, descripcion, imagen: null, fechaInicio, fechaFin, activo }); }}
             disabled={!canSave}
-            className="flex-1 py-2.5 rounded-xl transition-all"
-            style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
+            className="flex-1 py-2.5 transition-all"
+            style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
             onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
@@ -313,14 +313,14 @@ function MensajeModal({
         </div>
 
         <div className="flex gap-3 px-6 py-5" style={{ borderTop: '1px solid #E5E5E5' }}>
-          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
+          <button onClick={onClose} className="flex-1 py-2.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
             Cancelar
           </button>
           <button
             onClick={() => { if (canSave) onSave({ titulo, descripcion, topico, activo }); }}
             disabled={!canSave}
-            className="flex-1 py-2.5 rounded-xl transition-all"
-            style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
+            className="flex-1 py-2.5 transition-all"
+            style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
             onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
@@ -347,10 +347,10 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
           ¿Deseas eliminar <strong style={{ color: '#0A0A0A' }}>"{nombre}"</strong>? Esta acción no se puede deshacer y dejará de mostrarse en el portal.
         </p>
         <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
+          <button onClick={onClose} className="flex-1 py-2.5" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
             Cancelar
           </button>
-          <button onClick={onConfirm} className="flex-1 py-2.5 rounded-xl" style={{ backgroundColor: '#DC2626', color: '#FFFFFF', border: 'none', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>
+          <button onClick={onConfirm} className="flex-1 py-2.5" style={{ backgroundColor: '#DC2626', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>
             Sí, eliminar
           </button>
         </div>
