@@ -204,7 +204,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
 
   const handleInviteUser = () => {
     if (!inviteEmail.trim() || !inviteEmail.includes('@')) {
-      setInviteError('Ingresá un email válido');
+      setInviteError('Ingresa un email válido');
       return;
     }
     const newUser = {
@@ -221,7 +221,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
 
   const handleInviteBroker = () => {
     if (!inviteBrokerEmail.trim() || !inviteBrokerEmail.includes('@')) {
-      setInviteBrokerError('Ingresá un email válido');
+      setInviteBrokerError('Ingresa un email válido');
       return;
     }
     setInvitacionesBroker(prev => [...prev, { id: `inv${Date.now()}`, email: inviteBrokerEmail.trim(), fecha: 'Ahora mismo', mensaje: inviteBrokerMensaje.trim() }]);
@@ -719,7 +719,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 <Globe className="w-4 h-4" style={{ color: '#6B7280' }} />
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Idiomas</p>
               </div>
-              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Idiomas en los que podés atender a tus clientes</p>
+              <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Idiomas en los que puedes atender a tus clientes</p>
               <div className="flex flex-wrap gap-2 mb-3">
                 {idiomas.map((id, i) => (
                   <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
@@ -787,7 +787,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 </button>
               </div>
               <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Compartí el link para que tus clientes dejen su testimonio en tu perfil público. Podés mostrar u ocultar cada uno.
+                Comparte el link para que tus clientes dejen su testimonio en tu perfil público. Puedes mostrar u ocultar cada uno.
               </p>
               <div className="space-y-3">
                 {testimoniosBroker.map(t => {
@@ -1102,7 +1102,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 </p>
               </div>
               <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Agregá certificaciones o membresías que acrediten la calidad de tu inmobiliaria
+                Agrega certificaciones o membresías que acrediten la calidad de tu inmobiliaria
               </p>
               <div className="flex flex-wrap gap-2 mb-3">
                 {certificaciones.map((c, i) => (
@@ -1202,7 +1202,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   </button>
                 </div>
                 <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                  Compartí el link para que tus clientes puedan dejar su testimonio en tu perfil público
+                  Comparte el link para que tus clientes puedan dejar su testimonio en tu perfil público
                 </p>
                 <div className="space-y-3">
                   {testimonios.map(t => {
@@ -1300,7 +1300,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   Notificaciones por email
                 </p>
                 <p className="mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                  Elegí qué avisos querés recibir en tu correo
+                  Elige qué avisos quieres recibir en tu correo
                 </p>
               </div>
               <div className="space-y-2">
@@ -2036,7 +2036,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </button>
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373', marginBottom: '20px', lineHeight: '1.5' }}>
-              Compartí este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
+              Comparte este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
             </p>
             <div className="flex gap-2">
               <input
@@ -2074,7 +2074,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </button>
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373', marginBottom: '20px', lineHeight: '1.5' }}>
-              Compartí este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
+              Comparte este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
             </p>
             <div className="flex gap-2">
               <input
