@@ -418,7 +418,7 @@ export function AdminBannersModule() {
       setBanners(prev => prev.map(b => b.id === editingBanner.id ? { ...b, ...data } : b));
       showSuccess('Banner actualizado correctamente');
     } else {
-      setBanners(prev => [...prev, { id: nextId(), ...data }]);
+      setBanners(prev => [{ id: nextId(), ...data }, ...prev]);
       showSuccess('Banner creado correctamente');
     }
     setShowBannerModal(false);
