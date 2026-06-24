@@ -12,6 +12,7 @@ import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
+import { LeadDetailDrawer } from '@/app/components/LeadDetailDrawer';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
@@ -37,6 +38,7 @@ interface Lead {
   nombre: string;
   email: string;
   telefono: string;
+  origen: string;
   proyecto: string;
   estado: 'sin-asignar' | 'asignado' | 'contactado';
   fechaIngreso: string;
@@ -106,6 +108,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
   const [selectedLeadId, setSelectedLeadId] = useState<number | null>(null);
   const [assignmentFilter, setAssignmentFilter] = useState<'todos' | 'sin-asignar' | 'asignados'>('todos');
   const [leadSearchQuery, setLeadSearchQuery] = useState('');
+  const [selectedLeadForDetail, setSelectedLeadForDetail] = useState<Lead | null>(null);
   
   // Estados para Interacciones
   const [interactionTypeFilter, setInteractionTypeFilter] = useState<'todos' | 'Llamada' | 'Email' | 'WhatsApp'>('todos');
@@ -300,14 +303,14 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
   // DATOS MVP - LEADS
   const [leads, setLeads] = useState<Lead[]>([
-    { id: 1, nombre: 'Juan Pérez', email: 'juan.perez@email.com', telefono: '+56 9 1234 5678', proyecto: 'Parcelas Valle Hermoso', estado: 'sin-asignar', fechaIngreso: '2024-01-28' },
-    { id: 2, nombre: 'María López', email: 'maria.lopez@email.com', telefono: '+56 9 8765 4321', proyecto: 'Condominio Los Arrayanes', estado: 'asignado', fechaIngreso: '2024-01-27', brokerAsignado: 'María González' },
-    { id: 3, nombre: 'Pedro Soto', email: 'pedro.soto@email.com', telefono: '+56 9 2345 6789', proyecto: 'Parcelas Río Claro', estado: 'contactado', fechaIngreso: '2024-01-26', brokerAsignado: 'Carlos Pérez' },
-    { id: 4, nombre: 'Carla Fuentes', email: 'carla.fuentes@email.com', telefono: '+56 9 9876 5432', proyecto: 'Proyecto Colina Verde', estado: 'sin-asignar', fechaIngreso: '2024-01-28' },
-    { id: 5, nombre: 'Rodrigo Vega', email: 'rodrigo.vega@email.com', telefono: '+56 9 3456 7890', proyecto: 'Parcelas La Montaña', estado: 'asignado', fechaIngreso: '2024-01-27', brokerAsignado: 'Ana Martínez' },
-    { id: 6, nombre: 'Sofía Ramírez', email: 'sofia.ramirez@email.com', telefono: '+56 9 7654 3210', proyecto: 'Parcelas Valle Hermoso', estado: 'sin-asignar', fechaIngreso: '2024-01-28' },
-    { id: 7, nombre: 'Andrés Muñoz', email: 'andres.munoz@email.com', telefono: '+56 9 4567 8901', proyecto: 'Condominio Los Arrayanes', estado: 'asignado', fechaIngreso: '2024-01-26', brokerAsignado: 'Patricia Silva' },
-    { id: 8, nombre: 'Valentina Cruz', email: 'valentina.cruz@email.com', telefono: '+56 9 6543 2109', proyecto: 'Parcelas Río Claro', estado: 'contactado', fechaIngreso: '2024-01-25', brokerAsignado: 'Carlos Pérez' }
+    { id: 1, nombre: 'Juan Pérez', email: 'juan.perez@email.com', telefono: '+56 9 1234 5678', origen: 'Formulario web', proyecto: 'Parcelas Valle Hermoso', estado: 'sin-asignar', fechaIngreso: '2024-01-28' },
+    { id: 2, nombre: 'María López', email: 'maria.lopez@email.com', telefono: '+56 9 8765 4321', origen: 'Anuncio Meta', proyecto: 'Condominio Los Arrayanes', estado: 'asignado', fechaIngreso: '2024-01-27', brokerAsignado: 'María González' },
+    { id: 3, nombre: 'Pedro Soto', email: 'pedro.soto@email.com', telefono: '+56 9 2345 6789', origen: 'Google Ads', proyecto: 'Parcelas Río Claro', estado: 'contactado', fechaIngreso: '2024-01-26', brokerAsignado: 'Carlos Pérez' },
+    { id: 4, nombre: 'Carla Fuentes', email: 'carla.fuentes@email.com', telefono: '+56 9 9876 5432', origen: 'WhatsApp', proyecto: 'Proyecto Colina Verde', estado: 'sin-asignar', fechaIngreso: '2024-01-28' },
+    { id: 5, nombre: 'Rodrigo Vega', email: 'rodrigo.vega@email.com', telefono: '+56 9 3456 7890', origen: 'Formulario web', proyecto: 'Parcelas La Montaña', estado: 'asignado', fechaIngreso: '2024-01-27', brokerAsignado: 'Ana Martínez' },
+    { id: 6, nombre: 'Sofía Ramírez', email: 'sofia.ramirez@email.com', telefono: '+56 9 7654 3210', origen: 'Referido', proyecto: 'Parcelas Valle Hermoso', estado: 'sin-asignar', fechaIngreso: '2024-01-28' },
+    { id: 7, nombre: 'Andrés Muñoz', email: 'andres.munoz@email.com', telefono: '+56 9 4567 8901', origen: 'Google Ads', proyecto: 'Condominio Los Arrayanes', estado: 'asignado', fechaIngreso: '2024-01-26', brokerAsignado: 'Patricia Silva' },
+    { id: 8, nombre: 'Valentina Cruz', email: 'valentina.cruz@email.com', telefono: '+56 9 6543 2109', origen: 'Anuncio Meta', proyecto: 'Parcelas Río Claro', estado: 'contactado', fechaIngreso: '2024-01-25', brokerAsignado: 'Carlos Pérez' }
   ]);
 
   // DATOS MVP - INTERACCIONES
@@ -1372,6 +1375,24 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {/* SECCIÓN: ASIGNACIONES */}
           {activeNav === 'asignaciones' && (
             <>
+              {selectedLeadForDetail && (
+                <LeadDetailDrawer
+                  lead={{
+                    id: selectedLeadForDetail.id,
+                    nombre: selectedLeadForDetail.nombre,
+                    email: selectedLeadForDetail.email,
+                    telefono: selectedLeadForDetail.telefono,
+                    origen: selectedLeadForDetail.origen,
+                    estado: selectedLeadForDetail.estado,
+                    broker: selectedLeadForDetail.brokerAsignado || '—',
+                    fecha: selectedLeadForDetail.fechaIngreso
+                  }}
+                  isOpen={true}
+                  onClose={() => setSelectedLeadForDetail(null)}
+                />
+              )}
+              {!selectedLeadForDetail && (
+              <>
               {/* Filtros y búsqueda */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -1421,9 +1442,9 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 <table className="w-full">
                   <thead>
                     <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                      <th className="text-left px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Cliente</th>
-                      <th className="text-left px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Proyecto</th>
-                      <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fecha ingreso</th>
+                      <th className="text-left px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Lead</th>
+                      <th className="text-left px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Origen</th>
+                      <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fecha</th>
                       <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estado</th>
                       <th className="text-left px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Broker asignado</th>
                       <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acciones</th>
@@ -1453,11 +1474,15 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         <td className="px-6 py-4">
                           <div>
                             <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', marginBottom: '2px' }}>{lead.nombre}</div>
-                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{lead.email}</div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginBottom: '1px' }}>{lead.email}</div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{lead.telefono}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}>{lead.proyecto}</span>
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#374151', backgroundColor: '#F3F4F6', border: '1px solid #E5E7EB' }}>
+                            <Globe className="w-3 h-3" style={{ color: '#6B7280' }} />
+                            {lead.origen}
+                          </span>
                         </td>
                         <td className="text-center px-6 py-4">
                           <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{lead.fechaIngreso}</span>
@@ -1485,21 +1510,35 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                           )}
                         </td>
                         <td className="text-center px-6 py-4">
-                          {lead.estado === 'sin-asignar' ? (
-                            <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', backgroundColor: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
-                              <UserPlus className="w-4 h-4" /> Asignar
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => setSelectedLeadForDetail(lead)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors"
+                              style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}
+                              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; (e.currentTarget.style as any).borderColor = '#C5D9A8'; e.currentTarget.style.color = '#3D5E28'; }}
+                              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; (e.currentTarget.style as any).borderColor = '#E5E5E5'; e.currentTarget.style.color = '#0A0A0A'; }}
+                            >
+                              <Eye className="w-3.5 h-3.5" /> Ver
                             </button>
-                          ) : (
-                            <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
-                              <Edit2 className="w-4 h-4" /> Reasignar
-                            </button>
-                          )}
+                            {lead.estado === 'sin-asignar' ? (
+                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', backgroundColor: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
+                                <UserPlus className="w-3.5 h-3.5" /> Asignar
+                              </button>
+                            ) : (
+                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                                <Edit2 className="w-3.5 h-3.5" /> Reasignar
+                              </button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+
+              </>
+              )}
 
               {/* Modal seleccionar broker */}
               {leadParaAsignar && (
@@ -1513,7 +1552,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       <button onClick={() => setLeadParaAsignar(null)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><X className="w-4 h-4" /></button>
                     </div>
                     <div className="px-6 py-5 space-y-2">
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', marginBottom: '10px' }}>Seleccioná un broker activo</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', marginBottom: '10px' }}>Selecciona un broker activo</p>
                       {brokers.filter(b => b.estado === 'activo').map(broker => (
                         <button key={broker.id} onClick={() => setBrokerSeleccionadoId(broker.id)} className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left" style={{ border: `1px solid ${brokerSeleccionadoId === broker.id ? '#3D5E28' : '#E5E5E5'}`, backgroundColor: brokerSeleccionadoId === broker.id ? '#F0F5EB' : '#FAFAFA' }}>
                           <div className="flex items-center gap-3">
