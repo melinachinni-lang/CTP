@@ -394,6 +394,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       </a>
                     </div>
                     <button
+                      onClick={() => setShowContactModal(true)}
                       style={{
                         backgroundColor: '#006B4E',
                         fontFamily: 'var(--font-body)',
@@ -404,7 +405,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
-                      <Mail className="w-4 h-4" />
+                      <Phone className="w-4 h-4" />
                       Contactar
                     </button>
                   </div>
