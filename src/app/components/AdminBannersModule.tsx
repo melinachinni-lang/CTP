@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, Check, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, Info, Bell } from 'lucide-react';
 
 interface BannerAdmin {
@@ -57,9 +57,19 @@ function BannerModal({
   const [fechaInicio, setFechaInicio] = useState(banner?.fechaInicio ?? '');
   const [fechaFin, setFechaFin] = useState(banner?.fechaFin ?? '');
   const [activo, setActivo] = useState(banner?.activo ?? true);
+  const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isEdit = !!banner;
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => setImagenUrl(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  }
   const canSave = titulo.trim() && descripcion.trim() && fechaInicio && fechaFin;
 
   return (
@@ -94,15 +104,28 @@ function BannerModal({
               {/* Imagen */}
               <div>
                 <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Imagen</label>
-                <div className="rounded-xl flex flex-col items-center justify-center gap-2 py-8 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { (e.currentTarget.style as any).borderColor = '#006B4E'; (e.currentTarget.style as any).backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { (e.currentTarget.style as any).borderColor = '#D1D5DB'; (e.currentTarget.style as any).backgroundColor = '#FAFAFA'; }}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
-                    <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" style={{ display: 'none' }} onChange={handleFileChange} />
+                {imagenUrl ? (
+                  <div className="rounded-xl overflow-hidden relative" style={{ border: '1px solid #E5E5E5' }}>
+                    <img src={imagenUrl} alt="Preview" style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }} />
+                    <button onClick={() => { setImagenUrl(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF' }}>
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                    <button onClick={() => fileInputRef.current?.click()} className="absolute bottom-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: '500' }}>
+                      <Upload className="w-3 h-3" /> Cambiar
+                    </button>
                   </div>
-                  <div className="text-center">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>PNG, JPG o WEBP · Máx. 2 MB · Recomendado 1200×400 px</p>
+                ) : (
+                  <div onClick={() => fileInputRef.current?.click()} className="rounded-xl flex flex-col items-center justify-center gap-2 py-8 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { (e.currentTarget.style as any).borderColor = '#006B4E'; (e.currentTarget.style as any).backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { (e.currentTarget.style as any).borderColor = '#D1D5DB'; (e.currentTarget.style as any).backgroundColor = '#FAFAFA'; }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
+                      <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                    </div>
+                    <div className="text-center">
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>PNG, JPG o WEBP · Máx. 2 MB · Recomendado 1200×400 px</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Título */}
@@ -172,12 +195,16 @@ function BannerModal({
           ) : (
             /* Preview */
             <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-              <div className="flex items-center justify-center" style={{ height: '140px', backgroundColor: '#F3F4F6', borderBottom: '1px solid #E5E5E5' }}>
-                <div className="flex flex-col items-center gap-2">
-                  <ImageIcon className="w-8 h-8" style={{ color: '#C3C3C3' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Imagen del banner</span>
+              {imagenUrl ? (
+                <img src={imagenUrl} alt="Banner preview" style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block', borderBottom: '1px solid #E5E5E5' }} />
+              ) : (
+                <div className="flex items-center justify-center" style={{ height: '140px', backgroundColor: '#F3F4F6', borderBottom: '1px solid #E5E5E5' }}>
+                  <div className="flex flex-col items-center gap-2">
+                    <ImageIcon className="w-8 h-8" style={{ color: '#C3C3C3' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Imagen del banner</span>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="p-5" style={{ backgroundColor: '#FFFFFF' }}>
                 <div className="flex items-start justify-between mb-2">
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', lineHeight: '1.3' }}>
@@ -209,7 +236,7 @@ function BannerModal({
             Cancelar
           </button>
           <button
-            onClick={() => { if (canSave) onSave({ titulo, descripcion, imagen: null, fechaInicio, fechaFin, activo }); }}
+            onClick={() => { if (canSave) onSave({ titulo, descripcion, imagen: imagenUrl, fechaInicio, fechaFin, activo }); }}
             disabled={!canSave}
             className="flex-1 py-2.5 transition-all"
             style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
@@ -549,8 +576,12 @@ export function AdminBannersModule() {
                 <div key={banner.id} className="rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
                   <div className="flex items-start gap-4 p-5">
                     {/* Imagen */}
-                    <div className="flex-shrink-0 rounded-lg flex items-center justify-center overflow-hidden" style={{ width: '120px', height: '80px', backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5' }}>
-                      <ImageIcon className="w-7 h-7" style={{ color: '#C3C3C3' }} />
+                    <div className="flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center" style={{ width: '120px', height: '80px', backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5' }}>
+                      {banner.imagen ? (
+                        <img src={banner.imagen} alt={banner.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <ImageIcon className="w-7 h-7" style={{ color: '#C3C3C3' }} />
+                      )}
                     </div>
 
                     {/* Info */}
