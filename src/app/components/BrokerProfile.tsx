@@ -403,7 +403,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
                       <Mail className="w-4 h-4" />
-                      Enviar mensaje
+                      Contactar
                     </button>
                   </div>
 
