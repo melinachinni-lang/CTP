@@ -1202,7 +1202,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       placeholder="Buscar broker..."
                       value={brokerSearchQuery}
                       onChange={(e) => setBrokerSearchQuery(e.target.value)}
-                      className="pl-10 pr-4 py-2.5 rounded-lg"
+                      className="pl-10 pr-4 py-2.5 rounded-xl"
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
@@ -1215,23 +1215,26 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   </div>
 
                   {/* Filtro por estado */}
-                  <select
-                    value={brokerFilter}
-                    onChange={(e) => setBrokerFilter(e.target.value as any)}
-                    className="appearance-none pl-4 pr-10 py-2.5 rounded-lg cursor-pointer"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E5E5'
-                    }}
-                  >
-                    <option value="todos">Todos los brokers</option>
-                    <option value="activos">Solo activos</option>
-                    <option value="inactivos">Solo inactivos</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={brokerFilter}
+                      onChange={(e) => setBrokerFilter(e.target.value as any)}
+                      className="appearance-none pl-4 pr-10 py-2.5 rounded-xl cursor-pointer"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        color: '#0A0A0A',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E5E5'
+                      }}
+                    >
+                      <option value="todos">Todos los brokers</option>
+                      <option value="activos">Solo activos</option>
+                      <option value="inactivos">Solo inactivos</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -1312,7 +1315,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         <td className="text-center px-6 py-4">
                           <button
                             onClick={() => toggleBrokerEstado(broker.id)}
-                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors"
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl transition-colors"
                             style={{
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--font-size-xs)',
@@ -1403,7 +1406,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       placeholder="Buscar lead..."
                       value={leadSearchQuery}
                       onChange={(e) => setLeadSearchQuery(e.target.value)}
-                      className="pl-10 pr-4 py-2.5 rounded-lg"
+                      className="pl-10 pr-4 py-2.5 rounded-xl"
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
@@ -1414,23 +1417,26 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       }}
                     />
                   </div>
-                  <select
-                    value={assignmentFilter}
-                    onChange={(e) => setAssignmentFilter(e.target.value as any)}
-                    className="appearance-none pl-4 pr-10 py-2.5 rounded-lg cursor-pointer"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E5E5'
-                    }}
-                  >
-                    <option value="todos">Todos los leads</option>
-                    <option value="sin-asignar">Sin asignar</option>
-                    <option value="asignados">Asignados</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={assignmentFilter}
+                      onChange={(e) => setAssignmentFilter(e.target.value as any)}
+                      className="appearance-none pl-4 pr-10 py-2.5 rounded-xl cursor-pointer"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        color: '#0A0A0A',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E5E5'
+                      }}
+                    >
+                      <option value="todos">Todos los leads</option>
+                      <option value="sin-asignar">Sin asignar</option>
+                      <option value="asignados">Asignados</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+                  </div>
                 </div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
                   {filteredLeads.length} lead{filteredLeads.length !== 1 ? 's' : ''}
@@ -1513,7 +1519,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                           <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={() => setSelectedLeadForDetail(lead)}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors"
                               style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}
                               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; (e.currentTarget.style as any).borderColor = '#C5D9A8'; e.currentTarget.style.color = '#3D5E28'; }}
                               onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; (e.currentTarget.style as any).borderColor = '#E5E5E5'; e.currentTarget.style.color = '#0A0A0A'; }}
@@ -1521,11 +1527,11 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                               <Eye className="w-3.5 h-3.5" /> Ver
                             </button>
                             {lead.estado === 'sin-asignar' ? (
-                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', backgroundColor: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
+                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', backgroundColor: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
                                 <UserPlus className="w-3.5 h-3.5" /> Asignar
                               </button>
                             ) : (
-                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                              <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionadoId(null); setAsignarSuccess(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
                                 <Edit2 className="w-3.5 h-3.5" /> Reasignar
                               </button>
                             )}
@@ -1593,7 +1599,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       placeholder="Buscar interacción..."
                       value={interactionSearchQuery}
                       onChange={(e) => setInteractionSearchQuery(e.target.value)}
-                      className="pl-10 pr-4 py-2.5 rounded-lg"
+                      className="pl-10 pr-4 py-2.5 rounded-xl"
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
@@ -1604,24 +1610,27 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       }}
                     />
                   </div>
-                  <select
-                    value={interactionTypeFilter}
-                    onChange={(e) => setInteractionTypeFilter(e.target.value as any)}
-                    className="appearance-none pl-4 pr-10 py-2.5 rounded-lg cursor-pointer"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: '#0A0A0A',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E5E5'
-                    }}
-                  >
-                    <option value="todos">Todos los tipos</option>
-                    <option value="Llamada">Llamadas</option>
-                    <option value="Email">Emails</option>
-                    <option value="WhatsApp">WhatsApp</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={interactionTypeFilter}
+                      onChange={(e) => setInteractionTypeFilter(e.target.value as any)}
+                      className="appearance-none pl-4 pr-10 py-2.5 rounded-xl cursor-pointer"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--font-size-body-sm)',
+                        fontWeight: 'var(--font-weight-medium)',
+                        color: '#0A0A0A',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E5E5'
+                      }}
+                    >
+                      <option value="todos">Todos los tipos</option>
+                      <option value="Llamada">Llamadas</option>
+                      <option value="Email">Emails</option>
+                      <option value="WhatsApp">WhatsApp</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+                  </div>
                 </div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
                   {filteredInteracciones.length} interaccion{filteredInteracciones.length !== 1 ? 'es' : ''}
@@ -2591,7 +2600,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       placeholder="Buscar usuario..."
                       value={userSearchQuery}
                       onChange={(e) => setUserSearchQuery(e.target.value)}
-                      className="pl-10 pr-4 py-2.5 rounded-lg"
+                      className="pl-10 pr-4 py-2.5 rounded-xl"
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
