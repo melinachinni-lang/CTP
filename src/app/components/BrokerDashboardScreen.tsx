@@ -1579,7 +1579,7 @@ function PlanContent() {
                     if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF';
                   }}
                 >
-                  {isActive ? 'Plan activo' : isHigher ? 'Mejorar plan' : 'Cambiar a este plan'}
+                  {isActive ? 'Plan activo' : isHigher ? 'Contratar plan' : 'Cambiar a este plan'}
                 </button>
               </div>
             );
