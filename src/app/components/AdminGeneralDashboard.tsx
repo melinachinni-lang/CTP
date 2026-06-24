@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User } from 'lucide-react';
+import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User, Megaphone } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -12,6 +12,7 @@ import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
+import { AdminBannersModule } from '@/app/components/AdminBannersModule';
 import { LeadDetailDrawer } from '@/app/components/LeadDetailDrawer';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
@@ -19,7 +20,7 @@ interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -397,6 +398,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     [
       { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
       { id: 'recursos' as NavItem, icon: BookOpen, label: 'Recursos & Blog' },
+      { id: 'banners' as NavItem, icon: Megaphone, label: 'Banners & mensajes' },
       { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
       { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     ],
@@ -3774,6 +3776,9 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               </section>
             </>
           )}
+
+          {/* ── BANNERS & MENSAJES ── */}
+          {activeNav === 'banners' && <AdminBannersModule />}
 
           {/* ── RECURSOS & BLOG ── */}
           {activeNav === 'recursos' && <AdminRecursosModule />}
