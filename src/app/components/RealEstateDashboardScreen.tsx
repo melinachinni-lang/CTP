@@ -1012,11 +1012,18 @@ function PlanContent() {
   return (
     <main className="px-8 py-8 space-y-8">
       {planChanged && (
-        <div className="flex items-center gap-3 px-5 py-4 rounded-xl" style={{ backgroundColor: '#DCFCE7', border: '1px solid #86EFAC' }}>
-          <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16A34A' }} />
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', color: '#15803D' }}>
-            ¡Plan actualizado correctamente! Ya podés disfrutar los beneficios de tu nuevo plan.
-          </span>
+        <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '320px', maxWidth: '440px' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#16A34A' }}>
+            <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+          </div>
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', marginBottom: '1px' }}>
+              Plan actualizado correctamente
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
+              Ya puedes disfrutar los beneficios de tu nuevo plan.
+            </p>
+          </div>
         </div>
       )}
       <div>
