@@ -166,9 +166,8 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
                     fontWeight: language === lang ? 600 : 400,
                   }}
                 >
-                  {language === lang && <span className="w-1.5 h-1.5 rounded-full bg-green-700 inline-block" />}
-                  {language !== lang && <span className="w-1.5 h-1.5 inline-block" />}
                   {label}
+                  {language === lang && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-green-700 inline-block" />}
                 </button>
               ))}
             </div>
@@ -189,9 +188,8 @@ export default function LanguageCurrencySelector({ variant = 'header' }: Props) 
                     fontWeight: currency === cur ? 600 : 400,
                   }}
                 >
-                  {currency === cur && <span className="w-1.5 h-1.5 rounded-full bg-green-700 inline-block" />}
-                  {currency !== cur && <span className="w-1.5 h-1.5 inline-block" />}
                   {label}
+                  {currency === cur && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-green-700 inline-block" />}
                 </button>
               ))}
             </div>
