@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import {
   BookOpen, Upload, Trash2, Tag, Globe, EyeOff, Edit2, Eye,
   Plus, Search, Activity, X, Save, Check, AlertCircle, Star,
-  Bold, Italic, Link, List, ListOrdered, ArrowLeft
+  Bold, Italic, Link, List, ListOrdered, ArrowLeft, ChevronDown
 } from 'lucide-react';
 
 type ImagenRecurso = { id: string; url: string; nombre: string; esPrincipal: boolean };
@@ -384,16 +384,24 @@ export function AdminRecursosModule() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
           <input type="text" placeholder="Buscar recurso..." value={recursosSearch} onChange={e => setRecursosSearch(e.target.value)} className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }} />
         </div>
-        <select value={filtroTopico} onChange={e => setFiltroTopico(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '140px' }}>
-          <option value="todos">Todos los tópicos</option>
-          {TOPICOS.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value as typeof filtroEstado)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '130px' }}>
-          <option value="todos">Todos los estados</option>
-          <option value="activo">Activo</option>
-          <option value="inactivo">Inactivo</option>
-        </select>
-        <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex-shrink-0" style={{ backgroundColor: '#3D5E28', color: '#FFFFFF', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
+        <div className="relative">
+          <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+          <select value={filtroTopico} onChange={e => setFiltroTopico(e.target.value)} className="appearance-none pl-10 pr-9 py-2.5 rounded-full text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '160px' }}>
+            <option value="todos">Todos los tópicos</option>
+            {TOPICOS.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+        </div>
+        <div className="relative">
+          <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+          <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value as typeof filtroEstado)} className="appearance-none pl-10 pr-9 py-2.5 rounded-full text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '150px' }}>
+            <option value="todos">Todos los estados</option>
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+        </div>
+        <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all flex-shrink-0" style={{ backgroundColor: '#3D5E28', color: '#FFFFFF', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E4A1E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#3D5E28'; }}>
           <Plus className="w-4 h-4" /> Nuevo recurso
         </button>
       </div>
