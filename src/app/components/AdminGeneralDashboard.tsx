@@ -750,10 +750,14 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               {(activeNav === 'inicio' || activeNav === 'analitica' || activeNav === 'embudo') && (
                 <div className="flex items-center gap-3">
                   <div className="relative">
+                    <Calendar
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
+                      style={{ color: '#3D5E28' }}
+                    />
                     <select
                       value={dateRange}
                       onChange={(e) => setDateRange(e.target.value)}
-                      className="appearance-none pl-4 pr-10 py-2.5 rounded-full transition-all cursor-pointer"
+                      className="appearance-none pl-10 pr-9 py-2.5 rounded-full transition-all cursor-pointer"
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-body-sm)',
@@ -776,7 +780,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                       <option value="ultimos-90-dias">Últimos 90 días</option>
                       <option value="este-ano">Este año</option>
                     </select>
-                    <Calendar
+                    <ChevronDown
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
                       style={{ color: '#3D5E28' }}
                     />
@@ -785,10 +789,14 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {/* Filtro de dispositivo - solo en Analítica */}
                   {activeNav === 'analitica' && (
                     <div className="relative">
+                      <Smartphone
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
+                        style={{ color: '#737373' }}
+                      />
                       <select
                         value={deviceFilter}
                         onChange={(e) => setDeviceFilter(e.target.value as 'todos' | 'mobile' | 'desktop')}
-                        className="appearance-none pl-4 pr-10 py-2.5 rounded-full transition-all cursor-pointer"
+                        className="appearance-none pl-10 pr-9 py-2.5 rounded-full transition-all cursor-pointer"
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--font-size-body-sm)',
@@ -810,7 +818,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                         <option value="mobile">Mobile</option>
                         <option value="desktop">Desktop</option>
                       </select>
-                      <Smartphone
+                      <ChevronDown
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
                         style={{ color: '#737373' }}
                       />

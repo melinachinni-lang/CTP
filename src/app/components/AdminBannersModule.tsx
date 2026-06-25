@@ -505,7 +505,7 @@ export function AdminBannersModule() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-0 mb-6" style={{ borderBottom: '2px solid #F3F4F6' }}>
+      <div className="flex gap-1 p-1 rounded-full mb-6" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
         {([
           { key: 'banners', label: 'Banners promocionales', icon: Megaphone, count: banners.length },
           { key: 'mensajes', label: 'Mensajes informativos', icon: Bell, count: mensajes.length },
@@ -513,24 +513,19 @@ export function AdminBannersModule() {
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className="flex items-center gap-2 px-4 py-3 transition-all"
+            className="flex items-center gap-2 px-5 py-2 rounded-full transition-all"
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-sm)',
               fontWeight: tab === t.key ? '600' : '400',
-              color: tab === t.key ? '#006B4E' : '#737373',
-              borderBottom: `2px solid ${tab === t.key ? '#006B4E' : 'transparent'}`,
-              marginBottom: '-2px',
-              backgroundColor: 'transparent',
-              border: 'none',
-              borderBottomWidth: '2px',
-              borderBottomStyle: 'solid',
-              borderBottomColor: tab === t.key ? '#006B4E' : 'transparent',
+              color: tab === t.key ? '#0A0A0A' : '#6B7280',
+              backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent',
+              boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             }}
           >
             <t.icon className="w-4 h-4" />
             {t.label}
-            <span className="px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: tab === t.key ? '#F0F5EB' : '#F3F4F6', color: tab === t.key ? '#3D5E28' : '#737373', fontFamily: 'var(--font-body)', fontWeight: '600' }}>
+            <span className="px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: tab === t.key ? '#F0F5EB' : '#E5E5E5', color: tab === t.key ? '#3D5E28' : '#9CA3AF', fontFamily: 'var(--font-body)', fontWeight: '600' }}>
               {t.count}
             </span>
           </button>
