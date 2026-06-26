@@ -3845,7 +3845,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
             onClick={() => setSelectedPublicacion(null)} />
           <div className="relative flex flex-col w-full bg-white h-full overflow-y-auto"
-            style={{ maxWidth: '480px', boxShadow: '-4px 0 32px rgba(0,0,0,0.12)' }}>
+            style={{ maxWidth: '480px', boxShadow: '-4px 0 32px rgba(0,0,0,0.12)', zIndex: 1 }}>
 
             {/* Header */}
             <div className="flex items-start justify-between p-6 flex-shrink-0"
@@ -3959,12 +3959,15 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
               {/* Acciones principales */}
               <div className="pt-2 space-y-2">
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+                <button
+                  onClick={() => setSelectedPublicacion(null)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold transition-all"
                   style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
                   <Edit2 className="w-4 h-4" /> Editar publicación completa
                 </button>
-                <button onClick={() => { setSelectedPublicacion(null); onNavigate('parcelas'); }}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium"
+                <button
+                  onClick={() => { setSelectedPublicacion(null); onNavigate('parcelas'); }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all"
                   style={{ backgroundColor: '#F5F5F5', color: '#737373' }}>
                   <Eye className="w-4 h-4" /> Ver como la ve el comprador
                 </button>
