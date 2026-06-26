@@ -102,6 +102,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const [isSmartSearchExpanded, setIsSmartSearchExpanded] = useState(false);
   const [smartSearchValue, setSmartSearchValue] = useState('');
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
+  const [isAiProcessing, setIsAiProcessing] = useState(false);
+  const [aiInterpretedQuery, setAiInterpretedQuery] = useState<string | null>(null);
   const [includeProjects, setIncludeProjects] = useState(false);
 
   // Estados para scroll infinito
@@ -667,37 +669,40 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
   // Handler para búsqueda inteligente
   const handleSmartSearch = () => {
-    setFiltersApplied(true);
-    
-    // Actualizar activeFilters PRESERVANDO los filtros existentes y agregando búsqueda inteligente
-    setActiveFilters(prev => {
-      const updatedFilters = { ...prev };
-      
-      // Si hay texto de búsqueda, agregarlo
-      if (smartSearchValue.trim()) {
-        updatedFilters.smartSearchText = smartSearchValue.trim();
-      } else {
-        delete updatedFilters.smartSearchText;
-      }
-      
-      // Agregar badges seleccionados
-      if (selectedBadges.length > 0) {
-        updatedFilters.smartBadges = [...selectedBadges];
-      } else {
-        updatedFilters.smartBadges = [];
-      }
-      
-      return updatedFilters;
-    });
-    
-    // Cerrar el panel de búsqueda inteligente
+    const query = smartSearchValue.trim();
+
+    // Cerrar el panel y mostrar estado de procesamiento IA
     setIsSmartSearchExpanded(false);
-    
+    setIsSmartSearchBottomSheetOpen(false);
+    setIsAiProcessing(true);
+
     // Scroll suave al área de resultados
     const resultsSection = document.getElementById('results-section');
     if (resultsSection) {
       resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    // Simular procesamiento IA (1.8s)
+    setTimeout(() => {
+      setIsAiProcessing(false);
+      setFiltersApplied(true);
+      if (query) setAiInterpretedQuery(query);
+
+      setActiveFilters(prev => {
+        const updatedFilters = { ...prev };
+        if (query) {
+          updatedFilters.smartSearchText = query;
+        } else {
+          delete updatedFilters.smartSearchText;
+        }
+        if (selectedBadges.length > 0) {
+          updatedFilters.smartBadges = [...selectedBadges];
+        } else {
+          updatedFilters.smartBadges = [];
+        }
+        return updatedFilters;
+      });
+    }, 1800);
   };
 
   // Función para toggle de badges de búsqueda inteligente
@@ -1051,7 +1056,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 <div className="space-y-2.5 w-full md:w-auto">
                   <div className="h-[20px] hidden md:block"></div>
-                  <button 
+                  <button
                     onClick={() => {
                       // En mobile/tablet: abrir bottom sheet
                       // En desktop: expandir inline
@@ -1061,10 +1066,23 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         setIsSmartSearchExpanded(!isSmartSearchExpanded);
                       }
                     }}
-                    className="h-[40px] bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[14px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap w-full md:w-auto"
+                    className="h-[40px] px-[14px] text-sm leading-[1.5] font-medium rounded-[200px] transition-all flex items-center justify-center gap-1.5 whitespace-nowrap w-full md:w-auto relative"
+                    style={{
+                      backgroundColor: aiInterpretedQuery ? '#006B4E' : '#efefef',
+                      color: aiInterpretedQuery ? '#FFFFFF' : '#0A0A0A',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = aiInterpretedQuery ? '#01533E' : '#dedede';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = aiInterpretedQuery ? '#006B4E' : '#efefef';
+                    }}
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>{t.filters.smartSearch}</span>
+                    <span>{aiInterpretedQuery ? 'IA activa' : t.filters.smartSearch}</span>
+                    {aiInterpretedQuery && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#A8D97F' }} />
+                    )}
                   </button>
                 </div>
               </div>
@@ -1082,9 +1100,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
               >
                 {/* Encabezado con texto y botón cerrar */}
                 <div className="flex items-start justify-between mb-4 sm:mb-5 gap-3">
-                  <p className="text-xs sm:text-sm" style={{ fontWeight: 400, lineHeight: '1.6', color: '#0A0A0A' }}>
-                    {t.filters.smartSearchDesc}
-                  </p>
+                  <div className="flex items-start gap-2.5">
+                    <div className="w-6 h-6 rounded-lg flex-shrink-0 flex items-center justify-center mt-0.5" style={{ backgroundColor: '#E8F5EE' }}>
+                      <Sparkles className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
+                    </div>
+                    <p className="text-xs sm:text-sm" style={{ fontWeight: 400, lineHeight: '1.6', color: '#0A0A0A' }}>
+                      {t.filters.smartSearchDesc}
+                    </p>
+                  </div>
                   <button
                     onClick={() => setIsSmartSearchExpanded(false)}
                     className="text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1.5 text-xs sm:text-sm flex-shrink-0"
@@ -1101,16 +1124,28 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     type="text"
                     value={smartSearchValue}
                     onChange={(e) => setSmartSearchValue(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && smartSearchValue.trim()) handleSmartSearch(); }}
                     placeholder={t.filters.smartSearchPlaceholder}
-                    className="w-full h-12 sm:h-14 lg:h-16 pl-4 sm:pl-6 pr-4 sm:pr-32 lg:pr-40 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[12px] sm:rounded-[16px] focus:outline-none transition-all duration-200"
-                    style={{ fontWeight: 400, lineHeight: '1.5' }}
+                    className="w-full h-12 sm:h-14 lg:h-16 pl-4 sm:pl-6 pr-4 sm:pr-32 lg:pr-40 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 bg-white border-2 hover:border-gray-300 focus:border-[#006B4E] rounded-[12px] sm:rounded-[16px] focus:outline-none transition-all duration-200"
+                    style={{ fontWeight: 400, lineHeight: '1.5', borderColor: '#E5E5E5' }}
                   />
                   <button
                     onClick={handleSmartSearch}
-                    className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 h-9 sm:h-10 lg:h-12 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-3 sm:px-4 lg:px-5 text-xs sm:text-sm leading-[1.5] font-medium rounded-[8px] sm:rounded-[12px] transition-colors flex items-center justify-center gap-1.5 sm:gap-2"
+                    disabled={!smartSearchValue.trim() && selectedBadges.length === 0}
+                    className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 h-9 sm:h-10 lg:h-12 px-3 sm:px-4 lg:px-5 text-xs sm:text-sm leading-[1.5] font-medium rounded-[8px] sm:rounded-[12px] transition-all flex items-center justify-center gap-1.5 sm:gap-2 disabled:opacity-40"
+                    style={{
+                      backgroundColor: (smartSearchValue.trim() || selectedBadges.length > 0) ? '#006B4E' : '#efefef',
+                      color: (smartSearchValue.trim() || selectedBadges.length > 0) ? '#FFFFFF' : '#0A0A0A',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (smartSearchValue.trim() || selectedBadges.length > 0) e.currentTarget.style.backgroundColor = '#01533E';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = (smartSearchValue.trim() || selectedBadges.length > 0) ? '#006B4E' : '#efefef';
+                    }}
                   >
                     <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>{t.filters.search}</span>
+                    <span>Buscar con IA</span>
                   </button>
                 </div>
 
@@ -1640,17 +1675,88 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 {/* Contador y filtros activos con selector de vista */}
                 <div className="mb-6 mt-4 lg:mt-8">
+
+                  {/* Banner IA activa */}
+                  {(isAiProcessing || aiInterpretedQuery) && (
+                    <div
+                      className="flex items-center gap-3 px-4 py-3 rounded-2xl mb-4 flex-wrap"
+                      style={{ backgroundColor: '#F0F9F5', border: '1px solid #C5E8D8' }}
+                    >
+                      {isAiProcessing ? (
+                        <>
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <div className="w-5 h-5 flex-shrink-0 relative">
+                              <Sparkles className="w-5 h-5 absolute animate-pulse" style={{ color: '#006B4E' }} />
+                            </div>
+                            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#006B4E', fontWeight: 500 }}>
+                              La IA está analizando tu búsqueda…
+                            </span>
+                          </div>
+                          <div className="flex gap-1">
+                            {[0, 1, 2].map(i => (
+                              <span
+                                key={i}
+                                className="w-2 h-2 rounded-full"
+                                style={{
+                                  backgroundColor: '#006B4E',
+                                  opacity: 0.3,
+                                  animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite`
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      ) : aiInterpretedQuery ? (
+                        <>
+                          <Sparkles className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                          <div className="flex-1 min-w-0">
+                            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#737373', fontWeight: 400 }}>
+                              IA interpretó:{' '}
+                            </span>
+                            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#006B4E', fontWeight: 600 }}>
+                              &ldquo;{aiInterpretedQuery}&rdquo;
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setAiInterpretedQuery(null);
+                              setSmartSearchValue('');
+                              setSelectedBadges([]);
+                              setActiveFilters(prev => {
+                                const updated = { ...prev };
+                                delete updated.smartSearchText;
+                                updated.smartBadges = [];
+                                return updated;
+                              });
+                            }}
+                            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs transition-colors flex-shrink-0"
+                            style={{ fontFamily: 'Inter, sans-serif', color: '#737373', backgroundColor: '#E8F5EE', fontWeight: 500 }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D5EEE2'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}
+                          >
+                            <X className="w-3 h-3" />
+                            Limpiar IA
+                          </button>
+                        </>
+                      ) : null}
+                    </div>
+                  )}
+
                   {/* Fila con contador y botones de vista */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                    <p 
-                      style={{ 
+                    <p
+                      style={{
                         color: '#0A0A0A',
                         fontFamily: 'Inter, sans-serif',
                         fontSize: '15px',
                         fontWeight: 400
                       }}
                     >
-                      {parcelas.length} {t.explore.parcelasFoundSuffix}
+                      {isAiProcessing ? (
+                        <span style={{ color: '#737373' }}>Buscando parcelas…</span>
+                      ) : (
+                        <>{parcelas.length} {t.explore.parcelasFoundSuffix}</>
+                      )}
                     </p>
 
                     {/* Botones de selector de vista */}
@@ -1751,30 +1857,55 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 ) : (
                   /* Vista de Lista - Grid de parcelas o Empty State */
                   <>
-                    {parcelas.length === 0 && filtersApplied ? (
+                    {/* Loading overlay mientras IA procesa */}
+                    {isAiProcessing ? (
+                      <div className="col-span-2 py-16 sm:py-24 flex flex-col items-center justify-center text-center">
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style={{ backgroundColor: '#F0F9F5' }}>
+                          <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#006B4E' }} />
+                        </div>
+                        <h3 className="mb-2" style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
+                          Buscando con IA…
+                        </h3>
+                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#737373', maxWidth: '340px', lineHeight: '1.6' }}>
+                          Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se ajustan a lo que describes.
+                        </p>
+                        <div className="flex gap-2 mt-5">
+                          {[0, 1, 2, 3].map(i => (
+                            <div
+                              key={i}
+                              className="h-1.5 rounded-full animate-pulse"
+                              style={{
+                                width: i === 1 || i === 2 ? '32px' : '16px',
+                                backgroundColor: '#006B4E',
+                                opacity: 0.3 + i * 0.2,
+                                animationDelay: `${i * 0.15}s`
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : parcelas.length === 0 && filtersApplied ? (
                   // Empty State cuando no hay resultados con filtros aplicados
                   <div className="col-span-2 py-12 sm:py-16 md:py-20">
                     <div className="flex flex-col items-center justify-center text-center max-w-xl mx-auto px-4">
-                      {/* Ícono */}
+                      {/* Ícono - diferenciado si es búsqueda IA */}
                       <div className="mb-4 sm:mb-6">
-                        <MapPin 
-                          size={48}
-                          className="sm:hidden"
-                          style={{ color: '#CDD8DE' }}
-                          strokeWidth={1.5}
-                        />
-                        <MapPin 
-                          size={64}
-                          className="hidden sm:block" 
-                          style={{ color: '#CDD8DE' }}
-                          strokeWidth={1.5}
-                        />
+                        {aiInterpretedQuery ? (
+                          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto" style={{ backgroundColor: '#F0F9F5' }}>
+                            <Sparkles size={32} style={{ color: '#006B4E' }} strokeWidth={1.5} />
+                          </div>
+                        ) : (
+                          <>
+                            <MapPin size={48} className="sm:hidden" style={{ color: '#CDD8DE' }} strokeWidth={1.5} />
+                            <MapPin size={64} className="hidden sm:block" style={{ color: '#CDD8DE' }} strokeWidth={1.5} />
+                          </>
+                        )}
                       </div>
-                      
+
                       {/* Título */}
-                      <h3 
+                      <h3
                         className="mb-2 sm:mb-3"
-                        style={{ 
+                        style={{
                           color: '#0A0A0A',
                           fontFamily: 'var(--font-heading)',
                           fontSize: 'var(--font-size-h3)',
@@ -1782,12 +1913,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           lineHeight: 'var(--line-height-heading)'
                         }}
                       >
-                        {t.explore.noParcelasFound}
+                        {aiInterpretedQuery ? 'La IA no encontró coincidencias' : t.explore.noParcelasFound}
                       </h3>
 
                       {/* Texto descriptivo */}
                       <p
-                        className="mb-6 sm:mb-8"
+                        className="mb-4 sm:mb-5"
                         style={{
                           color: '#737373',
                           fontFamily: 'var(--font-body)',
@@ -1796,11 +1927,63 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           maxWidth: '480px'
                         }}
                       >
-                        {t.explore.noParcelasFoundDesc}
+                        {aiInterpretedQuery
+                          ? `No encontramos parcelas que coincidan con "${aiInterpretedQuery}". Prueba con otras palabras o usa los filtros para afinar tu búsqueda.`
+                          : t.explore.noParcelasFoundDesc}
                       </p>
-                      
+
+                      {/* Sugerencias IA */}
+                      {aiInterpretedQuery && (
+                        <div className="flex flex-wrap gap-2 justify-center mb-6">
+                          {['parcela con lago', 'con acceso pavimentado', 'ideal para inversión', 'cerca de Santiago'].map(sug => (
+                            <button
+                              key={sug}
+                              onClick={() => {
+                                setSmartSearchValue(sug);
+                                setAiInterpretedQuery(null);
+                                setTimeout(() => {
+                                  if (window.innerWidth < 1024) {
+                                    setIsSmartSearchBottomSheetOpen(true);
+                                  } else {
+                                    setIsSmartSearchExpanded(true);
+                                  }
+                                }, 100);
+                              }}
+                              className="px-3 py-1.5 rounded-full text-xs transition-colors"
+                              style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#F0F9F5', border: '1px solid #C5E8D8', color: '#006B4E', fontWeight: 500 }}
+                              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D5EEE2'; }}
+                              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F9F5'; }}
+                            >
+                              {sug}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Botones de acción */}
                       <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        {aiInterpretedQuery && (
+                          <button
+                            onClick={() => {
+                              setAiInterpretedQuery(null);
+                              setSmartSearchValue('');
+                              setSelectedBadges([]);
+                              setActiveFilters(prev => {
+                                const updated = { ...prev };
+                                delete updated.smartSearchText;
+                                updated.smartBadges = [];
+                                return updated;
+                              });
+                            }}
+                            className="h-10 sm:h-11 px-5 sm:px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors w-full sm:w-auto flex items-center justify-center gap-2"
+                            style={{ fontFamily: 'var(--font-body)', backgroundColor: '#006B4E', color: '#FFFFFF' }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
+                          >
+                            <Sparkles className="w-4 h-4" />
+                            Probar otra búsqueda
+                          </button>
+                        )}
                         <button
                           onClick={() => {
                             setActiveFilters({ tipos: [], destacadas: false, nuevas: false });
@@ -1813,18 +1996,26 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                               precioMin: '',
                               precioMax: ''
                             });
+                            setAiInterpretedQuery(null);
+                            setSmartSearchValue('');
+                            setSelectedBadges([]);
                             setFiltersApplied(false);
                           }}
                           className="h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm w-full sm:w-auto"
-                          style={{ 
+                          style={{
                             fontFamily: 'var(--font-body)',
-                            backgroundColor: '#006B4E',
-                            color: '#FFFFFF'
+                            backgroundColor: aiInterpretedQuery ? 'transparent' : '#006B4E',
+                            color: aiInterpretedQuery ? '#0A0A0A' : '#FFFFFF',
+                            border: aiInterpretedQuery ? '2px solid #DEDEDE' : 'none'
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = aiInterpretedQuery ? '#F5F5F5' : '#01533E';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = aiInterpretedQuery ? 'transparent' : '#006B4E';
+                          }}
                         >
-                          {t.filters.clearFilters}
+                          {aiInterpretedQuery ? 'Ver todas las parcelas' : t.filters.clearFilters}
                         </button>
 
                         <button
