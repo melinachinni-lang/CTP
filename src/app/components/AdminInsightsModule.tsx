@@ -330,8 +330,11 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
             </ul>
           </div>
 
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+          <button
+            onClick={() => { setDrawerInsight(null); onNavigate?.('publicaciones'); }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}
+          >
             <Eye className="w-4 h-4" /> Ir a la publicación
           </button>
         </div>
