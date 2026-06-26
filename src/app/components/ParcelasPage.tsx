@@ -671,20 +671,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const handleSmartSearch = () => {
     const query = smartSearchValue.trim();
 
-    // Cerrar el panel y mostrar estado de procesamiento IA
-    setIsSmartSearchExpanded(false);
-    setIsSmartSearchBottomSheetOpen(false);
+    // Mostrar loading DENTRO del panel (no lo cerramos aún)
     setIsAiProcessing(true);
 
-    // Scroll suave al área de resultados
-    const resultsSection = document.getElementById('results-section');
-    if (resultsSection) {
-      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    // Simular procesamiento IA (1.8s)
+    // Simular procesamiento IA (1.8s) → después cerrar panel y aplicar filtros
     setTimeout(() => {
       setIsAiProcessing(false);
+      setIsSmartSearchExpanded(false);
+      setIsSmartSearchBottomSheetOpen(false);
       setFiltersApplied(true);
       if (query) setAiInterpretedQuery(query);
 
@@ -702,6 +696,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
         }
         return updatedFilters;
       });
+
+      // Scroll a resultados DESPUÉS de que el panel cierre
+      setTimeout(() => {
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 350);
     }, 1800);
   };
 
@@ -1098,6 +1100,32 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   marginTop: isSmartSearchExpanded ? '32px' : '0'
                 }}
               >
+                {/* Estado de procesamiento IA — reemplaza el contenido del panel */}
+                {isAiProcessing ? (
+                  <div className="py-8 flex flex-col items-center justify-center text-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#E8F5EE' }}>
+                      <Sparkles className="w-7 h-7 animate-pulse" style={{ color: '#006B4E' }} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium mb-1" style={{ color: '#006B4E', fontFamily: 'Inter, sans-serif' }}>
+                        La IA está analizando tu búsqueda…
+                      </p>
+                      <p className="text-xs" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6', maxWidth: '320px' }}>
+                        Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se adaptan a lo que describes.
+                      </p>
+                    </div>
+                    <div className="flex gap-1.5">
+                      {[0, 1, 2].map(i => (
+                        <span
+                          key={i}
+                          className="w-2 h-2 rounded-full animate-pulse"
+                          style={{ backgroundColor: '#006B4E', animationDelay: `${i * 0.25}s` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <>
                 {/* Encabezado con texto y botón cerrar */}
                 <div className="flex items-start justify-between mb-4 sm:mb-5 gap-3">
                   <div className="flex items-start gap-2.5">
@@ -1218,6 +1246,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     <span>{t.filters.badgeServices}</span>
                   </button>
                 </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
