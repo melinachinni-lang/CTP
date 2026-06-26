@@ -366,7 +366,11 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
           </div>
 
           <button
-            onClick={() => { closeDrawer(); onNavigatePage?.('parcelas'); }}
+            onClick={() => {
+              const pub = drawerInsight?.publicacion;
+              closeDrawer();
+              onNavigate?.(`publicacion:${pub?.titulo}:${pub?.ubicacion}:${pub?.tipo ?? 'parcela'}`);
+            }}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}
           >

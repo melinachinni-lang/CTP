@@ -97,6 +97,7 @@ interface BloqueHome {
 
 export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps) {
   const [activeNav, setActiveNav] = useState<NavItem>('inicio');
+  const [selectedPublicacion, setSelectedPublicacion] = useState<{ name: string; ubicacion: string; tipo: string } | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [dateRange, setDateRange] = useState('ultimos-30-dias');
   const [deviceFilter, setDeviceFilter] = useState<'todos' | 'mobile' | 'desktop'>('todos');
@@ -3823,9 +3824,155 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {activeNav === 'recursos' && <AdminRecursosModule />}
 
           {/* ── INSIGHTS IA ── */}
-          {activeNav === 'insights' && <AdminInsightsModule onNavigate={(nav) => setActiveNav(nav as NavItem)} onNavigatePage={onNavigate} />}
+          {activeNav === 'insights' && <AdminInsightsModule
+            onNavigate={(nav) => {
+              if (nav.startsWith('publicacion:')) {
+                const [, name, ubicacion, tipo] = nav.split(':');
+                setSelectedPublicacion({ name, ubicacion, tipo });
+                setActiveNav('publicaciones');
+              } else {
+                setActiveNav(nav as NavItem);
+              }
+            }}
+            onNavigatePage={onNavigate}
+          />}
         </div>
       </div>
+
+      {/* ── PUBLICATION DETAIL DRAWER (desde Insights IA) ── */}
+      {selectedPublicacion && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
+            onClick={() => setSelectedPublicacion(null)} />
+          <div className="relative flex flex-col w-full bg-white h-full overflow-y-auto"
+            style={{ maxWidth: '480px', boxShadow: '-4px 0 32px rgba(0,0,0,0.12)' }}>
+
+            {/* Header */}
+            <div className="flex items-start justify-between p-6 flex-shrink-0"
+              style={{ borderBottom: '1px solid #E5E5E5' }}>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs px-2 py-0.5 rounded-full font-medium capitalize"
+                    style={{ backgroundColor: '#F0F5EB', color: '#3D5E28' }}>
+                    {selectedPublicacion.tipo === 'parcela' ? 'Parcela' : 'Proyecto'}
+                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+                    style={{ backgroundColor: '#DCFCE7', color: '#166534' }}>Activa</span>
+                  <span className="text-xs" style={{ color: '#737373' }}>· {selectedPublicacion.ubicacion}</span>
+                </div>
+                <h3 className="text-lg font-semibold" style={{ color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>
+                  {selectedPublicacion.name}
+                </h3>
+              </div>
+              <button onClick={() => setSelectedPublicacion(null)}
+                className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 ml-3 hover:bg-gray-100 transition-colors">
+                <X className="w-4 h-4" style={{ color: '#737373' }} />
+              </button>
+            </div>
+
+            {/* Alert IA */}
+            <div className="px-6 py-3 flex items-center gap-2"
+              style={{ backgroundColor: '#FEF2F2', borderBottom: '1px solid #FECACA' }}>
+              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#DC2626' }} />
+              <p className="text-xs font-medium" style={{ color: '#B91C1C' }}>
+                Insight IA: 45 días sin consultas — requiere atención
+              </p>
+            </div>
+
+            <div className="flex-1 p-6 space-y-6">
+
+              {/* Métricas */}
+              <div>
+                <p className="text-xs font-semibold mb-3" style={{ color: '#737373' }}>Actividad últimos 30 días</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { label: 'Vistas',    value: 127, color: '#3B82F6' },
+                    { label: 'Favoritos', value: 3,   color: '#D97706' },
+                    { label: 'Consultas', value: 0,   color: '#DC2626' },
+                  ].map(s => (
+                    <div key={s.label} className="rounded-xl p-3 text-center"
+                      style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                      <p className="text-2xl font-bold mb-0.5" style={{ color: s.color, fontFamily: 'var(--font-heading)' }}>{s.value}</p>
+                      <p className="text-xs" style={{ color: '#737373' }}>{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fotos */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs font-semibold" style={{ color: '#737373' }}>Imágenes</p>
+                  <span className="text-xs px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: '#FEE2E2', color: '#B91C1C' }}>2 de 12 recomendadas</span>
+                </div>
+                <div className="grid grid-cols-4 gap-2 mb-2">
+                  {[1, 2].map(i => (
+                    <div key={i} className="aspect-square rounded-xl flex items-center justify-center"
+                      style={{ backgroundColor: '#E5E5E5' }}>
+                      <ImageIcon className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+                    </div>
+                  ))}
+                  {[3, 4].map(i => (
+                    <div key={i} className="aspect-square rounded-xl border-2 border-dashed flex items-center justify-center"
+                      style={{ borderColor: '#C5D9A8' }}>
+                      <Plus className="w-4 h-4" style={{ color: '#C5D9A8' }} />
+                    </div>
+                  ))}
+                </div>
+                <button className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: '#F0F5EB', color: '#006B4E' }}>
+                  <Upload className="w-3.5 h-3.5" /> Añadir imágenes
+                </button>
+              </div>
+
+              {/* Precio */}
+              <div className="rounded-xl p-4" style={{ border: '1px solid #E5E5E5' }}>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-xs font-semibold" style={{ color: '#737373' }}>Precio</p>
+                  <span className="text-xs px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: '#FEE2E2', color: '#B91C1C' }}>18% sobre mercado</span>
+                </div>
+                <p className="text-xl font-bold mb-3" style={{ color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>
+                  $532.000<span className="text-sm font-normal" style={{ color: '#737373' }}>/m²</span>
+                </p>
+                <button className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: '#F0F5EB', color: '#006B4E' }}>
+                  <TrendingUp className="w-3.5 h-3.5" /> Revisar precio
+                </button>
+              </div>
+
+              {/* Descripción */}
+              <div className="rounded-xl p-4" style={{ border: '1px solid #E5E5E5' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-semibold" style={{ color: '#737373' }}>Descripción</p>
+                  <span className="text-xs" style={{ color: '#737373' }}>78 palabras</span>
+                </div>
+                <p className="text-xs leading-relaxed mb-3" style={{ color: '#0A0A0A' }}>
+                  Parcela de 12.000 m² ubicada en Los Ríos con vista a la cordillera. Acceso por camino de ripio a 3 km de la ruta principal...
+                </p>
+                <button className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: '#F0F5EB', color: '#006B4E' }}>
+                  <FileText className="w-3.5 h-3.5" /> Editar descripción
+                </button>
+              </div>
+
+              {/* Acciones principales */}
+              <div className="pt-2 space-y-2">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+                  <Edit2 className="w-4 h-4" /> Editar publicación completa
+                </button>
+                <button onClick={() => { setSelectedPublicacion(null); onNavigate('parcelas'); }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium"
+                  style={{ backgroundColor: '#F5F5F5', color: '#737373' }}>
+                  <Eye className="w-4 h-4" /> Ver como la ve el comprador
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
