@@ -387,8 +387,8 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     [
       { id: 'inicio' as NavItem, icon: Home, label: 'Inicio' },
       { id: 'analitica' as NavItem, icon: BarChart3, label: 'Analítica' },
-      { id: 'insights' as NavItem, icon: Sparkles, label: 'Insights IA' },
       { id: 'embudo' as NavItem, icon: FilterX, label: 'Embudo' },
+      { id: 'insights' as NavItem, icon: Sparkles, label: 'Insights IA' },
     ],
     [
       { id: 'brokers' as NavItem, icon: Users, label: 'Brokers' },
