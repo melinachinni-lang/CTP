@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User, Megaphone, Sparkles } from 'lucide-react';
+import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User, Megaphone, Sparkles, CheckCircle2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -18,7 +18,7 @@ import { LeadDetailDrawer } from '@/app/components/LeadDetailDrawer';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
 interface AdminGeneralDashboardProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: string, data?: any) => void;
 }
 
 type NavItem = 'inicio' | 'analitica' | 'insights' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
@@ -98,6 +98,7 @@ interface BloqueHome {
 export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps) {
   const [activeNav, setActiveNav] = useState<NavItem>('inicio');
   const [selectedPublicacion, setSelectedPublicacion] = useState<{ name: string; ubicacion: string; tipo: string } | null>(null);
+  const [editingDrawerDesc, setEditingDrawerDesc] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [dateRange, setDateRange] = useState('ultimos-30-dias');
   const [deviceFilter, setDeviceFilter] = useState<'todos' | 'mobile' | 'desktop'>('todos');
@@ -3843,7 +3844,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       {selectedPublicacion && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
-            onClick={() => setSelectedPublicacion(null)} />
+            onClick={() => { setSelectedPublicacion(null); setEditingDrawerDesc(false); }} />
           <div className="relative flex flex-col w-full bg-white h-full overflow-y-auto"
             style={{ maxWidth: '480px', boxShadow: '-4px 0 32px rgba(0,0,0,0.12)', zIndex: 1 }}>
 
@@ -3864,7 +3865,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {selectedPublicacion.name}
                 </h3>
               </div>
-              <button onClick={() => setSelectedPublicacion(null)}
+              <button onClick={() => { setSelectedPublicacion(null); setEditingDrawerDesc(false); }}
                 className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 ml-3 hover:bg-gray-100 transition-colors">
                 <X className="w-4 h-4" style={{ color: '#737373' }} />
               </button>
@@ -3943,30 +3944,64 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
               </div>
 
               {/* Descripción */}
-              <div className="rounded-xl p-4" style={{ border: '1px solid #E5E5E5' }}>
+              <div className="rounded-xl p-4" style={{ border: `1px solid ${editingDrawerDesc ? '#C5D9A8' : '#E5E5E5'}` }}>
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-xs font-semibold" style={{ color: '#737373' }}>Descripción</p>
-                  <span className="text-xs" style={{ color: '#737373' }}>78 palabras</span>
+                  <span className="text-xs" style={{ color: editingDrawerDesc ? '#006B4E' : '#737373' }}>
+                    {editingDrawerDesc ? 'Editando…' : '78 palabras'}
+                  </span>
                 </div>
-                <p className="text-xs leading-relaxed mb-3" style={{ color: '#0A0A0A' }}>
-                  Parcela de 12.000 m² ubicada en Los Ríos con vista a la cordillera. Acceso por camino de ripio a 3 km de la ruta principal...
-                </p>
-                <button className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
-                  style={{ backgroundColor: '#F0F5EB', color: '#006B4E' }}>
-                  <FileText className="w-3.5 h-3.5" /> Editar descripción
-                </button>
+                {editingDrawerDesc ? (
+                  <>
+                    <textarea
+                      rows={5}
+                      className="w-full px-0 py-0 outline-none text-xs resize-none leading-relaxed mb-3"
+                      style={{ color: '#0A0A0A', fontFamily: 'var(--font-body)', border: 'none', background: 'transparent' }}
+                      defaultValue="Parcela de 12.000 m² ubicada en Los Ríos con vista a la cordillera. Acceso por camino de ripio a 3 km de la ruta principal. Terreno plano, ideal para construir casa de campo o como inversión a largo plazo."
+                      autoFocus
+                    />
+                    <div className="flex gap-2">
+                      <button onClick={() => setEditingDrawerDesc(false)}
+                        className="flex-1 flex items-center justify-center px-3 py-2 rounded-full text-xs"
+                        style={{ backgroundColor: '#F5F5F5', color: '#737373' }}>
+                        Cancelar
+                      </button>
+                      <button onClick={() => setEditingDrawerDesc(false)}
+                        className="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium"
+                        style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+                        <CheckCircle2 className="w-3 h-3" /> Guardar
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs leading-relaxed mb-3" style={{ color: '#0A0A0A' }}>
+                      Parcela de 12.000 m² ubicada en Los Ríos con vista a la cordillera. Acceso por camino de ripio a 3 km de la ruta principal...
+                    </p>
+                    <button onClick={() => setEditingDrawerDesc(true)}
+                      className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
+                      style={{ backgroundColor: '#F0F5EB', color: '#006B4E' }}>
+                      <FileText className="w-3.5 h-3.5" /> Editar descripción
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Acciones principales */}
               <div className="pt-2 space-y-2">
                 <button
-                  onClick={() => setSelectedPublicacion(null)}
+                  onClick={() => {
+                    setSelectedPublicacion(null);
+                    setEditingDrawerDesc(false);
+                    setEditingParcelaId(null);
+                    setShowListingFlow(true);
+                  }}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold transition-all"
                   style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
                   <Edit2 className="w-4 h-4" /> Editar publicación completa
                 </button>
                 <button
-                  onClick={() => { setSelectedPublicacion(null); onNavigate('parcelas'); }}
+                  onClick={() => { setSelectedPublicacion(null); setEditingDrawerDesc(false); onNavigate('parcela-detalle', 1); }}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all"
                   style={{ backgroundColor: '#F5F5F5', color: '#737373' }}>
                   <Eye className="w-4 h-4" /> Ver como la ve el comprador
