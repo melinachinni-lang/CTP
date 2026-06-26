@@ -3823,7 +3823,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {activeNav === 'recursos' && <AdminRecursosModule />}
 
           {/* ── INSIGHTS IA ── */}
-          {activeNav === 'insights' && <AdminInsightsModule onNavigate={(nav) => setActiveNav(nav as NavItem)} />}
+          {activeNav === 'insights' && <AdminInsightsModule onNavigate={(nav) => setActiveNav(nav as NavItem)} onNavigatePage={onNavigate} />}
         </div>
       </div>
     </>

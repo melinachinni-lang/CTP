@@ -31,6 +31,7 @@ interface Insight {
 
 interface AdminInsightsModuleProps {
   onNavigate?: (nav: string) => void;
+  onNavigatePage?: (page: string) => void;
 }
 
 const INSIGHTS: Insight[] = [
@@ -153,7 +154,7 @@ const SCORING_OPTIONS: { key: ScoringLevel; label: string; icon: React.ElementTy
   },
 ];
 
-export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
+export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsightsModuleProps) {
   const [filterTab, setFilterTab]         = useState<FilterTab>('todos');
   const [expandedRazon, setExpandedRazon] = useState<string | null>(null);
   const [scoringLevel, setScoringLevel]   = useState<ScoringLevel>('medio');
@@ -365,7 +366,7 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
           </div>
 
           <button
-            onClick={() => { setDrawerInsight(null); onNavigate?.('publicaciones'); }}
+            onClick={() => { closeDrawer(); onNavigatePage?.('parcelas'); }}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}
           >
