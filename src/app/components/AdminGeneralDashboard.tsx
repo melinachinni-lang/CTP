@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User, Megaphone } from 'lucide-react';
+import { Home, Users, ClipboardList, MessageSquare, Shield, Settings, Calendar, TrendingUp, TrendingDown, ArrowRight, AlertCircle, X, Search, Filter, ChevronDown, Check, UserPlus, ToggleLeft, ToggleRight, Edit2, PhoneCall, Mail, FileText, ArrowUpRight, ArrowDownRight, AlertTriangle, Layout, Eye, Save, Image as ImageIcon, Video, MoveUp, MoveDown, BarChart3, Smartphone, FilterX, Plus, Activity, DollarSign, BookOpen, Upload, Trash2, Tag, Globe, EyeOff, ChevronRight, LogOut, User, Megaphone, Sparkles } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -13,6 +13,7 @@ import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAd
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
 import { AdminBannersModule } from '@/app/components/AdminBannersModule';
+import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { LeadDetailDrawer } from '@/app/components/LeadDetailDrawer';
 
 // Dashboard Admin General - Versión completa con MVP de todas las secciones
@@ -20,7 +21,7 @@ interface AdminGeneralDashboardProps {
   onNavigate: (page: string) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'insights' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -386,6 +387,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
     [
       { id: 'inicio' as NavItem, icon: Home, label: 'Inicio' },
       { id: 'analitica' as NavItem, icon: BarChart3, label: 'Analítica' },
+      { id: 'insights' as NavItem, icon: Sparkles, label: 'Insights IA' },
       { id: 'embudo' as NavItem, icon: FilterX, label: 'Embudo' },
     ],
     [
@@ -731,6 +733,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                 >
                   {activeNav === 'inicio' && 'Visión general del rendimiento de la plataforma'}
                   {activeNav === 'analitica' && 'Análisis del comportamiento del canal digital y uso del sitio'}
+                  {activeNav === 'insights' && 'Recomendaciones automáticas generadas por IA para mejorar el rendimiento comercial'}
                   {activeNav === 'embudo' && 'Proceso de conversión y tendencias de búsqueda'}
                   {activeNav === 'brokers' && 'Gestión de brokers y su actividad'}
                   {activeNav === 'asignaciones' && 'Asignación de leads a brokers'}
@@ -835,6 +838,34 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
           {/* SECCIÓN: INICIO */}
           {activeNav === 'inicio' && (
             <>
+              {/* ── Insights IA widget (Escenario 5 — contextual) ── */}
+              <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl px-5 py-4 mb-6"
+                style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8' }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#E8F5EE' }}>
+                    <Sparkles className="w-4 h-4" style={{ color: '#006B4E' }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>
+                      3 insights urgentes requieren tu atención
+                    </p>
+                    <p className="text-xs mt-0.5" style={{ color: '#3D5E28' }}>
+                      Precio fuera de mercado, imágenes insuficientes y una publicación sin actividad en 45 días.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setActiveNav('insights')}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium flex-shrink-0 transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Ver insights
+                </button>
+              </div>
+
               {/* KPIs Section */}
               <div className="flex items-center justify-between mb-6">
                 <div />
@@ -3790,6 +3821,9 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
 
           {/* ── RECURSOS & BLOG ── */}
           {activeNav === 'recursos' && <AdminRecursosModule />}
+
+          {/* ── INSIGHTS IA ── */}
+          {activeNav === 'insights' && <AdminInsightsModule />}
         </div>
       </div>
     </>
