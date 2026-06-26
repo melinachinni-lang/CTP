@@ -162,6 +162,24 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
   const [showEmpty, setShowEmpty]         = useState(false);
   const [drawerInsight, setDrawerInsight] = useState<Insight | null>(null);
   const [keywords, setKeywords]           = useState<string[]>([]);
+  const [isSaving, setIsSaving]           = useState(false);
+  const [saveSuccess, setSaveSuccess]     = useState(false);
+
+  const closeDrawer = () => {
+    setDrawerInsight(null);
+    setKeywords([]);
+    setIsSaving(false);
+    setSaveSuccess(false);
+  };
+
+  const handleDrawerSave = () => {
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      setSaveSuccess(true);
+      setTimeout(() => closeDrawer(), 1400);
+    }, 1200);
+  };
 
   const allInsights      = showEmpty ? [] : INSIGHTS;
   const filteredInsights = allInsights.filter(i => filterTab === 'todos' || i.priority === filterTab);
@@ -236,10 +254,18 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
           </div>
           <p className="text-xs mb-6" style={{ color: '#006B4E' }}>Rango recomendado: $445.000 — $465.000/m²</p>
 
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
-            <CheckCircle2 className="w-4 h-4" /> Actualizar precio
-          </button>
+          {saveSuccess ? (
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+              style={{ backgroundColor: '#E8F5EE', color: '#006B4E' }}>
+              <CheckCircle2 className="w-4 h-4" /> Precio actualizado correctamente
+            </div>
+          ) : (
+            <button onClick={handleDrawerSave} disabled={isSaving}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold transition-all disabled:opacity-70"
+              style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+              {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Guardando…</> : <><CheckCircle2 className="w-4 h-4" /> Actualizar precio</>}
+            </button>
+          )}
         </div>
       );
     }
@@ -282,10 +308,18 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
             </p>
           </div>
 
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
-            <Upload className="w-4 h-4" /> Subir imágenes
-          </button>
+          {saveSuccess ? (
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+              style={{ backgroundColor: '#E8F5EE', color: '#006B4E' }}>
+              <CheckCircle2 className="w-4 h-4" /> Imágenes subidas correctamente
+            </div>
+          ) : (
+            <button onClick={handleDrawerSave} disabled={isSaving}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold transition-all disabled:opacity-70"
+              style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+              {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Subiendo…</> : <><Upload className="w-4 h-4" /> Subir imágenes</>}
+            </button>
+          )}
         </div>
       );
     }
@@ -386,10 +420,18 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
             })}
           </div>
 
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
-            <CheckCircle2 className="w-4 h-4" /> Guardar descripción
-          </button>
+          {saveSuccess ? (
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+              style={{ backgroundColor: '#E8F5EE', color: '#006B4E' }}>
+              <CheckCircle2 className="w-4 h-4" /> Descripción guardada correctamente
+            </div>
+          ) : (
+            <button onClick={handleDrawerSave} disabled={isSaving}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold transition-all disabled:opacity-70"
+              style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+              {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Guardando…</> : <><CheckCircle2 className="w-4 h-4" /> Guardar descripción</>}
+            </button>
+          )}
         </div>
       );
     }
@@ -451,10 +493,18 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
             </div>
           </div>
 
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
-            <CheckCircle2 className="w-4 h-4" /> Guardar cambios
-          </button>
+          {saveSuccess ? (
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold"
+              style={{ backgroundColor: '#E8F5EE', color: '#006B4E' }}>
+              <CheckCircle2 className="w-4 h-4" /> Información actualizada correctamente
+            </div>
+          ) : (
+            <button onClick={handleDrawerSave} disabled={isSaving}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold transition-all disabled:opacity-70"
+              style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}>
+              {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Guardando…</> : <><CheckCircle2 className="w-4 h-4" /> Guardar cambios</>}
+            </button>
+          )}
         </div>
       );
     }
@@ -767,7 +817,7 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
           <div
             className="absolute inset-0"
             style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
-            onClick={() => { setDrawerInsight(null); setKeywords([]); }}
+            onClick={closeDrawer}
           />
           <div
             className="relative flex flex-col w-full bg-white h-full overflow-y-auto"
@@ -798,7 +848,7 @@ export function AdminInsightsModule({ onNavigate }: AdminInsightsModuleProps) {
                 </h3>
               </div>
               <button
-                onClick={() => { setDrawerInsight(null); setKeywords([]); }}
+                onClick={closeDrawer}
                 className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 ml-3 mt-0.5 transition-colors hover:bg-gray-100"
               >
                 <X className="w-4 h-4" style={{ color: '#737373' }} />
