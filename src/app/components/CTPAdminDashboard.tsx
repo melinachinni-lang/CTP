@@ -220,12 +220,16 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
                         </button>
                       );
                     })}
+                    {group.id === 'administracion' && (
+                      <div className="px-2 pb-1">
+                        <SugerenciasButton />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             );
           })}
-          <SugerenciasButton />
         </nav>
 
         {/* User area */}
