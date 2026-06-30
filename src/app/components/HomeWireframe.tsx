@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { showAiOverlay, hideAiOverlay } from '../utils/aiOverlay';
 import { motion, useMotionValue, useTransform, animate } from 'motion/react';
 import Slider from 'react-slick';
 import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart, Scale } from 'lucide-react';
@@ -424,30 +425,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       smartFilters.ubicacion = 'aysen';
     }
 
-    // Mostrar overlay de procesamiento IA directamente en el DOM
-    const existing = document.getElementById('__ctp-ai-overlay__');
-    if (existing) existing.remove();
-    const overlayEl = document.createElement('div');
-    overlayEl.id = '__ctp-ai-overlay__';
-    overlayEl.style.cssText = [
-      'position:fixed', 'inset:0', 'z-index:99999',
-      'display:flex', 'align-items:center', 'justify-content:center',
-      'background:rgba(255,255,255,0.96)', 'backdrop-filter:blur(10px)',
-    ].join(';');
-    overlayEl.innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:2rem;max-width:360px">
-        <div style="width:80px;height:80px;border-radius:24px;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:2.2rem">✦</div>
-        <div>
-          <p style="font-size:1.1rem;font-weight:600;color:#006B4E;font-family:Montserrat,sans-serif;margin:0 0 8px">La IA está analizando tu búsqueda…</p>
-          <p style="font-size:0.875rem;color:#737373;font-family:Inter,sans-serif;line-height:1.6;margin:0">Estamos encontrando las parcelas que mejor se adaptan a lo que describes.</p>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(overlayEl);
-
-    // Navegar a parcelas después de 1.8s
+    // Mostrar modal de procesamiento IA y navegar a parcelas después de 1.8s
+    showAiOverlay();
     setTimeout(() => {
-      document.getElementById('__ctp-ai-overlay__')?.remove();
+      hideAiOverlay();
       onNavigate('parcelas', undefined, smartFilters);
     }, 1800);
   };
