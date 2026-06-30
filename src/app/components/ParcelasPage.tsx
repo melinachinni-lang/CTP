@@ -1048,11 +1048,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                 <div className="space-y-2.5 w-full md:w-auto">
                   <div className="h-[20px] hidden md:block"></div>
-                  <button 
-                    onClick={handleSearch}
-                    className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto"
+                  <button
+                    onClick={isSmartSearchExpanded ? handleSmartSearch : handleSearch}
+                    className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto gap-1.5"
                   >
-                    {t.filters.search}
+                    {isSmartSearchExpanded && <Sparkles className="w-3.5 h-3.5" />}
+                    {isSmartSearchExpanded ? 'Buscar con IA' : t.filters.search}
                   </button>
                 </div>
 
@@ -3644,8 +3645,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       {/* Overlay de procesamiento IA — cubre toda la pantalla */}
       {isAiProcessing && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(250, 250, 250, 0.88)', backdropFilter: 'blur(6px)' }}
+          className="fixed inset-0 flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(8px)', zIndex: 99999 }}
         >
           <div className="flex flex-col items-center gap-5 text-center px-8">
             <div
