@@ -671,18 +671,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const handleSmartSearch = () => {
     const query = smartSearchValue.trim();
 
-    // Cerrar panel/bottom sheet de inmediato y arrancar loading
-    setIsAiProcessing(true);
+    // Cerrar panel/bottom sheet y activar loading overlay
     setIsSmartSearchExpanded(false);
     setIsSmartSearchBottomSheetOpen(false);
-
-    // Scroll a resultados para que el usuario vea el estado de carga
-    setTimeout(() => {
-      const resultsSection = document.getElementById('results-section');
-      if (resultsSection) {
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+    setIsAiProcessing(true);
 
     // Simular procesamiento IA (1.8s) → aplicar filtros y mostrar resultados
     setTimeout(() => {
@@ -704,6 +696,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
         }
         return updatedFilters;
       });
+
+      // Scroll a resultados después de que cargue
+      setTimeout(() => {
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 200);
     }, 1800);
   };
 
@@ -3636,6 +3636,50 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Overlay de procesamiento IA — cubre toda la pantalla */}
+      {isAiProcessing && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(250, 250, 250, 0.88)', backdropFilter: 'blur(6px)' }}
+        >
+          <div className="flex flex-col items-center gap-5 text-center px-8">
+            <div
+              className="w-20 h-20 rounded-3xl flex items-center justify-center"
+              style={{ backgroundColor: '#E8F5EE' }}
+            >
+              <Sparkles className="w-10 h-10 animate-pulse" style={{ color: '#006B4E' }} />
+            </div>
+            <div>
+              <p
+                className="text-lg font-semibold mb-2"
+                style={{ color: '#006B4E', fontFamily: 'Montserrat, sans-serif' }}
+              >
+                La IA está analizando tu búsqueda…
+              </p>
+              <p
+                className="text-sm"
+                style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6', maxWidth: '320px' }}
+              >
+                Estamos encontrando las parcelas que mejor se adaptan a lo que describes.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              {[0, 1, 2, 3].map(i => (
+                <div
+                  key={i}
+                  className="h-2 rounded-full animate-pulse"
+                  style={{
+                    width: i === 1 || i === 2 ? '32px' : '16px',
+                    backgroundColor: '#006B4E',
+                    animationDelay: `${i * 0.15}s`
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>
