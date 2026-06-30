@@ -382,7 +382,6 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
   // Función para manejar búsqueda inteligente
   const handleSmartSearch = () => {
-    // Crear objeto de filtros basado en badges seleccionados o texto de búsqueda
     const smartFilters = {
       ubicacion: '',
       superficie: '',
@@ -391,57 +390,66 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       tipo: 'parcelas'
     };
 
-    // Analizar texto de búsqueda inteligente
     const searchText = smartSearchValue.toLowerCase();
-    
-    // Mapeo de palabras clave a filtros
+
     if (searchText.includes('lago') || searchText.includes('río') || selectedBadges.includes('lago-rio')) {
-      smartFilters.ubicacion = 'aysen'; // Región con lagos
+      smartFilters.ubicacion = 'aysen';
     }
-    
     if (searchText.includes('naturaleza') || searchText.includes('bosque') || selectedBadges.includes('naturaleza')) {
       smartFilters.ubicacion = 'aysen';
-      smartFilters.superficie = '10000-50000'; // Parcelas medianas en naturaleza
+      smartFilters.superficie = '10000-50000';
     }
-    
     if (searchText.includes('inversión') || searchText.includes('invertir') || selectedBadges.includes('inversion')) {
-      smartFilters.precio = '50000000-100000000'; // Rango medio-alto para inversión
+      smartFilters.precio = '50000000-100000000';
     }
-    
     if (searchText.includes('grande') || searchText.includes('amplia')) {
-      smartFilters.superficie = '100000-500000'; // Parcelas grandes
+      smartFilters.superficie = '100000-500000';
     }
-    
     if (searchText.includes('pequeña') || searchText.includes('compacta')) {
-      smartFilters.superficie = '0-5000'; // Parcelas pequeñas
+      smartFilters.superficie = '0-5000';
     }
-    
     if (searchText.includes('barata') || searchText.includes('económica')) {
-      smartFilters.precio = '30000000-50000000'; // Precio bajo-medio
+      smartFilters.precio = '30000000-50000000';
     }
-    
     if (searchText.includes('acceso') || searchText.includes('carretera') || selectedBadges.includes('acceso')) {
-      smartFilters.ubicacion = 'aysen'; // Región con buenas rutas
+      smartFilters.ubicacion = 'aysen';
     }
-    
     if (searchText.includes('servicios') || searchText.includes('luz') || searchText.includes('agua') || selectedBadges.includes('servicios')) {
-      smartFilters.ubicacion = 'aysen'; // Región con servicios
+      smartFilters.ubicacion = 'aysen';
     }
-
-    // Si hay texto pero no se detectaron palabras clave específicas, buscar en Aysén por defecto
     if (searchText && !smartFilters.ubicacion && !smartFilters.precio && !smartFilters.superficie) {
       smartFilters.ubicacion = 'aysen';
     }
-
-    // Si solo hay badges sin texto
-    if (!searchText && selectedBadges.length > 0) {
-      if (!smartFilters.ubicacion) {
-        smartFilters.ubicacion = 'aysen';
-      }
+    if (!searchText && selectedBadges.length > 0 && !smartFilters.ubicacion) {
+      smartFilters.ubicacion = 'aysen';
     }
 
-    // Navegar a página de parcelas con filtros inteligentes
-    onNavigate('parcelas', undefined, smartFilters);
+    // Mostrar overlay de procesamiento IA directamente en el DOM
+    const existing = document.getElementById('__ctp-ai-overlay__');
+    if (existing) existing.remove();
+    const overlayEl = document.createElement('div');
+    overlayEl.id = '__ctp-ai-overlay__';
+    overlayEl.style.cssText = [
+      'position:fixed', 'inset:0', 'z-index:99999',
+      'display:flex', 'align-items:center', 'justify-content:center',
+      'background:rgba(255,255,255,0.96)', 'backdrop-filter:blur(10px)',
+    ].join(';');
+    overlayEl.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:2rem;max-width:360px">
+        <div style="width:80px;height:80px;border-radius:24px;background:#E8F5EE;display:flex;align-items:center;justify-content:center;font-size:2.2rem">✦</div>
+        <div>
+          <p style="font-size:1.1rem;font-weight:600;color:#006B4E;font-family:Montserrat,sans-serif;margin:0 0 8px">La IA está analizando tu búsqueda…</p>
+          <p style="font-size:0.875rem;color:#737373;font-family:Inter,sans-serif;line-height:1.6;margin:0">Estamos encontrando las parcelas que mejor se adaptan a lo que describes.</p>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlayEl);
+
+    // Navegar a parcelas después de 1.8s
+    setTimeout(() => {
+      document.getElementById('__ctp-ai-overlay__')?.remove();
+      onNavigate('parcelas', undefined, smartFilters);
+    }, 1800);
   };
 
   // Configuración del carrusel
