@@ -3332,145 +3332,164 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
             {/* Contenido del bottom sheet */}
             <div className="p-4 space-y-6 pb-24">
-              {/* Descripción */}
-              <p
-                className="text-sm"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400,
-                  lineHeight: '1.6',
-                  color: '#737373'
-                }}
-              >
-                {t.filters.smartSearchDesc}
-              </p>
-
-              {/* Campo de texto con botón integrado */}
-              <div className="w-full relative">
-                <input
-                  type="text"
-                  value={smartSearchValue}
-                  onChange={(e) => setSmartSearchValue(e.target.value)}
-                  placeholder={t.filters.smartSearchPlaceholder}
-                  className="w-full h-14 pl-4 pr-32 text-sm text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[16px] focus:outline-none transition-all duration-200"
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: 400,
-                    lineHeight: '1.5'
-                  }}
-                />
-                <button
-                  onClick={() => {
-                    handleSmartSearch();
-                    setIsSmartSearchBottomSheetOpen(false);
-                  }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-4 text-sm leading-[1.5] font-medium rounded-[12px] transition-colors flex items-center justify-center gap-2"
-                  style={{
-                    fontFamily: 'Inter, sans-serif'
-                  }}
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>{t.filters.search}</span>
-                </button>
-              </div>
-
-              {/* Chips de sugerencias */}
-              <div>
-                <p
-                  className="text-sm mb-3"
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: 500,
-                    color: '#0A0A0A'
-                  }}
-                >
-                  {t.filters.suggestions}
-                </p>
-                <div className="flex flex-wrap gap-2.5">
-                  <button 
-                    onClick={() => toggleBadge('naturaleza')}
-                    className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
-                      selectedBadges.includes('naturaleza')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
-                        : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
-                    }`}
-                    style={{ 
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400, 
-                      lineHeight: '1.5' 
-                    }}
-                  >
-                    <Trees className="w-4 h-4" />
-                    <span>{t.filters.badgeNature}</span>
-                  </button>
-                  <button
-                    onClick={() => toggleBadge('lago-rio')}
-                    className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
-                      selectedBadges.includes('lago-rio')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
-                        : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
-                    }`}
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      lineHeight: '1.5'
-                    }}
-                  >
-                    <Waves className="w-4 h-4" />
-                    <span>{t.filters.badgeWater}</span>
-                  </button>
-                  <button
-                    onClick={() => toggleBadge('inversion')}
-                    className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
-                      selectedBadges.includes('inversion')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
-                        : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
-                    }`}
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      lineHeight: '1.5'
-                    }}
-                  >
-                    <TrendingUp className="w-4 h-4" />
-                    <span>{t.filters.badgeInvestment}</span>
-                  </button>
-                  <button
-                    onClick={() => toggleBadge('acceso')}
-                    className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
-                      selectedBadges.includes('acceso')
-                        ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
-                        : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
-                    }`}
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      lineHeight: '1.5'
-                    }}
-                  >
-                    <Car className="w-4 h-4" />
-                    <span>{t.filters.badgeAccess}</span>
-                  </button>
+              {isAiProcessing ? (
+                /* Estado de carga IA dentro del bottom sheet */
+                <div className="py-16 flex flex-col items-center justify-center text-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#E8F5EE' }}>
+                    <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#006B4E' }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium mb-1" style={{ color: '#006B4E', fontFamily: 'Inter, sans-serif' }}>
+                      La IA está analizando tu búsqueda…
+                    </p>
+                    <p className="text-xs" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6', maxWidth: '280px' }}>
+                      Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se adaptan a lo que describes.
+                    </p>
+                  </div>
+                  <div className="flex gap-1.5">
+                    {[0, 1, 2].map(i => (
+                      <span key={i} className="w-2 h-2 rounded-full animate-pulse"
+                        style={{ backgroundColor: '#006B4E', animationDelay: `${i * 0.25}s` }} />
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Descripción */}
+                  <p
+                    className="text-sm"
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontWeight: 400,
+                      lineHeight: '1.6',
+                      color: '#737373'
+                    }}
+                  >
+                    {t.filters.smartSearchDesc}
+                  </p>
 
-              {/* Botón de aplicar */}
-              <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
-                <button
-                  onClick={() => {
-                    handleSmartSearch();
-                    setIsSmartSearchBottomSheetOpen(false);
-                  }}
-                  className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white rounded-[100px] transition-colors"
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 500
-                  }}
-                >
-                  {t.filters.applySearch}
-                </button>
-              </div>
+                  {/* Campo de texto con botón integrado */}
+                  <div className="w-full relative">
+                    <input
+                      type="text"
+                      value={smartSearchValue}
+                      onChange={(e) => setSmartSearchValue(e.target.value)}
+                      placeholder={t.filters.smartSearchPlaceholder}
+                      className="w-full h-14 pl-4 pr-32 text-sm text-gray-900 placeholder:text-gray-400 bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black rounded-[16px] focus:outline-none transition-all duration-200"
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 400,
+                        lineHeight: '1.5'
+                      }}
+                    />
+                    <button
+                      onClick={handleSmartSearch}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-4 text-sm leading-[1.5] font-medium rounded-[12px] transition-colors flex items-center justify-center gap-2"
+                      style={{
+                        fontFamily: 'Inter, sans-serif'
+                      }}
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>{t.filters.search}</span>
+                    </button>
+                  </div>
+
+                  {/* Chips de sugerencias */}
+                  <div>
+                    <p
+                      className="text-sm mb-3"
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 500,
+                        color: '#0A0A0A'
+                      }}
+                    >
+                      {t.filters.suggestions}
+                    </p>
+                    <div className="flex flex-wrap gap-2.5">
+                      <button
+                        onClick={() => toggleBadge('naturaleza')}
+                        className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
+                          selectedBadges.includes('naturaleza')
+                            ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
+                            : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+                        }`}
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          lineHeight: '1.5'
+                        }}
+                      >
+                        <Trees className="w-4 h-4" />
+                        <span>{t.filters.badgeNature}</span>
+                      </button>
+                      <button
+                        onClick={() => toggleBadge('lago-rio')}
+                        className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
+                          selectedBadges.includes('lago-rio')
+                            ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
+                            : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+                        }`}
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          lineHeight: '1.5'
+                        }}
+                      >
+                        <Waves className="w-4 h-4" />
+                        <span>{t.filters.badgeWater}</span>
+                      </button>
+                      <button
+                        onClick={() => toggleBadge('inversion')}
+                        className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
+                          selectedBadges.includes('inversion')
+                            ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
+                            : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+                        }`}
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          lineHeight: '1.5'
+                        }}
+                      >
+                        <TrendingUp className="w-4 h-4" />
+                        <span>{t.filters.badgeInvestment}</span>
+                      </button>
+                      <button
+                        onClick={() => toggleBadge('acceso')}
+                        className={`px-4 py-2 text-sm rounded-[100px] transition-all duration-200 flex items-center gap-2 ${
+                          selectedBadges.includes('acceso')
+                            ? 'bg-[#006B4E] text-white border border-[#006B4E] hover:bg-[#01533E]'
+                            : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+                        }`}
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          lineHeight: '1.5'
+                        }}
+                      >
+                        <Car className="w-4 h-4" />
+                        <span>{t.filters.badgeAccess}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Botón de aplicar */}
+                  <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
+                    <button
+                      onClick={handleSmartSearch}
+                      className="w-full h-12 bg-[#006B4E] hover:bg-[#01533E] text-white rounded-[100px] transition-colors"
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '15px',
+                        fontWeight: 500
+                      }}
+                    >
+                      {t.filters.applySearch}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
