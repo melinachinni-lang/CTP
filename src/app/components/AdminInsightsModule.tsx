@@ -539,7 +539,7 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
             onClick={() => { setShowEmpty(v => !v); setFilterTab('todos'); }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs transition-all"
             style={{ backgroundColor: '#F5F5F5', color: '#737373', border: '1px solid #E5E5E5' }}
           >
             {showEmpty ? 'Ver con datos' : 'Ver estado vacío'}
@@ -547,15 +547,15 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs transition-all disabled:opacity-50"
-            style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', border: '1px solid #C5D9A8' }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs transition-all disabled:opacity-50"
+            style={{ backgroundColor: '#F0F5EB', color: '#006B4E', border: '1px solid #C5D9A8' }}
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             {isLoading ? 'Actualizando…' : 'Actualizar'}
           </button>
           <button
             onClick={() => setShowScoringConfig(v => !v)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs transition-all"
             style={{
               backgroundColor: showScoringConfig ? '#006B4E' : '#F5F5F5',
               color: showScoringConfig ? '#FFFFFF' : '#0A0A0A',

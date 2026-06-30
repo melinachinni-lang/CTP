@@ -101,18 +101,20 @@ export function TeamContent() {
             Gestiona tu equipo de ventas y brokers
           </p>
         </div>
-        <button 
+        <button
           onClick={() => setShowAddModal(true)}
-          className="bg-white hover:bg-gray-50 text-black py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors flex items-center gap-2"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
           style={{
+            backgroundColor: '#006B4E',
+            color: '#FFFFFF',
             fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            fontWeight: 'var(--font-weight-medium)',
-            lineHeight: 'var(--line-height-body)',
-            color: '#0A0A0A'
+            fontSize: 'var(--font-size-body-sm)',
+            fontWeight: 600,
           }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
         >
-          <UserPlus className="w-5 h-5" />
+          <UserPlus className="w-4 h-4" />
           Agregar broker
         </button>
       </div>
