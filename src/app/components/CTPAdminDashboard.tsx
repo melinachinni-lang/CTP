@@ -494,8 +494,10 @@ function BrokersContent() {
         subtitle="Gestión de brokers y su actividad en la plataforma"
         action={
           <button
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" /> Agregar broker
           </button>
@@ -542,7 +544,7 @@ function BrokersContent() {
                 <td className="px-5 py-4" style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: 600 }}>{b.cerrados}</td>
                 <td className="px-5 py-4"><StatusBadge status={b.status} /></td>
                 <td className="px-5 py-4">
-                  <button className="p-1 rounded-lg transition-colors" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                  <button className="p-1 rounded-xl transition-colors" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
                     <MoreHorizontal className="w-4 h-4" style={{ color: '#737373' }} />
                   </button>
                 </td>
@@ -573,8 +575,10 @@ function AsignacionesContent() {
         subtitle="Asignación de leads a brokers"
         action={
           <button
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" /> Nueva asignación
           </button>
@@ -671,8 +675,10 @@ function UsuariosContent() {
         subtitle="Gestión de usuarios internos de CTP y sus roles"
         action={
           <button
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
             <Plus className="w-4 h-4" /> Invitar usuario
           </button>
@@ -682,7 +688,7 @@ function UsuariosContent() {
       {/* Roles summary */}
       <div className="grid grid-cols-5 gap-3 mb-8">
         {ROLES.map(r => (
-          <div key={r} className="rounded-xl p-4 text-center" style={{ border: '1px solid #E5E5E5' }}>
+          <div key={r} className="rounded-2xl p-4 text-center" style={{ border: '1px solid #E5E5E5' }}>
             <p style={{ fontSize: '20px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 4px' }}>
               {USUARIOS_MOCK.filter(u => u.rol === r).length}
             </p>
@@ -724,7 +730,7 @@ function UsuariosContent() {
                 </td>
                 <td className="px-5 py-4"><StatusBadge status={u.status} /></td>
                 <td className="px-5 py-4">
-                  <button className="p-1 rounded-lg transition-colors" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                  <button className="p-1 rounded-xl transition-colors" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
                     <MoreHorizontal className="w-4 h-4" style={{ color: '#737373' }} />
                   </button>
                 </td>
