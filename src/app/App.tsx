@@ -10,6 +10,7 @@ import { PersonDashboardScreen, CompareContent } from '@/app/components/PersonDa
 import { Navbar } from '@/app/components/Navbar';
 import { AdminDashboard } from '@/app/components/AdminDashboard';
 import { AdminGeneralDashboard } from '@/app/components/AdminGeneralDashboard';
+import { CTPAdminDashboard } from '@/app/components/CTPAdminDashboard';
 import { HomeWireframe } from '@/app/components/HomeWireframe';
 import { ParcelasPage } from '@/app/components/ParcelasPage';
 import { ParcelasPageEmpty } from '@/app/components/ParcelasPageEmpty';
@@ -111,6 +112,7 @@ type Screen =
   | 'broker-dashboard'
   | 'admin-dashboard'
   | 'admin-general-dashboard'
+  | 'ctp-admin-dashboard'
   | 'politica-privacidad'
   | 'terminos-condiciones'
   | 'asesoria'
@@ -414,6 +416,7 @@ function AppContent() {
                 <option value="broker-dashboard">11. Dashboard Broker</option>
                 <option value="admin-dashboard">12. Dashboard Admin</option>
                 <option value="admin-general-dashboard">13. Dashboard Admin General</option>
+                <option value="ctp-admin-dashboard">14. Dashboard CTP Admin</option>
               </select>
             </div>
           </div>
@@ -447,6 +450,7 @@ function AppContent() {
         {currentScreen === 'broker-dashboard' && <BrokerDashboardScreen onNavigate={handleNavigate} ref={brokerDashboardRef} />}
         {currentScreen === 'admin-dashboard' && <AdminDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'admin-general-dashboard' && <AdminGeneralDashboard onNavigate={handleNavigate} />}
+        {currentScreen === 'ctp-admin-dashboard' && <CTPAdminDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigateHome={() => setCurrentScreen('home')} />}
         {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigateHome={() => setCurrentScreen('home')} />}
         {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
