@@ -671,14 +671,22 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const handleSmartSearch = () => {
     const query = smartSearchValue.trim();
 
-    // Mostrar loading DENTRO del panel (no lo cerramos aún)
+    // Cerrar panel/bottom sheet de inmediato y arrancar loading
     setIsAiProcessing(true);
+    setIsSmartSearchExpanded(false);
+    setIsSmartSearchBottomSheetOpen(false);
 
-    // Simular procesamiento IA (1.8s) → después cerrar panel y aplicar filtros
+    // Scroll a resultados para que el usuario vea el estado de carga
+    setTimeout(() => {
+      const resultsSection = document.getElementById('results-section');
+      if (resultsSection) {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+
+    // Simular procesamiento IA (1.8s) → aplicar filtros y mostrar resultados
     setTimeout(() => {
       setIsAiProcessing(false);
-      setIsSmartSearchExpanded(false);
-      setIsSmartSearchBottomSheetOpen(false);
       setFiltersApplied(true);
       if (query) setAiInterpretedQuery(query);
 
@@ -696,14 +704,6 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
         }
         return updatedFilters;
       });
-
-      // Scroll a resultados DESPUÉS de que el panel cierre
-      setTimeout(() => {
-        const resultsSection = document.getElementById('results-section');
-        if (resultsSection) {
-          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 350);
     }, 1800);
   };
 
