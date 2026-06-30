@@ -386,8 +386,8 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
         </div>
         <button
           onClick={() => { setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
-          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+          className="flex items-center gap-2 px-4 py-2.5 transition-colors"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
         >
@@ -494,8 +494,8 @@ function BrokersContent() {
         subtitle="Gestión de brokers y su actividad en la plataforma"
         action={
           <button
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+            className="flex items-center gap-2 px-4 py-2.5 transition-colors"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
@@ -575,8 +575,8 @@ function AsignacionesContent() {
         subtitle="Asignación de leads a brokers"
         action={
           <button
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+            className="flex items-center gap-2 px-4 py-2.5 transition-colors"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
@@ -675,8 +675,8 @@ function UsuariosContent() {
         subtitle="Gestión de usuarios internos de CTP y sus roles"
         action={
           <button
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600 }}
+            className="flex items-center gap-2 px-4 py-2.5 transition-colors"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
