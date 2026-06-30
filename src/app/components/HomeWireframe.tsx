@@ -425,12 +425,12 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       smartFilters.ubicacion = 'aysen';
     }
 
-    // Mostrar modal de procesamiento IA y navegar a parcelas después de 1.8s
+    // Mostrar modal de procesamiento IA y navegar a parcelas después de 3.5s
     showAiOverlay();
     setTimeout(() => {
       hideAiOverlay();
       onNavigate('parcelas', undefined, smartFilters);
-    }, 1800);
+    }, 3500);
   };
 
   // Configuración del carrusel

@@ -707,7 +707,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
           resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }, 200);
-    }, 1800);
+    }, 3500);
   };
 
   // Función para toggle de badges de búsqueda inteligente
