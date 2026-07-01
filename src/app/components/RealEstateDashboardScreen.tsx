@@ -39,7 +39,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       { id: 'home', label: 'Inicio', icon: Home },
       { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
       { id: 'inquiries', label: 'Consultas', icon: MessageCircle },
-      { id: 'reservas', label: 'Reservas', icon: FileText },
+      { id: 'reservas', label: 'Valores de reservas', icon: FileText },
       { id: 'calendarios', label: 'Calendarios', icon: Calendar },
     ],
     [

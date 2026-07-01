@@ -50,7 +50,7 @@ const NAV_GROUPS = [
       { id: 'inicio' as NavSection,          label: 'Inicio',            icon: Home },
       { id: 'my-publications' as NavSection, label: 'Mis publicaciones', icon: FolderOpen },
       { id: 'inquiries' as NavSection,       label: 'Consultas',         icon: MessageCircle },
-      { id: 'reservas' as NavSection,        label: 'Reservas',          icon: FileText },
+      { id: 'reservas' as NavSection,        label: 'Valores de reservas', icon: FileText },
       { id: 'calendarios' as NavSection,     label: 'Calendarios',       icon: Calendar },
       { id: 'asignaciones' as NavSection,   label: 'Asignaciones',      icon: Users },
       { id: 'interacciones' as NavSection,  label: 'Interacciones',     icon: MessageSquare },
