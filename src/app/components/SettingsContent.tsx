@@ -158,6 +158,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   // — Usuarios state
   const [usuarios, setUsuarios] = useState(USUARIOS_INIT);
   const [brokerQuery, setBrokerQuery] = useState('');
+  const [brokerMenuOpen, setBrokerMenuOpen] = useState<number | null>(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRol, setInviteRol] = useState<UserRol>('Broker');
@@ -1406,7 +1407,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </div>
 
               {/* Tabla */}
-              <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5' }}>
+              <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5' }} onClick={() => setBrokerMenuOpen(null)}>
                 <table className="w-full">
                   <thead>
                     <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
@@ -1450,13 +1451,39 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                                 {statusStyle.label}
                               </span>
                             </td>
-                            <td className="px-5 py-4">
-                              <button className="p-1.5 rounded-lg transition-colors"
+                            <td className="px-5 py-4" style={{ position: 'relative' }}>
+                              <button
+                                className="p-1.5 rounded-lg transition-colors"
+                                onClick={e => { e.stopPropagation(); setBrokerMenuOpen(brokerMenuOpen === b.id ? null : b.id); }}
                                 onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F3F4F6')}
                                 onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                               >
                                 <MoreHorizontal className="w-4 h-4" style={{ color: '#9CA3AF' }} />
                               </button>
+                              {brokerMenuOpen === b.id && (
+                                <div
+                                  className="absolute right-0 z-50 rounded-xl overflow-hidden"
+                                  style={{ top: 'calc(100% - 4px)', minWidth: '160px', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.10)' }}
+                                  onClick={e => e.stopPropagation()}
+                                >
+                                  {[
+                                    { label: 'Ver perfil', color: '#0A0A0A' },
+                                    { label: 'Cambiar estado', color: '#0A0A0A' },
+                                    { label: 'Desvincular', color: '#DC2626' },
+                                  ].map(({ label, color }) => (
+                                    <button
+                                      key={label}
+                                      className="w-full text-left px-4 py-2.5 transition-colors"
+                                      style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color, backgroundColor: 'transparent' }}
+                                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F9FAFB')}
+                                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                                      onClick={() => setBrokerMenuOpen(null)}
+                                    >
+                                      {label}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
                             </td>
                           </tr>
                         );
