@@ -477,7 +477,24 @@ const ASIGN_MOCK = [
   { id: 5, lead: 'Felipe Aguilera',  parcela: 'Parcela Paine Norte',   broker: 'Sin asignar',    fecha: '10 jun 2026', status: 'pendiente' as const },
 ];
 
+const BROKERS_ASIGN = ['Carlos Pérez', 'Sofía Ramírez', 'Diego Muñoz', 'Sin asignar'];
+
 export function AsignacionesContent() {
+  const [rows, setRows] = useState(ASIGN_MOCK);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ lead: '', parcela: '', broker: BROKERS_ASIGN[0] });
+  const [error, setError] = useState('');
+
+  function handleSubmit() {
+    if (!form.lead.trim() || !form.parcela.trim()) { setError('Completa todos los campos.'); return; }
+    const today = new Date();
+    const fecha = `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
+    setRows(prev => [{ id: prev.length + 1, lead: form.lead.trim(), parcela: form.parcela.trim(), broker: form.broker, fecha, status: 'pendiente' as const }, ...prev]);
+    setForm({ lead: '', parcela: '', broker: BROKERS_ASIGN[0] });
+    setError('');
+    setShowModal(false);
+  }
+
   return (
     <div className="p-8">
       <SectionShell
@@ -489,6 +506,7 @@ export function AsignacionesContent() {
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
+            onClick={() => { setError(''); setShowModal(true); }}
           >
             <Plus className="w-4 h-4" /> Nueva asignación
           </button>
@@ -506,8 +524,8 @@ export function AsignacionesContent() {
             </tr>
           </thead>
           <tbody>
-            {ASIGN_MOCK.map((a, i) => (
-              <tr key={a.id} style={{ borderBottom: i < ASIGN_MOCK.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
+            {rows.map((a, i) => (
+              <tr key={a.id} style={{ borderBottom: i < rows.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
                 <td className="px-5 py-4" style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{a.lead}</td>
                 <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.parcela}</td>
                 <td className="px-5 py-4">
@@ -522,6 +540,68 @@ export function AsignacionesContent() {
           </tbody>
         </table>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={() => setShowModal(false)}>
+          <div className="rounded-2xl p-6 w-full max-w-md" style={{ backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }} onClick={e => e.stopPropagation()}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', marginBottom: '20px' }}>Nueva asignación</h3>
+            <div className="space-y-4">
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Lead</label>
+                <input
+                  type="text"
+                  placeholder="Nombre del lead"
+                  value={form.lead}
+                  onChange={e => setForm(f => ({ ...f, lead: e.target.value }))}
+                  className="w-full px-3 py-2 outline-none"
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A' }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Parcela / Proyecto</label>
+                <input
+                  type="text"
+                  placeholder="Ej: Parcela Los Robles"
+                  value={form.parcela}
+                  onChange={e => setForm(f => ({ ...f, parcela: e.target.value }))}
+                  className="w-full px-3 py-2 outline-none"
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A' }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Broker asignado</label>
+                <select
+                  value={form.broker}
+                  onChange={e => setForm(f => ({ ...f, broker: e.target.value }))}
+                  className="w-full px-3 py-2 outline-none"
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', appearance: 'none', backgroundColor: '#FFFFFF' }}
+                >
+                  {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
+                </select>
+              </div>
+              {error && <p style={{ fontSize: '12px', color: '#DC2626' }}>{error}</p>}
+            </div>
+            <div className="flex gap-3 mt-6 justify-end">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2"
+                style={{ fontSize: '13px', fontWeight: 600, color: '#737373', borderRadius: '200px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 transition-colors"
+                style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: '#006B4E' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
+              >
+                Asignar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
