@@ -84,7 +84,6 @@ const NAV_GROUPS = [
     items: [
       { id: 'recursos' as NavSection,  label: 'Recursos & Blog',    icon: BookOpen },
       { id: 'banners' as NavSection,   label: 'Banners & mensajes', icon: Megaphone },
-      { id: 'whatsapp' as NavSection,  label: 'Números WhatsApp',   icon: Phone },
     ],
   },
   {
