@@ -532,7 +532,7 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
             </h2>
             <div className="flex items-center gap-2 mt-0.5">
               <Clock className="w-3 h-3" style={{ color: '#737373' }} />
-              <span className="text-xs" style={{ color: '#737373' }}>Actualizado hace 5 min · {INSIGHTS.length} insights disponibles</span>
+              <span className="text-xs" style={{ color: '#737373' }}>Actualizado hace 5 min · {allInsights.length} insights disponibles</span>
             </div>
           </div>
         </div>
@@ -607,7 +607,7 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
       {/* ── KPI SUMMARY ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Total insights',        value: INSIGHTS.length, color: '#006B4E', bg: '#F0F5EB', border: '#C5D9A8' },
+          { label: 'Total insights',        value: allInsights.length, color: '#006B4E', bg: '#F0F5EB', border: '#C5D9A8' },
           { label: 'Alta prioridad',        value: altaCount,       color: '#B91C1C', bg: '#FEF2F2', border: '#FECACA' },
           { label: 'Media prioridad',       value: mediaCount,      color: '#92400E', bg: '#FFFBEB', border: '#FDE68A' },
           { label: 'Publicaciones afectadas', value: afectadas,     color: '#374151', bg: '#F5F5F5', border: '#E5E5E5' },
