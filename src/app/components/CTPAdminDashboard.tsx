@@ -384,25 +384,13 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
   return (
     <div className="p-8">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>
-            Bienvenido, Admin CTP
-          </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>
-            Visión general de tus publicaciones y el estado de la plataforma.
-          </p>
-        </div>
-        <button
-          onClick={() => { setPublishModalOrigin(currentSection); setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); }}
-          className="flex items-center gap-2 px-4 py-2.5 transition-colors"
-          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
-          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
-          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
-        >
-          <Plus className="w-4 h-4" />
-          Nueva publicación
-        </button>
+      <div className="mb-8">
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>
+          Bienvenido, Admin CTP
+        </h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>
+          Visión general de tus publicaciones y el estado de la plataforma.
+        </p>
       </div>
 
       {/* KPIs como publicador */}
