@@ -3,7 +3,7 @@ import {
   Home, FolderOpen, MessageCircle, FileText, Calendar, User,
   TrendingUp, BarChart3, Zap, Sparkles,
   Users, ClipboardList, MessageSquare, CalendarCheck,
-  BookOpen, Megaphone, Phone, Shield,
+  BookOpen, Megaphone, Phone,
   Building2, Settings, HelpCircle, ChevronDown,
   Plus, ArrowUpRight, ArrowDownRight, Eye, Search,
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
@@ -22,7 +22,6 @@ import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
-import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 import { AdminBannersModule } from '@/app/components/AdminBannersModule';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
@@ -33,7 +32,7 @@ type NavSection =
   | 'inicio' | 'my-publications' | 'inquiries' | 'reservas' | 'calendarios' | 'profile'
   | 'performance' | 'analitica' | 'embudo' | 'insights'
   | 'brokers' | 'asignaciones' | 'interacciones' | 'citas'
-  | 'recursos' | 'banners' | 'whatsapp' | 'whitelist'
+  | 'recursos' | 'banners' | 'whatsapp'
   | 'team' | 'configuracion' | 'help';
 
 interface CTPAdminDashboardProps {
@@ -82,7 +81,6 @@ const NAV_GROUPS = [
       { id: 'recursos' as NavSection,  label: 'Recursos & Blog',    icon: BookOpen },
       { id: 'banners' as NavSection,   label: 'Banners & mensajes', icon: Megaphone },
       { id: 'whatsapp' as NavSection,  label: 'Números WhatsApp',   icon: Phone },
-      { id: 'whitelist' as NavSection, label: 'Whitelist',          icon: Shield },
     ],
   },
   {
@@ -286,7 +284,6 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'insights'        && <AdminInsightsModule />}
         {currentSection === 'citas'           && <CitasAdminView />}
         {currentSection === 'whatsapp'        && <ContactosWhatsAppAdminView />}
-        {currentSection === 'whitelist'       && <WhitelistAdminView />}
         {currentSection === 'banners'         && <AdminBannersModule />}
         {currentSection === 'recursos'        && <AdminRecursosModule />}
         {currentSection === 'team'            && <TeamContent />}

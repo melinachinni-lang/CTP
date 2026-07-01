@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2 } from 'lucide-react';
+import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -1536,6 +1537,20 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   </div>
                 );
               })}
+            </div>
+
+            {/* ── Sección: Whitelist de acceso ── */}
+            <div className="space-y-4" style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Shield className="w-4 h-4" style={{ color: '#6B7280' }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Whitelist de acceso</p>
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                  Controla qué correos pueden registrarse o iniciar sesión en la plataforma.
+                </p>
+              </div>
+              <WhitelistAdminView />
             </div>
           </div>
         )}
