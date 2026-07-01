@@ -142,7 +142,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
           <button onClick={() => setVistaPrevia(v => !v)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all" style={{ backgroundColor: vistaPrevia ? '#F0F5EB' : '#F5F5F5', border: `1px solid ${vistaPrevia ? '#C5D9A8' : '#E5E5E5'}`, color: vistaPrevia ? '#3D5E28' : '#737373', fontFamily: 'var(--font-body)' }}>
             <Eye className="w-3.5 h-3.5" /> {vistaPrevia ? 'Volver a editar' : 'Vista previa'}
           </button>
-          <button onClick={handleSave} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}>
+          <button onClick={handleSave} className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all" style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}>
             {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : <><Save className="w-4 h-4" /> {recurso ? 'Guardar cambios' : 'Publicar recurso'}</>}
           </button>
         </div>
@@ -401,7 +401,7 @@ export function AdminRecursosModule() {
           </select>
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
         </div>
-        <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+        <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
           <Plus className="w-4 h-4" /> Nuevo recurso
         </button>
       </div>

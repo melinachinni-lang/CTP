@@ -103,13 +103,14 @@ export function TeamContent() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 transition-colors"
           style={{
             backgroundColor: '#006B4E',
             color: '#FFFFFF',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--font-size-body-sm)',
             fontWeight: 600,
+            borderRadius: '200px',
           }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}

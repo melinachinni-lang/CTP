@@ -387,7 +387,7 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
         <button
           onClick={() => { setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); }}
           className="flex items-center gap-2 px-4 py-2.5 transition-colors"
-          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
         >
@@ -495,7 +495,7 @@ function BrokersContent() {
         action={
           <button
             className="flex items-center gap-2 px-4 py-2.5 transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
@@ -576,7 +576,7 @@ function AsignacionesContent() {
         action={
           <button
             className="flex items-center gap-2 px-4 py-2.5 transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
@@ -676,7 +676,7 @@ function UsuariosContent() {
         action={
           <button
             className="flex items-center gap-2 px-4 py-2.5 transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '12px' }}
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
           >
