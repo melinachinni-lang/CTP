@@ -68,7 +68,7 @@ export function AdminAnaliticaView() {
     { dispositivo: 'Mobile',  porcentaje: 68, valor: 5606 },
     { dispositivo: 'Desktop', porcentaje: 32, valor: 2639 },
   ];
-  const pieColors = ['#006B4E', '#2563EB'];
+  const pieColors = ['#006B4E', '#52C49A'];
 
   const origenTraficoDetallado = [
     { origen: 'Orgánico', semana1: 1200, semana2: 1320, semana3: 1410, semana4: 1565, total: 5606, porcentaje: 45, trending: 'up' },
@@ -94,7 +94,7 @@ export function AdminAnaliticaView() {
     { semana: 'Sem 3', ctaClicks: 284, formIniciados: 185, formEnviados: 124, whatsapp: 176 },
     { semana: 'Sem 4', ctaClicks: 312, formIniciados: 198, formEnviados: 138, whatsapp: 192 },
   ];
-  const lineColors = ['#006B4E', '#2563EB', '#7C3AED', '#F59E0B'];
+  const lineColors = ['#006B4E', '#52C49A', '#7C3AED', '#F59E0B'];
 
   const tooltipStyle = {
     contentStyle: {
@@ -196,12 +196,12 @@ export function AdminAnaliticaView() {
               <YAxis {...axisStyle} />
               <Tooltip {...tooltipStyle} />
               <Bar dataKey="nuevos"      fill="#006B4E" radius={[4, 4, 0, 0]} name="Usuarios nuevos" />
-              <Bar dataKey="recurrentes" fill="#2563EB" radius={[4, 4, 0, 0]} name="Usuarios recurrentes" />
+              <Bar dataKey="recurrentes" fill="#52C49A" radius={[4, 4, 0, 0]} name="Usuarios recurrentes" />
             </BarChart>
           </ResponsiveContainer>
         </div>
         <div className="flex items-center justify-center gap-6 mt-4">
-          {[{ label: 'Usuarios nuevos', color: '#006B4E' }, { label: 'Usuarios recurrentes', color: '#2563EB' }].map((item, i) => (
+          {[{ label: 'Usuarios nuevos', color: '#006B4E' }, { label: 'Usuarios recurrentes', color: '#52C49A' }].map((item, i) => (
             <div key={i} className="flex items-center gap-2">
               <div style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: item.color }} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{item.label}</span>
