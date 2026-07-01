@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone } from 'lucide-react';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
@@ -11,6 +11,7 @@ import { SettingsContent } from '@/app/components/SettingsContent';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { AsignacionesContent, InteraccionesContent } from '@/app/components/CTPAdminDashboard';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
+import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -42,9 +43,10 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       { id: 'calendarios', label: 'Calendarios', icon: Calendar },
     ],
     [
-      { id: 'asignaciones',  label: 'Asignaciones',  icon: Users },
-      { id: 'interacciones', label: 'Interacciones', icon: MessageSquare },
-      { id: 'citas',         label: 'Citas',         icon: CalendarCheck },
+      { id: 'asignaciones',  label: 'Asignaciones',     icon: Users },
+      { id: 'interacciones', label: 'Interacciones',    icon: MessageSquare },
+      { id: 'citas',         label: 'Citas',            icon: CalendarCheck },
+      { id: 'whatsapp',      label: 'Números WhatsApp', icon: Phone },
     ],
     [
       { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
@@ -199,6 +201,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'asignaciones'  && <AsignacionesContent />}
         {currentSection === 'interacciones' && <InteraccionesContent />}
         {currentSection === 'citas'         && <CitasAdminView />}
+        {currentSection === 'whatsapp'      && <ContactosWhatsAppAdminView />}
         {currentSection === 'performance' && <RendimientoView viewType="inmobiliaria" />}
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}
