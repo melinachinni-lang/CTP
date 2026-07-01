@@ -184,10 +184,10 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
 
   const allInsights      = showEmpty ? [] : INSIGHTS;
   const filteredInsights = allInsights.filter(i => filterTab === 'todos' || i.priority === filterTab);
-  const altaCount        = INSIGHTS.filter(i => i.priority === 'alta').length;
-  const mediaCount       = INSIGHTS.filter(i => i.priority === 'media').length;
-  const bajaCount        = INSIGHTS.filter(i => i.priority === 'baja').length;
-  const afectadas        = new Set(INSIGHTS.filter(i => i.publicacion).map(i => i.publicacion!.titulo)).size;
+  const altaCount        = allInsights.filter(i => i.priority === 'alta').length;
+  const mediaCount       = allInsights.filter(i => i.priority === 'media').length;
+  const bajaCount        = allInsights.filter(i => i.priority === 'baja').length;
+  const afectadas        = new Set(allInsights.filter(i => i.publicacion).map(i => i.publicacion!.titulo)).size;
 
   const handleRefresh = () => {
     setIsLoading(true);
