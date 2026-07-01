@@ -1785,54 +1785,6 @@ function HelpContent() {
         </p>
       </div>
 
-      {/* Contact Support */}
-      <section className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF' }}>
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
-            <MessageCircle className="w-6 h-6" style={{ color: '#0A0A0A' }} />
-          </div>
-          <h2 
-            style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'var(--font-size-h4)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#FFFFFF',
-              lineHeight: 'var(--line-height-heading)'
-            }}
-          >
-            Contacta a soporte
-          </h2>
-        </div>
-        <p 
-          style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-regular)',
-            color: '#C3C3C3',
-            lineHeight: 'var(--line-height-body)'
-          }}
-        >
-          Nuestro equipo está disponible para ayudarte con publicaciones, gestión de leads y optimización de conversiones.
-        </p>
-        <button 
-          className="w-full py-3 px-6 transition-all"
-          style={{
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            borderRadius: '200px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)',
-            letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-        >
-          Iniciar conversación
-        </button>
-      </section>
-
       {/* FAQ */}
       <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
         <h2 
