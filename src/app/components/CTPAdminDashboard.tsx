@@ -484,7 +484,7 @@ const ASIGN_MOCK = [
   { id: 5, lead: 'Felipe Aguilera',  parcela: 'Parcela Paine Norte',   broker: 'Sin asignar',    fecha: '10 jun 2026', status: 'pendiente' as const },
 ];
 
-function AsignacionesContent() {
+export function AsignacionesContent() {
   return (
     <div className="p-8">
       <SectionShell
@@ -543,7 +543,7 @@ const INTER_MOCK = [
   { tipo: 'WhatsApp',  lead: 'Felipe Aguilera', broker: 'Sin asignar',   desc: 'Primer contacto vía WhatsApp', fecha: 'Ayer, 17:42', icon: MessageCircle, color: '#059669' },
 ];
 
-function InteraccionesContent() {
+export function InteraccionesContent() {
   return (
     <div className="p-8">
       <SectionShell title="Interacciones" subtitle="Registro de interacciones cliente–broker" />
