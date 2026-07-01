@@ -7,6 +7,7 @@ import {
   Building2, Settings, HelpCircle, ChevronDown,
   Plus, ArrowUpRight, ArrowDownRight, Eye, Search,
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
+  Bookmark, UserCheck, type LucideIcon,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -317,17 +318,26 @@ function SectionShell({ title, subtitle, action }: { title: string; subtitle: st
   );
 }
 
-function KPICard({ label, value, change, up }: { label: string; value: string; change: string; up: boolean }) {
+function KPICard({ label, value, change, up, icon: Icon, iconBg, iconColor }: {
+  label: string; value: string; change: string; up: boolean;
+  icon: LucideIcon; iconBg: string; iconColor: string;
+}) {
   return (
     <div className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-      <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: '0 0 8px' }}>{label}</p>
-      <p style={{ fontSize: '26px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 6px' }}>{value}</p>
-      <div className="flex items-center gap-1">
-        {up
-          ? <ArrowUpRight className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
-          : <ArrowDownRight className="w-3.5 h-3.5" style={{ color: '#E53E3E' }} />}
-        <span style={{ fontSize: '12px', color: up ? '#006B4E' : '#E53E3E', fontFamily: 'var(--font-body)' }}>{change} vs mes anterior</span>
+      <div className="flex items-center justify-between mb-3">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: iconBg }}>
+          <Icon className="w-4 h-4" style={{ color: iconColor }} />
+        </div>
+        <span
+          className="flex items-center gap-0.5"
+          style={{ fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', color: up ? '#006B4E' : '#E53E3E', backgroundColor: up ? '#E8F5EE' : '#FEE2E2', padding: '2px 7px', borderRadius: '99px' }}
+        >
+          {up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+          {change}
+        </span>
       </div>
+      <p style={{ fontSize: '26px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 3px' }}>{value}</p>
+      <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
     </div>
   );
 }
@@ -353,16 +363,16 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
   setTriggerPublishModal: (fn: (n: number) => number) => void;
 }) {
   const kpisPublicador = [
-    { label: 'Publicaciones activas',  value: '34',     change: '+3',     up: true },
-    { label: 'Consultas recibidas',    value: '218',    change: '+12%',   up: true },
-    { label: 'Reservas este mes',      value: '9',      change: '+2',     up: true },
-    { label: 'Parcelas guardadas',     value: '1.243',  change: '+8%',    up: true },
+    { label: 'Publicaciones activas',  value: '34',     change: '+3',     up: true,  icon: FolderOpen,    iconBg: '#E8F5EE', iconColor: '#006B4E' },
+    { label: 'Consultas recibidas',    value: '218',    change: '+12%',   up: true,  icon: MessageCircle, iconBg: '#EFF6FF', iconColor: '#2563EB' },
+    { label: 'Reservas este mes',      value: '9',      change: '+2',     up: true,  icon: FileText,      iconBg: '#F5F3FF', iconColor: '#7C3AED' },
+    { label: 'Parcelas guardadas',     value: '1.243',  change: '+8%',    up: true,  icon: Bookmark,      iconBg: '#FFF7ED', iconColor: '#C2410C' },
   ];
   const kpisPlataforma = [
-    { label: 'Usuarios totales',       value: '8.245',  change: '+14%',   up: true },
-    { label: 'Inmobiliarias activas',  value: '41',     change: '+4',     up: true },
-    { label: 'Brokers activos',        value: '87',     change: '+6',     up: true },
-    { label: 'Conversión leads',       value: '3.4%',   change: '+0.2pp', up: true },
+    { label: 'Usuarios totales',       value: '8.245',  change: '+14%',   up: true,  icon: Users,         iconBg: '#EFF6FF', iconColor: '#2563EB' },
+    { label: 'Inmobiliarias activas',  value: '41',     change: '+4',     up: true,  icon: Building2,     iconBg: '#E8F5EE', iconColor: '#006B4E' },
+    { label: 'Brokers activos',        value: '87',     change: '+6',     up: true,  icon: UserCheck,     iconBg: '#F0FDFA', iconColor: '#0D9488' },
+    { label: 'Conversión leads',       value: '3.4%',   change: '+0.2pp', up: true,  icon: TrendingUp,    iconBg: '#F5F3FF', iconColor: '#7C3AED' },
   ];
   const actividad = [
     { icon: CheckCircle, color: '#006B4E', text: 'Nueva reserva recibida para Parcela Los Robles', time: 'Hace 12 min' },
