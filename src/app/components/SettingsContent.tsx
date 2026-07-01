@@ -304,9 +304,10 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap"
+                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all whitespace-nowrap"
                 style={{
                   fontFamily: 'var(--font-body)',
+                  borderRadius: '200px',
                   backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                   color: isActive ? '#0A0A0A' : '#6B7280',
                   boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
