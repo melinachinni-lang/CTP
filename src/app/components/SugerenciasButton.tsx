@@ -66,16 +66,13 @@ export function SugerenciasButton({ open: controlledOpen, onClose: controlledOnC
       {/* Sidebar button — only rendered in uncontrolled mode */}
       {!isControlled && <button
         onClick={() => setInternalOpen(true)}
-        className="flex items-center gap-3 px-4 py-3 text-sm transition-colors"
+        className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors"
         style={{
-          color: 'rgba(255,255,255,0.65)',
+          color: 'rgba(255,255,255,0.62)',
           backgroundColor: 'transparent',
           fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-sm)',
-          width: 'calc(100% - 16px)',
-          marginLeft: '8px',
-          marginRight: '8px',
-          borderRadius: '8px',
+          fontSize: '13px',
+          fontWeight: 400,
         }}
         onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
@@ -83,10 +80,10 @@ export function SugerenciasButton({ open: controlledOpen, onClose: controlledOnC
         }}
         onMouseLeave={e => {
           e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+          e.currentTarget.style.color = 'rgba(255,255,255,0.62)';
         }}
       >
-        <Lightbulb className="w-5 h-5 flex-shrink-0" />
+        <Lightbulb className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: 1.8 }} />
         <span>Sugerencias</span>
       </button>}
 

@@ -221,9 +221,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
                       );
                     })}
                     {group.id === 'administracion' && (
-                      <div className="px-2 pb-1">
-                        <SugerenciasButton />
-                      </div>
+                      <SugerenciasButton />
                     )}
                   </div>
                 )}
