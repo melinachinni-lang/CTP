@@ -64,6 +64,7 @@ export function AdminRegionesView() {
     backgroundColor: '#FAFAFA',
     outline: 'none',
     flex: 1,
+    minWidth: 0,
   };
 
   const actionBtn = (onClick: () => void, label: string): React.ReactElement => (
@@ -93,7 +94,7 @@ export function AdminRegionesView() {
       <div className="flex rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', height: '620px', backgroundColor: '#FFFFFF' }}>
 
         {/* ── Panel izquierdo: Regiones ── */}
-        <div className="flex flex-col flex-shrink-0" style={{ width: '320px', borderRight: '1px solid #E5E5E5' }}>
+        <div className="flex flex-col flex-shrink-0" style={{ width: '320px', borderRight: '1px solid #E5E5E5', overflow: 'hidden' }}>
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 flex-shrink-0" style={{ borderBottom: '1px solid #E5E5E5' }}>
             <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: '#0A0A0A' }}>Regiones</span>

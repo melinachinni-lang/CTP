@@ -82,15 +82,15 @@ const NAV_GROUPS = [
       { id: 'recursos' as NavSection,  label: 'Recursos & Blog',    icon: BookOpen },
       { id: 'banners' as NavSection,   label: 'Banners & mensajes', icon: Megaphone },
       { id: 'whatsapp' as NavSection,  label: 'Números WhatsApp',   icon: Phone },
-      { id: 'regiones' as NavSection,  label: 'Regiones y Comunas', icon: MapPin },
     ],
   },
   {
     id: 'administracion',
     label: 'Administración',
     items: [
-      { id: 'team' as NavSection,          label: 'Equipo CTP',   icon: Building2 },
-      { id: 'configuracion' as NavSection, label: 'Configuración', icon: Settings },
+      { id: 'team' as NavSection,          label: 'Equipo CTP',        icon: Building2 },
+      { id: 'regiones' as NavSection,      label: 'Regiones y Comunas', icon: MapPin },
+      { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
       { id: 'help' as NavSection,          label: 'Ayuda',              icon: HelpCircle },
     ],
   },
