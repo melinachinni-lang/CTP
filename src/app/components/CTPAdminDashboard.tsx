@@ -55,6 +55,7 @@ const NAV_GROUPS = [
       { id: 'asignaciones' as NavSection,   label: 'Asignaciones',      icon: Users },
       { id: 'interacciones' as NavSection,  label: 'Interacciones',     icon: MessageSquare },
       { id: 'citas' as NavSection,          label: 'Citas',             icon: CalendarCheck },
+      { id: 'whatsapp' as NavSection,       label: 'Números WhatsApp',  icon: Phone },
       { id: 'profile' as NavSection,         label: 'Perfil',            icon: User },
     ],
   },
