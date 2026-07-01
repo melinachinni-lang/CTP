@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2 } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal } from 'lucide-react';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -70,6 +70,14 @@ function RequirementRow({ met, label }: { met: boolean; label: string }) {
     </div>
   );
 }
+
+const BROKERS_MOCK = [
+  { id: 1, nombre: 'Carlos Pérez',    email: 'carlos@ctp.cl',  asignados: 12, cerrados: 4,  status: 'activo'    as const },
+  { id: 2, nombre: 'Sofía Ramírez',   email: 'sofia@ctp.cl',   asignados: 8,  cerrados: 2,  status: 'activo'    as const },
+  { id: 3, nombre: 'Diego Muñoz',     email: 'diego@ctp.cl',   asignados: 15, cerrados: 7,  status: 'activo'    as const },
+  { id: 4, nombre: 'Valentina Cruz',  email: 'val@ctp.cl',     asignados: 3,  cerrados: 1,  status: 'pendiente' as const },
+  { id: 5, nombre: 'Martín Salinas',  email: 'martin@ctp.cl',  asignados: 0,  cerrados: 0,  status: 'inactivo'  as const },
+];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -145,6 +153,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
 
   // — Usuarios state
   const [usuarios, setUsuarios] = useState(USUARIOS_INIT);
+  const [brokerQuery, setBrokerQuery] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRol, setInviteRol] = useState<'Admin' | 'Broker'>('Broker');
@@ -1380,17 +1389,17 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               Usuarios y permisos
             </h2>
 
-            {/* ── Sección: Brokers asociados ── */}
+            {/* ── Sección: Brokers ── */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Brokers asociados</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Brokers</p>
                   <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#DCFCE7', color: '#166534', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)' }}>
-                    {usuarios.filter(u => u.rol === 'Broker').length} activos
+                    {BROKERS_MOCK.filter(b => b.status === 'activo').length} activos
                   </span>
-                  {invitacionesBroker.length > 0 && (
+                  {BROKERS_MOCK.filter(b => b.status === 'pendiente').length > 0 && (
                     <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEF9C3', color: '#854D0E', border: '1px solid #FDE68A', fontFamily: 'var(--font-body)' }}>
-                      {invitacionesBroker.length} pendientes
+                      {BROKERS_MOCK.filter(b => b.status === 'pendiente').length} pendientes
                     </span>
                   )}
                 </div>
@@ -1405,85 +1414,80 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 </button>
               </div>
 
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Los brokers se asocian a tu inmobiliaria mediante invitación. Aceptada la invitación, pueden gestionar publicaciones y consultas asignadas.
-              </p>
+              {/* Buscador */}
+              <div className="relative" style={{ maxWidth: '300px' }}>
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                <input
+                  value={brokerQuery}
+                  onChange={e => setBrokerQuery(e.target.value)}
+                  placeholder="Buscar broker..."
+                  className="w-full pl-9 pr-3 py-2 rounded-xl"
+                  style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                  onFocus={e => e.target.style.borderColor = '#006B4E'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+              </div>
 
-              {/* Brokers activos */}
-              {usuarios.filter(u => u.rol === 'Broker').map(user => {
-                const color = getColor(user.nombre);
-                return (
-                  <div key={user.id} className="flex items-center justify-between p-4 rounded-xl transition-colors" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#F3F4F6'}
-                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.backgroundColor = '#FAFAFA'}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 700, color: color.text }}>{getInitials(user.nombre)}</span>
-                      </div>
-                      <div>
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{user.nombre}</p>
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>{user.email}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#DCFCE7', color: '#166534', border: '1px solid #86EFAC', fontFamily: 'var(--font-body)' }}>Activo</span>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#A3A3A3' }}>{user.ultimoAcceso}</p>
-                      <button
-                        onClick={() => setUsuarios(prev => prev.filter(u => u.id !== user.id))}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
-                        style={{ border: '1px solid #FCA5A5', color: '#DC2626', backgroundColor: '#FFF1F1', fontFamily: 'var(--font-body)' }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFF1F1'}
-                      >
-                        Desvincular
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {usuarios.filter(u => u.rol === 'Broker').length === 0 && invitacionesBroker.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-10 text-center rounded-xl" style={{ border: '1.5px dashed #E5E5E5' }}>
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#F5F5F5' }}>
-                    <User className="w-6 h-6" style={{ color: '#D1D5DB' }} />
-                  </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>Sin brokers aún</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Invitá brokers para que gestionen publicaciones bajo tu inmobiliaria.</p>
-                </div>
-              )}
-
-              {/* Invitaciones pendientes */}
-              {invitacionesBroker.length > 0 && (
-                <div className="space-y-2">
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Invitaciones pendientes</p>
-                  {invitacionesBroker.map(inv => (
-                    <div key={inv.id} className="flex items-center justify-between p-4 rounded-xl" style={{ border: '1.5px solid #FDE68A', backgroundColor: '#FFFBEB' }}>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FEF3C7' }}>
-                          <Mail className="w-4 h-4" style={{ color: '#92400E' }} />
-                        </div>
-                        <div>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{inv.email}</p>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Invitación enviada · {inv.fecha}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEF9C3', color: '#854D0E', border: '1px solid #FDE68A', fontFamily: 'var(--font-body)' }}>Pendiente</span>
-                        <button
-                          onClick={() => setInvitacionesBroker(prev => prev.filter(i => i.id !== inv.id))}
-                          className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
-                          style={{ border: '1px solid #E5E5E5', color: '#6B7280', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Tabla */}
+              <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5' }}>
+                <table className="w-full">
+                  <thead>
+                    <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+                      {['Broker', 'Email', 'Leads asignados', 'Leads cerrados', 'Estado', ''].map(h => (
+                        <th key={h} className="text-left px-5 py-3" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {BROKERS_MOCK
+                      .filter(b =>
+                        b.nombre.toLowerCase().includes(brokerQuery.toLowerCase()) ||
+                        b.email.toLowerCase().includes(brokerQuery.toLowerCase())
+                      )
+                      .map((b, i, arr) => {
+                        const statusStyle =
+                          b.status === 'activo'    ? { bg: '#DCFCE7', color: '#166534', border: '#86EFAC', label: 'Activo' } :
+                          b.status === 'pendiente' ? { bg: '#FEF9C3', color: '#854D0E', border: '#FDE68A', label: 'Pendiente' } :
+                                                     { bg: '#F3F4F6', color: '#6B7280', border: '#E5E7EB', label: 'Inactivo' };
+                        const initials = b.nombre.split(' ').map(w => w[0]).join('').substring(0, 2);
+                        return (
+                          <tr key={b.id} style={{ borderBottom: i < arr.length - 1 ? '1px solid #F0F0F0' : 'none' }}
+                            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FAFAFA')}
+                            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                          >
+                            <td className="px-5 py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#E8F5EE' }}>
+                                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#006B4E', fontFamily: 'var(--font-heading)' }}>{initials}</span>
+                                </div>
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{b.nombre}</span>
+                              </div>
+                            </td>
+                            <td className="px-5 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{b.email}</td>
+                            <td className="px-5 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{b.asignados}</td>
+                            <td className="px-5 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{b.cerrados}</td>
+                            <td className="px-5 py-4">
+                              <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: statusStyle.bg, color: statusStyle.color, border: `1px solid ${statusStyle.border}`, fontFamily: 'var(--font-body)' }}>
+                                {statusStyle.label}
+                              </span>
+                            </td>
+                            <td className="px-5 py-4">
+                              <button className="p-1.5 rounded-lg transition-colors"
+                                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F3F4F6')}
+                                onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <MoreHorizontal className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* ── Sección: Equipo administrativo ── */}

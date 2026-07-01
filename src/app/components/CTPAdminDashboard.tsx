@@ -32,7 +32,7 @@ import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 type NavSection =
   | 'inicio' | 'my-publications' | 'inquiries' | 'reservas' | 'calendarios' | 'profile'
   | 'performance' | 'analitica' | 'embudo' | 'insights'
-  | 'brokers' | 'asignaciones' | 'interacciones' | 'citas'
+  | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
   | 'team' | 'configuracion' | 'help';
 
@@ -69,7 +69,6 @@ const NAV_GROUPS = [
     id: 'gestion',
     label: 'Gestión de agentes',
     items: [
-      { id: 'brokers' as NavSection,       label: 'Brokers',       icon: Users },
       { id: 'asignaciones' as NavSection,  label: 'Asignaciones',  icon: ClipboardList },
       { id: 'interacciones' as NavSection, label: 'Interacciones', icon: MessageSquare },
       { id: 'citas' as NavSection,         label: 'Citas',         icon: CalendarCheck },
@@ -292,7 +291,6 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'team'            && <TeamContent />}
         {currentSection === 'help'            && <HelpContent />}
         {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="inmobiliaria" />}
-        {currentSection === 'brokers'         && <BrokersContent />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
         {currentSection === 'interacciones'   && <InteraccionesContent />}
       </div>
@@ -434,7 +432,7 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
               { label: 'Ver mis publicaciones', section: 'my-publications' as NavSection, icon: FolderOpen },
               { label: 'Consultas pendientes',  section: 'inquiries' as NavSection,       icon: MessageCircle },
               { label: 'Analítica plataforma',  section: 'analitica' as NavSection,       icon: BarChart3 },
-              { label: 'Gestión de brokers',    section: 'brokers' as NavSection,         icon: Users },
+              { label: 'Gestión de brokers',    section: 'configuracion' as NavSection,   icon: Users },
               { label: 'Insights IA',           section: 'insights' as NavSection,        icon: Sparkles },
             ].map(({ label, section, icon: Icon }) => (
               <button
@@ -471,93 +469,6 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
             ))}
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Brokers ──────────────────────────────────────────────────────────────────
-
-const BROKERS_MOCK = [
-  { id: 1, nombre: 'Carlos Pérez',    email: 'carlos@ctp.cl',   asignados: 12, cerrados: 4, status: 'activo' as const },
-  { id: 2, nombre: 'Sofía Ramírez',   email: 'sofia@ctp.cl',    asignados: 8,  cerrados: 2, status: 'activo' as const },
-  { id: 3, nombre: 'Diego Muñoz',     email: 'diego@ctp.cl',    asignados: 15, cerrados: 7, status: 'activo' as const },
-  { id: 4, nombre: 'Valentina Cruz',  email: 'val@ctp.cl',      asignados: 3,  cerrados: 1, status: 'pendiente' as const },
-  { id: 5, nombre: 'Martín Salinas',  email: 'martin@ctp.cl',   asignados: 0,  cerrados: 0, status: 'inactivo' as const },
-];
-
-function BrokersContent() {
-  const [query, setQuery] = useState('');
-  const filtered = BROKERS_MOCK.filter(b =>
-    b.nombre.toLowerCase().includes(query.toLowerCase()) ||
-    b.email.toLowerCase().includes(query.toLowerCase())
-  );
-
-  return (
-    <div className="p-8">
-      <SectionShell
-        title="Brokers"
-        subtitle="Gestión de brokers y su actividad en la plataforma"
-        action={
-          <button
-            className="flex items-center gap-2 px-4 py-2.5 transition-colors"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
-          >
-            <Plus className="w-4 h-4" /> Agregar broker
-          </button>
-        }
-      />
-      {/* Search */}
-      <div className="relative mb-6" style={{ maxWidth: '320px' }}>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A0A0A0' }} />
-        <input
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          placeholder="Buscar broker…"
-          className="w-full pl-9 pr-4 py-2.5 rounded-xl"
-          style={{ border: '1px solid #E5E5E5', fontSize: '13px', fontFamily: 'var(--font-body)', outline: 'none', color: '#0A0A0A' }}
-        />
-      </div>
-      {/* Table */}
-      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-        <table className="w-full">
-          <thead>
-            <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-              {['Broker', 'Email', 'Leads asignados', 'Leads cerrados', 'Estado', ''].map(h => (
-                <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((b, i) => (
-              <tr key={b.id} style={{ borderBottom: i < filtered.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8F5EE' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 700, color: '#006B4E', fontFamily: 'var(--font-heading)' }}>
-                        {b.nombre.split(' ').map(w => w[0]).join('')}
-                      </span>
-                    </div>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{b.nombre}</span>
-                  </div>
-                </td>
-                <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{b.email}</td>
-                <td className="px-5 py-4" style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: 600 }}>{b.asignados}</td>
-                <td className="px-5 py-4" style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: 600 }}>{b.cerrados}</td>
-                <td className="px-5 py-4"><StatusBadge status={b.status} /></td>
-                <td className="px-5 py-4">
-                  <button className="p-1 rounded-xl transition-colors" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
-                    <MoreHorizontal className="w-4 h-4" style={{ color: '#737373' }} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );
