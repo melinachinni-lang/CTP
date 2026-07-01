@@ -160,7 +160,7 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
   const [scoringLevel, setScoringLevel]   = useState<ScoringLevel>('medio');
   const [showScoringConfig, setShowScoringConfig] = useState(false);
   const [isLoading, setIsLoading]         = useState(false);
-  const [showEmpty, setShowEmpty]         = useState(false);
+  const [showEmpty] = useState(true);
   const [drawerInsight, setDrawerInsight] = useState<Insight | null>(null);
   const [keywords, setKeywords]           = useState<string[]>([]);
   const [isSaving, setIsSaving]           = useState(false);
@@ -537,13 +537,6 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <button
-            onClick={() => { setShowEmpty(v => !v); setFilterTab('todos'); }}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs transition-all"
-            style={{ backgroundColor: '#F5F5F5', color: '#737373', border: '1px solid #E5E5E5', borderRadius: '200px' }}
-          >
-            {showEmpty ? 'Ver con datos' : 'Ver estado vacío'}
-          </button>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
