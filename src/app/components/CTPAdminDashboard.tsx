@@ -34,7 +34,7 @@ type NavSection =
   | 'performance' | 'analitica' | 'embudo' | 'insights'
   | 'brokers' | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'whitelist'
-  | 'team' | 'usuarios' | 'configuracion' | 'help';
+  | 'team' | 'configuracion' | 'help';
 
 interface CTPAdminDashboardProps {
   onNavigate: (screen: string, data?: any) => void;
@@ -89,9 +89,8 @@ const NAV_GROUPS = [
     id: 'administracion',
     label: 'Administración',
     items: [
-      { id: 'team' as NavSection,         label: 'Equipo CTP',          icon: Building2 },
-      { id: 'usuarios' as NavSection,     label: 'Usuarios & permisos', icon: Users },
-      { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
+      { id: 'team' as NavSection,          label: 'Equipo CTP',   icon: Building2 },
+      { id: 'configuracion' as NavSection, label: 'Configuración', icon: Settings },
       { id: 'help' as NavSection,          label: 'Ayuda',              icon: HelpCircle },
     ],
   },
@@ -298,7 +297,6 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'brokers'         && <BrokersContent />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
         {currentSection === 'interacciones'   && <InteraccionesContent />}
-        {currentSection === 'usuarios'        && <UsuariosContent />}
       </div>
     </>
   );
