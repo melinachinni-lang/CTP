@@ -3,7 +3,7 @@ import {
   Home, FolderOpen, MessageCircle, FileText, Calendar, User,
   TrendingUp, BarChart3, Zap, Sparkles,
   Users, ClipboardList, MessageSquare, CalendarCheck,
-  BookOpen, Megaphone, Phone,
+  BookOpen, Megaphone, Phone, MapPin,
   Building2, Settings, HelpCircle, ChevronDown,
   Plus, ArrowUpRight, ArrowDownRight, Eye, Search,
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
@@ -24,6 +24,7 @@ import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { AdminBannersModule } from '@/app/components/AdminBannersModule';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
+import { AdminRegionesView } from '@/app/components/AdminRegionesView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -32,7 +33,7 @@ type NavSection =
   | 'inicio' | 'my-publications' | 'inquiries' | 'reservas' | 'calendarios' | 'profile'
   | 'performance' | 'analitica' | 'embudo' | 'insights'
   | 'brokers' | 'asignaciones' | 'interacciones' | 'citas'
-  | 'recursos' | 'banners' | 'whatsapp'
+  | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
   | 'team' | 'configuracion' | 'help';
 
 interface CTPAdminDashboardProps {
@@ -81,6 +82,7 @@ const NAV_GROUPS = [
       { id: 'recursos' as NavSection,  label: 'Recursos & Blog',    icon: BookOpen },
       { id: 'banners' as NavSection,   label: 'Banners & mensajes', icon: Megaphone },
       { id: 'whatsapp' as NavSection,  label: 'Números WhatsApp',   icon: Phone },
+      { id: 'regiones' as NavSection,  label: 'Regiones y Comunas', icon: MapPin },
     ],
   },
   {
@@ -285,6 +287,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'citas'           && <CitasAdminView />}
         {currentSection === 'whatsapp'        && <ContactosWhatsAppAdminView />}
         {currentSection === 'banners'         && <AdminBannersModule />}
+        {currentSection === 'regiones'        && <AdminRegionesView />}
         {currentSection === 'recursos'        && <AdminRecursosModule />}
         {currentSection === 'team'            && <TeamContent />}
         {currentSection === 'help'            && <HelpContent />}
