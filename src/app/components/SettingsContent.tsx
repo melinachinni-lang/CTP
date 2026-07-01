@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal } from 'lucide-react';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type UserRol = 'Admin' | 'Broker' | 'Editor' | 'Moderador' | 'Solo lectura';
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getInitials(name: string) {
@@ -33,10 +37,10 @@ const EQUIPO_MOCK = [
   { id: 3, nombre: 'Felipe Castillo', rol: 'Broker', publicaciones: 4 },
 ];
 
-const USUARIOS_INIT = [
-  { id: 1, nombre: 'María Fernanda González', email: 'mfernanda@vallecentral.cl', rol: 'Admin' as const,  ultimoAcceso: 'Hace 2 horas' },
-  { id: 2, nombre: 'Carlos Andrés Muñoz',     email: 'cmunoz@vallecentral.cl',     rol: 'Broker' as const, ultimoAcceso: 'Hace 1 día' },
-  { id: 3, nombre: 'Javiera Paz Rojas',        email: 'jrojas@vallecentral.cl',     rol: 'Broker' as const, ultimoAcceso: 'Hace 3 días' },
+const USUARIOS_INIT: { id: number; nombre: string; email: string; rol: UserRol; ultimoAcceso: string }[] = [
+  { id: 1, nombre: 'María Fernanda González', email: 'mfernanda@vallecentral.cl', rol: 'Admin',        ultimoAcceso: 'Hace 2 horas' },
+  { id: 2, nombre: 'Carlos Andrés Muñoz',     email: 'cmunoz@vallecentral.cl',    rol: 'Broker',       ultimoAcceso: 'Hace 1 día' },
+  { id: 3, nombre: 'Javiera Paz Rojas',        email: 'jrojas@vallecentral.cl',    rol: 'Editor',       ultimoAcceso: 'Hace 3 días' },
 ];
 
 const SESIONES_INIT = [
@@ -156,21 +160,10 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [brokerQuery, setBrokerQuery] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRol, setInviteRol] = useState<'Admin' | 'Broker'>('Broker');
+  const [inviteRol, setInviteRol] = useState<UserRol>('Broker');
   const [inviteError, setInviteError] = useState('');
-  const [editingUser, setEditingUser] = useState<{ id: number; nombre: string; rol: 'Admin' | 'Broker' } | null>(null);
-  const [newRol, setNewRol] = useState<'Admin' | 'Broker'>('Broker');
-
-  // — Invitaciones broker state
-  const [invitacionesBroker, setInvitacionesBroker] = useState([
-    { id: 'inv1', email: 'pedro.soto@gmail.com', fecha: 'Hace 2 días', mensaje: '' },
-    { id: 'inv2', email: 'andrea.leon@broker.cl', fecha: 'Hace 5 días', mensaje: 'Te invito a unirte como broker de nuestra inmobiliaria.' },
-  ]);
-  const [showInviteBrokerModal, setShowInviteBrokerModal] = useState(false);
-  const [inviteBrokerEmail, setInviteBrokerEmail] = useState('');
-  const [inviteBrokerMensaje, setInviteBrokerMensaje] = useState('');
-  const [inviteBrokerError, setInviteBrokerError] = useState('');
-  const [inviteBrokerSent, setInviteBrokerSent] = useState(false);
+  const [editingUser, setEditingUser] = useState<{ id: number; nombre: string; rol: UserRol } | null>(null);
+  const [newRol, setNewRol] = useState<UserRol>('Broker');
 
   // — Seguridad state
   const [currentPass, setCurrentPass] = useState('');
@@ -227,22 +220,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     setUsuarios(prev => [...prev, newUser]);
     setInviteEmail(''); setInviteRol('Broker'); setInviteError('');
     setShowInviteModal(false);
-  };
-
-  const handleInviteBroker = () => {
-    if (!inviteBrokerEmail.trim() || !inviteBrokerEmail.includes('@')) {
-      setInviteBrokerError('Ingresa un email válido');
-      return;
-    }
-    setInvitacionesBroker(prev => [...prev, { id: `inv${Date.now()}`, email: inviteBrokerEmail.trim(), fecha: 'Ahora mismo', mensaje: inviteBrokerMensaje.trim() }]);
-    setInviteBrokerSent(true);
-    setTimeout(() => {
-      setInviteBrokerSent(false);
-      setShowInviteBrokerModal(false);
-      setInviteBrokerEmail('');
-      setInviteBrokerMensaje('');
-      setInviteBrokerError('');
-    }, 1800);
   };
 
   const handleRolChange = () => {
@@ -1404,13 +1381,13 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   )}
                 </div>
                 <button
-                  onClick={() => setShowInviteBrokerModal(true)}
+                  onClick={() => { setInviteRol('Broker'); setInviteEmail(''); setInviteError(''); setShowInviteModal(true); }}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
                   style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
                 >
-                  <Plus className="w-4 h-4" /> Invitar broker
+                  <Plus className="w-4 h-4" /> Agregar usuario
                 </button>
               </div>
 
@@ -1822,164 +1799,98 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
         </div>
       )}
 
-      {/* Modal: Invitar usuario */}
-      {showInviteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="bg-white rounded-2xl p-6 w-full max-w-sm mx-4 space-y-5" style={{ border: '1px solid #E5E5E5' }}>
-            <div className="flex items-center justify-between">
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Invitar usuario</h3>
-              <button onClick={() => { setShowInviteModal(false); setInviteError(''); }} className="p-1 rounded-lg hover:bg-gray-100">
-                <X className="w-4 h-4" style={{ color: '#9CA3AF' }} />
-              </button>
-            </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B6B6B', lineHeight: '1.5' }}>
-              El usuario recibirá un correo para crear su cuenta y acceder a la plataforma.
-            </p>
-            <div>
-              <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                Email <span style={{ color: '#DC2626' }}>*</span>
-              </label>
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={e => { setInviteEmail(e.target.value); setInviteError(''); }}
-                placeholder="usuario@empresa.cl"
-                className="w-full px-4 py-3 rounded-xl text-sm"
-                style={{ border: `1.5px solid ${inviteError ? '#DC2626' : '#E5E5E5'}`, fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
-                onFocus={e => { if (!inviteError) e.target.style.borderColor = '#006B4E'; }}
-                onBlur={e => { if (!inviteError) e.target.style.borderColor = '#E5E5E5'; }}
-              />
-              {inviteError && <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626' }}>{inviteError}</p>}
-            </div>
-            <div>
-              <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                Rol
-              </label>
-              <div className="flex gap-2">
-                {(['Broker', 'Admin'] as const).map(r => (
-                  <button
-                    key={r}
-                    onClick={() => setInviteRol(r)}
-                    className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
-                    style={{
-                      border: `1.5px solid ${inviteRol === r ? '#006B4E' : '#E5E5E5'}`,
-                      backgroundColor: inviteRol === r ? '#F0FDF4' : '#FAFAFA',
-                      color: inviteRol === r ? '#006B4E' : '#6B7280',
-                      fontFamily: 'var(--font-body)',
-                    }}
-                  >
-                    {r}
-                  </button>
-                ))}
+      {/* Modal: Agregar usuario */}
+      {showInviteModal && (() => {
+        const roles: { value: UserRol; label: string; desc: string }[] = [
+          { value: 'Admin',        label: 'Admin',        desc: 'Acceso completo a configuración, equipo y datos' },
+          { value: 'Broker',       label: 'Broker',       desc: 'Gestión de publicaciones y consultas asignadas' },
+          { value: 'Editor',       label: 'Editor',       desc: 'Puede crear y editar contenido, sin configuración' },
+          { value: 'Moderador',    label: 'Moderador',    desc: 'Revisión y aprobación de contenido publicado' },
+          { value: 'Solo lectura', label: 'Solo lectura', desc: 'Visualización sin posibilidad de editar' },
+        ];
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 space-y-5" style={{ border: '1px solid #E5E5E5' }}>
+              <div className="flex items-center justify-between">
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Agregar usuario</h3>
+                <button onClick={() => { setShowInviteModal(false); setInviteError(''); }} className="p-1 rounded-lg hover:bg-gray-100">
+                  <X className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+                </button>
               </div>
-              <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
-                {inviteRol === 'Admin' ? 'Acceso completo a configuración y equipo' : 'Acceso a publicaciones y consultas asignadas'}
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B6B6B', lineHeight: '1.5' }}>
+                El usuario recibirá un correo para crear su cuenta y acceder a la plataforma.
               </p>
-            </div>
-            <div className="flex gap-3 pt-1">
-              <button
-                onClick={() => { setShowInviteModal(false); setInviteError(''); }}
-                className="px-4 py-2.5 rounded-full text-sm font-medium"
-                style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleInviteUser}
-                className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >
-                Enviar invitación
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal: Invitar broker */}
-      {showInviteBrokerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 space-y-5" style={{ border: '1px solid #E5E5E5' }}>
-            <div className="flex items-center justify-between">
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Invitar broker</h3>
-              <button onClick={() => { setShowInviteBrokerModal(false); setInviteBrokerEmail(''); setInviteBrokerMensaje(''); setInviteBrokerError(''); setInviteBrokerSent(false); }} className="p-1 rounded-lg hover:bg-gray-100">
-                <X className="w-4 h-4" style={{ color: '#9CA3AF' }} />
-              </button>
-            </div>
-
-            {inviteBrokerSent ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center space-y-3">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
-                  <Check className="w-7 h-7" style={{ color: '#166534' }} />
-                </div>
-                <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>¡Invitación enviada!</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280' }}>
-                  Le llegará un email a <strong>{inviteBrokerEmail}</strong> con el link de invitación.
-                </p>
+              <div>
+                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  Email <span style={{ color: '#DC2626' }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  value={inviteEmail}
+                  onChange={e => { setInviteEmail(e.target.value); setInviteError(''); }}
+                  placeholder="usuario@empresa.cl"
+                  className="w-full px-4 py-3 rounded-xl text-sm"
+                  style={{ border: `1.5px solid ${inviteError ? '#DC2626' : '#E5E5E5'}`, fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                  onFocus={e => { if (!inviteError) e.target.style.borderColor = '#006B4E'; }}
+                  onBlur={e => { if (!inviteError) e.target.style.borderColor = '#E5E5E5'; }}
+                />
+                {inviteError && <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626' }}>{inviteError}</p>}
               </div>
-            ) : (
-              <>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B6B6B', lineHeight: '1.5' }}>
-                  El broker recibirá un email con una invitación para asociarse a tu inmobiliaria. Una vez aceptada, podrá gestionar publicaciones y consultas.
-                </p>
-
-                <div>
-                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                    Email del broker <span style={{ color: '#DC2626' }}>*</span>
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
-                    <input
-                      type="email"
-                      value={inviteBrokerEmail}
-                      onChange={e => { setInviteBrokerEmail(e.target.value); setInviteBrokerError(''); }}
-                      placeholder="broker@ejemplo.cl"
-                      className="w-full pl-9 pr-4 py-3 rounded-xl text-sm"
-                      style={{ border: `1.5px solid ${inviteBrokerError ? '#DC2626' : '#E5E5E5'}`, fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
-                      onFocus={e => { if (!inviteBrokerError) e.target.style.borderColor = '#006B4E'; }}
-                      onBlur={e => { if (!inviteBrokerError) e.target.style.borderColor = '#E5E5E5'; }}
-                    />
-                  </div>
-                  {inviteBrokerError && <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626' }}>{inviteBrokerError}</p>}
+              <div>
+                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  Tipo de usuario
+                </label>
+                <div className="flex flex-col gap-1.5">
+                  {roles.map(({ value, label, desc }) => (
+                    <button
+                      key={value}
+                      onClick={() => setInviteRol(value)}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left transition-all"
+                      style={{
+                        border: `1.5px solid ${inviteRol === value ? '#006B4E' : '#E5E5E5'}`,
+                        backgroundColor: inviteRol === value ? '#F0FDF4' : '#FAFAFA',
+                        fontFamily: 'var(--font-body)',
+                      }}
+                    >
+                      <span
+                        className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center"
+                        style={{
+                          border: `2px solid ${inviteRol === value ? '#006B4E' : '#D1D5DB'}`,
+                          backgroundColor: inviteRol === value ? '#006B4E' : 'transparent',
+                        }}
+                      >
+                        {inviteRol === value && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      </span>
+                      <span style={{ fontSize: '13px', fontWeight: 500, color: inviteRol === value ? '#006B4E' : '#0A0A0A' }}>{label}</span>
+                      <span style={{ fontSize: '12px', color: '#9CA3AF', marginLeft: 'auto' }}>{desc}</span>
+                    </button>
+                  ))}
                 </div>
-
-                <div>
-                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                    Mensaje personal <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', fontWeight: 400 }}>(opcional)</span>
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={inviteBrokerMensaje}
-                    onChange={e => setInviteBrokerMensaje(e.target.value)}
-                    placeholder="Ej: Te invito a unirte como broker de nuestra inmobiliaria..."
-                    className="w-full px-4 py-3 rounded-xl text-sm resize-none"
-                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', lineHeight: '1.6' }}
-                    onFocus={e => e.target.style.borderColor = '#006B4E'}
-                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-                  />
-                </div>
-
-                <div className="flex gap-3 pt-1">
-                  <button onClick={() => { setShowInviteBrokerModal(false); setInviteBrokerEmail(''); setInviteBrokerMensaje(''); setInviteBrokerError(''); }} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
-                    Cancelar
-                  </button>
-                  <button
-                    onClick={handleInviteBroker}
-                    className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-                    style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-                  >
-                    Enviar invitación
-                  </button>
-                </div>
-              </>
-            )}
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button
+                  onClick={() => { setShowInviteModal(false); setInviteError(''); }}
+                  className="px-4 py-2.5 rounded-full text-sm font-medium"
+                  style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleInviteUser}
+                  className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                >
+                  Enviar invitación
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
+
+
 
       {/* Modal: Editar rol */}
       {editingUser && (
@@ -2005,20 +1916,25 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
                 Nuevo rol
               </label>
-              <div className="flex gap-2">
-                {(['Broker', 'Admin'] as const).map(r => (
+              <div className="flex flex-col gap-1.5">
+                {(['Admin', 'Broker', 'Editor', 'Moderador', 'Solo lectura'] as const).map(r => (
                   <button
                     key={r}
                     onClick={() => setNewRol(r)}
-                    className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left transition-all"
                     style={{
                       border: `1.5px solid ${newRol === r ? '#006B4E' : '#E5E5E5'}`,
                       backgroundColor: newRol === r ? '#F0FDF4' : '#FAFAFA',
-                      color: newRol === r ? '#006B4E' : '#6B7280',
                       fontFamily: 'var(--font-body)',
                     }}
                   >
-                    {r}
+                    <span
+                      className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center"
+                      style={{ border: `2px solid ${newRol === r ? '#006B4E' : '#D1D5DB'}`, backgroundColor: newRol === r ? '#006B4E' : 'transparent' }}
+                    >
+                      {newRol === r && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                    </span>
+                    <span style={{ fontSize: '13px', fontWeight: 500, color: newRol === r ? '#006B4E' : '#0A0A0A' }}>{r}</span>
                   </button>
                 ))}
               </div>
