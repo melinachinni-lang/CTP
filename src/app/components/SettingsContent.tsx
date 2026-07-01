@@ -1861,8 +1861,10 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                       >
                         {inviteRol === value && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
                       </span>
-                      <span style={{ fontSize: '13px', fontWeight: 500, color: inviteRol === value ? '#006B4E' : '#0A0A0A' }}>{label}</span>
-                      <span style={{ fontSize: '12px', color: '#9CA3AF', marginLeft: 'auto' }}>{desc}</span>
+                      <div className="flex flex-col gap-0.5">
+                        <span style={{ fontSize: '13px', fontWeight: 500, color: inviteRol === value ? '#006B4E' : '#0A0A0A', lineHeight: '1.3' }}>{label}</span>
+                        <span style={{ fontSize: '11px', color: '#9CA3AF', lineHeight: '1.3' }}>{desc}</span>
+                      </div>
                     </button>
                   ))}
                 </div>
