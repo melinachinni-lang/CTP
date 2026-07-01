@@ -510,11 +510,12 @@ export function CitasAdminView() {
               <button
                 key={f}
                 onClick={() => setFiltroEstado(f)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize"
+                className="px-3 py-1.5 text-xs font-medium transition-all capitalize"
                 style={{
                   backgroundColor: filtroEstado === f ? '#0A0A0A' : '#F5F5F5',
                   color: filtroEstado === f ? '#FFFFFF' : '#525252',
                   fontFamily: 'var(--font-body)',
+                  borderRadius: '200px',
                 }}
               >
                 {f === 'todas' ? 'Todas' : f.charAt(0).toUpperCase() + f.slice(1) + 's'}
@@ -592,8 +593,8 @@ export function CitasAdminView() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setModalConfirmar(s)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+                          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
                           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
                           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
                         >
@@ -601,8 +602,8 @@ export function CitasAdminView() {
                         </button>
                         <button
                           onClick={() => setModalRechazar(s)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                          style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)' }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+                          style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
                           onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FCA5A5'}
                           onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
                         >
@@ -612,8 +613,8 @@ export function CitasAdminView() {
                     ) : (
                       <button
                         onClick={() => setEmailPreview({ solicitud: s, tipo: s.estado === 'rechazada' ? 'rechazo' : s.tipoCita === 'videollamada' ? 'confirmacion-videollamada' : 'confirmacion-presencial' })}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                        style={{ backgroundColor: '#F5F5F5', color: '#525252', fontFamily: 'var(--font-body)' }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+                        style={{ backgroundColor: '#F5F5F5', color: '#525252', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
                       >
