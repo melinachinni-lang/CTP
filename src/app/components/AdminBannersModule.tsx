@@ -470,7 +470,7 @@ export function AdminBannersModule() {
   }
 
   return (
-    <>
+    <div className="p-8">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
@@ -776,6 +776,6 @@ export function AdminBannersModule() {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }
