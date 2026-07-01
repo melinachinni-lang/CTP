@@ -1467,7 +1467,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                                   onClick={e => e.stopPropagation()}
                                 >
                                   {[
-                                    { label: 'Ver perfil', color: '#0A0A0A' },
                                     { label: 'Cambiar estado', color: '#0A0A0A' },
                                     { label: 'Desvincular', color: '#DC2626' },
                                   ].map(({ label, color }) => (
