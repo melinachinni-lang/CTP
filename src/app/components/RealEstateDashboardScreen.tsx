@@ -25,6 +25,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     const [showMenu, setShowMenu] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
+    const [publishModalOrigin, setPublishModalOrigin] = React.useState('home');
 
     // Exponer función para abrir modal de publicación
     React.useImperativeHandle(ref, () => ({
@@ -186,7 +187,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       {/* Main Content Area */}
       <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '256px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
-        {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
+        {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} onTypeModalCancel={() => setCurrentSection(publishModalOrigin)} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="inmobiliaria" />}
         {currentSection === 'reservas' && (
           <div className="p-8">
@@ -355,6 +356,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
           </button>
           <button 
             onClick={() => {
+              setPublishModalOrigin(currentSection);
               setCurrentSection('my-publications');
               setTriggerPublishModal(prev => prev + 1);
             }}

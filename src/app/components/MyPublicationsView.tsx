@@ -20,9 +20,10 @@ interface MyPublicationsViewProps {
   onNavigate?: (screen: string, id?: number) => void;
   onNavigateToSection?: (section: string) => void;
   autoOpenModal?: boolean | number;
+  onTypeModalCancel?: () => void;
 }
 
-export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToSection, autoOpenModal = false }: MyPublicationsViewProps) {
+export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToSection, autoOpenModal = false, onTypeModalCancel }: MyPublicationsViewProps) {
   const [showWizard, setShowWizard] = useState(false);
   const [showTypeSelectionModal, setShowTypeSelectionModal] = useState(false);
   const [showListingFlow, setShowListingFlow] = useState(false);
@@ -1696,7 +1697,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
 
             {/* Botón cancelar */}
             <button
-              onClick={() => setShowTypeSelectionModal(false)}
+              onClick={() => { setShowTypeSelectionModal(false); onTypeModalCancel?.(); }}
               className="w-full mt-6 px-6 py-3 transition-all rounded-lg"
               style={{
                 backgroundColor: '#FFFFFF',

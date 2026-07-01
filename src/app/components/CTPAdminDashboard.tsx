@@ -112,6 +112,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
   });
   const [showMenu, setShowMenu] = useState(false);
   const [triggerPublishModal, setTriggerPublishModal] = useState(0);
+  const [publishModalOrigin, setPublishModalOrigin] = useState<NavSection>('inicio');
 
   const toggleGroup = (groupId: string) => {
     setOpenGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
@@ -278,7 +279,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         style={{ left: '256px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}
       >
         {currentSection === 'inicio'          && <CTPHomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
-        {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="ctp-admin" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
+        {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="ctp-admin" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} onTypeModalCancel={() => setCurrentSection(publishModalOrigin)} />}
         {currentSection === 'inquiries'       && <ConsultasView viewType="inmobiliaria" />}
         {currentSection === 'reservas'        && <ReservasAdminView />}
         {currentSection === 'calendarios'     && <CalendariosView />}
@@ -393,7 +394,7 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
           </p>
         </div>
         <button
-          onClick={() => { setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); }}
+          onClick={() => { setPublishModalOrigin(currentSection); setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); }}
           className="flex items-center gap-2 px-4 py-2.5 transition-colors"
           style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, borderRadius: '200px' }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
