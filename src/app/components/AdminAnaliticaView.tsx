@@ -151,6 +151,13 @@ export function AdminAnaliticaView() {
   return (
     <div className="p-6 space-y-6">
 
+      {/* KPIs */}
+      <section className="grid grid-cols-5 gap-4">
+        {trafficKPIs.map((kpi, i) => (
+          <KPICard key={i} {...kpi} />
+        ))}
+      </section>
+
       {/* Gráfico principal unificado estilo GA4 */}
       <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <div className="flex items-start justify-between mb-6">
@@ -217,13 +224,6 @@ export function AdminAnaliticaView() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </section>
-
-      {/* KPIs */}
-      <section className="grid grid-cols-5 gap-4">
-        {trafficKPIs.map((kpi, i) => (
-          <KPICard key={i} {...kpi} />
-        ))}
       </section>
 
       {/* Visitas por día + Por dispositivo */}
