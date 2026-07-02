@@ -53,7 +53,6 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const [showBrokerAssignModal, setShowBrokerAssignModal] = useState(false);
   const [brokerSelectedInmobiliaria, setBrokerSelectedInmobiliaria] = useState('');
   const [showInmobiliariaDropdown, setShowInmobiliariaDropdown] = useState(false);
-  const [brokerPublicationType, setBrokerPublicationType] = useState<'parcela' | 'proyecto' | null>(null);
 
   const BROKER_INMOBILIARIAS = [
     { id: 'inm-1', nombre: 'Inmobiliaria Del Campo SpA', logo: '🏢' },
@@ -157,7 +156,6 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       setShowTypeSelectionModal(true);
     } else if (userType === 'broker') {
       setBrokerSelectedInmobiliaria('');
-      setBrokerPublicationType(null);
       setShowBrokerAssignModal(true);
     } else {
       setShowListingFlow(true);
@@ -1858,7 +1856,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
           style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
           onClick={e => { if (e.target === e.currentTarget) { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); } }}
         >
-          <div className="w-full max-w-lg mx-4 rounded-2xl bg-background overflow-hidden" style={{ border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}>
+          <div className="w-full max-w-md mx-4 rounded-2xl bg-background overflow-hidden" style={{ border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}>
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
               <div>
@@ -1866,11 +1864,11 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   Nueva publicación
                 </h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', marginTop: '2px' }}>
-                  Configura los datos previos antes de continuar
+                  Selecciona la inmobiliaria a la que pertenece esta parcela
                 </p>
               </div>
               <button
-                onClick={() => { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); setBrokerSelectedInmobiliaria(''); setBrokerPublicationType(null); }}
+                onClick={() => { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); setBrokerSelectedInmobiliaria(''); }}
                 className="p-1.5 rounded-lg transition-colors"
                 style={{ color: '#9CA3AF' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'}
@@ -1882,10 +1880,9 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
 
             {/* Body */}
             <div className="p-6 space-y-5">
-              {/* Selector de inmobiliaria */}
               <div>
                 <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  Inmobiliaria asociada <span style={{ color: '#DC2626' }}>*</span>
+                  Inmobiliaria <span style={{ color: '#DC2626' }}>*</span>
                 </label>
                 <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
                   Como broker puedes estar asociado a más de una inmobiliaria.
@@ -1938,67 +1935,10 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 </div>
               </div>
 
-              {/* Tipo de publicación */}
-              <div>
-                <label className="block mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  ¿Qué quieres publicar? <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setBrokerPublicationType('parcela')}
-                    className="flex flex-col items-center gap-3 px-4 py-5 rounded-xl transition-all"
-                    style={{
-                      border: `2px solid ${brokerPublicationType === 'parcela' ? '#006B4E' : '#E5E5E5'}`,
-                      backgroundColor: brokerPublicationType === 'parcela' ? '#F0F7F5' : '#FFFFFF',
-                    }}
-                    onMouseEnter={e => { if (brokerPublicationType !== 'parcela') { e.currentTarget.style.borderColor = '#B2D8CE'; e.currentTarget.style.backgroundColor = '#FAFAFA'; } }}
-                    onMouseLeave={e => { if (brokerPublicationType !== 'parcela') { e.currentTarget.style.borderColor = '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FFFFFF'; } }}
-                  >
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: brokerPublicationType === 'parcela' ? '#C7E8DD' : '#F0F0F0' }}>
-                      <FileText className="w-6 h-6" style={{ color: brokerPublicationType === 'parcela' ? '#006B4E' : '#9CA3AF' }} />
-                    </div>
-                    <div className="text-center">
-                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '13px', fontWeight: 600, color: brokerPublicationType === 'parcela' ? '#006B4E' : 'var(--foreground)', marginBottom: '2px' }}>
-                        Parcela individual
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
-                        Un lote o terreno
-                      </div>
-                    </div>
-                    {brokerPublicationType === 'parcela' && (
-                      <CheckCircle2 className="w-4 h-4 absolute" style={{ color: '#006B4E', top: '10px', right: '10px', position: 'relative', marginTop: '-8px' }} />
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => setBrokerPublicationType('proyecto')}
-                    className="flex flex-col items-center gap-3 px-4 py-5 rounded-xl transition-all"
-                    style={{
-                      border: `2px solid ${brokerPublicationType === 'proyecto' ? '#006B4E' : '#E5E5E5'}`,
-                      backgroundColor: brokerPublicationType === 'proyecto' ? '#F0F7F5' : '#FFFFFF',
-                    }}
-                    onMouseEnter={e => { if (brokerPublicationType !== 'proyecto') { e.currentTarget.style.borderColor = '#B2D8CE'; e.currentTarget.style.backgroundColor = '#FAFAFA'; } }}
-                    onMouseLeave={e => { if (brokerPublicationType !== 'proyecto') { e.currentTarget.style.borderColor = '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FFFFFF'; } }}
-                  >
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: brokerPublicationType === 'proyecto' ? '#C7E8DD' : '#F0F0F0' }}>
-                      <Building2 className="w-6 h-6" style={{ color: brokerPublicationType === 'proyecto' ? '#006B4E' : '#9CA3AF' }} />
-                    </div>
-                    <div className="text-center">
-                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '13px', fontWeight: 600, color: brokerPublicationType === 'proyecto' ? '#006B4E' : 'var(--foreground)', marginBottom: '2px' }}>
-                        Proyecto inmobiliario
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
-                        Múltiples parcelas
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
               {/* Acciones */}
               <div className="flex gap-3 pt-1">
                 <button
-                  onClick={() => { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); setBrokerSelectedInmobiliaria(''); setBrokerPublicationType(null); }}
+                  onClick={() => { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); setBrokerSelectedInmobiliaria(''); }}
                   className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
                   style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#EBEBEB'}
@@ -2008,25 +1948,21 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                 </button>
                 <button
                   onClick={() => {
-                    if (!brokerSelectedInmobiliaria || !brokerPublicationType) return;
+                    if (!brokerSelectedInmobiliaria) return;
                     setShowBrokerAssignModal(false);
                     setShowInmobiliariaDropdown(false);
-                    if (brokerPublicationType === 'proyecto') {
-                      setShowProjectFlow(true);
-                    } else {
-                      setShowListingFlow(true);
-                    }
+                    setShowListingFlow(true);
                   }}
-                  disabled={!brokerSelectedInmobiliaria || !brokerPublicationType}
+                  disabled={!brokerSelectedInmobiliaria}
                   className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
                   style={{
-                    backgroundColor: (brokerSelectedInmobiliaria && brokerPublicationType) ? '#006B4E' : '#E5E5E5',
-                    color: (brokerSelectedInmobiliaria && brokerPublicationType) ? '#FFFFFF' : '#9CA3AF',
+                    backgroundColor: brokerSelectedInmobiliaria ? '#006B4E' : '#E5E5E5',
+                    color: brokerSelectedInmobiliaria ? '#FFFFFF' : '#9CA3AF',
                     fontFamily: 'var(--font-body)',
-                    cursor: (brokerSelectedInmobiliaria && brokerPublicationType) ? 'pointer' : 'not-allowed',
+                    cursor: brokerSelectedInmobiliaria ? 'pointer' : 'not-allowed',
                   }}
-                  onMouseEnter={e => { if (brokerSelectedInmobiliaria && brokerPublicationType) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                  onMouseLeave={e => { if (brokerSelectedInmobiliaria && brokerPublicationType) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                  onMouseEnter={e => { if (brokerSelectedInmobiliaria) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                  onMouseLeave={e => { if (brokerSelectedInmobiliaria) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                 >
                   Continuar
                 </button>
