@@ -277,6 +277,20 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
             ))}
           </nav>
 
+          {/* Sugerencias */}
+          <div className="px-2 py-2" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <button
+              onClick={() => setShowSugerencias(true)}
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors"
+              style={{ color: 'rgba(255,255,255,0.62)', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 400 }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.62)'; }}
+            >
+              <Lightbulb className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: 1.8 }} />
+              <span>Sugerencias</span>
+            </button>
+          </div>
+
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
             <button
