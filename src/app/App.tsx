@@ -412,11 +412,11 @@ function AppContent() {
                 <option value="completar-perfil">1.1. Completar perfil (post-verificación)</option>
                 <option value="comparador">Comparador público</option>
                 <option value="person-dashboard">7. Dashboard Personal</option>
-                <option value="real-estate-dashboard">10. Dashboard Inmobiliaria</option>
+                <option value="real-estate-dashboard">10. Inmobiliaria CTP</option>
                 <option value="broker-dashboard">11. Dashboard Broker</option>
                 <option value="admin-dashboard">12. Dashboard Admin</option>
                 <option value="admin-general-dashboard">13. Dashboard Admin General</option>
-                <option value="ctp-admin-dashboard">14. Dashboard CTP Admin</option>
+                <option value="ctp-admin-dashboard">14. CTP Plataforma</option>
               </select>
             </div>
           </div>
