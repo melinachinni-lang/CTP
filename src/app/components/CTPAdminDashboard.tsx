@@ -4,7 +4,7 @@ import {
   TrendingUp, BarChart3, Zap, Sparkles,
   Users, ClipboardList, MessageSquare, CalendarCheck,
   BookOpen, Megaphone, Phone, MapPin,
-  Building2, Settings, HelpCircle, ChevronDown,
+  Building2, Settings, HelpCircle, ChevronDown, ShieldCheck,
   Plus, ArrowUpRight, ArrowDownRight, Eye, Search,
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
   Bookmark, UserCheck, type LucideIcon,
@@ -25,13 +25,14 @@ import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAd
 import { AdminBannersModule } from '@/app/components/AdminBannersModule';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
 import { AdminRegionesView } from '@/app/components/AdminRegionesView';
+import { AdminVerificacionView } from '@/app/components/AdminVerificacionView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type NavSection =
   | 'inicio' | 'my-publications' | 'inquiries' | 'reservas' | 'calendarios' | 'profile'
-  | 'performance' | 'analitica' | 'embudo'
+  | 'performance' | 'analitica' | 'embudo' | 'verificacion'
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
   | 'team' | 'configuracion' | 'help';
@@ -64,6 +65,7 @@ const NAV_GROUPS = [
     id: 'administracion',
     label: 'Administración',
     items: [
+      { id: 'verificacion' as NavSection,   label: 'Verificación',       icon: ShieldCheck },
       { id: 'team' as NavSection,          label: 'Equipo CTP',         icon: Building2 },
       { id: 'regiones' as NavSection,      label: 'Regiones y Comunas', icon: MapPin },
       { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
@@ -279,6 +281,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'recursos'        && <AdminRecursosModule />}
         {currentSection === 'team'            && <TeamContent />}
         {currentSection === 'help'            && <HelpContent />}
+        {currentSection === 'verificacion'    && <AdminVerificacionView />}
         {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="inmobiliaria" />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
         {currentSection === 'interacciones'   && <InteraccionesContent />}
@@ -406,7 +409,7 @@ function CTPHomeContent({ setCurrentSection }: {
           </p>
           <div className="space-y-2">
             {[
-              { label: 'Verificar registros',  section: 'configuracion' as NavSection, icon: ClipboardList },
+              { label: 'Verificar registros',  section: 'verificacion' as NavSection, icon: ClipboardList },
               { label: 'Analítica plataforma', section: 'analitica' as NavSection,     icon: BarChart3 },
               { label: 'Banners & mensajes',   section: 'banners' as NavSection,       icon: Megaphone },
               { label: 'Gestión de equipo',    section: 'team' as NavSection,          icon: Users },
