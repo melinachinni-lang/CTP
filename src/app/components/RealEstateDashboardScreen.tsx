@@ -76,7 +76,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
               color: '#FFFFFF',
               lineHeight: 'var(--line-height-heading)'
             }}>
-              Inmobiliaria CTP
+              CompraTuParcela
             </h2>
           </div>
 

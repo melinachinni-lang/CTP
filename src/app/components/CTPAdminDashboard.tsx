@@ -142,7 +142,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
             color: '#FFFFFF',
             lineHeight: 'var(--line-height-heading)',
           }}>
-            CTP Plataforma
+            CompraTuParcela
           </p>
         </div>
 
@@ -246,7 +246,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
               <span style={{ fontSize: '11px', fontWeight: 700, color: '#FFFFFF', fontFamily: 'var(--font-heading)' }}>CTP</span>
             </div>
             <div className="flex-1 text-left">
-              <p style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '13px', fontFamily: 'var(--font-body)', margin: 0 }}>CTP Plataforma</p>
+              <p style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '13px', fontFamily: 'var(--font-body)', margin: 0 }}>Admin CTP</p>
               <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '1px', fontFamily: 'var(--font-body)' }}>Administrador general</p>
             </div>
           </button>
@@ -382,7 +382,7 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
       {/* Header */}
       <div className="mb-8">
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>
-          Bienvenido, CTP Plataforma
+          Bienvenido, Admin CTP
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>
           Visión general de tus publicaciones y el estado de la plataforma.
