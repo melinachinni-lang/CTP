@@ -402,37 +402,62 @@ export function AdminVerificacionView() {
                     </td>
                     {/* Acciones */}
                     <td className="px-4 py-4 text-right">
-                      <div className="flex items-center gap-2 justify-end">
-                        <button
-                          onClick={() => { setDrawerRegistro(r); setShowRechazoInput(false); setNotaRechazo(''); }}
-                          className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all"
-                          style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', color: '#737373', fontFamily: 'var(--font-body)' }}
-                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                        >
-                          <Eye className="w-3.5 h-3.5" /> Ver
-                        </button>
+                      <div className="flex items-center gap-1.5 justify-end">
+                        {/* Ver */}
+                        <div className="relative group">
+                          <button
+                            onClick={() => { setDrawerRegistro(r); setShowRechazoInput(false); setNotaRechazo(''); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
+                            style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', color: '#737373' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
+                            style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
+                            Ver detalle
+                          </span>
+                        </div>
                         {r.estado === 'pendiente' && (
                           <>
-                            <button
-                              onClick={() => handleRechazar(r.id)}
-                              disabled={isProcesando}
-                              className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all disabled:opacity-50"
-                              style={{ border: '1px solid #FECACA', backgroundColor: '#FEF2F2', color: '#B91C1C', fontFamily: 'var(--font-body)' }}
-                            >
-                              <XCircle className="w-3.5 h-3.5" /> Rechazar
-                            </button>
-                            <button
-                              onClick={() => handleAprobar(r.id)}
-                              disabled={isProcesando}
-                              className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all disabled:opacity-50"
-                              style={{ backgroundColor: isProcesando ? '#C5D9A8' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-                            >
-                              {isProcesando
-                                ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Procesando…</>
-                                : <><CheckCircle className="w-3.5 h-3.5" /> Aprobar</>
-                              }
-                            </button>
+                            {/* Rechazar */}
+                            <div className="relative group">
+                              <button
+                                onClick={() => handleRechazar(r.id)}
+                                disabled={isProcesando}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors disabled:opacity-40"
+                                style={{ border: '1px solid #FECACA', backgroundColor: '#FEF2F2', color: '#B91C1C' }}
+                                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }}
+                                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}
+                              >
+                                <XCircle className="w-4 h-4" />
+                              </button>
+                              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
+                                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
+                                Rechazar
+                              </span>
+                            </div>
+                            {/* Aprobar */}
+                            <div className="relative group">
+                              <button
+                                onClick={() => handleAprobar(r.id)}
+                                disabled={isProcesando}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors disabled:opacity-40"
+                                style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}
+                                onMouseEnter={e => { if (!isProcesando) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                                onMouseLeave={e => { if (!isProcesando) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                              >
+                                {isProcesando
+                                  ? <RefreshCw className="w-4 h-4 animate-spin" />
+                                  : <CheckCircle className="w-4 h-4" />
+                                }
+                              </button>
+                              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
+                                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
+                                Aprobar
+                              </span>
+                            </div>
                           </>
                         )}
                       </div>
