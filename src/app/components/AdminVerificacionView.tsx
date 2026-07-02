@@ -316,7 +316,7 @@ export function AdminVerificacionView() {
       </div>
 
       {/* Tabla */}
-      <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+      <div className="rounded-2xl overflow-hidden overflow-x-auto" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         {filtrados.length === 0 ? (
           <div className="py-16 text-center">
             <CheckCircle2 className="w-10 h-10 mx-auto mb-3" style={{ color: '#D1FAE5' }} />
@@ -326,9 +326,9 @@ export function AdminVerificacionView() {
           <table className="w-full">
             <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
               <tr>
-                {['Solicitante', 'Tipo', 'Región', 'Documentos', 'Enviado', 'Estado', 'Acciones'].map((h, i) => (
+                {['Solicitante', 'Tipo', 'Documentos', 'Enviado', 'Estado', 'Acciones'].map((h, i) => (
                   <th key={h}
-                    className={`px-5 py-3.5 ${i === 0 ? 'text-left' : i >= 5 ? 'text-right' : 'text-left'}`}
+                    className={`px-4 py-3.5 ${i === 0 ? 'text-left' : i >= 4 ? 'text-right' : 'text-left'}`}
                     style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}
                   >
                     {h}
@@ -351,7 +351,7 @@ export function AdminVerificacionView() {
                     onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
                   >
                     {/* Solicitante */}
-                    <td className="px-5 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                           style={{ backgroundColor: r.tipo === 'inmobiliaria' ? '#EFF6FF' : '#F0F5EB' }}>
@@ -367,21 +367,14 @@ export function AdminVerificacionView() {
                       </div>
                     </td>
                     {/* Tipo */}
-                    <td className="px-5 py-4">
+                    <td className="px-4 py-4">
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium"
                         style={{ backgroundColor: r.tipo === 'inmobiliaria' ? '#EFF6FF' : '#F0F5EB', color: r.tipo === 'inmobiliaria' ? '#1D4ED8' : '#006B4E' }}>
                         {r.tipo === 'inmobiliaria' ? 'Inmobiliaria' : 'Broker'}
                       </span>
                     </td>
-                    {/* Región */}
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#9CA3AF' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{r.region}</span>
-                      </div>
-                    </td>
                     {/* Documentos */}
-                    <td className="px-5 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-1.5">
                         <FileText className="w-3.5 h-3.5" style={{ color: docSubidos === docTotal ? '#006B4E' : '#D97706' }} />
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: docSubidos === docTotal ? '#006B4E' : '#D97706' }}>
@@ -393,14 +386,14 @@ export function AdminVerificacionView() {
                       </div>
                     </td>
                     {/* Fecha */}
-                    <td className="px-5 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{r.fechaEnvio}</span>
                       </div>
                     </td>
                     {/* Estado */}
-                    <td className="px-5 py-4 text-right">
+                    <td className="px-4 py-4 text-right">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
                         style={{ backgroundColor: cfg.bg, color: cfg.color }}>
                         <EstIcon className="w-3 h-3" />
@@ -408,7 +401,7 @@ export function AdminVerificacionView() {
                       </span>
                     </td>
                     {/* Acciones */}
-                    <td className="px-5 py-4 text-right">
+                    <td className="px-4 py-4 text-right">
                       <div className="flex items-center gap-2 justify-end">
                         <button
                           onClick={() => { setDrawerRegistro(r); setShowRechazoInput(false); setNotaRechazo(''); }}
