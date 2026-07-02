@@ -353,28 +353,28 @@ function StatusBadge({ status }: { status: 'activo' | 'pendiente' | 'inactivo' }
 
 // ─── Inicio (CTP Home) ────────────────────────────────────────────────────────
 
-function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
+function CTPHomeContent({ setCurrentSection }: {
   setCurrentSection: (s: NavSection) => void;
   setTriggerPublishModal: (fn: (n: number) => number) => void;
 }) {
-  const kpisPublicador = [
-    { label: 'Publicaciones activas',  value: '34',     change: '+3',     up: true,  icon: FolderOpen,    iconBg: '#E8F5EE', iconColor: '#006B4E' },
-    { label: 'Consultas recibidas',    value: '218',    change: '+12%',   up: true,  icon: MessageCircle, iconBg: '#EFF6FF', iconColor: '#2563EB' },
-    { label: 'Reservas este mes',      value: '9',      change: '+2',     up: true,  icon: FileText,      iconBg: '#F5F3FF', iconColor: '#7C3AED' },
-    { label: 'Parcelas guardadas',     value: '1.243',  change: '+8%',    up: true,  icon: Bookmark,      iconBg: '#FFF7ED', iconColor: '#C2410C' },
+  const kpisActividad = [
+    { label: 'Publicaciones activas',   value: '1.847',  change: '+23',    up: true,  icon: FolderOpen,    iconBg: '#E8F5EE', iconColor: '#006B4E' },
+    { label: 'Consultas este mes',      value: '4.312',  change: '+18%',   up: true,  icon: MessageCircle, iconBg: '#EFF6FF', iconColor: '#2563EB' },
+    { label: 'Reservas este mes',       value: '94',     change: '+11',    up: true,  icon: FileText,      iconBg: '#F5F3FF', iconColor: '#7C3AED' },
+    { label: 'Tasa de conversión',      value: '3.4%',   change: '+0.2pp', up: true,  icon: TrendingUp,    iconBg: '#FFF7ED', iconColor: '#C2410C' },
   ];
-  const kpisPlataforma = [
-    { label: 'Usuarios totales',       value: '8.245',  change: '+14%',   up: true,  icon: Users,         iconBg: '#EFF6FF', iconColor: '#2563EB' },
-    { label: 'Inmobiliarias activas',  value: '41',     change: '+4',     up: true,  icon: Building2,     iconBg: '#E8F5EE', iconColor: '#006B4E' },
-    { label: 'Brokers activos',        value: '87',     change: '+6',     up: true,  icon: UserCheck,     iconBg: '#F0FDFA', iconColor: '#0D9488' },
-    { label: 'Conversión leads',       value: '3.4%',   change: '+0.2pp', up: true,  icon: TrendingUp,    iconBg: '#F5F3FF', iconColor: '#7C3AED' },
+  const kpisParticipantes = [
+    { label: 'Inmobiliarias activas',         value: '41',     change: '+4',   up: true,  icon: Building2,     iconBg: '#E8F5EE', iconColor: '#006B4E' },
+    { label: 'Brokers activos',               value: '87',     change: '+6',   up: true,  icon: UserCheck,     iconBg: '#F0FDFA', iconColor: '#0D9488' },
+    { label: 'Usuarios registrados',          value: '8.245',  change: '+14%', up: true,  icon: Users,         iconBg: '#EFF6FF', iconColor: '#2563EB' },
+    { label: 'Pendientes de verificación',    value: '5',      change: '+3',   up: false, icon: ClipboardList, iconBg: '#FEF3C7', iconColor: '#B7791F' },
   ];
   const actividad = [
-    { icon: CheckCircle, color: '#006B4E', text: 'Nueva reserva recibida para Parcela Los Robles', time: 'Hace 12 min' },
-    { icon: MessageCircle, color: '#006B4E', text: '5 nuevas consultas en las últimas 2 horas', time: 'Hace 1 h' },
-    { icon: Users, color: '#2563EB', text: 'Broker Carlos Pérez completó 3 asignaciones', time: 'Hace 2 h' },
-    { icon: AlertCircle, color: '#B7791F', text: 'Publicación "Parcela Aysén Sur" requiere revisión', time: 'Hace 4 h' },
-    { icon: CheckCircle, color: '#006B4E', text: 'Inmobiliaria Verde Sur activó su plan Premium', time: 'Ayer, 16:30' },
+    { icon: CheckCircle,   color: '#006B4E', text: 'Nueva reserva — Parcela Los Robles (Inmobiliaria Verde Sur)', time: 'Hace 12 min' },
+    { icon: MessageCircle, color: '#2563EB', text: '5 nuevas consultas recibidas en la plataforma', time: 'Hace 1 h' },
+    { icon: AlertCircle,   color: '#B7791F', text: 'Inmobiliaria Patagonia Sur pendiente de verificación', time: 'Hace 2 h' },
+    { icon: UserCheck,     color: '#0D9488', text: 'Broker Diego Muñoz validado y activado', time: 'Hace 3 h' },
+    { icon: Building2,     color: '#006B4E', text: 'Inmobiliaria Verde Sur activó su plan Premium', time: 'Ayer, 16:30' },
   ];
 
   return (
@@ -385,27 +385,27 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
           Bienvenido, Admin CTP
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>
-          Visión general de tus publicaciones y el estado de la plataforma.
+          Visión general de la plataforma CompraTuParcela.
         </p>
       </div>
 
-      {/* KPIs como publicador */}
+      {/* KPIs actividad global */}
       <div className="mb-2">
         <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
-          Como publicador
+          Actividad global
         </p>
         <div className="grid grid-cols-4 gap-4 mb-8">
-          {kpisPublicador.map(k => <KPICard key={k.label} {...k} />)}
+          {kpisActividad.map(k => <KPICard key={k.label} {...k} />)}
         </div>
       </div>
 
-      {/* KPIs plataforma */}
+      {/* KPIs participantes */}
       <div className="mb-8">
         <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
-          Plataforma
+          Participantes
         </p>
         <div className="grid grid-cols-4 gap-4">
-          {kpisPlataforma.map(k => <KPICard key={k.label} {...k} />)}
+          {kpisParticipantes.map(k => <KPICard key={k.label} {...k} />)}
         </div>
       </div>
 
@@ -418,11 +418,11 @@ function CTPHomeContent({ setCurrentSection, setTriggerPublishModal }: {
           </p>
           <div className="space-y-2">
             {[
-              { label: 'Ver mis publicaciones', section: 'my-publications' as NavSection, icon: FolderOpen },
-              { label: 'Consultas pendientes',  section: 'inquiries' as NavSection,       icon: MessageCircle },
-              { label: 'Analítica plataforma',  section: 'analitica' as NavSection,       icon: BarChart3 },
-              { label: 'Gestión de brokers',    section: 'configuracion' as NavSection,   icon: Users },
-              { label: 'Insights IA',           section: 'insights' as NavSection,        icon: Sparkles },
+              { label: 'Verificar registros',  section: 'configuracion' as NavSection, icon: ClipboardList },
+              { label: 'Analítica plataforma', section: 'analitica' as NavSection,     icon: BarChart3 },
+              { label: 'Banners & mensajes',   section: 'banners' as NavSection,       icon: Megaphone },
+              { label: 'Gestión de equipo',    section: 'team' as NavSection,          icon: Users },
+              { label: 'Regiones y comunas',   section: 'regiones' as NavSection,      icon: MapPin },
             ].map(({ label, section, icon: Icon }) => (
               <button
                 key={section}
