@@ -159,6 +159,7 @@ const ESTADO_CONFIG: Record<EstadoRegistro, { label: string; color: string; bg: 
 export function AdminVerificacionView() {
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('pendiente');
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>('todos');
+  const [showTipoDropdown, setShowTipoDropdown] = useState(false);
   const [busqueda, setBusqueda] = useState('');
   const [drawerRegistro, setDrawerRegistro] = useState<RegistroPendiente | null>(null);
   const [registros, setRegistros] = useState<RegistroPendiente[]>(REGISTROS);
@@ -264,23 +265,39 @@ export function AdminVerificacionView() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Tipo filter */}
-          <div className="flex gap-1">
-            {([['todos', 'Todos'], ['inmobiliaria', 'Inmobiliarias'], ['broker', 'Brokers']] as [FiltroTipo, string][]).map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => setFiltroTipo(key)}
-                className="px-3 py-1.5 rounded-full text-xs transition-all"
-                style={{
-                  fontFamily: 'var(--font-body)', fontWeight: 500,
-                  color: filtroTipo === key ? '#FFFFFF' : '#737373',
-                  backgroundColor: filtroTipo === key ? '#006B4E' : '#F5F5F5',
-                  border: `1px solid ${filtroTipo === key ? '#006B4E' : '#E5E5E5'}`,
-                }}
-              >
-                {label}
-              </button>
-            ))}
+          {/* Tipo dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowTipoDropdown(v => !v)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors"
+              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 500, color: '#0A0A0A' }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              {filtroTipo === 'todos' ? 'Todos' : filtroTipo === 'inmobiliaria' ? 'Inmobiliarias' : 'Brokers'}
+              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showTipoDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+            </button>
+            {showTipoDropdown && (
+              <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '160px' }}>
+                {([['todos', 'Todos'], ['inmobiliaria', 'Inmobiliarias'], ['broker', 'Brokers']] as [FiltroTipo, string][]).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => { setFiltroTipo(key); setShowTipoDropdown(false); }}
+                    className="w-full text-left px-4 py-2.5 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)', fontSize: '13px',
+                      fontWeight: filtroTipo === key ? 600 : 400,
+                      color: filtroTipo === key ? '#006B4E' : '#0A0A0A',
+                      backgroundColor: filtroTipo === key ? '#F0F9F5' : '#FFFFFF',
+                    }}
+                    onMouseEnter={e => { if (filtroTipo !== key) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                    onMouseLeave={e => { if (filtroTipo !== key) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Búsqueda */}
