@@ -1,6 +1,16 @@
-import React from 'react';
-import { Users, UserPlus, UserCheck, Activity, MousePointer, ArrowUpRight, ArrowDownRight, type LucideIcon } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import React, { useState } from 'react';
+import { Users, UserPlus, UserCheck, Activity, MousePointer, ArrowUpRight, ArrowDownRight, ChevronDown, Calendar, type LucideIcon } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
+
+const RANGO_PRESETS = [
+  { id: 'hoy',     label: 'Hoy' },
+  { id: '7d',      label: 'Últimos 7 días' },
+  { id: '28d',     label: 'Últimos 28 días' },
+  { id: '30d',     label: 'Últimos 30 días' },
+  { id: 'mes',     label: 'Este mes' },
+  { id: 'mes_ant', label: 'El mes pasado' },
+  { id: '90d',     label: 'Últimos 90 días' },
+];
 
 // ─── KPI Card ────────────────────────────────────────────────────────────────
 
@@ -36,6 +46,34 @@ function KPICard({ label, value, change, up, icon: Icon, iconBg, iconColor }: {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export function AdminAnaliticaView() {
+  const [rango, setRango] = useState('30d');
+  const [showRango, setShowRango] = useState(false);
+  const rangoLabel = RANGO_PRESETS.find(r => r.id === rango)?.label ?? '';
+
+  const traficoUnificado = [
+    { dia: '1 jun',  visitas: 320,  consultas: 45,  reservas: 4  },
+    { dia: '3 jun',  visitas: 385,  consultas: 52,  reservas: 5  },
+    { dia: '5 jun',  visitas: 412,  consultas: 61,  reservas: 6  },
+    { dia: '7 jun',  visitas: 456,  consultas: 58,  reservas: 7  },
+    { dia: '9 jun',  visitas: 492,  consultas: 74,  reservas: 8  },
+    { dia: '11 jun', visitas: 445,  consultas: 68,  reservas: 6  },
+    { dia: '13 jun', visitas: 512,  consultas: 79,  reservas: 9  },
+    { dia: '15 jun', visitas: 534,  consultas: 83,  reservas: 10 },
+    { dia: '17 jun', visitas: 556,  consultas: 91,  reservas: 11 },
+    { dia: '19 jun', visitas: 498,  consultas: 76,  reservas: 8  },
+    { dia: '21 jun', visitas: 528,  consultas: 84,  reservas: 9  },
+    { dia: '23 jun', visitas: 565,  consultas: 95,  reservas: 12 },
+    { dia: '25 jun', visitas: 556,  consultas: 88,  reservas: 11 },
+    { dia: '27 jun', visitas: 578,  consultas: 97,  reservas: 13 },
+    { dia: '29 jun', visitas: 621,  consultas: 104, reservas: 14 },
+  ];
+
+  const LINEAS = [
+    { key: 'visitas',   label: 'Visitas',   color: '#2563EB' },
+    { key: 'consultas', label: 'Consultas', color: '#006B4E' },
+    { key: 'reservas',  label: 'Reservas',  color: '#7C3AED' },
+  ];
+
   const trafficKPIs = [
     { label: 'Usuarios totales',         value: '8.245',  change: '+14.2%', up: true,  icon: Users,        iconBg: '#EFF6FF', iconColor: '#2563EB' },
     { label: 'Usuarios nuevos',          value: '5.621',  change: '+18.5%', up: true,  icon: UserPlus,     iconBg: '#E8F5EE', iconColor: '#006B4E' },
@@ -112,6 +150,74 @@ export function AdminAnaliticaView() {
 
   return (
     <div className="p-6 space-y-6">
+
+      {/* Gráfico principal unificado estilo GA4 */}
+      <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
+              Tráfico de la plataforma
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
+              Visitas, consultas y reservas en el período seleccionado
+            </p>
+          </div>
+          {/* Date range selector */}
+          <div className="relative">
+            <button
+              onClick={() => setShowRango(v => !v)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500 }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
+              {rangoLabel}
+              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRango ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+            </button>
+            {showRango && (
+              <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '200px' }}>
+                {RANGO_PRESETS.map(preset => (
+                  <button
+                    key={preset.id}
+                    onClick={() => { setRango(preset.id); setShowRango(false); }}
+                    className="w-full text-left px-4 py-2.5 transition-colors"
+                    style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: rango === preset.id ? 600 : 400, color: rango === preset.id ? '#006B4E' : '#0A0A0A', backgroundColor: rango === preset.id ? '#F0F9F5' : '#FFFFFF' }}
+                    onMouseEnter={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                    onMouseLeave={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Leyenda de líneas */}
+        <div className="flex items-center gap-6 mb-4">
+          {LINEAS.map(l => (
+            <div key={l.key} className="flex items-center gap-2">
+              <div style={{ width: '24px', height: '3px', borderRadius: '2px', backgroundColor: l.color }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>{l.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ height: '300px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={traficoUnificado} margin={{ top: 4, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F0" />
+              <XAxis dataKey="dia" tick={{ fontFamily: 'var(--font-body)', fontSize: 11, fill: '#A3A3A3' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontFamily: 'var(--font-body)', fontSize: 11, fill: '#A3A3A3' }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', borderRadius: '12px', fontFamily: 'var(--font-body)', fontSize: '13px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
+              {LINEAS.map(l => (
+                <Line key={l.key} type="monotone" dataKey={l.key} stroke={l.color} strokeWidth={2.5} dot={false} name={l.label} />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
 
       {/* KPIs */}
       <section className="grid grid-cols-5 gap-4">
