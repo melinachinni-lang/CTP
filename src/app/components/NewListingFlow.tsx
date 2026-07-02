@@ -1,14 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, X, Check, Upload, FileText, Image as ImageIcon, AlertCircle, Video, Download, Plus, Trash2, MapPin, Move, Home, Compass, Wheat, Store, Waves, Mountain, Trees, Leaf, Droplet, Zap, Wifi, Car, DoorOpen, Shield, Search, FileCheck, Lightbulb, Sun, Globe, Route, Camera, Recycle, Trash, Settings } from 'lucide-react';
+import { ChevronLeft, X, Check, Upload, FileText, Image as ImageIcon, AlertCircle, Video, Download, Plus, Trash2, MapPin, Move, Home, Compass, Wheat, Store, Waves, Mountain, Trees, Leaf, Droplet, Zap, Wifi, Car, DoorOpen, Shield, Search, FileCheck, Lightbulb, Sun, Globe, Route, Camera, Recycle, Trash, Settings, Building2, CheckCircle2 } from 'lucide-react';
 
 interface NewListingFlowProps {
   onClose: () => void;
   onPublish: () => void;
   parcelaId?: string | null;
+  userType?: string;
 }
 
-export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlowProps) {
-  const [currentStep, setCurrentStep] = useState(1);
+const BROKER_INMOBILIARIAS = [
+  { id: 'inm-1', nombre: 'Inmobiliaria Del Campo SpA' },
+  { id: 'inm-2', nombre: 'Parcelas del Sur Ltda.' },
+  { id: 'inm-3', nombre: 'Valle Verde Propiedades' },
+];
+
+export function NewListingFlow({ onClose, onPublish, parcelaId, userType }: NewListingFlowProps) {
+  const isBroker = userType === 'broker';
+  const [currentStep, setCurrentStep] = useState(isBroker ? 0 : 1);
+  const [brokerInmobiliaria, setBrokerInmobiliaria] = useState('');
+  const [showBrokerDropdown, setShowBrokerDropdown] = useState(false);
   const isEditing = !!parcelaId;
   const [formData, setFormData] = useState({
     // Paso 1: Información básica
@@ -85,13 +95,21 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
   const [showPreview, setShowPreview] = useState(false);
   const [activeMapTab, setActiveMapTab] = useState<'360' | 'plano' | 'mapa'>('mapa');
 
-  const steps = [
+  const steps = isBroker ? [
+    { number: 0, label: 'Inmobiliaria' },
+    { number: 1, label: 'Info. básica' },
+    { number: 2, label: 'Características' },
+    { number: 3, label: 'Ubicación' },
+    { number: 4, label: 'Documentación' },
+    { number: 5, label: 'Multimedia' },
+  ] : [
     { number: 1, label: 'Información básica' },
     { number: 2, label: 'Características' },
     { number: 3, label: 'Ubicación y mapas' },
     { number: 4, label: 'Documentación' },
     { number: 5, label: 'Multimedia' },
   ];
+  const totalSteps = isBroker ? 6 : 5;
 
   // Helper functions para "Seleccionar todo"
   const landUseKeys = ['residential', 'tourist', 'agricultural', 'commercial'];
@@ -166,6 +184,12 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
 
+    if (step === 0) {
+      if (!brokerInmobiliaria) {
+        newErrors.brokerInmobiliaria = 'Selecciona la inmobiliaria a la que pertenece esta parcela';
+      }
+    }
+
     if (step === 1) {
       if (!formData.title.trim()) {
         newErrors.title = 'Título de la publicación: ingresa un título descriptivo';
@@ -208,7 +232,8 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
   };
 
   const handleBack = () => {
-    if (currentStep > 1) {
+    const minStep = isBroker ? 0 : 1;
+    if (currentStep > minStep) {
       setCurrentStep(currentStep - 1);
       setErrors({});
       setShowValidationAlert(false);
@@ -410,7 +435,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                     marginTop: '4px',
                     lineHeight: 'var(--line-height-body)'
                   }}>
-                    Paso {currentStep} de 5
+                    Paso {isBroker ? currentStep + 1 : currentStep} de {totalSteps}
                   </p>
                 </div>
               </div>
@@ -452,16 +477,16 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                     <div
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
                       style={{
-                        backgroundColor: currentStep > step.number 
-                          ? '#006B4E' 
-                          : currentStep === step.number 
-                          ? '#FFFFFF' 
+                        backgroundColor: currentStep > step.number
+                          ? '#006B4E'
+                          : currentStep === step.number
+                          ? '#FFFFFF'
                           : '#FAFAFA',
                         border: currentStep >= step.number ? '2px solid #006B4E' : '2px solid #DEDEDE',
-                        color: currentStep > step.number 
-                          ? '#FFFFFF' 
-                          : currentStep === step.number 
-                          ? '#006B4E' 
+                        color: currentStep > step.number
+                          ? '#FFFFFF'
+                          : currentStep === step.number
+                          ? '#006B4E'
                           : '#C3C3C3',
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
@@ -471,7 +496,7 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                       {currentStep > step.number ? (
                         <Check size={14} />
                       ) : (
-                        step.number
+                        index + 1
                       )}
                     </div>
                     <span
@@ -561,6 +586,77 @@ export function NewListingFlow({ onClose, onPublish, parcelaId }: NewListingFlow
                     </li>
                   ))}
                 </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Paso 0 (broker): Selección de inmobiliaria */}
+          {currentStep === 0 && isBroker && (
+            <div className="space-y-6">
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-regular)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+                  Inmobiliaria asociada
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '8px', lineHeight: 'var(--line-height-body)' }}>
+                  Como broker puedes estar asociado a más de una inmobiliaria. Selecciona a cuál pertenece esta parcela.
+                </p>
+              </div>
+
+              <div className="max-w-lg">
+                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  Inmobiliaria <span style={{ color: '#DC2626' }}>*</span>
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowBrokerDropdown(!showBrokerDropdown)}
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left"
+                    style={{
+                      border: `1.5px solid ${errors.brokerInmobiliaria ? '#DC2626' : showBrokerDropdown ? '#006B4E' : brokerInmobiliaria ? '#006B4E' : '#E5E5E5'}`,
+                      backgroundColor: '#FAFAFA',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      color: brokerInmobiliaria ? '#0A0A0A' : '#9CA3AF',
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: brokerInmobiliaria ? '#006B4E' : '#9CA3AF' }} />
+                      <span>
+                        {brokerInmobiliaria
+                          ? BROKER_INMOBILIARIAS.find(i => i.id === brokerInmobiliaria)?.nombre
+                          : 'Selecciona una inmobiliaria'}
+                      </span>
+                    </div>
+                    <svg className="w-4 h-4 flex-shrink-0" style={{ color: '#9CA3AF', transform: showBrokerDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {showBrokerDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 rounded-xl overflow-hidden z-10" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
+                      {BROKER_INMOBILIARIAS.map(inm => (
+                        <button
+                          key={inm.id}
+                          onClick={() => { setBrokerInmobiliaria(inm.id); setShowBrokerDropdown(false); }}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors"
+                          style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F9F7'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#9CA3AF' }} />
+                          <span style={{ flex: 1 }}>{inm.nombre}</span>
+                          {brokerInmobiliaria === inm.id && (
+                            <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {errors.brokerInmobiliaria && (
+                  <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626' }}>
+                    {errors.brokerInmobiliaria}
+                  </p>
+                )}
               </div>
             </div>
           )}

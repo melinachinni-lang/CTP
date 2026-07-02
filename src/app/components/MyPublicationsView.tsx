@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { Plus, MoreVertical, Edit2, Share2, Trash2, Calendar, MapPin, Maximize2, Eye, Link as LinkIcon, MessageCircle, Check, Copy, FileText, Building2, CheckCircle2, X, Pause, Play, FileSpreadsheet, RefreshCw, ExternalLink } from 'lucide-react';
 import { PublicationWizard, PublicationData, PublicationStatus, StockUnit } from '@/app/components/PublicationWizard';
 import { PublicacionPublicaView } from '@/app/components/PublicacionPublicaView';
@@ -50,15 +49,6 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const handleSincronizar = () => { setSincronizando(true); setTimeout(() => setSincronizando(false), 2000); };
   const [showPublicationLimitModal, setShowPublicationLimitModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [showBrokerAssignModal, setShowBrokerAssignModal] = useState(false);
-  const [brokerSelectedInmobiliaria, setBrokerSelectedInmobiliaria] = useState('');
-  const [showInmobiliariaDropdown, setShowInmobiliariaDropdown] = useState(false);
-
-  const BROKER_INMOBILIARIAS = [
-    { id: 'inm-1', nombre: 'Inmobiliaria Del Campo SpA', logo: '🏢' },
-    { id: 'inm-2', nombre: 'Parcelas del Sur Ltda.', logo: '🌿' },
-    { id: 'inm-3', nombre: 'Valle Verde Propiedades', logo: '🏡' },
-  ];
 
   // Efecto para abrir el modal cuando cambia autoOpenModal
   useEffect(() => {
@@ -155,8 +145,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
     if (userType === 'inmobiliaria') {
       setShowTypeSelectionModal(true);
     } else if (userType === 'broker') {
-      setBrokerSelectedInmobiliaria('');
-      setShowBrokerAssignModal(true);
+      setShowListingFlow(true);
     } else {
       setShowListingFlow(true);
     }
@@ -1735,6 +1724,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
         <NewListingFlow
           onClose={() => setShowListingFlow(false)}
           onPublish={handlePublishListing}
+          userType={userType}
         />
       )}
 
@@ -1849,129 +1839,6 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
         </div>
       )}
 
-      {/* Broker: Modal de asignación de inmobiliaria + tipo antes de publicar */}
-      {showBrokerAssignModal && createPortal(
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-          onClick={e => { if (e.target === e.currentTarget) { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); } }}
-        >
-          <div className="w-full max-w-md mx-4 rounded-2xl bg-background overflow-hidden" style={{ border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}>
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
-              <div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 600, color: 'var(--foreground)' }}>
-                  Nueva publicación
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', marginTop: '2px' }}>
-                  Selecciona la inmobiliaria a la que pertenece esta parcela
-                </p>
-              </div>
-              <button
-                onClick={() => { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); setBrokerSelectedInmobiliaria(''); }}
-                className="p-1.5 rounded-lg transition-colors"
-                style={{ color: '#9CA3AF' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="p-6 space-y-5">
-              <div>
-                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  Inmobiliaria <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                  Como broker puedes estar asociado a más de una inmobiliaria.
-                </p>
-                <div className="relative">
-                  <button
-                    onClick={() => setShowInmobiliariaDropdown(!showInmobiliariaDropdown)}
-                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left"
-                    style={{
-                      border: `1.5px solid ${showInmobiliariaDropdown ? '#006B4E' : (brokerSelectedInmobiliaria ? '#006B4E' : '#E5E5E5')}`,
-                      backgroundColor: '#FAFAFA',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      color: brokerSelectedInmobiliaria ? 'var(--foreground)' : '#9CA3AF',
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: brokerSelectedInmobiliaria ? '#006B4E' : '#9CA3AF' }} />
-                      <span>
-                        {brokerSelectedInmobiliaria
-                          ? BROKER_INMOBILIARIAS.find(i => i.id === brokerSelectedInmobiliaria)?.nombre
-                          : 'Selecciona una inmobiliaria'}
-                      </span>
-                    </div>
-                    <svg className="w-4 h-4 flex-shrink-0" style={{ color: '#9CA3AF', transform: showInmobiliariaDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {showInmobiliariaDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-1 rounded-xl overflow-hidden z-10" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
-                      {BROKER_INMOBILIARIAS.map(inm => (
-                        <button
-                          key={inm.id}
-                          onClick={() => { setBrokerSelectedInmobiliaria(inm.id); setShowInmobiliariaDropdown(false); }}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors"
-                          style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F9F7'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-                        >
-                          <span className="text-lg">{inm.logo}</span>
-                          <span style={{ flex: 1 }}>{inm.nombre}</span>
-                          {brokerSelectedInmobiliaria === inm.id && (
-                            <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Acciones */}
-              <div className="flex gap-3 pt-1">
-                <button
-                  onClick={() => { setShowBrokerAssignModal(false); setShowInmobiliariaDropdown(false); setBrokerSelectedInmobiliaria(''); }}
-                  className="px-5 py-2.5 rounded-full text-sm font-medium transition-all"
-                  style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#EBEBEB'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={() => {
-                    if (!brokerSelectedInmobiliaria) return;
-                    setShowBrokerAssignModal(false);
-                    setShowInmobiliariaDropdown(false);
-                    setShowListingFlow(true);
-                  }}
-                  disabled={!brokerSelectedInmobiliaria}
-                  className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-                  style={{
-                    backgroundColor: brokerSelectedInmobiliaria ? '#006B4E' : '#E5E5E5',
-                    color: brokerSelectedInmobiliaria ? '#FFFFFF' : '#9CA3AF',
-                    fontFamily: 'var(--font-body)',
-                    cursor: brokerSelectedInmobiliaria ? 'pointer' : 'not-allowed',
-                  }}
-                  onMouseEnter={e => { if (brokerSelectedInmobiliaria) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                  onMouseLeave={e => { if (brokerSelectedInmobiliaria) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-                >
-                  Continuar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
     </div>
   );
 }
