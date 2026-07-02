@@ -156,7 +156,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
           </nav>
 
           {/* Sugerencias */}
-          <div className="px-2 py-2" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="px-4 py-5">
             <SugerenciasButton />
           </div>
 

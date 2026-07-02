@@ -278,15 +278,24 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           </nav>
 
           {/* Sugerencias */}
-          <div className="px-2 py-2" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="px-4 py-5">
             <button
               onClick={() => setShowSugerencias(true)}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors"
-              style={{ color: 'rgba(255,255,255,0.62)', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 400 }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.62)'; }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 transition-all"
+              style={{
+                color: '#52C49A',
+                backgroundColor: 'rgba(82,196,154,0.10)',
+                border: '1px solid rgba(82,196,154,0.25)',
+                borderRadius: '200px',
+                fontFamily: 'var(--font-body)',
+                fontSize: '13px',
+                fontWeight: 500,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(82,196,154,0.18)'; e.currentTarget.style.borderColor = 'rgba(82,196,154,0.4)'; e.currentTarget.style.color = '#7EDABA'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(82,196,154,0.10)'; e.currentTarget.style.borderColor = 'rgba(82,196,154,0.25)'; e.currentTarget.style.color = '#52C49A'; }}
             >
-              <Lightbulb className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: 1.8 }} />
+              <Lightbulb className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: 2 }} />
               <span>Sugerencias</span>
             </button>
           </div>

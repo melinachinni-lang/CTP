@@ -63,27 +63,32 @@ export function SugerenciasButton({ open: controlledOpen, onClose: controlledOnC
 
   return (
     <>
-      {/* Sidebar button — only rendered in uncontrolled mode */}
+      {/* Sidebar floating button — only rendered in uncontrolled mode */}
       {!isControlled && <button
         onClick={() => setInternalOpen(true)}
-        className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors"
+        className="w-full flex items-center justify-center gap-2 py-2.5 transition-all"
         style={{
-          color: 'rgba(255,255,255,0.62)',
-          backgroundColor: 'transparent',
+          color: '#52C49A',
+          backgroundColor: 'rgba(82,196,154,0.10)',
+          border: '1px solid rgba(82,196,154,0.25)',
+          borderRadius: '200px',
           fontFamily: 'var(--font-body)',
           fontSize: '13px',
-          fontWeight: 400,
+          fontWeight: 500,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-          e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+          e.currentTarget.style.backgroundColor = 'rgba(82,196,154,0.18)';
+          e.currentTarget.style.borderColor = 'rgba(82,196,154,0.4)';
+          e.currentTarget.style.color = '#7EDABA';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.color = 'rgba(255,255,255,0.62)';
+          e.currentTarget.style.backgroundColor = 'rgba(82,196,154,0.10)';
+          e.currentTarget.style.borderColor = 'rgba(82,196,154,0.25)';
+          e.currentTarget.style.color = '#52C49A';
         }}
       >
-        <Lightbulb className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: 1.8 }} />
+        <Lightbulb className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: 2 }} />
         <span>Sugerencias</span>
       </button>}
 
