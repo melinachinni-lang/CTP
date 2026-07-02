@@ -108,18 +108,11 @@ export function AdminAnaliticaView() {
   ];
   const pieColors = ['#006B4E', '#52C49A'];
 
-  const origenPorSemana = [
-    { semana: 'Sem 1', 'Orgánico': 1200, 'Pagado': 980,  'Referido': 520, 'Otros': 145 },
-    { semana: 'Sem 2', 'Orgánico': 1320, 'Pagado': 1020, 'Referido': 565, 'Otros': 158 },
-    { semana: 'Sem 3', 'Orgánico': 1410, 'Pagado': 990,  'Referido': 578, 'Otros': 162 },
-    { semana: 'Sem 4', 'Orgánico': 1565, 'Pagado': 997,  'Referido': 579, 'Otros': 158 },
-  ];
-
-  const FUENTES = [
-    { key: 'Orgánico', color: '#006B4E', total: 5606, pct: 45, up: true  },
-    { key: 'Pagado',   color: '#2563EB', total: 3987, pct: 32, up: true  },
-    { key: 'Referido', color: '#7C3AED', total: 2242, pct: 18, up: true  },
-    { key: 'Otros',    color: '#F59E0B', total: 623,  pct: 5,  up: false },
+  const origenTraficoDetallado = [
+    { origen: 'Orgánico', semana1: 1200, semana2: 1320, semana3: 1410, semana4: 1565, total: 5606, porcentaje: 45, trending: 'up' },
+    { origen: 'Pagado',   semana1: 980,  semana2: 1020, semana3: 990,  semana4: 997,  total: 3987, porcentaje: 32, trending: 'up' },
+    { origen: 'Referido', semana1: 520,  semana2: 565,  semana3: 578,  semana4: 579,  total: 2242, porcentaje: 18, trending: 'up' },
+    { origen: 'Otros',    semana1: 145,  semana2: 158,  semana3: 162,  semana4: 158,  total: 623,  porcentaje: 5,  trending: 'down' },
   ];
 
   const proyectosMasVisitados = [
@@ -324,63 +317,50 @@ export function AdminAnaliticaView() {
       </section>
 
       {/* Origen del tráfico */}
-      <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
-              Origen del tráfico
-            </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-              Evolución semanal por fuente de visitas
-            </p>
-          </div>
-          {/* Leyenda */}
-          <div className="flex items-center gap-5">
-            {FUENTES.map(f => (
-              <div key={f.key} className="flex items-center gap-2">
-                <div style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: f.color }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>{f.key}</span>
-              </div>
-            ))}
-          </div>
+      <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <div className="px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
+            Origen del tráfico
+          </h2>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
+            Evolución y distribución por fuente
+          </p>
         </div>
-
-        <div style={{ height: '260px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={origenPorSemana} margin={{ top: 4, right: 8, left: 0, bottom: 0 }} barSize={40}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F0" vertical={false} />
-              <XAxis dataKey="semana" tick={{ fontFamily: 'var(--font-body)', fontSize: 11, fill: '#A3A3A3' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontFamily: 'var(--font-body)', fontSize: 11, fill: '#A3A3A3' }} axisLine={false} tickLine={false} tickFormatter={v => v.toLocaleString('es-CL')} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', borderRadius: '12px', fontFamily: 'var(--font-body)', fontSize: '13px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                formatter={(v: any, name: string) => [v.toLocaleString('es-CL'), name]}
-              />
-              {FUENTES.map(f => (
-                <Bar key={f.key} dataKey={f.key} stackId="origen" fill={f.color} radius={f.key === 'Otros' ? [4, 4, 0, 0] : [0, 0, 0, 0]} />
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+              <tr>
+                {['Origen', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Total', '%', 'Tendencia'].map((h, i) => (
+                  <th key={h} className={`px-6 py-4 ${i === 0 ? 'text-left' : 'text-right'}`}
+                    style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {origenTraficoDetallado.map((origen, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #F5F5F5' }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FAFAFA')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
+                >
+                  <td className="px-6 py-4"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{origen.origen}</span></td>
+                  {[origen.semana1, origen.semana2, origen.semana3, origen.semana4].map((v, j) => (
+                    <td key={j} className="px-6 py-4 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{v.toLocaleString()}</span></td>
+                  ))}
+                  <td className="px-6 py-4 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{origen.total.toLocaleString()}</span></td>
+                  <td className="px-6 py-4 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{origen.porcentaje}%</span></td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: origen.trending === 'up' ? '#E8F5EE' : '#FEE2E2' }}>
+                      {origen.trending === 'up'
+                        ? <ArrowUpRight className="w-3 h-3" style={{ color: '#006B4E' }} />
+                        : <ArrowDownRight className="w-3 h-3" style={{ color: '#DC2626' }} />}
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Resumen por fuente */}
-        <div className="grid grid-cols-4 gap-4 mt-6">
-          {FUENTES.map(f => (
-            <div key={f.key} className="rounded-xl p-4" style={{ backgroundColor: '#FAFAFA', border: '1px solid #F0F0F0' }}>
-              <div className="flex items-center gap-2 mb-2">
-                <div style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: f.color }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{f.key}</span>
-              </div>
-              <p style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 2px' }}>
-                {f.total.toLocaleString('es-CL')}
-              </p>
-              <div className="flex items-center gap-1.5">
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#A3A3A3' }}>{f.pct}% del total</span>
-                <span className="flex items-center" style={{ color: f.up ? '#006B4E' : '#DC2626' }}>
-                  {f.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                </span>
-              </div>
-            </div>
-          ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
