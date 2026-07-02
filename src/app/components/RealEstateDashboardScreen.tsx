@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
@@ -68,6 +69,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       key: 'rendimiento', label: 'Rendimiento',
       items: [
         { id: 'performance', label: 'Rendimiento',        icon: TrendingUp },
+        { id: 'insights',    label: 'Insights IA',        icon: Sparkles },
         { id: 'plan',        label: 'Plan y facturación', icon: CreditCard },
       ],
     },
@@ -228,6 +230,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'citas'         && <CitasAdminView />}
         {currentSection === 'whatsapp'      && <ContactosWhatsAppAdminView />}
         {currentSection === 'performance' && <RendimientoView viewType="inmobiliaria" />}
+        {currentSection === 'insights'    && <AdminInsightsModule />}
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}

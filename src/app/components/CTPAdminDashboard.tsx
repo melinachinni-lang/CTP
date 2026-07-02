@@ -19,7 +19,7 @@ import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
-import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
+
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { AdminBannersModule } from '@/app/components/AdminBannersModule';
@@ -31,7 +31,7 @@ import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 
 type NavSection =
   | 'inicio' | 'my-publications' | 'inquiries' | 'reservas' | 'calendarios' | 'profile'
-  | 'performance' | 'analitica' | 'embudo' | 'insights'
+  | 'performance' | 'analitica' | 'embudo'
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
   | 'team' | 'configuracion' | 'help';
@@ -50,7 +50,6 @@ const NAV_GROUPS = [
       { id: 'performance' as NavSection, label: 'Rendimiento',          icon: TrendingUp },
       { id: 'analitica' as NavSection,   label: 'Analítica plataforma', icon: BarChart3 },
       { id: 'embudo' as NavSection,      label: 'Embudo digital',       icon: Zap },
-      { id: 'insights' as NavSection,    label: 'Insights IA',          icon: Sparkles },
     ],
   },
   {
@@ -272,7 +271,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'performance'     && <RendimientoView viewType="inmobiliaria" />}
         {currentSection === 'analitica'       && <AdminAnaliticaView />}
         {currentSection === 'embudo'          && <AdminEmbudoView />}
-        {currentSection === 'insights'        && <AdminInsightsModule />}
+
         {currentSection === 'citas'           && <CitasAdminView />}
         {currentSection === 'whatsapp'        && <ContactosWhatsAppAdminView />}
         {currentSection === 'banners'         && <AdminBannersModule />}

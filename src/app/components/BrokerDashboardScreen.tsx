@@ -7,6 +7,7 @@ import { RendimientoView } from '@/app/components/RendimientoView';
 import { SettingsContent } from '@/app/components/SettingsContent';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
+import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -39,7 +40,8 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     ],
     [
       { id: 'performance', label: 'Rendimiento', icon: 'chart' },
-      { id: 'plan', label: 'Plan y facturación', icon: 'card' },
+      { id: 'insights',    label: 'Insights IA', icon: 'sparkles' },
+      { id: 'plan',        label: 'Plan y facturación', icon: 'card' },
     ],
     [
       { id: 'profile', label: 'Perfil', icon: 'profile' },
@@ -112,6 +114,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         return (
           <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        );
+      case 'sparkles':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
         );
       default:
@@ -232,6 +240,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
           </div>
         )}
         {currentSection === 'performance' && <RendimientoView viewType="broker" />}
+        {currentSection === 'insights'    && <AdminInsightsModule />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
         {currentSection === 'profile' && <SettingsContent mode="profile" userType="broker" />}
