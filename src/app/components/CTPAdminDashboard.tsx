@@ -44,22 +44,6 @@ interface CTPAdminDashboardProps {
 
 const NAV_GROUPS = [
   {
-    id: 'publicador',
-    label: 'Como publicador',
-    items: [
-      { id: 'inicio' as NavSection,          label: 'Inicio',            icon: Home },
-      { id: 'my-publications' as NavSection, label: 'Mis publicaciones', icon: FolderOpen },
-      { id: 'inquiries' as NavSection,       label: 'Consultas',         icon: MessageCircle },
-      { id: 'reservas' as NavSection,        label: 'Valores de reservas', icon: FileText },
-      { id: 'calendarios' as NavSection,     label: 'Calendarios',       icon: Calendar },
-      { id: 'asignaciones' as NavSection,   label: 'Asignaciones',      icon: Users },
-      { id: 'interacciones' as NavSection,  label: 'Interacciones',     icon: MessageSquare },
-      { id: 'citas' as NavSection,          label: 'Citas',             icon: CalendarCheck },
-      { id: 'whatsapp' as NavSection,       label: 'Números WhatsApp',  icon: Phone },
-      { id: 'profile' as NavSection,         label: 'Perfil',            icon: User },
-    ],
-  },
-  {
     id: 'rendimiento',
     label: 'Rendimiento',
     items: [
@@ -67,15 +51,6 @@ const NAV_GROUPS = [
       { id: 'analitica' as NavSection,   label: 'Analítica plataforma', icon: BarChart3 },
       { id: 'embudo' as NavSection,      label: 'Embudo digital',       icon: Zap },
       { id: 'insights' as NavSection,    label: 'Insights IA',          icon: Sparkles },
-    ],
-  },
-  {
-    id: 'gestion',
-    label: 'Gestión de agentes',
-    items: [
-      { id: 'asignaciones' as NavSection,  label: 'Asignaciones',  icon: ClipboardList },
-      { id: 'interacciones' as NavSection, label: 'Interacciones', icon: MessageSquare },
-      { id: 'citas' as NavSection,         label: 'Citas',         icon: CalendarCheck },
     ],
   },
   {
@@ -90,7 +65,7 @@ const NAV_GROUPS = [
     id: 'administracion',
     label: 'Administración',
     items: [
-      { id: 'team' as NavSection,          label: 'Equipo CTP',        icon: Building2 },
+      { id: 'team' as NavSection,          label: 'Equipo CTP',         icon: Building2 },
       { id: 'regiones' as NavSection,      label: 'Regiones y Comunas', icon: MapPin },
       { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
       { id: 'help' as NavSection,          label: 'Ayuda',              icon: HelpCircle },
@@ -103,9 +78,7 @@ const NAV_GROUPS = [
 export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
   const [currentSection, setCurrentSection] = useState<NavSection>('inicio');
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    publicador: true,
     rendimiento: true,
-    gestion: false,
     contenido: false,
     administracion: false,
   });
@@ -148,6 +121,22 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
 
         {/* Nav groups */}
         <nav className="flex-1 overflow-y-auto scrollbar-hide px-2 pb-2">
+          {/* Inicio standalone */}
+          <button
+            onClick={() => setCurrentSection('inicio')}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all mb-1"
+            style={{
+              backgroundColor: currentSection === 'inicio' ? '#FFFFFF' : 'transparent',
+              color: currentSection === 'inicio' ? '#002F23' : 'rgba(255,255,255,0.62)',
+              fontFamily: 'var(--font-body)', fontWeight: currentSection === 'inicio' ? 600 : 400, fontSize: '13px',
+            }}
+            onMouseEnter={e => { if (currentSection !== 'inicio') { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; } }}
+            onMouseLeave={e => { if (currentSection !== 'inicio') { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.62)'; } }}
+          >
+            <Home className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: currentSection === 'inicio' ? 2.5 : 1.8, color: currentSection === 'inicio' ? '#002F23' : 'rgba(255,255,255,0.62)' }} />
+            <span>Inicio</span>
+          </button>
+
           {NAV_GROUPS.map((group) => {
             const isOpen = openGroups[group.id];
             const hasActive = group.items.some(i => i.id === currentSection);

@@ -36,29 +36,45 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     }));
 
   const navGroups = [
-    [
-      { id: 'home', label: 'Inicio', icon: Home },
-      { id: 'my-publications', label: 'Mis publicaciones', icon: FolderOpen },
-      { id: 'inquiries', label: 'Consultas', icon: MessageCircle },
-      { id: 'reservas', label: 'Valores de reservas', icon: FileText },
-      { id: 'calendarios', label: 'Calendarios', icon: Calendar },
-    ],
-    [
-      { id: 'asignaciones',  label: 'Asignaciones',     icon: Users },
-      { id: 'interacciones', label: 'Interacciones',    icon: MessageSquare },
-      { id: 'citas',         label: 'Citas',            icon: CalendarCheck },
-      { id: 'whatsapp',      label: 'Números WhatsApp', icon: Phone },
-    ],
-    [
-      { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
-      { id: 'team', label: 'Equipo', icon: Users },
-      { id: 'plan', label: 'Plan y facturación', icon: CreditCard },
-    ],
-    [
-      { id: 'profile', label: 'Perfil', icon: User },
-      { id: 'settings', label: 'Configuración', icon: Settings },
-      { id: 'help', label: 'Ayuda', icon: HelpCircle },
-    ],
+    {
+      label: null,
+      items: [
+        { id: 'home',           label: 'Inicio',            icon: Home },
+        { id: 'my-publications',label: 'Mis publicaciones', icon: FolderOpen },
+        { id: 'inquiries',      label: 'Consultas',         icon: MessageCircle },
+      ],
+    },
+    {
+      label: 'Gestión',
+      items: [
+        { id: 'reservas',    label: 'Valores de reservas', icon: FileText },
+        { id: 'calendarios', label: 'Calendarios',         icon: Calendar },
+        { id: 'asignaciones',label: 'Asignaciones',        icon: Users },
+        { id: 'whatsapp',    label: 'Números WhatsApp',    icon: Phone },
+      ],
+    },
+    {
+      label: 'Interacciones',
+      items: [
+        { id: 'interacciones', label: 'Interacciones', icon: MessageSquare },
+        { id: 'citas',         label: 'Citas',         icon: CalendarCheck },
+      ],
+    },
+    {
+      label: 'Rendimiento',
+      items: [
+        { id: 'performance', label: 'Rendimiento',       icon: TrendingUp },
+        { id: 'plan',        label: 'Plan y facturación', icon: CreditCard },
+      ],
+    },
+    {
+      label: 'Cuenta',
+      items: [
+        { id: 'profile',  label: 'Perfil',         icon: User },
+        { id: 'settings', label: 'Configuración',  icon: Settings },
+        { id: 'help',     label: 'Ayuda',          icon: HelpCircle },
+      ],
+    },
   ];
 
   return (
@@ -85,9 +101,14 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
             {navGroups.map((group, groupIdx) => (
               <React.Fragment key={groupIdx}>
                 {groupIdx > 0 && (
-                  <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
+                  <div style={{ height: '1px', margin: '8px 16px 4px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
                 )}
-                {group.map((item) => {
+                {group.label && (
+                  <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-body)', padding: '6px 20px 2px' }}>
+                    {group.label}
+                  </p>
+                )}
+                {group.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = currentSection === item.id;
                   return (
