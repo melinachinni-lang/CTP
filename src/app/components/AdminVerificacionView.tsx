@@ -328,7 +328,7 @@ export function AdminVerificacionView() {
               <tr>
                 {['Solicitante', 'Tipo', 'Documentos', 'Enviado', 'Estado', 'Acciones'].map((h, i) => (
                   <th key={h}
-                    className={`px-4 py-3.5 ${i === 0 ? 'text-left' : i >= 4 ? 'text-right' : 'text-left'}`}
+                    className={`px-4 py-3.5 ${i === 0 ? 'text-left' : i >= 4 ? 'text-center' : 'text-left'}`}
                     style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}
                   >
                     {h}
@@ -393,7 +393,7 @@ export function AdminVerificacionView() {
                       </div>
                     </td>
                     {/* Estado */}
-                    <td className="px-4 py-4 text-right">
+                    <td className="px-4 py-4 text-center">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
                         style={{ backgroundColor: cfg.bg, color: cfg.color }}>
                         <EstIcon className="w-3 h-3" />
@@ -402,7 +402,7 @@ export function AdminVerificacionView() {
                     </td>
                     {/* Acciones */}
                     <td className="px-4 py-4 text-right">
-                      <div className="flex items-center gap-1.5 justify-end">
+                      <div className="flex items-center gap-1.5 justify-center">
                         {/* Ver */}
                         <div className="relative group">
                           <button
