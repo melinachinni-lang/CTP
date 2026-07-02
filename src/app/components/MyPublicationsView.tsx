@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Plus, MoreVertical, Edit2, Share2, Trash2, Calendar, MapPin, Maximize2, Eye, Link as LinkIcon, MessageCircle, Check, Copy, FileText, Building2, CheckCircle2, X, Pause, Play, FileSpreadsheet, RefreshCw, ExternalLink } from 'lucide-react';
 import { PublicationWizard, PublicationData, PublicationStatus, StockUnit } from '@/app/components/PublicationWizard';
 import { PublicacionPublicaView } from '@/app/components/PublicacionPublicaView';
@@ -1851,7 +1852,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       )}
 
       {/* Broker: Modal de asignación de inmobiliaria + tipo antes de publicar */}
-      {showBrokerAssignModal && (
+      {showBrokerAssignModal && createPortal(
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
@@ -2032,7 +2033,8 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
