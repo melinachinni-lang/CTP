@@ -206,7 +206,7 @@ export function AdminVerificacionView() {
   ];
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-8">
 
       {/* Header */}
       <div className="mb-6">
