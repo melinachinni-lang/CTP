@@ -253,6 +253,7 @@ interface HomeContentProps {
 
 function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentProps) {
   const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
+  const [dashRankingTab, setDashRankingTab] = React.useState<'parcelas' | 'proyectos'>('parcelas');
 
   // Datos simulados para gráfico de evolución
   const evolutionData = selectedPeriod === '7' ? [
@@ -290,7 +291,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
     { name: 'Clicks', value: 20, color: '#7D460D' },
   ];
 
-  // Datos del ranking de parcelas
+  // Datos del ranking
   const parcelasRanking = [
     { 
       name: 'Parcela Vista Cordillera', 
@@ -332,17 +333,52 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       trend: 'up',
       trendValue: '+8%'
     },
-    { 
-      name: 'Terreno Los Andes', 
+    {
+      name: 'Terreno Los Andes',
       location: 'Los Andes',
-      views: 98, 
-      consultas: 8, 
+      views: 98,
+      consultas: 8,
       status: 'low',
       statusLabel: 'Bajo rendimiento',
       trend: 'down',
       trendValue: '-3%'
     },
   ];
+
+  const proyectosRanking = [
+    {
+      name: 'Proyecto Vista Cordillera — Fase 2',
+      location: 'Lo Barnechea',
+      views: 1240,
+      consultas: 24,
+      status: 'high',
+      statusLabel: 'Alto interés',
+      trend: 'up',
+      trendValue: '+31%'
+    },
+    {
+      name: 'Condominio Los Arrayanes',
+      location: 'Villarrica',
+      views: 890,
+      consultas: 17,
+      status: 'high',
+      statusLabel: 'Alta demanda',
+      trend: 'up',
+      trendValue: '+14%'
+    },
+    {
+      name: 'Proyecto Lago Ranco',
+      location: 'Los Lagos',
+      views: 623,
+      consultas: 11,
+      status: 'medium',
+      statusLabel: 'Interés medio',
+      trend: 'neutral',
+      trendValue: '-2%'
+    },
+  ];
+
+  const activeRanking = dashRankingTab === 'parcelas' ? parcelasRanking : proyectosRanking;
 
   return (
     <main className="px-8 py-8 space-y-8">
@@ -583,208 +619,155 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </section>
       </div>
 
-      {/* Ranking de parcelas */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-center justify-between">
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h3)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Ranking de parcelas
-          </h2>
-          <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            border: '2px solid #DEDEDE',
-            borderRadius: '200px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-medium)',
-            letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-          >
-            <Edit className="w-3.5 h-3.5" />
-            Editar publicaciones
-          </button>
+      {/* Ranking de publicaciones */}
+      <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        {/* Header */}
+        <div className="px-6 pt-5 pb-0">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '2px' }}>
+                Ranking de publicaciones
+              </h2>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                Por interacción — últimos 30 días
+              </p>
+            </div>
+            <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{
+              backgroundColor: '#FFFFFF', color: '#0A0A0A',
+              border: '1.5px solid #DEDEDE', borderRadius: '200px',
+              fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
+              fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)'
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+            >
+              <Edit className="w-3.5 h-3.5" />
+              Editar publicaciones
+            </button>
+          </div>
+          {/* Tabs */}
+          <div className="flex" style={{ borderBottom: '1px solid #F0F0F0' }}>
+            {(['parcelas', 'proyectos'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setDashRankingTab(tab)}
+                style={{
+                  fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                  fontWeight: dashRankingTab === tab ? 600 : 400,
+                  color: dashRankingTab === tab ? '#006B4E' : '#9CA3AF',
+                  backgroundColor: 'transparent', border: 'none',
+                  borderBottom: dashRankingTab === tab ? '2px solid #006B4E' : '2px solid transparent',
+                  padding: '8px 16px 10px', cursor: 'pointer', transition: 'color 0.15s',
+                }}
+              >
+                {tab === 'parcelas' ? 'Parcelas' : 'Proyectos'}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 pb-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
-          <div className="col-span-5" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Parcela
-          </div>
-          <div className="col-span-2 text-center" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Visualizaciones
-          </div>
-          <div className="col-span-2 text-center" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Consultas
-          </div>
-          <div className="col-span-2 text-center" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Tendencia
-          </div>
-          <div className="col-span-1 text-right" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Estado
-          </div>
+        <div className="grid grid-cols-12 gap-4 px-6 py-3" style={{ borderBottom: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
+          {[
+            { label: 'Publicación', span: 'col-span-5', align: 'text-left' },
+            { label: 'Visualizaciones', span: 'col-span-2', align: 'text-center' },
+            { label: 'Consultas', span: 'col-span-2', align: 'text-center' },
+            { label: 'Tendencia', span: 'col-span-2', align: 'text-center' },
+            { label: 'Estado', span: 'col-span-1', align: 'text-right' },
+          ].map(({ label, span, align }) => (
+            <div key={label} className={`${span} ${align}`} style={{
+              fontFamily: 'var(--font-body)', fontSize: '11px',
+              fontWeight: 600, color: '#9CA3AF',
+              textTransform: 'uppercase', letterSpacing: '0.06em'
+            }}>
+              {label}
+            </div>
+          ))}
         </div>
 
         {/* Table Rows */}
-        <div className="space-y-3">
-          {parcelasRanking.map((parcela, index) => (
-            <div 
+        <div>
+          {activeRanking.map((item, index) => (
+            <div
               key={index}
-              className="grid grid-cols-12 gap-4 py-4 rounded-xl transition-all cursor-pointer" 
-              style={{ border: '1px solid #F5F5F5' }}
-              onMouseEnter={(e) => { 
-                e.currentTarget.style.backgroundColor = '#FAFAFA'; 
-                e.currentTarget.style.borderColor = '#E5E5E5';
-              }}
-              onMouseLeave={(e) => { 
-                e.currentTarget.style.backgroundColor = 'transparent'; 
-                e.currentTarget.style.borderColor = '#F5F5F5';
-              }}
+              className="grid grid-cols-12 gap-4 px-6 py-4 transition-colors cursor-pointer"
+              style={{ borderBottom: index < activeRanking.length - 1 ? '1px solid #F9FAFB' : 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
             >
-              <div className="col-span-5 flex items-center gap-3 pl-4">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ 
-                  backgroundColor: '#FAFAFA',
-                  border: '1px solid #E5E5E5',
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#737373'
+              <div className="col-span-5 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{
+                  backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5',
+                  fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-sm)',
+                  fontWeight: 600, color: '#737373'
                 }}>
                   {index + 1}
                 </div>
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-ui)'
+                <div className="min-w-0">
+                  <div style={{
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+                    fontWeight: 600, color: '#0A0A0A',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
                   }}>
-                    {parcela.name}
+                    {item.name}
                   </div>
-                  <div style={{ 
-                    fontSize: 'var(--font-size-xs)',
-                    color: '#737373',
-                    marginTop: '2px'
-                  }}>
-                    {parcela.location}
+                  <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '1px' }}>
+                    {item.location}
                   </div>
                 </div>
               </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-2">
-                  <Eye className="w-4 h-4" style={{ color: '#737373' }} />
-                  <span style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    {parcela.views}
-                  </span>
-                </div>
+              <div className="col-span-2 flex items-center justify-center gap-1.5">
+                <Eye className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  {item.views.toLocaleString('es-CL')}
+                </span>
+              </div>
+              <div className="col-span-2 flex items-center justify-center gap-1.5">
+                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  {item.consultas}
+                </span>
               </div>
               <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4" style={{ color: '#737373' }} />
-                  <span style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    {parcela.consultas}
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ 
-                  backgroundColor: parcela.trend === 'up' ? '#DCFCE7' : parcela.trend === 'down' ? '#FEE2E2' : '#F5F5F5'
+                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{
+                  backgroundColor: item.trend === 'up' ? '#DCFCE7' : item.trend === 'down' ? '#FEE2E2' : '#F5F5F5'
                 }}>
-                  {parcela.trend === 'up' && <ArrowUp className="w-3.5 h-3.5" style={{ color: '#16A34A' }} />}
-                  {parcela.trend === 'down' && <ArrowDown className="w-3.5 h-3.5" style={{ color: '#DC2626' }} />}
-                  <span style={{ 
-                    fontSize: 'var(--font-size-xs)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: parcela.trend === 'up' ? '#16A34A' : parcela.trend === 'down' ? '#DC2626' : '#737373'
+                  {item.trend === 'up' && <ArrowUpRight className="w-3 h-3" style={{ color: '#16A34A' }} />}
+                  {item.trend === 'down' && <ArrowDownRight className="w-3 h-3" style={{ color: '#DC2626' }} />}
+                  <span style={{
+                    fontSize: '11px', fontWeight: 600,
+                    color: item.trend === 'up' ? '#16A34A' : item.trend === 'down' ? '#DC2626' : '#737373'
                   }}>
-                    {parcela.trendValue}
+                    {item.trendValue}
                   </span>
                 </div>
               </div>
-              <div className="col-span-1 flex items-center justify-end pr-4">
-                <span className="px-2.5 py-1 rounded-full whitespace-nowrap" style={{ 
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  backgroundColor: parcela.status === 'high' ? '#DCFCE7' : parcela.status === 'medium' ? '#FEF3C7' : '#FEE2E2',
-                  color: parcela.status === 'high' ? '#16A34A' : parcela.status === 'medium' ? '#CA8A04' : '#DC2626'
+              <div className="col-span-1 flex items-center justify-end">
+                <span className="px-2.5 py-1 rounded-full whitespace-nowrap" style={{
+                  fontSize: '11px', fontWeight: 500,
+                  backgroundColor: item.status === 'high' ? '#DCFCE7' : item.status === 'medium' ? '#FEF3C7' : '#FEE2E2',
+                  color: item.status === 'high' ? '#16A34A' : item.status === 'medium' ? '#CA8A04' : '#DC2626'
                 }}>
-                  {parcela.statusLabel}
+                  {item.statusLabel}
                 </span>
               </div>
             </div>
           ))}
         </div>
 
-        <button className="w-full py-2.5 px-6 transition-all" style={{ 
-          backgroundColor: '#FFFFFF',
-          color: '#737373',
-          border: '2px solid #DEDEDE',
-          borderRadius: '200px',
-          fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-sm)',
-          fontWeight: 'var(--font-weight-medium)',
-          letterSpacing: 'var(--letter-spacing-wide)',
-          lineHeight: 'var(--line-height-ui)'
-        }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.color = '#0A0A0A'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = '#737373'; }}
-        >
-          Ver todas las parcelas
-        </button>
+        {/* Footer */}
+        <div className="px-6 py-4" style={{ borderTop: '1px solid #F0F0F0' }}>
+          <button className="w-full py-2 transition-all" style={{
+            backgroundColor: 'transparent', color: '#737373', border: 'none',
+            fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
+            cursor: 'pointer'
+          }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#0A0A0A'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#737373'; }}
+          >
+            Ver todas las {dashRankingTab === 'parcelas' ? 'parcelas' : 'proyectos'} →
+          </button>
+        </div>
       </section>
     </main>
   );
