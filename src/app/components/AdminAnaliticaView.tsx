@@ -50,6 +50,43 @@ export function AdminAnaliticaView() {
   const [showRango, setShowRango] = useState(false);
   const rangoLabel = RANGO_PRESETS.find(r => r.id === rango)?.label ?? '';
 
+  const [origenPeriodo, setOrigenPeriodo] = useState('28d');
+  const [showOrigenDropdown, setShowOrigenDropdown] = useState(false);
+
+  const ORIGEN_PRESETS = [
+    { id: '7d',  label: 'Últimos 7 días' },
+    { id: '28d', label: 'Últimos 28 días' },
+    { id: '90d', label: 'Últimos 90 días' },
+    { id: 'mes', label: 'Este mes' },
+  ];
+
+  const origenData: Record<string, { fuentes: { nombre: string; actual: number; anterior: number }[] }> = {
+    '7d':  { fuentes: [
+      { nombre: 'Orgánico',       actual: 2100, anterior: 1890 },
+      { nombre: 'Pagado',         actual: 1450, anterior: 1280 },
+      { nombre: 'Redes Sociales', actual: 980,  anterior: 850  },
+      { nombre: 'Directo',        actual: 620,  anterior: 710  },
+    ]},
+    '28d': { fuentes: [
+      { nombre: 'Orgánico',       actual: 5606, anterior: 4890 },
+      { nombre: 'Pagado',         actual: 3987, anterior: 3650 },
+      { nombre: 'Redes Sociales', actual: 2890, anterior: 2340 },
+      { nombre: 'Directo',        actual: 1823, anterior: 1980 },
+    ]},
+    '90d': { fuentes: [
+      { nombre: 'Orgánico',       actual: 16200, anterior: 14100 },
+      { nombre: 'Pagado',         actual: 11500, anterior: 10200 },
+      { nombre: 'Redes Sociales', actual: 8400,  anterior: 7100  },
+      { nombre: 'Directo',        actual: 5200,  anterior: 5800  },
+    ]},
+    'mes': { fuentes: [
+      { nombre: 'Orgánico',       actual: 6800, anterior: 5900 },
+      { nombre: 'Pagado',         actual: 4700, anterior: 4200 },
+      { nombre: 'Redes Sociales', actual: 3200, anterior: 2800 },
+      { nombre: 'Directo',        actual: 2100, anterior: 2350 },
+    ]},
+  };
+
   const traficoUnificado = [
     { dia: '1 jun',  visitas: 320,  consultas: 45,  reservas: 4  },
     { dia: '3 jun',  visitas: 385,  consultas: 52,  reservas: 5  },
@@ -107,13 +144,6 @@ export function AdminAnaliticaView() {
     { dispositivo: 'Desktop', porcentaje: 32, valor: 2639 },
   ];
   const pieColors = ['#006B4E', '#52C49A'];
-
-  const origenTraficoDetallado = [
-    { origen: 'Orgánico', semana1: 1200, semana2: 1320, semana3: 1410, semana4: 1565, total: 5606, porcentaje: 45, trending: 'up' },
-    { origen: 'Pagado',   semana1: 980,  semana2: 1020, semana3: 990,  semana4: 997,  total: 3987, porcentaje: 32, trending: 'up' },
-    { origen: 'Referido', semana1: 520,  semana2: 565,  semana3: 578,  semana4: 579,  total: 2242, porcentaje: 18, trending: 'up' },
-    { origen: 'Otros',    semana1: 145,  semana2: 158,  semana3: 162,  semana4: 158,  total: 623,  porcentaje: 5,  trending: 'down' },
-  ];
 
   const proyectosMasVisitados = [
     { nombre: 'Parcelas Valle Hermoso',      visitas: 2845, ratio: 4.4 },
@@ -317,50 +347,87 @@ export function AdminAnaliticaView() {
       </section>
 
       {/* Origen del tráfico */}
-      <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
-            Origen del tráfico
-          </h2>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-            Evolución y distribución por fuente
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-              <tr>
-                {['Origen', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Total', '%', 'Tendencia'].map((h, i) => (
-                  <th key={h} className={`px-6 py-4 ${i === 0 ? 'text-left' : 'text-right'}`}
-                    style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                    {h}
-                  </th>
+      <section className="rounded-2xl" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <div className="px-6 py-5 flex items-center justify-between" style={{ borderBottom: '1px solid #E5E5E5' }}>
+          <div>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
+              Origen del tráfico
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
+              Distribución de sesiones por fuente
+            </p>
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => setShowOrigenDropdown(!showOrigenDropdown)}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl"
+              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', cursor: 'pointer' }}
+            >
+              <Calendar className="w-3.5 h-3.5" style={{ color: '#737373' }} />
+              {ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}
+              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373' }} />
+            </button>
+            {showOrigenDropdown && (
+              <div className="absolute right-0 top-full mt-1 z-20 rounded-xl py-1" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', minWidth: '160px' }}>
+                {ORIGEN_PRESETS.map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => { setOrigenPeriodo(p.id); setShowOrigenDropdown(false); }}
+                    className="w-full text-left px-4 py-2"
+                    style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenPeriodo === p.id ? '#006B4E' : '#374151', backgroundColor: origenPeriodo === p.id ? '#E8F5EE' : 'transparent', cursor: 'pointer', display: 'block' }}
+                  >
+                    {p.label}
+                  </button>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {origenTraficoDetallado.map((origen, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid #F5F5F5' }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FAFAFA')}
-                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
-                >
-                  <td className="px-6 py-4"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{origen.origen}</span></td>
-                  {[origen.semana1, origen.semana2, origen.semana3, origen.semana4].map((v, j) => (
-                    <td key={j} className="px-6 py-4 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{v.toLocaleString()}</span></td>
-                  ))}
-                  <td className="px-6 py-4 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{origen.total.toLocaleString()}</span></td>
-                  <td className="px-6 py-4 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{origen.porcentaje}%</span></td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: origen.trending === 'up' ? '#E8F5EE' : '#FEE2E2' }}>
-                      {origen.trending === 'up'
-                        ? <ArrowUpRight className="w-3 h-3" style={{ color: '#006B4E' }} />
-                        : <ArrowDownRight className="w-3 h-3" style={{ color: '#DC2626' }} />}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="px-6 py-5">
+          {(() => {
+            const fuentes = origenData[origenPeriodo].fuentes;
+            const total = fuentes.reduce((s, f) => s + f.actual, 0);
+            const maxVal = Math.max(...fuentes.flatMap(f => [f.actual, f.anterior]));
+            return (
+              <div className="space-y-5">
+                {fuentes.map((f, i) => {
+                  const actualPct = (f.actual / maxVal) * 100;
+                  const anteriorPct = (f.anterior / maxVal) * 100;
+                  const sharePct = Math.round((f.actual / total) * 100);
+                  const delta = f.actual - f.anterior;
+                  const deltaUp = delta >= 0;
+                  return (
+                    <div key={i} className="flex items-center gap-4">
+                      <span style={{ width: '120px', flexShrink: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>{f.nombre}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ height: '14px', width: `${actualPct}%`, backgroundColor: '#006B4E', borderRadius: '3px', marginBottom: '5px', minWidth: '4px' }} />
+                        <div style={{ height: '10px', width: `${anteriorPct}%`, borderRadius: '3px', minWidth: '4px', backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
+                      </div>
+                      <div style={{ width: '100px', flexShrink: 0, textAlign: 'right' }}>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{f.actual.toLocaleString('es-CL')}</div>
+                        <div className="flex items-center justify-end gap-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px' }}>
+                          <span style={{ color: '#9CA3AF' }}>{sharePct}%</span>
+                          <span style={{ color: deltaUp ? '#006B4E' : '#DC2626', fontWeight: 500 }}>
+                            {deltaUp ? '↑' : '↓'}{Math.abs(delta).toLocaleString('es-CL')}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          <div className="flex items-center gap-6 mt-6 pt-4" style={{ borderTop: '1px solid #F5F5F5' }}>
+            <div className="flex items-center gap-2">
+              <div style={{ width: '24px', height: '10px', backgroundColor: '#006B4E', borderRadius: '3px', flexShrink: 0 }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Período actual</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: '24px', height: '8px', borderRadius: '3px', flexShrink: 0, backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Período anterior</span>
+            </div>
+          </div>
         </div>
       </section>
 
