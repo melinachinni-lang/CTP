@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
@@ -390,173 +390,34 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
       {/* KPIs Section */}
       <section className="grid grid-cols-4 gap-6">
-        {/* Parcelas activas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +3
+        {[
+          { label: 'Parcelas publicadas', value: '12',    change: '+3',    up: true,  Icon: FileText,      iconBg: '#E8F5EE', iconColor: '#006B4E' },
+          { label: 'Visualizaciones',     value: '4.523', change: '+22%',  up: true,  Icon: Eye,           iconBg: '#EFF6FF', iconColor: '#2563EB' },
+          { label: 'Consultas recibidas', value: '77',    change: '+12%',  up: true,  Icon: MessageCircle, iconBg: '#F5F3FF', iconColor: '#7C3AED' },
+          { label: 'Favoritos usuarios',  value: '143',   change: '+15%',  up: true,  Icon: Heart,         iconBg: '#FFF1F2', iconColor: '#DC2626' },
+        ].map(({ label, value, change, up, Icon, iconBg, iconColor }) => (
+          <div key={label} className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: iconBg }}>
+                <Icon className="w-4 h-4" style={{ color: iconColor }} />
+              </div>
+              <span
+                className="flex items-center gap-0.5"
+                style={{
+                  fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)',
+                  color: up ? '#006B4E' : '#DC2626',
+                  backgroundColor: up ? '#E8F5EE' : '#FEE2E2',
+                  padding: '2px 7px', borderRadius: '99px',
+                }}
+              >
+                {up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                {change}
               </span>
             </div>
+            <p style={{ fontSize: '26px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 3px' }}>{value}</p>
+            <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
           </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Parcelas publicadas
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              12
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              3 publicadas esta semana
-            </div>
-          </div>
-        </div>
-        
-        {/* Visualizaciones totales */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +22%
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Visualizaciones
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              4,523
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Últimos 30 días
-            </div>
-          </div>
-        </div>
-        
-        {/* Consultas recibidas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
-              <AlertCircle className="w-3 h-3" style={{ color: '#462611' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#462611' }}>
-                5 nuevas
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Consultas recibidas
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              77
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Últimos 30 días
-            </div>
-          </div>
-        </div>
-        
-        {/* Parcelas guardadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Heart className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +15%
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Favoritos usuarios
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              143
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Usuarios interesados
-            </div>
-          </div>
-        </div>
+        ))}
       </section>
 
       {/* Gráfico principal - Evolución de visualizaciones */}
