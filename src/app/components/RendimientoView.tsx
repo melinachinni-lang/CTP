@@ -72,6 +72,17 @@ const RANKING_BROKER: PropiedadRanking[] = [
   { id: 4, nombre: 'Parcela Cerro Amarillo', ubicacion: 'Pirque, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', vistas: 198, consultas: 2, tendencia: 4, estado: 'En crecimiento', inmobiliaria: 'Tierras del Valle' },
 ];
 
+const RANKING_INMO_PROYECTOS: PropiedadRanking[] = [
+  { id: 1, nombre: 'Proyecto Vista Cordillera — Fase 2', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', vistas: 1240, consultas: 24, tendencia: 31, estado: 'Alto interés' },
+  { id: 2, nombre: 'Condominio Los Arrayanes', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', vistas: 890, consultas: 17, tendencia: 14, estado: 'Alta demanda' },
+  { id: 3, nombre: 'Proyecto Lago Ranco', ubicacion: 'Los Lagos, Los Ríos', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', vistas: 623, consultas: 11, tendencia: -2, estado: 'Estable' },
+];
+
+const RANKING_BROKER_PROYECTOS: PropiedadRanking[] = [
+  { id: 1, nombre: 'Condominio Pucón Norte', ubicacion: 'Pucón, Araucanía', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', vistas: 734, consultas: 15, tendencia: 22, estado: 'Alto interés', inmobiliaria: 'Patagonia Properties' },
+  { id: 2, nombre: 'Proyecto Ribera Sur', ubicacion: 'Valdivia, Los Ríos', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', vistas: 489, consultas: 9, tendencia: 7, estado: 'En crecimiento', inmobiliaria: 'Sur Verde Propiedades' },
+];
+
 const ESTADO_BADGE: Record<string, { bg: string; text: string; border: string }> = {
   'Alto interés':   { bg: '#DCFCE7', text: '#166534', border: '#86EFAC' },
   'Alta demanda':   { bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
@@ -171,6 +182,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
   const [periodo, setPeriodo] = useState<Periodo>('30d');
   const [isLoading, setIsLoading] = useState(true);
   const [isChartLoading, setIsChartLoading] = useState(false);
+  const [rankingTab, setRankingTab] = useState<'parcelas' | 'proyectos'>('parcelas');
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 1200);
@@ -199,7 +211,9 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
       ];
 
   const chartData  = CHART_DATA[viewType][periodo];
-  const ranking    = viewType === 'inmobiliaria' ? RANKING_INMO : RANKING_BROKER;
+  const ranking    = viewType === 'inmobiliaria'
+    ? (rankingTab === 'parcelas' ? RANKING_INMO : RANKING_INMO_PROYECTOS)
+    : (rankingTab === 'parcelas' ? RANKING_BROKER : RANKING_BROKER_PROYECTOS);
   const chartTitle = viewType === 'inmobiliaria'
     ? 'Evolución de visualizaciones'
     : 'Evolución del interés en propiedades';
@@ -306,26 +320,52 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
       {/* Ranking / Tabla */}
       <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
         {/* Table header */}
-        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #F0F0F0' }}>
-          <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
-              {viewType === 'inmobiliaria' ? 'Ranking de parcelas' : 'Propiedades en seguimiento'}
-            </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-              {viewType === 'inmobiliaria' ? 'Por interacción — últimos 30 días' : 'Propiedades con mayor interés'}
-            </p>
+        <div className="px-5 pt-4 pb-0">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
+                {viewType === 'inmobiliaria' ? 'Ranking de publicaciones' : 'Propiedades en seguimiento'}
+              </h2>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
+                Por interacción — últimos 30 días
+              </p>
+            </div>
+            {viewType === 'broker' && (
+              <button
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#333333'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0A0A0A'}
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Agregar propiedad
+              </button>
+            )}
           </div>
-          {viewType === 'broker' && (
-            <button
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all"
-              style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#333333'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0A0A0A'}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              Agregar propiedad
-            </button>
-          )}
+          {/* Tabs */}
+          <div className="flex gap-0" style={{ borderBottom: '1px solid #F0F0F0' }}>
+            {(['parcelas', 'proyectos'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setRankingTab(tab)}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-body-sm)',
+                  fontWeight: rankingTab === tab ? 600 : 400,
+                  color: rankingTab === tab ? '#006B4E' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  borderBottom: rankingTab === tab ? '2px solid #006B4E' : '2px solid transparent',
+                  padding: '8px 16px 10px',
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                  transition: 'color 0.15s',
+                }}
+              >
+                {tab === 'parcelas' ? 'Parcelas' : 'Proyectos'}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Column headers */}
@@ -450,8 +490,8 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '260px', lineHeight: '1.6' }}>
               {viewType === 'inmobiliaria'
-                ? 'Publicá tu primera parcela para ver el rendimiento acá.'
-                : 'Agregá propiedades a tu seguimiento para ver el ranking.'}
+                ? 'Publica tu primera parcela para ver el rendimiento acá.'
+                : 'Agrega propiedades a tu seguimiento para ver el ranking.'}
             </p>
           </div>
         )}
