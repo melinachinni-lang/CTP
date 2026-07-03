@@ -93,6 +93,8 @@ const ESTADO_BADGE: Record<string, { bg: string; text: string; border: string }>
 
 const PERIODO_LABELS: Record<Periodo, string> = { '7d': '7 días', '30d': '30 días', '90d': '90 días' };
 
+const RANKING_SCALE: Record<Periodo, number> = { '7d': 0.22, '30d': 1.0, '90d': 3.1 };
+
 // ─── SVG Line Chart ───────────────────────────────────────────────────────────
 
 function LineChart({ data, color, loading, periodo }: { data: number[]; color: string; loading: boolean; periodo: Periodo }) {
@@ -183,6 +185,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isChartLoading, setIsChartLoading] = useState(false);
   const [rankingTab, setRankingTab] = useState<'parcelas' | 'proyectos'>('parcelas');
+  const [rankingPeriodo, setRankingPeriodo] = useState<Periodo>('30d');
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 1200);
@@ -327,20 +330,41 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 {viewType === 'inmobiliaria' ? 'Ranking de publicaciones' : 'Propiedades en seguimiento'}
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-                Por interacción — últimos 30 días
+                Por interacción — {PERIODO_LABELS[rankingPeriodo]}
               </p>
             </div>
-            {viewType === 'broker' && (
-              <button
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all"
-                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#333333'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0A0A0A'}
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Agregar propiedad
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
+                {(['7d', '30d', '90d'] as Periodo[]).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => setRankingPeriodo(p)}
+                    className="px-3 py-1.5 rounded-full transition-all"
+                    style={{
+                      backgroundColor: rankingPeriodo === p ? '#0A0A0A' : 'transparent',
+                      color: rankingPeriodo === p ? '#FFFFFF' : '#737373',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-xs)',
+                      fontWeight: rankingPeriodo === p ? 600 : 400,
+                      border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {PERIODO_LABELS[p]}
+                  </button>
+                ))}
+              </div>
+              {viewType === 'broker' && (
+                <button
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                  style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#333333'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0A0A0A'}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Agregar propiedad
+                </button>
+              )}
+            </div>
           </div>
           {/* Tabs */}
           <div className="flex gap-0" style={{ borderBottom: '1px solid #F0F0F0' }}>
@@ -432,12 +456,12 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
 
               {/* Vistas */}
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
-                {prop.vistas.toLocaleString('es-CL')}
+                {Math.round(prop.vistas * RANKING_SCALE[rankingPeriodo]).toLocaleString('es-CL')}
               </p>
 
               {/* Consultas */}
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
-                {prop.consultas}
+                {Math.max(1, Math.round(prop.consultas * RANKING_SCALE[rankingPeriodo]))}
               </p>
 
               {/* Tendencia */}

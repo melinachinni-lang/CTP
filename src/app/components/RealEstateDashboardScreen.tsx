@@ -254,6 +254,8 @@ interface HomeContentProps {
 function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentProps) {
   const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
   const [dashRankingTab, setDashRankingTab] = React.useState<'parcelas' | 'proyectos'>('parcelas');
+  const [dashRankingPeriod, setDashRankingPeriod] = React.useState<'7' | '30' | '90'>('30');
+  const DASH_RANKING_SCALE: Record<'7' | '30' | '90', number> = { '7': 0.22, '30': 1.0, '90': 3.1 };
 
   // Datos simulados para gráfico de evolución
   const evolutionData = selectedPeriod === '7' ? [
@@ -629,21 +631,41 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 Ranking de publicaciones
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Por interacción — últimos 30 días
+                Por interacción — {dashRankingPeriod === '7' ? '7 días' : dashRankingPeriod === '30' ? '30 días' : '90 días'}
               </p>
             </div>
-            <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{
-              backgroundColor: '#FFFFFF', color: '#0A0A0A',
-              border: '1.5px solid #DEDEDE', borderRadius: '200px',
-              fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)'
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-            >
-              <Edit className="w-3.5 h-3.5" />
-              Editar publicaciones
-            </button>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
+                {(['7', '30', '90'] as const).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => setDashRankingPeriod(p)}
+                    className="px-3 py-1.5 rounded-full transition-all"
+                    style={{
+                      backgroundColor: dashRankingPeriod === p ? '#0A0A0A' : 'transparent',
+                      color: dashRankingPeriod === p ? '#FFFFFF' : '#737373',
+                      fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
+                      fontWeight: dashRankingPeriod === p ? 600 : 400,
+                      border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {p} días
+                  </button>
+                ))}
+              </div>
+              <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{
+                backgroundColor: '#FFFFFF', color: '#0A0A0A',
+                border: '1.5px solid #DEDEDE', borderRadius: '200px',
+                fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
+                fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)'
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              >
+                <Edit className="w-3.5 h-3.5" />
+                Editar publicaciones
+              </button>
+            </div>
           </div>
           {/* Tabs */}
           <div className="flex" style={{ borderBottom: '1px solid #F0F0F0' }}>
@@ -719,13 +741,13 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               <div className="col-span-2 flex items-center justify-center gap-1.5">
                 <Eye className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  {item.views.toLocaleString('es-CL')}
+                  {Math.round(item.views * DASH_RANKING_SCALE[dashRankingPeriod]).toLocaleString('es-CL')}
                 </span>
               </div>
               <div className="col-span-2 flex items-center justify-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  {item.consultas}
+                  {Math.max(1, Math.round(item.consultas * DASH_RANKING_SCALE[dashRankingPeriod]))}
                 </span>
               </div>
               <div className="col-span-2 flex items-center justify-center">
