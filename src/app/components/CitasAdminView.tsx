@@ -472,6 +472,12 @@ export function CitasAdminView() {
 
   return (
     <div>
+      {/* Header */}
+      <div style={{ marginBottom: '28px' }}>
+        <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h2)', color: '#0A0A0A', marginBottom: '4px' }}>Citas</h2>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Gestiona las solicitudes de visita a publicaciones de la plataforma</p>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         {[
@@ -539,8 +545,8 @@ export function CitasAdminView() {
           <table className="w-full">
             <thead>
               <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                {['Usuario', 'Parcela', 'Tipo', 'Fecha y hora', 'Estado', 'Acciones'].map(h => (
-                  <th key={h} className="px-6 py-3 text-left" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                {['Interesado', 'Publicación', 'Cita', 'Estado', 'Acciones'].map(h => (
+                  <th key={h} className="px-6 py-4 text-left" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -549,82 +555,77 @@ export function CitasAdminView() {
                 <tr
                   key={s.id}
                   onClick={() => setSolicitudDetalle(s)}
-                  style={{ borderBottom: i < solicitudesFiltradas.length - 1 ? '1px solid #F9FAFB' : 'none', cursor: 'pointer', transition: 'background-color 0.15s' }}
+                  style={{ borderBottom: i < solicitudesFiltradas.length - 1 ? '1px solid #F3F4F6' : 'none', cursor: 'pointer', transition: 'background-color 0.15s' }}
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FAFAFA')}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  {/* Usuario */}
-                  <td className="px-6 py-4">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827', marginBottom: '2px' }}>{s.nombre}</p>
+                  {/* Interesado */}
+                  <td className="px-6 py-5">
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#111827', marginBottom: '3px' }}>{s.nombre}</p>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>{s.email}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{s.telefono}</p>
                   </td>
-                  {/* Parcela */}
-                  <td className="px-6 py-4">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827', marginBottom: '2px' }}>{s.parcela}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>{s.ubicacion}</p>
-                    {s.mensaje && (
-                      <p className="mt-1 italic" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>"{s.mensaje.length > 50 ? s.mensaje.substring(0, 50) + '...' : s.mensaje}"</p>
-                    )}
+                  {/* Publicación */}
+                  <td className="px-6 py-5">
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827', marginBottom: '3px' }}>{s.parcela}</p>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3 flex-shrink-0" style={{ color: '#9CA3AF' }} />
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>{s.ubicacion}</p>
+                    </div>
                   </td>
-                  {/* Tipo */}
-                  <td className="px-6 py-4"><BadgeTipo tipo={s.tipoCita} /></td>
-                  {/* Fecha */}
-                  <td className="px-6 py-4">
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#111827', marginBottom: '2px' }}>{s.fecha}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280' }}>{s.horario} hrs</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{s.fechaCreacion}</p>
+                  {/* Cita: tipo + fecha */}
+                  <td className="px-6 py-5">
+                    <div style={{ marginBottom: '6px' }}>
+                      <BadgeTipo tipo={s.tipoCita} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#374151', marginBottom: '1px' }}>{s.fecha}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{s.horario} hrs · {s.fechaCreacion}</p>
                   </td>
                   {/* Estado */}
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-5">
                     <BadgeEstado estado={s.estado} />
                     {s.estado === 'confirmada' && s.tipoCita === 'videollamada' && s.linkMeet && (
-                      <a href={s.linkMeet} target="_blank" rel="noreferrer" className="flex items-center gap-1 mt-1.5 text-xs" style={{ color: '#4F46E5', textDecoration: 'none' }}>
-                        <Link className="w-3 h-3" /> Meet
+                      <a href={s.linkMeet} target="_blank" rel="noreferrer" className="flex items-center gap-1 mt-2 text-xs" style={{ color: '#4F46E5', textDecoration: 'none' }}>
+                        <Link className="w-3 h-3" /> Ver Meet
                       </a>
-                    )}
-                    {s.estado === 'rechazada' && s.motivoRechazo && (
-                      <p className="mt-1 text-xs italic" style={{ color: '#9CA3AF', maxWidth: '120px' }}>"{s.motivoRechazo.substring(0, 40)}..."</p>
                     )}
                   </td>
                   {/* Acciones */}
-                  <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
-                    {s.estado === 'pendiente' ? (
-                      <div className="flex items-center gap-2">
+                  <td className="px-6 py-5" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center gap-2">
+                      {s.estado === 'pendiente' ? (
+                        <>
+                          <button
+                            onClick={() => setModalConfirmar(s)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+                            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" /> Confirmar
+                          </button>
+                          <button
+                            onClick={() => setModalRechazar(s)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
+                            style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FCA5A5'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
+                          >
+                            <X className="w-3.5 h-3.5" /> Rechazar
+                          </button>
+                        </>
+                      ) : (
                         <button
-                          onClick={() => setModalConfirmar(s)}
+                          onClick={() => setEmailPreview({ solicitud: s, tipo: s.estado === 'rechazada' ? 'rechazo' : s.tipoCita === 'videollamada' ? 'confirmacion-videollamada' : 'confirmacion-presencial' })}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
-                          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                          style={{ backgroundColor: '#F5F5F5', color: '#525252', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
                         >
-                          <CheckCircle className="w-3.5 h-3.5" /> Confirmar
+                          <Eye className="w-3.5 h-3.5" /> Ver correo
                         </button>
-                        <button
-                          onClick={() => setModalRechazar(s)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
-                          style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FCA5A5'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
-                        >
-                          <X className="w-3.5 h-3.5" /> Rechazar
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setEmailPreview({ solicitud: s, tipo: s.estado === 'rechazada' ? 'rechazo' : s.tipoCita === 'videollamada' ? 'confirmacion-videollamada' : 'confirmacion-presencial' })}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
-                        style={{ backgroundColor: '#F5F5F5', color: '#525252', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-                      >
-                        <Eye className="w-3.5 h-3.5" /> Ver correo
-                      </button>
-                    )}
-                  </td>
-                  {/* Indicador de detalle */}
-                  <td className="pr-4 py-4">
-                    <ChevronRight className="w-4 h-4" style={{ color: '#006B4E' }} />
+                      )}
+                      <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#D1D5DB' }} />
+                    </div>
                   </td>
                 </tr>
               ))}
