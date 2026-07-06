@@ -363,7 +363,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 {viewType === 'inmobiliaria' ? 'Ranking de publicaciones' : 'Propiedades en seguimiento'}
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-                Por interacción — {PERIODO_LABELS[rankingPeriodo]}
+                Top 10 parcelas y proyectos por interacción — {PERIODO_LABELS[rankingPeriodo]}
               </p>
             </div>
             <div className="flex items-center gap-3">
