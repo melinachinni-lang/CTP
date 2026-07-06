@@ -68,17 +68,17 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     {
       key: 'rendimiento', label: 'Rendimiento',
       items: [
-        { id: 'performance', label: 'Rendimiento',        icon: TrendingUp },
-        { id: 'insights',    label: 'Insights IA',        icon: Sparkles },
-        { id: 'plan',        label: 'Plan y facturación', icon: CreditCard },
+        { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
+        { id: 'insights',    label: 'Insights IA', icon: Sparkles },
       ],
     },
     {
       key: 'cuenta', label: 'Cuenta',
       items: [
-        { id: 'profile',  label: 'Perfil',        icon: User },
-        { id: 'settings', label: 'Configuración', icon: Settings },
-        { id: 'help',     label: 'Ayuda',         icon: HelpCircle },
+        { id: 'profile',  label: 'Perfil',             icon: User        },
+        { id: 'plan',     label: 'Plan y facturación',  icon: CreditCard  },
+        { id: 'settings', label: 'Configuración',       icon: Settings    },
+        { id: 'help',     label: 'Ayuda',               icon: HelpCircle  },
       ],
     },
   ];

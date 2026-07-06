@@ -41,12 +41,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     [
       { id: 'performance', label: 'Rendimiento', icon: 'chart' },
       { id: 'insights',    label: 'Insights IA', icon: 'sparkles' },
-      { id: 'plan',        label: 'Plan y facturación', icon: 'card' },
     ],
     [
-      { id: 'profile', label: 'Perfil', icon: 'profile' },
-      { id: 'settings', label: 'Configuración', icon: 'settings' },
-      { id: 'help', label: 'Ayuda', icon: 'help' },
+      { id: 'profile',  label: 'Perfil',             icon: 'profile'   },
+      { id: 'plan',     label: 'Plan y facturación',  icon: 'card'      },
+      { id: 'settings', label: 'Configuración',       icon: 'settings'  },
+      { id: 'help',     label: 'Ayuda',               icon: 'help'      },
     ],
   ];
 
