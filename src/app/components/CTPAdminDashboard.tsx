@@ -741,12 +741,28 @@ export function AsignacionesContent() {
 
 // ─── Interacciones ────────────────────────────────────────────────────────────
 
-const INTER_MOCK = [
-  { tipo: 'Consulta',  lead: 'Roberto Fuentes', broker: 'Carlos Pérez',  desc: 'Solicitó más fotos de la parcela', fecha: 'Hace 20 min', icon: MessageSquare, color: '#2563EB' },
-  { tipo: 'Llamada',   lead: 'Camila Torres',   broker: 'Sofía Ramírez', desc: 'Llamada de 8 minutos, interesada en financiamiento', fecha: 'Hace 1 h', icon: Phone, color: '#006B4E' },
-  { tipo: 'Cita',      lead: 'Andrés Morales',  broker: 'Diego Muñoz',   desc: 'Visita confirmada para el 20 jun', fecha: 'Hace 2 h', icon: Calendar, color: '#7C3AED' },
-  { tipo: 'Consulta',  lead: 'Daniela Herrera', broker: 'Carlos Pérez',  desc: 'Preguntó por acceso a servicios básicos', fecha: 'Hace 3 h', icon: MessageSquare, color: '#2563EB' },
-  { tipo: 'WhatsApp',  lead: 'Felipe Aguilera', broker: 'Sin asignar',   desc: 'Primer contacto vía WhatsApp', fecha: 'Ayer, 17:42', icon: MessageCircle, color: '#059669' },
+type InterBase = { tipo: string; fecha: string; icon: typeof MessageSquare; color: string };
+type InterRegistrada = InterBase & { anonimo?: false; lead: string; broker: string; desc: string };
+type InterWhatsApp   = InterBase & { anonimo: true;  parcela: string; numero: string; dispositivo: string; fuente: string };
+type InterItem = InterRegistrada | InterWhatsApp;
+
+const INTER_MOCK: InterItem[] = [
+  { tipo: 'Consulta', lead: 'Roberto Fuentes', broker: 'Carlos Pérez',  desc: 'Solicitó más fotos de la parcela',                  fecha: 'Hace 20 min',  icon: MessageSquare, color: '#2563EB' },
+  { tipo: 'Llamada',  lead: 'Camila Torres',   broker: 'Sofía Ramírez', desc: 'Llamada de 8 minutos, interesada en financiamiento', fecha: 'Hace 1 h',     icon: Phone,         color: '#006B4E' },
+  { tipo: 'Cita',     lead: 'Andrés Morales',  broker: 'Diego Muñoz',   desc: 'Visita confirmada para el 20 jun',                  fecha: 'Hace 2 h',     icon: Calendar,      color: '#7C3AED' },
+  { tipo: 'Consulta', lead: 'Daniela Herrera', broker: 'Carlos Pérez',  desc: 'Preguntó por acceso a servicios básicos',           fecha: 'Hace 3 h',     icon: MessageSquare, color: '#2563EB' },
+  {
+    tipo: 'WhatsApp', anonimo: true,
+    parcela: 'Parcela Paine Norte', numero: '+56 9 8000 1234',
+    dispositivo: 'Móvil · Chrome 124', fuente: 'Ficha pública',
+    fecha: 'Ayer, 17:42', icon: MessageCircle, color: '#059669',
+  },
+  {
+    tipo: 'WhatsApp', anonimo: true,
+    parcela: 'Proyecto Aysén Sur', numero: '+56 9 7654 3210',
+    dispositivo: 'Escritorio · Safari', fuente: 'Ficha pública',
+    fecha: 'Ayer, 14:10', icon: MessageCircle, color: '#059669',
+  },
 ];
 
 export function InteraccionesContent() {
@@ -754,22 +770,45 @@ export function InteraccionesContent() {
     <div className="p-8">
       <SectionShell title="Interacciones" subtitle="Registro de interacciones cliente–broker" />
       <div className="space-y-3">
-        {INTER_MOCK.map(({ tipo, lead, broker, desc, fecha, icon: Icon, color }, i) => (
+        {INTER_MOCK.map((item, i) => (
           <div key={i} className="flex items-start gap-4 p-4 rounded-2xl" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color + '15' }}>
-              <Icon className="w-4 h-4" style={{ color }} />
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: item.color + '15' }}>
+              <item.icon className="w-4 h-4" style={{ color: item.color }} />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span style={{ fontSize: '11px', fontWeight: 600, backgroundColor: color + '15', color, padding: '1px 7px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>
-                  {tipo}
+                <span style={{ fontSize: '11px', fontWeight: 600, backgroundColor: item.color + '15', color: item.color, padding: '1px 7px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>
+                  {item.tipo}
                 </span>
-                <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{fecha}</span>
+                <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{item.fecha}</span>
               </div>
-              <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: '0 0 2px', fontWeight: 500 }}>
-                {lead} <span style={{ fontWeight: 400, color: '#737373' }}>con {broker}</span>
-              </p>
-              <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{desc}</p>
+
+              {item.anonimo ? (
+                <>
+                  <p style={{ fontSize: '13px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: '0 0 4px' }}>
+                    Visitante anónimo
+                    <span style={{ fontWeight: 400, color: '#9CA3AF', fontSize: '12px', marginLeft: '6px' }}>· sin sesión iniciada</span>
+                  </p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1">
+                    <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
+                      Publicación: <span style={{ color: '#0A0A0A', fontWeight: 500 }}>{item.parcela}</span>
+                    </span>
+                    <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
+                      Nº destino: <span style={{ color: '#0A0A0A', fontWeight: 500 }}>{item.numero}</span>
+                    </span>
+                    <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
+                      {item.dispositivo}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: '0 0 2px', fontWeight: 500 }}>
+                    {item.lead} <span style={{ fontWeight: 400, color: '#737373' }}>con {item.broker}</span>
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{item.desc}</p>
+                </>
+              )}
             </div>
           </div>
         ))}
