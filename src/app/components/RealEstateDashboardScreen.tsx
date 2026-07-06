@@ -405,25 +405,6 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             Visualiza el desempeño de tus publicaciones
           </p>
         </div>
-        <div className="flex gap-3">
-          <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            border: '2px solid #DEDEDE',
-            borderRadius: '200px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)',
-            letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-          >
-            <Star className="w-4 h-4" />
-            Destacar parcela
-          </button>
-        </div>
       </div>
 
       {/* KPIs Section */}
