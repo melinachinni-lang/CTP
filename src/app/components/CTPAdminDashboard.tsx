@@ -587,43 +587,52 @@ export function AsignacionesContent() {
                 <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
                   Interesado <span style={{ color: '#DC2626' }}>*</span>
                 </label>
-                <select
-                  value={form.interesado}
-                  onChange={e => handleSelectConsulta(e.target.value)}
-                  className="w-full px-3 py-2 outline-none"
-                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: form.interesado ? '#0A0A0A' : '#9CA3AF', appearance: 'none', backgroundColor: '#FFFFFF' }}
-                >
-                  <option value="">Selecciona un interesado...</option>
-                  {CONSULTAS_DISPONIBLES.map(c => (
-                    <option key={c.nombre} value={c.nombre}>{c.nombre} — {c.parcela}</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={form.interesado}
+                    onChange={e => handleSelectConsulta(e.target.value)}
+                    className="w-full px-3 py-2 pr-9 outline-none"
+                    style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: form.interesado ? '#0A0A0A' : '#9CA3AF', appearance: 'none', backgroundColor: '#FFFFFF' }}
+                  >
+                    <option value="">Selecciona un interesado...</option>
+                    {CONSULTAS_DISPONIBLES.map(c => (
+                      <option key={c.nombre} value={c.nombre}>{c.nombre} — {c.parcela}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+                </div>
                 {form.email && <p style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '4px' }}>{form.email}</p>}
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
                   Publicación <span style={{ color: '#DC2626' }}>*</span>
                 </label>
-                <select
-                  value={form.parcela}
-                  onChange={e => setForm(f => ({ ...f, parcela: e.target.value }))}
-                  className="w-full px-3 py-2 outline-none"
-                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: form.parcela ? '#0A0A0A' : '#9CA3AF', appearance: 'none', backgroundColor: '#FFFFFF' }}
-                >
-                  <option value="">Selecciona una publicación...</option>
-                  {PUBLICACIONES_INMO.map(p => <option key={p} value={p}>{p}</option>)}
-                </select>
+                <div className="relative">
+                  <select
+                    value={form.parcela}
+                    onChange={e => setForm(f => ({ ...f, parcela: e.target.value }))}
+                    className="w-full px-3 py-2 pr-9 outline-none"
+                    style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: form.parcela ? '#0A0A0A' : '#9CA3AF', appearance: 'none', backgroundColor: '#FFFFFF' }}
+                  >
+                    <option value="">Selecciona una publicación...</option>
+                    {PUBLICACIONES_INMO.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+                </div>
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Broker asignado</label>
-                <select
-                  value={form.broker}
-                  onChange={e => setForm(f => ({ ...f, broker: e.target.value }))}
-                  className="w-full px-3 py-2 outline-none"
-                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', appearance: 'none', backgroundColor: '#FFFFFF' }}
-                >
-                  {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
+                <div className="relative">
+                  <select
+                    value={form.broker}
+                    onChange={e => setForm(f => ({ ...f, broker: e.target.value }))}
+                    className="w-full px-3 py-2 pr-9 outline-none"
+                    style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', appearance: 'none', backgroundColor: '#FFFFFF' }}
+                  >
+                    {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
+                  </select>
+                  <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+                </div>
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
