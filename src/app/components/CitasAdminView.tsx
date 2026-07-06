@@ -471,7 +471,7 @@ export function CitasAdminView() {
   const cardStyle = { backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' };
 
   return (
-    <div>
+    <div className="p-8">
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
         <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h2)', color: '#0A0A0A', marginBottom: '4px' }}>Citas</h2>
@@ -500,18 +500,7 @@ export function CitasAdminView() {
       <section className="rounded-2xl" style={cardStyle}>
         {/* Toolbar */}
         <div className="flex items-center gap-3 px-6 py-4 border-b" style={{ borderColor: '#E5E5E5' }}>
-          <div className="relative flex-1 max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
-            <input
-              type="text"
-              placeholder="Buscar por nombre, email o parcela..."
-              value={busqueda}
-              onChange={e => setBusqueda(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg text-sm"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
-            />
-          </div>
-          <div className="flex items-center gap-1 ml-auto">
+          <div className="flex items-center gap-1">
             {(['todas', 'pendiente', 'confirmada', 'rechazada'] as const).map(f => (
               <button
                 key={f}
@@ -522,6 +511,8 @@ export function CitasAdminView() {
                   color: filtroEstado === f ? '#FFFFFF' : '#525252',
                   fontFamily: 'var(--font-body)',
                   borderRadius: '200px',
+                  border: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 {f === 'todas' ? 'Todas' : f.charAt(0).toUpperCase() + f.slice(1) + 's'}
@@ -532,6 +523,17 @@ export function CitasAdminView() {
                 )}
               </button>
             ))}
+          </div>
+          <div className="relative ml-auto" style={{ width: '260px' }}>
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+            <input
+              type="text"
+              placeholder="Buscar por nombre, email o parcela..."
+              value={busqueda}
+              onChange={e => setBusqueda(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 rounded-lg text-sm"
+              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }}
+            />
           </div>
         </div>
 
@@ -591,37 +593,40 @@ export function CitasAdminView() {
                   </td>
                   {/* Acciones */}
                   <td className="px-6 py-5" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       {s.estado === 'pendiente' ? (
                         <>
                           <button
+                            title="Confirmar solicitud"
                             onClick={() => setModalConfirmar(s)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
-                            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+                            className="flex items-center justify-center transition-all"
+                            style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', cursor: 'pointer', backgroundColor: '#D1FAE5', color: '#065F46', flexShrink: 0 }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#006B4E'; e.currentTarget.style.color = '#FFFFFF'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#D1FAE5'; e.currentTarget.style.color = '#065F46'; }}
                           >
-                            <CheckCircle className="w-3.5 h-3.5" /> Confirmar
+                            <CheckCircle className="w-4 h-4" />
                           </button>
                           <button
+                            title="Rechazar solicitud"
                             onClick={() => setModalRechazar(s)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
-                            style={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FCA5A5'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
+                            className="flex items-center justify-center transition-all"
+                            style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', cursor: 'pointer', backgroundColor: '#FEE2E2', color: '#DC2626', flexShrink: 0 }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.color = '#DC2626'; }}
                           >
-                            <X className="w-3.5 h-3.5" /> Rechazar
+                            <X className="w-4 h-4" />
                           </button>
                         </>
                       ) : (
                         <button
+                          title="Ver correo enviado"
                           onClick={() => setEmailPreview({ solicitud: s, tipo: s.estado === 'rechazada' ? 'rechazo' : s.tipoCita === 'videollamada' ? 'confirmacion-videollamada' : 'confirmacion-presencial' })}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all"
-                          style={{ backgroundColor: '#F5F5F5', color: '#525252', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-                          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                          className="flex items-center justify-center transition-all"
+                          style={{ width: '32px', height: '32px', borderRadius: '50%', border: 'none', cursor: 'pointer', backgroundColor: '#F5F5F5', color: '#525252', flexShrink: 0 }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; e.currentTarget.style.color = '#111827'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#525252'; }}
                         >
-                          <Eye className="w-3.5 h-3.5" /> Ver correo
+                          <Eye className="w-4 h-4" />
                         </button>
                       )}
                       <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#D1D5DB' }} />
