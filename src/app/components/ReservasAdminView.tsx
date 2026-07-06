@@ -343,24 +343,6 @@ export function ReservasAdminView() {
 
   return (
     <div className="p-8 space-y-6">
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Total solicitudes', value: reservas.length, color: '#0A0A0A' },
-          { label: 'Por revisar', value: porRevisar, color: '#92400E' },
-          { label: 'Reservadas', value: reservadas, color: '#065F46' },
-          { label: 'Rechazadas', value: reservas.filter(r => r.estado === 'rechazada').length, color: '#991B1B' },
-        ].map(stat => (
-          <div key={stat.label} className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '8px' }}>{stat.label}</p>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: stat.color }} />
-              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', fontWeight: 600, color: stat.color, lineHeight: 1 }}>{stat.value}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Toolbar */}
       <div className="flex flex-row gap-3 items-center justify-between">
         <Tabs
