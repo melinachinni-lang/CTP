@@ -209,6 +209,18 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
             </div>
             {showMenu && (
               <div className="mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+                <div className="flex items-center justify-between px-3 py-1.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Mi cuenta</span>
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="p-0.5 rounded transition-colors"
+                    style={{ lineHeight: 0 }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <X className="w-3 h-3" style={{ color: 'rgba(255,255,255,0.4)' }} />
+                  </button>
+                </div>
                 <button
                   onClick={() => onNavigate('entry')}
                   className="w-full text-left text-xs py-2 px-3"

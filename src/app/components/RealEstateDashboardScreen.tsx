@@ -195,6 +195,16 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
             </button>
             {showMenu && (
               <div className="mt-3 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
+                <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: '#F3F4F6' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Mi cuenta</span>
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="p-1 rounded transition-colors hover:bg-gray-100"
+                    style={{ lineHeight: 0 }}
+                  >
+                    <X className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                  </button>
+                </div>
                 <button
                   onClick={() => onNavigate('entry')}
                   className="w-full text-left px-4 py-2.5 transition-colors"
