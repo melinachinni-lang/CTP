@@ -511,7 +511,7 @@ export function AsignacionesContent() {
       />
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 p-1 rounded-xl" style={{ backgroundColor: '#F5F5F5', width: 'fit-content' }}>
+      <div className="flex gap-1 mb-6 p-1" style={{ backgroundColor: '#F5F5F5', width: 'fit-content', borderRadius: '200px' }}>
         {([
           { key: 'sin-asignar', label: 'Sin asignar', count: sinAsignar.length, badgeBg: '#FEF3C7', badgeColor: '#B45309' },
           { key: 'asignadas',   label: 'Asignadas',   count: asignadas.length,  badgeBg: '#DCFCE7', badgeColor: '#166534' },
@@ -521,7 +521,7 @@ export function AsignacionesContent() {
             onClick={() => setTab(t.key)}
             className="flex items-center gap-2 px-4 py-2 transition-colors"
             style={{
-              borderRadius: '10px',
+              borderRadius: '200px',
               fontSize: '13px',
               fontWeight: tab === t.key ? 600 : 400,
               fontFamily: 'var(--font-body)',
