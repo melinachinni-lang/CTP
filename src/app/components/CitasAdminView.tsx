@@ -430,6 +430,13 @@ export function CitasAdminView() {
   const [modalRechazar, setModalRechazar] = useState<SolicitudCita | null>(null);
   const [motivoRechazo, setMotivoRechazo] = useState('');
   const [emailPreview, setEmailPreview] = useState<{ solicitud: SolicitudCita; tipo: 'confirmacion-presencial' | 'confirmacion-videollamada' | 'rechazo' } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'reject' } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   const solicitudesFiltradas = solicitudes.filter(s => {
     const matchEstado = filtroEstado === 'todas' || s.estado === filtroEstado;
@@ -448,6 +455,7 @@ export function CitasAdminView() {
   };
 
   const handleConfirmar = (id: number) => {
+    const sol = solicitudes.find(s => s.id === id);
     setSolicitudes(prev => prev.map(s =>
       s.id === id ? {
         ...s,
@@ -458,14 +466,19 @@ export function CitasAdminView() {
       } : s
     ));
     setModalConfirmar(null);
+    setSolicitudDetalle(null);
+    setToast({ message: `Solicitud de ${sol?.nombre ?? 'interesado'} confirmada. Se envió el correo de confirmación.`, type: 'success' });
   };
 
   const handleRechazar = (id: number) => {
+    const sol = solicitudes.find(s => s.id === id);
     setSolicitudes(prev => prev.map(s =>
       s.id === id ? { ...s, estado: 'rechazada' as const, motivoRechazo: motivoRechazo.trim() || undefined } : s
     ));
     setModalRechazar(null);
+    setSolicitudDetalle(null);
     setMotivoRechazo('');
+    setToast({ message: `Solicitud de ${sol?.nombre ?? 'interesado'} rechazada. Se notificó al interesado.`, type: 'reject' });
   };
 
   const cardStyle = { backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' };
@@ -768,6 +781,41 @@ export function CitasAdminView() {
           onVerEmail={(s) => setEmailPreview({ solicitud: s, tipo: s.estado === 'rechazada' ? 'rechazo' : s.tipoCita === 'videollamada' ? 'confirmacion-videollamada' : 'confirmacion-presencial' })}
         />
       )}
+
+      {/* Toast */}
+      {toast && (
+        <div
+          className="fixed z-[70] flex items-start gap-3 px-5 py-4 rounded-2xl shadow-xl"
+          style={{
+            bottom: '32px',
+            right: '32px',
+            maxWidth: '360px',
+            backgroundColor: toast.type === 'success' ? '#ECFDF5' : '#FFF1F2',
+            border: `1px solid ${toast.type === 'success' ? '#6EE7B7' : '#FECDD3'}`,
+            animation: 'slideUp 0.25s ease-out',
+          }}
+        >
+          <div
+            className="flex items-center justify-center flex-shrink-0 mt-0.5"
+            style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: toast.type === 'success' ? '#D1FAE5' : '#FFE4E6' }}
+          >
+            {toast.type === 'success'
+              ? <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
+              : <X className="w-4 h-4" style={{ color: '#E11D48' }} />
+            }
+          </div>
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-sm)', color: toast.type === 'success' ? '#065F46' : '#9F1239', marginBottom: '2px' }}>
+              {toast.type === 'success' ? 'Solicitud confirmada' : 'Solicitud rechazada'}
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: toast.type === 'success' ? '#047857' : '#BE123C' }}>
+              {toast.message}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <style>{`@keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }`}</style>
     </div>
   );
 }
