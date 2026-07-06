@@ -629,8 +629,10 @@ export function CitasAdminView() {
                           <Eye className="w-4 h-4" />
                         </button>
                       )}
-                      <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#D1D5DB' }} />
                     </div>
+                  </td>
+                  <td className="pr-5 py-5">
+                    <ChevronRight className="w-4 h-4" style={{ color: '#D1D5DB' }} />
                   </td>
                 </tr>
               ))}
