@@ -697,16 +697,16 @@ export function CitasAdminView() {
                 </div>
               )}
 
-              <div className="flex gap-3">
-                <button onClick={() => setModalConfirmar(null)} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-                  Cancelar
-                </button>
-                <button onClick={() => handleConfirmar(modalConfirmar.id)} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+              <div className="flex flex-col gap-2">
+                <button onClick={() => handleConfirmar(modalConfirmar.id)} className="w-full py-3 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
                   Confirmar y enviar correo
+                </button>
+                <button onClick={() => setModalConfirmar(null)} className="w-full py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                  Cancelar
                 </button>
               </div>
             </div>
@@ -745,16 +745,16 @@ export function CitasAdminView() {
                 />
               </div>
 
-              <div className="flex gap-3">
-                <button onClick={() => { setModalRechazar(null); setMotivoRechazo(''); }} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-                  Cancelar
-                </button>
-                <button onClick={() => handleRechazar(modalRechazar.id)} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+              <div className="flex flex-col gap-2">
+                <button onClick={() => handleRechazar(modalRechazar.id)} className="w-full py-3 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>
                   Rechazar y notificar
+                </button>
+                <button onClick={() => { setModalRechazar(null); setMotivoRechazo(''); }} className="w-full py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                  Cancelar
                 </button>
               </div>
             </div>
