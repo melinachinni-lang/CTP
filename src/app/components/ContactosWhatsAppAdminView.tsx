@@ -581,6 +581,16 @@ export function ContactosWhatsAppAdminView() {
 
   return (
     <div className="p-8 space-y-6">
+      {/* Header */}
+      <div className="mb-2">
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', marginBottom: '4px' }}>
+          Números WhatsApp
+        </h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>
+          Gestiona los números de WhatsApp asociados a tus publicaciones
+        </p>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
@@ -601,18 +611,21 @@ export function ContactosWhatsAppAdminView() {
 
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        <div className="flex gap-1 p-1 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
+        <div className="flex gap-1 p-1" style={{ backgroundColor: '#F5F5F5', borderRadius: '200px' }}>
           {([
             ['todos', 'Todos'],
             ['con-asignacion', 'Con asignaciones'],
             ['sin-asignar', 'Sin asignar'],
           ] as const).map(([id, label]) => (
             <button key={id} onClick={() => setFiltroAsignacion(id)}
-              className="px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+              className="px-3 py-1.5 text-sm font-medium transition-all"
               style={{
+                borderRadius: '200px',
                 backgroundColor: filtroAsignacion === id ? '#FFFFFF' : 'transparent',
                 color: filtroAsignacion === id ? '#006B4E' : '#6B7280',
                 fontFamily: 'var(--font-body)',
+                border: 'none',
+                cursor: 'pointer',
                 boxShadow: filtroAsignacion === id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
               }}>
               {label}
