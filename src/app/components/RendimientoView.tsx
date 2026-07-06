@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2 } from 'lucide-react';
 
 type ViewType = 'inmobiliaria' | 'broker';
-type Periodo = '7d' | '30d' | '90d';
+export type Periodo = '7d' | '30d' | '90d';
 
 interface RendimientoViewProps {
   viewType: ViewType;
@@ -31,9 +31,9 @@ interface PropiedadRanking {
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
-type DualSeries = { parcelas: number[]; proyectos: number[] };
+export type DualSeries = { parcelas: number[]; proyectos: number[] };
 
-const CHART_DATA: Record<ViewType, Record<Periodo, DualSeries>> = {
+export const CHART_DATA: Record<ViewType, Record<Periodo, DualSeries>> = {
   inmobiliaria: {
     '7d': {
       parcelas:  [88, 124, 105, 142, 159, 134, 182],
@@ -64,7 +64,7 @@ const CHART_DATA: Record<ViewType, Record<Periodo, DualSeries>> = {
   },
 };
 
-const X_LABELS: Record<Periodo, { label: string; index: number }[]> = {
+export const X_LABELS: Record<Periodo, { label: string; index: number }[]> = {
   '7d': [
     { label: 'Lun', index: 0 }, { label: 'Mar', index: 1 }, { label: 'Mié', index: 2 },
     { label: 'Jue', index: 3 }, { label: 'Vie', index: 4 }, { label: 'Sáb', index: 5 }, { label: 'Dom', index: 6 },
@@ -117,7 +117,7 @@ const RANKING_SCALE: Record<Periodo, number> = { '7d': 0.22, '30d': 1.0, '90d': 
 
 // ─── Dual Line Chart (Parcelas vs Proyectos) ─────────────────────────────────
 
-function DualLineChart({ parcelas, proyectos, loading, periodo }: {
+export function DualLineChart({ parcelas, proyectos, loading, periodo }: {
   parcelas: number[]; proyectos: number[]; loading: boolean; periodo: Periodo;
 }) {
   const W = 800, H = 210;

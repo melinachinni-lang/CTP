@@ -4,7 +4,7 @@ import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
-import { RendimientoView } from '@/app/components/RendimientoView';
+import { RendimientoView, DualLineChart, CHART_DATA, Periodo } from '@/app/components/RendimientoView';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { TeamContent } from '@/app/components/TeamContent';
 import { HelpContent } from '@/app/components/HelpContent';
@@ -263,25 +263,8 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
   const [dashRankingPeriod, setDashRankingPeriod] = React.useState<'7' | '30' | '90'>('30');
   const DASH_RANKING_SCALE: Record<'7' | '30' | '90', number> = { '7': 0.22, '30': 1.0, '90': 3.1 };
 
-  // Datos simulados para gráfico de evolución
-  const evolutionData = selectedPeriod === '7' ? [
-    { date: '21 Ene', views: 145 },
-    { date: '22 Ene', views: 178 },
-    { date: '23 Ene', views: 156 },
-    { date: '24 Ene', views: 189 },
-    { date: '25 Ene', views: 201 },
-    { date: '26 Ene', views: 234 },
-    { date: '27 Ene', views: 267 },
-  ] : selectedPeriod === '30' ? [
-    { date: 'Sem 1', views: 892 },
-    { date: 'Sem 2', views: 1045 },
-    { date: 'Sem 3', views: 1123 },
-    { date: 'Sem 4', views: 1289 },
-  ] : [
-    { date: 'Mes 1', views: 3842 },
-    { date: 'Mes 2', views: 4156 },
-    { date: 'Mes 3', views: 4523 },
-  ];
+  const periodoMap: Record<'7' | '30' | '90', Periodo> = { '7': '7d', '30': '30d', '90': '90d' };
+  const chartSeries = CHART_DATA['inmobiliaria'][periodoMap[selectedPeriod]];
 
   // Datos para gráfico de barras - consultas por parcela
   const consultasData = [
@@ -446,17 +429,29 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       </section>
 
       {/* Gráfico principal - Evolución de visualizaciones */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+      <section className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <div className="flex items-center justify-between">
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h3)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Evolución de visualizaciones
-          </h2>
+          <div>
+            <h2 style={{
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 'var(--font-weight-medium)',
+              fontSize: 'var(--font-size-h3)',
+              lineHeight: 'var(--line-height-heading)',
+              color: '#0A0A0A'
+            }}>
+              Evolución de visualizaciones
+            </h2>
+            <div className="flex items-center gap-4 mt-1">
+              <span className="flex items-center gap-1.5" style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
+                <span style={{ display: 'inline-block', width: 12, height: 2, backgroundColor: '#006B4E', borderRadius: 2 }} />
+                Parcelas
+              </span>
+              <span className="flex items-center gap-1.5" style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
+                <span style={{ display: 'inline-block', width: 12, height: 0, borderTop: '2px dashed #2563EB' }} />
+                Proyectos
+              </span>
+            </div>
+          </div>
           <div className="flex gap-2 rounded-full p-1" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
             {(['7', '30', '90'] as const).map((period) => (
               <button
@@ -476,38 +471,12 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
             ))}
           </div>
         </div>
-        <div style={{ width: '100%', height: '320px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={evolutionData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#CDD8DE" />
-              <XAxis 
-                dataKey="date" 
-                style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-              />
-              <YAxis 
-                style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#FFFFFF', 
-                  border: '1px solid #CDD8DE', 
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontFamily: 'var(--font-body)'
-                }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="views" 
-                stroke="#006B4E" 
-                strokeWidth={3}
-                dot={{ fill: '#006B4E', r: 4 }}
-                activeDot={{ r: 6, fill: '#006B4E' }}
-                name="Visualizaciones"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        <DualLineChart
+          parcelas={chartSeries.parcelas}
+          proyectos={chartSeries.proyectos}
+          loading={false}
+          periodo={periodoMap[selectedPeriod]}
+        />
       </section>
 
       {/* Gráficos secundarios */}
