@@ -285,23 +285,33 @@ function AsignacionModal({ numero, onClose, onAsignar }: {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" onClick={e => e.stopPropagation()}>
-        <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#E5E5E5' }}>
-          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
-            Asignar a parcela o proyecto
-          </h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100"><X className="w-4 h-4" style={{ color: '#6B7280' }} /></button>
+        <div className="px-6 py-4 border-b flex items-start justify-between" style={{ borderColor: '#E5E5E5' }}>
+          <div>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '2px' }}>
+              Asignar a parcela o proyecto
+            </h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+              Selecciona a qué publicación se vinculará este número de WhatsApp
+            </p>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 flex-shrink-0 mt-0.5"><X className="w-4 h-4" style={{ color: '#6B7280' }} /></button>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="flex gap-2">
             {(['parcela', 'proyecto'] as const).map(t => (
               <button key={t} onClick={() => { setTipo(t); setBusqueda(''); }}
-                className="flex-1 py-2 rounded-lg text-sm font-medium transition-all capitalize"
+                className="flex-1 py-2 text-sm font-medium transition-all"
                 style={{
+                  borderRadius: '200px',
                   backgroundColor: tipo === t ? '#006B4E' : '#F5F5F5',
                   color: tipo === t ? '#FFFFFF' : '#6B7280',
                   fontFamily: 'var(--font-body)',
-                }}>
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={e => { if (tipo !== t) e.currentTarget.style.backgroundColor = '#EBEBEB'; }}
+                onMouseLeave={e => { if (tipo !== t) e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
                 {t === 'parcela' ? 'Parcela' : 'Proyecto'}
               </button>
             ))}
