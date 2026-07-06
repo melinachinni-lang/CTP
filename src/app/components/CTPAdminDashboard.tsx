@@ -457,36 +457,60 @@ function CTPHomeContent({ setCurrentSection }: {
 // ─── Asignaciones ─────────────────────────────────────────────────────────────
 
 const ASIGN_MOCK = [
-  { id: 1, lead: 'Roberto Fuentes',  parcela: 'Parcela Los Robles',    broker: 'Carlos Pérez',   fecha: '14 jun 2026', status: 'activo' as const },
-  { id: 2, lead: 'Camila Torres',    parcela: 'Parcela Valle Pirque',  broker: 'Sofía Ramírez',  fecha: '13 jun 2026', status: 'pendiente' as const },
-  { id: 3, lead: 'Andrés Morales',   parcela: 'Proyecto Aysén Sur',    broker: 'Diego Muñoz',    fecha: '12 jun 2026', status: 'activo' as const },
-  { id: 4, lead: 'Daniela Herrera',  parcela: 'Parcela El Manzano',    broker: 'Carlos Pérez',   fecha: '11 jun 2026', status: 'activo' as const },
-  { id: 5, lead: 'Felipe Aguilera',  parcela: 'Parcela Paine Norte',   broker: 'Sin asignar',    fecha: '10 jun 2026', status: 'pendiente' as const },
+  { id: 1, interesado: 'Roberto Fuentes',  email: 'r.fuentes@gmail.com',    parcela: 'Parcela Los Robles',   broker: 'Carlos Pérez',  fecha: '14 jun 2026', status: 'activo' as const },
+  { id: 2, interesado: 'Camila Torres',    email: 'c.torres@outlook.com',   parcela: 'Parcela Valle Pirque', broker: 'Sofía Ramírez', fecha: '13 jun 2026', status: 'pendiente' as const },
+  { id: 3, interesado: 'Andrés Morales',   email: 'am.morales@gmail.com',   parcela: 'Proyecto Aysén Sur',   broker: 'Diego Muñoz',   fecha: '12 jun 2026', status: 'activo' as const },
+  { id: 4, interesado: 'Daniela Herrera',  email: 'dherrera@yahoo.com',     parcela: 'Parcela El Manzano',   broker: 'Carlos Pérez',  fecha: '11 jun 2026', status: 'activo' as const },
+  { id: 5, interesado: 'Felipe Aguilera',  email: 'f.aguilera@gmail.com',   parcela: 'Parcela Paine Norte',  broker: 'Sin asignar',   fecha: '10 jun 2026', status: 'pendiente' as const },
 ];
 
-const BROKERS_ASIGN = ['Carlos Pérez', 'Sofía Ramírez', 'Diego Muñoz', 'Sin asignar'];
+const BROKERS_ASIGN = ['Carlos Pérez', 'Sofía Ramírez', 'Diego Muñoz'];
+
+const CONSULTAS_DISPONIBLES = [
+  { nombre: 'Laura Vásquez',    email: 'l.vasquez@gmail.com',   parcela: 'Parcela Vista Cordillera' },
+  { nombre: 'Matías Contreras', email: 'm.contreras@gmail.com', parcela: 'Parcela Sur Verde' },
+  { nombre: 'Carla Sepúlveda',  email: 'c.sepulveda@gmail.com', parcela: 'Proyecto Aysén Sur' },
+];
+
+const PUBLICACIONES_INMO = [
+  'Parcela Vista Cordillera', 'Parcela Los Cedros', 'Terreno Valle Central',
+  'Parcela Alto Maipo', 'Parcela Paine Norte', 'Parcela El Manzano',
+  'Parcela Los Robles', 'Parcela Valle Pirque', 'Proyecto Aysén Sur',
+];
 
 export function AsignacionesContent() {
   const [rows, setRows] = useState(ASIGN_MOCK);
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ lead: '', parcela: '', broker: BROKERS_ASIGN[0] });
+  const [form, setForm] = useState({ interesado: '', email: '', parcela: '', broker: BROKERS_ASIGN[0], nota: '' });
   const [error, setError] = useState('');
+  const [editingBroker, setEditingBroker] = useState<number | null>(null);
+
+  function handleSelectConsulta(nombre: string) {
+    const c = CONSULTAS_DISPONIBLES.find(x => x.nombre === nombre);
+    if (c) setForm(f => ({ ...f, interesado: c.nombre, email: c.email, parcela: c.parcela }));
+    else setForm(f => ({ ...f, interesado: nombre, email: '', parcela: '' }));
+  }
 
   function handleSubmit() {
-    if (!form.lead.trim() || !form.parcela.trim()) { setError('Completa todos los campos.'); return; }
+    if (!form.interesado || !form.parcela) { setError('Selecciona un interesado y una publicación.'); return; }
     const today = new Date();
     const fecha = `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
-    setRows(prev => [{ id: prev.length + 1, lead: form.lead.trim(), parcela: form.parcela.trim(), broker: form.broker, fecha, status: 'pendiente' as const }, ...prev]);
-    setForm({ lead: '', parcela: '', broker: BROKERS_ASIGN[0] });
+    setRows(prev => [{ id: prev.length + 1, interesado: form.interesado, email: form.email, parcela: form.parcela, broker: form.broker, fecha, status: 'pendiente' as const }, ...prev]);
+    setForm({ interesado: '', email: '', parcela: '', broker: BROKERS_ASIGN[0], nota: '' });
     setError('');
     setShowModal(false);
+  }
+
+  function handleReasignar(id: number, broker: string) {
+    setRows(prev => prev.map(r => r.id === id ? { ...r, broker, status: broker === 'Sin asignar' ? 'pendiente' as const : 'activo' as const } : r));
+    setEditingBroker(null);
   }
 
   return (
     <div className="p-8">
       <SectionShell
         title="Asignaciones"
-        subtitle="Asignación de leads a brokers"
+        subtitle="Distribución de consultas entrantes a tu equipo de brokers"
         action={
           <button
             className="flex items-center gap-2 px-4 py-2.5 transition-colors"
@@ -503,7 +527,7 @@ export function AsignacionesContent() {
         <table className="w-full">
           <thead>
             <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-              {['Lead', 'Parcela / Proyecto', 'Broker asignado', 'Fecha', 'Estado'].map(h => (
+              {['Interesado', 'Publicación', 'Broker asignado', 'Fecha', 'Estado'].map(h => (
                 <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                   {h}
                 </th>
@@ -513,12 +537,37 @@ export function AsignacionesContent() {
           <tbody>
             {rows.map((a, i) => (
               <tr key={a.id} style={{ borderBottom: i < rows.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
-                <td className="px-5 py-4" style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{a.lead}</td>
+                <td className="px-5 py-4">
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{a.interesado}</p>
+                  <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.email}</p>
+                </td>
                 <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.parcela}</td>
                 <td className="px-5 py-4">
-                  <span style={{ fontSize: '13px', color: a.broker === 'Sin asignar' ? '#B7791F' : '#0A0A0A', fontFamily: 'var(--font-body)' }}>
-                    {a.broker}
-                  </span>
+                  {editingBroker === a.id ? (
+                    <select
+                      autoFocus
+                      defaultValue={a.broker}
+                      onBlur={() => setEditingBroker(null)}
+                      onChange={e => handleReasignar(a.id, e.target.value)}
+                      className="outline-none px-2 py-1"
+                      style={{ border: '1px solid #E5E5E5', borderRadius: '8px', fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', backgroundColor: '#FFFFFF' }}
+                    >
+                      {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
+                      <option value="Sin asignar">Sin asignar</option>
+                    </select>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span style={{ fontSize: '13px', color: a.broker === 'Sin asignar' ? '#B7791F' : '#0A0A0A', fontFamily: 'var(--font-body)' }}>
+                        {a.broker}
+                      </span>
+                      <button
+                        onClick={() => setEditingBroker(a.id)}
+                        style={{ fontSize: '11px', color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                      >
+                        Reasignar
+                      </button>
+                    </div>
+                  )}
                 </td>
                 <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.fecha}</td>
                 <td className="px-5 py-4"><StatusBadge status={a.status} /></td>
@@ -531,29 +580,39 @@ export function AsignacionesContent() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={() => setShowModal(false)}>
           <div className="rounded-2xl p-6 w-full max-w-md" style={{ backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }} onClick={e => e.stopPropagation()}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', marginBottom: '20px' }}>Nueva asignación</h3>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', marginBottom: '4px' }}>Nueva asignación</h3>
+            <p style={{ fontSize: '12px', color: '#9CA3AF', marginBottom: '20px' }}>Asigna una consulta entrante a uno de tus brokers</p>
             <div className="space-y-4">
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Lead</label>
-                <input
-                  type="text"
-                  placeholder="Nombre del lead"
-                  value={form.lead}
-                  onChange={e => setForm(f => ({ ...f, lead: e.target.value }))}
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+                  Interesado <span style={{ color: '#DC2626' }}>*</span>
+                </label>
+                <select
+                  value={form.interesado}
+                  onChange={e => handleSelectConsulta(e.target.value)}
                   className="w-full px-3 py-2 outline-none"
-                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A' }}
-                />
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: form.interesado ? '#0A0A0A' : '#9CA3AF', appearance: 'none', backgroundColor: '#FFFFFF' }}
+                >
+                  <option value="">Selecciona un interesado...</option>
+                  {CONSULTAS_DISPONIBLES.map(c => (
+                    <option key={c.nombre} value={c.nombre}>{c.nombre} — {c.parcela}</option>
+                  ))}
+                </select>
+                {form.email && <p style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '4px' }}>{form.email}</p>}
               </div>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Parcela / Proyecto</label>
-                <input
-                  type="text"
-                  placeholder="Ej: Parcela Los Robles"
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+                  Publicación <span style={{ color: '#DC2626' }}>*</span>
+                </label>
+                <select
                   value={form.parcela}
                   onChange={e => setForm(f => ({ ...f, parcela: e.target.value }))}
                   className="w-full px-3 py-2 outline-none"
-                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A' }}
-                />
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: form.parcela ? '#0A0A0A' : '#9CA3AF', appearance: 'none', backgroundColor: '#FFFFFF' }}
+                >
+                  <option value="">Selecciona una publicación...</option>
+                  {PUBLICACIONES_INMO.map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>Broker asignado</label>
@@ -566,23 +625,30 @@ export function AsignacionesContent() {
                   {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+                  Nota para el broker <span style={{ color: '#9CA3AF', fontWeight: 400 }}>(opcional)</span>
+                </label>
+                <textarea
+                  placeholder="Ej: Cliente muy interesado, llamar hoy antes de las 18 hrs."
+                  value={form.nota}
+                  onChange={e => setForm(f => ({ ...f, nota: e.target.value }))}
+                  rows={3}
+                  className="w-full px-3 py-2 outline-none resize-none"
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', lineHeight: '1.5' }}
+                />
+              </div>
               {error && <p style={{ fontSize: '12px', color: '#DC2626' }}>{error}</p>}
             </div>
             <div className="flex gap-3 mt-6 justify-end">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2"
-                style={{ fontSize: '13px', fontWeight: 600, color: '#737373', borderRadius: '200px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}
-              >
+              <button onClick={() => setShowModal(false)} className="px-4 py-2"
+                style={{ fontSize: '13px', fontWeight: 600, color: '#737373', borderRadius: '200px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
                 Cancelar
               </button>
-              <button
-                onClick={handleSubmit}
-                className="px-4 py-2 transition-colors"
+              <button onClick={handleSubmit} className="px-4 py-2 transition-colors"
                 style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: '#006B4E' }}
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
-              >
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
                 Asignar
               </button>
             </div>
