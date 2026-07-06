@@ -275,6 +275,7 @@ function AsignacionModal({ numero, onClose, onAsignar }: {
 }) {
   const [tipo, setTipo] = useState<'parcela' | 'proyecto'>('parcela');
   const [busqueda, setBusqueda] = useState('');
+  const [pendingItem, setPendingItem] = useState<{ id: string; nombre: string; ubicacion: string } | null>(null);
   const lista = tipo === 'parcela' ? PARCELAS_MOCK : PROYECTOS_MOCK;
   const yaAsignados = numero.asignaciones.map(a => a.id);
   const filtrada = lista.filter(i =>
@@ -282,66 +283,128 @@ function AsignacionModal({ numero, onClose, onAsignar }: {
     (i.nombre.toLowerCase().includes(busqueda.toLowerCase()) || i.ubicacion.toLowerCase().includes(busqueda.toLowerCase()))
   );
 
+  function handleConfirmar() {
+    if (!pendingItem) return;
+    onAsignar({ tipo, id: pendingItem.id, nombre: pendingItem.nombre, ubicacion: pendingItem.ubicacion });
+  }
+
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" onClick={e => e.stopPropagation()}>
         <div className="px-6 py-4 border-b flex items-start justify-between" style={{ borderColor: '#E5E5E5' }}>
           <div>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A', marginBottom: '2px' }}>
-              Asignar a parcela o proyecto
+              {pendingItem ? 'Confirmar asignación' : 'Asignar a parcela o proyecto'}
             </h3>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-              Selecciona a qué publicación se vinculará este número de WhatsApp
+              {pendingItem
+                ? 'Revisa los datos antes de confirmar'
+                : 'Selecciona a qué publicación se vinculará este número de WhatsApp'}
             </p>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 flex-shrink-0 mt-0.5"><X className="w-4 h-4" style={{ color: '#6B7280' }} /></button>
         </div>
 
-        <div className="p-5 space-y-4">
-          <div className="flex gap-2">
-            {(['parcela', 'proyecto'] as const).map(t => (
-              <button key={t} onClick={() => { setTipo(t); setBusqueda(''); }}
-                className="flex-1 py-2 text-sm font-medium transition-all"
-                style={{
-                  borderRadius: '200px',
-                  backgroundColor: tipo === t ? '#006B4E' : '#F5F5F5',
-                  color: tipo === t ? '#FFFFFF' : '#6B7280',
-                  fontFamily: 'var(--font-body)',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={e => { if (tipo !== t) e.currentTarget.style.backgroundColor = '#EBEBEB'; }}
-                onMouseLeave={e => { if (tipo !== t) e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
-                {t === 'parcela' ? 'Parcela' : 'Proyecto'}
-              </button>
-            ))}
-          </div>
-
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
-            <input type="text" placeholder="Buscar..." value={busqueda} onChange={e => setBusqueda(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg text-sm"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
-          </div>
-
-          <div className="rounded-xl overflow-hidden max-h-64 overflow-y-auto" style={{ border: '1px solid #E5E5E5' }}>
-            {filtrada.length === 0 ? (
-              <p className="py-6 text-center" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>
-                No hay resultados o ya están asignados.
-              </p>
-            ) : filtrada.map((item, i) => (
-              <button key={item.id} onClick={() => onAsignar({ tipo, id: item.id, nombre: item.nombre, ubicacion: item.ubicacion })}
-                className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-gray-50"
-                style={{ borderBottom: i < filtrada.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
-                <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>{item.nombre}</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{item.ubicacion}</p>
+        {pendingItem ? (
+          /* Confirmación */
+          <div className="p-5 space-y-4">
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EBFEF5' }}>
+                  <MessageSquare className="w-4 h-4" style={{ color: '#006B4E' }} />
                 </div>
-                <Plus className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                <div className="flex-1 min-w-0">
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '2px' }}>
+                    Número
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{numero.etiqueta}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>{numero.numero}</p>
+                </div>
+              </div>
+              <div className="mt-3 pt-3" style={{ borderTop: '1px solid #E5E5E5' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>
+                  Se asignará a
+                </p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{
+                    backgroundColor: tipo === 'parcela' ? '#EFF6FF' : '#F5F3FF',
+                    color: tipo === 'parcela' ? '#1E40AF' : '#5B21B6',
+                    fontFamily: 'var(--font-body)',
+                  }}>
+                    {tipo === 'parcela' ? 'Parcela' : 'Proyecto'}
+                  </span>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{pendingItem.nombre}</p>
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>{pendingItem.ubicacion}</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setPendingItem(null)}
+                className="flex-1 py-2.5 text-sm font-medium"
+                style={{ borderRadius: '200px', backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}
+              >
+                Cancelar
               </button>
-            ))}
+              <button
+                onClick={handleConfirmar}
+                className="flex-1 py-2.5 text-sm font-medium transition-all"
+                style={{ borderRadius: '200px', backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+              >
+                Asignar
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Lista de selección */
+          <div className="p-5 space-y-4">
+            <div className="flex gap-2">
+              {(['parcela', 'proyecto'] as const).map(t => (
+                <button key={t} onClick={() => { setTipo(t); setBusqueda(''); }}
+                  className="flex-1 py-2 text-sm font-medium transition-all"
+                  style={{
+                    borderRadius: '200px',
+                    backgroundColor: tipo === t ? '#006B4E' : '#F5F5F5',
+                    color: tipo === t ? '#FFFFFF' : '#6B7280',
+                    fontFamily: 'var(--font-body)',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={e => { if (tipo !== t) e.currentTarget.style.backgroundColor = '#EBEBEB'; }}
+                  onMouseLeave={e => { if (tipo !== t) e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+                  {t === 'parcela' ? 'Parcela' : 'Proyecto'}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
+              <input type="text" placeholder="Buscar..." value={busqueda} onChange={e => setBusqueda(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-lg text-sm"
+                style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)' }} />
+            </div>
+
+            <div className="rounded-xl overflow-hidden max-h-64 overflow-y-auto" style={{ border: '1px solid #E5E5E5' }}>
+              {filtrada.length === 0 ? (
+                <p className="py-6 text-center" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>
+                  No hay resultados o ya están asignados.
+                </p>
+              ) : filtrada.map((item, i) => (
+                <button key={item.id} onClick={() => setPendingItem(item)}
+                  className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-gray-50"
+                  style={{ borderBottom: i < filtrada.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#111827' }}>{item.nombre}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{item.ubicacion}</p>
+                  </div>
+                  <Plus className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -520,12 +583,19 @@ export function ContactosWhatsAppAdminView() {
   const [eliminando, setEliminando] = useState<NumeroWhatsApp | null>(null);
   const [asignando, setAsignando] = useState<NumeroWhatsApp | null>(null);
   const [toast, setToast] = useState<{ etiqueta: string; asignaciones: Asignacion[] } | null>(null);
+  const [assignToast, setAssignToast] = useState<string | null>(null);
 
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 4000);
     return () => clearTimeout(t);
   }, [toast]);
+
+  useEffect(() => {
+    if (!assignToast) return;
+    const t = setTimeout(() => setAssignToast(null), 3000);
+    return () => clearTimeout(t);
+  }, [assignToast]);
 
   const conAsignaciones = numeros.filter(n => n.asignaciones.length > 0).length;
   const sinAsignar = numeros.filter(n => n.asignaciones.length === 0).length;
@@ -585,6 +655,7 @@ export function ContactosWhatsAppAdminView() {
       : prev
     );
     setAsignando(null);
+    setAssignToast(asignacion.nombre);
   };
 
   const cardStyle = { backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' };
@@ -764,6 +835,17 @@ export function ContactosWhatsAppAdminView() {
           onClose={() => setAsignando(null)}
           onAsignar={(asignacion) => handleAgregarAsignacion(asignando.id, asignacion)}
         />
+      )}
+
+      {/* Toast asignación exitosa */}
+      {assignToast && (
+        <div
+          className="fixed bottom-6 right-6 z-[100] flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500 }}
+        >
+          <CheckCircle className="w-4 h-4 flex-shrink-0" />
+          Número asignado a {assignToast}
+        </div>
       )}
 
       {/* Toast de confirmación */}
