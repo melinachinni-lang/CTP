@@ -162,59 +162,55 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
 
           {/* User Profile Area */}
           <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 transition-colors"
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                color: 'rgba(255,255,255,0.65)'
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-            >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                <User className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.65)' }} />
-              </div>
-              <div className="flex-1 text-left">
-                <div style={{
-                  fontWeight: 'var(--font-weight-medium)',
-                  color: '#FFFFFF',
-                  fontSize: 'var(--font-size-body-sm)'
-                }}>
-                  Mi cuenta
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex items-center gap-3 flex-1 transition-colors"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-body-sm)',
+                  color: 'rgba(255,255,255,0.65)'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <User className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.65)' }} />
                 </div>
-                <div style={{
-                  fontSize: 'var(--font-size-xs)',
-                  color: 'rgba(255,255,255,0.5)',
-                  marginTop: '2px'
-                }}>
-                  Plan Profesional
+                <div className="flex-1 text-left">
+                  <div style={{ fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', fontSize: 'var(--font-size-body-sm)' }}>
+                    Mi cuenta
+                  </div>
+                  <div style={{ fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>
+                    Plan Profesional
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+              {showMenu && (
+                <button
+                  onClick={() => setShowMenu(false)}
+                  className="flex-shrink-0 p-1 rounded transition-colors"
+                  style={{ lineHeight: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.5)' }} />
+                </button>
+              )}
+            </div>
             {showMenu && (
               <div className="mt-3 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-                <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: '#F3F4F6' }}>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Mi cuenta</span>
-                  <button
-                    onClick={() => setShowMenu(false)}
-                    className="p-1 rounded transition-colors hover:bg-gray-100"
-                    style={{ lineHeight: 0 }}
-                  >
-                    <X className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                  </button>
-                </div>
                 <button
                   onClick={() => onNavigate('entry')}
                   className="w-full text-left px-4 py-2.5 transition-colors"
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--font-size-body-sm)',
-                    color: '#0A0A0A'
+                    color: '#0A0A0A',
+                    backgroundColor: 'transparent',
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   Cerrar sesión
                 </button>

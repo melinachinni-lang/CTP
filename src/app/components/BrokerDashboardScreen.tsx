@@ -190,43 +190,44 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm"
-              style={{ color: 'rgba(255,255,255,0.65)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-            >
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <span className="flex-1 text-left font-medium">Mi cuenta</span>
-            </button>
-            <div className="mt-2 pl-11">
-              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>Plan Básico</span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex items-center gap-3 flex-1 text-sm"
+                style={{ color: 'rgba(255,255,255,0.65)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1 text-left">
+                  <span className="font-medium block">Mi cuenta</span>
+                  <span className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>Plan Básico</span>
+                </div>
+              </button>
+              {showMenu && (
+                <button
+                  onClick={() => setShowMenu(false)}
+                  className="flex-shrink-0 p-1 rounded transition-colors"
+                  style={{ lineHeight: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.5)' }} />
+                </button>
+              )}
             </div>
             {showMenu && (
               <div className="mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                <div className="flex items-center justify-between px-3 py-1.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                  <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Mi cuenta</span>
-                  <button
-                    onClick={() => setShowMenu(false)}
-                    className="p-0.5 rounded transition-colors"
-                    style={{ lineHeight: 0 }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-                  >
-                    <X className="w-3 h-3" style={{ color: 'rgba(255,255,255,0.4)' }} />
-                  </button>
-                </div>
                 <button
                   onClick={() => onNavigate('entry')}
                   className="w-full text-left text-xs py-2 px-3"
-                  style={{ color: 'rgba(255,255,255,0.8)' }}
+                  style={{ color: 'rgba(255,255,255,0.8)', backgroundColor: 'transparent' }}
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ''; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   Cerrar sesión
                 </button>
