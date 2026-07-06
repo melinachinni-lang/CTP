@@ -31,41 +31,35 @@ interface PropiedadRanking {
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
-type MultiSeries = { viz: number[]; consultas: number[]; favoritos: number[] };
+type DualSeries = { parcelas: number[]; proyectos: number[] };
 
-const MULTI_CHART_DATA: Record<ViewType, Record<Periodo, MultiSeries>> = {
+const CHART_DATA: Record<ViewType, Record<Periodo, DualSeries>> = {
   inmobiliaria: {
     '7d': {
-      viz:       [142, 198, 167, 224, 251, 213, 289],
-      consultas: [  2,   4,   3,   5,   6,   4,   7],
-      favoritos: [  1,   2,   1,   3,   3,   2,   4],
+      parcelas:  [88, 124, 105, 142, 159, 134, 182],
+      proyectos: [54,  74,  62,  82,  92,  79, 107],
     },
     '30d': {
-      viz:       [120,135,128,156,167,145,178,192,185,201,215,198,224,231,218,242,255,239,261,278,265,283,297,281,304,318,299,325,341,357],
-      consultas: [  1,  1,  1,  2,  2,  2,  2,  3,  2,  3,  3,  3,  3,  3,  3,  4,  4,  3,  4,  5,  4,  5,  5,  4,  5,  6,  5,  6,  6,  7],
-      favoritos: [  0,  1,  0,  1,  1,  1,  1,  1,  1,  1,  2,  1,  2,  2,  1,  2,  2,  2,  2,  3,  2,  3,  3,  2,  3,  3,  3,  3,  4,  4],
+      parcelas:  [75, 84, 80, 97,104, 90,112,119,115,125,134,124,140,144,136,151,159,149,163,174,165,177,186,175,190,199,187,204,213,222],
+      proyectos: [45, 51, 48, 59, 63, 55, 66, 73, 70, 76, 81, 74, 84, 87, 82, 91, 96, 90, 98,104, 99,106,111,106,114,119,112,121,128,135],
     },
     '90d': {
-      viz:       [890,1020,1150,1089,1230,1410,1355,1488,1612,1580,1720,1845,1980],
-      consultas: [  8,  10,  12,  11,  13,  15,  14,  16,  18,  17,  19,  21,  23],
-      favoritos: [  3,   4,   5,   4,   6,   7,   6,   7,   8,   8,   9,  10,  11],
+      parcelas:  [540, 620, 700, 662, 748, 858, 824, 905, 980, 960,1045,1120,1204],
+      proyectos: [350, 400, 450, 427, 482, 552, 531, 583, 632, 620, 675, 725, 776],
     },
   },
   broker: {
     '7d': {
-      viz:       [68, 91, 77, 108, 124, 103, 138],
-      consultas: [ 2,  3,  2,   4,   4,   3,   5],
-      favoritos: [ 1,  1,  1,   2,   2,   1,   3],
+      parcelas:  [42, 57, 48, 67, 77, 64, 86],
+      proyectos: [26, 34, 29, 41, 47, 39, 52],
     },
     '30d': {
-      viz:       [55, 63, 58, 72, 81, 69, 88, 96, 84,102,115, 98,121,129,112,136,148,131,157,169,154,178,192,176,204,219,198,231,248,267],
-      consultas: [ 1,  1,  1,  1,  2,  1,  2,  2,  2,  2,  3,  2,  3,  3,  2,  3,  4,  3,  4,  4,  3,  4,  5,  4,  5,  5,  4,  6,  6,  7],
-      favoritos: [ 0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  1,  2,  2,  1,  2,  2,  2,  2,  3,  2,  3,  3,  2,  3,  3,  4],
+      parcelas:  [34, 39, 36, 45, 51, 43, 55, 60, 53, 64, 72, 61, 76, 81, 70, 85, 93, 82, 98,106, 96,111,120,110,128,137,124,145,155,167],
+      proyectos: [21, 24, 22, 27, 30, 26, 33, 36, 31, 38, 43, 37, 45, 48, 42, 51, 55, 49, 59, 63, 58, 67, 72, 66, 76, 82, 74, 86, 93,100],
     },
     '90d': {
-      viz:       [390,445,502,478,541,618,584,652,721,698,774,851,940],
-      consultas: [  4,  5,  6,  5,  7,  8,  7,  8,  9,  9, 10, 11, 13],
-      favoritos: [  1,  2,  2,  2,  3,  3,  3,  4,  4,  4,  5,  5,  6],
+      parcelas:  [237, 270, 305, 290, 329, 376, 355, 396, 438, 424, 470, 517, 571],
+      proyectos: [153, 175, 197, 188, 212, 242, 229, 256, 283, 274, 304, 334, 369],
     },
   },
 };
@@ -121,82 +115,76 @@ const PERIODO_LABELS: Record<Periodo, string> = { '7d': '7 días', '30d': '30 d�
 
 const RANKING_SCALE: Record<Periodo, number> = { '7d': 0.22, '30d': 1.0, '90d': 3.1 };
 
-// ─── Multi-series SVG Line Chart ─────────────────────────────────────────────
+// ─── Dual Line Chart (Parcelas vs Proyectos) ─────────────────────────────────
 
-function MultiLineChart({ data, loading, periodo }: { data: MultiSeries; loading: boolean; periodo: Periodo }) {
+function DualLineChart({ parcelas, proyectos, loading, periodo }: {
+  parcelas: number[]; proyectos: number[]; loading: boolean; periodo: Periodo;
+}) {
   const W = 800, H = 210;
-  const PAD = { top: 16, right: 16, bottom: 36, left: 16 };
+  const PAD = { top: 16, right: 16, bottom: 36, left: 56 };
   const innerW = W - PAD.left - PAD.right;
   const innerH = H - PAD.top - PAD.bottom;
 
-  const normalize = (arr: number[]) => {
-    const mn = Math.min(...arr), mx = Math.max(...arr);
-    const range = mx - mn || 1;
-    return arr.map(v => (v - mn) / range);
-  };
+  const allVals = [...parcelas, ...proyectos];
+  const minRaw = Math.min(...allVals);
+  const maxRaw = Math.max(...allVals);
+  const range = (maxRaw - minRaw) || 1;
+  const min = minRaw - range * 0.08;
+  const max = maxRaw + range * 0.06;
+  const extent = max - min;
 
-  const SERIES = [
-    { key: 'viz',       norm: normalize(data.viz),       color: '#006B4E', gradId: 'mgViz',  dash: undefined },
-    { key: 'consultas', norm: normalize(data.consultas), color: '#7C3AED', gradId: 'mgCon',  dash: undefined },
-    { key: 'favoritos', norm: normalize(data.favoritos), color: '#DC2626', gradId: 'mgFav',  dash: '6 3' },
-  ];
+  const px = (i: number, len: number) => PAD.left + (i / (len - 1)) * innerW;
+  const py = (v: number) => PAD.top + innerH - ((v - min) / extent) * innerH;
 
-  const len = data.viz.length;
-  const px = (i: number) => PAD.left + (i / (len - 1)) * innerW;
-  const py = (v: number) => PAD.top + innerH - v * innerH;
+  const ySteps = 4;
+  const yTicks = Array.from({ length: ySteps + 1 }, (_, i) => ({
+    v: Math.round(min + (i / ySteps) * extent),
+    y: PAD.top + innerH - (i / ySteps) * innerH,
+  }));
 
-  const gridLines = [0, 0.25, 0.5, 0.75, 1];
-  const showDots = len <= 7;
+  const makePath = (data: number[]) =>
+    data.map((v, i) => `${i === 0 ? 'M' : 'L'}${px(i, data.length).toFixed(1)},${py(v).toFixed(1)}`).join(' ');
+
+  const pPath = makePath(parcelas);
+  const prPath = makePath(proyectos);
+  const pArea = `${pPath} L${px(parcelas.length - 1, parcelas.length).toFixed(1)},${(PAD.top + innerH).toFixed(1)} L${px(0, parcelas.length).toFixed(1)},${(PAD.top + innerH).toFixed(1)}Z`;
+
+  const showDots = parcelas.length <= 7;
 
   return (
     <div className="relative" style={{ opacity: loading ? 0.35 : 1, transition: 'opacity 0.25s ease' }}>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: '190px', display: 'block' }}>
         <defs>
-          {SERIES.map(s => (
-            <linearGradient key={s.gradId} id={s.gradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={s.color} stopOpacity="0.12" />
-              <stop offset="100%" stopColor={s.color} stopOpacity="0" />
-            </linearGradient>
-          ))}
+          <linearGradient id="dualGradP" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#006B4E" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#006B4E" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
-        {/* Grid */}
-        {gridLines.map((v, i) => (
-          <line key={i} x1={PAD.left} y1={py(v)} x2={W - PAD.right} y2={py(v)} stroke="#F0F0F0" strokeWidth="1" />
+        {yTicks.map((t, i) => (
+          <line key={i} x1={PAD.left} y1={t.y} x2={W - PAD.right} y2={t.y} stroke="#F0F0F0" strokeWidth="1" />
         ))}
-
-        {/* X-axis labels */}
+        {yTicks.map((t, i) => (
+          <text key={i} x={PAD.left - 8} y={t.y + 4} textAnchor="end" fontSize="11" fill="#B0B0B0" fontFamily="system-ui, sans-serif">
+            {t.v >= 1000 ? `${(t.v / 1000).toFixed(1)}k` : t.v < 0 ? '' : t.v}
+          </text>
+        ))}
         {X_LABELS[periodo].map(({ label, index }) => (
-          <text key={index} x={px(index)} y={H - 6} textAnchor="middle" fontSize="11" fill="#B0B0B0" fontFamily="system-ui, sans-serif">
+          <text key={index} x={px(index, parcelas.length)} y={H - 6} textAnchor="middle" fontSize="11" fill="#B0B0B0" fontFamily="system-ui, sans-serif">
             {label}
           </text>
         ))}
 
-        {/* Area fill (only for viz) */}
-        {(() => {
-          const s = SERIES[0];
-          const linePath = s.norm.map((v, i) => `${i === 0 ? 'M' : 'L'}${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ');
-          const areaPath = `${linePath} L${px(len - 1).toFixed(1)},${py(0).toFixed(1)} L${px(0).toFixed(1)},${py(0).toFixed(1)}Z`;
-          return <path d={areaPath} fill={`url(#${s.gradId})`} />;
-        })()}
+        <path d={pArea} fill="url(#dualGradP)" />
+        <path d={pPath} fill="none" stroke="#006B4E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={prPath} fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="6 3" />
 
-        {/* Lines */}
-        {SERIES.map(s => {
-          const linePath = s.norm.map((v, i) => `${i === 0 ? 'M' : 'L'}${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ');
-          return (
-            <path key={s.key} d={linePath} fill="none" stroke={s.color} strokeWidth="2.5"
-              strokeLinecap="round" strokeLinejoin="round"
-              strokeDasharray={s.dash}
-            />
-          );
-        })}
-
-        {/* Dots — 7-day view only */}
-        {showDots && SERIES.map(s =>
-          s.norm.map((v, i) => (
-            <circle key={`${s.key}-${i}`} cx={px(i)} cy={py(v)} r="4" fill={s.color} stroke="#FFFFFF" strokeWidth="2" />
-          ))
-        )}
+        {showDots && parcelas.map((v, i) => (
+          <circle key={`p-${i}`} cx={px(i, parcelas.length)} cy={py(v)} r="4" fill="#006B4E" stroke="#FFFFFF" strokeWidth="2" />
+        ))}
+        {showDots && proyectos.map((v, i) => (
+          <circle key={`pr-${i}`} cx={px(i, proyectos.length)} cy={py(v)} r="4" fill="#2563EB" stroke="#FFFFFF" strokeWidth="2" />
+        ))}
       </svg>
 
       {loading && (
@@ -243,7 +231,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
         { label: 'Favoritos usuarios',   value: 14,   change: 5,   desc: 'vs mes anterior', icon: <Heart className="w-5 h-5" style={{ color: '#DC2626' }} />, iconBg: '#FFF1F2' },
       ];
 
-  const multiData  = MULTI_CHART_DATA[viewType][periodo];
+  const chartData  = CHART_DATA[viewType][periodo];
   const ranking    = viewType === 'inmobiliaria'
     ? (rankingTab === 'parcelas' ? RANKING_INMO : RANKING_INMO_PROYECTOS)
     : (rankingTab === 'parcelas' ? RANKING_BROKER : RANKING_BROKER_PROYECTOS);
@@ -316,34 +304,28 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
 
       {/* Chart Section */}
       <div className="p-5 rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-        <div className="flex items-start justify-between mb-4 flex-wrap gap-3">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
-              Evolución comparada
+              Evolución de visualizaciones
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-              Tendencia relativa — últimos {PERIODO_LABELS[periodo]}
+              Últimos {PERIODO_LABELS[periodo]}
             </p>
           </div>
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-4">
             {/* Leyenda */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {[
-                { color: '#006B4E', label: viewType === 'inmobiliaria' ? 'Visualizaciones' : 'Visualizaciones', value: viewType === 'inmobiliaria' ? '3.840' : '1.920', dash: false },
-                { color: '#7C3AED', label: 'Consultas', value: viewType === 'inmobiliaria' ? '47' : '31', dash: false },
-                { color: '#DC2626', label: 'Favoritos', value: viewType === 'inmobiliaria' ? '28' : '14', dash: true },
+                { color: '#006B4E', label: 'Parcelas', dash: false },
+                { color: '#2563EB', label: 'Proyectos', dash: true },
               ].map(item => (
                 <div key={item.label} className="flex items-center gap-1.5">
                   <svg width="20" height="10" viewBox="0 0 20 10">
                     <line x1="0" y1="5" x2="20" y2="5" stroke={item.color} strokeWidth="2.5"
-                      strokeDasharray={item.dash ? '5 3' : undefined} strokeLinecap="round" />
+                      strokeDasharray={item.dash ? '6 3' : undefined} strokeLinecap="round" />
                   </svg>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151' }}>
-                    {item.label}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: item.color }}>
-                    {item.value}
-                  </span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151' }}>{item.label}</span>
                 </div>
               ))}
             </div>
@@ -368,10 +350,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             </div>
           </div>
         </div>
-        <MultiLineChart data={multiData} loading={isChartLoading} periodo={periodo} />
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#D1D5DB', marginTop: '8px', textAlign: 'right' }}>
-          Cada métrica se muestra en escala relativa para comparar tendencias
-        </p>
+        <DualLineChart parcelas={chartData.parcelas} proyectos={chartData.proyectos} loading={isChartLoading} periodo={periodo} />
       </div>
 
       {/* Ranking / Tabla */}
