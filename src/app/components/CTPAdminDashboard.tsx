@@ -472,13 +472,17 @@ const ASIGNADAS_INITIAL = [
 
 const BROKERS_ASIGN = ['Carlos Pérez', 'Sofía Ramírez', 'Diego Muñoz'];
 
+type AsignModal =
+  | { type: 'asignar'; consultaId: string }
+  | { type: 'editar'; asignadaId: number }
+  | null;
+
 export function AsignacionesContent() {
   const [tab, setTab] = useState<'sin-asignar' | 'asignadas'>('sin-asignar');
   const [sinAsignar, setSinAsignar] = useState(SIN_ASIGNAR_INITIAL);
   const [asignadas, setAsignadas] = useState(ASIGNADAS_INITIAL);
-  const [asignando, setAsignando] = useState<string | null>(null);
+  const [modal, setModal] = useState<AsignModal>(null);
   const [brokerTemp, setBrokerTemp] = useState(BROKERS_ASIGN[0]);
-  const [editingBroker, setEditingBroker] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
   function showToast(msg: string) {
@@ -486,22 +490,44 @@ export function AsignacionesContent() {
     setTimeout(() => setToast(null), 3000);
   }
 
-  function handleAsignar(id: string) {
-    const consulta = sinAsignar.find(c => c.id === id)!;
+  function openAsignar(consultaId: string) {
+    setBrokerTemp(BROKERS_ASIGN[0]);
+    setModal({ type: 'asignar', consultaId });
+  }
+
+  function openEditar(asignadaId: number) {
+    const a = asignadas.find(x => x.id === asignadaId)!;
+    setBrokerTemp(a.broker);
+    setModal({ type: 'editar', asignadaId });
+  }
+
+  function handleConfirmarAsignar() {
+    if (modal?.type !== 'asignar') return;
+    const consulta = sinAsignar.find(c => c.id === modal.consultaId)!;
     const today = new Date();
     const fecha = `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
-    setSinAsignar(prev => prev.filter(c => c.id !== id));
-    setAsignadas(prev => [{ id: Date.now(), interesado: consulta.interesado, email: consulta.email, parcela: consulta.parcela, broker: brokerTemp, fecha, status: 'pendiente' as const }, ...prev]);
-    setAsignando(null);
-    setBrokerTemp(BROKERS_ASIGN[0]);
+    setSinAsignar(prev => prev.filter(c => c.id !== modal.consultaId));
+    setAsignadas(prev => [{ id: Date.now(), interesado: consulta.interesado, email: consulta.email, parcela: consulta.parcela, broker: brokerTemp, fecha, status: 'activo' as const }, ...prev]);
+    setModal(null);
     showToast(`Consulta asignada a ${brokerTemp}`);
   }
 
-  function handleReasignar(id: number, broker: string) {
-    setAsignadas(prev => prev.map(r => r.id === id ? { ...r, broker, status: 'activo' as const } : r));
-    setEditingBroker(null);
-    showToast(`Reasignado a ${broker}`);
+  function handleConfirmarEditar() {
+    if (modal?.type !== 'editar') return;
+    setAsignadas(prev => prev.map(r => r.id === modal.asignadaId ? { ...r, broker: brokerTemp } : r));
+    setModal(null);
+    showToast(`Reasignado a ${brokerTemp}`);
   }
+
+  function handleEliminar(id: number) {
+    const a = asignadas.find(x => x.id === id)!;
+    setAsignadas(prev => prev.filter(x => x.id !== id));
+    setSinAsignar(prev => [{ id: `r${id}`, interesado: a.interesado, email: a.email, parcela: a.parcela, fecha: a.fecha }, ...prev]);
+    showToast('Asignación eliminada');
+  }
+
+  const modalConsulta = modal?.type === 'asignar' ? sinAsignar.find(c => c.id === modal.consultaId) : null;
+  const modalAsignada = modal?.type === 'editar' ? asignadas.find(a => a.id === modal.asignadaId) : null;
 
   return (
     <div className="p-8">
@@ -580,48 +606,15 @@ export function AsignacionesContent() {
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.parcela}</td>
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.fecha}</td>
                     <td className="px-5 py-4">
-                      {asignando === c.id ? (
-                        <div className="flex items-center gap-2">
-                          <div className="relative">
-                            <select
-                              autoFocus
-                              value={brokerTemp}
-                              onChange={e => setBrokerTemp(e.target.value)}
-                              className="pr-8 pl-2 py-1.5 outline-none"
-                              style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', appearance: 'none', backgroundColor: '#FFFFFF' }}
-                            >
-                              {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
-                            </select>
-                            <ChevronDown className="w-3.5 h-3.5 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
-                          </div>
-                          <button
-                            onClick={() => handleAsignar(c.id)}
-                            className="px-3 py-1.5 transition-colors"
-                            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
-                          >
-                            Confirmar
-                          </button>
-                          <button
-                            onClick={() => setAsignando(null)}
-                            className="px-3 py-1.5"
-                            style={{ backgroundColor: '#F5F5F5', color: '#737373', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => { setAsignando(c.id); setBrokerTemp(BROKERS_ASIGN[0]); }}
-                          className="px-3 py-1.5 transition-colors"
-                          style={{ backgroundColor: '#F0FAF5', color: '#006B4E', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #A7E3C8', cursor: 'pointer' }}
-                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }}
-                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}
-                        >
-                          Asignar broker
-                        </button>
-                      )}
+                      <button
+                        onClick={() => openAsignar(c.id)}
+                        className="px-3 py-1.5 transition-colors"
+                        style={{ backgroundColor: '#F0FAF5', color: '#006B4E', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #A7E3C8', cursor: 'pointer' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}
+                      >
+                        Asignar broker
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -637,7 +630,7 @@ export function AsignacionesContent() {
           <table className="w-full">
             <thead>
               <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                {['Interesado', 'Publicación', 'Broker asignado', 'Fecha', 'Estado'].map(h => (
+                {['Interesado', 'Publicación', 'Broker asignado', 'Fecha', 'Acciones'].map(h => (
                   <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                     {h}
                   </th>
@@ -652,36 +645,84 @@ export function AsignacionesContent() {
                     <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.email}</p>
                   </td>
                   <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.parcela}</td>
-                  <td className="px-5 py-4">
-                    {editingBroker === a.id ? (
-                      <select
-                        autoFocus
-                        defaultValue={a.broker}
-                        onBlur={() => setEditingBroker(null)}
-                        onChange={e => handleReasignar(a.id, e.target.value)}
-                        className="outline-none px-2 py-1"
-                        style={{ border: '1px solid #E5E5E5', borderRadius: '8px', fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', backgroundColor: '#FFFFFF' }}
-                      >
-                        {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
-                      </select>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{a.broker}</span>
-                        <button
-                          onClick={() => setEditingBroker(a.id)}
-                          style={{ fontSize: '11px', color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
-                        >
-                          Reasignar
-                        </button>
-                      </div>
-                    )}
-                  </td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{a.broker}</td>
                   <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.fecha}</td>
-                  <td className="px-5 py-4"><StatusBadge status={a.status} /></td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => openEditar(a.id)}
+                        style={{ fontSize: '12px', color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        Editar
+                      </button>
+                      <span style={{ color: '#E5E5E5', fontSize: '14px' }}>|</span>
+                      <button
+                        onClick={() => handleEliminar(a.id)}
+                        style={{ fontSize: '12px', color: '#DC2626', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Modal asignar / editar */}
+      {modal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+          onClick={() => setModal(null)}
+        >
+          <div
+            className="rounded-2xl p-6 w-full max-w-sm"
+            style={{ backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', marginBottom: '4px' }}>
+              {modal.type === 'asignar' ? 'Asignar broker' : 'Editar asignación'}
+            </h3>
+            <p style={{ fontSize: '12px', color: '#9CA3AF', marginBottom: '20px' }}>
+              {modal.type === 'asignar'
+                ? `${modalConsulta?.interesado} · ${modalConsulta?.parcela}`
+                : `${modalAsignada?.interesado} · ${modalAsignada?.parcela}`}
+            </p>
+            <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+              Broker asignado
+            </label>
+            <div className="relative mb-6">
+              <select
+                value={brokerTemp}
+                onChange={e => setBrokerTemp(e.target.value)}
+                className="w-full px-3 py-2 pr-9 outline-none"
+                style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', appearance: 'none', backgroundColor: '#FFFFFF' }}
+              >
+                {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
+            </div>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setModal(null)}
+                style={{ fontSize: '13px', fontWeight: 600, color: '#737373', borderRadius: '200px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', padding: '8px 16px', cursor: 'pointer' }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={modal.type === 'asignar' ? handleConfirmarAsignar : handleConfirmarEditar}
+                className="transition-colors"
+                style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: '#006B4E', padding: '8px 16px', border: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
+              >
+                {modal.type === 'asignar' ? 'Asignar' : 'Guardar'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
