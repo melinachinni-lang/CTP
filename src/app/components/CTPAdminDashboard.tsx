@@ -484,6 +484,12 @@ export function AsignacionesContent() {
   const [form, setForm] = useState({ interesado: '', email: '', parcela: '', broker: BROKERS_ASIGN[0], nota: '' });
   const [error, setError] = useState('');
   const [editingBroker, setEditingBroker] = useState<number | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
 
   function handleSelectConsulta(nombre: string) {
     const c = CONSULTAS_DISPONIBLES.find(x => x.nombre === nombre);
@@ -499,11 +505,13 @@ export function AsignacionesContent() {
     setForm({ interesado: '', email: '', parcela: '', broker: BROKERS_ASIGN[0], nota: '' });
     setError('');
     setShowModal(false);
+    showToast(`Consulta asignada a ${form.broker}`);
   }
 
   function handleReasignar(id: number, broker: string) {
     setRows(prev => prev.map(r => r.id === id ? { ...r, broker, status: broker === 'Sin asignar' ? 'pendiente' as const : 'activo' as const } : r));
     setEditingBroker(null);
+    showToast(broker === 'Sin asignar' ? 'Asignación removida' : `Reasignado a ${broker}`);
   }
 
   return (
@@ -662,6 +670,17 @@ export function AsignacionesContent() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast de éxito */}
+      {toast && (
+        <div
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, animation: 'fadeInUp 0.2s ease' }}
+        >
+          <CheckCircle className="w-4 h-4 flex-shrink-0" />
+          {toast}
         </div>
       )}
     </div>
