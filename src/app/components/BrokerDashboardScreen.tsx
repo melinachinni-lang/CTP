@@ -244,7 +244,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
           </div>
         )}
         {currentSection === 'performance' && <RendimientoView viewType="broker" />}
-        {currentSection === 'insights'    && <AdminInsightsModule />}
+        {currentSection === 'insights'    && <AdminInsightsModule onNavigate={setCurrentSection} />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
         {currentSection === 'profile' && <SettingsContent mode="profile" userType="broker" />}

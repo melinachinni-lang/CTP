@@ -234,7 +234,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'citas'         && <CitasAdminView />}
         {currentSection === 'whatsapp'      && <ContactosWhatsAppAdminView />}
         {currentSection === 'performance' && <RendimientoView viewType="inmobiliaria" />}
-        {currentSection === 'insights'    && <AdminInsightsModule />}
+        {currentSection === 'insights'    && <AdminInsightsModule onNavigate={setCurrentSection} />}
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}

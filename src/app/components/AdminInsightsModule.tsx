@@ -706,9 +706,11 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
             </div>
           )}
           <button
-            onClick={() => filterTab !== 'todos' ? setFilterTab('todos') : undefined}
+            onClick={() => filterTab !== 'todos' ? setFilterTab('todos') : onNavigate?.('my-publications')}
             className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium mx-auto transition-all"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             <ArrowRight className="w-4 h-4" />
             {filterTab !== 'todos' ? 'Ver todos los insights' : 'Ver mis publicaciones'}
