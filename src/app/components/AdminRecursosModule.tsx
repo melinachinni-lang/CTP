@@ -101,17 +101,26 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
     });
   };
 
+  const savedRangeRef = React.useRef<Range | null>(null);
+
+  const saveSelectionOnBlur = () => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && editorRef.current?.contains(sel.anchorNode))
+      savedRangeRef.current = sel.getRangeAt(0).cloneRange();
+  };
+
   const execCmd = (cmd: string, value?: string) => { editorRef.current?.focus(); document.execCommand(cmd, false, value); };
 
   const applyBlock = (tag: 'p' | 'h1' | 'h2' | 'h3') => {
     const editor = editorRef.current;
     if (!editor) return;
+    editor.focus();
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return;
     const range = sel.getRangeAt(0);
     let node: Node | null = range.startContainer;
     while (node && node.parentNode !== editor) node = node.parentNode;
-    if (!node) { document.execCommand('formatBlock', false, tag); setCurrentBlockType(tag); return; }
+    if (!node || node === editor) return;
     const newEl = document.createElement(tag);
     newEl.innerHTML = (node as HTMLElement).innerHTML || '<br>';
     editor.replaceChild(newEl, node);
@@ -120,7 +129,6 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
     newRange.collapse(false);
     sel.removeAllRanges();
     sel.addRange(newRange);
-    editor.focus();
     setCurrentBlockType(tag);
   };
 
@@ -139,18 +147,22 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
     const editor = editorRef.current;
     if (!editor) return;
     const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
-    const range = sel.getRangeAt(0);
+    // Restore selection if lost (because dropdown stole focus)
+    if (savedRangeRef.current && (!sel || sel.isCollapsed)) {
+      sel?.removeAllRanges();
+      sel?.addRange(savedRangeRef.current);
+    }
+    const currentSel = window.getSelection();
+    if (!currentSel || currentSel.rangeCount === 0 || currentSel.isCollapsed) return;
+    const range = currentSel.getRangeAt(0);
     const span = document.createElement('span');
     span.style.fontSize = size;
-    try {
-      range.surroundContents(span);
-    } catch {
+    try { range.surroundContents(span); } catch {
       const contents = range.extractContents();
       span.appendChild(contents);
       range.insertNode(span);
     }
-    sel.removeAllRanges();
+    currentSel.removeAllRanges();
     editor.focus();
   };
 
@@ -259,19 +271,25 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
 
               {/* Toolbar */}
               <div className="flex items-center gap-1 px-4 py-2 flex-wrap" style={{ backgroundColor: '#F8F8F8', borderTop: '1px solid #F0F0F0', borderBottom: '1px solid #F0F0F0' }}>
-                {/* Tipo de bloque estilo WordPress */}
-                <select
-                  value={currentBlockType}
-                  onMouseDown={e => e.stopPropagation()}
-                  onChange={e => applyBlock(e.target.value as 'p' | 'h1' | 'h2' | 'h3')}
-                  className="rounded outline-none cursor-pointer text-xs"
-                  style={{ height: '26px', padding: '0 6px', fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', minWidth: '120px', fontWeight: 500 }}
-                >
-                  <option value="p">Párrafo</option>
-                  <option value="h1">Título 1 (H1)</option>
-                  <option value="h2">Título 2 (H2)</option>
-                  <option value="h3">Título 3 (H3)</option>
-                </select>
+                {/* Jerarquía de bloques */}
+                {([
+                  { label: 'P', title: 'Párrafo', tag: 'p' as const },
+                  { label: 'H1', title: 'Título 1', tag: 'h1' as const },
+                  { label: 'H2', title: 'Título 2', tag: 'h2' as const },
+                  { label: 'H3', title: 'Título 3', tag: 'h3' as const },
+                ]).map(btn => (
+                  <button
+                    key={btn.label}
+                    title={btn.title}
+                    onMouseDown={e => { e.preventDefault(); applyBlock(btn.tag); }}
+                    className="px-2 py-1 rounded text-xs font-medium transition-colors"
+                    style={{ fontFamily: 'var(--font-body)', color: currentBlockType === btn.tag ? '#0A0A0A' : '#737373', backgroundColor: currentBlockType === btn.tag ? '#E5E5E5' : 'transparent', minWidth: '32px' }}
+                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; e.currentTarget.style.color = '#0A0A0A'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = currentBlockType === btn.tag ? '#E5E5E5' : 'transparent'; e.currentTarget.style.color = currentBlockType === btn.tag ? '#0A0A0A' : '#737373'; }}
+                  >
+                    {btn.label}
+                  </button>
+                ))}
                 <div className="w-px h-5 mx-1" style={{ backgroundColor: '#D5D5D5' }} />
                 {/* Tamaño de fuente */}
                 <select
@@ -299,7 +317,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               </div>
 
               {/* Área editable */}
-              <div ref={editorRef} contentEditable suppressContentEditableWarning className="ctp-editor outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '0.9375rem', color: '#0A0A0A', padding: '20px 24px', minHeight: '320px', lineHeight: '1.7' }} onMouseUp={detectBlockType} onKeyUp={detectBlockType} />
+              <div ref={editorRef} contentEditable suppressContentEditableWarning className="ctp-editor outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '0.9375rem', color: '#0A0A0A', padding: '20px 24px', minHeight: '320px', lineHeight: '1.7' }} onMouseUp={detectBlockType} onKeyUp={detectBlockType} onBlur={saveSelectionOnBlur} />
               <div className="px-6 pb-4">
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#A3A3A3' }}>Selecciona texto y usa la barra para aplicar formato. Coloca el cursor en un párrafo y presiona P / H2 / H3 para cambiar el tipo de bloque.</p>
               </div>
