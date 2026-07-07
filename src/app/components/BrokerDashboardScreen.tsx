@@ -37,6 +37,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       { id: 'inquiries', label: 'Consultas', icon: 'message' },
       { id: 'reservas', label: 'Reservas', icon: 'file' },
       { id: 'calendarios', label: 'Calendarios', icon: 'calendar' },
+      { id: 'asignaciones', label: 'Asignaciones', icon: 'users' },
     ],
     [
       { id: 'performance', label: 'Rendimiento', icon: 'chart' },
@@ -120,6 +121,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
         return (
           <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+        );
+      case 'users':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
         );
       default:
@@ -256,6 +263,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
             <CalendariosView />
           </div>
         )}
+        {currentSection === 'asignaciones' && <BrokerAsignacionesContent />}
         {currentSection === 'performance' && <RendimientoView viewType="broker" />}
         {currentSection === 'insights'    && <AdminInsightsModule onNavigate={setCurrentSection} />}
         {currentSection === 'plan' && <PlanContent />}
@@ -1404,6 +1412,202 @@ function LeadsContent() {
         </div>
       </section>
     </main>
+  );
+}
+
+// Broker Asignaciones Section
+const BROKER_PENDIENTES_INITIAL = [
+  { id: 'p1', interesado: 'Laura Vásquez',    email: 'l.vasquez@gmail.com',   parcela: 'Parcela Vista Cordillera', inmobiliaria: 'InmoSur',           fecha: '15 jun 2026' },
+  { id: 'p2', interesado: 'Matías Contreras', email: 'm.contreras@gmail.com', parcela: 'Parcela Sur Verde',        inmobiliaria: 'Valle Central',     fecha: '15 jun 2026' },
+  { id: 'p3', interesado: 'Carla Sepúlveda',  email: 'c.sepulveda@gmail.com', parcela: 'Proyecto Aysén Sur',       inmobiliaria: 'Propiedades Chile', fecha: '14 jun 2026' },
+];
+
+const BROKER_ASIGNADAS_INITIAL = [
+  { id: 1, interesado: 'Roberto Fuentes', email: 'r.fuentes@gmail.com',  parcela: 'Parcela Los Robles',   inmobiliaria: 'InmoSur', fecha: '13 jun 2026' },
+  { id: 2, interesado: 'Andrés Morales',  email: 'am.morales@gmail.com', parcela: 'Proyecto Aysén Sur',   inmobiliaria: 'InmoSur', fecha: '12 jun 2026' },
+];
+
+function BrokerAsignacionesContent() {
+  const [tab, setTab] = React.useState<'pendientes' | 'asignadas'>('pendientes');
+  const [pendientes, setPendientes] = React.useState(BROKER_PENDIENTES_INITIAL);
+  const [asignadas, setAsignadas] = React.useState(BROKER_ASIGNADAS_INITIAL);
+  const [toast, setToast] = React.useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  function handleAceptar(id: string) {
+    const lead = pendientes.find(p => p.id === id)!;
+    const today = new Date();
+    const fecha = `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
+    setPendientes(prev => prev.filter(p => p.id !== id));
+    setAsignadas(prev => [{ id: Date.now(), interesado: lead.interesado, email: lead.email, parcela: lead.parcela, inmobiliaria: lead.inmobiliaria, fecha }, ...prev]);
+    showToast('Lead aceptado correctamente');
+  }
+
+  function handleRechazar(id: string) {
+    setPendientes(prev => prev.filter(p => p.id !== id));
+    showToast('Lead rechazado');
+  }
+
+  const tabs = [
+    { key: 'pendientes' as const, label: 'Pendientes', count: pendientes.length, badgeBg: '#FEF3C7', badgeColor: '#B45309' },
+    { key: 'asignadas'  as const, label: 'Asignadas',  count: asignadas.length,  badgeBg: '#DCFCE7', badgeColor: '#166534' },
+  ];
+
+  return (
+    <div className="p-8">
+      <div style={{ marginBottom: '24px' }}>
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+          Mis asignaciones
+        </h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '6px' }}>
+          Leads que te han asignado las inmobiliarias
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 mb-6 p-1" style={{ backgroundColor: '#F5F5F5', width: 'fit-content', borderRadius: '200px' }}>
+        {tabs.map(t => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className="flex items-center gap-2 px-4 py-2 transition-colors"
+            style={{
+              borderRadius: '200px',
+              fontSize: '13px',
+              fontWeight: tab === t.key ? 600 : 400,
+              fontFamily: 'var(--font-body)',
+              color: tab === t.key ? '#0A0A0A' : '#737373',
+              backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+            }}
+          >
+            {t.label}
+            <span
+              className="flex items-center justify-center"
+              style={{
+                fontSize: '11px', fontWeight: 600,
+                width: '20px', height: '20px', borderRadius: '99px',
+                backgroundColor: tab === t.key ? t.badgeBg : '#E5E5E5',
+                color: tab === t.key ? t.badgeColor : '#737373',
+              }}
+            >
+              {t.count}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Pendientes */}
+      {tab === 'pendientes' && (
+        pendientes.length === 0 ? (
+          <div className="rounded-2xl flex items-center justify-center py-16" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
+            <div className="text-center">
+              <CheckCircle className="w-10 h-10 mx-auto mb-3" style={{ color: '#006B4E' }} />
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Sin pendientes</p>
+              <p style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)', marginTop: '4px' }}>No tienes leads pendientes de respuesta</p>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+            <table className="w-full">
+              <thead>
+                <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+                  {['Interesado', 'Publicación', 'Inmobiliaria', 'Fecha', 'Acciones'].map(h => (
+                    <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {pendientes.map((c, i) => (
+                  <tr key={c.id} style={{ borderBottom: i < pendientes.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
+                    <td className="px-5 py-4">
+                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{c.interesado}</p>
+                      <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{c.email}</p>
+                    </td>
+                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.parcela}</td>
+                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.inmobiliaria}</td>
+                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.fecha}</td>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleAceptar(c.id)}
+                          className="px-3 py-1.5 transition-colors"
+                          style={{ backgroundColor: '#F0FAF5', color: '#006B4E', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #A7E3C8', cursor: 'pointer' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}
+                        >
+                          Aceptar
+                        </button>
+                        <button
+                          onClick={() => handleRechazar(c.id)}
+                          className="px-3 py-1.5 transition-colors"
+                          style={{ backgroundColor: '#FEF2F2', color: '#DC2626', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #FECACA', cursor: 'pointer' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}
+                        >
+                          Rechazar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      )}
+
+      {/* Asignadas */}
+      {tab === 'asignadas' && (
+        <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+          <table className="w-full">
+            <thead>
+              <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+                {['Interesado', 'Publicación', 'Inmobiliaria', 'Fecha', 'Estado'].map(h => (
+                  <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {asignadas.map((a, i) => (
+                <tr key={a.id} style={{ borderBottom: i < asignadas.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
+                  <td className="px-5 py-4">
+                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{a.interesado}</p>
+                    <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.email}</p>
+                  </td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.parcela}</td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.inmobiliaria}</td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.fecha}</td>
+                  <td className="px-5 py-4">
+                    <span style={{ backgroundColor: '#DCFCE7', color: '#166534', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '4px 12px', display: 'inline-block' }}>
+                      Aceptada
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '280px' }}>
+          <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#52C49A' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#FFFFFF' }}>{toast}</p>
+        </div>
+      )}
+    </div>
   );
 }
 
