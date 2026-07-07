@@ -326,9 +326,9 @@ export function AdminVerificacionView() {
           <table className="w-full">
             <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
               <tr>
-                {['Solicitante', 'Tipo', 'Documentos', 'Enviado', 'Estado', 'Acciones'].map((h, i) => (
+                {['Solicitante', 'Tipo', 'Enviado', 'Estado', 'Acciones'].map((h, i) => (
                   <th key={h}
-                    className={`px-4 py-3.5 ${i === 0 ? 'text-left' : i >= 4 ? 'text-center' : 'text-left'}`}
+                    className={`px-4 py-3.5 ${i === 0 ? 'text-left' : i >= 3 ? 'text-center' : 'text-left'}`}
                     style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}
                   >
                     {h}
@@ -340,8 +340,6 @@ export function AdminVerificacionView() {
               {filtrados.map((r, i) => {
                 const cfg = ESTADO_CONFIG[r.estado];
                 const EstIcon = cfg.icon;
-                const docSubidos = r.documentos.filter(d => d.estado === 'subido').length;
-                const docTotal   = r.documentos.length;
                 const isProcesando = procesando === r.id;
                 return (
                   <tr
@@ -372,18 +370,6 @@ export function AdminVerificacionView() {
                         style={{ backgroundColor: r.tipo === 'inmobiliaria' ? '#EFF6FF' : '#F0F5EB', color: r.tipo === 'inmobiliaria' ? '#1D4ED8' : '#006B4E' }}>
                         {r.tipo === 'inmobiliaria' ? 'Inmobiliaria' : 'Broker'}
                       </span>
-                    </td>
-                    {/* Documentos */}
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-1.5">
-                        <FileText className="w-3.5 h-3.5" style={{ color: docSubidos === docTotal ? '#006B4E' : '#D97706' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: docSubidos === docTotal ? '#006B4E' : '#D97706' }}>
-                          {docSubidos}/{docTotal}
-                        </span>
-                        {docSubidos < docTotal && (
-                          <AlertCircle className="w-3.5 h-3.5" style={{ color: '#D97706' }} />
-                        )}
-                      </div>
                     </td>
                     {/* Fecha */}
                     <td className="px-4 py-4">
@@ -521,31 +507,6 @@ export function AdminVerificacionView() {
                     </div>
                   );
                 })}
-              </div>
-
-              {/* Documentos */}
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#0A0A0A', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Documentos</p>
-                <div className="space-y-2">
-                  {drawerRegistro.documentos.map(doc => (
-                    <div key={doc.nombre} className="flex items-center justify-between p-3 rounded-xl" style={{ backgroundColor: '#FAFAFA', border: '1px solid #F0F0F0' }}>
-                      <div className="flex items-center gap-2">
-                        {doc.estado === 'subido'
-                          ? <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                          : <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#D97706' }} />
-                        }
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A' }}>{doc.nombre}</span>
-                      </div>
-                      {doc.estado === 'subido' ? (
-                        <button className="flex items-center gap-1 text-xs" style={{ color: '#006B4E' }}>
-                          <Download className="w-3.5 h-3.5" /> Ver
-                        </button>
-                      ) : (
-                        <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>Faltante</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* Nota si fue rechazado */}
