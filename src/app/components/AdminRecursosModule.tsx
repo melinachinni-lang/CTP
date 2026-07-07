@@ -241,7 +241,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               Volver al listado
             </button>
             <button
-              onClick={onBack}
+              onClick={() => { setPublishSuccess(false); setVistaPrevia(true); }}
               className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all"
               style={{ backgroundColor: '#006B4E', color: '#FFFFFF', borderRadius: '200px', fontFamily: 'var(--font-body)' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
