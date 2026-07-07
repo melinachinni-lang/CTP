@@ -20,6 +20,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const [isLoading, setIsLoading] = useState(true);
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [showContactBrokerModal, setShowContactBrokerModal] = useState(false);
+  const [showHeroContactModal, setShowHeroContactModal] = useState(false);
   const [selectedBroker, setSelectedBroker] = useState<{ nombre: string; rol: string; imagen: string; zona: string; parcelasActivas: number; estado: string } | null>(null);
   const [contactForm, setContactForm] = useState({ nombre: '', email: '', mensaje: '' });
   const [contactSent, setContactSent] = useState(false);
@@ -416,12 +417,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
 
                 <div className="flex gap-3 flex-wrap pt-3">
                   <button
-                    onClick={() => {
-                      if (activeTab !== 'sobre') setActiveTab('sobre');
-                      setTimeout(() => {
-                        contactRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }, activeTab !== 'sobre' ? 150 : 0);
-                    }}
+                    onClick={() => { setContactForm({ nombre: '', email: '', mensaje: '' }); setContactSent(false); setShowHeroContactModal(true); }}
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-sm)',
@@ -1417,6 +1413,81 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       style={{ backgroundColor: contactForm.nombre && contactForm.email && contactForm.mensaje ? '#006B4E' : '#D1D5DB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, cursor: contactForm.nombre && contactForm.email && contactForm.mensaje ? 'pointer' : 'not-allowed' }}
                       onMouseEnter={e => { if (contactForm.nombre && contactForm.email && contactForm.mensaje) e.currentTarget.style.backgroundColor = '#01533E'; }}
                       onMouseLeave={e => { if (contactForm.nombre && contactForm.email && contactForm.mensaje) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                    >
+                      Enviar consulta
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* MODAL CONTACTAR INMOBILIARIA (desde hero) */}
+      {showHeroContactModal && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) { setShowHeroContactModal(false); } }}
+        >
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 pt-6 pb-4" style={{ borderBottom: '1px solid #E5E7EB' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0" style={{ border: '2px solid #E5E7EB' }}>
+                  <ImageWithFallback src={inmobiliaria.logo ?? ''} alt={inmobiliaria.nombre} className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#0A0A0A', marginBottom: '2px' }}>
+                    {inmobiliaria.nombre}
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
+                    Inmobiliaria · {profileData.ubicacionPrincipal}
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => setShowHeroContactModal(false)} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5">
+              {contactSent ? (
+                <div className="text-center py-6">
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#E8F5EE' }}>
+                    <CheckCircle className="w-7 h-7" style={{ color: '#006B4E' }} />
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '8px' }}>¡Consulta enviada!</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                    {inmobiliaria.nombre} recibirá tu mensaje y te responderá a la brevedad.
+                  </p>
+                  <button onClick={() => setShowHeroContactModal(false)} className="mt-6 h-10 px-8 rounded-full text-white transition-colors" style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+                    Cerrar
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {/* WhatsApp CTA */}
+                  <button className="w-full h-11 rounded-full flex items-center justify-center gap-2 mb-4 text-white font-medium transition-colors" style={{ backgroundColor: '#25D366', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1DA851'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#25D366'}>
+                    <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.118 1.523 5.846L.044 23.02a.5.5 0 0 0 .611.637l5.26-1.524A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.896 0-3.67-.516-5.189-1.416l-.372-.22-3.863 1.12 1.07-3.768-.242-.389A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                    Contactar por WhatsApp
+                  </button>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex-1 h-px" style={{ backgroundColor: '#E5E7EB' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>o envía una consulta</span>
+                    <div className="flex-1 h-px" style={{ backgroundColor: '#E5E7EB' }} />
+                  </div>
+                  <div className="space-y-3">
+                    <input type="text" placeholder="Tu nombre" value={contactForm.nombre} onChange={e => setContactForm(f => ({ ...f, nombre: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
+                    <input type="email" placeholder="Tu email" value={contactForm.email} onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
+                    <textarea placeholder={`¿En qué te puede ayudar ${inmobiliaria.nombre}?`} value={contactForm.mensaje} onChange={e => setContactForm(f => ({ ...f, mensaje: e.target.value }))} rows={3} className="w-full px-4 py-3 rounded-xl outline-none resize-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
+                    <button
+                      onClick={() => { if (contactForm.nombre && contactForm.email) setContactSent(true); }}
+                      className="w-full h-11 rounded-full font-semibold transition-colors"
+                      style={{ backgroundColor: contactForm.nombre && contactForm.email ? '#006B4E' : '#E5E5E5', color: contactForm.nombre && contactForm.email ? '#FFFFFF' : '#A3A3A3', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
                     >
                       Enviar consulta
                     </button>
