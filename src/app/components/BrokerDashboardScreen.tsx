@@ -1519,7 +1519,7 @@ function BrokerAsignacionesContent() {
               <thead>
                 <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
                   {['Interesado', 'Publicación', 'Inmobiliaria', 'Fecha', 'Acciones'].map(h => (
-                    <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    <th key={h} className={`px-5 py-3 ${h === 'Acciones' ? 'text-center' : 'text-left'}`} style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                       {h}
                     </th>
                   ))}
@@ -1536,7 +1536,7 @@ function BrokerAsignacionesContent() {
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.inmobiliaria}</td>
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.fecha}</td>
                     <td className="px-5 py-4">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleAceptar(c.id)}
                           className="px-3 py-1.5 transition-colors"
