@@ -49,6 +49,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(false);
   const [vistaPrevia, setVistaPrevia] = useState(false);
+  const [showArticle, setShowArticle] = useState(false);
   const [currentBlockType, setCurrentBlockType] = useState<'p' | 'h1' | 'h2' | 'h3'>('p');
 
   const editorRef = useRef<HTMLDivElement>(null);
@@ -197,28 +198,124 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
         .ctp-preview ol{list-style:decimal;padding-left:22px;margin:4px 0 10px}
         .ctp-preview a{color:#006B4E;text-decoration:underline}
         .ctp-preview strong,.ctp-preview b{font-weight:600}
+        .ctp-article h1{font-size:2.25rem;font-weight:700;color:#0A0A0A;margin:0 0 12px;line-height:1.2;letter-spacing:-0.025em;font-family:var(--font-heading)}
+        .ctp-article h2{font-size:1.625rem;font-weight:700;color:#0A0A0A;margin:36px 0 10px;line-height:1.3;font-family:var(--font-heading)}
+        .ctp-article h3{font-size:1.25rem;font-weight:600;color:#0A0A0A;margin:28px 0 8px;line-height:1.4;font-family:var(--font-heading)}
+        .ctp-article p{margin:0 0 20px;color:#333333;line-height:1.8;font-size:1.0625rem;font-family:var(--font-body)}
+        .ctp-article ul{list-style:disc;padding-left:24px;margin:0 0 20px;color:#333333}
+        .ctp-article ol{list-style:decimal;padding-left:24px;margin:0 0 20px;color:#333333}
+        .ctp-article li{margin-bottom:8px;line-height:1.75;font-size:1.0625rem;font-family:var(--font-body)}
+        .ctp-article a{color:#006B4E;text-decoration:underline}
+        .ctp-article strong,.ctp-article b{font-weight:600}
+        .ctp-article em,.ctp-article i{font-style:italic}
+        .ctp-article blockquote{border-left:3px solid #006B4E;padding:12px 0 12px 20px;margin:24px 0;color:#525252;font-size:1.1rem;font-style:italic}
       `}</style>
 
       {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <button
-            onClick={vistaPrevia ? () => setVistaPrevia(false) : onBack}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors"
+            onClick={showArticle ? () => { setShowArticle(false); onBack(); } : vistaPrevia ? () => setVistaPrevia(false) : onBack}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors flex-shrink-0"
             style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
           >
-            <ArrowLeft className="w-4 h-4" /> {vistaPrevia ? 'Volver a editar' : 'Volver al listado'}
+            <ArrowLeft className="w-4 h-4" />
+            {showArticle ? 'Volver al listado' : vistaPrevia ? 'Volver a editar' : 'Volver al listado'}
           </button>
           <span style={{ color: '#D5D5D5' }}>/</span>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-            {recurso ? 'Editar recurso' : 'Nuevo recurso'}
-          </span>
+          {showArticle ? (
+            <>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Recursos &amp; Blog</span>
+              <span style={{ color: '#D5D5D5' }}>/</span>
+              <span className="truncate" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', maxWidth: '320px' }}>{formTitulo}</span>
+            </>
+          ) : (
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+              {recurso ? 'Editar recurso' : 'Nuevo recurso'}
+            </span>
+          )}
         </div>
+        {showArticle && (
+          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs flex-shrink-0" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: 500, border: '1px solid #C5D9A8' }}>
+            <Globe className="w-3 h-3" /> Vista pública
+          </span>
+        )}
       </div>
 
-      {publishSuccess ? (
+      {showArticle ? (
+        /* ── Vista artículo publicado ── */
+        (() => {
+          const htmlContent = editorRef.current?.innerHTML || recurso?.contenido || '';
+          const wordCount = htmlContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter((w: string) => w.length > 0).length;
+          const readTime = Math.max(1, Math.ceil(wordCount / 200));
+          const today = new Date();
+          const fechaDisplay = recurso?.fecha || `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
+          return (
+            <div className="max-w-2xl mx-auto pb-16">
+              {/* Imagen hero */}
+              {imagenPrincipal ? (
+                <div className="w-full rounded-2xl overflow-hidden mb-8" style={{ height: '420px' }}>
+                  <img src={imagenPrincipal.url} alt={formTitulo} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-full rounded-2xl flex items-center justify-center mb-8" style={{ height: '280px', backgroundColor: '#F0F5EB', border: '1px solid #E2EDCC' }}>
+                  <div className="text-center">
+                    <BookOpen className="w-12 h-12 mx-auto mb-3" style={{ color: '#A8C880' }} />
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: '#A3A3A3' }}>Sin imagen de portada</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Metadatos */}
+              <div className="flex items-center gap-3 mb-4 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 600 }}>
+                  <Tag className="w-3 h-3" />{formTopico}
+                </span>
+                <span style={{ color: '#D5D5D5' }}>·</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', color: '#737373' }}>{fechaDisplay}</span>
+                <span style={{ color: '#D5D5D5' }}>·</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', color: '#737373' }}>☕ {readTime} min de lectura</span>
+              </div>
+
+              {/* Título */}
+              <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.25rem', fontWeight: 700, color: '#0A0A0A', lineHeight: 1.2, letterSpacing: '-0.025em', marginBottom: '16px' }}>
+                {formTitulo || 'Sin título'}
+              </h1>
+
+              {/* Bajada */}
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1.15rem', color: '#525252', lineHeight: 1.7, marginBottom: '32px', paddingBottom: '32px', borderBottom: '1px solid #EFEFEF' }}>
+                {formDescripcion}
+              </p>
+
+              {/* Autor */}
+              <div className="flex items-center gap-3 mb-8 pb-8" style={{ borderBottom: '1px solid #EFEFEF' }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#006B4E' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '0.8rem', fontWeight: 700, color: '#FFFFFF' }}>CTP</span>
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', fontWeight: 600, color: '#0A0A0A', margin: 0 }}>Equipo CompraTuParcela</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#9CA3AF', margin: '2px 0 0' }}>Publicado el {fechaDisplay}</p>
+                </div>
+              </div>
+
+              {/* Contenido */}
+              <div className="ctp-article" dangerouslySetInnerHTML={{ __html: htmlContent || '<p style="color:#A3A3A3;font-family:var(--font-body)">El artículo no tiene contenido aún.</p>' }} />
+
+              {/* Tags */}
+              {formPalabrasClave.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-12 pt-8" style={{ borderTop: '1px solid #EFEFEF' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em', marginRight: '4px', alignSelf: 'center' }}>Tags:</span>
+                  {formPalabrasClave.map(k => (
+                    <span key={k} className="px-3 py-1 rounded-full text-sm" style={{ backgroundColor: '#F5F5F5', color: '#525252', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5' }}>#{k}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })()
+      ) : publishSuccess ? (
         /* ── Pantalla de éxito ── */
         <div className="flex flex-col items-center justify-center py-20 text-center max-w-md mx-auto">
           <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: '#DCFCE7' }}>
@@ -241,7 +338,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               Volver al listado
             </button>
             <button
-              onClick={() => { setPublishSuccess(false); setVistaPrevia(true); }}
+              onClick={() => { setPublishSuccess(false); setShowArticle(true); }}
               className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all"
               style={{ backgroundColor: '#006B4E', color: '#FFFFFF', borderRadius: '200px', fontFamily: 'var(--font-body)' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
@@ -456,7 +553,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
       )}
 
       {/* Footer de acciones */}
-      {!publishSuccess && <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
+      {!publishSuccess && !showArticle && <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
         <button onClick={() => setVistaPrevia(v => !v)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all" style={{ backgroundColor: vistaPrevia ? '#F0F5EB' : '#F5F5F5', border: `1px solid ${vistaPrevia ? '#C5D9A8' : '#E5E5E5'}`, color: vistaPrevia ? '#3D5E28' : '#737373', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = vistaPrevia ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = vistaPrevia ? '#F0F5EB' : '#F5F5F5'; }}>
           <Eye className="w-3.5 h-3.5" /> {vistaPrevia ? 'Volver a editar' : 'Vista previa'}
         </button>
