@@ -377,7 +377,7 @@ export function AdminRecursosModule() {
   }
 
   return (
-    <>
+    <div className="p-6">
       {/* Header */}
       <div className="mb-6">
         <h1 style={{
@@ -534,6 +534,6 @@ export function AdminRecursosModule() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
