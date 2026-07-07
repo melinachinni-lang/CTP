@@ -491,10 +491,12 @@ export function AdminRecursosModule() {
   const handleSave = (data: Omit<Recurso, 'id' | 'fecha'>) => {
     if (typeof editorView === 'object') {
       setRecursos(prev => prev.map(r => r.id === editorView.id ? { ...r, ...data } : r));
+      setEditorView('list'); // edición: vuelve al listado inmediatamente
     } else {
       setRecursos(prev => [{ id: `r${Date.now()}`, fecha: '12 jun 2026', ...data }, ...prev]);
+      // artículo nuevo: NO redirige — el RecursoEditor muestra la pantalla de éxito
+      // y llama onBack() cuando el usuario decide salir
     }
-    setEditorView('list');
   };
 
   const filtrados = recursos.filter(r => {
