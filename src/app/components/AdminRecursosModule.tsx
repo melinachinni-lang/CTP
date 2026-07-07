@@ -378,6 +378,27 @@ export function AdminRecursosModule() {
 
   return (
     <>
+      {/* Header */}
+      <div className="mb-6">
+        <h1 style={{
+          fontFamily: 'var(--font-heading)',
+          fontWeight: 'var(--font-weight-regular)',
+          fontSize: 'var(--font-size-h2)',
+          lineHeight: 'var(--line-height-heading)',
+          color: '#0A0A0A',
+          marginBottom: '8px'
+        }}>
+          Recursos &amp; Blog
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 'var(--font-size-body-base)',
+          color: '#737373'
+        }}>
+          Gestiona los artículos, guías y contenido editorial de la plataforma
+        </p>
+      </div>
+
       {/* Toolbar */}
       <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
         <div className="relative flex-1">
