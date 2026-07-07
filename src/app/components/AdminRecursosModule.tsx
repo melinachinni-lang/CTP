@@ -100,10 +100,20 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
     });
   };
 
-  const execCmd = (cmd: string, value?: string) => { editorRef.current?.focus(); document.execCommand(cmd, false, value); };
+  const savedRange = React.useRef<Range | null>(null);
+  const saveSelection = () => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && editorRef.current?.contains(sel.anchorNode))
+      savedRange.current = sel.getRangeAt(0).cloneRange();
+  };
+  const restoreSelection = () => {
+    const sel = window.getSelection();
+    if (sel && savedRange.current) { sel.removeAllRanges(); sel.addRange(savedRange.current); }
+  };
+  const execCmd = (cmd: string, value?: string) => { restoreSelection(); document.execCommand(cmd, false, value); };
   const insertLink = () => {
     const url = window.prompt('URL del enlace:');
-    if (url) { editorRef.current?.focus(); document.execCommand('createLink', false, url); }
+    if (url) { restoreSelection(); document.execCommand('createLink', false, url); }
   };
 
   return (
@@ -137,14 +147,6 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
           <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
             {recurso ? 'Editar recurso' : 'Nuevo recurso'}
           </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <button onClick={() => setVistaPrevia(v => !v)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all" style={{ backgroundColor: vistaPrevia ? '#F0F5EB' : '#F5F5F5', border: `1px solid ${vistaPrevia ? '#C5D9A8' : '#E5E5E5'}`, color: vistaPrevia ? '#3D5E28' : '#737373', fontFamily: 'var(--font-body)' }}>
-            <Eye className="w-3.5 h-3.5" /> {vistaPrevia ? 'Volver a editar' : 'Vista previa'}
-          </button>
-          <button onClick={handleSave} className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all" style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}>
-            {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : <><Save className="w-4 h-4" /> {recurso ? 'Guardar cambios' : 'Publicar recurso'}</>}
-          </button>
         </div>
       </div>
 
@@ -232,7 +234,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               </div>
 
               {/* Área editable */}
-              <div ref={editorRef} contentEditable suppressContentEditableWarning className="ctp-editor outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', padding: '20px 24px', minHeight: '320px', lineHeight: '1.7' }} onFocus={e => { e.currentTarget.style.outline = 'none'; }} />
+              <div ref={editorRef} contentEditable suppressContentEditableWarning className="ctp-editor outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', padding: '20px 24px', minHeight: '320px', lineHeight: '1.7' }} onMouseUp={saveSelection} onKeyUp={saveSelection} onSelect={saveSelection} />
               <div className="px-6 pb-4">
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#A3A3A3' }}>Seleccioná texto y usá la barra para aplicar formato (H2, H3, negrita, cursiva, enlaces, listas).</p>
               </div>
@@ -325,6 +327,16 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
           </div>
         </div>
       )}
+
+      {/* Footer de acciones */}
+      <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
+        <button onClick={() => setVistaPrevia(v => !v)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all" style={{ backgroundColor: vistaPrevia ? '#F0F5EB' : '#F5F5F5', border: `1px solid ${vistaPrevia ? '#C5D9A8' : '#E5E5E5'}`, color: vistaPrevia ? '#3D5E28' : '#737373', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = vistaPrevia ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = vistaPrevia ? '#F0F5EB' : '#F5F5F5'; }}>
+          <Eye className="w-3.5 h-3.5" /> {vistaPrevia ? 'Volver a editar' : 'Vista previa'}
+        </button>
+        <button onClick={handleSave} className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all" style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}>
+          {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : <><Save className="w-4 h-4" /> {recurso ? 'Guardar cambios' : 'Publicar recurso'}</>}
+        </button>
+      </div>
     </div>
   );
 }
