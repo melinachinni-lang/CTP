@@ -107,7 +107,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
   };
 
   return (
-    <>
+    <div className="p-6">
       <style>{`
         .ctp-editor h2{font-size:1.2rem;font-weight:600;color:#0A0A0A;margin:14px 0 6px;line-height:1.4}
         .ctp-editor h3{font-size:1.05rem;font-weight:600;color:#0A0A0A;margin:10px 0 4px;line-height:1.4}
@@ -325,7 +325,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
