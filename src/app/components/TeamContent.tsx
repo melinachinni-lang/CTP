@@ -424,7 +424,7 @@ export function TeamContent() {
 
       {/* Broker Detail Modal */}
       {broker && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6">
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-6" style={{ backgroundColor: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }}>
           <div className="bg-white rounded-[24px] max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-8 border-b-2 border-gray-200">
@@ -797,7 +797,7 @@ export function TeamContent() {
 
       {/* Nueva Invitación Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6">
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-6" style={{ backgroundColor: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }}>
           <div className="bg-white rounded-[24px] max-w-lg w-full shadow-[0_8px_30px_rgba(0,0,0,0.2)] flex flex-col" style={{ maxHeight: '90vh' }}>
             {inviteSent ? (
               <div className="p-10 flex flex-col items-center text-center space-y-4">
