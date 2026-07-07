@@ -48,6 +48,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
   const [formErrors, setFormErrors] = useState({ titulo: false, descripcion: false });
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [vistaPrevia, setVistaPrevia] = useState(false);
+  const [currentBlockType, setCurrentBlockType] = useState<'p' | 'h1' | 'h2' | 'h3'>('p');
 
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -102,26 +103,36 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
 
   const execCmd = (cmd: string, value?: string) => { editorRef.current?.focus(); document.execCommand(cmd, false, value); };
 
-  const applyBlock = (tag: 'p' | 'h2' | 'h3') => {
+  const applyBlock = (tag: 'p' | 'h1' | 'h2' | 'h3') => {
     const editor = editorRef.current;
     if (!editor) return;
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return;
     const range = sel.getRangeAt(0);
-    // Find the direct child of the editor that contains the selection start
     let node: Node | null = range.startContainer;
     while (node && node.parentNode !== editor) node = node.parentNode;
-    if (!node) { document.execCommand('formatBlock', false, tag); return; }
+    if (!node) { document.execCommand('formatBlock', false, tag); setCurrentBlockType(tag); return; }
     const newEl = document.createElement(tag);
     newEl.innerHTML = (node as HTMLElement).innerHTML || '<br>';
     editor.replaceChild(newEl, node);
-    // Place cursor at end of new element
     const newRange = document.createRange();
     newRange.selectNodeContents(newEl);
     newRange.collapse(false);
     sel.removeAllRanges();
     sel.addRange(newRange);
     editor.focus();
+    setCurrentBlockType(tag);
+  };
+
+  const detectBlockType = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || !editorRef.current) return;
+    let node: Node | null = sel.getRangeAt(0).startContainer;
+    while (node && node.parentNode !== editorRef.current) node = node.parentNode;
+    if (node && node.nodeName) {
+      const tag = node.nodeName.toLowerCase();
+      if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'p') setCurrentBlockType(tag as 'p' | 'h1' | 'h2' | 'h3');
+    }
   };
 
   const applyFontSize = (size: string) => {
@@ -151,18 +162,20 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
   return (
     <div className="p-6">
       <style>{`
-        .ctp-editor h2{font-size:1.35rem;font-weight:700;color:#0A0A0A;margin:16px 0 6px;line-height:1.3}
-        .ctp-editor h3{font-size:1.1rem;font-weight:600;color:#0A0A0A;margin:12px 0 4px;line-height:1.4}
+        .ctp-editor h1{font-size:2rem;font-weight:700;color:#0A0A0A;margin:20px 0 8px;line-height:1.2;letter-spacing:-0.02em}
+        .ctp-editor h2{font-size:1.5rem;font-weight:700;color:#0A0A0A;margin:18px 0 6px;line-height:1.3}
+        .ctp-editor h3{font-size:1.15rem;font-weight:600;color:#0A0A0A;margin:14px 0 4px;line-height:1.4}
         .ctp-editor p{margin:0 0 10px;color:#3A3A3A;line-height:1.7;font-size:0.9375rem}
         .ctp-editor ul{list-style:disc;padding-left:22px;margin:4px 0 10px;color:#3A3A3A}
         .ctp-editor ol{list-style:decimal;padding-left:22px;margin:4px 0 10px;color:#3A3A3A}
-        .ctp-editor li{margin-bottom:4px;line-height:1.6}
+        .ctp-editor li{margin-bottom:4px;line-height:1.6;font-size:0.9375rem}
         .ctp-editor a{color:#006B4E;text-decoration:underline}
         .ctp-editor strong,.ctp-editor b{font-weight:600}
         .ctp-editor em,.ctp-editor i{font-style:italic}
-        .ctp-preview h2{font-size:1.35rem;font-weight:700;color:#0A0A0A;margin:16px 0 6px;line-height:1.3}
-        .ctp-preview h3{font-size:1.1rem;font-weight:600;color:#0A0A0A;margin:12px 0 4px;line-height:1.4}
-        .ctp-preview p{margin:0 0 10px;color:#3A3A3A;line-height:1.7}
+        .ctp-preview h1{font-size:2rem;font-weight:700;color:#0A0A0A;margin:20px 0 8px;line-height:1.2;letter-spacing:-0.02em}
+        .ctp-preview h2{font-size:1.5rem;font-weight:700;color:#0A0A0A;margin:18px 0 6px;line-height:1.3}
+        .ctp-preview h3{font-size:1.15rem;font-weight:600;color:#0A0A0A;margin:14px 0 4px;line-height:1.4}
+        .ctp-preview p{margin:0 0 10px;color:#3A3A3A;line-height:1.7;font-size:0.9375rem}
         .ctp-preview ul{list-style:disc;padding-left:22px;margin:4px 0 10px}
         .ctp-preview ol{list-style:decimal;padding-left:22px;margin:4px 0 10px}
         .ctp-preview a{color:#006B4E;text-decoration:underline}
@@ -246,16 +259,19 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
 
               {/* Toolbar */}
               <div className="flex items-center gap-1 px-4 py-2 flex-wrap" style={{ backgroundColor: '#F8F8F8', borderTop: '1px solid #F0F0F0', borderBottom: '1px solid #F0F0F0' }}>
-                {/* Jerarquía de bloques */}
-                {([
-                  { label: 'P', title: 'Párrafo', tag: 'p' as const },
-                  { label: 'H2', title: 'Título H2', tag: 'h2' as const },
-                  { label: 'H3', title: 'Subtítulo H3', tag: 'h3' as const },
-                ]).map(btn => (
-                  <button key={btn.label} title={btn.title} onMouseDown={e => { e.preventDefault(); applyBlock(btn.tag); }} className="px-2 py-1 rounded text-xs font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#737373', minWidth: '32px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; e.currentTarget.style.color = '#0A0A0A'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#737373'; }}>
-                    {btn.label}
-                  </button>
-                ))}
+                {/* Tipo de bloque estilo WordPress */}
+                <select
+                  value={currentBlockType}
+                  onMouseDown={e => e.stopPropagation()}
+                  onChange={e => applyBlock(e.target.value as 'p' | 'h1' | 'h2' | 'h3')}
+                  className="rounded outline-none cursor-pointer text-xs"
+                  style={{ height: '26px', padding: '0 6px', fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', minWidth: '120px', fontWeight: 500 }}
+                >
+                  <option value="p">Párrafo</option>
+                  <option value="h1">Título 1 (H1)</option>
+                  <option value="h2">Título 2 (H2)</option>
+                  <option value="h3">Título 3 (H3)</option>
+                </select>
                 <div className="w-px h-5 mx-1" style={{ backgroundColor: '#D5D5D5' }} />
                 {/* Tamaño de fuente */}
                 <select
@@ -283,7 +299,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               </div>
 
               {/* Área editable */}
-              <div ref={editorRef} contentEditable suppressContentEditableWarning className="ctp-editor outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '0.9375rem', color: '#0A0A0A', padding: '20px 24px', minHeight: '320px', lineHeight: '1.7' }} />
+              <div ref={editorRef} contentEditable suppressContentEditableWarning className="ctp-editor outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '0.9375rem', color: '#0A0A0A', padding: '20px 24px', minHeight: '320px', lineHeight: '1.7' }} onMouseUp={detectBlockType} onKeyUp={detectBlockType} />
               <div className="px-6 pb-4">
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#A3A3A3' }}>Selecciona texto y usa la barra para aplicar formato. Coloca el cursor en un párrafo y presiona P / H2 / H3 para cambiar el tipo de bloque.</p>
               </div>
