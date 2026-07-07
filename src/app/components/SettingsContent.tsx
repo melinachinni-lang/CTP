@@ -94,7 +94,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   // — Perfil form state
   const [perfil, setPerfil] = useState({
     nombre: 'Inmobiliaria Valle Central',
-    descripcion: 'Inmobiliaria especializada en parcelas de agrado en la zona central de Chile. Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales.',
+    descripcion: 'Inmobiliaria especializada en parcelas de agrado.',
+    quienesSomos: 'Con más de 15 años de experiencia, conectamos a personas con sus terrenos ideales en la zona central de Chile.',
     email: 'contacto@vallecentral.cl',
     telefono: '+56 9 8765 4321',
     whatsapp: '+56 9 8765 4321',
@@ -962,16 +963,39 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 Descripción
               </label>
               <textarea
-                rows={4}
+                rows={2}
+                maxLength={50}
                 value={perfil.descripcion}
-                onChange={e => setPerfil(p => ({ ...p, descripcion: e.target.value }))}
+                onChange={e => setPerfil(p => ({ ...p, descripcion: e.target.value.slice(0, 50) }))}
+                placeholder="Breve descripción de la empresa..."
                 className="w-full px-4 py-3 rounded-xl text-sm resize-none transition-colors"
                 style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', lineHeight: '1.6' }}
                 onFocus={e => e.target.style.borderColor = '#006B4E'}
                 onBlur={e => e.target.style.borderColor = '#E5E5E5'}
               />
-              <p className="mt-1 text-right" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
-                {perfil.descripcion.length} caracteres
+              <p className="mt-1 text-right" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: perfil.descripcion.length >= 50 ? '#DC2626' : '#9CA3AF' }}>
+                {perfil.descripcion.length}/50 caracteres
+              </p>
+            </div>
+
+            {/* Quiénes somos */}
+            <div>
+              <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                Quiénes somos
+              </label>
+              <textarea
+                rows={3}
+                maxLength={100}
+                value={perfil.quienesSomos}
+                onChange={e => setPerfil(p => ({ ...p, quienesSomos: e.target.value.slice(0, 100) }))}
+                placeholder="Cuéntale a tus clientes quiénes son y qué los diferencia..."
+                className="w-full px-4 py-3 rounded-xl text-sm resize-none transition-colors"
+                style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA', lineHeight: '1.6' }}
+                onFocus={e => e.target.style.borderColor = '#006B4E'}
+                onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+              />
+              <p className="mt-1 text-right" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: perfil.quienesSomos.length >= 100 ? '#DC2626' : '#9CA3AF' }}>
+                {perfil.quienesSomos.length}/100 caracteres
               </p>
             </div>
 
