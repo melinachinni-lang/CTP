@@ -618,38 +618,21 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       </h3>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {profileData.servicios.map((servicio, index) => (
-                        <div 
+                        <div
                           key={index}
-                          className="flex items-start gap-4 p-5 rounded-xl border hover:shadow-sm transition-all"
-                          style={{ 
-                            backgroundColor: 'var(--input-background)',
-                            borderColor: 'var(--border)'
-                          }}
+                          className="px-4 py-3 rounded-xl border"
+                          style={{ backgroundColor: 'var(--input-background)', borderColor: 'var(--border)' }}
                         >
-                          <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-white border" style={{ borderColor: 'var(--border)' }}>
-                            {servicio.icon}
-                          </div>
-                          <div className="flex-1">
-                            <p style={{ 
-                              fontSize: 'var(--font-size-body-base)',
-                              fontWeight: 'var(--font-weight-semibold)',
-                              fontFamily: 'var(--font-body)',
-                              color: 'var(--foreground)',
-                              marginBottom: '0.375rem'
-                            }}>
-                              {servicio.titulo}
-                            </p>
-                            <p style={{ 
-                              fontSize: 'var(--font-size-body-sm)', 
-                              color: '#737373', 
-                              lineHeight: '1.5',
-                              fontFamily: 'var(--font-body)'
-                            }}>
-                              {servicio.descripcion}
-                            </p>
-                          </div>
+                          <p style={{
+                            fontSize: 'var(--font-size-body-base)',
+                            fontWeight: 'var(--font-weight-semibold)',
+                            fontFamily: 'var(--font-body)',
+                            color: 'var(--foreground)'
+                          }}>
+                            {servicio.titulo}
+                          </p>
                         </div>
                       ))}
                     </div>
