@@ -181,6 +181,27 @@ export function AdminAnaliticaView() {
   return (
     <div className="p-6 space-y-6">
 
+      {/* Header */}
+      <div>
+        <h1 style={{
+          fontFamily: 'var(--font-heading)',
+          fontWeight: 'var(--font-weight-regular)',
+          fontSize: 'var(--font-size-h2)',
+          lineHeight: 'var(--line-height-heading)',
+          color: '#0A0A0A',
+          marginBottom: '8px'
+        }}>
+          Analítica de la plataforma
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 'var(--font-size-body-base)',
+          color: '#737373'
+        }}>
+          Métricas de tráfico, usuarios y comportamiento en CompraTuParcela
+        </p>
+      </div>
+
       {/* KPIs */}
       <section className="grid grid-cols-5 gap-4">
         {trafficKPIs.map((kpi, i) => (
