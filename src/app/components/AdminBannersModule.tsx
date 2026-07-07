@@ -610,32 +610,34 @@ export function AdminBannersModule() {
                         {/* Acciones */}
                         <div className="flex items-center gap-2">
                           <button
+                            title="Editar"
                             onClick={() => { setEditingBanner(banner); setShowBannerModal(true); }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all"
-                            style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: '500' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F5EB'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: '#F5F5F5', color: '#737373' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
                           >
-                            <Edit2 className="w-3.5 h-3.5" /> Editar
+                            <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
+                            title={banner.activo ? 'Desactivar' : 'Activar'}
                             onClick={() => setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: !b.activo } : b))}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all"
-                            style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: '500' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'; }}
                           >
                             {banner.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                            {banner.activo ? 'Desactivar' : 'Activar'}
                           </button>
                           <button
+                            title="Eliminar"
                             onClick={() => setBannerToDelete(banner)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all"
-                            style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', color: '#DC2626', fontFamily: 'var(--font-body)', fontWeight: '500' }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; (e.currentTarget.style as any).borderColor = '#FECACA'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; (e.currentTarget.style as any).borderColor = '#E5E5E5'; }}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}
                           >
-                            <Trash2 className="w-3.5 h-3.5" /> Eliminar
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>
@@ -711,15 +713,14 @@ export function AdminBannersModule() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-center gap-2">
-                            <button onClick={() => { setEditingMensaje(msg); setShowMensajeModal(true); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F0F5EB'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}>
-                              <Edit2 className="w-3.5 h-3.5" /> Editar
+                            <button title="Editar" onClick={() => { setEditingMensaje(msg); setShowMensajeModal(true); }} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+                              <Edit2 className="w-3.5 h-3.5" />
                             </button>
-                            <button onClick={() => setMensajes(prev => prev.map(m => m.id === msg.id ? { ...m, activo: !m.activo } : m))} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F3F4F6'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}>
+                            <button title={msg.activo ? 'Desactivar' : 'Activar'} onClick={() => setMensajes(prev => prev.map(m => m.id === msg.id ? { ...m, activo: !m.activo } : m))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: msg.activo ? '#F0F5EB' : '#F5F5F5', color: msg.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = msg.activo ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = msg.activo ? '#F0F5EB' : '#F5F5F5'; }}>
                               {msg.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                              {msg.activo ? 'Desactivar' : 'Activar'}
                             </button>
-                            <button onClick={() => setMensajeToDelete(msg)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', color: '#DC2626', fontFamily: 'var(--font-body)', fontWeight: '500' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; (e.currentTarget.style as any).borderColor = '#FECACA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; (e.currentTarget.style as any).borderColor = '#E5E5E5'; }}>
-                              <Trash2 className="w-3.5 h-3.5" /> Eliminar
+                            <button title="Eliminar" onClick={() => setMensajeToDelete(msg)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                              <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         </td>
