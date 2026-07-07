@@ -798,7 +798,7 @@ export function TeamContent() {
       {/* Nueva Invitación Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6">
-          <div className="bg-white rounded-[24px] max-w-lg w-full shadow-[0_8px_30px_rgba(0,0,0,0.2)] overflow-hidden">
+          <div className="bg-white rounded-[24px] max-w-lg w-full shadow-[0_8px_30px_rgba(0,0,0,0.2)] flex flex-col" style={{ maxHeight: '90vh' }}>
             {inviteSent ? (
               <div className="p-10 flex flex-col items-center text-center space-y-4">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ECFDF5' }}>
@@ -835,7 +835,7 @@ export function TeamContent() {
             ) : (
               <>
                 {/* Header */}
-                <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-gray-100">
+                <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-gray-100 flex-shrink-0">
                   <div>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
                       Nueva invitación
@@ -850,7 +850,7 @@ export function TeamContent() {
                 </div>
 
                 {/* Form body */}
-                <div className="px-8 py-6 space-y-5">
+                <div className="px-8 py-6 space-y-5 overflow-y-auto flex-1">
                   {/* Email */}
                   <div>
                     <label style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
@@ -937,7 +937,7 @@ export function TeamContent() {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-end gap-3 px-8 pb-8">
+                <div className="flex items-center justify-end gap-3 px-8 py-6 border-t border-gray-100 flex-shrink-0">
                   <button
                     onClick={handleCloseInviteModal}
                     className="py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
