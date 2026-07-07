@@ -715,29 +715,6 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         </div>
                       </div>
 
-                      <div className="pt-4 grid grid-cols-2 gap-4">
-                        <button className="h-12 bg-white hover:bg-gray-50 text-black px-6 rounded-[200px] transition-all border-2 border-black flex items-center justify-center gap-2 shadow-sm hover:shadow" style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-body-sm)',
-                          fontWeight: 'var(--font-weight-semibold)'
-                        }}>
-                          <Phone className="w-5 h-5" />
-                          Llamar
-                        </button>
-                        <button 
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            fontWeight: 'var(--font-weight-semibold)',
-                            backgroundColor: '#006B4E'
-                          }}
-                          className="h-12 text-white px-6 rounded-[200px] transition-colors flex items-center justify-center shadow-sm hover:shadow"
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                        >
-                          WhatsApp
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
