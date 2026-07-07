@@ -315,50 +315,6 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                     </p>
                   </div>
 
-                  {/* Testimonios */}
-                  <div>
-                    <h3 style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'var(--font-size-h4)',
-                      fontWeight: 'var(--font-weight-medium)',
-                      color: 'var(--foreground)',
-                      marginBottom: '1.25rem'
-                    }}>
-                      Testimonios
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {brokerData.testimonios.map((t, i) => (
-                        <div key={i} className="rounded-xl p-5 border" style={{ borderColor: 'var(--border)' }}>
-                          <div className="flex gap-0.5 mb-3">
-                            {[...Array(t.calificacion)].map((_, j) => (
-                              <Star key={j} className="w-4 h-4 fill-current" style={{ color: '#F59E0B' }} />
-                            ))}
-                          </div>
-                          <p className="mb-4" style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            color: '#404040',
-                            lineHeight: '1.6'
-                          }}>
-                            "{t.testimonio}"
-                          </p>
-                          <div>
-                            <p style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 'var(--font-size-body-sm)',
-                              fontWeight: 'var(--font-weight-medium)',
-                              color: 'var(--foreground)'
-                            }}>{t.nombre}</p>
-                            <p style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 'var(--font-size-xs)',
-                              color: '#737373'
-                            }}>{t.ubicacion}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
 
                 {/* Sidebar */}
