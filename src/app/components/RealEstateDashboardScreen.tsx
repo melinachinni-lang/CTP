@@ -617,18 +617,6 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                   </button>
                 ))}
               </div>
-              <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{
-                backgroundColor: '#FFFFFF', color: '#0A0A0A',
-                border: '1.5px solid #DEDEDE', borderRadius: '200px',
-                fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
-                fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                <Edit className="w-3.5 h-3.5" />
-                Editar publicaciones
-              </button>
             </div>
           </div>
           {/* Tabs */}
@@ -697,8 +685,13 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                   }}>
                     {item.name}
                   </div>
+                  {item.inmobiliaria && (
+                    <div style={{ fontSize: '11px', color: '#006B4E', fontWeight: 500, marginTop: '1px' }}>
+                      Inmobiliaria: {item.inmobiliaria}
+                    </div>
+                  )}
                   <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '1px' }}>
-                    {item.inmobiliaria ? `${item.inmobiliaria} · ` : ''}{item.location}
+                    {item.location}
                   </div>
                 </div>
               </div>

@@ -581,13 +581,13 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
           className="px-5 py-2.5"
           style={{
             display: 'grid',
-            gridTemplateColumns: viewType === 'inmobiliaria' ? '1fr 96px 80px 88px 130px 88px' : '1fr 96px 80px 88px 130px 88px',
+            gridTemplateColumns: '1fr 96px 80px 88px 130px',
             gap: '8px',
             borderBottom: '1px solid #F0F0F0',
             backgroundColor: '#FAFAFA',
           }}
         >
-          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado', ''].map((col, i) => (
+          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado'].map((col, i) => (
             <span
               key={i}
               style={{
@@ -615,7 +615,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
               className="px-5 py-3 transition-colors"
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 96px 80px 88px 130px 88px',
+                gridTemplateColumns: '1fr 96px 80px 88px 130px',
                 gap: '8px',
                 alignItems: 'center',
                 borderBottom: rowIdx < ranking.length - 1 ? '1px solid #F9FAFB' : 'none',
@@ -632,8 +632,13 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {prop.nombre}
                   </p>
+                  {prop.inmobiliaria && (
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#006B4E', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      Inmobiliaria: {prop.inmobiliaria}
+                    </p>
+                  )}
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {prop.inmobiliaria ? `${prop.inmobiliaria} · ` : ''}{prop.ubicacion}
+                    {prop.ubicacion}
                   </p>
                 </div>
               </div>
@@ -669,20 +674,6 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 </span>
               </div>
 
-              {/* Action */}
-              <div className="flex justify-center">
-                <button
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
-                  style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
-                >
-                  {viewType === 'inmobiliaria'
-                    ? <><Edit2 className="w-3 h-3" /> Editar</>
-                    : <><Phone className="w-3 h-3" /> Contactar</>
-                  }
-                </button>
-              </div>
             </div>
           );
         })}
