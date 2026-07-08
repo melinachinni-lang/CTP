@@ -632,13 +632,8 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {prop.nombre}
                   </p>
-                  {prop.inmobiliaria && (
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#006B4E', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      Inmobiliaria: {prop.inmobiliaria}
-                    </p>
-                  )}
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {prop.ubicacion}
+                    {prop.inmobiliaria ? <><span style={{ color: '#006B4E', fontWeight: 500 }}>Inmobiliaria: {prop.inmobiliaria}</span> · {prop.ubicacion}</> : prop.ubicacion}
                   </p>
                 </div>
               </div>

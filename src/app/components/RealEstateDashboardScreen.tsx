@@ -685,13 +685,8 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                   }}>
                     {item.name}
                   </div>
-                  {item.inmobiliaria && (
-                    <div style={{ fontSize: '11px', color: '#006B4E', fontWeight: 500, marginTop: '1px' }}>
-                      Inmobiliaria: {item.inmobiliaria}
-                    </div>
-                  )}
                   <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '1px' }}>
-                    {item.location}
+                    {item.inmobiliaria ? <><span style={{ color: '#006B4E', fontWeight: 500 }}>Inmobiliaria: {item.inmobiliaria}</span> · {item.location}</> : item.location}
                   </div>
                 </div>
               </div>
