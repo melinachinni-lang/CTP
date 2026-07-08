@@ -370,117 +370,135 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             </div>
           </div>
 
-          {/* Dropdown único estilo GA4 */}
-          <div className="relative" ref={datePickerRef}>
-            <button
-              onClick={() => setShowDropdown(v => !v)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-            >
-              <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-              {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : PERIODO_LABELS[periodo]}
-              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-            </button>
+          {/* Controles de período — wrapper con ref para click-outside */}
+          <div className="flex items-center gap-2" ref={datePickerRef}>
 
-            {showDropdown && (
-              <div
-                className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden"
-                style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '210px' }}
+            {/* Dropdown de períodos predefinidos */}
+            <div className="relative">
+              <button
+                onClick={() => { setShowDropdown(v => !v); setShowCustomRange(false); }}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
               >
-                {/* Presets */}
-                {(['7d', '30d', '90d'] as Periodo[]).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => { handlePeriodo(p); setAppliedRange(null); setShowDropdown(false); setShowCustomRange(false); }}
-                    className="w-full text-left px-4 py-2.5 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)', fontSize: '13px',
-                      fontWeight: !appliedRange && periodo === p ? 600 : 400,
-                      color: !appliedRange && periodo === p ? '#006B4E' : '#0A0A0A',
-                      backgroundColor: !appliedRange && periodo === p ? '#F0F9F5' : '#FFFFFF',
-                      border: 'none', cursor: 'pointer', display: 'block',
-                    }}
-                    onMouseEnter={e => { if (appliedRange || periodo !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                    onMouseLeave={e => { if (appliedRange || periodo !== p) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                  >
-                    {PERIODO_LABELS[p]}
-                  </button>
-                ))}
+                <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
+                {appliedRange ? PERIODO_LABELS[periodo] : PERIODO_LABELS[periodo]}
+                <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+              </button>
 
-                {/* Separador */}
-                <div style={{ height: '1px', backgroundColor: '#F0F0F0', margin: '2px 0' }} />
-
-                {/* Rango personalizado */}
-                <button
-                  onClick={() => setShowCustomRange(v => !v)}
-                  className="w-full text-left px-4 py-2.5 transition-colors flex items-center justify-between"
-                  style={{
-                    fontFamily: 'var(--font-body)', fontSize: '13px',
-                    fontWeight: appliedRange ? 600 : 400,
-                    color: appliedRange ? '#006B4E' : '#0A0A0A',
-                    backgroundColor: appliedRange ? '#F0F9F5' : '#FFFFFF',
-                    border: 'none', cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = appliedRange ? '#F0F9F5' : '#FFFFFF'; }}
+              {showDropdown && (
+                <div
+                  className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden"
+                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '190px' }}
                 >
-                  <span>{appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : 'Rango personalizado'}</span>
-                  <ChevronDown className="w-3.5 h-3.5" style={{ color: '#9CA3AF', transform: showCustomRange ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-                </button>
-
-                {/* Campos de fecha (expandibles) */}
-                {showCustomRange && (
-                  <div className="px-4 pb-4 space-y-3" style={{ borderTop: '1px solid #F0F0F0', paddingTop: '12px' }}>
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        Desde
-                      </label>
-                      <input
-                        type="date"
-                        value={customFrom}
-                        onChange={e => setCustomFrom(e.target.value)}
-                        max={customTo || undefined}
-                        className="w-full px-3 py-2 rounded-lg outline-none transition-colors"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
-                        onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
-                        onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        Hasta
-                      </label>
-                      <input
-                        type="date"
-                        value={customTo}
-                        onChange={e => setCustomTo(e.target.value)}
-                        min={customFrom || undefined}
-                        className="w-full px-3 py-2 rounded-lg outline-none transition-colors"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
-                        onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
-                        onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }}
-                      />
-                    </div>
+                  {(['7d', '30d', '90d'] as Periodo[]).map(p => (
                     <button
-                      onClick={handleApplyRange}
-                      disabled={!customFrom || !customTo}
-                      className="w-full py-2 rounded-lg transition-colors"
+                      key={p}
+                      onClick={() => { handlePeriodo(p); setAppliedRange(null); setCustomFrom(''); setCustomTo(''); setShowDropdown(false); }}
+                      className="w-full text-left px-4 py-2.5 transition-colors"
                       style={{
-                        fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF',
-                        backgroundColor: customFrom && customTo ? '#006B4E' : '#D1D5DB',
-                        border: 'none', cursor: customFrom && customTo ? 'pointer' : 'not-allowed',
+                        fontFamily: 'var(--font-body)', fontSize: '13px',
+                        fontWeight: !appliedRange && periodo === p ? 600 : 400,
+                        color: !appliedRange && periodo === p ? '#006B4E' : '#0A0A0A',
+                        backgroundColor: !appliedRange && periodo === p ? '#F0F9F5' : '#FFFFFF',
+                        border: 'none', cursor: 'pointer', display: 'block',
                       }}
-                      onMouseEnter={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                      onMouseLeave={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                      onMouseEnter={e => { if (appliedRange || periodo !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = (!appliedRange && periodo === p) ? '#F0F9F5' : '#FFFFFF'; }}
                     >
-                      Aplicar
+                      {PERIODO_LABELS[p]}
                     </button>
-                  </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Botón de rango personalizado (separado) */}
+            <div className="relative">
+              <button
+                onClick={() => { setShowCustomRange(v => !v); setShowDropdown(false); }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
+                style={{
+                  border: appliedRange ? '1px solid #006B4E' : '1px solid #E5E5E5',
+                  backgroundColor: appliedRange ? '#F0F9F5' : '#FFFFFF',
+                  fontFamily: 'var(--font-body)', fontSize: '13px',
+                  fontWeight: appliedRange ? 600 : 400,
+                  color: appliedRange ? '#006B4E' : '#6B7280',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                onMouseLeave={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+              >
+                <CalendarDays className="w-3.5 h-3.5" />
+                {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : 'Rango'}
+                {appliedRange && (
+                  <span
+                    role="button"
+                    onClick={e => { e.stopPropagation(); setAppliedRange(null); setCustomFrom(''); setCustomTo(''); setShowCustomRange(false); }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    <X className="w-3 h-3" />
+                  </span>
                 )}
-              </div>
-            )}
+              </button>
+
+              {showCustomRange && (
+                <div
+                  className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4 space-y-3"
+                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}
+                >
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>
+                    Rango personalizado
+                  </p>
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Desde
+                    </label>
+                    <input
+                      type="date"
+                      value={customFrom}
+                      onChange={e => setCustomFrom(e.target.value)}
+                      max={customTo || undefined}
+                      className="w-full px-3 py-2 rounded-lg outline-none transition-colors"
+                      style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
+                      onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
+                      onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Hasta
+                    </label>
+                    <input
+                      type="date"
+                      value={customTo}
+                      onChange={e => setCustomTo(e.target.value)}
+                      min={customFrom || undefined}
+                      className="w-full px-3 py-2 rounded-lg outline-none transition-colors"
+                      style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
+                      onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
+                      onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }}
+                    />
+                  </div>
+                  <button
+                    onClick={handleApplyRange}
+                    disabled={!customFrom || !customTo}
+                    className="w-full py-2 rounded-lg transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF',
+                      backgroundColor: customFrom && customTo ? '#006B4E' : '#D1D5DB',
+                      border: 'none', cursor: customFrom && customTo ? 'pointer' : 'not-allowed',
+                    }}
+                    onMouseEnter={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                    onMouseLeave={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                  >
+                    Aplicar
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
         <DualLineChart parcelas={chartData.parcelas} proyectos={chartData.proyectos} loading={isChartLoading} periodo={periodo} />
