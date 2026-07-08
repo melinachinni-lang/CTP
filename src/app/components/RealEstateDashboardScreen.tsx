@@ -48,7 +48,6 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         { id: 'home',           label: 'Inicio',            icon: Home },
         { id: 'my-publications',label: 'Mis publicaciones', icon: FolderOpen },
         { id: 'inquiries',      label: 'Consultas',         icon: MessageCircle },
-        { id: 'calendarios',    label: 'Calendarios',       icon: Calendar },
       ],
     },
     {
@@ -57,6 +56,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         { id: 'reservas',    label: 'Valores de reservas', icon: FileText },
         { id: 'asignaciones',label: 'Asignaciones',        icon: Users },
         { id: 'whatsapp',    label: 'Números WhatsApp',    icon: Phone },
+        { id: 'calendarios', label: 'Calendarios',         icon: Calendar },
       ],
     },
     {

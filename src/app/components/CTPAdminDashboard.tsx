@@ -62,13 +62,6 @@ const NAV_GROUPS = [
     ],
   },
   {
-    id: 'gestion',
-    label: 'Gestión',
-    items: [
-      { id: 'calendarios' as NavSection, label: 'Calendarios', icon: CalendarCheck },
-    ],
-  },
-  {
     id: 'administracion',
     label: 'Administración',
     items: [
@@ -88,7 +81,6 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     rendimiento: true,
     contenido: false,
-    gestion: false,
     administracion: false,
   });
   const [showMenu, setShowMenu] = useState(false);
