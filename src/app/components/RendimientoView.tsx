@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2, CalendarDays, X } from 'lucide-react';
 
 type ViewType = 'inmobiliaria' | 'broker';
 export type Periodo = '7d' | '30d' | '90d';
@@ -205,16 +205,53 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
   const [rankingTab, setRankingTab] = useState<'parcelas' | 'proyectos'>('parcelas');
   const [rankingPeriodo, setRankingPeriodo] = useState<Periodo>('30d');
 
+  // Rango personalizado de fechas
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [customFrom, setCustomFrom] = useState('');
+  const [customTo, setCustomTo] = useState('');
+  const [appliedRange, setAppliedRange] = useState<{ from: string; to: string } | null>(null);
+  const datePickerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 1200);
     return () => clearTimeout(t);
   }, []);
 
+  // Cerrar el picker al hacer click fuera
+  useEffect(() => {
+    if (!showDatePicker) return;
+    const handler = (e: MouseEvent) => {
+      if (datePickerRef.current && !datePickerRef.current.contains(e.target as Node)) {
+        setShowDatePicker(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showDatePicker]);
+
   const handlePeriodo = (p: Periodo) => {
     if (p === periodo) return;
     setPeriodo(p);
+    setAppliedRange(null);
     setIsChartLoading(true);
     setTimeout(() => setIsChartLoading(false), 500);
+  };
+
+  const handleApplyRange = () => {
+    if (!customFrom || !customTo) return;
+    setAppliedRange({ from: customFrom, to: customTo });
+    setShowDatePicker(false);
+    setIsChartLoading(true);
+    setTimeout(() => setIsChartLoading(false), 500);
+  };
+
+  const formatRangeLabel = (from: string, to: string) => {
+    const fmt = (d: string) => {
+      const [y, m, day] = d.split('-');
+      const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+      return `${parseInt(day)} ${meses[parseInt(m) - 1]}`;
+    };
+    return `${fmt(from)} – ${fmt(to)}`;
   };
 
   const kpis: KPI[] = viewType === 'inmobiliaria'
@@ -310,7 +347,9 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
               Evolución de visualizaciones
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-              Últimos {PERIODO_LABELS[periodo]}
+              {appliedRange
+                ? `${formatRangeLabel(appliedRange.from, appliedRange.to)}`
+                : `Últimos ${PERIODO_LABELS[periodo]}`}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -330,23 +369,129 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
               ))}
             </div>
             {/* Period selector */}
-            <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
-              {(['7d', '30d', '90d'] as Periodo[]).map(p => (
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
+                {(['7d', '30d', '90d'] as Periodo[]).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => handlePeriodo(p)}
+                    className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      backgroundColor: !appliedRange && periodo === p ? '#FFFFFF' : 'transparent',
+                      color: !appliedRange && periodo === p ? '#0A0A0A' : '#6B7280',
+                      boxShadow: !appliedRange && periodo === p ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                      border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {PERIODO_LABELS[p]}
+                  </button>
+                ))}
+              </div>
+
+              {/* Botón de rango personalizado */}
+              <div className="relative" ref={datePickerRef}>
                 <button
-                  key={p}
-                  onClick={() => handlePeriodo(p)}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+                  onClick={() => setShowDatePicker(prev => !prev)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all"
                   style={{
                     fontFamily: 'var(--font-body)',
-                    backgroundColor: periodo === p ? '#FFFFFF' : 'transparent',
-                    color: periodo === p ? '#0A0A0A' : '#6B7280',
-                    boxShadow: periodo === p ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                    border: 'none', cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: appliedRange ? 600 : 400,
+                    backgroundColor: appliedRange ? '#006B4E' : '#F3F4F6',
+                    color: appliedRange ? '#FFFFFF' : '#6B7280',
+                    border: 'none',
+                    cursor: 'pointer',
                   }}
+                  onMouseEnter={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#E5E7EB'; }}
+                  onMouseLeave={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#F3F4F6'; }}
                 >
-                  {PERIODO_LABELS[p]}
+                  <CalendarDays className="w-3.5 h-3.5" />
+                  {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : 'Rango'}
+                  {appliedRange && (
+                    <span
+                      role="button"
+                      onClick={e => { e.stopPropagation(); setAppliedRange(null); setCustomFrom(''); setCustomTo(''); }}
+                      className="ml-0.5 hover:opacity-70 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </span>
+                  )}
                 </button>
-              ))}
+
+                {/* Date picker popover */}
+                {showDatePicker && (
+                  <div
+                    className="absolute right-0 top-full mt-2 rounded-2xl shadow-lg z-50 p-5"
+                    style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #E5E7EB', minWidth: '280px' }}
+                  >
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '14px' }}>
+                      Seleccionar rango
+                    </p>
+                    <div className="space-y-3 mb-4">
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          Desde
+                        </label>
+                        <input
+                          type="date"
+                          value={customFrom}
+                          onChange={e => setCustomFrom(e.target.value)}
+                          max={customTo || undefined}
+                          className="w-full px-3 py-2 rounded-xl outline-none transition-colors"
+                          style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1.5px solid #E5E7EB', backgroundColor: '#FAFAFA' }}
+                          onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
+                          onBlur={e => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          Hasta
+                        </label>
+                        <input
+                          type="date"
+                          value={customTo}
+                          onChange={e => setCustomTo(e.target.value)}
+                          min={customFrom || undefined}
+                          className="w-full px-3 py-2 rounded-xl outline-none transition-colors"
+                          style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1.5px solid #E5E7EB', backgroundColor: '#FAFAFA' }}
+                          onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
+                          onBlur={e => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setShowDatePicker(false)}
+                        className="flex-1 py-2 rounded-xl transition-colors"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#6B7280', border: '1.5px solid #E5E7EB', backgroundColor: '#FFFFFF', cursor: 'pointer' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleApplyRange}
+                        disabled={!customFrom || !customTo}
+                        className="flex-1 py-2 rounded-xl transition-colors"
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          color: '#FFFFFF',
+                          backgroundColor: customFrom && customTo ? '#006B4E' : '#D1D5DB',
+                          border: 'none',
+                          cursor: customFrom && customTo ? 'pointer' : 'not-allowed',
+                        }}
+                        onMouseEnter={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                        onMouseLeave={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                      >
+                        Aplicar
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
