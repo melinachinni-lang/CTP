@@ -1415,46 +1415,46 @@ function LeadsContent() {
   );
 }
 
-// Broker Asignaciones Section
+// Broker Asignaciones Section — flujo: broker asignado a parcela/proyecto
 const BROKER_PENDIENTES_INITIAL = [
-  { id: 'p1', interesado: 'Laura Vásquez',    email: 'l.vasquez@gmail.com',   parcela: 'Parcela Vista Cordillera', inmobiliaria: 'InmoSur',           fecha: '15 jun 2026' },
-  { id: 'p2', interesado: 'Matías Contreras', email: 'm.contreras@gmail.com', parcela: 'Parcela Sur Verde',        inmobiliaria: 'Valle Central',     fecha: '15 jun 2026' },
-  { id: 'p3', interesado: 'Carla Sepúlveda',  email: 'c.sepulveda@gmail.com', parcela: 'Proyecto Aysén Sur',       inmobiliaria: 'Propiedades Chile', fecha: '14 jun 2026' },
+  { id: 'p1', propiedad: 'Parcela Vista Cordillera', tipo: 'Parcela',  ubicacion: 'Lo Barnechea, R. Metropolitana', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', fecha: '15 jul 2026' },
+  { id: 'p2', propiedad: 'Parcela Sur Verde',        tipo: 'Parcela',  ubicacion: 'Valdivia, Los Ríos',             inmobiliaria: 'Sur Verde Propiedades',     imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', fecha: '15 jul 2026' },
+  { id: 'p3', propiedad: 'Proyecto Aysén Sur',       tipo: 'Proyecto', ubicacion: 'Coyhaique, Aysén',              inmobiliaria: 'Propiedades Chile',         imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', fecha: '14 jul 2026' },
 ];
 
-const BROKER_ASIGNADAS_INITIAL = [
-  { id: 1, interesado: 'Roberto Fuentes', email: 'r.fuentes@gmail.com',  parcela: 'Parcela Los Robles',   inmobiliaria: 'InmoSur', fecha: '13 jun 2026' },
-  { id: 2, interesado: 'Andrés Morales',  email: 'am.morales@gmail.com', parcela: 'Proyecto Aysén Sur',   inmobiliaria: 'InmoSur', fecha: '12 jun 2026' },
+const BROKER_ACTIVAS_INITIAL = [
+  { id: 1, propiedad: 'Parcela Los Robles',          tipo: 'Parcela',  ubicacion: 'Rancagua, O\'Higgins',           inmobiliaria: 'InmoSur',                   imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', desde: '13 jun 2026', leads: 4 },
+  { id: 2, propiedad: 'Condominio Los Arrayanes',    tipo: 'Proyecto', ubicacion: 'Villarrica, Araucanía',          inmobiliaria: 'InmoSur',                   imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', desde: '12 jun 2026', leads: 2 },
 ];
 
 function BrokerAsignacionesContent() {
-  const [tab, setTab] = React.useState<'pendientes' | 'asignadas'>('pendientes');
+  const [tab, setTab] = React.useState<'pendientes' | 'activas'>('pendientes');
   const [pendientes, setPendientes] = React.useState(BROKER_PENDIENTES_INITIAL);
-  const [asignadas, setAsignadas] = React.useState(BROKER_ASIGNADAS_INITIAL);
-  const [toast, setToast] = React.useState<string | null>(null);
+  const [activas, setActivas] = React.useState(BROKER_ACTIVAS_INITIAL);
+  const [toast, setToast] = React.useState<{ msg: string; tipo: 'ok' | 'err' } | null>(null);
 
-  function showToast(msg: string) {
-    setToast(msg);
+  function showToast(msg: string, tipo: 'ok' | 'err' = 'ok') {
+    setToast({ msg, tipo });
     setTimeout(() => setToast(null), 3000);
   }
 
   function handleAceptar(id: string) {
-    const lead = pendientes.find(p => p.id === id)!;
+    const item = pendientes.find(p => p.id === id)!;
     const today = new Date();
     const fecha = `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
     setPendientes(prev => prev.filter(p => p.id !== id));
-    setAsignadas(prev => [{ id: Date.now(), interesado: lead.interesado, email: lead.email, parcela: lead.parcela, inmobiliaria: lead.inmobiliaria, fecha }, ...prev]);
-    showToast('Lead aceptado correctamente');
+    setActivas(prev => [{ id: Date.now(), propiedad: item.propiedad, tipo: item.tipo, ubicacion: item.ubicacion, inmobiliaria: item.inmobiliaria, imagen: item.imagen, desde: fecha, leads: 0 }, ...prev]);
+    showToast('Asignación aceptada', 'ok');
   }
 
   function handleRechazar(id: string) {
     setPendientes(prev => prev.filter(p => p.id !== id));
-    showToast('Lead rechazado');
+    showToast('Asignación rechazada', 'err');
   }
 
   const tabs = [
     { key: 'pendientes' as const, label: 'Pendientes', count: pendientes.length, badgeBg: '#FEF3C7', badgeColor: '#B45309' },
-    { key: 'asignadas'  as const, label: 'Asignadas',  count: asignadas.length,  badgeBg: '#DCFCE7', badgeColor: '#166534' },
+    { key: 'activas'    as const, label: 'Activas',    count: activas.length,    badgeBg: '#DCFCE7', badgeColor: '#166534' },
   ];
 
   return (
@@ -1464,7 +1464,7 @@ function BrokerAsignacionesContent() {
           Mis asignaciones
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '6px' }}>
-          Leads que te han asignado las inmobiliarias
+          Parcelas y proyectos que las inmobiliarias te han asignado para gestionar
         </p>
       </div>
 
@@ -1475,28 +1475,10 @@ function BrokerAsignacionesContent() {
             key={t.key}
             onClick={() => setTab(t.key)}
             className="flex items-center gap-2 px-4 py-2 transition-colors"
-            style={{
-              borderRadius: '200px',
-              fontSize: '13px',
-              fontWeight: tab === t.key ? 600 : 400,
-              fontFamily: 'var(--font-body)',
-              color: tab === t.key ? '#0A0A0A' : '#737373',
-              backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            }}
+            style={{ borderRadius: '200px', fontSize: '13px', fontWeight: tab === t.key ? 600 : 400, fontFamily: 'var(--font-body)', color: tab === t.key ? '#0A0A0A' : '#737373', backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent', border: 'none', cursor: 'pointer', boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
           >
             {t.label}
-            <span
-              className="flex items-center justify-center"
-              style={{
-                fontSize: '11px', fontWeight: 600,
-                width: '20px', height: '20px', borderRadius: '99px',
-                backgroundColor: tab === t.key ? t.badgeBg : '#E5E5E5',
-                color: tab === t.key ? t.badgeColor : '#737373',
-              }}
-            >
+            <span className="flex items-center justify-center" style={{ fontSize: '11px', fontWeight: 600, width: '20px', height: '20px', borderRadius: '99px', backgroundColor: tab === t.key ? t.badgeBg : '#E5E5E5', color: tab === t.key ? t.badgeColor : '#737373' }}>
               {t.count}
             </span>
           </button>
@@ -1510,7 +1492,7 @@ function BrokerAsignacionesContent() {
             <div className="text-center">
               <CheckCircle className="w-10 h-10 mx-auto mb-3" style={{ color: '#006B4E' }} />
               <p style={{ fontSize: '14px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Sin pendientes</p>
-              <p style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)', marginTop: '4px' }}>No tienes leads pendientes de respuesta</p>
+              <p style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)', marginTop: '4px' }}>No tienes asignaciones pendientes de respuesta</p>
             </div>
           </div>
         ) : (
@@ -1518,7 +1500,7 @@ function BrokerAsignacionesContent() {
             <table className="w-full">
               <thead>
                 <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                  {['Interesado', 'Publicación', 'Inmobiliaria', 'Fecha', 'Acciones'].map(h => (
+                  {['Propiedad', 'Tipo', 'Inmobiliaria', 'Recibida', 'Acciones'].map(h => (
                     <th key={h} className={`px-5 py-3 ${h === 'Acciones' ? 'text-center' : 'text-left'}`} style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                       {h}
                     </th>
@@ -1529,30 +1511,29 @@ function BrokerAsignacionesContent() {
                 {pendientes.map((c, i) => (
                   <tr key={c.id} style={{ borderBottom: i < pendientes.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
                     <td className="px-5 py-4">
-                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{c.interesado}</p>
-                      <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{c.email}</p>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }}>
+                          <img src={c.imagen} alt={c.propiedad} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                        <div>
+                          <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{c.propiedad}</p>
+                          <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{c.ubicacion}</p>
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.parcela}</td>
+                    <td className="px-5 py-4">
+                      <span style={{ backgroundColor: c.tipo === 'Parcela' ? '#F0F9F5' : '#EFF6FF', color: c.tipo === 'Parcela' ? '#006B4E' : '#1D4ED8', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '3px 10px', display: 'inline-block', border: c.tipo === 'Parcela' ? '1px solid #A7E3C8' : '1px solid #93C5FD' }}>
+                        {c.tipo}
+                      </span>
+                    </td>
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.inmobiliaria}</td>
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.fecha}</td>
                     <td className="px-5 py-4">
                       <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handleAceptar(c.id)}
-                          className="px-3 py-1.5 transition-colors"
-                          style={{ backgroundColor: '#F0FAF5', color: '#006B4E', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #A7E3C8', cursor: 'pointer' }}
-                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }}
-                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}
-                        >
+                        <button onClick={() => handleAceptar(c.id)} className="px-3 py-1.5 transition-colors" style={{ backgroundColor: '#F0FAF5', color: '#006B4E', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #A7E3C8', cursor: 'pointer' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}>
                           Aceptar
                         </button>
-                        <button
-                          onClick={() => handleRechazar(c.id)}
-                          className="px-3 py-1.5 transition-colors"
-                          style={{ backgroundColor: '#FEF2F2', color: '#DC2626', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #FECACA', cursor: 'pointer' }}
-                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }}
-                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}
-                        >
+                        <button onClick={() => handleRechazar(c.id)} className="px-3 py-1.5 transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#DC2626', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #FECACA', cursor: 'pointer' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
                           Rechazar
                         </button>
                       </div>
@@ -1565,46 +1546,70 @@ function BrokerAsignacionesContent() {
         )
       )}
 
-      {/* Asignadas */}
-      {tab === 'asignadas' && (
-        <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-          <table className="w-full">
-            <thead>
-              <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                {['Interesado', 'Publicación', 'Inmobiliaria', 'Fecha', 'Estado'].map(h => (
-                  <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {asignadas.map((a, i) => (
-                <tr key={a.id} style={{ borderBottom: i < asignadas.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
-                  <td className="px-5 py-4">
-                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{a.interesado}</p>
-                    <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.email}</p>
-                  </td>
-                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.parcela}</td>
-                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.inmobiliaria}</td>
-                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.fecha}</td>
-                  <td className="px-5 py-4">
-                    <span style={{ backgroundColor: '#DCFCE7', color: '#166534', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '4px 12px', display: 'inline-block' }}>
-                      Aceptada
-                    </span>
-                  </td>
+      {/* Activas */}
+      {tab === 'activas' && (
+        activas.length === 0 ? (
+          <div className="rounded-2xl flex items-center justify-center py-16" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
+            <div className="text-center">
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Sin asignaciones activas</p>
+              <p style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)', marginTop: '4px' }}>Acepta una asignación pendiente para verla aquí</p>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+            <table className="w-full">
+              <thead>
+                <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+                  {['Propiedad', 'Tipo', 'Inmobiliaria', 'Desde', 'Leads activos'].map(h => (
+                    <th key={h} className={`px-5 py-3 ${h === 'Leads activos' ? 'text-center' : 'text-left'}`} style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {activas.map((a, i) => (
+                  <tr key={a.id} style={{ borderBottom: i < activas.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }}>
+                          <img src={a.imagen} alt={a.propiedad} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                        <div>
+                          <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{a.propiedad}</p>
+                          <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.ubicacion}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span style={{ backgroundColor: a.tipo === 'Parcela' ? '#F0F9F5' : '#EFF6FF', color: a.tipo === 'Parcela' ? '#006B4E' : '#1D4ED8', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '3px 10px', display: 'inline-block', border: a.tipo === 'Parcela' ? '1px solid #A7E3C8' : '1px solid #93C5FD' }}>
+                        {a.tipo}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.inmobiliaria}</td>
+                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.desde}</td>
+                    <td className="px-5 py-4 text-center">
+                      {a.leads > 0 ? (
+                        <span className="inline-flex items-center justify-center gap-1" style={{ backgroundColor: '#FEF3C7', color: '#B45309', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '3px 12px', border: '1px solid #FCD34D' }}>
+                          {a.leads} {a.leads === 1 ? 'lead' : 'leads'}
+                        </span>
+                      ) : (
+                        <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)' }}>Sin leads aún</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
       )}
 
       {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '280px' }}>
-          <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#52C49A' }} />
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#FFFFFF' }}>{toast}</p>
+          <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: toast.tipo === 'ok' ? '#52C49A' : '#F87171' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#FFFFFF' }}>{toast.msg}</p>
         </div>
       )}
     </div>
