@@ -130,13 +130,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
         if (initialFilters.smartBadges && initialFilters.smartBadges.length > 0) {
           setSelectedBadges(initialFilters.smartBadges);
         }
+        // Dropdowns muestran "Todos" — no aplicar filtro de texto exacto, solo badges
         setHeroFilters({ ubicacion: '', tipo: '', superficieMin: '', superficieMax: '', condicion: '', precioMin: '', precioMax: '' });
         setActiveFilters({
           tipos: [],
           smartBadges: initialFilters.smartBadges || [],
           destacadas: false,
           nuevas: false,
-          smartSearchText: initialFilters.smartSearchText,
+          // No ponemos smartSearchText aquí para evitar el filtro de texto estricto
         });
         setFiltersApplied(true);
         return;
