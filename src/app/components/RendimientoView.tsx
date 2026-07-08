@@ -78,11 +78,11 @@ export const X_LABELS: Record<Periodo, { label: string; index: number }[]> = {
 };
 
 const RANKING_INMO: PropiedadRanking[] = [
-  { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', vistas: 847, consultas: 12, tendencia: 23, estado: 'Alto interés' },
-  { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', vistas: 612, consultas: 8, tendencia: 11, estado: 'Alta demanda' },
-  { id: 3, nombre: 'Parcela Los Robles', ubicacion: 'Rancagua, O\'Higgins', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', vistas: 445, consultas: 5, tendencia: -4, estado: 'Estable' },
-  { id: 4, nombre: 'Parcela El Valle Verde', ubicacion: 'San José de Maipo, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', vistas: 322, consultas: 3, tendencia: 6, estado: 'En crecimiento' },
-  { id: 5, nombre: 'Parcela Sur Verde', ubicacion: 'Valdivia, Los Ríos', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', vistas: 189, consultas: 1, tendencia: -12, estado: 'Bajo interés' },
+  { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', vistas: 847, consultas: 12, tendencia: 23, estado: 'Alto interés', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', vistas: 612, consultas: 8, tendencia: 11, estado: 'Alta demanda', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 3, nombre: 'Parcela Los Robles', ubicacion: 'Rancagua, O\'Higgins', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', vistas: 445, consultas: 5, tendencia: -4, estado: 'Estable', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 4, nombre: 'Parcela El Valle Verde', ubicacion: 'San José de Maipo, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', vistas: 322, consultas: 3, tendencia: 6, estado: 'En crecimiento', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 5, nombre: 'Parcela Sur Verde', ubicacion: 'Valdivia, Los Ríos', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', vistas: 189, consultas: 1, tendencia: -12, estado: 'Bajo interés', inmobiliaria: 'Vista Natura Propiedades' },
 ];
 
 const RANKING_BROKER: PropiedadRanking[] = [
@@ -93,9 +93,9 @@ const RANKING_BROKER: PropiedadRanking[] = [
 ];
 
 const RANKING_INMO_PROYECTOS: PropiedadRanking[] = [
-  { id: 1, nombre: 'Proyecto Vista Cordillera — Fase 2', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', vistas: 1240, consultas: 24, tendencia: 31, estado: 'Alto interés' },
-  { id: 2, nombre: 'Condominio Los Arrayanes', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', vistas: 890, consultas: 17, tendencia: 14, estado: 'Alta demanda' },
-  { id: 3, nombre: 'Proyecto Lago Ranco', ubicacion: 'Los Lagos, Los Ríos', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', vistas: 623, consultas: 11, tendencia: -2, estado: 'Estable' },
+  { id: 1, nombre: 'Proyecto Vista Cordillera — Fase 2', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', vistas: 1240, consultas: 24, tendencia: 31, estado: 'Alto interés', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 2, nombre: 'Condominio Los Arrayanes', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', vistas: 890, consultas: 17, tendencia: 14, estado: 'Alta demanda', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 3, nombre: 'Proyecto Lago Ranco', ubicacion: 'Los Lagos, Los Ríos', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', vistas: 623, consultas: 11, tendencia: -2, estado: 'Estable', inmobiliaria: 'Vista Natura Propiedades' },
 ];
 
 const RANKING_BROKER_PROYECTOS: PropiedadRanking[] = [

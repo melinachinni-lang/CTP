@@ -284,41 +284,45 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
   // Datos del ranking
   const parcelasRanking = [
-    { 
-      name: 'Parcela Vista Cordillera', 
+    {
+      name: 'Parcela Vista Cordillera',
       location: 'Lo Barnechea',
-      views: 267, 
-      consultas: 24, 
+      inmobiliaria: 'Vista Natura Propiedades',
+      views: 267,
+      consultas: 24,
       status: 'high',
       statusLabel: 'Alto interés',
       trend: 'up',
       trendValue: '+18%'
     },
-    { 
-      name: 'Parcela Los Cedros', 
+    {
+      name: 'Parcela Los Cedros',
       location: 'Colina',
-      views: 234, 
-      consultas: 18, 
+      inmobiliaria: 'Vista Natura Propiedades',
+      views: 234,
+      consultas: 18,
       status: 'high',
       statusLabel: 'Alto interés',
       trend: 'up',
       trendValue: '+12%'
     },
-    { 
-      name: 'Terreno Valle Central', 
+    {
+      name: 'Terreno Valle Central',
       location: 'Buin',
-      views: 189, 
-      consultas: 15, 
+      inmobiliaria: 'Vista Natura Propiedades',
+      views: 189,
+      consultas: 15,
       status: 'medium',
       statusLabel: 'Interés medio',
       trend: 'neutral',
       trendValue: '+5%'
     },
-    { 
-      name: 'Parcela Alto Maipo', 
+    {
+      name: 'Parcela Alto Maipo',
       location: 'San José de Maipo',
-      views: 156, 
-      consultas: 12, 
+      inmobiliaria: 'Vista Natura Propiedades',
+      views: 156,
+      consultas: 12,
       status: 'medium',
       statusLabel: 'Interés medio',
       trend: 'up',
@@ -327,6 +331,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
     {
       name: 'Terreno Los Andes',
       location: 'Los Andes',
+      inmobiliaria: 'Vista Natura Propiedades',
       views: 98,
       consultas: 8,
       status: 'low',
@@ -340,6 +345,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
     {
       name: 'Proyecto Vista Cordillera — Fase 2',
       location: 'Lo Barnechea',
+      inmobiliaria: 'Vista Natura Propiedades',
       views: 1240,
       consultas: 24,
       status: 'high',
@@ -350,6 +356,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
     {
       name: 'Condominio Los Arrayanes',
       location: 'Villarrica',
+      inmobiliaria: 'Vista Natura Propiedades',
       views: 890,
       consultas: 17,
       status: 'high',
@@ -360,6 +367,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
     {
       name: 'Proyecto Lago Ranco',
       location: 'Los Lagos',
+      inmobiliaria: 'Vista Natura Propiedades',
       views: 623,
       consultas: 11,
       status: 'medium',
@@ -690,7 +698,7 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                     {item.name}
                   </div>
                   <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '1px' }}>
-                    {item.location}
+                    {item.inmobiliaria ? `${item.inmobiliaria} · ` : ''}{item.location}
                   </div>
                 </div>
               </div>
