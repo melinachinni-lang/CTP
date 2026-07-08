@@ -351,6 +351,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
       setShowBrokerOnboarding(true);
     } else if (selectedProfile === 'real-estate') {
       setShowProfileForm(false);
+      setOnboardingStep(3);
       setShowRealEstateOnboarding(true);
     } else {
       // person
@@ -2152,202 +2153,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
               {t.entry.back}
             </button>
 
-            {/* Step Indicator */}
-            <div className="text-center mb-6">
-              <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                {t.entry.stepOf3} {onboardingStep} {language === 'en' ? 'of' : 'de'} 3
-              </p>
-            </div>
-
             {/* Onboarding Steps */}
-            {onboardingStep === 1 && (
-              <div>
-                <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  {t.entry.reOnboard1Title}
-                </h1>
-                <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  {t.entry.reOnboard1Subtitle}
-                </p>
-                <div className="space-y-3 mb-8">
-                  <button
-                    onClick={() => setUsageIntent('few')}
-                    className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                      usageIntent === 'few'
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            usageIntent === 'few' ? 'border-black' : 'border-gray-400'
-                          }`}
-                        >
-                          {usageIntent === 'few' && (
-                            <div className="w-3 h-3 rounded-full bg-black"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          {t.entry.reOnboard1Opt1}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setUsageIntent('many')}
-                    className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                      usageIntent === 'many'
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            usageIntent === 'many' ? 'border-black' : 'border-gray-400'
-                          }`}
-                        >
-                          {usageIntent === 'many' && (
-                            <div className="w-3 h-3 rounded-full bg-black"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          {t.entry.reOnboard1Opt2}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setUsageIntent('evaluate')}
-                    className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                      usageIntent === 'evaluate'
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            usageIntent === 'evaluate' ? 'border-black' : 'border-gray-400'
-                          }`}
-                        >
-                          {usageIntent === 'evaluate' && (
-                            <div className="w-3 h-3 rounded-full bg-black"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          {t.entry.reOnboard1Opt3}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {onboardingStep === 2 && (
-              <div>
-                <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
-                  {t.entry.reOnboard2Title}
-                </h1>
-                <p className="text-gray-600 mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, lineHeight: '1.5' }}>
-                  {t.entry.reOnboard2Subtitle}
-                </p>
-                <div className="space-y-3 mb-8">
-                  <button
-                    onClick={() => setMainGoal('inventory')}
-                    className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                      mainGoal === 'inventory'
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            mainGoal === 'inventory' ? 'border-black' : 'border-gray-400'
-                          }`}
-                        >
-                          {mainGoal === 'inventory' && (
-                            <div className="w-3 h-3 rounded-full bg-black"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          {t.entry.reOnboard2Opt1}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setMainGoal('contacts')}
-                    className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                      mainGoal === 'contacts'
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            mainGoal === 'contacts' ? 'border-black' : 'border-gray-400'
-                          }`}
-                        >
-                          {mainGoal === 'contacts' && (
-                            <div className="w-3 h-3 rounded-full bg-black"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          {t.entry.reOnboard2Opt2}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setMainGoal('visibility')}
-                    className={`w-full text-left p-5 border-2 rounded-lg transition-all ${
-                      mainGoal === 'visibility'
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            mainGoal === 'visibility' ? 'border-black' : 'border-gray-400'
-                          }`}
-                        >
-                          {mainGoal === 'visibility' && (
-                            <div className="w-3 h-3 rounded-full bg-black"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 400 }}>
-                          {t.entry.reOnboard2Opt3}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            )}
-
             {onboardingStep === 3 && (
               <div>
                 <h1 style={{ color: '#0A0A0A', fontFamily: 'Montserrat, sans-serif', fontSize: '32px', fontWeight: 600, lineHeight: '1.2', marginBottom: '16px' }}>
@@ -2445,38 +2251,16 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Continue Button */}
             <button
               onClick={handleOnboardingContinue}
-              disabled={
-                (onboardingStep === 1 && !usageIntent) ||
-                (onboardingStep === 2 && !mainGoal) ||
-                (onboardingStep === 3 && !teamSize)
-              }
-              style={{ 
+              disabled={!teamSize}
+              style={{
                 fontFamily: 'Inter, sans-serif',
-                backgroundColor: ((onboardingStep === 1 && usageIntent) ||
-                (onboardingStep === 2 && mainGoal) ||
-                (onboardingStep === 3 && teamSize)) ? '#006B4E' : '#E5E5E5'
+                backgroundColor: teamSize ? '#006B4E' : '#E5E5E5'
               }}
               className={`w-full h-12 px-6 text-base leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center shadow-sm ${
-                ((onboardingStep === 1 && usageIntent) ||
-                (onboardingStep === 2 && mainGoal) ||
-                (onboardingStep === 3 && teamSize))
-                  ? 'text-white'
-                  : 'text-gray-400 cursor-not-allowed'
+                teamSize ? 'text-white' : 'text-gray-400 cursor-not-allowed'
               }`}
-              onMouseEnter={(e) => { 
-                if ((onboardingStep === 1 && usageIntent) ||
-                    (onboardingStep === 2 && mainGoal) ||
-                    (onboardingStep === 3 && teamSize)) {
-                  e.currentTarget.style.backgroundColor = '#01533E';
-                }
-              }}
-              onMouseLeave={(e) => { 
-                if ((onboardingStep === 1 && usageIntent) ||
-                    (onboardingStep === 2 && mainGoal) ||
-                    (onboardingStep === 3 && teamSize)) {
-                  e.currentTarget.style.backgroundColor = '#006B4E';
-                }
-              }}
+              onMouseEnter={(e) => { if (teamSize) e.currentTarget.style.backgroundColor = '#01533E'; }}
+              onMouseLeave={(e) => { if (teamSize) e.currentTarget.style.backgroundColor = '#006B4E'; }}
             >
               {t.entry.continuar}
             </button>
