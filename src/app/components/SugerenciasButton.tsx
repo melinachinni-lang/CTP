@@ -68,24 +68,22 @@ export function SugerenciasButton({ open: controlledOpen, onClose: controlledOnC
         onClick={() => setInternalOpen(true)}
         className="flex items-center justify-center gap-1.5 px-3 py-1.5 mx-auto transition-all"
         style={{
-          color: 'rgba(82,196,154,0.75)',
+          color: '#52C49A',
           backgroundColor: 'transparent',
-          border: '1px solid rgba(82,196,154,0.2)',
+          border: 'none',
           borderRadius: '200px',
           fontFamily: 'var(--font-body)',
           fontSize: '12px',
-          fontWeight: 400,
+          fontWeight: 600,
           display: 'flex',
         }}
         onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = 'rgba(82,196,154,0.08)';
-          e.currentTarget.style.borderColor = 'rgba(82,196,154,0.35)';
-          e.currentTarget.style.color = '#52C49A';
+          e.currentTarget.style.color = '#7EDABA';
         }}
         onMouseLeave={e => {
           e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.borderColor = 'rgba(82,196,154,0.2)';
-          e.currentTarget.style.color = 'rgba(82,196,154,0.75)';
+          e.currentTarget.style.color = '#52C49A';
         }}
       >
         <Lightbulb className="w-3.5 h-3.5 flex-shrink-0" style={{ strokeWidth: 1.8 }} />
