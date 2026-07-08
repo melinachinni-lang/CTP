@@ -54,11 +54,11 @@ export function TeamContent() {
   const [activeMenu, setActiveMenu] = React.useState<number | null>(null);
   const [inviteEmail, setInviteEmail] = React.useState('');
   const [inviteName, setInviteName] = React.useState('');
-  const [inviteRol, setInviteRol] = React.useState<'Admin' | 'Broker' | 'Marketing' | 'Operaciones'>('Broker');
+  const [inviteRol, setInviteRol] = React.useState<'Admin' | 'Marketing' | 'Operaciones'>('Admin');
   const [inviteSent, setInviteSent] = React.useState(false);
 
   const handleSendInvite = () => {
-    if (!inviteEmail.trim()) return;
+    if (!inviteEmail.trim() || !inviteName.trim()) return;
     setInviteSent(true);
   };
   const handleCloseInviteModal = () => {
@@ -179,7 +179,7 @@ export function TeamContent() {
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
         >
           <Mail className="w-4 h-4" />
-          Nueva invitación
+          Nuevo usuario
         </button>
       </div>
 
@@ -815,7 +815,7 @@ export function TeamContent() {
                 </p>
                 <div className="flex gap-3 pt-4 w-full">
                   <button
-                    onClick={() => { setInviteSent(false); setInviteEmail(''); setInviteName(''); setInviteRol('Broker'); }}
+                    onClick={() => { setInviteSent(false); setInviteEmail(''); setInviteName(''); setInviteRol('Admin'); }}
                     className="flex-1 py-3 px-6 border-2 border-gray-200 hover:border-gray-300 rounded-[200px] transition-colors"
                     style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: '#0A0A0A' }}
                   >
@@ -838,7 +838,7 @@ export function TeamContent() {
                 <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-gray-100 flex-shrink-0">
                   <div>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-                      Nueva invitación
+                      Nuevo usuario
                     </h2>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B6B6B', marginTop: '4px' }}>
                       Invita a un nuevo miembro a unirse a tu equipo
@@ -869,8 +869,7 @@ export function TeamContent() {
                   {/* Name (optional) */}
                   <div>
                     <label style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                      Nombre{' '}
-                      <span style={{ fontWeight: 400, color: '#9CA3AF' }}>(opcional)</span>
+                      Nombre <span style={{ color: '#DC2626' }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -888,7 +887,7 @@ export function TeamContent() {
                       Rol en la plataforma
                     </label>
                     <div className="grid grid-cols-2 gap-2">
-                      {(['Admin', 'Broker', 'Marketing', 'Operaciones'] as const).map(rol => {
+                      {(['Admin', 'Marketing', 'Operaciones'] as const).map(rol => {
                         const cfg = ROLES_CONFIG[rol];
                         const selected = inviteRol === rol;
                         return (
@@ -947,17 +946,17 @@ export function TeamContent() {
                   </button>
                   <button
                     onClick={handleSendInvite}
-                    disabled={!inviteEmail.trim()}
+                    disabled={!inviteEmail.trim() || !inviteName.trim()}
                     className="flex items-center gap-2 text-white py-3 px-6 rounded-[200px] transition-all"
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-body-base)',
                       fontWeight: 600,
-                      backgroundColor: inviteEmail.trim() ? '#006B4E' : '#D1D5DB',
-                      cursor: inviteEmail.trim() ? 'pointer' : 'not-allowed',
+                      backgroundColor: inviteEmail.trim() && inviteName.trim() ? '#006B4E' : '#D1D5DB',
+                      cursor: inviteEmail.trim() && inviteName.trim() ? 'pointer' : 'not-allowed',
                     }}
-                    onMouseEnter={e => { if (inviteEmail.trim()) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                    onMouseLeave={e => { if (inviteEmail.trim()) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                    onMouseEnter={e => { if (inviteEmail.trim() && inviteName.trim()) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                    onMouseLeave={e => { if (inviteEmail.trim() && inviteName.trim()) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                   >
                     <Send className="w-4 h-4" />
                     Enviar invitación
