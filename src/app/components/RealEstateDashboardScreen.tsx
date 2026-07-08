@@ -60,7 +60,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       ],
     },
     {
-      key: 'interacciones', label: 'Interacciones',
+      key: 'interacciones', label: 'Actividad',
       items: [
         { id: 'interacciones', label: 'Interacciones', icon: MessageSquare },
         { id: 'citas',         label: 'Citas',         icon: CalendarCheck },
