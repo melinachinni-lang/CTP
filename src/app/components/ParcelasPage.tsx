@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { showAiOverlay, hideAiOverlay } from '../utils/aiOverlay';
-import { ChevronDown, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale } from 'lucide-react';
+import { ChevronDown, ChevronUp, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { VendedorCaptacionSection } from '@/app/components/VendedorCaptacionSection';
@@ -105,6 +105,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
   const [isAiProcessing, setIsAiProcessing] = useState(false);
   const [aiInterpretedQuery, setAiInterpretedQuery] = useState<string | null>(null);
+  const [aiChipExpanded, setAiChipExpanded] = useState(false);
+  const [aiChipEditValue, setAiChipEditValue] = useState('');
   const [includeProjects, setIncludeProjects] = useState(false);
 
   // Estados para scroll infinito
@@ -363,9 +365,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     if (activeFilters.condicion) {
       labels.push({ type: 'condicion', label: activeFilters.condicion });
     }
-    if (activeFilters.smartSearchText) {
-      labels.push({ type: 'smartSearchText', label: `"${activeFilters.smartSearchText}"` });
-    }
+    // smartSearchText se muestra como chip especial de IA, no como chip regular
     // Mapeo de badges a labels legibles
     const badgeLabels: Record<string, string> = {
       'naturaleza': t.filters.badgeNature,
@@ -683,21 +683,22 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       hideAiOverlay();
       setIsAiProcessing(false);
       setFiltersApplied(true);
-      if (query) setAiInterpretedQuery(query);
+      if (query) {
+        setAiInterpretedQuery(query);
+        setAiChipExpanded(false);
+        setAiChipEditValue(query);
+      }
 
-      setActiveFilters(prev => {
-        const updatedFilters = { ...prev };
-        if (query) {
-          updatedFilters.smartSearchText = query;
-        } else {
-          delete updatedFilters.smartSearchText;
-        }
-        if (selectedBadges.length > 0) {
-          updatedFilters.smartBadges = [...selectedBadges];
-        } else {
-          updatedFilters.smartBadges = [];
-        }
-        return updatedFilters;
+      // Resetear heroFilters para que los dropdowns muestren "Todos"
+      setHeroFilters({ ubicacion: '', tipo: '', superficieMin: '', superficieMax: '', condicion: '', precioMin: '', precioMax: '' });
+
+      // Mantener solo filtros de IA, limpiar filtros estándar
+      setActiveFilters({
+        tipos: [],
+        smartBadges: selectedBadges.length > 0 ? [...selectedBadges] : [],
+        destacadas: false,
+        nuevas: false,
+        ...(query ? { smartSearchText: query } : {}),
       });
 
       // Scroll a resultados después de que cargue
@@ -720,7 +721,54 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       }
     });
   };
-  
+
+  // Limpiar búsqueda IA completamente
+  const clearAiSearch = () => {
+    setAiInterpretedQuery(null);
+    setAiChipExpanded(false);
+    setAiChipEditValue('');
+    setSmartSearchValue('');
+    setSelectedBadges([]);
+    setActiveFilters(prev => {
+      const updated = { ...prev };
+      delete updated.smartSearchText;
+      updated.smartBadges = [];
+      return updated;
+    });
+  };
+
+  // Re-buscar con prompt editado desde el chip
+  const handleAiReSearch = () => {
+    const query = aiChipEditValue.trim();
+    if (!query) return;
+    setSmartSearchValue(query);
+    setAiChipExpanded(false);
+    setAiInterpretedQuery(null);
+    showAiOverlay();
+    setIsSmartSearchExpanded(false);
+    setIsSmartSearchBottomSheetOpen(false);
+    setIsAiProcessing(true);
+    setTimeout(() => {
+      hideAiOverlay();
+      setIsAiProcessing(false);
+      setFiltersApplied(true);
+      setAiInterpretedQuery(query);
+      setAiChipEditValue(query);
+      setHeroFilters({ ubicacion: '', tipo: '', superficieMin: '', superficieMax: '', condicion: '', precioMin: '', precioMax: '' });
+      setActiveFilters({
+        tipos: [],
+        smartBadges: [],
+        destacadas: false,
+        nuevas: false,
+        smartSearchText: query,
+      });
+      setTimeout(() => {
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }, 3500);
+  };
+
   // Función para formatear moneda
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('es-CL', {
@@ -1710,69 +1758,25 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 {/* Contador y filtros activos con selector de vista */}
                 <div className="mb-6 mt-4 lg:mt-8">
 
-                  {/* Banner IA activa */}
-                  {(isAiProcessing || aiInterpretedQuery) && (
+                  {/* Banner procesando IA (solo durante animación) */}
+                  {isAiProcessing && (
                     <div
-                      className="flex items-center gap-3 px-4 py-3 rounded-2xl mb-4 flex-wrap"
+                      className="flex items-center gap-3 px-4 py-3 rounded-2xl mb-4"
                       style={{ backgroundColor: '#F0F9F5', border: '1px solid #C5E8D8' }}
                     >
-                      {isAiProcessing ? (
-                        <>
-                          <div className="flex items-center gap-2 flex-1 min-w-0">
-                            <div className="w-5 h-5 flex-shrink-0 relative">
-                              <Sparkles className="w-5 h-5 absolute animate-pulse" style={{ color: '#006B4E' }} />
-                            </div>
-                            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#006B4E', fontWeight: 500 }}>
-                              La IA está analizando tu búsqueda…
-                            </span>
-                          </div>
-                          <div className="flex gap-1">
-                            {[0, 1, 2].map(i => (
-                              <span
-                                key={i}
-                                className="w-2 h-2 rounded-full"
-                                style={{
-                                  backgroundColor: '#006B4E',
-                                  opacity: 0.3,
-                                  animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite`
-                                }}
-                              />
-                            ))}
-                          </div>
-                        </>
-                      ) : aiInterpretedQuery ? (
-                        <>
-                          <Sparkles className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                          <div className="flex-1 min-w-0">
-                            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#737373', fontWeight: 400 }}>
-                              IA interpretó:{' '}
-                            </span>
-                            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#006B4E', fontWeight: 600 }}>
-                              &ldquo;{aiInterpretedQuery}&rdquo;
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => {
-                              setAiInterpretedQuery(null);
-                              setSmartSearchValue('');
-                              setSelectedBadges([]);
-                              setActiveFilters(prev => {
-                                const updated = { ...prev };
-                                delete updated.smartSearchText;
-                                updated.smartBadges = [];
-                                return updated;
-                              });
-                            }}
-                            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs transition-colors flex-shrink-0"
-                            style={{ fontFamily: 'Inter, sans-serif', color: '#737373', backgroundColor: '#E8F5EE', fontWeight: 500 }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D5EEE2'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}
-                          >
-                            <X className="w-3 h-3" />
-                            Limpiar IA
-                          </button>
-                        </>
-                      ) : null}
+                      <div className="w-5 h-5 flex-shrink-0 relative">
+                        <Sparkles className="w-5 h-5 absolute animate-pulse" style={{ color: '#006B4E' }} />
+                      </div>
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#006B4E', fontWeight: 500, flex: 1 }}>
+                        La IA está analizando tu búsqueda…
+                      </span>
+                      <div className="flex gap-1">
+                        {[0, 1, 2].map(i => (
+                          <span key={i} className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: '#006B4E', opacity: 0.3, animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite` }}
+                          />
+                        ))}
+                      </div>
                     </div>
                   )}
 
@@ -1854,20 +1858,97 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   </div>
                   
                   {/* Chips de filtros activos */}
-                  {getActiveFilterLabels().length > 0 && (
-                    <div className="flex flex-wrap gap-2">
+                  {(getActiveFilterLabels().length > 0 || (aiInterpretedQuery && !isAiProcessing)) && (
+                    <div className="flex flex-wrap gap-2 items-start">
+                      {/* Chip especial de búsqueda con IA */}
+                      {aiInterpretedQuery && !isAiProcessing && (
+                        <div className="flex flex-col gap-0" style={{ width: aiChipExpanded ? '100%' : 'auto' }}>
+                          {!aiChipExpanded ? (
+                            /* Chip colapsado */
+                            <button
+                              onClick={() => setAiChipExpanded(true)}
+                              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[100px] transition-colors"
+                              style={{ backgroundColor: '#F0F9F5', border: '1.5px solid #006B4E', cursor: 'pointer' }}
+                            >
+                              <Sparkles className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#006B4E' }} />
+                              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 600, color: '#006B4E' }}>
+                                Búsqueda con IA
+                              </span>
+                              <ChevronDown className="w-3 h-3" style={{ color: '#006B4E' }} />
+                              <span
+                                role="button"
+                                onClick={e => { e.stopPropagation(); clearAiSearch(); }}
+                                className="hover:bg-green-100 rounded-full p-0.5 transition-colors"
+                              >
+                                <X className="w-3 h-3" style={{ color: '#006B4E' }} />
+                              </span>
+                            </button>
+                          ) : (
+                            /* Chip expandido — editor de prompt */
+                            <div
+                              className="flex flex-col gap-2 px-4 py-3 rounded-2xl w-full"
+                              style={{ backgroundColor: '#F0F9F5', border: '1.5px solid #006B4E' }}
+                            >
+                              <div className="flex items-center gap-2">
+                                <Sparkles className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#006B4E', flex: 1 }}>
+                                  Búsqueda con IA
+                                </span>
+                                <button onClick={() => setAiChipExpanded(false)} className="hover:bg-green-100 rounded-full p-1 transition-colors">
+                                  <ChevronUp className="w-4 h-4" style={{ color: '#006B4E' }} />
+                                </button>
+                              </div>
+                              <div className="flex gap-2">
+                                <input
+                                  value={aiChipEditValue}
+                                  onChange={e => setAiChipEditValue(e.target.value)}
+                                  onKeyDown={e => { if (e.key === 'Enter' && aiChipEditValue.trim()) handleAiReSearch(); }}
+                                  className="flex-1 px-3 py-2 rounded-[100px] outline-none transition-colors"
+                                  style={{
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontSize: '13px',
+                                    color: '#0A0A0A',
+                                    backgroundColor: '#FFFFFF',
+                                    border: '1.5px solid #C5E8D8',
+                                  }}
+                                  onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
+                                  onBlur={e => { e.currentTarget.style.borderColor = '#C5E8D8'; }}
+                                  autoFocus
+                                />
+                                <button
+                                  onClick={handleAiReSearch}
+                                  disabled={!aiChipEditValue.trim()}
+                                  className="flex items-center gap-1.5 px-4 py-2 rounded-[100px] transition-colors"
+                                  style={{
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    backgroundColor: aiChipEditValue.trim() ? '#006B4E' : '#D1D5DB',
+                                    color: '#FFFFFF',
+                                    cursor: aiChipEditValue.trim() ? 'pointer' : 'not-allowed',
+                                    border: 'none',
+                                  }}
+                                  onMouseEnter={e => { if (aiChipEditValue.trim()) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                                  onMouseLeave={e => { if (aiChipEditValue.trim()) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                                >
+                                  <Sparkles className="w-3.5 h-3.5" />
+                                  Buscar
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Chips de filtros regulares */}
                       {getActiveFilterLabels().map((filter) => (
-                        <div 
+                        <div
                           key={`${filter.type}-${filter.label}-${filter.value || ''}`}
                           className="inline-flex items-center gap-1.5 sm:gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 px-3 sm:px-4 py-1.5 sm:py-2 rounded-[100px] transition-colors"
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '12px',
-                            fontWeight: 400
-                          }}
+                          style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 400 }}
                         >
                           <span style={{ color: '#0A0A0A' }}>{filter.label}</span>
-                          <button 
+                          <button
                             onClick={() => removeFilter(filter.type, filter.value)}
                             className="hover:bg-gray-200 rounded-full p-0.5 transition-colors"
                           >
