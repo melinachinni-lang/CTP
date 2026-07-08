@@ -47,7 +47,6 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       items: [
         { id: 'home',           label: 'Inicio',            icon: Home },
         { id: 'my-publications',label: 'Mis publicaciones', icon: FolderOpen },
-        { id: 'inquiries',      label: 'Consultas',         icon: MessageCircle },
       ],
     },
     {
@@ -62,6 +61,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     {
       key: 'interacciones', label: 'Actividad',
       items: [
+        { id: 'inquiries',     label: 'Consultas',     icon: MessageCircle },
         { id: 'interacciones', label: 'Interacciones', icon: MessageSquare },
         { id: 'citas',         label: 'Citas',         icon: CalendarCheck },
       ],
