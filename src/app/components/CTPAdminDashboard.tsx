@@ -358,7 +358,7 @@ function CTPHomeContent({ setCurrentSection }: {
     { label: 'Inmobiliarias activas',         value: '41',     change: '+4',   up: true,  icon: Building2,     iconBg: '#E8F5EE', iconColor: '#006B4E' },
     { label: 'Brokers activos',               value: '87',     change: '+6',   up: true,  icon: UserCheck,     iconBg: '#F0FDFA', iconColor: '#0D9488' },
     { label: 'Usuarios registrados',          value: '8.245',  change: '+14%', up: true,  icon: Users,         iconBg: '#EFF6FF', iconColor: '#2563EB' },
-    { label: 'Pendientes de verificación',    value: '5',      change: '+3',   up: false, icon: ClipboardList, iconBg: '#FEF3C7', iconColor: '#B7791F' },
+    { label: 'Visitas al sitio',              value: '14.306', change: '+11%', up: true,  icon: Eye,           iconBg: '#F5F3FF', iconColor: '#7C3AED' },
   ];
   const actividad = [
     { icon: CheckCircle,   color: '#006B4E', text: 'Nueva reserva — Parcela Los Robles (Inmobiliaria Verde Sur)', time: 'Hace 12 min' },
