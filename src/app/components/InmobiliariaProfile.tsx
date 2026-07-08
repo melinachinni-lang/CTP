@@ -590,10 +590,10 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         color: 'var(--foreground)',
                         marginBottom: '0.25rem'
                       }}>
-                        Zonas de operación
+                        Presencia regional
                       </p>
                       <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                        Cobertura regional
+                        Regiones con cobertura
                       </p>
                     </div>
                   </div>
