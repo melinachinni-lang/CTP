@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, Check, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, Info, Bell } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, Check, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, Info, Bell, RefreshCw } from 'lucide-react';
 
 interface BannerAdmin {
   id: number;
@@ -484,12 +484,13 @@ export function AdminBannersModule() {
         <div className="flex items-center gap-2">
           <button
             onClick={simulateLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm transition-all"
-            style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: '500' }}
+            className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all"
+            title="Actualizar"
+            style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E2EDCC'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0F5EB'}
           >
-            Actualizar
+            <RefreshCw className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => { setEditingBanner(null); setEditingMensaje(null); if (tab === 'banners') setShowBannerModal(true); else setShowMensajeModal(true); }}
