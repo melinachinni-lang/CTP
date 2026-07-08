@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Users, UserPlus, UserCheck, Activity, MousePointer, ArrowUpRight, ArrowDownRight, ChevronDown, Calendar, type LucideIcon } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
 
@@ -52,6 +52,36 @@ export function AdminAnaliticaView() {
 
   const [origenPeriodo, setOrigenPeriodo] = useState('28d');
   const [showOrigenDropdown, setShowOrigenDropdown] = useState(false);
+  const [showOrigenRango, setShowOrigenRango] = useState(false);
+  const [origenFrom, setOrigenFrom] = useState('');
+  const [origenTo, setOrigenTo] = useState('');
+  const [origenApplied, setOrigenApplied] = useState<{ from: string; to: string } | null>(null);
+  const origenPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (origenPickerRef.current && !origenPickerRef.current.contains(e.target as Node)) {
+        setShowOrigenDropdown(false);
+        setShowOrigenRango(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  function formatOrigenRangeLabel(from: string, to: string) {
+    if (!from && !to) return 'Rango personalizado';
+    const fmt = (d: string) => { const [y, m, day] = d.split('-'); return `${day}/${m}/${y.slice(2)}`; };
+    if (from && !to) return `Desde ${fmt(from)}`;
+    if (!from && to) return `Hasta ${fmt(to)}`;
+    return `${fmt(from)} – ${fmt(to)}`;
+  }
+
+  function handleApplyOrigenRango() {
+    if (!origenFrom && !origenTo) return;
+    setOrigenApplied({ from: origenFrom, to: origenTo });
+    setShowOrigenRango(false);
+  }
 
   const ORIGEN_PRESETS = [
     { id: '7d',  label: 'Últimos 7 días' },
@@ -378,37 +408,75 @@ export function AdminAnaliticaView() {
               Distribución de sesiones por fuente
             </p>
           </div>
-          <div className="relative">
-            <button
-              onClick={() => setShowOrigenDropdown(!showOrigenDropdown)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', cursor: 'pointer' }}
-            >
-              <Calendar className="w-3.5 h-3.5" style={{ color: '#737373' }} />
-              {ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}
-              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373' }} />
-            </button>
-            {showOrigenDropdown && (
-              <div className="absolute right-0 top-full mt-1 z-20 rounded-xl py-1" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', minWidth: '160px' }}>
-                {ORIGEN_PRESETS.map(p => (
-                  <button
-                    key={p.id}
-                    onClick={() => { setOrigenPeriodo(p.id); setShowOrigenDropdown(false); }}
-                    className="w-full text-left px-4 py-2"
-                    style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenPeriodo === p.id ? '#006B4E' : '#374151', backgroundColor: origenPeriodo === p.id ? '#E8F5EE' : 'transparent', cursor: 'pointer', display: 'block' }}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="flex items-center gap-2" ref={origenPickerRef}>
+            {/* Preset dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => { setShowOrigenDropdown(!showOrigenDropdown); setShowOrigenRango(false); }}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl"
+                style={{ border: `1px solid ${origenApplied ? '#E5E5E5' : '#E5E5E5'}`, backgroundColor: origenApplied ? '#FAFAFA' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenApplied ? '#9CA3AF' : '#374151', cursor: 'pointer', opacity: origenApplied ? 0.6 : 1 }}
+              >
+                <Calendar className="w-3.5 h-3.5" style={{ color: '#737373' }} />
+                {origenApplied ? formatOrigenRangeLabel(origenApplied.from, origenApplied.to) : ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}
+                <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373' }} />
+              </button>
+              {showOrigenDropdown && (
+                <div className="absolute right-0 top-full mt-1 z-20 rounded-xl py-1" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', minWidth: '160px' }}>
+                  {ORIGEN_PRESETS.map(p => (
+                    <button key={p.id} onClick={() => { setOrigenPeriodo(p.id); setOrigenApplied(null); setOrigenFrom(''); setOrigenTo(''); setShowOrigenDropdown(false); }}
+                      className="w-full text-left px-4 py-2"
+                      style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: !origenApplied && origenPeriodo === p.id ? '#006B4E' : '#374151', backgroundColor: !origenApplied && origenPeriodo === p.id ? '#E8F5EE' : 'transparent', cursor: 'pointer', display: 'block' }}>
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            {/* Rango button */}
+            <div className="relative">
+              <button
+                onClick={() => { setShowOrigenRango(!showOrigenRango); setShowOrigenDropdown(false); }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors"
+                style={{ border: `1px solid ${origenApplied ? '#006B4E' : '#E5E5E5'}`, backgroundColor: origenApplied ? '#E8F5EE' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenApplied ? '#006B4E' : '#374151', cursor: 'pointer', fontWeight: origenApplied ? 600 : 400 }}>
+                <Calendar className="w-3.5 h-3.5" />
+                Rango
+              </button>
+              {showOrigenRango && (
+                <div className="absolute right-0 top-full mt-1 z-20 rounded-xl p-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.10)', minWidth: '240px' }}>
+                  <p style={{ fontSize: '12px', fontWeight: 600, color: '#374151', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Rango personalizado</p>
+                  <div className="flex flex-col gap-3 mb-4">
+                    <div>
+                      <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Desde</label>
+                      <input type="date" value={origenFrom} onChange={e => setOrigenFrom(e.target.value)} style={{ width: '100%', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '6px 10px', fontSize: '13px', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none' }} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Hasta</label>
+                      <input type="date" value={origenTo} onChange={e => setOrigenTo(e.target.value)} min={origenFrom} style={{ width: '100%', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '6px 10px', fontSize: '13px', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none' }} />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    {origenApplied && (
+                      <button onClick={() => { setOrigenApplied(null); setOrigenFrom(''); setOrigenTo(''); setShowOrigenRango(false); }} style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#DC2626', borderRadius: '200px', border: '1px solid #FECACA', backgroundColor: '#FFF5F5', padding: '7px 0', cursor: 'pointer' }}>
+                        Limpiar
+                      </button>
+                    )}
+                    <button onClick={handleApplyOrigenRango} disabled={!origenFrom && !origenTo}
+                      style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: (origenFrom || origenTo) ? '#006B4E' : '#D1D5DB', padding: '7px 0', border: 'none', cursor: (origenFrom || origenTo) ? 'pointer' : 'not-allowed' }}>
+                      Aplicar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="px-6 py-5">
           {(() => {
-            const fuentes = origenData[origenPeriodo].fuentes;
+            const fuentes = origenData[origenApplied ? '28d' : origenPeriodo].fuentes;
             const total = fuentes.reduce((s, f) => s + f.actual, 0);
-            const maxVal = Math.max(...fuentes.flatMap(f => [f.actual, f.anterior]));
+            const maxVal = origenApplied
+              ? Math.max(...fuentes.map(f => f.actual))
+              : Math.max(...fuentes.flatMap(f => [f.actual, f.anterior]));
             return (
               <div className="space-y-5">
                 {fuentes.map((f, i) => {
@@ -421,16 +489,20 @@ export function AdminAnaliticaView() {
                     <div key={i} className="flex items-center gap-4">
                       <span style={{ width: '120px', flexShrink: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>{f.nombre}</span>
                       <div style={{ flex: 1 }}>
-                        <div style={{ height: '14px', width: `${actualPct}%`, backgroundColor: '#006B4E', borderRadius: '3px', marginBottom: '5px', minWidth: '4px' }} />
-                        <div style={{ height: '10px', width: `${anteriorPct}%`, borderRadius: '3px', minWidth: '4px', backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
+                        <div style={{ height: '14px', width: `${actualPct}%`, backgroundColor: '#006B4E', borderRadius: '3px', marginBottom: origenApplied ? 0 : '5px', minWidth: '4px' }} />
+                        {!origenApplied && (
+                          <div style={{ height: '10px', width: `${anteriorPct}%`, borderRadius: '3px', minWidth: '4px', backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
+                        )}
                       </div>
                       <div style={{ width: '100px', flexShrink: 0, textAlign: 'right' }}>
                         <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{f.actual.toLocaleString('es-CL')}</div>
                         <div className="flex items-center justify-end gap-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px' }}>
                           <span style={{ color: '#9CA3AF' }}>{sharePct}%</span>
-                          <span style={{ color: deltaUp ? '#006B4E' : '#DC2626', fontWeight: 500 }}>
-                            {deltaUp ? '↑' : '↓'}{Math.abs(delta).toLocaleString('es-CL')}
-                          </span>
+                          {!origenApplied && (
+                            <span style={{ color: deltaUp ? '#006B4E' : '#DC2626', fontWeight: 500 }}>
+                              {deltaUp ? '↑' : '↓'}{Math.abs(delta).toLocaleString('es-CL')}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -442,12 +514,16 @@ export function AdminAnaliticaView() {
           <div className="flex items-center gap-6 mt-6 pt-4" style={{ borderTop: '1px solid #F5F5F5' }}>
             <div className="flex items-center gap-2">
               <div style={{ width: '24px', height: '10px', backgroundColor: '#006B4E', borderRadius: '3px', flexShrink: 0 }} />
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Período actual</span>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>
+                {origenApplied ? formatOrigenRangeLabel(origenApplied.from, origenApplied.to) : 'Período actual'}
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <div style={{ width: '24px', height: '8px', borderRadius: '3px', flexShrink: 0, backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Período anterior</span>
-            </div>
+            {!origenApplied && (
+              <div className="flex items-center gap-2">
+                <div style={{ width: '24px', height: '8px', borderRadius: '3px', flexShrink: 0, backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Período anterior</span>
+              </div>
+            )}
           </div>
         </div>
       </section>
