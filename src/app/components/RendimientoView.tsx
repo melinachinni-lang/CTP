@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2, CalendarDays, X } from 'lucide-react';
+import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2, CalendarDays, X, ChevronDown } from 'lucide-react';
 
 type ViewType = 'inmobiliaria' | 'broker';
 export type Periodo = '7d' | '30d' | '90d';
