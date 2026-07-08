@@ -241,6 +241,8 @@ function AppContent() {
     condicion: string;
     precio: string;
     tipo: string;
+    smartSearchText?: string;
+    smartBadges?: string[];
   } | null>(null);
 
   // Función para abrir modal de publicación en el dashboard activo
@@ -272,6 +274,8 @@ function AppContent() {
     condicion: string;
     precio: string;
     tipo: string;
+    smartSearchText?: string;
+    smartBadges?: string[];
   }) => {
     if (screen === 'person-dashboard-notifications') {
       setCurrentScreen('person-dashboard');

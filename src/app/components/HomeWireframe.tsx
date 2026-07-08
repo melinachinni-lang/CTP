@@ -429,7 +429,11 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     showAiOverlay();
     setTimeout(() => {
       hideAiOverlay();
-      onNavigate('parcelas', undefined, smartFilters);
+      onNavigate('parcelas', undefined, {
+        ...smartFilters,
+        smartSearchText: smartSearchValue.trim() || undefined,
+        smartBadges: selectedBadges.length > 0 ? [...selectedBadges] : undefined,
+      });
     }, 3500);
   };
 

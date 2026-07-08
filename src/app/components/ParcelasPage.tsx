@@ -25,6 +25,8 @@ interface ParcelasPageProps {
     condicion: string;
     precio: string;
     tipo: string;
+    smartSearchText?: string;
+    smartBadges?: string[];
   } | null;
   savedParcelaIds?: number[];
   onToggleSaved?: (id: number) => void;
@@ -120,6 +122,26 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   // Aplicar filtros iniciales cuando se reciben del Home
   useEffect(() => {
     if (initialFilters) {
+      // Si viene de búsqueda IA, activar el chip de IA y resetear dropdowns
+      if (initialFilters.smartSearchText) {
+        setAiInterpretedQuery(initialFilters.smartSearchText);
+        setAiChipEditValue(initialFilters.smartSearchText);
+        setAiChipExpanded(false);
+        if (initialFilters.smartBadges && initialFilters.smartBadges.length > 0) {
+          setSelectedBadges(initialFilters.smartBadges);
+        }
+        setHeroFilters({ ubicacion: '', tipo: '', superficieMin: '', superficieMax: '', condicion: '', precioMin: '', precioMax: '' });
+        setActiveFilters({
+          tipos: [],
+          smartBadges: initialFilters.smartBadges || [],
+          destacadas: false,
+          nuevas: false,
+          smartSearchText: initialFilters.smartSearchText,
+        });
+        setFiltersApplied(true);
+        return;
+      }
+
       const newActiveFilters: typeof activeFilters = {
         tipos: [],
         smartBadges: [],
