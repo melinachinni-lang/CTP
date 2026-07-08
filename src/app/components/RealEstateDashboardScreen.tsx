@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
+import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
@@ -259,6 +260,13 @@ interface HomeContentProps {
 
 function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentProps) {
   const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
+  const [evolApplied, setEvolApplied] = React.useState<AppliedRange | null>(null);
+  const [consultasApplied, setConsultasApplied] = React.useState<AppliedRange | null>(null);
+  const [consultasPeriod, setConsultasPeriod] = React.useState('30d');
+  const [interaccionApplied, setInteraccionApplied] = React.useState<AppliedRange | null>(null);
+  const [interaccionPeriod, setInteraccionPeriod] = React.useState('30d');
+  const CHART_PRESETS = [{ id: '7d', label: 'Últimos 7 días' }, { id: '30d', label: 'Últimos 30 días' }, { id: '90d', label: 'Últimos 90 días' }];
+  const EVOL_PRESETS = [{ id: '7', label: '7 días' }, { id: '30', label: '30 días' }, { id: '90', label: '90 días' }];
   const [dashRankingTab, setDashRankingTab] = React.useState<'parcelas' | 'proyectos'>('parcelas');
   const [dashRankingPeriod, setDashRankingPeriod] = React.useState<'7' | '30' | '90'>('30');
   const DASH_RANKING_SCALE: Record<'7' | '30' | '90', number> = { '7': 0.22, '30': 1.0, '90': 3.1 };
@@ -411,24 +419,14 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               </span>
             </div>
           </div>
-          <div className="flex gap-2 rounded-full p-1" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-            {(['7', '30', '90'] as const).map((period) => (
-              <button
-                key={period}
-                onClick={() => setSelectedPeriod(period)}
-                className="px-4 py-1.5 rounded-full transition-all"
-                style={{
-                  backgroundColor: selectedPeriod === period ? '#0A0A0A' : 'transparent',
-                  color: selectedPeriod === period ? '#FFFFFF' : '#737373',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-medium)'
-                }}
-              >
-                {period} días
-              </button>
-            ))}
-          </div>
+          <ChartRangePicker
+            presets={EVOL_PRESETS}
+            selected={selectedPeriod}
+            onSelectPreset={(id) => setSelectedPeriod(id as '7' | '30' | '90')}
+            appliedRange={evolApplied}
+            onApplyRange={setEvolApplied}
+            onClearRange={() => setEvolApplied(null)}
+          />
         </div>
         <DualLineChart
           parcelas={chartSeries.parcelas}
@@ -442,15 +440,12 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       <div className="grid grid-cols-2 gap-6">
         {/* Gráfico de barras - Consultas por parcela */}
         <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h4)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Consultas por parcela
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+              Consultas por parcela
+            </h2>
+            <ChartRangePicker presets={CHART_PRESETS} selected={consultasPeriod} onSelectPreset={setConsultasPeriod} appliedRange={consultasApplied} onApplyRange={setConsultasApplied} onClearRange={() => setConsultasApplied(null)} />
+          </div>
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={consultasData}>
@@ -487,15 +482,12 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
         {/* Gráfico donut - Tipo de interacción */}
         <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h4)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Tipo de interacción
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+              Tipo de interacción
+            </h2>
+            <ChartRangePicker presets={CHART_PRESETS} selected={interaccionPeriod} onSelectPreset={setInteraccionPeriod} appliedRange={interaccionApplied} onApplyRange={setInteraccionApplied} onClearRange={() => setInteraccionApplied(null)} />
+          </div>
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

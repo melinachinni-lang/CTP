@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Users, UserPlus, UserCheck, Activity, MousePointer, ArrowUpRight, ArrowDownRight, ChevronDown, Calendar, type LucideIcon } from 'lucide-react';
+import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
 
 const RANGO_PRESETS = [
@@ -47,8 +48,7 @@ function KPICard({ label, value, change, up, icon: Icon, iconBg, iconColor }: {
 
 export function AdminAnaliticaView() {
   const [rango, setRango] = useState('30d');
-  const [showRango, setShowRango] = useState(false);
-  const rangoLabel = RANGO_PRESETS.find(r => r.id === rango)?.label ?? '';
+  const [traficoApplied, setTraficoApplied] = useState<AppliedRange | null>(null);
 
   const [origenPeriodo, setOrigenPeriodo] = useState('28d');
   const [showOrigenDropdown, setShowOrigenDropdown] = useState(false);
@@ -250,36 +250,14 @@ export function AdminAnaliticaView() {
               Visitas, consultas y reservas en el período seleccionado
             </p>
           </div>
-          {/* Date range selector */}
-          <div className="relative">
-            <button
-              onClick={() => setShowRango(v => !v)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500 }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-            >
-              <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
-              {rangoLabel}
-              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRango ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-            </button>
-            {showRango && (
-              <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '200px' }}>
-                {RANGO_PRESETS.map(preset => (
-                  <button
-                    key={preset.id}
-                    onClick={() => { setRango(preset.id); setShowRango(false); }}
-                    className="w-full text-left px-4 py-2.5 transition-colors"
-                    style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: rango === preset.id ? 600 : 400, color: rango === preset.id ? '#006B4E' : '#0A0A0A', backgroundColor: rango === preset.id ? '#F0F9F5' : '#FFFFFF' }}
-                    onMouseEnter={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                    onMouseLeave={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <ChartRangePicker
+            presets={RANGO_PRESETS}
+            selected={rango}
+            onSelectPreset={setRango}
+            appliedRange={traficoApplied}
+            onApplyRange={setTraficoApplied}
+            onClearRange={() => setTraficoApplied(null)}
+          />
         </div>
 
         {/* Leyenda de líneas */}

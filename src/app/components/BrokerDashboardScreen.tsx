@@ -8,6 +8,7 @@ import { SettingsContent } from '@/app/components/SettingsContent';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
+import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -278,6 +279,13 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
 // Home Section Component
 function HomeContent() {
   const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
+  const [interesApplied, setInteresApplied] = React.useState<AppliedRange | null>(null);
+  const [consultasApplied, setConsultasApplied] = React.useState<AppliedRange | null>(null);
+  const [consultasPeriod, setConsultasPeriod] = React.useState('30d');
+  const [interaccionApplied, setInteraccionApplied] = React.useState<AppliedRange | null>(null);
+  const [interaccionPeriod, setInteraccionPeriod] = React.useState('30d');
+  const CHART_PRESETS = [{ id: '7d', label: 'Últimos 7 días' }, { id: '30d', label: 'Últimos 30 días' }, { id: '90d', label: 'Últimos 90 días' }];
+  const EVOL_PRESETS = [{ id: '7', label: '7 días' }, { id: '30', label: '30 días' }, { id: '90', label: '90 días' }];
 
   // Datos simulados para gráfico de evolución
   const interestData = selectedPeriod === '7' ? [
@@ -600,24 +608,14 @@ function HomeContent() {
           }}>
             Interés en propiedades
           </h2>
-          <div className="flex gap-2 rounded-full p-1" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-            {(['7', '30', '90'] as const).map((period) => (
-              <button
-                key={period}
-                onClick={() => setSelectedPeriod(period)}
-                className="px-4 py-1.5 rounded-full transition-all"
-                style={{
-                  backgroundColor: selectedPeriod === period ? '#0A0A0A' : 'transparent',
-                  color: selectedPeriod === period ? '#FFFFFF' : '#737373',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-medium)'
-                }}
-              >
-                {period} días
-              </button>
-            ))}
-          </div>
+          <ChartRangePicker
+            presets={EVOL_PRESETS}
+            selected={selectedPeriod}
+            onSelectPreset={(id) => setSelectedPeriod(id as '7' | '30' | '90')}
+            appliedRange={interesApplied}
+            onApplyRange={setInteresApplied}
+            onClearRange={() => setInteresApplied(null)}
+          />
         </div>
         <div style={{ width: '100%', height: '320px' }}>
           <ResponsiveContainer width="100%" height="100%">
@@ -657,15 +655,12 @@ function HomeContent() {
       <div className="grid grid-cols-2 gap-6">
         {/* Gráfico de barras - Consultas por propiedad */}
         <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h4)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Consultas por propiedad
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+              Consultas por propiedad
+            </h2>
+            <ChartRangePicker presets={CHART_PRESETS} selected={consultasPeriod} onSelectPreset={setConsultasPeriod} appliedRange={consultasApplied} onApplyRange={setConsultasApplied} onClearRange={() => setConsultasApplied(null)} />
+          </div>
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={consultasPorPropiedad}>
@@ -702,15 +697,12 @@ function HomeContent() {
 
         {/* Gráfico donut - Tipo de interacción */}
         <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h4)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Tipo de interacción
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+              Tipo de interacción
+            </h2>
+            <ChartRangePicker presets={CHART_PRESETS} selected={interaccionPeriod} onSelectPreset={setInteraccionPeriod} appliedRange={interaccionApplied} onApplyRange={setInteraccionApplied} onClearRange={() => setInteraccionApplied(null)} />
+          </div>
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
