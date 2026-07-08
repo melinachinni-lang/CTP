@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Eye, Edit, AlertCircle, X, UserPlus, Check, Mail, Send } from 'lucide-react';
+import { User, Eye, Edit, AlertCircle, X, UserPlus, Check, Mail, Send, UserRoundPlus } from 'lucide-react';
 
 const ROLES_CONFIG: Record<string, { color: string; bg: string; permisos: { label: string; ok: boolean }[] }> = {
   Admin: {
@@ -149,7 +149,7 @@ export function TeamContent() {
               letterSpacing: 'var(--letter-spacing-normal)'
             }}
           >
-            Equipo y brokers
+            Equipo CTP
           </h1>
           <p 
             style={{ 
@@ -161,7 +161,7 @@ export function TeamContent() {
               letterSpacing: 'var(--letter-spacing-normal)'
             }}
           >
-            Gestiona tu equipo de ventas y brokers
+            Gestiona los miembros de tu equipo
           </p>
         </div>
         <button
@@ -178,7 +178,7 @@ export function TeamContent() {
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
         >
-          <Mail className="w-4 h-4" />
+          <UserRoundPlus className="w-4 h-4" />
           Nuevo usuario
         </button>
       </div>
@@ -886,7 +886,7 @@ export function TeamContent() {
                     <label style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
                       Rol en la plataforma
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-2">
                       {(['Admin', 'Marketing', 'Operaciones'] as const).map(rol => {
                         const cfg = ROLES_CONFIG[rol];
                         const selected = inviteRol === rol;
