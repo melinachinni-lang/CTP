@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
@@ -262,6 +262,37 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
   const [dashRankingTab, setDashRankingTab] = React.useState<'parcelas' | 'proyectos'>('parcelas');
   const [dashRankingPeriod, setDashRankingPeriod] = React.useState<'7' | '30' | '90'>('30');
   const DASH_RANKING_SCALE: Record<'7' | '30' | '90', number> = { '7': 0.22, '30': 1.0, '90': 3.1 };
+  const DASH_PERIODO_LABELS: Record<'7' | '30' | '90', string> = { '7': 'Últimos 7 días', '30': 'Últimos 30 días', '90': 'Últimos 90 días' };
+  const [showDashRankingDropdown, setShowDashRankingDropdown] = useState(false);
+  const [showDashRankingRange, setShowDashRankingRange] = useState(false);
+  const [dashRankingFrom, setDashRankingFrom] = useState('');
+  const [dashRankingTo, setDashRankingTo] = useState('');
+  const [dashRankingApplied, setDashRankingApplied] = useState<{ from: string; to: string } | null>(null);
+  const dashRankingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showDashRankingDropdown && !showDashRankingRange) return;
+    const handler = (e: MouseEvent) => {
+      if (dashRankingRef.current && !dashRankingRef.current.contains(e.target as Node)) {
+        setShowDashRankingDropdown(false);
+        setShowDashRankingRange(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showDashRankingDropdown, showDashRankingRange]);
+
+  const formatDashRangeLabel = (from: string, to: string) => {
+    const fmt = (d: string) => { const [, m, day] = d.split('-'); const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return `${parseInt(day)} ${meses[parseInt(m)-1]}`; };
+    return `${fmt(from)} – ${fmt(to)}`;
+  };
+
+  const handleApplyDashRankingRange = () => {
+    if (!dashRankingFrom || !dashRankingTo) return;
+    setDashRankingApplied({ from: dashRankingFrom, to: dashRankingTo });
+    setShowDashRankingDropdown(false);
+    setShowDashRankingRange(false);
+  };
 
   const periodoMap: Record<'7' | '30' | '90', Periodo> = { '7': '7d', '30': '30d', '90': '90d' };
   const chartSeries = CHART_DATA['inmobiliaria'][periodoMap[selectedPeriod]];
@@ -515,27 +546,70 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
                 Ranking de publicaciones
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Top 10 parcelas y proyectos por interacción — {dashRankingPeriod === '7' ? 'Últimos 7 días' : dashRankingPeriod === '30' ? 'Últimos 30 días' : 'Últimos 90 días'}
+                Top 10 parcelas y proyectos por interacción — {dashRankingApplied ? formatDashRangeLabel(dashRankingApplied.from, dashRankingApplied.to) : DASH_PERIODO_LABELS[dashRankingPeriod]}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              {(['7', '30', '90'] as const).map(p => (
+            <div className="flex items-center gap-2" ref={dashRankingRef}>
+              {/* Dropdown períodos */}
+              <div className="relative">
                 <button
-                  key={p}
-                  onClick={() => setDashRankingPeriod(p)}
-                  className="px-3 py-1.5 rounded-full transition-all"
-                  style={{
-                    backgroundColor: dashRankingPeriod === p ? '#0A0A0A' : 'transparent',
-                    color: dashRankingPeriod === p ? '#FFFFFF' : '#737373',
-                    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
-                    fontWeight: dashRankingPeriod === p ? 600 : 400,
-                    border: dashRankingPeriod === p ? 'none' : '1px solid #E5E5E5',
-                    cursor: 'pointer',
-                  }}
+                  onClick={() => { setShowDashRankingDropdown(v => !v); setShowDashRankingRange(false); }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                 >
-                  Últimos {p} días
+                  <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
+                  {DASH_PERIODO_LABELS[dashRankingPeriod]}
+                  <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDashRankingDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
                 </button>
-              ))}
+                {showDashRankingDropdown && (
+                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '190px' }}>
+                    {(['7', '30', '90'] as const).map(p => (
+                      <button key={p} onClick={() => { setDashRankingPeriod(p); setDashRankingApplied(null); setDashRankingFrom(''); setDashRankingTo(''); setShowDashRankingDropdown(false); }}
+                        className="w-full text-left px-4 py-2.5 transition-colors"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: !dashRankingApplied && dashRankingPeriod === p ? 600 : 400, color: !dashRankingApplied && dashRankingPeriod === p ? '#006B4E' : '#0A0A0A', backgroundColor: !dashRankingApplied && dashRankingPeriod === p ? '#F0F9F5' : '#FFFFFF', border: 'none', cursor: 'pointer', display: 'block' }}
+                        onMouseEnter={e => { if (dashRankingApplied || dashRankingPeriod !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = (!dashRankingApplied && dashRankingPeriod === p) ? '#F0F9F5' : '#FFFFFF'; }}
+                      >{DASH_PERIODO_LABELS[p]}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Botón rango personalizado */}
+              <div className="relative">
+                <button
+                  onClick={() => { setShowDashRankingRange(v => !v); setShowDashRankingDropdown(false); }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
+                  style={{ border: dashRankingApplied ? '1px solid #006B4E' : '1px solid #E5E5E5', backgroundColor: dashRankingApplied ? '#F0F9F5' : '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: dashRankingApplied ? 600 : 400, color: dashRankingApplied ? '#006B4E' : '#6B7280', cursor: 'pointer' }}
+                  onMouseEnter={e => { if (!dashRankingApplied) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  onMouseLeave={e => { if (!dashRankingApplied) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                >
+                  <CalendarDays className="w-3.5 h-3.5" />
+                  {dashRankingApplied ? formatDashRangeLabel(dashRankingApplied.from, dashRankingApplied.to) : 'Rango'}
+                  {dashRankingApplied && (
+                    <span role="button" onClick={e => { e.stopPropagation(); setDashRankingApplied(null); setDashRankingFrom(''); setDashRankingTo(''); setShowDashRankingRange(false); }} className="hover:opacity-60 transition-opacity">
+                      <X className="w-3 h-3" />
+                    </span>
+                  )}
+                </button>
+                {showDashRankingRange && (
+                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4 space-y-3" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>Rango personalizado</p>
+                    <div>
+                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</label>
+                      <input type="date" value={dashRankingFrom} onChange={e => setDashRankingFrom(e.target.value)} max={dashRankingTo || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
+                    </div>
+                    <div>
+                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hasta</label>
+                      <input type="date" value={dashRankingTo} onChange={e => setDashRankingTo(e.target.value)} min={dashRankingFrom || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
+                    </div>
+                    <button onClick={handleApplyDashRankingRange} disabled={!dashRankingFrom || !dashRankingTo} className="w-full py-2 rounded-lg" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF', backgroundColor: dashRankingFrom && dashRankingTo ? '#006B4E' : '#D1D5DB', border: 'none', cursor: dashRankingFrom && dashRankingTo ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (dashRankingFrom && dashRankingTo) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (dashRankingFrom && dashRankingTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+                      Aplicar
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           {/* Tabs */}
