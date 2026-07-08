@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
@@ -284,97 +284,17 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
   // Datos del ranking
   const parcelasRanking = [
-    {
-      name: 'Parcela Vista Cordillera',
-      location: 'Lo Barnechea',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 267,
-      consultas: 24,
-      status: 'high',
-      statusLabel: 'Alto interés',
-      trend: 'up',
-      trendValue: '+18%'
-    },
-    {
-      name: 'Parcela Los Cedros',
-      location: 'Colina',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 234,
-      consultas: 18,
-      status: 'high',
-      statusLabel: 'Alto interés',
-      trend: 'up',
-      trendValue: '+12%'
-    },
-    {
-      name: 'Terreno Valle Central',
-      location: 'Buin',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 189,
-      consultas: 15,
-      status: 'medium',
-      statusLabel: 'Interés medio',
-      trend: 'neutral',
-      trendValue: '+5%'
-    },
-    {
-      name: 'Parcela Alto Maipo',
-      location: 'San José de Maipo',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 156,
-      consultas: 12,
-      status: 'medium',
-      statusLabel: 'Interés medio',
-      trend: 'up',
-      trendValue: '+8%'
-    },
-    {
-      name: 'Terreno Los Andes',
-      location: 'Los Andes',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 98,
-      consultas: 8,
-      status: 'low',
-      statusLabel: 'Bajo rendimiento',
-      trend: 'down',
-      trendValue: '-3%'
-    },
+    { name: 'Parcela Vista Cordillera', location: 'Lo Barnechea', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', views: 267, consultas: 24, status: 'high', statusLabel: 'Alto interés', tendencia: 18 },
+    { name: 'Parcela Los Cedros', location: 'Colina', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', views: 234, consultas: 18, status: 'high', statusLabel: 'Alto interés', tendencia: 12 },
+    { name: 'Terreno Valle Central', location: 'Buin', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', views: 189, consultas: 15, status: 'medium', statusLabel: 'Interés medio', tendencia: 5 },
+    { name: 'Parcela Alto Maipo', location: 'San José de Maipo', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', views: 156, consultas: 12, status: 'medium', statusLabel: 'Interés medio', tendencia: 8 },
+    { name: 'Terreno Los Andes', location: 'Los Andes', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', views: 98, consultas: 8, status: 'low', statusLabel: 'Bajo rendimiento', tendencia: -3 },
   ];
 
   const proyectosRanking = [
-    {
-      name: 'Proyecto Vista Cordillera — Fase 2',
-      location: 'Lo Barnechea',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 1240,
-      consultas: 24,
-      status: 'high',
-      statusLabel: 'Alto interés',
-      trend: 'up',
-      trendValue: '+31%'
-    },
-    {
-      name: 'Condominio Los Arrayanes',
-      location: 'Villarrica',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 890,
-      consultas: 17,
-      status: 'high',
-      statusLabel: 'Alta demanda',
-      trend: 'up',
-      trendValue: '+14%'
-    },
-    {
-      name: 'Proyecto Lago Ranco',
-      location: 'Los Lagos',
-      inmobiliaria: 'Vista Natura Propiedades',
-      views: 623,
-      consultas: 11,
-      status: 'medium',
-      statusLabel: 'Interés medio',
-      trend: 'neutral',
-      trendValue: '-2%'
-    },
+    { name: 'Proyecto Vista Cordillera — Fase 2', location: 'Lo Barnechea', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', views: 1240, consultas: 24, status: 'high', statusLabel: 'Alto interés', tendencia: 31 },
+    { name: 'Condominio Los Arrayanes', location: 'Villarrica', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', views: 890, consultas: 17, status: 'high', statusLabel: 'Alta demanda', tendencia: 14 },
+    { name: 'Proyecto Lago Ranco', location: 'Los Lagos', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', views: 623, consultas: 11, status: 'medium', statusLabel: 'Interés medio', tendencia: -2 },
   ];
 
   const activeRanking = dashRankingTab === 'parcelas' ? parcelasRanking : proyectosRanking;
@@ -588,35 +508,34 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       {/* Ranking de publicaciones */}
       <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         {/* Header */}
-        <div className="px-6 pt-5 pb-0">
+        <div className="px-5 pt-5 pb-0">
           <div className="flex items-center justify-between mb-3">
             <div>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '2px' }}>
                 Ranking de publicaciones
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Por interacción — {dashRankingPeriod === '7' ? '7 días' : dashRankingPeriod === '30' ? '30 días' : '90 días'}
+                Top 10 parcelas y proyectos por interacción — {dashRankingPeriod === '7' ? 'Últimos 7 días' : dashRankingPeriod === '30' ? 'Últimos 30 días' : 'Últimos 90 días'}
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
-                {(['7', '30', '90'] as const).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => setDashRankingPeriod(p)}
-                    className="px-3 py-1.5 rounded-full transition-all"
-                    style={{
-                      backgroundColor: dashRankingPeriod === p ? '#0A0A0A' : 'transparent',
-                      color: dashRankingPeriod === p ? '#FFFFFF' : '#737373',
-                      fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
-                      fontWeight: dashRankingPeriod === p ? 600 : 400,
-                      border: 'none', cursor: 'pointer',
-                    }}
-                  >
-                    {p} días
-                  </button>
-                ))}
-              </div>
+            <div className="flex items-center gap-2">
+              {(['7', '30', '90'] as const).map(p => (
+                <button
+                  key={p}
+                  onClick={() => setDashRankingPeriod(p)}
+                  className="px-3 py-1.5 rounded-full transition-all"
+                  style={{
+                    backgroundColor: dashRankingPeriod === p ? '#0A0A0A' : 'transparent',
+                    color: dashRankingPeriod === p ? '#FFFFFF' : '#737373',
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
+                    fontWeight: dashRankingPeriod === p ? 600 : 400,
+                    border: dashRankingPeriod === p ? 'none' : '1px solid #E5E5E5',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Últimos {p} días
+                </button>
+              ))}
             </div>
           </div>
           {/* Tabs */}
@@ -641,103 +560,96 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-3" style={{ borderBottom: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
-          {[
-            { label: 'Publicación', span: 'col-span-5', align: 'text-left' },
-            { label: 'Visualizaciones', span: 'col-span-2', align: 'text-center' },
-            { label: 'Consultas', span: 'col-span-2', align: 'text-center' },
-            { label: 'Tendencia', span: 'col-span-2', align: 'text-center' },
-            { label: 'Estado', span: 'col-span-1', align: 'text-right' },
-          ].map(({ label, span, align }) => (
-            <div key={label} className={`${span} ${align}`} style={{
-              fontFamily: 'var(--font-body)', fontSize: '11px',
-              fontWeight: 600, color: '#9CA3AF',
-              textTransform: 'uppercase', letterSpacing: '0.06em'
-            }}>
-              {label}
-            </div>
+        <div
+          className="px-5 py-2.5"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 96px 80px 88px 130px',
+            gap: '8px',
+            borderBottom: '1px solid #F0F0F0',
+            backgroundColor: '#FAFAFA',
+          }}
+        >
+          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado'].map((col, i) => (
+            <span key={i} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: i > 0 ? 'center' : 'left' }}>
+              {col}
+            </span>
           ))}
         </div>
 
         {/* Table Rows */}
-        <div>
-          {activeRanking.map((item, index) => (
+        {activeRanking.map((item, index) => {
+          const pos = item.tendencia >= 0;
+          const estadoBadge: Record<string, { bg: string; text: string; border: string }> = {
+            'Alto interés':   { bg: '#DCFCE7', text: '#166534', border: '#86EFAC' },
+            'Alta demanda':   { bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
+            'En crecimiento': { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
+            'Estable':        { bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
+            'Interés medio':  { bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
+            'Bajo rendimiento': { bg: '#FEE2E2', text: '#991B1B', border: '#FCA5A5' },
+          };
+          const badge = estadoBadge[item.statusLabel] ?? { bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' };
+          return (
             <div
               key={index}
-              className="grid grid-cols-12 gap-4 px-6 py-4 transition-colors cursor-pointer"
-              style={{ borderBottom: index < activeRanking.length - 1 ? '1px solid #F9FAFB' : 'none' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+              className="px-5 py-3 transition-colors"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 96px 80px 88px 130px',
+                gap: '8px',
+                alignItems: 'center',
+                borderBottom: index < activeRanking.length - 1 ? '1px solid #F9FAFB' : 'none',
+              }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
             >
-              <div className="col-span-5 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{
-                  backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5',
-                  fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 600, color: '#737373'
-                }}>
-                  {index + 1}
+              {/* Propiedad */}
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                  <img src={item.imagen} alt={item.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0">
-                  <div style={{
-                    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                    fontWeight: 600, color: '#0A0A0A',
-                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
-                  }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {item.name}
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '1px' }}>
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {item.inmobiliaria ? <><span style={{ color: '#006B4E', fontWeight: 500 }}>Inmobiliaria: {item.inmobiliaria}</span> · {item.location}</> : item.location}
-                  </div>
+                  </p>
                 </div>
               </div>
-              <div className="col-span-2 flex items-center justify-center gap-1.5">
-                <Eye className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  {Math.round(item.views * DASH_RANKING_SCALE[dashRankingPeriod]).toLocaleString('es-CL')}
+              {/* Vistas */}
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
+                {Math.round(item.views * DASH_RANKING_SCALE[dashRankingPeriod]).toLocaleString('es-CL')}
+              </p>
+              {/* Consultas */}
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
+                {Math.max(1, Math.round(item.consultas * DASH_RANKING_SCALE[dashRankingPeriod]))}
+              </p>
+              {/* Tendencia */}
+              <div className="flex items-center justify-center gap-1">
+                {pos ? <TrendingUp className="w-3.5 h-3.5" style={{ color: '#16A34A' }} /> : <TrendingDown className="w-3.5 h-3.5" style={{ color: '#DC2626' }} />}
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: pos ? '#16A34A' : '#DC2626' }}>
+                  {pos ? '+' : ''}{item.tendencia}%
                 </span>
               </div>
-              <div className="col-span-2 flex items-center justify-center gap-1.5">
-                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  {Math.max(1, Math.round(item.consultas * DASH_RANKING_SCALE[dashRankingPeriod]))}
-                </span>
-              </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{
-                  backgroundColor: item.trend === 'up' ? '#DCFCE7' : item.trend === 'down' ? '#FEE2E2' : '#F5F5F5'
-                }}>
-                  {item.trend === 'up' && <ArrowUpRight className="w-3 h-3" style={{ color: '#16A34A' }} />}
-                  {item.trend === 'down' && <ArrowDownRight className="w-3 h-3" style={{ color: '#DC2626' }} />}
-                  <span style={{
-                    fontSize: '11px', fontWeight: 600,
-                    color: item.trend === 'up' ? '#16A34A' : item.trend === 'down' ? '#DC2626' : '#737373'
-                  }}>
-                    {item.trendValue}
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-1 flex items-center justify-end">
-                <span className="px-2.5 py-1 rounded-full whitespace-nowrap" style={{
-                  fontSize: '11px', fontWeight: 500,
-                  backgroundColor: item.status === 'high' ? '#DCFCE7' : item.status === 'medium' ? '#FEF3C7' : '#FEE2E2',
-                  color: item.status === 'high' ? '#16A34A' : item.status === 'medium' ? '#CA8A04' : '#DC2626'
-                }}>
+              {/* Estado */}
+              <div className="flex justify-center">
+                <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: badge.bg, color: badge.text, border: `1px solid ${badge.border}`, fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>
                   {item.statusLabel}
                 </span>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
 
         {/* Footer */}
-        <div className="px-6 py-4" style={{ borderTop: '1px solid #F0F0F0' }}>
+        <div className="px-5 py-4" style={{ borderTop: '1px solid #F0F0F0' }}>
           <button className="w-full py-2 transition-all" style={{
             backgroundColor: 'transparent', color: '#737373', border: 'none',
-            fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-            cursor: 'pointer'
+            fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', cursor: 'pointer'
           }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#0A0A0A'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#737373'; }}
+            onMouseEnter={e => e.currentTarget.style.color = '#0A0A0A'}
+            onMouseLeave={e => e.currentTarget.style.color = '#737373'}
           >
             Ver todas las {dashRankingTab === 'parcelas' ? 'parcelas' : 'proyectos'} →
           </button>
