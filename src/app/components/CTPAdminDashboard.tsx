@@ -9,7 +9,7 @@ import {
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
   Bookmark, UserCheck, type LucideIcon,
   UserPlus, ToggleLeft, ToggleRight, AlertTriangle, X, Check,
-  Download, Activity, Mail,
+  Download, Activity, Mail, Globe, Share2,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -944,12 +944,37 @@ const LEAD_ESTADO_STYLES: Record<string, { bg: string; color: string; label: str
   'no-interesado':  { bg: '#F5F5F5', color: '#737373', label: 'No interesado' },
 };
 
-const ORIGEN_ICONS: Record<string, string> = {
-  'Web':      '🌐',
-  'Meta':     '📘',
-  'Google':   '🔍',
-  'WhatsApp': '💬',
+const ORIGEN_ICON_MAP: Record<string, LucideIcon> = {
+  'Web':      Globe,
+  'Meta':     Share2,
+  'Google':   Search,
+  'WhatsApp': MessageCircle,
 };
+
+function LeadIconBtn({ icon: Icon, label, onClick, color = '#525252', bg = '#FAFAFA', hoverBg = '#F0F0F0' }: {
+  icon: LucideIcon; label: string; onClick: () => void; color?: string; bg?: string; hoverBg?: string;
+}) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative inline-flex" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <button
+        onClick={onClick}
+        className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+        style={{ backgroundColor: bg, border: '1px solid #E5E5E5', color }}
+        onMouseEnter={e => { e.currentTarget.style.backgroundColor = hoverBg; }}
+        onMouseLeave={e => { e.currentTarget.style.backgroundColor = bg; }}
+      >
+        <Icon className="w-4 h-4" />
+      </button>
+      {show && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded-md text-xs whitespace-nowrap pointer-events-none" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', zIndex: 50 }}>
+          {label}
+          <div className="absolute top-full left-1/2 -translate-x-1/2" style={{ width: 0, height: 0, borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderTop: '4px solid #0A0A0A' }} />
+        </div>
+      )}
+    </div>
+  );
+}
 
 const CTP_BROKERS_ASIGN = [
   { id: 'b1', nombre: 'Carlos Pérez',   leads: 14, disponible: true  },
@@ -1057,7 +1082,7 @@ function CTPLeadsView() {
                 {[
                   { label: 'Email', value: selectedLead.email },
                   { label: 'Teléfono', value: selectedLead.telefono },
-                  { label: 'Origen', value: `${ORIGEN_ICONS[selectedLead.origen] || ''} ${selectedLead.origen}` },
+                  { label: 'Origen', value: selectedLead.origen },
                   { label: 'Fecha de ingreso', value: selectedLead.fecha },
                 ].map(({ label, value }) => (
                   <div key={label}>
@@ -1123,10 +1148,10 @@ function CTPLeadsView() {
         subtitle={`${leads.length} leads registrados en la plataforma`}
         action={
           <div className="flex items-center gap-2">
-            <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+            <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
               <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
               <Download className="w-3.5 h-3.5" /> Exportar
             </button>
           </div>
@@ -1197,10 +1222,12 @@ function CTPLeadsView() {
                       </div>
                     </td>
                     <td className="px-5 py-4">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-                        <span style={{ fontSize: '13px' }}>{ORIGEN_ICONS[lead.origen] || '🌐'}</span>
-                        <span style={{ fontSize: '12px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.origen}</span>
-                      </div>
+                      {(() => { const OrigenIcon = ORIGEN_ICON_MAP[lead.origen] || Globe; return (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+                          <OrigenIcon className="w-3.5 h-3.5" style={{ color: '#525252' }} />
+                          <span style={{ fontSize: '12px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.origen}</span>
+                        </div>
+                      ); })()}
                     </td>
                     <td className="px-5 py-4">
                       <span style={{ backgroundColor: est.bg, color: est.color, fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>{est.label}</span>
@@ -1212,13 +1239,9 @@ function CTPLeadsView() {
                       <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.fecha}</span>
                     </td>
                     <td className="px-5 py-4">
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionado(null); }} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
-                          <UserPlus className="w-3.5 h-3.5" />{lead.broker === '-' ? 'Asignar' : 'Reasignar'}
-                        </button>
-                        <button onClick={() => setSelectedLead(lead)} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
-                          <Eye className="w-3.5 h-3.5" />Ver detalle
-                        </button>
+                      <div className="flex items-center gap-1.5">
+                        <LeadIconBtn icon={UserPlus} label={lead.broker === '-' ? 'Asignar broker' : 'Reasignar broker'} onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionado(null); }} color="#006B4E" bg="#E8F5EE" hoverBg="#D4EDDF" />
+                        <LeadIconBtn icon={Eye} label="Ver detalle" onClick={() => setSelectedLead(lead)} />
                       </div>
                     </td>
                   </tr>
@@ -1285,7 +1308,7 @@ function CTPBrokersView() {
         title="Brokers"
         subtitle={`${brokers.length} brokers registrados en la plataforma`}
         action={
-          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
             <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
           </button>
         }
