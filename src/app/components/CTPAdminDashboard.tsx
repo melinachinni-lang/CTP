@@ -1148,10 +1148,10 @@ function CTPLeadsView() {
         subtitle={`${leads.length} leads registrados en la plataforma`}
         action={
           <div className="flex items-center gap-2">
-            <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+            <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
               <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+            <button className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
               <Download className="w-3.5 h-3.5" /> Exportar
             </button>
           </div>
@@ -1308,7 +1308,7 @@ function CTPBrokersView() {
         title="Brokers"
         subtitle={`${brokers.length} brokers registrados en la plataforma`}
         action={
-          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
             <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
           </button>
         }
