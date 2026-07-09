@@ -7,7 +7,7 @@ import {
   Building2, Settings, HelpCircle, ChevronDown, ShieldCheck,
   Plus, ArrowUpRight, ArrowDownRight, Eye, Search,
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
-  Bookmark, UserCheck, X, type LucideIcon,
+  Bookmark, UserCheck, type LucideIcon,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -358,7 +358,7 @@ function CTPHomeContent({ setCurrentSection }: {
     { label: 'Inmobiliarias activas',         value: '41',     change: '+4',   up: true,  icon: Building2,     iconBg: '#E8F5EE', iconColor: '#006B4E' },
     { label: 'Brokers activos',               value: '87',     change: '+6',   up: true,  icon: UserCheck,     iconBg: '#F0FDFA', iconColor: '#0D9488' },
     { label: 'Usuarios registrados',          value: '8.245',  change: '+14%', up: true,  icon: Users,         iconBg: '#EFF6FF', iconColor: '#2563EB' },
-    { label: 'Visitas al sitio',              value: '14.306', change: '+11%', up: true,  icon: Eye,           iconBg: '#F5F3FF', iconColor: '#7C3AED' },
+    { label: 'Pendientes de verificación',    value: '5',      change: '+3',   up: false, icon: ClipboardList, iconBg: '#FEF3C7', iconColor: '#B7791F' },
   ];
   const actividad = [
     { icon: CheckCircle,   color: '#006B4E', text: 'Nueva reserva — Parcela Los Robles (Inmobiliaria Verde Sur)', time: 'Hace 12 min' },
@@ -457,26 +457,24 @@ function CTPHomeContent({ setCurrentSection }: {
 // ─── Asignaciones ─────────────────────────────────────────────────────────────
 
 const SIN_ASIGNAR_INITIAL = [
-  { id: 's1', propiedad: 'Parcela Vista Cordillera', tipo: 'Parcela',  ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80',  fecha: '15 jul 2026' },
-  { id: 's2', propiedad: 'Parcela Sur Verde',        tipo: 'Parcela',  ubicacion: 'Valdivia, Los Ríos',             imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80',  fecha: '15 jul 2026' },
-  { id: 's3', propiedad: 'Proyecto Aysén Sur',       tipo: 'Proyecto', ubicacion: 'Coyhaique, Aysén',              imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80',  fecha: '14 jul 2026' },
-  { id: 's4', propiedad: 'Parcela Paine Norte',      tipo: 'Parcela',  ubicacion: 'Paine, R. Metropolitana',        imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80',  fecha: '10 jul 2026' },
+  { id: 's1', interesado: 'Laura Vásquez',    email: 'l.vasquez@gmail.com',   parcela: 'Parcela Vista Cordillera', fecha: '15 jun 2026' },
+  { id: 's2', interesado: 'Matías Contreras', email: 'm.contreras@gmail.com', parcela: 'Parcela Sur Verde',        fecha: '15 jun 2026' },
+  { id: 's3', interesado: 'Carla Sepúlveda',  email: 'c.sepulveda@gmail.com', parcela: 'Proyecto Aysén Sur',       fecha: '14 jun 2026' },
+  { id: 's4', interesado: 'Felipe Aguilera',  email: 'f.aguilera@gmail.com',  parcela: 'Parcela Paine Norte',      fecha: '10 jun 2026' },
 ];
 
-type BrokerAsignado = { nombre: string; estado: 'pendiente' | 'activa' | 'rechazada' };
-
-const ASIGNADAS_INITIAL: { id: number; propiedad: string; tipo: string; ubicacion: string; imagen: string; brokers: BrokerAsignado[]; fecha: string }[] = [
-  { id: 1, propiedad: 'Parcela Los Robles',       tipo: 'Parcela',  ubicacion: 'Rancagua, O\'Higgins',    imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', brokers: [{ nombre: 'Carlos Pérez', estado: 'activa' }, { nombre: 'Sofía Ramírez', estado: 'pendiente' }], fecha: '14 jun 2026' },
-  { id: 2, propiedad: 'Parcela Valle Pirque',     tipo: 'Parcela',  ubicacion: 'Pirque, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', brokers: [{ nombre: 'Sofía Ramírez', estado: 'pendiente' }],                                                       fecha: '13 jun 2026' },
-  { id: 3, propiedad: 'Condominio Los Arrayanes', tipo: 'Proyecto', ubicacion: 'Villarrica, Araucanía',    imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', brokers: [{ nombre: 'Diego Muñoz', estado: 'activa' }, { nombre: 'Carlos Pérez', estado: 'activa' }],             fecha: '12 jun 2026' },
-  { id: 4, propiedad: 'Parcela El Manzano',       tipo: 'Parcela',  ubicacion: 'Colina, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', brokers: [{ nombre: 'Carlos Pérez', estado: 'rechazada' }],                                                       fecha: '11 jun 2026' },
+const ASIGNADAS_INITIAL = [
+  { id: 1, interesado: 'Roberto Fuentes',  email: 'r.fuentes@gmail.com',  parcela: 'Parcela Los Robles',   broker: 'Carlos Pérez',  fecha: '14 jun 2026', status: 'activo' as const },
+  { id: 2, interesado: 'Camila Torres',    email: 'c.torres@outlook.com', parcela: 'Parcela Valle Pirque', broker: 'Sofía Ramírez', fecha: '13 jun 2026', status: 'activo' as const },
+  { id: 3, interesado: 'Andrés Morales',   email: 'am.morales@gmail.com', parcela: 'Proyecto Aysén Sur',   broker: 'Diego Muñoz',   fecha: '12 jun 2026', status: 'activo' as const },
+  { id: 4, interesado: 'Daniela Herrera',  email: 'dherrera@yahoo.com',   parcela: 'Parcela El Manzano',   broker: 'Carlos Pérez',  fecha: '11 jun 2026', status: 'activo' as const },
 ];
 
 const BROKERS_ASIGN = ['Carlos Pérez', 'Sofía Ramírez', 'Diego Muñoz'];
 
 type AsignModal =
-  | { type: 'asignar'; propiedadId: string }
-  | { type: 'agregar'; asignadaId: number }
+  | { type: 'asignar'; consultaId: string }
+  | { type: 'editar'; asignadaId: number }
   | null;
 
 export function AsignacionesContent() {
@@ -484,82 +482,58 @@ export function AsignacionesContent() {
   const [sinAsignar, setSinAsignar] = useState(SIN_ASIGNAR_INITIAL);
   const [asignadas, setAsignadas] = useState(ASIGNADAS_INITIAL);
   const [modal, setModal] = useState<AsignModal>(null);
-  const [brokersSeleccionados, setBrokersSeleccionados] = useState<string[]>([]);
+  const [brokerTemp, setBrokerTemp] = useState(BROKERS_ASIGN[0]);
   const [toast, setToast] = useState<string | null>(null);
 
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
-  function openAsignar(propiedadId: string) {
-    setBrokersSeleccionados([]);
-    setModal({ type: 'asignar', propiedadId });
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
   }
 
-  function openAgregar(asignadaId: number) {
-    setBrokersSeleccionados([]);
-    setModal({ type: 'agregar', asignadaId });
+  function openAsignar(consultaId: string) {
+    setBrokerTemp(BROKERS_ASIGN[0]);
+    setModal({ type: 'asignar', consultaId });
   }
 
-  function toggleBroker(nombre: string) {
-    setBrokersSeleccionados(prev => prev.includes(nombre) ? prev.filter(b => b !== nombre) : [...prev, nombre]);
+  function openEditar(asignadaId: number) {
+    const a = asignadas.find(x => x.id === asignadaId)!;
+    setBrokerTemp(a.broker);
+    setModal({ type: 'editar', asignadaId });
   }
 
   function handleConfirmarAsignar() {
-    if (modal?.type !== 'asignar' || brokersSeleccionados.length === 0) return;
-    const prop = sinAsignar.find(c => c.id === modal.propiedadId)!;
+    if (modal?.type !== 'asignar') return;
+    const consulta = sinAsignar.find(c => c.id === modal.consultaId)!;
     const today = new Date();
     const fecha = `${today.getDate()} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][today.getMonth()]} ${today.getFullYear()}`;
-    setSinAsignar(prev => prev.filter(c => c.id !== modal.propiedadId));
-    setAsignadas(prev => [{ id: Date.now(), propiedad: prop.propiedad, tipo: prop.tipo, ubicacion: prop.ubicacion, imagen: prop.imagen, brokers: brokersSeleccionados.map(b => ({ nombre: b, estado: 'pendiente' as const })), fecha }, ...prev]);
+    setSinAsignar(prev => prev.filter(c => c.id !== modal.consultaId));
+    setAsignadas(prev => [{ id: Date.now(), interesado: consulta.interesado, email: consulta.email, parcela: consulta.parcela, broker: brokerTemp, fecha, status: 'activo' as const }, ...prev]);
     setModal(null);
-    showToast(`Propiedad asignada a ${brokersSeleccionados.join(', ')}`);
+    showToast(`Consulta asignada a ${brokerTemp}`);
   }
 
-  function handleConfirmarAgregar() {
-    if (modal?.type !== 'agregar' || brokersSeleccionados.length === 0) return;
-    setAsignadas(prev => prev.map(a => {
-      if (a.id !== modal.asignadaId) return a;
-      const nuevos = brokersSeleccionados.filter(b => !a.brokers.some(x => x.nombre === b)).map(b => ({ nombre: b, estado: 'pendiente' as const }));
-      return { ...a, brokers: [...a.brokers, ...nuevos] };
-    }));
+  function handleConfirmarEditar() {
+    if (modal?.type !== 'editar') return;
+    setAsignadas(prev => prev.map(r => r.id === modal.asignadaId ? { ...r, broker: brokerTemp } : r));
     setModal(null);
-    showToast(`Broker${brokersSeleccionados.length > 1 ? 's' : ''} agregado${brokersSeleccionados.length > 1 ? 's' : ''}`);
+    showToast(`Reasignado a ${brokerTemp}`);
   }
 
-  function handleQuitarBroker(asignadaId: number, brokerNombre: string) {
-    setAsignadas(prev => prev.map(a => {
-      if (a.id !== asignadaId) return a;
-      const restantes = a.brokers.filter(b => b.nombre !== brokerNombre);
-      if (restantes.length === 0) {
-        setSinAsignar(sa => [{ id: `r${asignadaId}`, propiedad: a.propiedad, tipo: a.tipo, ubicacion: a.ubicacion, imagen: a.imagen, fecha: a.fecha }, ...sa]);
-        return null as any;
-      }
-      return { ...a, brokers: restantes };
-    }).filter(Boolean));
-    showToast('Broker desasignado');
+  function handleEliminar(id: number) {
+    const a = asignadas.find(x => x.id === id)!;
+    setAsignadas(prev => prev.filter(x => x.id !== id));
+    setSinAsignar(prev => [{ id: `r${id}`, interesado: a.interesado, email: a.email, parcela: a.parcela, fecha: a.fecha }, ...prev]);
+    showToast('Asignación eliminada');
   }
 
-  const ESTADO_BADGE: Record<string, { bg: string; color: string; border: string }> = {
-    pendiente: { bg: '#FEF3C7', color: '#B45309', border: '#FCD34D' },
-    activa:    { bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
-    rechazada: { bg: '#FEE2E2', color: '#991B1B', border: '#FCA5A5' },
-  };
-  const ESTADO_LABEL: Record<string, string> = { pendiente: 'Pendiente', activa: 'Activa', rechazada: 'Rechazada' };
-
-  const tipoBadge = (tipo: string) => ({
-    backgroundColor: tipo === 'Parcela' ? '#F0F9F5' : '#EFF6FF',
-    color: tipo === 'Parcela' ? '#006B4E' : '#1D4ED8',
-    border: tipo === 'Parcela' ? '1px solid #A7E3C8' : '1px solid #93C5FD',
-  });
-
-  // Para el modal de agregar: brokers ya asignados a esa propiedad
-  const yaAsignados = modal?.type === 'agregar' ? (asignadas.find(a => a.id === modal.asignadaId)?.brokers.map(b => b.nombre) ?? []) : [];
-  const modalPropiedad = modal?.type === 'asignar' ? sinAsignar.find(c => c.id === modal.propiedadId) : modal?.type === 'agregar' ? asignadas.find(a => a.id === modal.asignadaId) : null;
+  const modalConsulta = modal?.type === 'asignar' ? sinAsignar.find(c => c.id === modal.consultaId) : null;
+  const modalAsignada = modal?.type === 'editar' ? asignadas.find(a => a.id === modal.asignadaId) : null;
 
   return (
     <div className="p-8">
       <SectionShell
-        title="Asignación de propiedades"
-        subtitle="Asigna uno o varios brokers a cada parcela o proyecto. Los leads que lleguen se distribuyen automáticamente entre los brokers asignados."
+        title="Distribución de consultas"
+        subtitle="Asigna las consultas entrantes a tu equipo de brokers"
       />
 
       {/* Tabs */}
@@ -568,10 +542,32 @@ export function AsignacionesContent() {
           { key: 'sin-asignar', label: 'Sin asignar', count: sinAsignar.length, badgeBg: '#FEF3C7', badgeColor: '#B45309' },
           { key: 'asignadas',   label: 'Asignadas',   count: asignadas.length,  badgeBg: '#DCFCE7', badgeColor: '#166534' },
         ] as const).map(t => (
-          <button key={t.key} onClick={() => setTab(t.key)} className="flex items-center gap-2 px-4 py-2 transition-colors"
-            style={{ borderRadius: '200px', fontSize: '13px', fontWeight: tab === t.key ? 600 : 400, fontFamily: 'var(--font-body)', color: tab === t.key ? '#0A0A0A' : '#737373', backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent', border: 'none', cursor: 'pointer', boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className="flex items-center gap-2 px-4 py-2 transition-colors"
+            style={{
+              borderRadius: '200px',
+              fontSize: '13px',
+              fontWeight: tab === t.key ? 600 : 400,
+              fontFamily: 'var(--font-body)',
+              color: tab === t.key ? '#0A0A0A' : '#737373',
+              backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+            }}
+          >
             {t.label}
-            <span className="flex items-center justify-center" style={{ fontSize: '11px', fontWeight: 600, width: '20px', height: '20px', borderRadius: '99px', backgroundColor: tab === t.key ? t.badgeBg : '#E5E5E5', color: tab === t.key ? t.badgeColor : '#737373' }}>
+            <span
+              className="flex items-center justify-center"
+              style={{
+                fontSize: '11px', fontWeight: 600,
+                width: '20px', height: '20px', borderRadius: '99px',
+                backgroundColor: tab === t.key ? t.badgeBg : '#E5E5E5',
+                color: tab === t.key ? t.badgeColor : '#737373',
+              }}
+            >
               {t.count}
             </span>
           </button>
@@ -585,7 +581,7 @@ export function AsignacionesContent() {
             <div className="text-center">
               <CheckCircle className="w-10 h-10 mx-auto mb-3" style={{ color: '#006B4E' }} />
               <p style={{ fontSize: '14px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Todo al día</p>
-              <p style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)', marginTop: '4px' }}>Todas las propiedades tienen al menos un broker asignado</p>
+              <p style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: 'var(--font-body)', marginTop: '4px' }}>No hay consultas pendientes de asignar</p>
             </div>
           </div>
         ) : (
@@ -593,8 +589,10 @@ export function AsignacionesContent() {
             <table className="w-full">
               <thead>
                 <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                  {['Propiedad', 'Tipo', 'Agregada', 'Acción'].map(h => (
-                    <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{h}</th>
+                  {['Interesado', 'Publicación', 'Fecha', 'Acción'].map(h => (
+                    <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                      {h}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -602,20 +600,19 @@ export function AsignacionesContent() {
                 {sinAsignar.map((c, i) => (
                   <tr key={c.id} style={{ borderBottom: i < sinAsignar.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
                     <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0"><img src={c.imagen} alt={c.propiedad} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
-                        <div>
-                          <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{c.propiedad}</p>
-                          <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{c.ubicacion}</p>
-                        </div>
-                      </div>
+                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{c.interesado}</p>
+                      <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{c.email}</p>
                     </td>
-                    <td className="px-5 py-4"><span style={{ ...tipoBadge(c.tipo), borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '3px 10px', display: 'inline-block' }}>{c.tipo}</span></td>
+                    <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.parcela}</td>
                     <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{c.fecha}</td>
                     <td className="px-5 py-4">
-                      <button onClick={() => openAsignar(c.id)} className="px-3 py-1.5 transition-colors"
+                      <button
+                        onClick={() => openAsignar(c.id)}
+                        className="px-3 py-1.5 transition-colors"
                         style={{ backgroundColor: '#F0FAF5', color: '#006B4E', borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', border: '1px solid #A7E3C8', cursor: 'pointer' }}
-                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}>
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DCF5EB'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0FAF5'; }}
+                      >
                         Asignar broker
                       </button>
                     </td>
@@ -633,8 +630,10 @@ export function AsignacionesContent() {
           <table className="w-full">
             <thead>
               <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                {['Propiedad', 'Tipo', 'Brokers asignados', 'Desde', ''].map(h => (
-                  <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{h}</th>
+                {['Interesado', 'Publicación', 'Broker asignado', 'Fecha', 'Acciones'].map(h => (
+                  <th key={h} className="text-left px-5 py-3" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    {h}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -642,39 +641,29 @@ export function AsignacionesContent() {
               {asignadas.map((a, i) => (
                 <tr key={a.id} style={{ borderBottom: i < asignadas.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
                   <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0"><img src={a.imagen} alt={a.propiedad} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
-                      <div>
-                        <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{a.propiedad}</p>
-                        <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.ubicacion}</p>
-                      </div>
-                    </div>
+                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{a.interesado}</p>
+                    <p style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', margin: '2px 0 0' }}>{a.email}</p>
                   </td>
-                  <td className="px-5 py-4"><span style={{ ...tipoBadge(a.tipo), borderRadius: '200px', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)', padding: '3px 10px', display: 'inline-block' }}>{a.tipo}</span></td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.parcela}</td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{a.broker}</td>
+                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.fecha}</td>
                   <td className="px-5 py-4">
-                    <div className="flex flex-wrap gap-2">
-                      {a.brokers.map(b => {
-                        const badge = ESTADO_BADGE[b.estado];
-                        return (
-                          <div key={b.nombre} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: badge.bg, border: `1px solid ${badge.border}` }}>
-                            <span style={{ fontSize: '12px', fontWeight: 600, color: badge.color, fontFamily: 'var(--font-body)' }}>{b.nombre}</span>
-                            <span style={{ fontSize: '10px', color: badge.color, fontFamily: 'var(--font-body)', opacity: 0.75 }}>· {ESTADO_LABEL[b.estado]}</span>
-                            <button onClick={() => handleQuitarBroker(a.id, b.nombre)} style={{ display: 'flex', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: badge.color, opacity: 0.6 }}
-                              onMouseEnter={e => { e.currentTarget.style.opacity = '1'; }} onMouseLeave={e => { e.currentTarget.style.opacity = '0.6'; }}>
-                              <X className="w-3 h-3" />
-                            </button>
-                          </div>
-                        );
-                      })}
-                      <button onClick={() => openAgregar(a.id)} className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors"
-                        style={{ backgroundColor: '#F5F5F5', border: '1px dashed #D1D5DB', fontSize: '12px', fontWeight: 500, color: '#6B7280', fontFamily: 'var(--font-body)', cursor: 'pointer' }}
-                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#EBEBEB'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
-                        <Plus className="w-3 h-3" /> Agregar
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => openEditar(a.id)}
+                        style={{ fontSize: '12px', color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        Editar
+                      </button>
+                      <span style={{ color: '#E5E5E5', fontSize: '14px' }}>|</span>
+                      <button
+                        onClick={() => handleEliminar(a.id)}
+                        style={{ fontSize: '12px', color: '#DC2626', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        Eliminar
                       </button>
                     </div>
                   </td>
-                  <td className="px-5 py-4" style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{a.fecha}</td>
-                  <td className="px-5 py-4" />
                 </tr>
               ))}
             </tbody>
@@ -682,44 +671,55 @@ export function AsignacionesContent() {
         </div>
       )}
 
-      {/* Modal selección de brokers (multi-select) */}
+      {/* Modal asignar / editar */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }} onClick={() => setModal(null)}>
-          <div className="rounded-2xl p-6 w-full max-w-sm" style={{ backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }} onClick={e => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+          onClick={() => setModal(null)}
+        >
+          <div
+            className="rounded-2xl p-6 w-full max-w-sm"
+            style={{ backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+            onClick={e => e.stopPropagation()}
+          >
             <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', marginBottom: '4px' }}>
-              {modal.type === 'asignar' ? 'Asignar brokers' : 'Agregar brokers'}
+              {modal.type === 'asignar' ? 'Asignar broker' : 'Editar asignación'}
             </h3>
             <p style={{ fontSize: '12px', color: '#9CA3AF', marginBottom: '20px' }}>
-              {modalPropiedad?.propiedad}
-              <span style={{ display: 'block', marginTop: '2px' }}>{modalPropiedad?.ubicacion}</span>
+              {modal.type === 'asignar'
+                ? `${modalConsulta?.interesado} · ${modalConsulta?.parcela}`
+                : `${modalAsignada?.interesado} · ${modalAsignada?.parcela}`}
             </p>
-            <p style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '10px' }}>
-              Selecciona uno o más brokers
-            </p>
-            <div className="space-y-2 mb-6">
-              {BROKERS_ASIGN.filter(b => !yaAsignados.includes(b)).map(b => (
-                <label key={b} className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors"
-                  style={{ border: brokersSeleccionados.includes(b) ? '1.5px solid #006B4E' : '1px solid #E5E5E5', backgroundColor: brokersSeleccionados.includes(b) ? '#F0F9F5' : '#FAFAFA' }}>
-                  <input type="checkbox" checked={brokersSeleccionados.includes(b)} onChange={() => toggleBroker(b)} style={{ accentColor: '#006B4E', width: '15px', height: '15px' }} />
-                  <span style={{ fontSize: '13px', fontWeight: brokersSeleccionados.includes(b) ? 600 : 400, color: '#0A0A0A' }}>{b}</span>
-                </label>
-              ))}
-              {BROKERS_ASIGN.filter(b => !yaAsignados.includes(b)).length === 0 && (
-                <p style={{ fontSize: '13px', color: '#9CA3AF', textAlign: 'center', padding: '12px' }}>Todos los brokers ya están asignados a esta propiedad</p>
-              )}
+            <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+              Broker asignado
+            </label>
+            <div className="relative mb-6">
+              <select
+                value={brokerTemp}
+                onChange={e => setBrokerTemp(e.target.value)}
+                className="w-full px-3 py-2 pr-9 outline-none"
+                style={{ border: '1px solid #E5E5E5', borderRadius: '10px', fontSize: '13px', color: '#0A0A0A', appearance: 'none', backgroundColor: '#FFFFFF' }}
+              >
+                {BROKERS_ASIGN.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#9CA3AF' }} />
             </div>
             <div className="flex gap-3 justify-end">
-              <button onClick={() => setModal(null)} style={{ fontSize: '13px', fontWeight: 600, color: '#737373', borderRadius: '200px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', padding: '8px 16px', cursor: 'pointer' }}>
+              <button
+                onClick={() => setModal(null)}
+                style={{ fontSize: '13px', fontWeight: 600, color: '#737373', borderRadius: '200px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', padding: '8px 16px', cursor: 'pointer' }}
+              >
                 Cancelar
               </button>
               <button
-                onClick={modal.type === 'asignar' ? handleConfirmarAsignar : handleConfirmarAgregar}
-                disabled={brokersSeleccionados.length === 0}
+                onClick={modal.type === 'asignar' ? handleConfirmarAsignar : handleConfirmarEditar}
                 className="transition-colors"
-                style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: brokersSeleccionados.length > 0 ? '#006B4E' : '#D1D5DB', padding: '8px 16px', border: 'none', cursor: brokersSeleccionados.length > 0 ? 'pointer' : 'not-allowed' }}
-                onMouseEnter={e => { if (brokersSeleccionados.length > 0) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                onMouseLeave={e => { if (brokersSeleccionados.length > 0) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
-                {modal.type === 'asignar' ? 'Asignar' : 'Agregar'}
+                style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: '#006B4E', padding: '8px 16px', border: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
+              >
+                {modal.type === 'asignar' ? 'Asignar' : 'Guardar'}
               </button>
             </div>
           </div>
@@ -727,8 +727,10 @@ export function AsignacionesContent() {
       )}
 
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg"
-          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500 }}>
+        <div
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, animation: 'fadeInUp 0.2s ease' }}
+        >
           <CheckCircle className="w-4 h-4 flex-shrink-0" />
           {toast}
         </div>

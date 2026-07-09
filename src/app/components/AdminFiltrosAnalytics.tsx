@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { ChevronDown, Calendar } from 'lucide-react';
 
@@ -88,38 +88,9 @@ export function AdminFiltrosAnalytics() {
   const [activeTab, setActiveTab] = useState('ubicacion');
   const [rango, setRango] = useState('28d');
   const [showRango, setShowRango] = useState(false);
-  const [showCustomRango, setShowCustomRango] = useState(false);
-  const [customFrom, setCustomFrom] = useState('');
-  const [customTo, setCustomTo] = useState('');
-  const [appliedRange, setAppliedRange] = useState<{ from: string; to: string } | null>(null);
-  const pickerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
-        setShowRango(false);
-        setShowCustomRango(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
-  function formatRangeLabel(from: string, to: string) {
-    const fmt = (d: string) => { const [y, m, day] = d.split('-'); return `${day}/${m}/${y.slice(2)}`; };
-    if (from && !to) return `Desde ${fmt(from)}`;
-    if (!from && to) return `Hasta ${fmt(to)}`;
-    return `${fmt(from)} – ${fmt(to)}`;
-  }
-
-  function handleApplyRange() {
-    if (!customFrom && !customTo) return;
-    setAppliedRange({ from: customFrom, to: customTo });
-    setShowCustomRango(false);
-  }
 
   const datos = DATA[activeTab];
-  const rangoLabel = appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : (RANGO_PRESETS.find(r => r.id === rango)?.label ?? '');
+  const rangoLabel = RANGO_PRESETS.find(r => r.id === rango)?.label ?? '';
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -139,76 +110,44 @@ export function AdminFiltrosAnalytics() {
           </div>
 
           {/* Date range selector */}
-          <div className="flex items-center gap-2" ref={pickerRef}>
-            {/* Preset dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => { setShowRango(v => !v); setShowCustomRango(false); }}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-                style={{ border: '1px solid var(--border)', backgroundColor: 'var(--background)', fontFamily: 'var(--font-body)', fontSize: '13px', color: appliedRange ? '#9CA3AF' : 'var(--foreground)', fontWeight: 500, opacity: appliedRange ? 0.6 : 1 }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--background)'; }}
+          <div className="relative">
+            <button
+              onClick={() => setShowRango(v => !v)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+              style={{ border: '1px solid var(--border)', backgroundColor: 'var(--background)', fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--foreground)', fontWeight: 500 }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--background)'; }}
+            >
+              <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
+              {rangoLabel}
+              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRango ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+            </button>
+
+            {showRango && (
+              <div
+                className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden"
+                style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '200px' }}
               >
-                <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
-                {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : rangoLabel}
-                <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRango ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-              </button>
-              {showRango && (
-                <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden"
-                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '200px' }}>
-                  {RANGO_PRESETS.map(preset => (
-                    <button key={preset.id}
-                      onClick={() => { setRango(preset.id); setAppliedRange(null); setCustomFrom(''); setCustomTo(''); setShowRango(false); }}
-                      className="w-full text-left px-4 py-2.5 transition-colors"
-                      style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: !appliedRange && rango === preset.id ? 600 : 400, color: !appliedRange && rango === preset.id ? '#006B4E' : '#0A0A0A', backgroundColor: !appliedRange && rango === preset.id ? '#F0F9F5' : '#FFFFFF' }}
-                      onMouseEnter={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                      onMouseLeave={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                      {preset.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            {/* Rango button */}
-            <div className="relative">
-              <button
-                onClick={() => { setShowCustomRango(v => !v); setShowRango(false); }}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition-colors"
-                style={{ border: `1px solid ${appliedRange ? '#006B4E' : 'var(--border)'}`, backgroundColor: appliedRange ? '#E8F5EE' : 'var(--background)', fontFamily: 'var(--font-body)', fontSize: '13px', color: appliedRange ? '#006B4E' : 'var(--foreground)', fontWeight: appliedRange ? 600 : 500, cursor: 'pointer' }}>
-                <Calendar className="w-4 h-4" />
-                Rango
-              </button>
-              {showCustomRango && (
-                <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4"
-                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}>
-                  <p style={{ fontSize: '12px', fontWeight: 600, color: '#374151', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Rango personalizado</p>
-                  <div className="flex flex-col gap-3 mb-4">
-                    <div>
-                      <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Desde</label>
-                      <input type="date" value={customFrom} onChange={e => setCustomFrom(e.target.value)}
-                        style={{ width: '100%', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '6px 10px', fontSize: '13px', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none' }} />
-                    </div>
-                    <div>
-                      <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Hasta</label>
-                      <input type="date" value={customTo} onChange={e => setCustomTo(e.target.value)} min={customFrom}
-                        style={{ width: '100%', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '6px 10px', fontSize: '13px', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none' }} />
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    {appliedRange && (
-                      <button onClick={() => { setAppliedRange(null); setCustomFrom(''); setCustomTo(''); setShowCustomRango(false); }}
-                        style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#DC2626', borderRadius: '200px', border: '1px solid #FECACA', backgroundColor: '#FFF5F5', padding: '7px 0', cursor: 'pointer' }}>
-                        Limpiar
-                      </button>
-                    )}
-                    <button onClick={handleApplyRange} disabled={!customFrom && !customTo}
-                      style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: (customFrom || customTo) ? '#006B4E' : '#D1D5DB', padding: '7px 0', border: 'none', cursor: (customFrom || customTo) ? 'pointer' : 'not-allowed' }}>
-                      Aplicar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                {RANGO_PRESETS.map(preset => (
+                  <button
+                    key={preset.id}
+                    onClick={() => { setRango(preset.id); setShowRango(false); }}
+                    className="w-full text-left px-4 py-2.5 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '13px',
+                      fontWeight: rango === preset.id ? 600 : 400,
+                      color: rango === preset.id ? '#006B4E' : '#0A0A0A',
+                      backgroundColor: rango === preset.id ? '#F0F9F5' : '#FFFFFF',
+                    }}
+                    onMouseEnter={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                    onMouseLeave={e => { if (rango !== preset.id) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

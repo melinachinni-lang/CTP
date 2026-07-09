@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2, CalendarDays, X, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Eye, MessageCircle, Heart, Home, TrendingUp, TrendingDown, Edit2, Phone, Plus, BarChart2 } from 'lucide-react';
 
 type ViewType = 'inmobiliaria' | 'broker';
 export type Periodo = '7d' | '30d' | '90d';
@@ -78,11 +78,11 @@ export const X_LABELS: Record<Periodo, { label: string; index: number }[]> = {
 };
 
 const RANKING_INMO: PropiedadRanking[] = [
-  { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', vistas: 847, consultas: 12, tendencia: 23, estado: 'Alto interés', inmobiliaria: 'Vista Natura Propiedades' },
-  { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', vistas: 612, consultas: 8, tendencia: 11, estado: 'Alta demanda', inmobiliaria: 'Vista Natura Propiedades' },
-  { id: 3, nombre: 'Parcela Los Robles', ubicacion: 'Rancagua, O\'Higgins', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', vistas: 445, consultas: 5, tendencia: -4, estado: 'Estable', inmobiliaria: 'Vista Natura Propiedades' },
-  { id: 4, nombre: 'Parcela El Valle Verde', ubicacion: 'San José de Maipo, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', vistas: 322, consultas: 3, tendencia: 6, estado: 'En crecimiento', inmobiliaria: 'Vista Natura Propiedades' },
-  { id: 5, nombre: 'Parcela Sur Verde', ubicacion: 'Valdivia, Los Ríos', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', vistas: 189, consultas: 1, tendencia: -12, estado: 'Bajo interés', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 1, nombre: 'Parcela Vista Cordillera', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', vistas: 847, consultas: 12, tendencia: 23, estado: 'Alto interés' },
+  { id: 2, nombre: 'Parcela Lago Azul', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', vistas: 612, consultas: 8, tendencia: 11, estado: 'Alta demanda' },
+  { id: 3, nombre: 'Parcela Los Robles', ubicacion: 'Rancagua, O\'Higgins', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', vistas: 445, consultas: 5, tendencia: -4, estado: 'Estable' },
+  { id: 4, nombre: 'Parcela El Valle Verde', ubicacion: 'San José de Maipo, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', vistas: 322, consultas: 3, tendencia: 6, estado: 'En crecimiento' },
+  { id: 5, nombre: 'Parcela Sur Verde', ubicacion: 'Valdivia, Los Ríos', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', vistas: 189, consultas: 1, tendencia: -12, estado: 'Bajo interés' },
 ];
 
 const RANKING_BROKER: PropiedadRanking[] = [
@@ -93,9 +93,9 @@ const RANKING_BROKER: PropiedadRanking[] = [
 ];
 
 const RANKING_INMO_PROYECTOS: PropiedadRanking[] = [
-  { id: 1, nombre: 'Proyecto Vista Cordillera — Fase 2', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', vistas: 1240, consultas: 24, tendencia: 31, estado: 'Alto interés', inmobiliaria: 'Vista Natura Propiedades' },
-  { id: 2, nombre: 'Condominio Los Arrayanes', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', vistas: 890, consultas: 17, tendencia: 14, estado: 'Alta demanda', inmobiliaria: 'Vista Natura Propiedades' },
-  { id: 3, nombre: 'Proyecto Lago Ranco', ubicacion: 'Los Lagos, Los Ríos', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', vistas: 623, consultas: 11, tendencia: -2, estado: 'Estable', inmobiliaria: 'Vista Natura Propiedades' },
+  { id: 1, nombre: 'Proyecto Vista Cordillera — Fase 2', ubicacion: 'Lo Barnechea, R. Metropolitana', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', vistas: 1240, consultas: 24, tendencia: 31, estado: 'Alto interés' },
+  { id: 2, nombre: 'Condominio Los Arrayanes', ubicacion: 'Villarrica, Araucanía', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', vistas: 890, consultas: 17, tendencia: 14, estado: 'Alta demanda' },
+  { id: 3, nombre: 'Proyecto Lago Ranco', ubicacion: 'Los Lagos, Los Ríos', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', vistas: 623, consultas: 11, tendencia: -2, estado: 'Estable' },
 ];
 
 const RANKING_BROKER_PROYECTOS: PropiedadRanking[] = [
@@ -111,7 +111,7 @@ const ESTADO_BADGE: Record<string, { bg: string; text: string; border: string }>
   'Bajo interés':   { bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
 };
 
-const PERIODO_LABELS: Record<Periodo, string> = { '7d': 'Últimos 7 días', '30d': 'Últimos 30 días', '90d': 'Últimos 90 días' };
+const PERIODO_LABELS: Record<Periodo, string> = { '7d': '7 días', '30d': '30 días', '90d': '90 días' };
 
 const RANKING_SCALE: Record<Periodo, number> = { '7d': 0.22, '30d': 1.0, '90d': 3.1 };
 
@@ -204,82 +204,17 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
   const [isChartLoading, setIsChartLoading] = useState(false);
   const [rankingTab, setRankingTab] = useState<'parcelas' | 'proyectos'>('parcelas');
   const [rankingPeriodo, setRankingPeriodo] = useState<Periodo>('30d');
-  const [showRankingDropdown, setShowRankingDropdown] = useState(false);
-  const [showRankingCustomRange, setShowRankingCustomRange] = useState(false);
-  const [rankingCustomFrom, setRankingCustomFrom] = useState('');
-  const [rankingCustomTo, setRankingCustomTo] = useState('');
-  const [rankingAppliedRange, setRankingAppliedRange] = useState<{ from: string; to: string } | null>(null);
-  const rankingPickerRef = useRef<HTMLDivElement>(null);
-
-  // Dropdown de período + rango personalizado (gráfico)
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showCustomRange, setShowCustomRange] = useState(false);
-  const [customFrom, setCustomFrom] = useState('');
-  const [customTo, setCustomTo] = useState('');
-  const [appliedRange, setAppliedRange] = useState<{ from: string; to: string } | null>(null);
-  const datePickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 1200);
     return () => clearTimeout(t);
   }, []);
 
-  // Cerrar dropdowns al hacer click fuera
-  useEffect(() => {
-    if (!showDropdown && !showCustomRange) return;
-    const handler = (e: MouseEvent) => {
-      if (datePickerRef.current && !datePickerRef.current.contains(e.target as Node)) {
-        setShowDropdown(false);
-        setShowCustomRange(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [showDropdown, showCustomRange]);
-
-  useEffect(() => {
-    if (!showRankingDropdown && !showRankingCustomRange) return;
-    const handler = (e: MouseEvent) => {
-      if (rankingPickerRef.current && !rankingPickerRef.current.contains(e.target as Node)) {
-        setShowRankingDropdown(false);
-        setShowRankingCustomRange(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [showRankingDropdown, showRankingCustomRange]);
-
-  const handleApplyRankingRange = () => {
-    if (!rankingCustomFrom || !rankingCustomTo) return;
-    setRankingAppliedRange({ from: rankingCustomFrom, to: rankingCustomTo });
-    setShowRankingDropdown(false);
-    setShowRankingCustomRange(false);
-  };
-
   const handlePeriodo = (p: Periodo) => {
     if (p === periodo) return;
     setPeriodo(p);
-    setAppliedRange(null);
     setIsChartLoading(true);
     setTimeout(() => setIsChartLoading(false), 500);
-  };
-
-  const handleApplyRange = () => {
-    if (!customFrom || !customTo) return;
-    setAppliedRange({ from: customFrom, to: customTo });
-    setShowDropdown(false);
-    setShowCustomRange(false);
-    setIsChartLoading(true);
-    setTimeout(() => setIsChartLoading(false), 500);
-  };
-
-  const formatRangeLabel = (from: string, to: string) => {
-    const fmt = (d: string) => {
-      const [y, m, day] = d.split('-');
-      const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-      return `${parseInt(day)} ${meses[parseInt(m) - 1]}`;
-    };
-    return `${fmt(from)} – ${fmt(to)}`;
   };
 
   const kpis: KPI[] = viewType === 'inmobiliaria'
@@ -369,17 +304,18 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
 
       {/* Chart Section */}
       <div className="p-5 rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-        <div className="flex items-start justify-between mb-5">
-          {/* Título + subtítulo + leyenda a la izquierda */}
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
               Evolución de visualizaciones
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-              Visitas de parcelas y proyectos en el período seleccionado
+              Últimos {PERIODO_LABELS[periodo]}
             </p>
-            {/* Leyenda debajo del subtítulo */}
-            <div className="flex items-center gap-6 mt-3">
+          </div>
+          <div className="flex items-center gap-4">
+            {/* Leyenda */}
+            <div className="flex items-center gap-4">
               {[
                 { color: '#006B4E', label: 'Parcelas', dash: false },
                 { color: '#2563EB', label: 'Proyectos', dash: true },
@@ -389,141 +325,29 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                     <line x1="0" y1="5" x2="20" y2="5" stroke={item.color} strokeWidth="2.5"
                       strokeDasharray={item.dash ? '6 3' : undefined} strokeLinecap="round" />
                   </svg>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>{item.label}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151' }}>{item.label}</span>
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Controles de período — wrapper con ref para click-outside */}
-          <div className="flex items-center gap-2" ref={datePickerRef}>
-
-            {/* Dropdown de períodos predefinidos */}
-            <div className="relative">
-              <button
-                onClick={() => { setShowDropdown(v => !v); setShowCustomRange(false); }}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-                style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                {appliedRange ? PERIODO_LABELS[periodo] : PERIODO_LABELS[periodo]}
-                <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-              </button>
-
-              {showDropdown && (
-                <div
-                  className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden"
-                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '190px' }}
+            {/* Period selector */}
+            <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
+              {(['7d', '30d', '90d'] as Periodo[]).map(p => (
+                <button
+                  key={p}
+                  onClick={() => handlePeriodo(p)}
+                  className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    backgroundColor: periodo === p ? '#FFFFFF' : 'transparent',
+                    color: periodo === p ? '#0A0A0A' : '#6B7280',
+                    boxShadow: periodo === p ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                    border: 'none', cursor: 'pointer',
+                  }}
                 >
-                  {(['7d', '30d', '90d'] as Periodo[]).map(p => (
-                    <button
-                      key={p}
-                      onClick={() => { handlePeriodo(p); setAppliedRange(null); setCustomFrom(''); setCustomTo(''); setShowDropdown(false); }}
-                      className="w-full text-left px-4 py-2.5 transition-colors"
-                      style={{
-                        fontFamily: 'var(--font-body)', fontSize: '13px',
-                        fontWeight: !appliedRange && periodo === p ? 600 : 400,
-                        color: !appliedRange && periodo === p ? '#006B4E' : '#0A0A0A',
-                        backgroundColor: !appliedRange && periodo === p ? '#F0F9F5' : '#FFFFFF',
-                        border: 'none', cursor: 'pointer', display: 'block',
-                      }}
-                      onMouseEnter={e => { if (appliedRange || periodo !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = (!appliedRange && periodo === p) ? '#F0F9F5' : '#FFFFFF'; }}
-                    >
-                      {PERIODO_LABELS[p]}
-                    </button>
-                  ))}
-                </div>
-              )}
+                  {PERIODO_LABELS[p]}
+                </button>
+              ))}
             </div>
-
-            {/* Botón de rango personalizado (separado) */}
-            <div className="relative">
-              <button
-                onClick={() => { setShowCustomRange(v => !v); setShowDropdown(false); }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                style={{
-                  border: appliedRange ? '1px solid #006B4E' : '1px solid #E5E5E5',
-                  backgroundColor: appliedRange ? '#F0F9F5' : '#FFFFFF',
-                  fontFamily: 'var(--font-body)', fontSize: '13px',
-                  fontWeight: appliedRange ? 600 : 400,
-                  color: appliedRange ? '#006B4E' : '#6B7280',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                <CalendarDays className="w-3.5 h-3.5" />
-                {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : 'Rango'}
-                {appliedRange && (
-                  <span
-                    role="button"
-                    onClick={e => { e.stopPropagation(); setAppliedRange(null); setCustomFrom(''); setCustomTo(''); setShowCustomRange(false); }}
-                    className="hover:opacity-60 transition-opacity"
-                  >
-                    <X className="w-3 h-3" />
-                  </span>
-                )}
-              </button>
-
-              {showCustomRange && (
-                <div
-                  className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4 space-y-3"
-                  style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}
-                >
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>
-                    Rango personalizado
-                  </p>
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      Desde
-                    </label>
-                    <input
-                      type="date"
-                      value={customFrom}
-                      onChange={e => setCustomFrom(e.target.value)}
-                      max={customTo || undefined}
-                      className="w-full px-3 py-2 rounded-lg outline-none transition-colors"
-                      style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
-                      onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
-                      onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      Hasta
-                    </label>
-                    <input
-                      type="date"
-                      value={customTo}
-                      onChange={e => setCustomTo(e.target.value)}
-                      min={customFrom || undefined}
-                      className="w-full px-3 py-2 rounded-lg outline-none transition-colors"
-                      style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
-                      onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }}
-                      onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }}
-                    />
-                  </div>
-                  <button
-                    onClick={handleApplyRange}
-                    disabled={!customFrom || !customTo}
-                    className="w-full py-2 rounded-lg transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF',
-                      backgroundColor: customFrom && customTo ? '#006B4E' : '#D1D5DB',
-                      border: 'none', cursor: customFrom && customTo ? 'pointer' : 'not-allowed',
-                    }}
-                    onMouseEnter={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                    onMouseLeave={e => { if (customFrom && customTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-                  >
-                    Aplicar
-                  </button>
-                </div>
-              )}
-            </div>
-
           </div>
         </div>
         <DualLineChart parcelas={chartData.parcelas} proyectos={chartData.proyectos} loading={isChartLoading} periodo={periodo} />
@@ -539,69 +363,28 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 {viewType === 'inmobiliaria' ? 'Ranking de publicaciones' : 'Propiedades en seguimiento'}
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
-                Top 10 parcelas y proyectos por interacción — {rankingAppliedRange ? formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to) : PERIODO_LABELS[rankingPeriodo]}
+                Top 10 parcelas y proyectos por interacción — {PERIODO_LABELS[rankingPeriodo]}
               </p>
             </div>
-            <div className="flex items-center gap-2" ref={rankingPickerRef}>
-              {/* Dropdown períodos */}
-              <div className="relative">
-                <button
-                  onClick={() => { setShowRankingDropdown(v => !v); setShowRankingCustomRange(false); }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                  {PERIODO_LABELS[rankingPeriodo]}
-                  <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRankingDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-                </button>
-                {showRankingDropdown && (
-                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '190px' }}>
-                    {(['7d', '30d', '90d'] as Periodo[]).map(p => (
-                      <button key={p} onClick={() => { setRankingPeriodo(p); setRankingAppliedRange(null); setRankingCustomFrom(''); setRankingCustomTo(''); setShowRankingDropdown(false); }}
-                        className="w-full text-left px-4 py-2.5 transition-colors"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: !rankingAppliedRange && rankingPeriodo === p ? 600 : 400, color: !rankingAppliedRange && rankingPeriodo === p ? '#006B4E' : '#0A0A0A', backgroundColor: !rankingAppliedRange && rankingPeriodo === p ? '#F0F9F5' : '#FFFFFF', border: 'none', cursor: 'pointer', display: 'block' }}
-                        onMouseEnter={e => { if (rankingAppliedRange || rankingPeriodo !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = (!rankingAppliedRange && rankingPeriodo === p) ? '#F0F9F5' : '#FFFFFF'; }}
-                      >{PERIODO_LABELS[p]}</button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              {/* Botón rango personalizado */}
-              <div className="relative">
-                <button
-                  onClick={() => { setShowRankingCustomRange(v => !v); setShowRankingDropdown(false); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                  style={{ border: rankingAppliedRange ? '1px solid #006B4E' : '1px solid #E5E5E5', backgroundColor: rankingAppliedRange ? '#F0F9F5' : '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: rankingAppliedRange ? 600 : 400, color: rankingAppliedRange ? '#006B4E' : '#6B7280', cursor: 'pointer' }}
-                  onMouseEnter={e => { if (!rankingAppliedRange) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={e => { if (!rankingAppliedRange) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  <CalendarDays className="w-3.5 h-3.5" />
-                  {rankingAppliedRange ? formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to) : 'Rango'}
-                  {rankingAppliedRange && (
-                    <span role="button" onClick={e => { e.stopPropagation(); setRankingAppliedRange(null); setRankingCustomFrom(''); setRankingCustomTo(''); setShowRankingCustomRange(false); }} className="hover:opacity-60 transition-opacity">
-                      <X className="w-3 h-3" />
-                    </span>
-                  )}
-                </button>
-                {showRankingCustomRange && (
-                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4 space-y-3" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>Rango personalizado</p>
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</label>
-                      <input type="date" value={rankingCustomFrom} onChange={e => setRankingCustomFrom(e.target.value)} max={rankingCustomTo || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
-                    </div>
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hasta</label>
-                      <input type="date" value={rankingCustomTo} onChange={e => setRankingCustomTo(e.target.value)} min={rankingCustomFrom || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
-                    </div>
-                    <button onClick={handleApplyRankingRange} disabled={!rankingCustomFrom || !rankingCustomTo} className="w-full py-2 rounded-lg" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF', backgroundColor: rankingCustomFrom && rankingCustomTo ? '#006B4E' : '#D1D5DB', border: 'none', cursor: rankingCustomFrom && rankingCustomTo ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (rankingCustomFrom && rankingCustomTo) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (rankingCustomFrom && rankingCustomTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
-                      Aplicar
-                    </button>
-                  </div>
-                )}
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
+                {(['7d', '30d', '90d'] as Periodo[]).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => setRankingPeriodo(p)}
+                    className="px-3 py-1.5 rounded-full transition-all"
+                    style={{
+                      backgroundColor: rankingPeriodo === p ? '#0A0A0A' : 'transparent',
+                      color: rankingPeriodo === p ? '#FFFFFF' : '#737373',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-xs)',
+                      fontWeight: rankingPeriodo === p ? 600 : 400,
+                      border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {PERIODO_LABELS[p]}
+                  </button>
+                ))}
               </div>
               {viewType === 'broker' && (
                 <button
@@ -647,13 +430,13 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
           className="px-5 py-2.5"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 96px 80px 88px 130px',
+            gridTemplateColumns: viewType === 'inmobiliaria' ? '1fr 96px 80px 88px 130px 88px' : '1fr 96px 80px 88px 130px 88px',
             gap: '8px',
             borderBottom: '1px solid #F0F0F0',
             backgroundColor: '#FAFAFA',
           }}
         >
-          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado'].map((col, i) => (
+          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado', ''].map((col, i) => (
             <span
               key={i}
               style={{
@@ -681,7 +464,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
               className="px-5 py-3 transition-colors"
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 96px 80px 88px 130px',
+                gridTemplateColumns: '1fr 96px 80px 88px 130px 88px',
                 gap: '8px',
                 alignItems: 'center',
                 borderBottom: rowIdx < ranking.length - 1 ? '1px solid #F9FAFB' : 'none',
@@ -699,7 +482,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                     {prop.nombre}
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {prop.inmobiliaria ? <><span style={{ color: '#006B4E', fontWeight: 500 }}>Inmobiliaria: {prop.inmobiliaria}</span> · {prop.ubicacion}</> : prop.ubicacion}
+                    {prop.inmobiliaria ? `${prop.inmobiliaria} · ` : ''}{prop.ubicacion}
                   </p>
                 </div>
               </div>
@@ -735,6 +518,20 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 </span>
               </div>
 
+              {/* Action */}
+              <div className="flex justify-center">
+                <button
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                  style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                >
+                  {viewType === 'inmobiliaria'
+                    ? <><Edit2 className="w-3 h-3" /> Editar</>
+                    : <><Phone className="w-3 h-3" /> Contactar</>
+                  }
+                </button>
+              </div>
             </div>
           );
         })}
