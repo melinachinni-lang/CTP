@@ -53,7 +53,7 @@ export function SiteFooter({ onNavigate, isLoggedIn = false, onPublish }: SiteFo
               <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>Cómo funciona</div>
               <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={handlePublish}>Publicar propiedad</div>
               <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>Planes para inmobiliarias</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('entry')}>Para brokers</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes-brokers')}>Planes para brokers</div>
             </div>
           </div>
 

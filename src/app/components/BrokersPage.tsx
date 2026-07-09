@@ -563,7 +563,7 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
                 <div className="cursor-pointer hover:text-black" onClick={() => onNavigate('como-funciona')}>Cómo funciona</div>
                 <div>Publicar propiedad</div>
                 <div>Planes para inmobiliarias</div>
-                <div>Para brokers</div>
+                <div className="cursor-pointer hover:text-black" onClick={() => onNavigate('planes-brokers')}>Planes para brokers</div>
               </div>
             </div>
 

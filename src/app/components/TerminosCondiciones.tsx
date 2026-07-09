@@ -3,10 +3,10 @@ import { Navbar } from '@/app/components/Navbar';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 
 interface TerminosCondicionesProps {
-  onNavigateHome: () => void;
+  onNavigate: (screen: string) => void;
 }
 
-export function TerminosCondiciones({ onNavigateHome }: TerminosCondicionesProps) {
+export function TerminosCondiciones({ onNavigate }: TerminosCondicionesProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -17,9 +17,9 @@ export function TerminosCondiciones({ onNavigateHome }: TerminosCondicionesProps
       <Navbar
         onNavigate={(screen) => {
           if (screen === 'home') {
-            onNavigateHome();
+            onNavigate('home');
           } else {
-            onNavigateHome();
+            onNavigate('home');
           }
         }}
         estado="visitante"
@@ -499,7 +499,7 @@ export function TerminosCondiciones({ onNavigateHome }: TerminosCondicionesProps
                 <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Cómo funciona</div>
                 <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Publicar propiedad</div>
                 <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Planes para inmobiliarias</div>
-                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Para brokers</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes-brokers')}>Planes para brokers</div>
               </div>
             </div>
 

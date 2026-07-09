@@ -3,10 +3,10 @@ import { Navbar } from '@/app/components/Navbar';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 
 interface PoliticaPrivacidadProps {
-  onNavigateHome: () => void;
+  onNavigate: (screen: string) => void;
 }
 
-export function PoliticaPrivacidad({ onNavigateHome }: PoliticaPrivacidadProps) {
+export function PoliticaPrivacidad({ onNavigate }: PoliticaPrivacidadProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -17,9 +17,9 @@ export function PoliticaPrivacidad({ onNavigateHome }: PoliticaPrivacidadProps) 
       <Navbar
         onNavigate={(screen) => {
           if (screen === 'home') {
-            onNavigateHome();
+            onNavigate('home');
           } else {
-            onNavigateHome();
+            onNavigate('home');
           }
         }}
         estado="visitante"
@@ -1040,7 +1040,7 @@ export function PoliticaPrivacidad({ onNavigateHome }: PoliticaPrivacidadProps) 
                 <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Cómo funciona</div>
                 <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Publicar propiedad</div>
                 <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Planes para inmobiliarias</div>
-                <div className="cursor-pointer hover:text-[#006B4E] transition-colors">Para brokers</div>
+                <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes-brokers')}>Planes para brokers</div>
               </div>
             </div>
 

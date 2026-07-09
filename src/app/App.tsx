@@ -29,6 +29,7 @@ import { PoliticaPrivacidad } from '@/app/components/PoliticaPrivacidad';
 import { TerminosCondiciones } from '@/app/components/TerminosCondiciones';
 import { BrokerProfile } from '@/app/components/BrokerProfile';
 import { PlanesPage } from '@/app/components/PlanesPage';
+import { PlanesBrokersPage } from '@/app/components/PlanesBrokersPage';
 import { ArticuloPage } from '@/app/components/ArticuloPage';
 import { AsesoriaPage } from '@/app/components/AsesoriaPage';
 import { AccesoNoAutorizadoPage } from '@/app/components/AccesoNoAutorizadoPage';
@@ -105,6 +106,7 @@ type Screen =
   | 'vendedor-particular-profile'
   | 'broker-profile'
   | 'planes'
+  | 'planes-brokers'
   | 'articulo'
   | 'entry'
   | 'person-dashboard'
@@ -447,6 +449,7 @@ function AppContent() {
         {currentScreen === 'vendedor-particular-profile' && <VendedorParticularProfile onNavigate={handleNavigate} vendedorName={selectedInmobiliaria} />}
         {currentScreen === 'broker-profile' && <BrokerProfile onNavigate={handleNavigate} brokerName={selectedBrokerName} />}
         {currentScreen === 'planes' && <PlanesPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} />}
+        {currentScreen === 'planes-brokers' && <PlanesBrokersPage onNavigate={handleNavigate} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} />}
         {currentScreen === 'articulo' && <ArticuloPage onNavigate={handleNavigate} articuloId={selectedArticuloId} isLoggedIn={isLoggedIn} currentUser={currentUser} onLogout={handleLogout} />}
         {currentScreen === 'entry' && <EntryScreen onNavigate={handleNavigate} onSelectGoogleAccount={handleSelectAccount} />}
         {currentScreen === 'person-dashboard' && <PersonDashboardScreen onNavigate={handleNavigate} ref={personDashboardRef} savedParcelaIds={savedParcelaIds} onToggleSaved={handleToggleSaved} />}
@@ -455,8 +458,8 @@ function AppContent() {
         {currentScreen === 'admin-dashboard' && <AdminDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'admin-general-dashboard' && <AdminGeneralDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'ctp-admin-dashboard' && <CTPAdminDashboard onNavigate={handleNavigate} />}
-        {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigateHome={() => setCurrentScreen('home')} />}
-        {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigateHome={() => setCurrentScreen('home')} />}
+        {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigate={handleNavigate} />}
+        {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigate={handleNavigate} />}
         {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
         {currentScreen === 'acceso-no-autorizado' && <AccesoNoAutorizadoPage onNavigate={handleNavigate} />}
         {currentScreen === 'completar-perfil' && <CompletarPerfilScreen onNavigate={handleNavigate} />}
