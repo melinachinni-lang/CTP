@@ -1157,7 +1157,7 @@ function CTPLeadsView() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
           <input type="text" placeholder="Buscar por nombre o email..." value={search} onChange={e => setSearch(e.target.value)} className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }} onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }} onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }} />
         </div>
-        <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '160px' }}>
+        <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)} className="pl-3 pr-8 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '160px' }}>
           <option value="todos">Todos los estados</option>
           <option value="nuevo">Nuevo</option>
           <option value="asignado">Asignado</option>
@@ -1165,7 +1165,7 @@ function CTPLeadsView() {
           <option value="cerrado">Cerrado</option>
           <option value="no-interesado">No interesado</option>
         </select>
-        <select value={filtroOrigen} onChange={e => setFiltroOrigen(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '150px' }}>
+        <select value={filtroOrigen} onChange={e => setFiltroOrigen(e.target.value)} className="pl-3 pr-8 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '150px' }}>
           <option value="todos">Todos los orígenes</option>
           <option value="Web">Web</option>
           <option value="Meta">Meta</option>
@@ -1314,7 +1314,7 @@ function CTPBrokersView() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
             <input type="text" placeholder="Buscar broker..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', width: '260px' }} onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }} onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }} />
           </div>
-          <select value={filtro} onChange={e => setFiltro(e.target.value as any)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }}>
+          <select value={filtro} onChange={e => setFiltro(e.target.value as any)} className="pl-3 pr-8 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }}>
             <option value="todos">Todos los brokers</option>
             <option value="activos">Solo activos</option>
             <option value="inactivos">Solo inactivos</option>
