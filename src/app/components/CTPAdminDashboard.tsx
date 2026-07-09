@@ -1351,7 +1351,7 @@ function CTPBrokersView() {
               )) : filtrados.length === 0 ? (
                 <tr><td colSpan={7}>
                   <div className="flex flex-col items-center justify-center py-14 text-center">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#F0FDFA' }}><UserCheck className="w-6 h-6" style={{ color: '#0D9488' }} /></div>
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
                     <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtro !== 'todos' ? 'Sin resultados' : 'No hay brokers registrados'}</p>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtro !== 'todos' ? 'Prueba con otros filtros.' : 'Los brokers aparecerán aquí una vez que se registren.'}</p>
                   </div>
