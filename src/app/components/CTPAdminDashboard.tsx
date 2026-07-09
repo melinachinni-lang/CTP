@@ -8,6 +8,8 @@ import {
   Plus, ArrowUpRight, ArrowDownRight, Eye, Search,
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
   Bookmark, UserCheck, type LucideIcon,
+  UserPlus, ToggleLeft, ToggleRight, AlertTriangle, X, Check,
+  Download, Activity, Mail,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -35,7 +37,8 @@ type NavSection =
   | 'performance' | 'analitica' | 'embudo' | 'verificacion'
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
-  | 'team' | 'configuracion' | 'help';
+  | 'team' | 'configuracion' | 'help'
+  | 'leads' | 'brokers';
 
 interface CTPAdminDashboardProps {
   onNavigate: (screen: string, data?: any) => void;
@@ -62,6 +65,14 @@ const NAV_GROUPS = [
     ],
   },
   {
+    id: 'comercial',
+    label: 'Comercial',
+    items: [
+      { id: 'leads' as NavSection,   label: 'Leads',   icon: Users },
+      { id: 'brokers' as NavSection, label: 'Brokers', icon: UserCheck },
+    ],
+  },
+  {
     id: 'administracion',
     label: 'Administración',
     items: [
@@ -81,6 +92,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     rendimiento: true,
     contenido: false,
+    comercial: false,
     administracion: false,
   });
   const [showMenu, setShowMenu] = useState(false);
@@ -285,6 +297,8 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="inmobiliaria" />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
         {currentSection === 'interacciones'   && <InteraccionesContent />}
+        {currentSection === 'leads'           && <CTPLeadsView />}
+        {currentSection === 'brokers'         && <CTPBrokersView />}
       </div>
     </>
   );
@@ -901,6 +915,472 @@ function UsuariosContent() {
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+// ─── Leads mock data ──────────────────────────────────────────────────────────
+
+const CTP_LEADS_DATA = [
+  { id: 'l001', nombre: 'Rodrigo Sánchez',   email: 'rodrigo.sanchez@email.com',   telefono: '+56 9 8765 4321', origen: 'Web',      estado: 'nuevo',      broker: '-',            fecha: '27 ene 2026', publicacion: 'Parcela Vista al Lago',       mensaje: 'Estoy interesado en conocer más sobre esta parcela. ¿Podemos coordinar una visita?' },
+  { id: 'l002', nombre: 'Carolina Morales',  email: 'carolina.morales@email.com',  telefono: '+56 9 7654 3210', origen: 'Meta',     estado: 'asignado',   broker: 'Carlos Pérez',  fecha: '27 ene 2026', publicacion: 'Condominio Valle Verde',       mensaje: 'Me gustaría recibir información sobre las condiciones de financiamiento.' },
+  { id: 'l003', nombre: 'Felipe Vargas',     email: 'felipe.vargas@email.com',     telefono: '+56 9 6543 2109', origen: 'Google',   estado: 'contactado', broker: 'Sofía Ramírez', fecha: '26 ene 2026', publicacion: 'Parcela Bosque Nativo',        mensaje: '¿La parcela cuenta con todos los servicios básicos?' },
+  { id: 'l004', nombre: 'Daniela Fuentes',   email: 'daniela.fuentes@email.com',   telefono: '+56 9 5432 1098', origen: 'WhatsApp', estado: 'cerrado',    broker: 'Diego Muñoz',   fecha: '26 ene 2026', publicacion: 'Terreno Agrícola Premium',     mensaje: 'Quisiera información sobre los documentos de la propiedad.' },
+  { id: 'l005', nombre: 'Matías Hernández',  email: 'matias.hernandez@email.com',  telefono: '+56 9 4321 0987', origen: 'Web',      estado: 'cerrado',    broker: 'Carlos Pérez',  fecha: '25 ene 2026', publicacion: 'Parcela Cordillera',          mensaje: '¿Hay posibilidad de negociar el precio?' },
+  { id: 'l006', nombre: 'Valentina Torres',  email: 'valentina.torres@email.com',  telefono: '+56 9 3210 9876', origen: 'Meta',     estado: 'contactado', broker: 'Sofía Ramírez', fecha: '25 ene 2026', publicacion: 'Parcelas Los Andes',          mensaje: '¿Cuál es el tamaño mínimo de las parcelas disponibles?' },
+  { id: 'l007', nombre: 'Andrés Muñoz',      email: 'andres.munoz@email.com',      telefono: '+56 9 2109 8765', origen: 'Google',   estado: 'nuevo',      broker: '-',            fecha: '24 ene 2026', publicacion: 'Parcela Vista al Mar',        mensaje: 'Necesito saber si la parcela tiene acceso directo a la playa.' },
+  { id: 'l008', nombre: 'Sofía Reyes',       email: 'sofia.reyes@email.com',       telefono: '+56 9 1098 7654', origen: 'Web',      estado: 'asignado',   broker: 'Diego Muñoz',   fecha: '24 ene 2026', publicacion: 'Parcela Valle Central',       mensaje: '¿La parcela tiene factibilidad de agua y luz?' },
+  { id: 'l009', nombre: 'Ignacio Silva',     email: 'ignacio.silva@email.com',     telefono: '+56 9 0987 6543', origen: 'WhatsApp', estado: 'nuevo',      broker: '-',            fecha: '23 ene 2026', publicacion: 'Condominio Montaña',          mensaje: '¿Cuándo está programada la entrega del proyecto?' },
+  { id: 'l010', nombre: 'Francisca Castro',  email: 'francisca.castro@email.com',  telefono: '+56 9 9876 5432', origen: 'Meta',     estado: 'cerrado',    broker: 'Carlos Pérez',  fecha: '23 ene 2026', publicacion: 'Parcela Río y Montaña',       mensaje: 'Busco una parcela para proyecto turístico.' },
+  { id: 'l011', nombre: 'Pablo Soto',        email: 'pablo.soto@email.com',        telefono: '+56 9 8877 6655', origen: 'Google',   estado: 'contactado', broker: 'Diego Muñoz',   fecha: '22 ene 2026', publicacion: 'Parcela Lago Azul',           mensaje: 'Me interesa el acceso al lago y las vistas panorámicas.' },
+  { id: 'l012', nombre: 'Catalina Riquelme', email: 'catalina.riquelme@email.com', telefono: '+56 9 7766 5544', origen: 'Web',      estado: 'asignado',   broker: 'Sofía Ramírez', fecha: '22 ene 2026', publicacion: 'Parcela Viento Norte',        mensaje: '¿Existen restricciones para construir en esa zona?' },
+];
+
+const LEAD_ESTADO_STYLES: Record<string, { bg: string; color: string; label: string }> = {
+  nuevo:            { bg: '#EFF6FF', color: '#2563EB', label: 'Nuevo' },
+  asignado:         { bg: '#F0FDFA', color: '#0D9488', label: 'Asignado' },
+  contactado:       { bg: '#FFF7ED', color: '#C2410C', label: 'Contactado' },
+  cerrado:          { bg: '#E8F5EE', color: '#006B4E', label: 'Cerrado' },
+  'no-interesado':  { bg: '#F5F5F5', color: '#737373', label: 'No interesado' },
+};
+
+const ORIGEN_ICONS: Record<string, string> = {
+  'Web':      '🌐',
+  'Meta':     '📘',
+  'Google':   '🔍',
+  'WhatsApp': '💬',
+};
+
+const CTP_BROKERS_ASIGN = [
+  { id: 'b1', nombre: 'Carlos Pérez',   leads: 14, disponible: true  },
+  { id: 'b2', nombre: 'Sofía Ramírez',  leads: 9,  disponible: true  },
+  { id: 'b3', nombre: 'Diego Muñoz',    leads: 17, disponible: true  },
+  { id: 'b4', nombre: 'Ana Valenzuela', leads: 3,  disponible: false },
+];
+
+type CTPLead = typeof CTP_LEADS_DATA[0];
+
+// ─── Modal asignar broker (compartido) ───────────────────────────────────────
+
+function AsignarBrokerModal({ lead, brokers, brokerSeleccionado, onSelect, onConfirm, onClose, asignadoOk }: {
+  lead: CTPLead;
+  brokers: typeof CTP_BROKERS_ASIGN;
+  brokerSeleccionado: string | null;
+  onSelect: (id: string) => void;
+  onConfirm: () => void;
+  onClose: () => void;
+  asignadoOk: string | null;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+        <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
+          <div>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A', margin: 0 }}>Asignar broker</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373', marginTop: '2px' }}>Lead: <strong>{lead.nombre}</strong></p>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="px-6 py-5 space-y-2">
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>Seleccioná un broker disponible</p>
+          {brokers.map(b => (
+            <button key={b.id} onClick={() => { if (b.disponible) onSelect(b.id); }} disabled={!b.disponible} className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left" style={{ border: `1px solid ${brokerSeleccionado === b.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: brokerSeleccionado === b.id ? '#E8F5EE' : '#FAFAFA', opacity: b.disponible ? 1 : 0.5, cursor: b.disponible ? 'pointer' : 'not-allowed' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0" style={{ backgroundColor: brokerSeleccionado === b.id ? '#006B4E' : '#E5E5E5', color: brokerSeleccionado === b.id ? '#FFFFFF' : '#737373', fontFamily: 'var(--font-body)' }}>{b.nombre.charAt(0)}</div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', margin: 0 }}>{b.nombre}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#737373', marginTop: '1px' }}>{b.leads} leads asignados</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: b.disponible ? '#DCFCE7' : '#F5F5F5', color: b.disponible ? '#166534' : '#737373' }}>{b.disponible ? 'Disponible' : 'Inactivo'}</span>
+                {brokerSeleccionado === b.id && <Check className="w-4 h-4" style={{ color: '#006B4E' }} />}
+              </div>
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+          <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-sm transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#737373', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
+          <button onClick={onConfirm} disabled={!brokerSeleccionado} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', backgroundColor: asignadoOk === lead.id ? '#166534' : brokerSeleccionado ? '#006B4E' : '#B2D8C5', color: '#FFFFFF', cursor: brokerSeleccionado ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (brokerSeleccionado && asignadoOk !== lead.id) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (asignadoOk !== lead.id) e.currentTarget.style.backgroundColor = brokerSeleccionado ? '#006B4E' : '#B2D8C5'; }}>
+            {asignadoOk === lead.id ? <><Check className="w-4 h-4" />Asignado</> : <><UserPlus className="w-4 h-4" />Confirmar asignación</>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── CTPLeadsView ─────────────────────────────────────────────────────────────
+
+function CTPLeadsView() {
+  const [leads, setLeads] = useState(CTP_LEADS_DATA);
+  const [search, setSearch] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('todos');
+  const [filtroOrigen, setFiltroOrigen] = useState('todos');
+  const [loading, setLoading] = useState(false);
+  const [selectedLead, setSelectedLead] = useState<CTPLead | null>(null);
+  const [leadParaAsignar, setLeadParaAsignar] = useState<CTPLead | null>(null);
+  const [brokerSeleccionado, setBrokerSeleccionado] = useState<string | null>(null);
+  const [asignadoOk, setAsignadoOk] = useState<string | null>(null);
+
+  const filtrados = leads.filter(l => {
+    const matchSearch = l.nombre.toLowerCase().includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase());
+    const matchEstado = filtroEstado === 'todos' || l.estado === filtroEstado;
+    const matchOrigen = filtroOrigen === 'todos' || l.origen === filtroOrigen;
+    return matchSearch && matchEstado && matchOrigen;
+  });
+
+  function confirmarAsignacion() {
+    if (!leadParaAsignar || !brokerSeleccionado) return;
+    const broker = CTP_BROKERS_ASIGN.find(b => b.id === brokerSeleccionado);
+    if (!broker) return;
+    setLeads(prev => prev.map(l => l.id === leadParaAsignar.id ? { ...l, estado: 'asignado', broker: broker.nombre } : l));
+    setAsignadoOk(leadParaAsignar.id);
+    setTimeout(() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); setAsignadoOk(null); }, 1200);
+  }
+
+  if (selectedLead) {
+    const estStyle = LEAD_ESTADO_STYLES[selectedLead.estado] || LEAD_ESTADO_STYLES['nuevo'];
+    return (
+      <div className="p-8">
+        <button onClick={() => setSelectedLead(null)} className="flex items-center gap-2 mb-6 text-sm transition-colors" style={{ color: '#737373', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.color = '#0A0A0A'; }} onMouseLeave={e => { e.currentTarget.style.color = '#737373'; }}>
+          <ChevronDown className="w-4 h-4" style={{ transform: 'rotate(90deg)' }} /> Volver a leads
+        </button>
+        <SectionShell title={selectedLead.nombre} subtitle="Detalle del lead" />
+        <div className="grid grid-cols-3 gap-6">
+          <div className="col-span-2 space-y-5">
+            <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', marginBottom: '16px' }}>Información de contacto</p>
+              <div className="grid grid-cols-2 gap-5">
+                {[
+                  { label: 'Email', value: selectedLead.email },
+                  { label: 'Teléfono', value: selectedLead.telefono },
+                  { label: 'Origen', value: `${ORIGEN_ICONS[selectedLead.origen] || ''} ${selectedLead.origen}` },
+                  { label: 'Fecha de ingreso', value: selectedLead.fecha },
+                ].map(({ label, value }) => (
+                  <div key={label}>
+                    <p style={{ fontSize: '11px', color: '#A3A3A3', fontFamily: 'var(--font-body)', marginBottom: '3px' }}>{label}</p>
+                    <p style={{ fontSize: '14px', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: 500, margin: 0 }}>{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Publicación de interés</p>
+              <p style={{ fontSize: '14px', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: 500, margin: 0 }}>{selectedLead.publicacion}</p>
+            </div>
+            <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Mensaje</p>
+              <p style={{ fontSize: '14px', color: '#525252', fontFamily: 'var(--font-body)', lineHeight: '1.6', fontStyle: 'italic', margin: 0 }}>"{selectedLead.mensaje}"</p>
+            </div>
+            <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', marginBottom: '16px' }}>Historial</p>
+              <div className="space-y-4">
+                {[
+                  { icon: CheckCircle, color: '#006B4E', bg: '#E8F5EE', text: 'Lead creado en la plataforma', time: selectedLead.fecha },
+                  ...(selectedLead.broker !== '-' ? [{ icon: UserCheck, color: '#0D9488', bg: '#F0FDFA', text: `Asignado a ${selectedLead.broker}`, time: selectedLead.fecha }] : []),
+                  ...(selectedLead.estado === 'contactado' || selectedLead.estado === 'cerrado' ? [{ icon: MessageCircle, color: '#2563EB', bg: '#EFF6FF', text: 'Primer contacto realizado', time: selectedLead.fecha }] : []),
+                  ...(selectedLead.estado === 'cerrado' ? [{ icon: Bookmark, color: '#006B4E', bg: '#E8F5EE', text: 'Lead marcado como cerrado', time: selectedLead.fecha }] : []),
+                ].map(({ icon: Icon, color, bg, text, time }, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg }}>
+                      <Icon className="w-3.5 h-3.5" style={{ color }} />
+                    </div>
+                    <div>
+                      <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{text}</p>
+                      <p style={{ fontSize: '11px', color: '#A3A3A3', fontFamily: 'var(--font-body)', marginTop: '2px' }}>{time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Estado</p>
+              <span style={{ backgroundColor: estStyle.bg, color: estStyle.color, fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>{estStyle.label}</span>
+            </div>
+            <div className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5' }}>
+              <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', marginBottom: '10px' }}>Broker asignado</p>
+              <p style={{ fontSize: '14px', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontWeight: 500, margin: '0 0 14px' }}>{selectedLead.broker === '-' ? 'Sin asignar' : selectedLead.broker}</p>
+              <button onClick={() => { setLeadParaAsignar(selectedLead); setBrokerSeleccionado(null); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+                <UserPlus className="w-4 h-4" />{selectedLead.broker === '-' ? 'Asignar broker' : 'Reasignar broker'}
+              </button>
+            </div>
+          </div>
+        </div>
+        {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); }} asignadoOk={asignadoOk} />}
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-8">
+      <SectionShell
+        title="Leads"
+        subtitle={`${leads.length} leads registrados en la plataforma`}
+        action={
+          <div className="flex items-center gap-2">
+            <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+              <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+              <Download className="w-3.5 h-3.5" /> Exportar
+            </button>
+          </div>
+        }
+      />
+      <div className="flex flex-col md:flex-row gap-3 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
+          <input type="text" placeholder="Buscar por nombre o email..." value={search} onChange={e => setSearch(e.target.value)} className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }} onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }} onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }} />
+        </div>
+        <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '160px' }}>
+          <option value="todos">Todos los estados</option>
+          <option value="nuevo">Nuevo</option>
+          <option value="asignado">Asignado</option>
+          <option value="contactado">Contactado</option>
+          <option value="cerrado">Cerrado</option>
+          <option value="no-interesado">No interesado</option>
+        </select>
+        <select value={filtroOrigen} onChange={e => setFiltroOrigen(e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '150px' }}>
+          <option value="todos">Todos los orígenes</option>
+          <option value="Web">Web</option>
+          <option value="Meta">Meta</option>
+          <option value="Google">Google</option>
+          <option value="WhatsApp">WhatsApp</option>
+        </select>
+      </div>
+      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+              <tr>
+                {['Nombre', 'Contacto', 'Origen', 'Estado', 'Broker', 'Fecha', 'Acciones'].map(h => (
+                  <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? [1,2,3,4,5].map(i => (
+                <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                  {[160,180,80,90,110,80,130].map((w,j) => (
+                    <td key={j} className="px-5 py-4"><div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px` }} /></td>
+                  ))}
+                </tr>
+              )) : filtrados.length === 0 ? (
+                <tr><td colSpan={7}>
+                  <div className="flex flex-col items-center justify-center py-14 text-center">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
+                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Sin resultados' : 'Aún no hay leads'}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Probá con otros filtros.' : 'Los leads aparecerán aquí cuando lleguen.'}</p>
+                  </div>
+                </td></tr>
+              ) : filtrados.map((lead, idx) => {
+                const est = LEAD_ESTADO_STYLES[lead.estado] || LEAD_ESTADO_STYLES['nuevo'];
+                return (
+                  <tr key={lead.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EFF6FF' }}>
+                          <span style={{ fontSize: '11px', fontWeight: 700, color: '#2563EB' }}>{lead.nombre.charAt(0)}</span>
+                        </div>
+                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.nombre}</span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.email}</span></div>
+                        <div className="flex items-center gap-1.5"><Phone className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.telefono}</span></div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+                        <span style={{ fontSize: '13px' }}>{ORIGEN_ICONS[lead.origen] || '🌐'}</span>
+                        <span style={{ fontSize: '12px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.origen}</span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span style={{ backgroundColor: est.bg, color: est.color, fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>{est.label}</span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span style={{ fontSize: '13px', color: lead.broker === '-' ? '#A3A3A3' : '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.broker === '-' ? 'Sin asignar' : lead.broker}</span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.fecha}</span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionado(null); }} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+                          <UserPlus className="w-3.5 h-3.5" />{lead.broker === '-' ? 'Asignar' : 'Reasignar'}
+                        </button>
+                        <button onClick={() => setSelectedLead(lead)} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors" style={{ color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                          <Eye className="w-3.5 h-3.5" />Ver detalle
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); }} asignadoOk={asignadoOk} />}
+    </div>
+  );
+}
+
+// ─── Brokers mock data ────────────────────────────────────────────────────────
+
+const CTP_BROKERS_DATA = [
+  { id: 'b001', nombre: 'Carlos Pérez',     email: 'carlos.perez@ctp.cl',     leadsAsignados: 14, contactos: 38, ultimaActividad: 'Hace 1h',      estado: 'activo'   as const },
+  { id: 'b002', nombre: 'Sofía Ramírez',    email: 'sofia.ramirez@ctp.cl',    leadsAsignados: 9,  contactos: 21, ultimaActividad: 'Hace 3h',      estado: 'activo'   as const },
+  { id: 'b003', nombre: 'Diego Muñoz',      email: 'diego.munoz@ctp.cl',      leadsAsignados: 17, contactos: 44, ultimaActividad: 'Hace 5h',      estado: 'activo'   as const },
+  { id: 'b004', nombre: 'Ana Valenzuela',   email: 'ana.valenzuela@ctp.cl',   leadsAsignados: 3,  contactos: 8,  ultimaActividad: 'Hace 2 días',  estado: 'inactivo' as const },
+  { id: 'b005', nombre: 'Roberto Castillo', email: 'r.castillo@ctp.cl',       leadsAsignados: 11, contactos: 29, ultimaActividad: 'Ayer 14:20',   estado: 'activo'   as const },
+  { id: 'b006', nombre: 'Valentina Mora',   email: 'v.mora@ctp.cl',           leadsAsignados: 6,  contactos: 15, ultimaActividad: 'Hace 6h',      estado: 'activo'   as const },
+  { id: 'b007', nombre: 'Gonzalo Ibáñez',   email: 'g.ibanez@ctp.cl',         leadsAsignados: 0,  contactos: 0,  ultimaActividad: 'Hace 1 semana',estado: 'inactivo' as const },
+  { id: 'b008', nombre: 'Patricia Flores',  email: 'p.flores@ctp.cl',         leadsAsignados: 8,  contactos: 20, ultimaActividad: 'Hace 2h',      estado: 'activo'   as const },
+];
+
+// ─── CTPBrokersView ───────────────────────────────────────────────────────────
+
+function CTPBrokersView() {
+  const [brokers, setBrokers] = useState(CTP_BROKERS_DATA);
+  const [search, setSearch] = useState('');
+  const [filtro, setFiltro] = useState<'todos' | 'activos' | 'inactivos'>('todos');
+  const [loading, setLoading] = useState(false);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+
+  const filtrados = brokers.filter(b => {
+    const matchSearch = b.nombre.toLowerCase().includes(search.toLowerCase()) || b.email.toLowerCase().includes(search.toLowerCase());
+    const matchFiltro = filtro === 'todos' || (filtro === 'activos' ? b.estado === 'activo' : b.estado === 'inactivo');
+    return matchSearch && matchFiltro;
+  });
+
+  function handleToggle(id: string) {
+    const broker = brokers.find(b => b.id === id);
+    if (!broker) return;
+    if (broker.estado === 'activo') {
+      setConfirmId(id);
+    } else {
+      setBrokers(prev => prev.map(b => b.id === id ? { ...b, estado: 'activo' as const } : b));
+    }
+  }
+
+  function confirmarDesactivacion() {
+    if (!confirmId) return;
+    setBrokers(prev => prev.map(b => b.id === confirmId ? { ...b, estado: 'inactivo' as const } : b));
+    setConfirmId(null);
+  }
+
+  const brokerConfirm = brokers.find(b => b.id === confirmId);
+
+  return (
+    <div className="p-8">
+      <SectionShell
+        title="Brokers"
+        subtitle={`${brokers.length} brokers registrados en la plataforma`}
+        action={
+          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+            <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
+          </button>
+        }
+      />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
+            <input type="text" placeholder="Buscar broker..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', width: '260px' }} onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }} onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }} />
+          </div>
+          <select value={filtro} onChange={e => setFiltro(e.target.value as any)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }}>
+            <option value="todos">Todos los brokers</option>
+            <option value="activos">Solo activos</option>
+            <option value="inactivos">Solo inactivos</option>
+          </select>
+        </div>
+        <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{filtrados.length} broker{filtrados.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+              <tr>
+                {['Broker', 'Email', 'Leads asignados', 'Contactos', 'Última actividad', 'Estado', 'Acciones'].map(h => (
+                  <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? [1,2,3,4].map(i => (
+                <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                  {[160,180,90,70,110,80,120].map((w,j) => (
+                    <td key={j} className="px-5 py-4"><div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px` }} /></td>
+                  ))}
+                </tr>
+              )) : filtrados.length === 0 ? (
+                <tr><td colSpan={7}>
+                  <div className="flex flex-col items-center justify-center py-14 text-center">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#F0FDFA' }}><UserCheck className="w-6 h-6" style={{ color: '#0D9488' }} /></div>
+                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtro !== 'todos' ? 'Sin resultados' : 'No hay brokers registrados'}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtro !== 'todos' ? 'Probá con otros filtros.' : 'Los brokers aparecerán aquí una vez que se registren.'}</p>
+                  </div>
+                </td></tr>
+              ) : filtrados.map((broker, idx) => (
+                <tr key={broker.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: broker.estado === 'activo' ? '#F0FDFA' : '#F5F5F5' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 700, color: broker.estado === 'activo' ? '#0D9488' : '#737373' }}>{broker.nombre.charAt(0)}</span>
+                      </div>
+                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{broker.nombre}</span>
+                    </div>
+                  </td>
+                  <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.email}</span></td>
+                  <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.leadsAsignados}</span></td>
+                  <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.contactos}</span></td>
+                  <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.ultimaActividad}</span></td>
+                  <td className="px-5 py-4">
+                    <span style={{ fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: broker.estado === 'activo' ? '#DCFCE7' : '#F5F5F5', color: broker.estado === 'activo' ? '#16A34A' : '#737373' }}>
+                      {broker.estado === 'activo' ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4">
+                    <button onClick={() => handleToggle(broker.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                      {broker.estado === 'activo'
+                        ? <><ToggleRight className="w-4 h-4" style={{ color: '#16A34A' }} />Desactivar</>
+                        : <><ToggleLeft className="w-4 h-4" style={{ color: '#737373' }} />Activar</>}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {confirmId && brokerConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-full max-w-sm rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+            <div className="p-6">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#FEF3C7' }}>
+                <AlertTriangle className="w-6 h-6" style={{ color: '#CA8A04' }} />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A', margin: '0 0 8px' }}>¿Desactivar a {brokerConfirm.nombre}?</h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', lineHeight: '1.6', margin: '0 0 24px' }}>
+                El broker quedará inactivo y no podrá recibir nuevos leads hasta que sea reactivado. Los leads ya asignados no se verán afectados.
+              </p>
+              <div className="flex gap-3">
+                <button onClick={() => setConfirmId(null)} className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
+                <button onClick={confirmarDesactivacion} className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#FFFFFF', backgroundColor: '#CA8A04' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#A16207'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#CA8A04'; }}>Sí, desactivar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
