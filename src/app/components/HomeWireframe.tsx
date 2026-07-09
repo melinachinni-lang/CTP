@@ -2305,7 +2305,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>{t.home.footerHowItWorks}</div>
                     <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => isLoggedIn ? onOpenPublishModal?.() : onNavigateToPublish?.()}>{t.home.footerPublish}</div>
                     <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>{t.home.footerPlans}</div>
-                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('entry')}>{t.home.footerBrokers}</div>
+                    <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes-brokers')}>{t.home.footerBrokers}</div>
                   </div>
                 </div>
 

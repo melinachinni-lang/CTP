@@ -3870,12 +3870,12 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
                 }}>{t.home.footerPlans}</div>
-                <div style={{
+                <div className="cursor-pointer" style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: '#525252'
-                }}>{t.home.footerBrokers}</div>
+                }} onClick={() => onNavigate('planes-brokers')}>{t.home.footerBrokers}</div>
               </div>
             </div>
 

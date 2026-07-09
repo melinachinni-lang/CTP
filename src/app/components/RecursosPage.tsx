@@ -553,7 +553,7 @@ export function RecursosPage({ onNavigate, isLoggedIn = false, currentUser, onLo
                 <div>{t.home.footerHowItWorks}</div>
                 <div>{t.home.footerPublish}</div>
                 <div>{t.home.footerPlans}</div>
-                <div>{t.home.footerBrokers}</div>
+                <div className="cursor-pointer hover:text-black" onClick={() => onNavigate('planes-brokers')}>{t.home.footerBrokers}</div>
               </div>
             </div>
 

@@ -672,7 +672,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#525252' }}>{t.home.footerHowItWorks}</div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#525252' }}>{t.home.footerPublish}</div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#525252' }}>{t.home.footerPlans}</div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#525252' }}>{t.home.footerBrokers}</div>
+                <div className="cursor-pointer" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#525252' }} onClick={() => onNavigate('planes-brokers')}>{t.home.footerBrokers}</div>
               </div>
             </div>
 
