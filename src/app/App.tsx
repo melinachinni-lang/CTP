@@ -9,7 +9,6 @@ import { BrokerDashboardScreen } from '@/app/components/BrokerDashboardScreen';
 import { PersonDashboardScreen, CompareContent } from '@/app/components/PersonDashboardScreen';
 import { Navbar } from '@/app/components/Navbar';
 import { AdminDashboard } from '@/app/components/AdminDashboard';
-import { AdminGeneralDashboard } from '@/app/components/AdminGeneralDashboard';
 import { CTPAdminDashboard } from '@/app/components/CTPAdminDashboard';
 import { HomeWireframe } from '@/app/components/HomeWireframe';
 import { ParcelasPage } from '@/app/components/ParcelasPage';
@@ -113,7 +112,6 @@ type Screen =
   | 'real-estate-dashboard'
   | 'broker-dashboard'
   | 'admin-dashboard'
-  | 'admin-general-dashboard'
   | 'ctp-admin-dashboard'
   | 'politica-privacidad'
   | 'terminos-condiciones'
@@ -421,8 +419,7 @@ function AppContent() {
                 <option value="real-estate-dashboard">10. Inmobiliaria CTP</option>
                 <option value="broker-dashboard">11. Dashboard Broker</option>
                 <option value="admin-dashboard">12. Dashboard Admin</option>
-                <option value="admin-general-dashboard">13. Dashboard Admin General</option>
-                <option value="ctp-admin-dashboard">14. CTP Plataforma</option>
+                <option value="ctp-admin-dashboard">13. CTP Plataforma</option>
               </select>
             </div>
           </div>
@@ -456,7 +453,6 @@ function AppContent() {
         {currentScreen === 'real-estate-dashboard' && <RealEstateDashboardScreen onNavigate={handleNavigate} ref={realEstateDashboardRef} />}
         {currentScreen === 'broker-dashboard' && <BrokerDashboardScreen onNavigate={handleNavigate} ref={brokerDashboardRef} />}
         {currentScreen === 'admin-dashboard' && <AdminDashboard onNavigate={handleNavigate} />}
-        {currentScreen === 'admin-general-dashboard' && <AdminGeneralDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'ctp-admin-dashboard' && <CTPAdminDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigate={handleNavigate} />}
         {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigate={handleNavigate} />}
