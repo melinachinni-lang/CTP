@@ -342,21 +342,21 @@ function KPICard({ label, value, change, up, icon: Icon, iconBg, iconColor }: {
   icon: LucideIcon; iconBg: string; iconColor: string;
 }) {
   return (
-    <div className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-      <div className="flex items-center justify-between mb-3">
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: iconBg }}>
-          <Icon className="w-4 h-4" style={{ color: iconColor }} />
+    <div className="rounded-2xl p-3 md:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+      <div className="flex items-center justify-between mb-2 md:mb-3">
+        <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: iconBg }}>
+          <Icon className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color: iconColor }} />
         </div>
         <span
-          className="flex items-center gap-0.5"
-          style={{ fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)', color: up ? '#006B4E' : '#E53E3E', backgroundColor: up ? '#E8F5EE' : '#FEE2E2', padding: '2px 7px', borderRadius: '99px' }}
+          className="flex items-center gap-0.5 flex-shrink-0"
+          style={{ fontSize: '10px', fontWeight: 600, fontFamily: 'var(--font-body)', color: up ? '#006B4E' : '#E53E3E', backgroundColor: up ? '#E8F5EE' : '#FEE2E2', padding: '2px 5px', borderRadius: '99px', whiteSpace: 'nowrap' }}
         >
-          {up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+          {up ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}
           {change}
         </span>
       </div>
-      <p style={{ fontSize: '26px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 3px' }}>{value}</p>
-      <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
+      <p className="text-xl md:text-[26px]" style={{ fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 2px' }}>{value}</p>
+      <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
     </div>
   );
 }
