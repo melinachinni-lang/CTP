@@ -987,7 +987,7 @@ type CTPLead = typeof CTP_LEADS_DATA[0];
 
 // ─── Modal asignar broker (compartido) ───────────────────────────────────────
 
-function AsignarBrokerModal({ lead, brokers, brokerSeleccionado, onSelect, onConfirm, onClose, asignadoOk }: {
+function AsignarBrokerModal({ lead, brokers, brokerSeleccionado, onSelect, onConfirm, onClose, asignadoOk, errorModal }: {
   lead: CTPLead;
   brokers: typeof CTP_BROKERS_ASIGN;
   brokerSeleccionado: string | null;
@@ -995,6 +995,7 @@ function AsignarBrokerModal({ lead, brokers, brokerSeleccionado, onSelect, onCon
   onConfirm: () => void;
   onClose: () => void;
   asignadoOk: string | null;
+  errorModal?: boolean;
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -1009,7 +1010,13 @@ function AsignarBrokerModal({ lead, brokers, brokerSeleccionado, onSelect, onCon
           </button>
         </div>
         <div className="px-6 py-5 space-y-2">
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>Seleccioná un broker disponible</p>
+          {errorModal && (
+            <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl mb-3" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+              <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626', margin: 0 }}>No se pudo guardar la asignación. Intenta nuevamente.</p>
+            </div>
+          )}
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#0A0A0A', marginBottom: '12px' }}>Selecciona un broker disponible</p>
           {brokers.map(b => (
             <button key={b.id} onClick={() => { if (b.disponible) onSelect(b.id); }} disabled={!b.disponible} className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left" style={{ border: `1px solid ${brokerSeleccionado === b.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: brokerSeleccionado === b.id ? '#E8F5EE' : '#FAFAFA', opacity: b.disponible ? 1 : 0.5, cursor: b.disponible ? 'pointer' : 'not-allowed' }}>
               <div className="flex items-center gap-3">
@@ -1045,6 +1052,8 @@ function CTPLeadsView() {
   const [filtroEstado, setFiltroEstado] = useState('todos');
   const [filtroOrigen, setFiltroOrigen] = useState('todos');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CTPLead | null>(null);
   const [leadParaAsignar, setLeadParaAsignar] = useState<CTPLead | null>(null);
   const [brokerSeleccionado, setBrokerSeleccionado] = useState<string | null>(null);
@@ -1061,9 +1070,11 @@ function CTPLeadsView() {
     if (!leadParaAsignar || !brokerSeleccionado) return;
     const broker = CTP_BROKERS_ASIGN.find(b => b.id === brokerSeleccionado);
     if (!broker) return;
+    if (Math.random() < 0.3) { setErrorModal(true); return; }
+    setErrorModal(false);
     setLeads(prev => prev.map(l => l.id === leadParaAsignar.id ? { ...l, estado: 'asignado', broker: broker.nombre } : l));
     setAsignadoOk(leadParaAsignar.id);
-    setTimeout(() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); setAsignadoOk(null); }, 1200);
+    setTimeout(() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); setAsignadoOk(null); setErrorModal(false); }, 1200);
   }
 
   if (selectedLead) {
@@ -1136,7 +1147,7 @@ function CTPLeadsView() {
             </div>
           </div>
         </div>
-        {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); }} asignadoOk={asignadoOk} />}
+        {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); setErrorModal(false); }} asignadoOk={asignadoOk} errorModal={errorModal} />}
       </div>
     );
   }
@@ -1147,7 +1158,7 @@ function CTPLeadsView() {
         title="Leads"
         subtitle={`${leads.length} leads registrados en la plataforma`}
         action={
-          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <button onClick={() => { setLoading(true); setError(false); setTimeout(() => { setLoading(false); if (Math.random() < 0.35) setError(true); }, 1400); }} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
             <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
           </button>
         }
@@ -1196,7 +1207,20 @@ function CTPLeadsView() {
                     <td key={j} className="px-5 py-4"><div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px` }} /></td>
                   ))}
                 </tr>
-              )) : filtrados.length === 0 ? (
+              )) : error ? (
+                <tr><td colSpan={7}>
+                  <div className="flex flex-col items-center justify-center py-14 text-center">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
+                      <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>No se pudo cargar la información</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', margin: '0 0 16px' }}>Ocurrió un error inesperado. Verifica tu conexión e intenta nuevamente.</p>
+                    <button onClick={() => { setError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="px-4 py-2 rounded-[200px] text-sm font-medium transition-colors" style={{ color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                      Reintentar
+                    </button>
+                  </div>
+                </td></tr>
+              ) : filtrados.length === 0 ? (
                 <tr><td colSpan={7}>
                   <div className="flex flex-col items-center justify-center py-14 text-center">
                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
@@ -1252,7 +1276,7 @@ function CTPLeadsView() {
           </table>
         </div>
       </div>
-      {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); }} asignadoOk={asignadoOk} />}
+      {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); setErrorModal(false); }} asignadoOk={asignadoOk} errorModal={errorModal} />}
     </div>
   );
 }
@@ -1277,7 +1301,9 @@ function CTPBrokersView() {
   const [search, setSearch] = useState('');
   const [filtro, setFiltro] = useState<'todos' | 'activos' | 'inactivos'>('todos');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [errorDesactivar, setErrorDesactivar] = useState(false);
 
   const filtrados = brokers.filter(b => {
     const matchSearch = b.nombre.toLowerCase().includes(search.toLowerCase()) || b.email.toLowerCase().includes(search.toLowerCase());
@@ -1297,6 +1323,8 @@ function CTPBrokersView() {
 
   function confirmarDesactivacion() {
     if (!confirmId) return;
+    if (Math.random() < 0.3) { setErrorDesactivar(true); return; }
+    setErrorDesactivar(false);
     setBrokers(prev => prev.map(b => b.id === confirmId ? { ...b, estado: 'inactivo' as const } : b));
     setConfirmId(null);
   }
@@ -1309,7 +1337,7 @@ function CTPBrokersView() {
         title="Brokers"
         subtitle={`${brokers.length} brokers registrados en la plataforma`}
         action={
-          <button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <button onClick={() => { setLoading(true); setError(false); setTimeout(() => { setLoading(false); if (Math.random() < 0.35) setError(true); }, 1400); }} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
             <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar
           </button>
         }
@@ -1348,7 +1376,20 @@ function CTPBrokersView() {
                     <td key={j} className="px-5 py-4"><div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px` }} /></td>
                   ))}
                 </tr>
-              )) : filtrados.length === 0 ? (
+              )) : error ? (
+                <tr><td colSpan={7}>
+                  <div className="flex flex-col items-center justify-center py-14 text-center">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
+                      <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>No se pudo cargar la información</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', margin: '0 0 16px' }}>Ocurrió un error inesperado. Verifica tu conexión e intenta nuevamente.</p>
+                    <button onClick={() => { setError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="px-4 py-2 rounded-[200px] text-sm font-medium transition-colors" style={{ color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                      Reintentar
+                    </button>
+                  </div>
+                </td></tr>
+              ) : filtrados.length === 0 ? (
                 <tr><td colSpan={7}>
                   <div className="flex flex-col items-center justify-center py-14 text-center">
                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
@@ -1397,11 +1438,17 @@ function CTPBrokersView() {
                 <AlertTriangle className="w-6 h-6" style={{ color: '#CA8A04' }} />
               </div>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A', margin: '0 0 8px' }}>¿Desactivar a {brokerConfirm.nombre}?</h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', lineHeight: '1.6', margin: '0 0 24px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', lineHeight: '1.6', margin: '0 0 16px' }}>
                 El broker quedará inactivo y no podrá recibir nuevos leads hasta que sea reactivado. Los leads ya asignados no se verán afectados.
               </p>
+              {errorDesactivar && (
+                <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl mb-4" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626', margin: 0 }}>No se pudo completar la acción. Intenta nuevamente.</p>
+                </div>
+              )}
               <div className="flex gap-3">
-                <button onClick={() => setConfirmId(null)} className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
+                <button onClick={() => { setConfirmId(null); setErrorDesactivar(false); }} className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>Cancelar</button>
                 <button onClick={confirmarDesactivacion} className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#FFFFFF', backgroundColor: '#CA8A04' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#A16207'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#CA8A04'; }}>Sí, desactivar</button>
               </div>
             </div>
