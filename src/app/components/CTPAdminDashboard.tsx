@@ -9,7 +9,7 @@ import {
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
   Bookmark, UserCheck, type LucideIcon,
   UserPlus, ToggleLeft, ToggleRight, AlertTriangle, X, Check,
-  Download, Activity, Mail, Globe, Share2,
+  Download, Activity, Mail, Globe, Share2, Menu,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -96,6 +96,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
     administracion: false,
   });
   const [showMenu, setShowMenu] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [triggerPublishModal, setTriggerPublishModal] = useState(0);
   const [publishModalOrigin, setPublishModalOrigin] = useState<NavSection>('inicio');
 
@@ -105,6 +106,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
 
   const handleNavClick = (sectionId: NavSection, groupId: string) => {
     setCurrentSection(sectionId);
+    setSidebarOpen(false);
     if (!openGroups[groupId]) {
       setOpenGroups(prev => ({ ...prev, [groupId]: true }));
     }
@@ -114,11 +116,28 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
     <>
       <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
 
+      {/* ── Mobile header ── */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 flex items-center px-4 gap-3" style={{ backgroundColor: '#002F23', zIndex: 50 }}>
+        <button onClick={() => setSidebarOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-lg flex-shrink-0" style={{ color: 'rgba(255,255,255,0.8)' }}>
+          <Menu className="w-5 h-5" />
+        </button>
+        <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '16px', color: '#FFFFFF', margin: 0 }}>CompraTuParcela</p>
+      </div>
+
+      {/* ── Sidebar backdrop (mobile) ── */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 md:hidden" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 35 }} onClick={() => setSidebarOpen(false)} />
+      )}
+
       {/* ── Sidebar ── */}
       <aside
-        className="w-64 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20 flex flex-col"
-        style={{ backgroundColor: '#002F23' }}
+        className={`w-64 flex-shrink-0 fixed left-0 top-0 bottom-0 flex flex-col transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+        style={{ backgroundColor: '#002F23', zIndex: 40 }}
       >
+        {/* Mobile close button */}
+        <button className="md:hidden absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)' }} onClick={() => setSidebarOpen(false)}>
+          <X className="w-4 h-4" />
+        </button>
         {/* Logo */}
         <div className="px-6 pt-8 pb-5 flex-shrink-0">
           <p style={{
@@ -136,7 +155,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         <nav className="flex-1 overflow-y-auto scrollbar-hide px-2 pb-2">
           {/* Inicio standalone */}
           <button
-            onClick={() => setCurrentSection('inicio')}
+            onClick={() => { setCurrentSection('inicio'); setSidebarOpen(false); }}
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all mb-1"
             style={{
               backgroundColor: currentSection === 'inicio' ? '#FFFFFF' : 'transparent',
@@ -273,8 +292,8 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
 
       {/* ── Main content ── */}
       <div
-        className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]"
-        style={{ left: '256px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}
+        className="fixed overflow-y-auto bg-white rounded-xl md:rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)] top-[56px] left-3 right-3 bottom-3 md:top-[44px] md:left-64 md:right-3 md:bottom-3"
+        style={{ zIndex: 10 }}
       >
         {currentSection === 'inicio'          && <CTPHomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="ctp-admin" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} onTypeModalCancel={() => setCurrentSection(publishModalOrigin)} />}
@@ -1153,7 +1172,7 @@ function CTPLeadsView() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <SectionShell
         title="Leads"
         subtitle={`${leads.length} leads registrados en la plataforma`}
@@ -1191,90 +1210,133 @@ function CTPLeadsView() {
         </div>
       </div>
       <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-              <tr>
-                {['Nombre', 'Contacto', 'Origen', 'Estado', 'Broker', 'Fecha', 'Acciones'].map(h => (
-                  <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? [1,2,3,4,5].map(i => (
-                <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                  {[160,180,80,90,110,80,130].map((w,j) => (
-                    <td key={j} className="px-5 py-4"><div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px` }} /></td>
-                  ))}
-                </tr>
-              )) : error ? (
-                <tr><td colSpan={7}>
-                  <div className="flex flex-col items-center justify-center py-14 text-center">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
-                      <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
-                    </div>
-                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>No se pudo cargar la información</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', margin: '0 0 16px' }}>Ocurrió un error inesperado. Verifica tu conexión e intenta nuevamente.</p>
-                    <button onClick={() => { setError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="px-4 py-2 rounded-[200px] text-sm font-medium transition-colors" style={{ color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
-                      Reintentar
-                    </button>
-                  </div>
-                </td></tr>
-              ) : filtrados.length === 0 ? (
-                <tr><td colSpan={7}>
-                  <div className="flex flex-col items-center justify-center py-14 text-center">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
-                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Sin resultados' : 'Aún no hay leads'}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Prueba con otros filtros.' : 'Los leads aparecerán aquí cuando lleguen.'}</p>
-                  </div>
-                </td></tr>
-              ) : filtrados.map((lead, idx) => {
+        {/* Estado compartido: loading / error / vacío */}
+        {(loading || error || filtrados.length === 0) ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center px-4">
+            {loading ? (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3 animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+                <div className="h-3 rounded-full animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0', width: '160px' }} />
+                <div className="h-2.5 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: '120px' }} />
+              </>
+            ) : error ? (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
+                  <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
+                </div>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>No se pudo cargar la información</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', margin: '0 0 16px' }}>Ocurrió un error inesperado. Verifica tu conexión e intenta nuevamente.</p>
+                <button onClick={() => { setError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="px-4 py-2 rounded-[200px] text-sm font-medium transition-colors" style={{ color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                  Reintentar
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Sin resultados' : 'Aún no hay leads'}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Prueba con otros filtros.' : 'Los leads aparecerán aquí cuando lleguen.'}</p>
+              </>
+            )}
+          </div>
+        ) : (
+          <>
+            {/* Desktop: tabla */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full">
+                <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+                  <tr>
+                    {['Nombre', 'Contacto', 'Origen', 'Estado', 'Broker', 'Fecha', 'Acciones'].map(h => (
+                      <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtrados.map((lead, idx) => {
+                    const est = LEAD_ESTADO_STYLES[lead.estado] || LEAD_ESTADO_STYLES['nuevo'];
+                    return (
+                      <tr key={lead.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EFF6FF' }}>
+                              <span style={{ fontSize: '11px', fontWeight: 700, color: '#2563EB' }}>{lead.nombre.charAt(0)}</span>
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.nombre}</span>
+                          </div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.email}</span></div>
+                            <div className="flex items-center gap-1.5"><Phone className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.telefono}</span></div>
+                          </div>
+                        </td>
+                        <td className="px-5 py-4">
+                          {(() => { const OrigenIcon = ORIGEN_ICON_MAP[lead.origen] || Globe; return (
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+                              <OrigenIcon className="w-3.5 h-3.5" style={{ color: '#525252' }} />
+                              <span style={{ fontSize: '12px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.origen}</span>
+                            </div>
+                          ); })()}
+                        </td>
+                        <td className="px-5 py-4">
+                          <span style={{ backgroundColor: est.bg, color: est.color, fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>{est.label}</span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span style={{ fontSize: '13px', color: lead.broker === '-' ? '#A3A3A3' : '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.broker === '-' ? 'Sin asignar' : lead.broker}</span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.fecha}</span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-1.5">
+                            <LeadIconBtn icon={UserPlus} label={lead.broker === '-' ? 'Asignar broker' : 'Reasignar broker'} onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionado(null); }} color="#006B4E" bg="#E8F5EE" hoverBg="#D4EDDF" />
+                            <LeadIconBtn icon={Eye} label="Ver detalle" onClick={() => setSelectedLead(lead)} />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {/* Mobile: cards */}
+            <div className="md:hidden">
+              {filtrados.map((lead, idx) => {
                 const est = LEAD_ESTADO_STYLES[lead.estado] || LEAD_ESTADO_STYLES['nuevo'];
+                const OrigenIcon = ORIGEN_ICON_MAP[lead.origen] || Globe;
                 return (
-                  <tr key={lead.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
+                  <div key={lead.id} className="p-4" style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#EFF6FF' }}>
                           <span style={{ fontSize: '11px', fontWeight: 700, color: '#2563EB' }}>{lead.nombre.charAt(0)}</span>
                         </div>
-                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.nombre}</span>
-                      </div>
-                    </td>
-                    <td className="px-5 py-4">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.email}</span></div>
-                        <div className="flex items-center gap-1.5"><Phone className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.telefono}</span></div>
-                      </div>
-                    </td>
-                    <td className="px-5 py-4">
-                      {(() => { const OrigenIcon = ORIGEN_ICON_MAP[lead.origen] || Globe; return (
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-                          <OrigenIcon className="w-3.5 h-3.5" style={{ color: '#525252' }} />
-                          <span style={{ fontSize: '12px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.origen}</span>
+                        <div>
+                          <p style={{ fontWeight: 600, fontSize: '14px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{lead.nombre}</p>
+                          <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{lead.email}</p>
                         </div>
-                      ); })()}
-                    </td>
-                    <td className="px-5 py-4">
-                      <span style={{ backgroundColor: est.bg, color: est.color, fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>{est.label}</span>
-                    </td>
-                    <td className="px-5 py-4">
-                      <span style={{ fontSize: '13px', color: lead.broker === '-' ? '#A3A3A3' : '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.broker === '-' ? 'Sin asignar' : lead.broker}</span>
-                    </td>
-                    <td className="px-5 py-4">
-                      <span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.fecha}</span>
-                    </td>
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-1.5">
+                      </div>
+                      <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: est.bg, color: est.color, flexShrink: 0, marginLeft: '8px' }}>{est.label}</span>
+                    </div>
+                    <div className="flex items-end justify-between" style={{ marginLeft: '42px' }}>
+                      <div>
+                        <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: '0 0 3px' }}>{lead.telefono}</p>
+                        <div className="flex items-center gap-1.5">
+                          <OrigenIcon className="w-3 h-3 flex-shrink-0" style={{ color: '#525252' }} />
+                          <span style={{ fontSize: '12px', color: '#525252', fontFamily: 'var(--font-body)' }}>{lead.origen} · {lead.broker !== '-' ? lead.broker : 'Sin asignar'} · {lead.fecha}</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-1.5 flex-shrink-0 ml-2">
                         <LeadIconBtn icon={UserPlus} label={lead.broker === '-' ? 'Asignar broker' : 'Reasignar broker'} onClick={() => { setLeadParaAsignar(lead); setBrokerSeleccionado(null); }} color="#006B4E" bg="#E8F5EE" hoverBg="#D4EDDF" />
                         <LeadIconBtn icon={Eye} label="Ver detalle" onClick={() => setSelectedLead(lead)} />
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 );
               })}
-            </tbody>
-          </table>
-        </div>
+            </div>
+          </>
+        )}
+        <div className="hidden md:block" />
       </div>
       {leadParaAsignar && <AsignarBrokerModal lead={leadParaAsignar} brokers={CTP_BROKERS_ASIGN} brokerSeleccionado={brokerSeleccionado} onSelect={setBrokerSeleccionado} onConfirm={confirmarAsignacion} onClose={() => { setLeadParaAsignar(null); setBrokerSeleccionado(null); setErrorModal(false); }} asignadoOk={asignadoOk} errorModal={errorModal} />}
     </div>
@@ -1332,7 +1394,7 @@ function CTPBrokersView() {
   const brokerConfirm = brokers.find(b => b.id === confirmId);
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <SectionShell
         title="Brokers"
         subtitle={`${brokers.length} brokers registrados en la plataforma`}
@@ -1360,74 +1422,113 @@ function CTPBrokersView() {
         <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{filtrados.length} broker{filtrados.length !== 1 ? 's' : ''}</span>
       </div>
       <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-              <tr>
-                {['Broker', 'Email', 'Leads asignados', 'Contactos', 'Última actividad', 'Estado', 'Acciones'].map(h => (
-                  <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? [1,2,3,4].map(i => (
-                <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                  {[160,180,90,70,110,80,120].map((w,j) => (
-                    <td key={j} className="px-5 py-4"><div className="h-3 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: `${w}px` }} /></td>
+        {(loading || error || filtrados.length === 0) ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center px-4">
+            {loading ? (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3 animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+                <div className="h-3 rounded-full animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0', width: '160px' }} />
+                <div className="h-2.5 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: '120px' }} />
+              </>
+            ) : error ? (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
+                  <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
+                </div>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>No se pudo cargar la información</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', margin: '0 0 16px' }}>Ocurrió un error inesperado. Verifica tu conexión e intenta nuevamente.</p>
+                <button onClick={() => { setError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="px-4 py-2 rounded-[200px] text-sm font-medium transition-colors" style={{ color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
+                  Reintentar
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtro !== 'todos' ? 'Sin resultados' : 'No hay brokers registrados'}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtro !== 'todos' ? 'Prueba con otros filtros.' : 'Los brokers aparecerán aquí una vez que se registren.'}</p>
+              </>
+            )}
+          </div>
+        ) : (
+          <>
+            {/* Desktop: tabla */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full">
+                <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
+                  <tr>
+                    {['Broker', 'Email', 'Leads asignados', 'Contactos', 'Última actividad', 'Estado', 'Acciones'].map(h => (
+                      <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtrados.map((broker, idx) => (
+                    <tr key={broker.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: broker.estado === 'activo' ? '#F0FDFA' : '#F5F5F5' }}>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: broker.estado === 'activo' ? '#0D9488' : '#737373' }}>{broker.nombre.charAt(0)}</span>
+                          </div>
+                          <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{broker.nombre}</span>
+                        </div>
+                      </td>
+                      <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.email}</span></td>
+                      <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.leadsAsignados}</span></td>
+                      <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.contactos}</span></td>
+                      <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.ultimaActividad}</span></td>
+                      <td className="px-5 py-4">
+                        <span style={{ fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: broker.estado === 'activo' ? '#DCFCE7' : '#F5F5F5', color: broker.estado === 'activo' ? '#16A34A' : '#737373' }}>
+                          {broker.estado === 'activo' ? 'Activo' : 'Inactivo'}
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <button onClick={() => handleToggle(broker.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                          {broker.estado === 'activo'
+                            ? <><ToggleRight className="w-4 h-4" style={{ color: '#16A34A' }} />Desactivar</>
+                            : <><ToggleLeft className="w-4 h-4" style={{ color: '#737373' }} />Activar</>}
+                        </button>
+                      </td>
+                    </tr>
                   ))}
-                </tr>
-              )) : error ? (
-                <tr><td colSpan={7}>
-                  <div className="flex flex-col items-center justify-center py-14 text-center">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
-                      <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
-                    </div>
-                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>No se pudo cargar la información</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', margin: '0 0 16px' }}>Ocurrió un error inesperado. Verifica tu conexión e intenta nuevamente.</p>
-                    <button onClick={() => { setError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="px-4 py-2 rounded-[200px] text-sm font-medium transition-colors" style={{ color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
-                      Reintentar
-                    </button>
-                  </div>
-                </td></tr>
-              ) : filtrados.length === 0 ? (
-                <tr><td colSpan={7}>
-                  <div className="flex flex-col items-center justify-center py-14 text-center">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
-                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtro !== 'todos' ? 'Sin resultados' : 'No hay brokers registrados'}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtro !== 'todos' ? 'Prueba con otros filtros.' : 'Los brokers aparecerán aquí una vez que se registren.'}</p>
-                  </div>
-                </td></tr>
-              ) : filtrados.map((broker, idx) => (
-                <tr key={broker.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
+                </tbody>
+              </table>
+            </div>
+            {/* Mobile: cards */}
+            <div className="md:hidden">
+              {filtrados.map((broker, idx) => (
+                <div key={broker.id} className="p-4" style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: broker.estado === 'activo' ? '#F0FDFA' : '#F5F5F5' }}>
                         <span style={{ fontSize: '11px', fontWeight: 700, color: broker.estado === 'activo' ? '#0D9488' : '#737373' }}>{broker.nombre.charAt(0)}</span>
                       </div>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{broker.nombre}</span>
+                      <div>
+                        <p style={{ fontWeight: 600, fontSize: '14px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{broker.nombre}</p>
+                        <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{broker.email}</p>
+                      </div>
                     </div>
-                  </td>
-                  <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.email}</span></td>
-                  <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.leadsAsignados}</span></td>
-                  <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.contactos}</span></td>
-                  <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.ultimaActividad}</span></td>
-                  <td className="px-5 py-4">
-                    <span style={{ fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: broker.estado === 'activo' ? '#DCFCE7' : '#F5F5F5', color: broker.estado === 'activo' ? '#16A34A' : '#737373' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: broker.estado === 'activo' ? '#DCFCE7' : '#F5F5F5', color: broker.estado === 'activo' ? '#16A34A' : '#737373', flexShrink: 0, marginLeft: '8px' }}>
                       {broker.estado === 'activo' ? 'Activo' : 'Inactivo'}
                     </span>
-                  </td>
-                  <td className="px-5 py-4">
-                    <button onClick={() => handleToggle(broker.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                  </div>
+                  <div className="flex items-end justify-between" style={{ marginLeft: '42px' }}>
+                    <div>
+                      <p style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: '0 0 2px' }}>
+                        <span style={{ fontWeight: 600 }}>{broker.leadsAsignados}</span> leads · <span style={{ fontWeight: 600 }}>{broker.contactos}</span> contactos
+                      </p>
+                      <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>Última actividad: {broker.ultimaActividad}</p>
+                    </div>
+                    <button onClick={() => handleToggle(broker.id)} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors flex-shrink-0 ml-2" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
                       {broker.estado === 'activo'
-                        ? <><ToggleRight className="w-4 h-4" style={{ color: '#16A34A' }} />Desactivar</>
-                        : <><ToggleLeft className="w-4 h-4" style={{ color: '#737373' }} />Activar</>}
+                        ? <><ToggleRight className="w-3.5 h-3.5" style={{ color: '#16A34A' }} />Desactivar</>
+                        : <><ToggleLeft className="w-3.5 h-3.5" style={{ color: '#737373' }} />Activar</>}
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </div>
+          </>
+        )}
       </div>
 
       {confirmId && brokerConfirm && (
