@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Home, FolderOpen, MessageCircle, FileText, Calendar, User,
   TrendingUp, BarChart3, Zap, Sparkles,
@@ -377,10 +377,40 @@ function StatusBadge({ status }: { status: 'activo' | 'pendiente' | 'inactivo' }
 
 // ─── Inicio (CTP Home) ────────────────────────────────────────────────────────
 
+function KPICardSkeleton() {
+  return (
+    <div className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+      <div className="flex items-center justify-between mb-3">
+        <div className="w-9 h-9 rounded-xl animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+        <div className="h-5 w-14 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+      </div>
+      <div className="h-7 w-20 rounded-lg animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+      <div className="h-3 w-32 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+    </div>
+  );
+}
+
 function CTPHomeContent({ setCurrentSection }: {
   setCurrentSection: (s: NavSection) => void;
   setTriggerPublishModal: (fn: (n: number) => number) => void;
 }) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1600);
+    return () => clearTimeout(t);
+  }, []);
+
+  function handleActualizar() {
+    setLoading(true);
+    setError(false);
+    setTimeout(() => {
+      setLoading(false);
+      if (Math.random() < 0.35) setError(true);
+    }, 1400);
+  }
+
   const kpisActividad = [
     { label: 'Publicaciones activas',   value: '1.847',  change: '+23',    up: true,  icon: FolderOpen,    iconBg: '#E8F5EE', iconColor: '#006B4E' },
     { label: 'Consultas este mes',      value: '4.312',  change: '+18%',   up: true,  icon: MessageCircle, iconBg: '#EFF6FF', iconColor: '#2563EB' },
@@ -402,24 +432,42 @@ function CTPHomeContent({ setCurrentSection }: {
   ];
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>
-          Bienvenido, Admin CTP
-        </h1>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>
-          Visión general de la plataforma CompraTuParcela.
-        </p>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>
+            Bienvenido, Admin CTP
+          </h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>
+            Visión general de la plataforma CompraTuParcela.
+          </p>
+        </div>
+        <button onClick={handleActualizar} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors flex-shrink-0" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar datos
+        </button>
       </div>
+
+      {/* Banner de error */}
+      {error && (
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+          <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#DC2626', margin: 0, flex: 1 }}>
+            No se pudieron actualizar los datos. Verifica tu conexión e intenta nuevamente.
+          </p>
+          <button onClick={handleActualizar} style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+            Reintentar
+          </button>
+        </div>
+      )}
 
       {/* KPIs actividad global */}
       <div className="mb-2">
         <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
           Actividad global
         </p>
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          {kpisActividad.map(k => <KPICard key={k.label} {...k} />)}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {loading ? [1,2,3,4].map(i => <KPICardSkeleton key={i} />) : kpisActividad.map(k => <KPICard key={k.label} {...k} />)}
         </div>
       </div>
 
@@ -428,13 +476,13 @@ function CTPHomeContent({ setCurrentSection }: {
         <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
           Participantes
         </p>
-        <div className="grid grid-cols-4 gap-4">
-          {kpisParticipantes.map(k => <KPICard key={k.label} {...k} />)}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {loading ? [1,2,3,4].map(i => <KPICardSkeleton key={i} />) : kpisParticipantes.map(k => <KPICard key={k.label} {...k} />)}
         </div>
       </div>
 
       {/* Accesos rápidos + Actividad reciente */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Accesos rápidos */}
         <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
           <p style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 16px' }}>
@@ -464,23 +512,45 @@ function CTPHomeContent({ setCurrentSection }: {
         </div>
 
         {/* Actividad reciente */}
-        <div className="col-span-2 rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+        <div className="md:col-span-2 rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
           <p style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 16px' }}>
             Actividad reciente
           </p>
-          <div className="space-y-4">
-            {actividad.map(({ icon: Icon, color, text, time }, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: color + '18' }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color }} />
+          {loading ? (
+            <div className="space-y-4">
+              {[1,2,3,4,5].map(i => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full animate-pulse flex-shrink-0 mt-0.5" style={{ backgroundColor: '#F0F0F0' }} />
+                  <div className="flex-1">
+                    <div className="h-3 rounded-full animate-pulse mb-1.5" style={{ backgroundColor: '#F0F0F0', width: '75%' }} />
+                    <div className="h-2.5 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: '35%' }} />
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{text}</p>
-                  <p style={{ fontSize: '11px', color: '#A0A0A0', fontFamily: 'var(--font-body)', marginTop: '2px' }}>{time}</p>
-                </div>
+              ))}
+            </div>
+          ) : actividad.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: '#F5F5F5' }}>
+                <Clock className="w-5 h-5" style={{ color: '#A3A3A3' }} />
               </div>
-            ))}
-          </div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>Sin actividad reciente</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>La actividad de la plataforma aparecerá aquí.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {actividad.map(({ icon: Icon, color, text, time }, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: color + '18' }}>
+                    <Icon className="w-3.5 h-3.5" style={{ color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{text}</p>
+                    <p style={{ fontSize: '11px', color: '#A0A0A0', fontFamily: 'var(--font-body)', marginTop: '2px' }}>{time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
