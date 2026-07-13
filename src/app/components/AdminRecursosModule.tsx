@@ -491,26 +491,6 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
               </div>
             </div>
 
-            {/* Palabras clave */}
-            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>Palabras clave (SEO)</label>
-              <div className="flex gap-2">
-                <input type="text" placeholder="Ej: inversión" value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(); } }} className="flex-1 px-3 py-2 rounded-xl outline-none text-sm" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }} onFocus={e => { e.target.style.borderColor = '#3D5E28'; }} onBlur={e => { e.target.style.borderColor = '#E5E5E5'; }} />
-                <button onClick={addTag} className="px-3 py-2 rounded-xl" style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28' }}><Plus className="w-4 h-4" /></button>
-              </div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#A3A3A3', marginTop: '4px' }}>Enter o coma para agregar</p>
-              {formPalabrasClave.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {formPalabrasClave.map(k => (
-                    <span key={k} className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)' }}>
-                      #{k}
-                      <button onClick={() => setFormPalabrasClave(prev => prev.filter(p => p !== k))} className="hover:opacity-70"><X className="w-3 h-3" /></button>
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* Imágenes */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
               <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
