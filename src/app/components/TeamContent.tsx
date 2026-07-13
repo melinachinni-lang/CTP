@@ -66,7 +66,7 @@ export function TeamContent() {
     setInviteSent(false);
     setInviteEmail('');
     setInviteName('');
-    setInviteRol('Broker');
+    setInviteRol('Admin');
   };
 
   const brokers = [
@@ -179,7 +179,7 @@ export function TeamContent() {
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
         >
           <UserRoundPlus className="w-4 h-4" />
-          Nuevo usuario
+          Nueva invitación
         </button>
       </div>
 
@@ -838,7 +838,7 @@ export function TeamContent() {
                 <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-gray-100 flex-shrink-0">
                   <div>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 700, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
-                      Nuevo usuario
+                      Nueva invitación
                     </h2>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B6B6B', marginTop: '4px' }}>
                       Invita a un nuevo miembro a unirse a tu equipo
@@ -886,7 +886,7 @@ export function TeamContent() {
                     <label style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', display: 'block', marginBottom: '8px' }}>
                       Rol en la plataforma
                     </label>
-                    <div className="flex flex-col gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       {(['Admin', 'Marketing', 'Operaciones'] as const).map(rol => {
                         const cfg = ROLES_CONFIG[rol];
                         const selected = inviteRol === rol;
@@ -894,15 +894,13 @@ export function TeamContent() {
                           <button
                             key={rol}
                             onClick={() => setInviteRol(rol)}
-                            className="text-left px-4 py-3 rounded-[12px] border-2 transition-all"
+                            className="flex items-center justify-center gap-1.5 py-3 px-2 rounded-[12px] border-2 transition-all"
                             style={{ borderColor: selected ? cfg.color : '#E5E7EB', backgroundColor: selected ? cfg.bg : '#FAFAFA' }}
                           >
-                            <div className="flex items-center gap-2">
-                              {selected && <Check className="w-3.5 h-3.5 flex-shrink-0" style={{ color: cfg.color }} />}
-                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: selected ? cfg.color : '#374151' }}>
-                                {rol}
-                              </span>
-                            </div>
+                            {selected && <Check className="w-3 h-3 flex-shrink-0" style={{ color: cfg.color }} />}
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: selected ? cfg.color : '#374151' }}>
+                              {rol}
+                            </span>
                           </button>
                         );
                       })}
