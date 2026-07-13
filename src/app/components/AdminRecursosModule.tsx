@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import {
   BookOpen, Upload, Trash2, Tag, Globe, EyeOff, Edit2, Eye,
   Plus, Search, Activity, X, Save, Check, AlertCircle, Star,
-  Bold, Italic, Link, List, ListOrdered, ArrowLeft, ChevronDown
+  Bold, Italic, Link, List, ListOrdered, ArrowLeft, ChevronDown, RefreshCw
 } from 'lucide-react';
 
 type ImagenRecurso = { id: string; url: string; nombre: string; esPrincipal: boolean };
@@ -669,8 +669,8 @@ export function AdminRecursosModule() {
       <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' }}>
         <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #F0F0F0' }}>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{filtrados.length} recurso{filtrados.length !== 1 ? 's' : ''}</p>
-          <button onClick={() => { setRecursosLoading(true); setTimeout(() => setRecursosLoading(false), 1400); }} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all" style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28', fontFamily: 'var(--font-body)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
-            <Activity className={`w-3.5 h-3.5 ${recursosLoading ? 'animate-spin' : ''}`} /> Actualizar
+          <button onClick={() => { setRecursosLoading(true); setTimeout(() => setRecursosLoading(false), 1400); }} className="flex items-center justify-center w-8 h-8 rounded-lg transition-all" title="Actualizar" style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
+            <RefreshCw className={`w-3.5 h-3.5 ${recursosLoading ? 'animate-spin' : ''}`} />
           </button>
         </div>
 

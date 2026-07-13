@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
+import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { InquiriesSection } from '@/app/components/InquiriesSection';
 import { ConsultasView } from '@/app/components/ConsultasView';
@@ -46,8 +47,6 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       items: [
         { id: 'home',           label: 'Inicio',            icon: Home },
         { id: 'my-publications',label: 'Mis publicaciones', icon: FolderOpen },
-        { id: 'inquiries',      label: 'Consultas',         icon: MessageCircle },
-        { id: 'calendarios',    label: 'Calendarios',       icon: Calendar },
       ],
     },
     {
@@ -56,11 +55,13 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         { id: 'reservas',    label: 'Valores de reservas', icon: FileText },
         { id: 'asignaciones',label: 'Asignaciones',        icon: Users },
         { id: 'whatsapp',    label: 'Números WhatsApp',    icon: Phone },
+        { id: 'calendarios', label: 'Calendarios',         icon: Calendar },
       ],
     },
     {
-      key: 'interacciones', label: 'Interacciones',
+      key: 'interacciones', label: 'Actividad',
       items: [
+        { id: 'inquiries',     label: 'Consultas',     icon: MessageCircle },
         { id: 'interacciones', label: 'Interacciones', icon: MessageSquare },
         { id: 'citas',         label: 'Citas',         icon: CalendarCheck },
       ],
@@ -259,9 +260,47 @@ interface HomeContentProps {
 
 function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentProps) {
   const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
+  const [evolApplied, setEvolApplied] = React.useState<AppliedRange | null>(null);
+  const [consultasApplied, setConsultasApplied] = React.useState<AppliedRange | null>(null);
+  const [consultasPeriod, setConsultasPeriod] = React.useState('30d');
+  const [interaccionApplied, setInteraccionApplied] = React.useState<AppliedRange | null>(null);
+  const [interaccionPeriod, setInteraccionPeriod] = React.useState('30d');
+  const CHART_PRESETS = [{ id: '7d', label: 'Últimos 7 días' }, { id: '30d', label: 'Últimos 30 días' }, { id: '90d', label: 'Últimos 90 días' }];
+  const EVOL_PRESETS = [{ id: '7', label: '7 días' }, { id: '30', label: '30 días' }, { id: '90', label: '90 días' }];
   const [dashRankingTab, setDashRankingTab] = React.useState<'parcelas' | 'proyectos'>('parcelas');
   const [dashRankingPeriod, setDashRankingPeriod] = React.useState<'7' | '30' | '90'>('30');
   const DASH_RANKING_SCALE: Record<'7' | '30' | '90', number> = { '7': 0.22, '30': 1.0, '90': 3.1 };
+  const DASH_PERIODO_LABELS: Record<'7' | '30' | '90', string> = { '7': 'Últimos 7 días', '30': 'Últimos 30 días', '90': 'Últimos 90 días' };
+  const [showDashRankingDropdown, setShowDashRankingDropdown] = useState(false);
+  const [showDashRankingRange, setShowDashRankingRange] = useState(false);
+  const [dashRankingFrom, setDashRankingFrom] = useState('');
+  const [dashRankingTo, setDashRankingTo] = useState('');
+  const [dashRankingApplied, setDashRankingApplied] = useState<{ from: string; to: string } | null>(null);
+  const dashRankingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showDashRankingDropdown && !showDashRankingRange) return;
+    const handler = (e: MouseEvent) => {
+      if (dashRankingRef.current && !dashRankingRef.current.contains(e.target as Node)) {
+        setShowDashRankingDropdown(false);
+        setShowDashRankingRange(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showDashRankingDropdown, showDashRankingRange]);
+
+  const formatDashRangeLabel = (from: string, to: string) => {
+    const fmt = (d: string) => { const [, m, day] = d.split('-'); const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return `${parseInt(day)} ${meses[parseInt(m)-1]}`; };
+    return `${fmt(from)} – ${fmt(to)}`;
+  };
+
+  const handleApplyDashRankingRange = () => {
+    if (!dashRankingFrom || !dashRankingTo) return;
+    setDashRankingApplied({ from: dashRankingFrom, to: dashRankingTo });
+    setShowDashRankingDropdown(false);
+    setShowDashRankingRange(false);
+  };
 
   const periodoMap: Record<'7' | '30' | '90', Periodo> = { '7': '7d', '30': '30d', '90': '90d' };
   const chartSeries = CHART_DATA['inmobiliaria'][periodoMap[selectedPeriod]];
@@ -284,89 +323,17 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
   // Datos del ranking
   const parcelasRanking = [
-    { 
-      name: 'Parcela Vista Cordillera', 
-      location: 'Lo Barnechea',
-      views: 267, 
-      consultas: 24, 
-      status: 'high',
-      statusLabel: 'Alto interés',
-      trend: 'up',
-      trendValue: '+18%'
-    },
-    { 
-      name: 'Parcela Los Cedros', 
-      location: 'Colina',
-      views: 234, 
-      consultas: 18, 
-      status: 'high',
-      statusLabel: 'Alto interés',
-      trend: 'up',
-      trendValue: '+12%'
-    },
-    { 
-      name: 'Terreno Valle Central', 
-      location: 'Buin',
-      views: 189, 
-      consultas: 15, 
-      status: 'medium',
-      statusLabel: 'Interés medio',
-      trend: 'neutral',
-      trendValue: '+5%'
-    },
-    { 
-      name: 'Parcela Alto Maipo', 
-      location: 'San José de Maipo',
-      views: 156, 
-      consultas: 12, 
-      status: 'medium',
-      statusLabel: 'Interés medio',
-      trend: 'up',
-      trendValue: '+8%'
-    },
-    {
-      name: 'Terreno Los Andes',
-      location: 'Los Andes',
-      views: 98,
-      consultas: 8,
-      status: 'low',
-      statusLabel: 'Bajo rendimiento',
-      trend: 'down',
-      trendValue: '-3%'
-    },
+    { name: 'Parcela Vista Cordillera', location: 'Lo Barnechea', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', views: 267, consultas: 24, status: 'high', statusLabel: 'Alto interés', tendencia: 18 },
+    { name: 'Parcela Los Cedros', location: 'Colina', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', views: 234, consultas: 18, status: 'high', statusLabel: 'Alto interés', tendencia: 12 },
+    { name: 'Terreno Valle Central', location: 'Buin', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', views: 189, consultas: 15, status: 'medium', statusLabel: 'Interés medio', tendencia: 5 },
+    { name: 'Parcela Alto Maipo', location: 'San José de Maipo', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', views: 156, consultas: 12, status: 'medium', statusLabel: 'Interés medio', tendencia: 8 },
+    { name: 'Terreno Los Andes', location: 'Los Andes', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', views: 98, consultas: 8, status: 'low', statusLabel: 'Bajo rendimiento', tendencia: -3 },
   ];
 
   const proyectosRanking = [
-    {
-      name: 'Proyecto Vista Cordillera — Fase 2',
-      location: 'Lo Barnechea',
-      views: 1240,
-      consultas: 24,
-      status: 'high',
-      statusLabel: 'Alto interés',
-      trend: 'up',
-      trendValue: '+31%'
-    },
-    {
-      name: 'Condominio Los Arrayanes',
-      location: 'Villarrica',
-      views: 890,
-      consultas: 17,
-      status: 'high',
-      statusLabel: 'Alta demanda',
-      trend: 'up',
-      trendValue: '+14%'
-    },
-    {
-      name: 'Proyecto Lago Ranco',
-      location: 'Los Lagos',
-      views: 623,
-      consultas: 11,
-      status: 'medium',
-      statusLabel: 'Interés medio',
-      trend: 'neutral',
-      trendValue: '-2%'
-    },
+    { name: 'Proyecto Vista Cordillera — Fase 2', location: 'Lo Barnechea', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', views: 1240, consultas: 24, status: 'high', statusLabel: 'Alto interés', tendencia: 31 },
+    { name: 'Condominio Los Arrayanes', location: 'Villarrica', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', views: 890, consultas: 17, status: 'high', statusLabel: 'Alta demanda', tendencia: 14 },
+    { name: 'Proyecto Lago Ranco', location: 'Los Lagos', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', views: 623, consultas: 11, status: 'medium', statusLabel: 'Interés medio', tendencia: -2 },
   ];
 
   const activeRanking = dashRankingTab === 'parcelas' ? parcelasRanking : proyectosRanking;
@@ -452,24 +419,14 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
               </span>
             </div>
           </div>
-          <div className="flex gap-2 rounded-full p-1" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-            {(['7', '30', '90'] as const).map((period) => (
-              <button
-                key={period}
-                onClick={() => setSelectedPeriod(period)}
-                className="px-4 py-1.5 rounded-full transition-all"
-                style={{
-                  backgroundColor: selectedPeriod === period ? '#0A0A0A' : 'transparent',
-                  color: selectedPeriod === period ? '#FFFFFF' : '#737373',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-medium)'
-                }}
-              >
-                {period} días
-              </button>
-            ))}
-          </div>
+          <ChartRangePicker
+            presets={EVOL_PRESETS}
+            selected={selectedPeriod}
+            onSelectPreset={(id) => setSelectedPeriod(id as '7' | '30' | '90')}
+            appliedRange={evolApplied}
+            onApplyRange={setEvolApplied}
+            onClearRange={() => setEvolApplied(null)}
+          />
         </div>
         <DualLineChart
           parcelas={chartSeries.parcelas}
@@ -483,15 +440,12 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       <div className="grid grid-cols-2 gap-6">
         {/* Gráfico de barras - Consultas por parcela */}
         <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h4)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Consultas por parcela
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+              Consultas por parcela
+            </h2>
+            <ChartRangePicker presets={CHART_PRESETS} selected={consultasPeriod} onSelectPreset={setConsultasPeriod} appliedRange={consultasApplied} onApplyRange={setConsultasApplied} onClearRange={() => setConsultasApplied(null)} />
+          </div>
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={consultasData}>
@@ -528,15 +482,12 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
         {/* Gráfico donut - Tipo de interacción */}
         <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h4)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Tipo de interacción
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
+              Tipo de interacción
+            </h2>
+            <ChartRangePicker presets={CHART_PRESETS} selected={interaccionPeriod} onSelectPreset={setInteraccionPeriod} appliedRange={interaccionApplied} onApplyRange={setInteraccionApplied} onClearRange={() => setInteraccionApplied(null)} />
+          </div>
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -580,47 +531,77 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
       {/* Ranking de publicaciones */}
       <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         {/* Header */}
-        <div className="px-6 pt-5 pb-0">
+        <div className="px-5 pt-5 pb-0">
           <div className="flex items-center justify-between mb-3">
             <div>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '2px' }}>
                 Ranking de publicaciones
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Por interacción — {dashRankingPeriod === '7' ? '7 días' : dashRankingPeriod === '30' ? '30 días' : '90 días'}
+                Top 10 parcelas y proyectos por interacción — {dashRankingApplied ? formatDashRangeLabel(dashRankingApplied.from, dashRankingApplied.to) : DASH_PERIODO_LABELS[dashRankingPeriod]}
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
-                {(['7', '30', '90'] as const).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => setDashRankingPeriod(p)}
-                    className="px-3 py-1.5 rounded-full transition-all"
-                    style={{
-                      backgroundColor: dashRankingPeriod === p ? '#0A0A0A' : 'transparent',
-                      color: dashRankingPeriod === p ? '#FFFFFF' : '#737373',
-                      fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
-                      fontWeight: dashRankingPeriod === p ? 600 : 400,
-                      border: 'none', cursor: 'pointer',
-                    }}
-                  >
-                    {p} días
-                  </button>
-                ))}
+            <div className="flex items-center gap-2" ref={dashRankingRef}>
+              {/* Dropdown períodos */}
+              <div className="relative">
+                <button
+                  onClick={() => { setShowDashRankingDropdown(v => !v); setShowDashRankingRange(false); }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                >
+                  <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
+                  {DASH_PERIODO_LABELS[dashRankingPeriod]}
+                  <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDashRankingDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+                </button>
+                {showDashRankingDropdown && (
+                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '190px' }}>
+                    {(['7', '30', '90'] as const).map(p => (
+                      <button key={p} onClick={() => { setDashRankingPeriod(p); setDashRankingApplied(null); setDashRankingFrom(''); setDashRankingTo(''); setShowDashRankingDropdown(false); }}
+                        className="w-full text-left px-4 py-2.5 transition-colors"
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: !dashRankingApplied && dashRankingPeriod === p ? 600 : 400, color: !dashRankingApplied && dashRankingPeriod === p ? '#006B4E' : '#0A0A0A', backgroundColor: !dashRankingApplied && dashRankingPeriod === p ? '#F0F9F5' : '#FFFFFF', border: 'none', cursor: 'pointer', display: 'block' }}
+                        onMouseEnter={e => { if (dashRankingApplied || dashRankingPeriod !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = (!dashRankingApplied && dashRankingPeriod === p) ? '#F0F9F5' : '#FFFFFF'; }}
+                      >{DASH_PERIODO_LABELS[p]}</button>
+                    ))}
+                  </div>
+                )}
               </div>
-              <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{
-                backgroundColor: '#FFFFFF', color: '#0A0A0A',
-                border: '1.5px solid #DEDEDE', borderRadius: '200px',
-                fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)',
-                fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-              >
-                <Edit className="w-3.5 h-3.5" />
-                Editar publicaciones
-              </button>
+              {/* Botón rango personalizado */}
+              <div className="relative">
+                <button
+                  onClick={() => { setShowDashRankingRange(v => !v); setShowDashRankingDropdown(false); }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
+                  style={{ border: dashRankingApplied ? '1px solid #006B4E' : '1px solid #E5E5E5', backgroundColor: dashRankingApplied ? '#F0F9F5' : '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: dashRankingApplied ? 600 : 400, color: dashRankingApplied ? '#006B4E' : '#6B7280', cursor: 'pointer' }}
+                  onMouseEnter={e => { if (!dashRankingApplied) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  onMouseLeave={e => { if (!dashRankingApplied) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                >
+                  <CalendarDays className="w-3.5 h-3.5" />
+                  {dashRankingApplied ? formatDashRangeLabel(dashRankingApplied.from, dashRankingApplied.to) : 'Rango'}
+                  {dashRankingApplied && (
+                    <span role="button" onClick={e => { e.stopPropagation(); setDashRankingApplied(null); setDashRankingFrom(''); setDashRankingTo(''); setShowDashRankingRange(false); }} className="hover:opacity-60 transition-opacity">
+                      <X className="w-3 h-3" />
+                    </span>
+                  )}
+                </button>
+                {showDashRankingRange && (
+                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4 space-y-3" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>Rango personalizado</p>
+                    <div>
+                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</label>
+                      <input type="date" value={dashRankingFrom} onChange={e => setDashRankingFrom(e.target.value)} max={dashRankingTo || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
+                    </div>
+                    <div>
+                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hasta</label>
+                      <input type="date" value={dashRankingTo} onChange={e => setDashRankingTo(e.target.value)} min={dashRankingFrom || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
+                    </div>
+                    <button onClick={handleApplyDashRankingRange} disabled={!dashRankingFrom || !dashRankingTo} className="w-full py-2 rounded-lg" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF', backgroundColor: dashRankingFrom && dashRankingTo ? '#006B4E' : '#D1D5DB', border: 'none', cursor: dashRankingFrom && dashRankingTo ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (dashRankingFrom && dashRankingTo) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (dashRankingFrom && dashRankingTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+                      Aplicar
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           {/* Tabs */}
@@ -645,103 +626,96 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-3" style={{ borderBottom: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
-          {[
-            { label: 'Publicación', span: 'col-span-5', align: 'text-left' },
-            { label: 'Visualizaciones', span: 'col-span-2', align: 'text-center' },
-            { label: 'Consultas', span: 'col-span-2', align: 'text-center' },
-            { label: 'Tendencia', span: 'col-span-2', align: 'text-center' },
-            { label: 'Estado', span: 'col-span-1', align: 'text-right' },
-          ].map(({ label, span, align }) => (
-            <div key={label} className={`${span} ${align}`} style={{
-              fontFamily: 'var(--font-body)', fontSize: '11px',
-              fontWeight: 600, color: '#9CA3AF',
-              textTransform: 'uppercase', letterSpacing: '0.06em'
-            }}>
-              {label}
-            </div>
+        <div
+          className="px-5 py-2.5"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 96px 80px 88px 130px',
+            gap: '8px',
+            borderBottom: '1px solid #F0F0F0',
+            backgroundColor: '#FAFAFA',
+          }}
+        >
+          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado'].map((col, i) => (
+            <span key={i} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: i > 0 ? 'center' : 'left' }}>
+              {col}
+            </span>
           ))}
         </div>
 
         {/* Table Rows */}
-        <div>
-          {activeRanking.map((item, index) => (
+        {activeRanking.map((item, index) => {
+          const pos = item.tendencia >= 0;
+          const estadoBadge: Record<string, { bg: string; text: string; border: string }> = {
+            'Alto interés':   { bg: '#DCFCE7', text: '#166534', border: '#86EFAC' },
+            'Alta demanda':   { bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
+            'En crecimiento': { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
+            'Estable':        { bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
+            'Interés medio':  { bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
+            'Bajo rendimiento': { bg: '#FEE2E2', text: '#991B1B', border: '#FCA5A5' },
+          };
+          const badge = estadoBadge[item.statusLabel] ?? { bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' };
+          return (
             <div
               key={index}
-              className="grid grid-cols-12 gap-4 px-6 py-4 transition-colors cursor-pointer"
-              style={{ borderBottom: index < activeRanking.length - 1 ? '1px solid #F9FAFB' : 'none' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+              className="px-5 py-3 transition-colors"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 96px 80px 88px 130px',
+                gap: '8px',
+                alignItems: 'center',
+                borderBottom: index < activeRanking.length - 1 ? '1px solid #F9FAFB' : 'none',
+              }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
             >
-              <div className="col-span-5 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{
-                  backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5',
-                  fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 600, color: '#737373'
-                }}>
-                  {index + 1}
+              {/* Propiedad */}
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                  <img src={item.imagen} alt={item.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0">
-                  <div style={{
-                    fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                    fontWeight: 600, color: '#0A0A0A',
-                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
-                  }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {item.name}
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '1px' }}>
-                    {item.location}
-                  </div>
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item.inmobiliaria ? <><span style={{ color: '#006B4E', fontWeight: 500 }}>Inmobiliaria: {item.inmobiliaria}</span> · {item.location}</> : item.location}
+                  </p>
                 </div>
               </div>
-              <div className="col-span-2 flex items-center justify-center gap-1.5">
-                <Eye className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  {Math.round(item.views * DASH_RANKING_SCALE[dashRankingPeriod]).toLocaleString('es-CL')}
+              {/* Vistas */}
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
+                {Math.round(item.views * DASH_RANKING_SCALE[dashRankingPeriod]).toLocaleString('es-CL')}
+              </p>
+              {/* Consultas */}
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
+                {Math.max(1, Math.round(item.consultas * DASH_RANKING_SCALE[dashRankingPeriod]))}
+              </p>
+              {/* Tendencia */}
+              <div className="flex items-center justify-center gap-1">
+                {pos ? <TrendingUp className="w-3.5 h-3.5" style={{ color: '#16A34A' }} /> : <TrendingDown className="w-3.5 h-3.5" style={{ color: '#DC2626' }} />}
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: pos ? '#16A34A' : '#DC2626' }}>
+                  {pos ? '+' : ''}{item.tendencia}%
                 </span>
               </div>
-              <div className="col-span-2 flex items-center justify-center gap-1.5">
-                <MessageCircle className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  {Math.max(1, Math.round(item.consultas * DASH_RANKING_SCALE[dashRankingPeriod]))}
-                </span>
-              </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{
-                  backgroundColor: item.trend === 'up' ? '#DCFCE7' : item.trend === 'down' ? '#FEE2E2' : '#F5F5F5'
-                }}>
-                  {item.trend === 'up' && <ArrowUpRight className="w-3 h-3" style={{ color: '#16A34A' }} />}
-                  {item.trend === 'down' && <ArrowDownRight className="w-3 h-3" style={{ color: '#DC2626' }} />}
-                  <span style={{
-                    fontSize: '11px', fontWeight: 600,
-                    color: item.trend === 'up' ? '#16A34A' : item.trend === 'down' ? '#DC2626' : '#737373'
-                  }}>
-                    {item.trendValue}
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-1 flex items-center justify-end">
-                <span className="px-2.5 py-1 rounded-full whitespace-nowrap" style={{
-                  fontSize: '11px', fontWeight: 500,
-                  backgroundColor: item.status === 'high' ? '#DCFCE7' : item.status === 'medium' ? '#FEF3C7' : '#FEE2E2',
-                  color: item.status === 'high' ? '#16A34A' : item.status === 'medium' ? '#CA8A04' : '#DC2626'
-                }}>
+              {/* Estado */}
+              <div className="flex justify-center">
+                <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: badge.bg, color: badge.text, border: `1px solid ${badge.border}`, fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>
                   {item.statusLabel}
                 </span>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
 
         {/* Footer */}
-        <div className="px-6 py-4" style={{ borderTop: '1px solid #F0F0F0' }}>
+        <div className="px-5 py-4" style={{ borderTop: '1px solid #F0F0F0' }}>
           <button className="w-full py-2 transition-all" style={{
             backgroundColor: 'transparent', color: '#737373', border: 'none',
-            fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-            cursor: 'pointer'
+            fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', cursor: 'pointer'
           }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#0A0A0A'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#737373'; }}
+            onMouseEnter={e => e.currentTarget.style.color = '#0A0A0A'}
+            onMouseLeave={e => e.currentTarget.style.color = '#737373'}
           >
             Ver todas las {dashRankingTab === 'parcelas' ? 'parcelas' : 'proyectos'} →
           </button>

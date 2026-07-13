@@ -453,7 +453,7 @@ function AppContent() {
         {currentScreen === 'real-estate-dashboard' && <RealEstateDashboardScreen onNavigate={handleNavigate} ref={realEstateDashboardRef} />}
         {currentScreen === 'broker-dashboard' && <BrokerDashboardScreen onNavigate={handleNavigate} ref={brokerDashboardRef} />}
         {currentScreen === 'admin-dashboard' && <AdminDashboard onNavigate={handleNavigate} />}
-        {currentScreen === 'ctp-admin-dashboard' && <CTPAdminDashboard onNavigate={handleNavigate} />}
+{currentScreen === 'ctp-admin-dashboard' && <CTPAdminDashboard onNavigate={handleNavigate} />}
         {currentScreen === 'politica-privacidad' && <PoliticaPrivacidad onNavigate={handleNavigate} />}
         {currentScreen === 'terminos-condiciones' && <TerminosCondiciones onNavigate={handleNavigate} />}
         {currentScreen === 'asesoria' && <AsesoriaPage onNavigate={handleNavigate} />}
