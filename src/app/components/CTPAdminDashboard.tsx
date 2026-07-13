@@ -1514,7 +1514,7 @@ function CTPBrokersView() {
               <table className="w-full">
                 <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
                   <tr>
-                    {['Broker', 'Email', 'Leads asignados', 'Contactos', 'Última actividad', 'Estado', 'Acciones'].map(h => (
+                    {['Broker', 'Email', 'Leads asignados', 'Última actividad', 'Estado', 'Acciones'].map(h => (
                       <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
@@ -1532,7 +1532,6 @@ function CTPBrokersView() {
                       </td>
                       <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.email}</span></td>
                       <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.leadsAsignados}</span></td>
-                      <td className="px-5 py-4 text-center"><span style={{ fontSize: '16px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)' }}>{broker.contactos}</span></td>
                       <td className="px-5 py-4"><span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>{broker.ultimaActividad}</span></td>
                       <td className="px-5 py-4">
                         <span style={{ fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)', backgroundColor: broker.estado === 'activo' ? '#DCFCE7' : '#F5F5F5', color: broker.estado === 'activo' ? '#16A34A' : '#737373' }}>
@@ -1572,7 +1571,7 @@ function CTPBrokersView() {
                   <div className="flex items-end justify-between" style={{ marginLeft: '42px' }}>
                     <div>
                       <p style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: '0 0 2px' }}>
-                        <span style={{ fontWeight: 600 }}>{broker.leadsAsignados}</span> leads · <span style={{ fontWeight: 600 }}>{broker.contactos}</span> contactos
+                        <span style={{ fontWeight: 600 }}>{broker.leadsAsignados}</span> leads asignados
                       </p>
                       <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>Última actividad: {broker.ultimaActividad}</p>
                     </div>
