@@ -2667,24 +2667,9 @@ function PlanContent() {
 
   const plans = [
     {
-      id: 'bronce',
-      name: 'Bronce',
-      price: '$29.990',
-      description: 'Ideal para iniciar con más capacidad',
-      features: [
-        { name: 'Hasta 10 parcelas publicadas', included: true },
-        { name: '2 publicaciones destacadas', included: true },
-        { name: 'Visibilidad estándar', included: true },
-        { name: 'Estadísticas básicas', included: true },
-        { name: 'Soporte por email', included: true },
-        { name: 'Panel de equipo y brokers', included: false },
-        { name: 'Asesor comercial dedicado', included: false },
-      ]
-    },
-    {
       id: 'plata',
       name: 'Plata',
-      price: '$49.990',
+      price: '$35.000',
       description: 'Para vendedores con mayor volumen',
       features: [
         { name: 'Hasta 30 parcelas publicadas', included: true },
@@ -2699,7 +2684,7 @@ function PlanContent() {
     {
       id: 'oro',
       name: 'Oro',
-      price: '$89.990',
+      price: '$50.000',
       description: 'Máxima exposición y herramientas',
       features: [
         { name: 'Publicaciones ilimitadas', included: true },
@@ -2784,7 +2769,7 @@ function PlanContent() {
       </section>
       <section id="person-compara-planes">
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           {plans.map((plan) => (
             <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
               <div className="mb-6">

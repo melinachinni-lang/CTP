@@ -407,7 +407,7 @@ function PlanContent() {
     {
       id: 'bronce',
       name: 'Bronce',
-      price: '$29.990',
+      price: '$150.000',
       description: 'Ideal para inmobiliarias que inician',
       features: [
         { name: 'Hasta 10 parcelas publicadas', included: true },
@@ -422,7 +422,7 @@ function PlanContent() {
     {
       id: 'plata',
       name: 'Plata',
-      price: '$49.990',
+      price: '$300.000',
       description: 'Para inmobiliarias en crecimiento',
       features: [
         { name: 'Hasta 30 parcelas publicadas', included: true },
@@ -437,7 +437,7 @@ function PlanContent() {
     {
       id: 'oro',
       name: 'Oro',
-      price: '$89.990',
+      price: '$600.000',
       description: 'Máxima exposición para empresas',
       features: [
         { name: 'Publicaciones ilimitadas', included: true },

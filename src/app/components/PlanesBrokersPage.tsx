@@ -15,10 +15,10 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
 
   const planes = [
     {
-      nombre: 'Básico',
+      nombre: 'Bronce',
       descripcion: 'Para brokers que están comenzando',
-      precioMensual: 14900,
-      precioAnual: 149000,
+      precioMensual: 3000,
+      precioAnual: 30000,
       destacado: false,
       caracteristicas: [
         { incluido: true, texto: 'Hasta 5 propiedades activas' },
@@ -31,10 +31,10 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
       ]
     },
     {
-      nombre: 'Pro',
+      nombre: 'Plata',
       descripcion: 'Para brokers activos en crecimiento',
-      precioMensual: 39900,
-      precioAnual: 399000,
+      precioMensual: 4000,
+      precioAnual: 40000,
       destacado: true,
       caracteristicas: [
         { incluido: true, texto: 'Hasta 20 propiedades activas' },
@@ -47,10 +47,10 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
       ]
     },
     {
-      nombre: 'Elite',
+      nombre: 'Oro',
       descripcion: 'Máxima exposición para top brokers',
-      precioMensual: 89900,
-      precioAnual: 899000,
+      precioMensual: 5000,
+      precioAnual: 50000,
       destacado: false,
       caracteristicas: [
         { incluido: true, texto: 'Propiedades ilimitadas' },

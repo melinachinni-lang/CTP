@@ -1079,7 +1079,7 @@ function PlanContent() {
     {
       id: 'bronce',
       name: 'Bronce',
-      price: '$19.990',
+      price: '$3.000',
       description: 'Ideal para comenzar a promocionar propiedades',
       features: [
         { name: 'Hasta 5 propiedades en seguimiento', included: true },
@@ -1094,7 +1094,7 @@ function PlanContent() {
     {
       id: 'plata',
       name: 'Plata',
-      price: '$39.990',
+      price: '$4.000',
       description: 'Para brokers que buscan mayor visibilidad',
       features: [
         { name: 'Hasta 15 propiedades en seguimiento', included: true },
@@ -1109,7 +1109,7 @@ function PlanContent() {
     {
       id: 'oro',
       name: 'Oro',
-      price: '$69.990',
+      price: '$5.000',
       description: 'Máxima exposición para profesionales',
       features: [
         { name: 'Propiedades ilimitadas en seguimiento', included: true },

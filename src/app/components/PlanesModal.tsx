@@ -10,8 +10,8 @@ const planes = [
   {
     nombre: 'Bronce',
     descripcion: 'Ideal para inmobiliarias que inician',
-    precioMensual: 29900,
-    precioAnual: 299000,
+    precioMensual: 150000,
+    precioAnual: 1500000,
     destacado: false,
     caracteristicas: [
       'Hasta 10 parcelas publicadas',
@@ -24,8 +24,8 @@ const planes = [
   {
     nombre: 'Plata',
     descripcion: 'Para inmobiliarias en crecimiento',
-    precioMensual: 69900,
-    precioAnual: 699000,
+    precioMensual: 300000,
+    precioAnual: 3000000,
     destacado: true,
     caracteristicas: [
       'Hasta 30 parcelas publicadas',
@@ -39,8 +39,8 @@ const planes = [
   {
     nombre: 'Oro',
     descripcion: 'Máxima exposición para empresas',
-    precioMensual: 149900,
-    precioAnual: 1499000,
+    precioMensual: 600000,
+    precioAnual: 6000000,
     destacado: false,
     caracteristicas: [
       'Publicaciones ilimitadas',
