@@ -547,13 +547,13 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
 
 // ─── Módulo principal (listado) ───────────────────────────────────────────────
 
-export function AdminRecursosModule() {
+export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [recursos, setRecursos] = useState<Recurso[]>(MOCK);
   const [recursosLoading, setRecursosLoading] = useState(false);
   const [recursosSearch, setRecursosSearch] = useState('');
   const [filtroTopico, setFiltroTopico] = useState('todos');
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos');
-  const [editorView, setEditorView] = useState<'list' | 'create' | Recurso>('list');
+  const [editorView, setEditorView] = useState<'list' | 'create' | Recurso>(autoOpenNew ? 'create' : 'list');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const toggleEstado = (id: string) => {

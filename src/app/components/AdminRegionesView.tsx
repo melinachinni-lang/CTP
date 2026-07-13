@@ -24,14 +24,14 @@ const REGIONES_INIT: Record<string, string[]> = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function AdminRegionesView() {
+export function AdminRegionesView({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [data, setData] = useState<Record<string, string[]>>(REGIONES_INIT);
   const [selectedRegion, setSelectedRegion] = useState<string>('Arica y Parinacota');
 
   const [addingRegion, setAddingRegion] = useState(false);
   const [newRegion, setNewRegion] = useState('');
 
-  const [addingComuna, setAddingComuna] = useState(false);
+  const [addingComuna, setAddingComuna] = useState(autoOpenNew ?? false);
   const [newComuna, setNewComuna] = useState('');
 
   const regiones = Object.keys(data).sort((a, b) => a.localeCompare(b, 'es'));

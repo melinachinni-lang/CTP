@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, Check, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, Info, Bell, RefreshCw } from 'lucide-react';
 
 interface BannerAdmin {
@@ -387,10 +387,14 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
 }
 
 // ---------- MÓDULO PRINCIPAL ----------
-export function AdminBannersModule() {
+export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [banners, setBanners] = useState<BannerAdmin[]>(initialBanners);
 
   const [showBannerModal, setShowBannerModal] = useState(false);
+
+  useEffect(() => {
+    if (autoOpenNew) setShowBannerModal(true);
+  }, []);
   const [editingBanner, setEditingBanner] = useState<BannerAdmin | null>(null);
   const [bannerToDelete, setBannerToDelete] = useState<BannerAdmin | null>(null);
 

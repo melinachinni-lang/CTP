@@ -99,6 +99,14 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [triggerPublishModal, setTriggerPublishModal] = useState(0);
   const [publishModalOrigin, setPublishModalOrigin] = useState<NavSection>('inicio');
+  const [quickAction, setQuickAction] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (quickAction) {
+      const t = setTimeout(() => setQuickAction(null), 150);
+      return () => clearTimeout(t);
+    }
+  }, [quickAction]);
 
   const toggleGroup = (groupId: string) => {
     setOpenGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
@@ -295,7 +303,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         className="fixed overflow-y-auto bg-white rounded-xl md:rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)] top-[56px] left-3 right-3 bottom-3 md:top-[44px] md:left-64 md:right-3 md:bottom-3"
         style={{ zIndex: 10 }}
       >
-        {currentSection === 'inicio'          && <CTPHomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
+        {currentSection === 'inicio'          && <CTPHomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} setQuickAction={setQuickAction} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="ctp-admin" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} onTypeModalCancel={() => setCurrentSection(publishModalOrigin)} />}
         {currentSection === 'inquiries'       && <ConsultasView viewType="inmobiliaria" />}
         {currentSection === 'reservas'        && <ReservasAdminView />}
@@ -307,16 +315,16 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
 
         {currentSection === 'citas'           && <CitasAdminView />}
         {currentSection === 'whatsapp'        && <ContactosWhatsAppAdminView />}
-        {currentSection === 'banners'         && <AdminBannersModule />}
-        {currentSection === 'regiones'        && <AdminRegionesView />}
-        {currentSection === 'recursos'        && <AdminRecursosModule />}
-        {currentSection === 'team'            && <TeamContent />}
+        {currentSection === 'banners'         && <AdminBannersModule autoOpenNew={quickAction === 'banners-new'} />}
+        {currentSection === 'regiones'        && <AdminRegionesView autoOpenNew={quickAction === 'regiones-new'} />}
+        {currentSection === 'recursos'        && <AdminRecursosModule autoOpenNew={quickAction === 'recursos-new'} />}
+        {currentSection === 'team'            && <TeamContent autoOpenInvite={quickAction === 'team-invite'} />}
         {currentSection === 'help'            && <HelpContent />}
         {currentSection === 'verificacion'    && <AdminVerificacionView />}
         {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="inmobiliaria" />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
         {currentSection === 'interacciones'   && <InteraccionesContent />}
-        {currentSection === 'leads'           && <CTPLeadsView />}
+        {currentSection === 'leads'           && <CTPLeadsView autoFilterUnassigned={quickAction === 'leads-unassigned'} />}
         {currentSection === 'brokers'         && <CTPBrokersView />}
       </div>
     </>
@@ -390,9 +398,10 @@ function KPICardSkeleton() {
   );
 }
 
-function CTPHomeContent({ setCurrentSection }: {
+function CTPHomeContent({ setCurrentSection, setQuickAction }: {
   setCurrentSection: (s: NavSection) => void;
   setTriggerPublishModal: (fn: (n: number) => number) => void;
+  setQuickAction: (action: string) => void;
 }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -490,15 +499,15 @@ function CTPHomeContent({ setCurrentSection }: {
           </p>
           <div className="space-y-2">
             {[
-              { label: 'Verificar registros',  section: 'verificacion' as NavSection, icon: ClipboardList },
-              { label: 'Analítica plataforma', section: 'analitica' as NavSection,     icon: BarChart3 },
-              { label: 'Banners promocionales',   section: 'banners' as NavSection,       icon: Megaphone },
-              { label: 'Gestión de equipo',    section: 'team' as NavSection,          icon: Users },
-              { label: 'Regiones y comunas',   section: 'regiones' as NavSection,      icon: MapPin },
-            ].map(({ label, section, icon: Icon }) => (
+              { label: 'Invitar nuevo miembro',    section: 'team'         as NavSection, action: 'team-invite',       icon: UserPlus },
+              { label: 'Asignar lead sin broker',  section: 'leads'        as NavSection, action: 'leads-unassigned',  icon: UserCheck },
+              { label: 'Crear nuevo banner',       section: 'banners'      as NavSection, action: 'banners-new',       icon: Megaphone },
+              { label: 'Publicar nuevo recurso',   section: 'recursos'     as NavSection, action: 'recursos-new',      icon: BookOpen },
+              { label: 'Agregar región o comuna',  section: 'regiones'     as NavSection, action: 'regiones-new',      icon: MapPin },
+            ].map(({ label, section, action, icon: Icon }) => (
               <button
                 key={section}
-                onClick={() => setCurrentSection(section)}
+                onClick={() => { setCurrentSection(section); setQuickAction(action); }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors text-left"
                 style={{ backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '13px' }}
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F9F5'; e.currentTarget.style.color = '#006B4E'; }}
@@ -1135,12 +1144,16 @@ function AsignarBrokerModal({ lead, brokers, brokerSeleccionado, onSelect, onCon
 
 // ─── CTPLeadsView ─────────────────────────────────────────────────────────────
 
-function CTPLeadsView() {
+function CTPLeadsView({ autoFilterUnassigned }: { autoFilterUnassigned?: boolean }) {
   const [leads, setLeads] = useState(CTP_LEADS_DATA);
   const [search, setSearch] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('todos');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (autoFilterUnassigned) setFiltroEstado('nuevo');
+  }, []);
   const [errorModal, setErrorModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CTPLead | null>(null);
   const [leadParaAsignar, setLeadParaAsignar] = useState<CTPLead | null>(null);

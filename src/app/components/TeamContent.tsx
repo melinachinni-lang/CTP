@@ -48,9 +48,13 @@ const ROLES_CONFIG: Record<string, { color: string; bg: string; permisos: { labe
   },
 };
 
-export function TeamContent() {
+export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
   const [selectedBroker, setSelectedBroker] = React.useState<number | null>(null);
   const [showAddModal, setShowAddModal] = React.useState(false);
+
+  React.useEffect(() => {
+    if (autoOpenInvite) setShowAddModal(true);
+  }, []);
   const [activeMenu, setActiveMenu] = React.useState<number | null>(null);
   const [inviteEmail, setInviteEmail] = React.useState('');
   const [inviteName, setInviteName] = React.useState('');
