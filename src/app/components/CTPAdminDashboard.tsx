@@ -61,7 +61,7 @@ const NAV_GROUPS = [
     label: 'Contenido',
     items: [
       { id: 'recursos' as NavSection,  label: 'Recursos & Blog',    icon: BookOpen },
-      { id: 'banners' as NavSection,   label: 'Banners & mensajes', icon: Megaphone },
+      { id: 'banners' as NavSection,   label: 'Banners promocionales', icon: Megaphone },
     ],
   },
   {
@@ -492,7 +492,7 @@ function CTPHomeContent({ setCurrentSection }: {
             {[
               { label: 'Verificar registros',  section: 'verificacion' as NavSection, icon: ClipboardList },
               { label: 'Analítica plataforma', section: 'analitica' as NavSection,     icon: BarChart3 },
-              { label: 'Banners & mensajes',   section: 'banners' as NavSection,       icon: Megaphone },
+              { label: 'Banners promocionales',   section: 'banners' as NavSection,       icon: Megaphone },
               { label: 'Gestión de equipo',    section: 'team' as NavSection,          icon: Users },
               { label: 'Regiones y comunas',   section: 'regiones' as NavSection,      icon: MapPin },
             ].map(({ label, section, icon: Icon }) => (
