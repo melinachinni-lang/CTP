@@ -1139,7 +1139,6 @@ function CTPLeadsView() {
   const [leads, setLeads] = useState(CTP_LEADS_DATA);
   const [search, setSearch] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('todos');
-  const [filtroOrigen, setFiltroOrigen] = useState('todos');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
@@ -1151,8 +1150,7 @@ function CTPLeadsView() {
   const filtrados = leads.filter(l => {
     const matchSearch = l.nombre.toLowerCase().includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase());
     const matchEstado = filtroEstado === 'todos' || l.estado === filtroEstado;
-    const matchOrigen = filtroOrigen === 'todos' || l.origen === filtroOrigen;
-    return matchSearch && matchEstado && matchOrigen;
+    return matchSearch && matchEstado;
   });
 
   function confirmarAsignacion() {
@@ -1262,19 +1260,6 @@ function CTPLeadsView() {
             <option value="todos">Todos los estados</option>
             <option value="nuevo">Nuevo</option>
             <option value="asignado">Asignado</option>
-            <option value="contactado">Contactado</option>
-            <option value="cerrado">Cerrado</option>
-            <option value="no-interesado">No interesado</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
-        </div>
-        <div className="relative" style={{ minWidth: '150px' }}>
-          <select value={filtroOrigen} onChange={e => setFiltroOrigen(e.target.value)} className="appearance-none w-full pl-3 pr-8 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }}>
-            <option value="todos">Todos los orígenes</option>
-            <option value="Web">Web</option>
-            <option value="Meta">Meta</option>
-            <option value="Google">Google</option>
-            <option value="WhatsApp">WhatsApp</option>
           </select>
           <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
         </div>
@@ -1303,8 +1288,8 @@ function CTPLeadsView() {
             ) : (
               <>
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#EFF6FF' }}><Users className="w-6 h-6" style={{ color: '#2563EB' }} /></div>
-                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Sin resultados' : 'Aún no hay leads'}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtroEstado !== 'todos' || filtroOrigen !== 'todos' ? 'Prueba con otros filtros.' : 'Los leads aparecerán aquí cuando lleguen.'}</p>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 500, color: '#0A0A0A', margin: '0 0 4px' }}>{search || filtroEstado !== 'todos' ? 'Sin resultados' : 'Aún no hay leads'}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{search || filtroEstado !== 'todos' ? 'Prueba con otros filtros.' : 'Los leads aparecerán aquí cuando lleguen.'}</p>
               </>
             )}
           </div>
@@ -1315,7 +1300,7 @@ function CTPLeadsView() {
               <table className="w-full">
                 <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
                   <tr>
-                    {['Nombre', 'Contacto', 'Origen', 'Estado', 'Broker', 'Fecha', 'Acciones'].map(h => (
+                    {['Nombre', 'Contacto', 'Estado', 'Broker', 'Fecha', 'Acciones'].map(h => (
                       <th key={h} className="px-5 py-3.5 text-left" style={{ fontSize: '11px', fontWeight: 600, color: '#737373', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
@@ -1338,14 +1323,6 @@ function CTPLeadsView() {
                             <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.email}</span></div>
                             <div className="flex items-center gap-1.5"><Phone className="w-3 h-3 flex-shrink-0" style={{ color: '#A3A3A3' }} /><span style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>{lead.telefono}</span></div>
                           </div>
-                        </td>
-                        <td className="px-5 py-4">
-                          {(() => { const OrigenIcon = ORIGEN_ICON_MAP[lead.origen] || Globe; return (
-                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-                              <OrigenIcon className="w-3.5 h-3.5" style={{ color: '#525252' }} />
-                              <span style={{ fontSize: '12px', fontWeight: 500, color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{lead.origen}</span>
-                            </div>
-                          ); })()}
                         </td>
                         <td className="px-5 py-4">
                           <span style={{ backgroundColor: est.bg, color: est.color, fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', fontFamily: 'var(--font-body)' }}>{est.label}</span>
@@ -1372,7 +1349,6 @@ function CTPLeadsView() {
             <div className="md:hidden">
               {filtrados.map((lead, idx) => {
                 const est = LEAD_ESTADO_STYLES[lead.estado] || LEAD_ESTADO_STYLES['nuevo'];
-                const OrigenIcon = ORIGEN_ICON_MAP[lead.origen] || Globe;
                 return (
                   <div key={lead.id} className="p-4" style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
                     <div className="flex items-start justify-between mb-2">
@@ -1391,8 +1367,7 @@ function CTPLeadsView() {
                       <div>
                         <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: '0 0 3px' }}>{lead.telefono}</p>
                         <div className="flex items-center gap-1.5">
-                          <OrigenIcon className="w-3 h-3 flex-shrink-0" style={{ color: '#525252' }} />
-                          <span style={{ fontSize: '12px', color: '#525252', fontFamily: 'var(--font-body)' }}>{lead.origen} · {lead.broker !== '-' ? lead.broker : 'Sin asignar'} · {lead.fecha}</span>
+                          <span style={{ fontSize: '12px', color: '#525252', fontFamily: 'var(--font-body)' }}>{lead.broker !== '-' ? lead.broker : 'Sin asignar'} · {lead.fecha}</span>
                         </div>
                       </div>
                       <div className="flex gap-1.5 flex-shrink-0 ml-2">
