@@ -388,24 +388,18 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
 
 // ---------- MÓDULO PRINCIPAL ----------
 export function AdminBannersModule() {
-  const [tab, setTab] = useState<'banners' | 'mensajes'>('banners');
   const [banners, setBanners] = useState<BannerAdmin[]>(initialBanners);
-  const [mensajes, setMensajes] = useState<MensajeInfo[]>(initialMensajes);
 
   const [showBannerModal, setShowBannerModal] = useState(false);
   const [editingBanner, setEditingBanner] = useState<BannerAdmin | null>(null);
   const [bannerToDelete, setBannerToDelete] = useState<BannerAdmin | null>(null);
-
-  const [showMensajeModal, setShowMensajeModal] = useState(false);
-  const [editingMensaje, setEditingMensaje] = useState<MensajeInfo | null>(null);
-  const [mensajeToDelete, setMensajeToDelete] = useState<MensajeInfo | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedLabel, setSavedLabel] = useState('');
   const [deleted, setDeleted] = useState(false);
 
-  const nextId = () => Math.max(...banners.map(b => b.id), ...mensajes.map(m => m.id), 0) + 1;
+  const nextId = () => Math.max(...banners.map(b => b.id), 0) + 1;
 
   function showSuccess(label: string) {
     setSavedLabel(label);
@@ -429,26 +423,6 @@ export function AdminBannersModule() {
     if (!bannerToDelete) return;
     setBanners(prev => prev.filter(b => b.id !== bannerToDelete.id));
     setBannerToDelete(null);
-    setDeleted(true);
-    setTimeout(() => setDeleted(false), 3000);
-  }
-
-  function handleSaveMensaje(data: Omit<MensajeInfo, 'id'>) {
-    if (editingMensaje) {
-      setMensajes(prev => prev.map(m => m.id === editingMensaje.id ? { ...m, ...data } : m));
-      showSuccess('Mensaje actualizado correctamente');
-    } else {
-      setMensajes(prev => [...prev, { id: nextId(), ...data }]);
-      showSuccess('Mensaje creado correctamente');
-    }
-    setShowMensajeModal(false);
-    setEditingMensaje(null);
-  }
-
-  function handleDeleteMensaje() {
-    if (!mensajeToDelete) return;
-    setMensajes(prev => prev.filter(m => m.id !== mensajeToDelete.id));
-    setMensajeToDelete(null);
     setDeleted(true);
     setTimeout(() => setDeleted(false), 3000);
   }
@@ -493,49 +467,21 @@ export function AdminBannersModule() {
             <RefreshCw className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={() => { setEditingBanner(null); setEditingMensaje(null); if (tab === 'banners') setShowBannerModal(true); else setShowMensajeModal(true); }}
+            onClick={() => { setEditingBanner(null); setShowBannerModal(true); }}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', fontFamily: 'var(--font-body)', fontWeight: '500' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
             <Plus className="w-4 h-4" />
-            {tab === 'banners' ? 'Nuevo banner' : 'Nuevo mensaje'}
+            Nuevo banner
           </button>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-full mb-6" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
-        {([
-          { key: 'banners', label: 'Banners promocionales', icon: Megaphone, count: banners.length },
-          { key: 'mensajes', label: 'Mensajes informativos', icon: Bell, count: mensajes.length },
-        ] as const).map(t => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className="flex items-center gap-2 px-5 py-2 rounded-full transition-all"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-body-sm)',
-              fontWeight: tab === t.key ? '600' : '400',
-              color: tab === t.key ? '#0A0A0A' : '#6B7280',
-              backgroundColor: tab === t.key ? '#FFFFFF' : 'transparent',
-              boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            }}
-          >
-            <t.icon className="w-4 h-4" />
-            {t.label}
-            <span className="px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: tab === t.key ? '#F0F5EB' : '#E5E5E5', color: tab === t.key ? '#3D5E28' : '#9CA3AF', fontFamily: 'var(--font-body)', fontWeight: '600' }}>
-              {t.count}
-            </span>
-          </button>
-        ))}
-      </div>
 
       {/* ── BANNERS ── */}
-      {tab === 'banners' && (
-        <>
+      <>
           {loading ? (
             /* Skeleton */
             <div className="space-y-3">
@@ -648,92 +594,7 @@ export function AdminBannersModule() {
               ))}
             </div>
           )}
-        </>
-      )}
-
-      {/* ── MENSAJES ── */}
-      {tab === 'mensajes' && (
-        <>
-          {loading ? (
-            <div className="space-y-3">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="rounded-xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-                  <div className="space-y-2">
-                    <div className="h-4 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '50%' }} />
-                    <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '85%' }} />
-                    <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '30%' }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : mensajes.length === 0 ? (
-            <div className="rounded-2xl py-16 flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}>
-                <Bell className="w-8 h-8" style={{ color: '#3D5E28' }} />
-              </div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
-                Sin mensajes publicados
-              </h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '320px', lineHeight: '1.5', marginBottom: '20px' }}>
-                Crea mensajes informativos para comunicar novedades, mantenimientos u ofertas especiales a los usuarios.
-              </p>
-              <button onClick={() => { setEditingMensaje(null); setShowMensajeModal(true); }} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-                <Plus className="w-4 h-4" /> Crear primer mensaje
-              </button>
-            </div>
-          ) : (
-            <div className="rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
-              <table className="w-full">
-                <thead>
-                  <tr style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
-                    <th className="text-left px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '500', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mensaje</th>
-                    <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '500', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tópico</th>
-                    <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '500', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estado</th>
-                    <th className="text-center px-6 py-4" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '500', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mensajes.map((msg, i) => {
-                    const tp = topicoStyle(msg.topico);
-                    return (
-                      <tr key={msg.id} style={{ borderBottom: i < mensajes.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
-                        <td className="px-6 py-4">
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '600', color: '#0A0A0A', marginBottom: '3px' }}>{msg.titulo}</p>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: '1.5', maxWidth: '380px' }}>{msg.descripcion}</p>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: tp.bg, color: tp.color, fontFamily: 'var(--font-body)' }}>
-                            <Tag className="w-3 h-3" />
-                            {tp.label}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: msg.activo ? '#DCFCE7' : '#F3F4F6', color: msg.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
-                            {msg.activo ? 'Activo' : 'Inactivo'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center gap-2">
-                            <button title="Editar" onClick={() => { setEditingMensaje(msg); setShowMensajeModal(true); }} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}>
-                              <Edit2 className="w-3.5 h-3.5" />
-                            </button>
-                            <button title={msg.activo ? 'Desactivar' : 'Activar'} onClick={() => setMensajes(prev => prev.map(m => m.id === msg.id ? { ...m, activo: !m.activo } : m))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: msg.activo ? '#F0F5EB' : '#F5F5F5', color: msg.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = msg.activo ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = msg.activo ? '#F0F5EB' : '#F5F5F5'; }}>
-                              {msg.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                            </button>
-                            <button title="Eliminar" onClick={() => setMensajeToDelete(msg)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}>
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </>
-      )}
+      </>
 
       {/* Modales */}
       {showBannerModal && (
@@ -743,18 +604,8 @@ export function AdminBannersModule() {
           onClose={() => { setShowBannerModal(false); setEditingBanner(null); }}
         />
       )}
-      {showMensajeModal && (
-        <MensajeModal
-          mensaje={editingMensaje}
-          onSave={handleSaveMensaje}
-          onClose={() => { setShowMensajeModal(false); setEditingMensaje(null); }}
-        />
-      )}
       {bannerToDelete && (
         <DeleteModal nombre={bannerToDelete.titulo} onConfirm={handleDeleteBanner} onClose={() => setBannerToDelete(null)} />
-      )}
-      {mensajeToDelete && (
-        <DeleteModal nombre={mensajeToDelete.titulo} onConfirm={handleDeleteMensaje} onClose={() => setMensajeToDelete(null)} />
       )}
 
       {/* Toast éxito */}
