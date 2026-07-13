@@ -9,7 +9,7 @@ import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
-import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard } from 'lucide-react';
+import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard, Calendar } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
 
@@ -299,11 +299,10 @@ function HomeContent({ setCurrentSection }: { setCurrentSection: (s: string) => 
   ];
 
   const accesos = [
-    { label: 'Ver leads pendientes',       Icon: Users,         action: () => setCurrentSection('asignaciones') },
-    { label: 'Responder consulta activa',  Icon: MessageCircle, action: () => setCurrentSection('inquiries') },
-    { label: 'Agendar cita con cliente',   Icon: Star,          action: () => setCurrentSection('calendarios') },
-    { label: 'Mis publicaciones',          Icon: Eye,           action: () => setCurrentSection('listings') },
-    { label: 'Ver rendimiento',            Icon: TrendingUp,    action: () => setCurrentSection('performance') },
+    { label: 'Nueva publicación',             Icon: Plus,          action: () => setCurrentSection('listings') },
+    { label: 'Responder consulta pendiente',  Icon: MessageCircle, action: () => setCurrentSection('inquiries') },
+    { label: 'Nuevo calendario',              Icon: Calendar,      action: () => setCurrentSection('calendarios') },
+    { label: 'Usuarios y permisos',           Icon: Users,         action: () => setCurrentSection('settings') },
   ];
 
   const actividad = [

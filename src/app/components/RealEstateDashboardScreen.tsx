@@ -282,9 +282,9 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
   const accesos = [
     { label: 'Publicar nueva parcela',          Icon: Plus,          action: () => { setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); } },
     { label: 'Responder consultas pendientes',  Icon: MessageCircle, action: () => setCurrentSection('inquiries') },
-    { label: 'Ver reservas recientes',          Icon: FileText,      action: () => setCurrentSection('reservas') },
+    { label: 'Agregar número de WhatsApp',       Icon: Phone,         action: () => setCurrentSection('whatsapp') },
     { label: 'Asignar consulta a broker',       Icon: Users,         action: () => setCurrentSection('asignaciones') },
-    { label: 'Ver rendimiento',                 Icon: TrendingUp,    action: () => setCurrentSection('performance') },
+    { label: 'Usuarios y permisos',             Icon: Users,         action: () => setCurrentSection('team') },
   ];
 
   const actividad = [
