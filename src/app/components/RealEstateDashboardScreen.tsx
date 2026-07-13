@@ -259,469 +259,135 @@ interface HomeContentProps {
 }
 
 function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentProps) {
-  const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
-  const [evolApplied, setEvolApplied] = React.useState<AppliedRange | null>(null);
-  const [consultasApplied, setConsultasApplied] = React.useState<AppliedRange | null>(null);
-  const [consultasPeriod, setConsultasPeriod] = React.useState('30d');
-  const [interaccionApplied, setInteraccionApplied] = React.useState<AppliedRange | null>(null);
-  const [interaccionPeriod, setInteraccionPeriod] = React.useState('30d');
-  const CHART_PRESETS = [{ id: '7d', label: 'Últimos 7 días' }, { id: '30d', label: 'Últimos 30 días' }, { id: '90d', label: 'Últimos 90 días' }];
-  const EVOL_PRESETS = [{ id: '7', label: '7 días' }, { id: '30', label: '30 días' }, { id: '90', label: '90 días' }];
-  const [dashRankingTab, setDashRankingTab] = React.useState<'parcelas' | 'proyectos'>('parcelas');
-  const [dashRankingPeriod, setDashRankingPeriod] = React.useState<'7' | '30' | '90'>('30');
-  const DASH_RANKING_SCALE: Record<'7' | '30' | '90', number> = { '7': 0.22, '30': 1.0, '90': 3.1 };
-  const DASH_PERIODO_LABELS: Record<'7' | '30' | '90', string> = { '7': 'Últimos 7 días', '30': 'Últimos 30 días', '90': 'Últimos 90 días' };
-  const [showDashRankingDropdown, setShowDashRankingDropdown] = useState(false);
-  const [showDashRankingRange, setShowDashRankingRange] = useState(false);
-  const [dashRankingFrom, setDashRankingFrom] = useState('');
-  const [dashRankingTo, setDashRankingTo] = useState('');
-  const [dashRankingApplied, setDashRankingApplied] = useState<{ from: string; to: string } | null>(null);
-  const dashRankingRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-  useEffect(() => {
-    if (!showDashRankingDropdown && !showDashRankingRange) return;
-    const handler = (e: MouseEvent) => {
-      if (dashRankingRef.current && !dashRankingRef.current.contains(e.target as Node)) {
-        setShowDashRankingDropdown(false);
-        setShowDashRankingRange(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [showDashRankingDropdown, showDashRankingRange]);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1600);
+    return () => clearTimeout(t);
+  }, []);
 
-  const formatDashRangeLabel = (from: string, to: string) => {
-    const fmt = (d: string) => { const [, m, day] = d.split('-'); const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return `${parseInt(day)} ${meses[parseInt(m)-1]}`; };
-    return `${fmt(from)} – ${fmt(to)}`;
-  };
+  function handleActualizar() {
+    setLoading(true); setError(false);
+    setTimeout(() => { setLoading(false); if (Math.random() < 0.35) setError(true); }, 1400);
+  }
 
-  const handleApplyDashRankingRange = () => {
-    if (!dashRankingFrom || !dashRankingTo) return;
-    setDashRankingApplied({ from: dashRankingFrom, to: dashRankingTo });
-    setShowDashRankingDropdown(false);
-    setShowDashRankingRange(false);
-  };
-
-  const periodoMap: Record<'7' | '30' | '90', Periodo> = { '7': '7d', '30': '30d', '90': '90d' };
-  const chartSeries = CHART_DATA['inmobiliaria'][periodoMap[selectedPeriod]];
-
-  // Datos para gráfico de barras - consultas por parcela
-  const consultasData = [
-    { name: 'Vista Cordillera', consultas: 24 },
-    { name: 'Los Cedros', consultas: 18 },
-    { name: 'Valle Central', consultas: 15 },
-    { name: 'Alto Maipo', consultas: 12 },
-    { name: 'Los Andes', consultas: 8 },
+  const kpis = [
+    { label: 'Publicaciones activas',  value: '12',    change: '+3',     up: true,  bg: '#E8F5EE', color: '#006B4E', Icon: FolderOpen    },
+    { label: 'Consultas este mes',     value: '77',    change: '+12%',   up: true,  bg: '#EFF6FF', color: '#2563EB', Icon: MessageCircle },
+    { label: 'Reservas confirmadas',   value: '4',     change: '+1',     up: true,  bg: '#F5F3FF', color: '#7C3AED', Icon: FileText      },
+    { label: 'Tasa de conversión',     value: '3.4%',  change: '+0.2pp', up: true,  bg: '#FFF7ED', color: '#C2410C', Icon: TrendingUp    },
   ];
 
-  // Datos para gráfico donut - tipo de interacción
-  const interactionData = [
-    { name: 'Consultas', value: 48, color: '#006B4E' },
-    { name: 'Guardados', value: 32, color: '#462611' },
-    { name: 'Clicks', value: 20, color: '#7D460D' },
+  const accesos = [
+    { label: 'Publicar nueva parcela',          Icon: Plus,          action: () => { setCurrentSection('my-publications'); setTriggerPublishModal(n => n + 1); } },
+    { label: 'Responder consultas pendientes',  Icon: MessageCircle, action: () => setCurrentSection('inquiries') },
+    { label: 'Ver reservas recientes',          Icon: FileText,      action: () => setCurrentSection('reservas') },
+    { label: 'Asignar consulta a broker',       Icon: Users,         action: () => setCurrentSection('asignaciones') },
+    { label: 'Ver rendimiento',                 Icon: TrendingUp,    action: () => setCurrentSection('performance') },
   ];
 
-  // Datos del ranking
-  const parcelasRanking = [
-    { name: 'Parcela Vista Cordillera', location: 'Lo Barnechea', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=80', views: 267, consultas: 24, status: 'high', statusLabel: 'Alto interés', tendencia: 18 },
-    { name: 'Parcela Los Cedros', location: 'Colina', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=80', views: 234, consultas: 18, status: 'high', statusLabel: 'Alto interés', tendencia: 12 },
-    { name: 'Terreno Valle Central', location: 'Buin', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=80', views: 189, consultas: 15, status: 'medium', statusLabel: 'Interés medio', tendencia: 5 },
-    { name: 'Parcela Alto Maipo', location: 'San José de Maipo', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80', views: 156, consultas: 12, status: 'medium', statusLabel: 'Interés medio', tendencia: 8 },
-    { name: 'Terreno Los Andes', location: 'Los Andes', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=80', views: 98, consultas: 8, status: 'low', statusLabel: 'Bajo rendimiento', tendencia: -3 },
+  const actividad = [
+    { Icon: CheckCircle,   color: '#006B4E', text: 'Nueva consulta en "Parcela Vista Cordillera"',      time: 'Hace 15 min' },
+    { Icon: FileText,      color: '#7C3AED', text: 'Reserva confirmada — Parcela Los Cedros',            time: 'Hace 2h' },
+    { Icon: Heart,         color: '#DC2626', text: '3 nuevos favoritos en "Proyecto Vista Cordillera"',  time: 'Hace 3h' },
+    { Icon: MessageCircle, color: '#2563EB', text: 'Nueva consulta en Terreno Valle Central',            time: 'Ayer, 16:30' },
+    { Icon: CalendarDays,  color: '#0D9488', text: 'Cita agendada con Ana García — Mañana 11:00',        time: 'Ayer, 14:20' },
   ];
-
-  const proyectosRanking = [
-    { name: 'Proyecto Vista Cordillera — Fase 2', location: 'Lo Barnechea', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80', views: 1240, consultas: 24, status: 'high', statusLabel: 'Alto interés', tendencia: 31 },
-    { name: 'Condominio Los Arrayanes', location: 'Villarrica', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80', views: 890, consultas: 17, status: 'high', statusLabel: 'Alta demanda', tendencia: 14 },
-    { name: 'Proyecto Lago Ranco', location: 'Los Lagos', inmobiliaria: 'Vista Natura Propiedades', imagen: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=80', views: 623, consultas: 11, status: 'medium', statusLabel: 'Interés medio', tendencia: -2 },
-  ];
-
-  const activeRanking = dashRankingTab === 'parcelas' ? parcelasRanking : proyectosRanking;
 
   return (
-    <main className="px-8 py-8 space-y-8">
-      {/* Header with Quick Actions */}
-      <div className="flex items-start justify-between">
+    <div className="p-4 md:p-8">
+      <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-regular)',
-            fontSize: 'var(--font-size-h2)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Panel de rendimiento
-          </h1>
-          <p style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            color: '#737373',
-            marginTop: '8px'
-          }}>
-            Visualiza el desempeño de tus publicaciones
-          </p>
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>Bienvenido, Vista Natura</h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>Visión general de tu cuenta en CompraTuParcela.</p>
+        </div>
+        <button onClick={handleActualizar} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors flex-shrink-0" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <Zap className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar datos
+        </button>
+      </div>
+
+      {error && (
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+          <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#DC2626', margin: 0, flex: 1 }}>No se pudieron actualizar los datos. Verifica tu conexión e intenta nuevamente.</p>
+          <button onClick={handleActualizar} style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Reintentar</button>
+        </div>
+      )}
+
+      <div className="mb-8">
+        <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Tu actividad</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {loading ? [1,2,3,4].map(i => (
+            <div key={i} className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+                <div className="h-5 w-14 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+              </div>
+              <div className="h-7 w-20 rounded-lg animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+              <div className="h-3 w-32 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+            </div>
+          )) : kpis.map(({ label, value, change, up, bg, color, Icon }) => (
+            <div key={label} className="rounded-2xl p-3 md:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-center justify-between mb-2 md:mb-3">
+                <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg }}>
+                  <Icon className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color }} />
+                </div>
+                <span className="flex items-center gap-0.5 flex-shrink-0" style={{ fontSize: '10px', fontWeight: 600, fontFamily: 'var(--font-body)', color: up ? '#006B4E' : '#E53E3E', backgroundColor: up ? '#E8F5EE' : '#FEE2E2', padding: '2px 5px', borderRadius: '99px', whiteSpace: 'nowrap' }}>
+                  {up ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}{change}
+                </span>
+              </div>
+              <p className="text-xl md:text-[26px]" style={{ fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 2px' }}>{value}</p>
+              <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* KPIs Section */}
-      <section className="grid grid-cols-4 gap-6">
-        {[
-          { label: 'Parcelas publicadas', value: '12',    change: '+3',    up: true,  Icon: FileText,      iconBg: '#E8F5EE', iconColor: '#006B4E' },
-          { label: 'Visualizaciones',     value: '4.523', change: '+22%',  up: true,  Icon: Eye,           iconBg: '#EFF6FF', iconColor: '#2563EB' },
-          { label: 'Consultas recibidas', value: '77',    change: '+12%',  up: true,  Icon: MessageCircle, iconBg: '#F5F3FF', iconColor: '#7C3AED' },
-          { label: 'Favoritos usuarios',  value: '143',   change: '+15%',  up: true,  Icon: Heart,         iconBg: '#FFF1F2', iconColor: '#DC2626' },
-        ].map(({ label, value, change, up, Icon, iconBg, iconColor }) => (
-          <div key={label} className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: iconBg }}>
-                <Icon className="w-4 h-4" style={{ color: iconColor }} />
-              </div>
-              <span
-                className="flex items-center gap-0.5"
-                style={{
-                  fontSize: '11px', fontWeight: 600, fontFamily: 'var(--font-body)',
-                  color: up ? '#006B4E' : '#DC2626',
-                  backgroundColor: up ? '#E8F5EE' : '#FEE2E2',
-                  padding: '2px 7px', borderRadius: '99px',
-                }}
-              >
-                {up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                {change}
-              </span>
-            </div>
-            <p style={{ fontSize: '26px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 3px' }}>{value}</p>
-            <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
-          </div>
-        ))}
-      </section>
-
-      {/* Gráfico principal - Evolución de visualizaciones */}
-      <section className="rounded-2xl p-6 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 style={{
-              fontFamily: 'var(--font-heading)',
-              fontWeight: 'var(--font-weight-medium)',
-              fontSize: 'var(--font-size-h3)',
-              lineHeight: 'var(--line-height-heading)',
-              color: '#0A0A0A'
-            }}>
-              Evolución de visualizaciones
-            </h2>
-            <div className="flex items-center gap-4 mt-1">
-              <span className="flex items-center gap-1.5" style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                <span style={{ display: 'inline-block', width: 12, height: 2, backgroundColor: '#006B4E', borderRadius: 2 }} />
-                Parcelas
-              </span>
-              <span className="flex items-center gap-1.5" style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                <span style={{ display: 'inline-block', width: 12, height: 0, borderTop: '2px dashed #2563EB' }} />
-                Proyectos
-              </span>
-            </div>
-          </div>
-          <ChartRangePicker
-            presets={EVOL_PRESETS}
-            selected={selectedPeriod}
-            onSelectPreset={(id) => setSelectedPeriod(id as '7' | '30' | '90')}
-            appliedRange={evolApplied}
-            onApplyRange={setEvolApplied}
-            onClearRange={() => setEvolApplied(null)}
-          />
-        </div>
-        <DualLineChart
-          parcelas={chartSeries.parcelas}
-          proyectos={chartSeries.proyectos}
-          loading={false}
-          periodo={periodoMap[selectedPeriod]}
-        />
-      </section>
-
-      {/* Gráficos secundarios */}
-      <div className="grid grid-cols-2 gap-6">
-        {/* Gráfico de barras - Consultas por parcela */}
-        <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <div className="flex items-center justify-between">
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
-              Consultas por parcela
-            </h2>
-            <ChartRangePicker presets={CHART_PRESETS} selected={consultasPeriod} onSelectPreset={setConsultasPeriod} appliedRange={consultasApplied} onApplyRange={setConsultasApplied} onClearRange={() => setConsultasApplied(null)} />
-          </div>
-          <div style={{ width: '100%', height: '280px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={consultasData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#CDD8DE" />
-                <XAxis 
-                  dataKey="name" 
-                  style={{ fontSize: '11px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                />
-                <YAxis 
-                  style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#FFFFFF', 
-                    border: '1px solid #CDD8DE', 
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                />
-                <Bar 
-                  dataKey="consultas" 
-                  fill="#006B4E" 
-                  radius={[8, 8, 0, 0]}
-                  name="Consultas"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-
-        {/* Gráfico donut - Tipo de interacción */}
-        <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <div className="flex items-center justify-between">
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
-              Tipo de interacción
-            </h2>
-            <ChartRangePicker presets={CHART_PRESETS} selected={interaccionPeriod} onSelectPreset={setInteraccionPeriod} appliedRange={interaccionApplied} onApplyRange={setInteraccionApplied} onClearRange={() => setInteraccionApplied(null)} />
-          </div>
-          <div style={{ width: '100%', height: '280px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={interactionData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={90}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {interactionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#FFFFFF', 
-                    border: '1px solid #E5E5E5', 
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                />
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36}
-                  iconType="circle"
-                  wrapperStyle={{
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-      </div>
-
-      {/* Ranking de publicaciones */}
-      <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        {/* Header */}
-        <div className="px-5 pt-5 pb-0">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '2px' }}>
-                Ranking de publicaciones
-              </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Top 10 parcelas y proyectos por interacción — {dashRankingApplied ? formatDashRangeLabel(dashRankingApplied.from, dashRankingApplied.to) : DASH_PERIODO_LABELS[dashRankingPeriod]}
-              </p>
-            </div>
-            <div className="flex items-center gap-2" ref={dashRankingRef}>
-              {/* Dropdown períodos */}
-              <div className="relative">
-                <button
-                  onClick={() => { setShowDashRankingDropdown(v => !v); setShowDashRankingRange(false); }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                  {DASH_PERIODO_LABELS[dashRankingPeriod]}
-                  <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDashRankingDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-                </button>
-                {showDashRankingDropdown && (
-                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '190px' }}>
-                    {(['7', '30', '90'] as const).map(p => (
-                      <button key={p} onClick={() => { setDashRankingPeriod(p); setDashRankingApplied(null); setDashRankingFrom(''); setDashRankingTo(''); setShowDashRankingDropdown(false); }}
-                        className="w-full text-left px-4 py-2.5 transition-colors"
-                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: !dashRankingApplied && dashRankingPeriod === p ? 600 : 400, color: !dashRankingApplied && dashRankingPeriod === p ? '#006B4E' : '#0A0A0A', backgroundColor: !dashRankingApplied && dashRankingPeriod === p ? '#F0F9F5' : '#FFFFFF', border: 'none', cursor: 'pointer', display: 'block' }}
-                        onMouseEnter={e => { if (dashRankingApplied || dashRankingPeriod !== p) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = (!dashRankingApplied && dashRankingPeriod === p) ? '#F0F9F5' : '#FFFFFF'; }}
-                      >{DASH_PERIODO_LABELS[p]}</button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              {/* Botón rango personalizado */}
-              <div className="relative">
-                <button
-                  onClick={() => { setShowDashRankingRange(v => !v); setShowDashRankingDropdown(false); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
-                  style={{ border: dashRankingApplied ? '1px solid #006B4E' : '1px solid #E5E5E5', backgroundColor: dashRankingApplied ? '#F0F9F5' : '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: dashRankingApplied ? 600 : 400, color: dashRankingApplied ? '#006B4E' : '#6B7280', cursor: 'pointer' }}
-                  onMouseEnter={e => { if (!dashRankingApplied) e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-                  onMouseLeave={e => { if (!dashRankingApplied) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-                >
-                  <CalendarDays className="w-3.5 h-3.5" />
-                  {dashRankingApplied ? formatDashRangeLabel(dashRankingApplied.from, dashRankingApplied.to) : 'Rango'}
-                  {dashRankingApplied && (
-                    <span role="button" onClick={e => { e.stopPropagation(); setDashRankingApplied(null); setDashRankingFrom(''); setDashRankingTo(''); setShowDashRankingRange(false); }} className="hover:opacity-60 transition-opacity">
-                      <X className="w-3 h-3" />
-                    </span>
-                  )}
-                </button>
-                {showDashRankingRange && (
-                  <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4 space-y-3" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '240px' }}>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A', marginBottom: '2px' }}>Rango personalizado</p>
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</label>
-                      <input type="date" value={dashRankingFrom} onChange={e => setDashRankingFrom(e.target.value)} max={dashRankingTo || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
-                    </div>
-                    <div>
-                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hasta</label>
-                      <input type="date" value={dashRankingTo} onChange={e => setDashRankingTo(e.target.value)} min={dashRankingFrom || undefined} className="w-full px-3 py-2 rounded-lg outline-none" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA' }} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E5'; }} />
-                    </div>
-                    <button onClick={handleApplyDashRankingRange} disabled={!dashRankingFrom || !dashRankingTo} className="w-full py-2 rounded-lg" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#FFFFFF', backgroundColor: dashRankingFrom && dashRankingTo ? '#006B4E' : '#D1D5DB', border: 'none', cursor: dashRankingFrom && dashRankingTo ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (dashRankingFrom && dashRankingTo) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (dashRankingFrom && dashRankingTo) e.currentTarget.style.backgroundColor = '#006B4E'; }}>
-                      Aplicar
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* Tabs */}
-          <div className="flex" style={{ borderBottom: '1px solid #F0F0F0' }}>
-            {(['parcelas', 'proyectos'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setDashRankingTab(tab)}
-                style={{
-                  fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: dashRankingTab === tab ? 600 : 400,
-                  color: dashRankingTab === tab ? '#006B4E' : '#9CA3AF',
-                  backgroundColor: 'transparent', border: 'none',
-                  borderBottom: dashRankingTab === tab ? '2px solid #006B4E' : '2px solid transparent',
-                  padding: '8px 16px 10px', cursor: 'pointer', transition: 'color 0.15s',
-                }}
-              >
-                {tab === 'parcelas' ? 'Parcelas' : 'Proyectos'}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 16px' }}>Accesos rápidos</p>
+          <div className="space-y-2">
+            {accesos.map(({ label, Icon, action }) => (
+              <button key={label} onClick={action} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors text-left" style={{ backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '13px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F9F5'; e.currentTarget.style.color = '#006B4E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.color = '#0A0A0A'; }}>
+                <Icon className="w-4 h-4 flex-shrink-0" />{label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Table Header */}
-        <div
-          className="px-5 py-2.5"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 96px 80px 88px 130px',
-            gap: '8px',
-            borderBottom: '1px solid #F0F0F0',
-            backgroundColor: '#FAFAFA',
-          }}
-        >
-          {['Propiedad', 'Vistas', 'Consultas', 'Tendencia', 'Estado'].map((col, i) => (
-            <span key={i} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: i > 0 ? 'center' : 'left' }}>
-              {col}
-            </span>
-          ))}
-        </div>
-
-        {/* Table Rows */}
-        {activeRanking.map((item, index) => {
-          const pos = item.tendencia >= 0;
-          const estadoBadge: Record<string, { bg: string; text: string; border: string }> = {
-            'Alto interés':   { bg: '#DCFCE7', text: '#166534', border: '#86EFAC' },
-            'Alta demanda':   { bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
-            'En crecimiento': { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
-            'Estable':        { bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
-            'Interés medio':  { bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
-            'Bajo rendimiento': { bg: '#FEE2E2', text: '#991B1B', border: '#FCA5A5' },
-          };
-          const badge = estadoBadge[item.statusLabel] ?? { bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' };
-          return (
-            <div
-              key={index}
-              className="px-5 py-3 transition-colors"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 96px 80px 88px 130px',
-                gap: '8px',
-                alignItems: 'center',
-                borderBottom: index < activeRanking.length - 1 ? '1px solid #F9FAFB' : 'none',
-              }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-            >
-              {/* Propiedad */}
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
-                  <img src={item.imagen} alt={item.name} className="w-full h-full object-cover" />
+        <div className="md:col-span-2 rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 16px' }}>Actividad reciente</p>
+          {loading ? (
+            <div className="space-y-4">
+              {[1,2,3,4,5].map(i => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full animate-pulse flex-shrink-0 mt-0.5" style={{ backgroundColor: '#F0F0F0' }} />
+                  <div className="flex-1">
+                    <div className="h-3 rounded-full animate-pulse mb-1.5" style={{ backgroundColor: '#F0F0F0', width: '75%' }} />
+                    <div className="h-2.5 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: '35%' }} />
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {item.name}
-                  </p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {item.inmobiliaria ? <><span style={{ color: '#006B4E', fontWeight: 500 }}>Inmobiliaria: {item.inmobiliaria}</span> · {item.location}</> : item.location}
-                  </p>
-                </div>
-              </div>
-              {/* Vistas */}
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
-                {Math.round(item.views * DASH_RANKING_SCALE[dashRankingPeriod]).toLocaleString('es-CL')}
-              </p>
-              {/* Consultas */}
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151', textAlign: 'center' }}>
-                {Math.max(1, Math.round(item.consultas * DASH_RANKING_SCALE[dashRankingPeriod]))}
-              </p>
-              {/* Tendencia */}
-              <div className="flex items-center justify-center gap-1">
-                {pos ? <TrendingUp className="w-3.5 h-3.5" style={{ color: '#16A34A' }} /> : <TrendingDown className="w-3.5 h-3.5" style={{ color: '#DC2626' }} />}
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: pos ? '#16A34A' : '#DC2626' }}>
-                  {pos ? '+' : ''}{item.tendencia}%
-                </span>
-              </div>
-              {/* Estado */}
-              <div className="flex justify-center">
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: badge.bg, color: badge.text, border: `1px solid ${badge.border}`, fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>
-                  {item.statusLabel}
-                </span>
-              </div>
+              ))}
             </div>
-          );
-        })}
-
-        {/* Footer */}
-        <div className="px-5 py-4" style={{ borderTop: '1px solid #F0F0F0' }}>
-          <button className="w-full py-2 transition-all" style={{
-            backgroundColor: 'transparent', color: '#737373', border: 'none',
-            fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', cursor: 'pointer'
-          }}
-            onMouseEnter={e => e.currentTarget.style.color = '#0A0A0A'}
-            onMouseLeave={e => e.currentTarget.style.color = '#737373'}
-          >
-            Ver todas las {dashRankingTab === 'parcelas' ? 'parcelas' : 'proyectos'} →
-          </button>
+          ) : (
+            <div className="space-y-4">
+              {actividad.map(({ Icon, color, text, time }, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: color + '18' }}>
+                    <Icon className="w-3.5 h-3.5" style={{ color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{text}</p>
+                    <p style={{ fontSize: '11px', color: '#A0A0A0', fontFamily: 'var(--font-body)', marginTop: '2px' }}>{time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
 

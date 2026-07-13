@@ -247,7 +247,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
 
       {/* Main Content Area */}
       <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '224px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
-        {currentSection === 'home' && <HomeContent />}
+        {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} />}
         {currentSection === 'listings' && <MyPublicationsView userType="broker" userId="broker-456" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="broker" />}
         {currentSection === 'reservas' && (
@@ -277,681 +277,138 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
 });
 
 // Home Section Component
-function HomeContent() {
-  const [selectedPeriod, setSelectedPeriod] = React.useState<'7' | '30' | '90'>('30');
-  const [interesApplied, setInteresApplied] = React.useState<AppliedRange | null>(null);
-  const [consultasApplied, setConsultasApplied] = React.useState<AppliedRange | null>(null);
-  const [consultasPeriod, setConsultasPeriod] = React.useState('30d');
-  const [interaccionApplied, setInteraccionApplied] = React.useState<AppliedRange | null>(null);
-  const [interaccionPeriod, setInteraccionPeriod] = React.useState('30d');
-  const CHART_PRESETS = [{ id: '7d', label: 'Últimos 7 días' }, { id: '30d', label: 'Últimos 30 días' }, { id: '90d', label: 'Últimos 90 días' }];
-  const EVOL_PRESETS = [{ id: '7', label: '7 días' }, { id: '30', label: '30 días' }, { id: '90', label: '90 días' }];
+function HomeContent({ setCurrentSection }: { setCurrentSection: (s: string) => void }) {
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-  // Datos simulados para gráfico de evolución
-  const interestData = selectedPeriod === '7' ? [
-    { date: '21 Ene', interacciones: 38 },
-    { date: '22 Ene', interacciones: 45 },
-    { date: '23 Ene', interacciones: 42 },
-    { date: '24 Ene', interacciones: 51 },
-    { date: '25 Ene', interacciones: 48 },
-    { date: '26 Ene', interacciones: 62 },
-    { date: '27 Ene', interacciones: 71 },
-  ] : selectedPeriod === '30' ? [
-    { date: 'Sem 1', interacciones: 156 },
-    { date: 'Sem 2', interacciones: 189 },
-    { date: 'Sem 3', interacciones: 212 },
-    { date: 'Sem 4', interacciones: 245 },
-  ] : [
-    { date: 'Mes 1', interacciones: 634 },
-    { date: 'Mes 2', interacciones: 712 },
-    { date: 'Mes 3', interacciones: 802 },
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1600);
+    return () => clearTimeout(t);
+  }, []);
+
+  function handleActualizar() {
+    setLoading(true); setError(false);
+    setTimeout(() => { setLoading(false); if (Math.random() < 0.35) setError(true); }, 1400);
+  }
+
+  const kpis = [
+    { label: 'Leads asignados',           value: '14', change: '+2', up: true, bg: '#E8F5EE', color: '#006B4E', Icon: Users         },
+    { label: 'Consultas activas',          value: '8',  change: '+3', up: true, bg: '#EFF6FF', color: '#2563EB', Icon: MessageCircle },
+    { label: 'Citas esta semana',          value: '5',  change: '+1', up: true, bg: '#F5F3FF', color: '#7C3AED', Icon: Star          },
+    { label: 'Propiedades en seguimiento', value: '23', change: '+4', up: true, bg: '#FFF7ED', color: '#C2410C', Icon: Eye           },
   ];
 
-  // Datos para gráfico de barras - consultas por propiedad
-  const consultasPorPropiedad = [
-    { name: 'Vista Cordillera', consultas: 24 },
-    { name: 'Los Cedros', consultas: 18 },
-    { name: 'Valle Alto', consultas: 15 },
-    { name: 'El Roble', consultas: 12 },
-    { name: 'Los Andes', consultas: 8 },
+  const accesos = [
+    { label: 'Ver leads pendientes',       Icon: Users,         action: () => setCurrentSection('asignaciones') },
+    { label: 'Responder consulta activa',  Icon: MessageCircle, action: () => setCurrentSection('inquiries') },
+    { label: 'Agendar cita con cliente',   Icon: Star,          action: () => setCurrentSection('calendarios') },
+    { label: 'Mis publicaciones',          Icon: Eye,           action: () => setCurrentSection('listings') },
+    { label: 'Ver rendimiento',            Icon: TrendingUp,    action: () => setCurrentSection('performance') },
   ];
 
-  // Datos para gráfico donut - tipo de interacción
-  const tiposInteraccion = [
-    { name: 'Consultas', value: 45, color: '#006B4E' },
-    { name: 'Guardados', value: 35, color: '#462611' },
-    { name: 'Clicks contacto', value: 20, color: '#7D460D' },
-  ];
-
-  // Datos del ranking de propiedades
-  const propiedadesRanking = [
-    { 
-      name: 'Parcela Vista Cordillera', 
-      location: 'Lo Barnechea',
-      inmobiliaria: 'InmoSur',
-      views: 267, 
-      consultas: 24, 
-      status: 'high',
-      statusLabel: 'Alta demanda',
-      trend: 'up',
-      trendValue: '+18%'
-    },
-    { 
-      name: 'Parcela Los Cedros', 
-      location: 'Colina',
-      inmobiliaria: 'Propiedades Chile',
-      views: 234, 
-      consultas: 18, 
-      status: 'high',
-      statusLabel: 'Alta demanda',
-      trend: 'up',
-      trendValue: '+12%'
-    },
-    { 
-      name: 'Terreno Valle Alto', 
-      location: 'San Bernardo',
-      inmobiliaria: 'Broker directo',
-      views: 189, 
-      consultas: 15, 
-      status: 'medium',
-      statusLabel: 'Demanda media',
-      trend: 'neutral',
-      trendValue: '+5%'
-    },
-    { 
-      name: 'Parcela El Roble', 
-      location: 'Lampa',
-      inmobiliaria: 'InmoSur',
-      views: 156, 
-      consultas: 12, 
-      status: 'medium',
-      statusLabel: 'Demanda media',
-      trend: 'up',
-      trendValue: '+8%'
-    },
-    { 
-      name: 'Terreno Los Andes', 
-      location: 'Los Andes',
-      inmobiliaria: 'Broker directo',
-      views: 98, 
-      consultas: 8, 
-      status: 'low',
-      statusLabel: 'Baja demanda',
-      trend: 'down',
-      trendValue: '-3%'
-    },
+  const actividad = [
+    { Icon: Users,         color: '#006B4E', text: 'Lead asignado: Carlos Rodriguez busca parcela en Colina',     time: 'Hace 20 min' },
+    { Icon: Star,          color: '#7C3AED', text: 'Cita confirmada con Maria Gonzalez — Manana 10:00',           time: 'Hace 1h' },
+    { Icon: MessageCircle, color: '#2563EB', text: 'Nueva consulta de Pedro Morales en Parcela Vista Cordillera', time: 'Hace 2h' },
+    { Icon: CheckCircle,   color: '#006B4E', text: 'Lead actualizado: Diego Fuentes — interesado en parcela',     time: 'Hace 4h' },
+    { Icon: AlertCircle,   color: '#B7791F', text: '2 leads sin respuesta — seguimiento pendiente',               time: 'Ayer' },
   ];
 
   return (
-    <main className="px-8 py-8 space-y-8">
-      {/* Header with Quick Actions */}
-      <div className="flex items-start justify-between">
+    <div className="p-4 md:p-8">
+      <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-regular)',
-            fontSize: 'var(--font-size-h2)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Panel de oportunidades
-          </h1>
-          <p style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-base)',
-            color: '#737373',
-            marginTop: '8px'
-          }}>
-            Visualiza y gestiona las propiedades que estás promoviendo
-          </p>
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>Bienvenido, Carlos Perez</h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>Vision general de tu actividad como broker.</p>
         </div>
-        <div className="flex gap-3">
-          <button className="py-2.5 px-5 flex items-center gap-2 transition-all" style={{
-            backgroundColor: '#006B4E',
-            color: '#FFFFFF',
-            borderRadius: '200px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-medium)',
-            letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
-          >
-            <Plus className="w-4 h-4" />
-            Agregar a seguimiento
-          </button>
-        </div>
+        <button onClick={handleActualizar} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors flex-shrink-0" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <Zap className={"w-3.5 h-3.5 " + (loading ? "animate-spin" : "")} /> Actualizar datos
+        </button>
       </div>
 
-      {/* KPIs Section */}
-      <section className="grid grid-cols-4 gap-6">
-        {/* Propiedades en seguimiento */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Bookmark className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +2
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              En seguimiento
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              8
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              2 agregadas esta semana
-            </div>
-          </div>
+      {error && (
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+          <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#DC2626', margin: 0, flex: 1 }}>No se pudieron actualizar los datos. Verifica tu conexion e intenta nuevamente.</p>
+          <button onClick={handleActualizar} style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Reintentar</button>
         </div>
-        
-        {/* Visualizaciones totales */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Eye className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +28%
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Visualizaciones
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              2,148
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Últimos 30 días
-            </div>
-          </div>
-        </div>
-        
-        {/* Consultas generadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <MessageCircle className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(70, 38, 17, 0.1)' }}>
-              <AlertCircle className="w-3 h-3" style={{ color: '#462611' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#462611' }}>
-                3 nuevas
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Consultas generadas
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              42
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Últimos 30 días
-            </div>
-          </div>
-        </div>
-        
-        {/* Propiedades guardadas */}
-        <div className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 107, 78, 0.1)' }}>
-              <Heart className="w-5 h-5" style={{ color: '#006B4E' }} />
-            </div>
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(100, 126, 63, 0.1)' }}>
-              <ArrowUp className="w-3 h-3" style={{ color: '#647E3F' }} />
-              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#647E3F' }}>
-                +19%
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div style={{ 
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-medium)',
-              color: '#6B6B6B',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              lineHeight: '1.4'
-            }}>
-              Favoritos usuarios
-            </div>
-            <div style={{ 
-              fontFamily: 'var(--font-heading)',
-              fontSize: '48px',
-              fontWeight: 'var(--font-weight-light)',
-              lineHeight: '1',
-              color: '#0A0A0A',
-              marginTop: '12px',
-              marginBottom: '8px'
-            }}>
-              67
-            </div>
-            <div style={{ fontSize: 'var(--font-size-xs)', color: '#A3A3A3', lineHeight: '1.5' }}>
-              Señal de alto interés
-            </div>
-          </div>
-        </div>
-      </section>
+      )}
 
-      {/* Gráfico principal - Interés en propiedades */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-center justify-between">
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h3)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Interés en propiedades
-          </h2>
-          <ChartRangePicker
-            presets={EVOL_PRESETS}
-            selected={selectedPeriod}
-            onSelectPreset={(id) => setSelectedPeriod(id as '7' | '30' | '90')}
-            appliedRange={interesApplied}
-            onApplyRange={setInteresApplied}
-            onClearRange={() => setInteresApplied(null)}
-          />
-        </div>
-        <div style={{ width: '100%', height: '320px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={interestData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#CDD8DE" />
-              <XAxis 
-                dataKey="date" 
-                style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-              />
-              <YAxis 
-                style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#FFFFFF', 
-                  border: '1px solid #CDD8DE', 
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontFamily: 'var(--font-body)'
-                }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="interacciones" 
-                stroke="#006B4E" 
-                strokeWidth={3}
-                dot={{ fill: '#006B4E', r: 4 }}
-                activeDot={{ r: 6, fill: '#006B4E' }}
-                name="Interacciones"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
-
-      {/* Gráficos secundarios */}
-      <div className="grid grid-cols-2 gap-6">
-        {/* Gráfico de barras - Consultas por propiedad */}
-        <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <div className="flex items-center justify-between">
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
-              Consultas por propiedad
-            </h2>
-            <ChartRangePicker presets={CHART_PRESETS} selected={consultasPeriod} onSelectPreset={setConsultasPeriod} appliedRange={consultasApplied} onApplyRange={setConsultasApplied} onClearRange={() => setConsultasApplied(null)} />
-          </div>
-          <div style={{ width: '100%', height: '280px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={consultasPorPropiedad}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#CDD8DE" />
-                <XAxis 
-                  dataKey="name" 
-                  style={{ fontSize: '11px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                />
-                <YAxis 
-                  style={{ fontSize: '12px', fontFamily: 'var(--font-body)', fill: '#737373' }}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#FFFFFF', 
-                    border: '1px solid #CDD8DE', 
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                />
-                <Bar 
-                  dataKey="consultas" 
-                  fill="#006B4E" 
-                  radius={[8, 8, 0, 0]}
-                  name="Consultas"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-
-        {/* Gráfico donut - Tipo de interacción */}
-        <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-          <div className="flex items-center justify-between">
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: '#0A0A0A' }}>
-              Tipo de interacción
-            </h2>
-            <ChartRangePicker presets={CHART_PRESETS} selected={interaccionPeriod} onSelectPreset={setInteraccionPeriod} appliedRange={interaccionApplied} onApplyRange={setInteraccionApplied} onClearRange={() => setInteraccionApplied(null)} />
-          </div>
-          <div style={{ width: '100%', height: '280px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={tiposInteraccion}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={90}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {tiposInteraccion.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#FFFFFF', 
-                    border: '1px solid #CDD8DE', 
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                />
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36}
-                  iconType="circle"
-                  wrapperStyle={{
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)'
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-      </div>
-
-      {/* Ranking de propiedades en seguimiento */}
-      <section className="rounded-2xl p-6 space-y-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-center justify-between">
-          <h2 style={{ 
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'var(--font-weight-medium)',
-            fontSize: 'var(--font-size-h3)',
-            lineHeight: 'var(--line-height-heading)',
-            color: '#0A0A0A'
-          }}>
-            Propiedades en seguimiento
-          </h2>
-          <button className="py-2 px-4 flex items-center gap-2 transition-all" style={{ 
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            border: '2px solid #DEDEDE',
-            borderRadius: '200px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-medium)',
-            letterSpacing: 'var(--letter-spacing-wide)',
-            lineHeight: 'var(--line-height-ui)'
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
-          >
-            <Building2 className="w-3.5 h-3.5" />
-            Contactar inmobiliaria
-          </button>
-        </div>
-
-        {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 pb-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
-          <div className="col-span-5" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Propiedad
-          </div>
-          <div className="col-span-2 text-center" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Visualizaciones
-          </div>
-          <div className="col-span-2 text-center" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Consultas
-          </div>
-          <div className="col-span-2 text-center" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Tendencia
-          </div>
-          <div className="col-span-1 text-right" style={{ 
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            color: '#737373',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em'
-          }}>
-            Estado
-          </div>
-        </div>
-
-        {/* Table Rows */}
-        <div className="space-y-3">
-          {propiedadesRanking.map((propiedad, index) => (
-            <div 
-              key={index}
-              className="grid grid-cols-12 gap-4 py-4 rounded-xl transition-all cursor-pointer" 
-              style={{ border: '1px solid #F5F5F5' }}
-              onMouseEnter={(e) => { 
-                e.currentTarget.style.backgroundColor = '#FAFAFA'; 
-                e.currentTarget.style.borderColor = '#E5E5E5';
-              }}
-              onMouseLeave={(e) => { 
-                e.currentTarget.style.backgroundColor = 'transparent'; 
-                e.currentTarget.style.borderColor = '#F5F5F5';
-              }}
-            >
-              <div className="col-span-5 flex items-center gap-3 pl-4">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ 
-                  backgroundColor: '#FAFAFA',
-                  border: '1px solid #E5E5E5',
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'var(--font-size-body-sm)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#737373'
-                }}>
-                  {index + 1}
-                </div>
-                <div>
-                  <div style={{ 
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A',
-                    lineHeight: 'var(--line-height-ui)'
-                  }}>
-                    {propiedad.name}
-                  </div>
-                  <div className="flex items-center gap-2" style={{ marginTop: '2px' }}>
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                      {propiedad.location}
-                    </span>
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#C3C3C3' }}>•</span>
-                    <span style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                      {propiedad.inmobiliaria}
-                    </span>
-                  </div>
-                </div>
+      <div className="mb-8">
+        <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Tu actividad</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {loading ? [1,2,3,4].map(i => (
+            <div key={i} className="rounded-2xl p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+                <div className="h-5 w-14 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
               </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-2">
-                  <Eye className="w-4 h-4" style={{ color: '#737373' }} />
-                  <span style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    {propiedad.views}
-                  </span>
+              <div className="h-7 w-20 rounded-lg animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+              <div className="h-3 w-32 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+            </div>
+          )) : kpis.map(({ label, value, change, up, bg, color, Icon }) => (
+            <div key={label} className="rounded-2xl p-3 md:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-center justify-between mb-2 md:mb-3">
+                <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg }}>
+                  <Icon className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color }} />
                 </div>
-              </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4" style={{ color: '#737373' }} />
-                  <span style={{ 
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--font-size-body-base)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: '#0A0A0A'
-                  }}>
-                    {propiedad.consultas}
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-2 flex items-center justify-center">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ 
-                  backgroundColor: propiedad.trend === 'up' ? '#DCFCE7' : propiedad.trend === 'down' ? '#FEE2E2' : '#F5F5F5'
-                }}>
-                  {propiedad.trend === 'up' && <ArrowUp className="w-3.5 h-3.5" style={{ color: '#16A34A' }} />}
-                  {propiedad.trend === 'down' && <ArrowDown className="w-3.5 h-3.5" style={{ color: '#DC2626' }} />}
-                  <span style={{ 
-                    fontSize: 'var(--font-size-xs)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: propiedad.trend === 'up' ? '#16A34A' : propiedad.trend === 'down' ? '#DC2626' : '#737373'
-                  }}>
-                    {propiedad.trendValue}
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-1 flex items-center justify-end pr-4">
-                <span className="px-2.5 py-1 rounded-full whitespace-nowrap" style={{ 
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  backgroundColor: propiedad.status === 'high' ? '#DCFCE7' : propiedad.status === 'medium' ? '#FEF3C7' : '#FEE2E2',
-                  color: propiedad.status === 'high' ? '#16A34A' : propiedad.status === 'medium' ? '#CA8A04' : '#DC2626'
-                }}>
-                  {propiedad.statusLabel}
+                <span className="flex items-center gap-0.5 flex-shrink-0" style={{ fontSize: '10px', fontWeight: 600, fontFamily: 'var(--font-body)', color: up ? '#006B4E' : '#E53E3E', backgroundColor: up ? '#E8F5EE' : '#FEE2E2', padding: '2px 5px', borderRadius: '99px', whiteSpace: 'nowrap' }}>
+                  <ArrowUp className="w-2.5 h-2.5" />{change}
                 </span>
               </div>
+              <p className="text-xl md:text-[26px]" style={{ fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 2px' }}>{value}</p>
+              <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
             </div>
           ))}
         </div>
+      </div>
 
-        <button className="w-full py-2.5 px-6 transition-all" style={{ 
-          backgroundColor: '#FFFFFF',
-          color: '#737373',
-          border: '2px solid #DEDEDE',
-          borderRadius: '200px',
-          fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-sm)',
-          fontWeight: 'var(--font-weight-medium)',
-          letterSpacing: 'var(--letter-spacing-wide)',
-          lineHeight: 'var(--line-height-ui)'
-        }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.color = '#0A0A0A'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = '#737373'; }}
-        >
-          Ver todas las propiedades
-        </button>
-      </section>
-    </main>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 16px' }}>Accesos rapidos</p>
+          <div className="space-y-2">
+            {accesos.map(({ label, Icon, action }) => (
+              <button key={label} onClick={action} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors text-left" style={{ backgroundColor: '#FAFAFA', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '13px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F9F5'; e.currentTarget.style.color = '#006B4E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; e.currentTarget.style.color = '#0A0A0A'; }}>
+                <Icon className="w-4 h-4 flex-shrink-0" />{label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="md:col-span-2 rounded-2xl p-6" style={{ border: '1px solid #E5E5E5' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 16px' }}>Actividad reciente</p>
+          {loading ? (
+            <div className="space-y-4">
+              {[1,2,3,4,5].map(i => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full animate-pulse flex-shrink-0 mt-0.5" style={{ backgroundColor: '#F0F0F0' }} />
+                  <div className="flex-1">
+                    <div className="h-3 rounded-full animate-pulse mb-1.5" style={{ backgroundColor: '#F0F0F0', width: '75%' }} />
+                    <div className="h-2.5 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0', width: '35%' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {actividad.map(({ Icon, color, text, time }, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: color + '18' }}>
+                    <Icon className="w-3.5 h-3.5" style={{ color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)', margin: 0 }}>{text}</p>
+                    <p style={{ fontSize: '11px', color: '#A0A0A0', fontFamily: 'var(--font-body)', marginTop: '2px' }}>{time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
-
 // Leads Section Component
 function LeadsContent() {
   const [viewMode, setViewMode] = React.useState<'list' | 'kanban'>('list');
