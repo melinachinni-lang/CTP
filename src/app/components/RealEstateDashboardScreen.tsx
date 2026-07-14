@@ -412,6 +412,8 @@ function PlanContent() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+  const [invoicesLoading, setInvoicesLoading] = React.useState(true);
+  React.useEffect(() => { const t = setTimeout(() => setInvoicesLoading(false), 1400); return () => clearTimeout(t); }, []);
 
   const plans = [
     {
@@ -685,13 +687,31 @@ function PlanContent() {
             <div className="col-span-2 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Acción</span></div>
           </div>
           <div>
-            {filteredInvoices.length === 0 ? (
+            {invoicesLoading ? (
+              <>{[1,2,3].map(i => (
+                <div key={i} className="grid grid-cols-12 gap-4 px-6 py-5" style={{ borderBottom: i < 3 ? '1px solid #DEDEDE' : 'none' }}>
+                  <div className="col-span-2 flex items-center"><div className="h-3.5 rounded-full animate-pulse" style={{ width: '72%', backgroundColor: '#F0F0F0' }} /></div>
+                  <div className="col-span-5 flex items-center"><div className="h-6 rounded-full animate-pulse" style={{ width: '78%', backgroundColor: '#F0F0F0' }} /></div>
+                  <div className="col-span-3 flex items-center"><div className="h-3.5 rounded-full animate-pulse" style={{ width: '54%', backgroundColor: '#F0F0F0' }} /></div>
+                  <div className="col-span-2 flex items-center justify-end"><div className="h-8 rounded-full animate-pulse" style={{ width: '80px', backgroundColor: '#F0F0F0' }} /></div>
+                </div>
+              ))}</>
+            ) : filteredInvoices.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#F5F5F5' }}>
                   <CalendarDays className="w-6 h-6" style={{ color: '#A3A3A3' }} />
                 </div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Sin facturas en este período</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Prueba con otro rango de fechas</p>
+                {invoiceRange ? (
+                  <>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Sin facturas en este período</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Prueba con otro rango de fechas</p>
+                  </>
+                ) : (
+                  <>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Aún no tienes facturas</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Tus facturas aparecerán aquí cuando realices tu primer pago</p>
+                  </>
+                )}
               </div>
             ) : filteredInvoices.map((invoice, index) => (
               <div key={invoice.id} className="grid grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < filteredInvoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
