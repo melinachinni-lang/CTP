@@ -1087,6 +1087,8 @@ function PlanContent() {
   const [invoicesLoading, setInvoicesLoading] = React.useState(true);
   React.useEffect(() => { const t = setTimeout(() => setInvoicesLoading(false), 1400); return () => clearTimeout(t); }, []);
   const [planCancelled, setPlanCancelled] = React.useState(false);
+  const [invoiceError, setInvoiceError] = React.useState(false);
+  const [paymentError, setPaymentError] = React.useState(false);
 
   const plans = [
     {
@@ -1366,6 +1368,8 @@ function PlanContent() {
             <button onClick={() => setShowCancelModal(true)} className="px-6 py-2.5 transition-all self-start sm:self-auto" style={{ backgroundColor: '#FFFFFF', color: '#737373', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.borderColor = '#DC2626'; e.currentTarget.style.color = '#DC2626'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#737373'; }}>Cancelar suscripción</button>
           )}
         </div>
+        <div className="flex items-center gap-3">
+        <button onClick={() => setInvoiceError(v => !v)} style={{ fontSize: '11px', color: '#A3A3A3', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>{invoiceError ? 'Ocultar error' : 'Simular error de carga'}</button>
         <div className="relative" ref={rangoRef}>
           <button onClick={() => setShowRangoDropdown(v => !v)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl" style={{ border: `1px solid ${invoiceRange ? '#006B4E' : '#E5E5E5'}`, backgroundColor: invoiceRange ? '#E8F5EE' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: '13px', color: invoiceRange ? '#006B4E' : '#374151', cursor: 'pointer', fontWeight: invoiceRange ? 600 : 400 }}>
             <Calendar className="w-3.5 h-3.5" />
@@ -1393,6 +1397,7 @@ function PlanContent() {
             </div>
           )}
         </div>
+        </div>
         <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}><div className="overflow-x-auto"><div style={{ minWidth: '540px' }}>
           <div className="grid grid-cols-12 gap-4 px-6 py-4" style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #DEDEDE' }}>
             <div className="col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Fecha</span></div>
@@ -1410,6 +1415,15 @@ function PlanContent() {
                   <div className="col-span-2 flex items-center justify-end"><div className="h-8 rounded-full animate-pulse" style={{ width: '80px', backgroundColor: '#F0F0F0' }} /></div>
                 </div>
               ))}</>
+            ) : invoiceError ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#FEF2F2' }}>
+                  <AlertCircle className="w-6 h-6" style={{ color: '#DC2626' }} />
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>No se pudo cargar el historial</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '16px' }}>Ocurrió un error al obtener tus facturas. Intenta nuevamente.</p>
+                <button onClick={() => { setInvoiceError(false); setInvoicesLoading(true); setTimeout(() => setInvoicesLoading(false), 1400); }} className="px-6 py-2 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>Reintentar</button>
+              </div>
             ) : filteredInvoices.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#F5F5F5' }}>
@@ -1565,9 +1579,18 @@ function PlanContent() {
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0369A1', lineHeight: '1.5' }}>Serás redirigido a Mercado Pago para completar el pago de forma segura. El plan se activará automáticamente al confirmar.</p>
               </div>
             )}
+            {paymentError && (
+              <div className="flex items-start gap-3 rounded-xl p-4 mb-4" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#DC2626' }} />
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#DC2626', marginBottom: '2px' }}>No se pudo procesar el pago</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#B91C1C', lineHeight: '1.4' }}>Verifica los datos de tu tarjeta e intenta nuevamente.</p>
+                </div>
+              </div>
+            )}
             <div className="flex gap-3">
-              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
-              <button onClick={handleUpgrade} disabled={!paymentMethod} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: paymentMethod ? '#006B4E' : '#E5E5E5', color: paymentMethod ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#006B4E'; }}>Pagar</button>
+              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); setPaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
+              <button onClick={() => { if (paymentError) { handleUpgrade(); setPaymentError(false); } else { setPaymentError(true); } }} disabled={!paymentMethod} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: paymentMethod ? '#006B4E' : '#E5E5E5', color: paymentMethod ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#006B4E'; }}>{paymentError ? 'Reintentar' : 'Pagar'}</button>
             </div>
           </div>
         </div>
