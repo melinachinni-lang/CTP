@@ -2653,6 +2653,28 @@ function PlanContent() {
   const [showPaymentModal, setShowPaymentModal] = React.useState(false);
   const [paymentMethod, setPaymentMethod] = React.useState<'card' | 'mercadopago' | null>(null);
   const [billingPeriod, setBillingPeriod] = React.useState<'monthly' | 'annual'>('monthly');
+  const [showCancelModal, setShowCancelModal] = React.useState(false);
+  const [planCancelled, setPlanCancelled] = React.useState(false);
+  const [invoices, setInvoices] = React.useState<{ id: string; date: string; reason: string; reasonType: string; amount: string }[]>([]);
+
+  const handleCancelPlan = () => {
+    setPlanCancelled(true);
+    setInvoices(prev => [
+      { id: 'INV-2025-CANCEL', date: '14 Feb 2025', reason: 'Cancelación de suscripción', reasonType: 'cancellation', amount: '$0' },
+      ...prev
+    ]);
+    setShowCancelModal(false);
+  };
+
+  const getReasonBadgeStyle = (type: string) => {
+    switch (type) {
+      case 'subscription': return { backgroundColor: '#E8E7E6', color: 'var(--foreground)' };
+      case 'creation': return { backgroundColor: '#DCFCE7', color: '#16A34A' };
+      case 'upgrade': return { backgroundColor: '#FEF3C7', color: '#CA8A04' };
+      case 'cancellation': return { backgroundColor: '#FEE2E2', color: '#DC2626' };
+      default: return { backgroundColor: '#E8E7E6', color: '#737373' };
+    }
+  };
 
   const handleUpgrade = () => {
     if (pendingPlan) {
@@ -2747,10 +2769,17 @@ function PlanContent() {
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>Vendedor Particular</h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>Perfil: Personal · Gratuito</p>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#16A34A' }}>
-            <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-            <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
-          </div>
+          {planCancelled ? (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#FEF3C7' }}>
+              <AlertCircle className="w-4 h-4" style={{ color: '#D97706' }} />
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Cancelado · activo hasta 28 Feb 2025</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#16A34A' }}>
+              <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
+            </div>
+          )}
         </div>
         <button onClick={() => document.getElementById('person-compara-planes')?.scrollIntoView({ behavior: 'smooth' })} className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver planes profesionales</button>
       </section>
@@ -2818,19 +2847,39 @@ function PlanContent() {
           ))}
         </div>
       </section>
-      <section className="space-y-4">
-        <div>
-          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '8px' }}>Historial de facturación</h3>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>Consulta y descarga tus facturas anteriores</p>
+      <section className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '8px' }}>Historial de facturación</h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>Consulta y descarga tus facturas anteriores</p>
+          </div>
+          <button onClick={() => setShowCancelModal(true)} className="px-6 py-2.5 transition-all self-start sm:self-auto" style={{ backgroundColor: '#FFFFFF', color: '#737373', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.borderColor = '#DC2626'; e.currentTarget.style.color = '#DC2626'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#737373'; }}>Cancelar suscripción</button>
         </div>
         <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}>
-          <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
-              <CreditCard className="w-6 h-6" style={{ color: '#A3A3A3' }} />
+          {invoices.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
+                <CreditCard className="w-6 h-6" style={{ color: '#A3A3A3' }} />
+              </div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Aún no tienes facturas</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '280px' }}>Cuando contratas un plan de pago, tus facturas aparecerán aquí.</p>
             </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Aún no tienes facturas</p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '280px' }}>Cuando contratas un plan de pago, tus facturas aparecerán aquí.</p>
-          </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-12 gap-4 px-6 py-3" style={{ borderBottom: '1px solid #DEDEDE', backgroundColor: '#FAFAFA' }}>
+                <div className="col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fecha</span></div>
+                <div className="col-span-6"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Descripción</span></div>
+                <div className="col-span-3"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Monto</span></div>
+              </div>
+              {invoices.map((invoice, index) => (
+                <div key={invoice.id} className="grid grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < invoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                  <div className="col-span-2 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{invoice.date}</span></div>
+                  <div className="col-span-6 flex items-center"><span className="inline-flex items-center px-3 py-1.5 rounded-full" style={{ ...getReasonBadgeStyle(invoice.reasonType), fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}>{invoice.reason}</span></div>
+                  <div className="col-span-3 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--foreground)' }}>{invoice.amount}</span></div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </section>
       {showUpgradeModal && pendingPlanData && (
@@ -2946,6 +2995,23 @@ function PlanContent() {
             <div className="flex gap-3">
               <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
               <button onClick={handleUpgrade} disabled={!paymentMethod} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: paymentMethod ? '#006B4E' : '#E5E5E5', color: paymentMethod ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#006B4E'; }}>Pagar</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setShowCancelModal(false)}>
+          <div className="bg-white rounded-xl p-8 max-w-md w-full" style={{ border: '2px solid #DEDEDE' }} onClick={(e) => e.stopPropagation()}>
+            <div className="text-center mb-6">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FEE2E2' }}>
+                <AlertCircle className="w-7 h-7" style={{ color: '#DC2626' }} />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '8px' }}>¿Cancelar tu suscripción?</h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>Tu plan seguirá activo hasta el <strong>28 Feb 2025</strong>. Después perderás acceso a las funcionalidades premium.</p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setShowCancelModal(false)} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Mantener plan</button>
+              <button onClick={handleCancelPlan} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#DC2626', color: '#FFFFFF', border: '2px solid #DC2626', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#B91C1C'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#DC2626'}>Cancelar suscripción</button>
             </div>
           </div>
         </div>
