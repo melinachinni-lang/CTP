@@ -330,7 +330,7 @@ const es: Translations = {
   nav: {
     home: 'Inicio', explore: 'Explorar parcelas', listings: 'Mis publicaciones',
     saved: 'Guardados', inquiries: 'Consultas', calendarios: 'Calendarios',
-    compare: 'Comparar', purchases: 'Mis compras', plan: 'Plan y límites',
+    compare: 'Comparar', purchases: 'Mis compras', plan: 'Planes y Facturación',
     help: 'Ayuda', settings: 'Configuración', profile: 'Perfil', myAccount: 'Mi cuenta', signOut: 'Cerrar sesión',
     myProfile: 'Mi perfil', notifications: 'Notificaciones',
     parcelas: 'Parcelas', inmobiliarias: 'Inmobiliarias',
@@ -820,7 +820,7 @@ const en: Translations = {
   nav: {
     home: 'Home', explore: 'Explore parcels', listings: 'My listings',
     saved: 'Saved', inquiries: 'Inquiries', calendarios: 'Calendars',
-    compare: 'Compare', purchases: 'My purchases', plan: 'Plan & limits',
+    compare: 'Compare', purchases: 'My purchases', plan: 'Plans & Billing',
     help: 'Help', settings: 'Settings', profile: 'Profile', myAccount: 'My account', signOut: 'Sign out',
     myProfile: 'My profile', notifications: 'Notifications',
     parcelas: 'Parcels', inmobiliarias: 'Real estate agencies',

@@ -402,8 +402,16 @@ function PlanContent() {
   const [showPaymentModal, setShowPaymentModal] = React.useState(false);
   const [paymentMethod, setPaymentMethod] = React.useState<'card' | 'mercadopago' | null>(null);
   const [billingPeriod, setBillingPeriod] = React.useState<'monthly' | 'annual'>('monthly');
-  const [dateFrom, setDateFrom] = React.useState('');
-  const [dateTo, setDateTo] = React.useState('');
+  const [invoiceRange, setInvoiceRange] = React.useState<{ from: string; to: string } | null>(null);
+  const [showRangoDropdown, setShowRangoDropdown] = React.useState(false);
+  const [rangoFrom, setRangoFrom] = React.useState('');
+  const [rangoTo, setRangoTo] = React.useState('');
+  const rangoRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const handler = (e: MouseEvent) => { if (rangoRef.current && !rangoRef.current.contains(e.target as Node)) setShowRangoDropdown(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const plans = [
     {
@@ -479,9 +487,10 @@ function PlanContent() {
     { id: 'INV-2024-008', date: '28 Ago 2024', reason: 'Creación de suscripción - Plan Plata', reasonType: 'creation', amount: '$49.990' }
   ];
 
-  const monthMap: Record<string, string> = { ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06', jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12' };
-  const parseInvoiceMonth = (date: string) => { const p = date.toLowerCase().split(' '); return p.length >= 3 ? `${p[2]}-${monthMap[p[1]] || '01'}` : ''; };
-  const filteredInvoices = invoices.filter((inv) => { const m = parseInvoiceMonth(inv.date); if (dateFrom && m < dateFrom) return false; if (dateTo && m > dateTo) return false; return true; });
+  const invoiceMonthMap: Record<string, string> = { ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06', jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12' };
+  const parseInvoiceDate = (date: string) => { const p = date.toLowerCase().split(' '); return p.length >= 3 ? `${p[2]}-${invoiceMonthMap[p[1]] || '01'}-${p[0].padStart(2, '0')}` : ''; };
+  const formatRangeLabel = (from: string, to: string) => { const fmt = (d: string) => { const [y, m, day] = d.split('-'); return `${day}/${m}/${y.slice(2)}`; }; if (from && !to) return `Desde ${fmt(from)}`; if (!from && to) return `Hasta ${fmt(to)}`; return `${fmt(from)} – ${fmt(to)}`; };
+  const filteredInvoices = invoiceRange ? invoices.filter((inv) => { const d = parseInvoiceDate(inv.date); if (invoiceRange.from && d < invoiceRange.from) return false; if (invoiceRange.to && d > invoiceRange.to) return false; return true; }) : invoices;
 
   const handleDownload = (invoiceId: string) => console.log(`Descargando factura ${invoiceId}`);
   const handleCancelPlan = () => { setShowCancelModal(false); };
@@ -641,17 +650,31 @@ function PlanContent() {
           </div>
           <button onClick={() => setShowCancelModal(true)} className="px-6 py-2.5 transition-all self-start sm:self-auto" style={{ backgroundColor: '#FFFFFF', color: '#737373', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.borderColor = '#DC2626'; e.currentTarget.style.color = '#DC2626'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#737373'; }}>Cancelar suscripción</button>
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <div className="flex items-center gap-2">
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', whiteSpace: 'nowrap' }}>Desde</span>
-            <input type="month" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="px-3 py-1.5 rounded-lg" style={{ border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', outline: 'none', backgroundColor: '#FFFFFF' }} />
-          </div>
-          <div className="flex items-center gap-2">
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', whiteSpace: 'nowrap' }}>Hasta</span>
-            <input type="month" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="px-3 py-1.5 rounded-lg" style={{ border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', outline: 'none', backgroundColor: '#FFFFFF' }} />
-          </div>
-          {(dateFrom || dateTo) && (
-            <button onClick={() => { setDateFrom(''); setDateTo(''); }} className="px-4 py-1.5 rounded-full transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', border: '1px solid #DEDEDE', backgroundColor: '#FFFFFF', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#0A0A0A'; e.currentTarget.style.color = '#0A0A0A'; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#737373'; }}>Limpiar</button>
+        <div className="relative" ref={rangoRef}>
+          <button onClick={() => setShowRangoDropdown(v => !v)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl" style={{ border: `1px solid ${invoiceRange ? '#006B4E' : '#E5E5E5'}`, backgroundColor: invoiceRange ? '#E8F5EE' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: '13px', color: invoiceRange ? '#006B4E' : '#374151', cursor: 'pointer', fontWeight: invoiceRange ? 600 : 400 }}>
+            <CalendarDays className="w-3.5 h-3.5" />
+            {invoiceRange ? formatRangeLabel(invoiceRange.from, invoiceRange.to) : 'Rango'}
+          </button>
+          {showRangoDropdown && (
+            <div className="absolute left-0 top-full mt-1 z-50 rounded-xl p-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.10)', minWidth: '240px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 600, color: '#374151', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>Rango personalizado</p>
+              <div className="flex flex-col gap-3 mb-4">
+                <div>
+                  <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Desde</label>
+                  <input type="date" value={rangoFrom} onChange={e => setRangoFrom(e.target.value)} style={{ width: '100%', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '6px 10px', fontSize: '13px', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none' }} />
+                </div>
+                <div>
+                  <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Hasta</label>
+                  <input type="date" value={rangoTo} min={rangoFrom} onChange={e => setRangoTo(e.target.value)} style={{ width: '100%', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '6px 10px', fontSize: '13px', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none' }} />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                {invoiceRange && (
+                  <button onClick={() => { setInvoiceRange(null); setRangoFrom(''); setRangoTo(''); setShowRangoDropdown(false); }} style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#DC2626', borderRadius: '200px', border: '1px solid #FECACA', backgroundColor: '#FFF5F5', padding: '7px 0', cursor: 'pointer' }}>Limpiar</button>
+                )}
+                <button onClick={() => { if (rangoFrom || rangoTo) { setInvoiceRange({ from: rangoFrom, to: rangoTo }); setShowRangoDropdown(false); } }} disabled={!rangoFrom && !rangoTo} style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: (rangoFrom || rangoTo) ? '#006B4E' : '#D1D5DB', padding: '7px 0', border: 'none', cursor: (rangoFrom || rangoTo) ? 'pointer' : 'not-allowed' }}>Aplicar</button>
+              </div>
+            </div>
           )}
         </div>
         <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}><div className="overflow-x-auto"><div style={{ minWidth: '540px' }}>

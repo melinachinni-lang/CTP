@@ -2645,7 +2645,7 @@ function MyPurchasesContent() {
   );
 }
 
-// Plan y límites Section Component
+// Planes y Facturación Section Component
 function PlanContent() {
   const [showUpgradeModal, setShowUpgradeModal] = React.useState(false);
   const [pendingPlan, setPendingPlan] = React.useState<string | null>(null);
@@ -2733,7 +2733,7 @@ function PlanContent() {
         </div>
       )}
       <div>
-        <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)' }}>Plan y facturación</h1>
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-regular)', fontSize: 'var(--font-size-h2)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)' }}>Planes y Facturación</h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#737373', marginTop: '8px' }}>Gestiona tu plan y compara opciones</p>
       </div>
 
@@ -2816,6 +2816,22 @@ function PlanContent() {
               <button onClick={() => { setPendingPlan(plan.id); setShowUpgradeModal(true); }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
             </div>
           ))}
+        </div>
+      </section>
+      <section className="space-y-4">
+        <div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '8px' }}>Historial de facturación</h3>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>Consulta y descarga tus facturas anteriores</p>
+        </div>
+        <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}>
+          <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
+              <CreditCard className="w-6 h-6" style={{ color: '#A3A3A3' }} />
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Aún no tienes facturas</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '20px', maxWidth: '280px' }}>Cuando contratas un plan de pago, tus facturas aparecerán aquí.</p>
+            <button onClick={() => document.getElementById('person-compara-planes')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', border: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}>Ver planes disponibles</button>
+          </div>
         </div>
       </section>
       {showUpgradeModal && pendingPlanData && (
