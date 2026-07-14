@@ -402,6 +402,8 @@ function PlanContent() {
   const [showPaymentModal, setShowPaymentModal] = React.useState(false);
   const [paymentMethod, setPaymentMethod] = React.useState<'card' | 'mercadopago' | null>(null);
   const [billingPeriod, setBillingPeriod] = React.useState<'monthly' | 'annual'>('monthly');
+  const [dateFrom, setDateFrom] = React.useState('');
+  const [dateTo, setDateTo] = React.useState('');
 
   const plans = [
     {
@@ -453,6 +455,21 @@ function PlanContent() {
 
   const currentPlanData = plans.find(p => p.id === currentPlan);
 
+  const usageLimits: Record<string, Array<{ label: string; used: number; limit: number }>> = {
+    bronce: [
+      { label: 'Parcelas publicadas',       used: 7,  limit: 10 },
+      { label: 'Publicaciones destacadas',  used: 2,  limit: 2  },
+    ],
+    plata: [
+      { label: 'Parcelas publicadas',       used: 18, limit: 30 },
+      { label: 'Publicaciones destacadas',  used: 3,  limit: 5  },
+    ],
+    oro: [
+      { label: 'Parcelas publicadas',       used: 47, limit: -1 },
+      { label: 'Publicaciones destacadas',  used: 9,  limit: 15 },
+    ],
+  };
+
   const invoices = [
     { id: 'INV-2025-001', date: '28 Ene 2025', reason: 'Ciclo de suscripción - Plan Oro', reasonType: 'subscription', amount: '$89.990' },
     { id: 'INV-2024-012', date: '28 Dic 2024', reason: 'Ciclo de suscripción - Plan Oro', reasonType: 'subscription', amount: '$89.990' },
@@ -461,6 +478,10 @@ function PlanContent() {
     { id: 'INV-2024-009', date: '28 Sep 2024', reason: 'Ciclo de suscripción - Plan Plata', reasonType: 'subscription', amount: '$49.990' },
     { id: 'INV-2024-008', date: '28 Ago 2024', reason: 'Creación de suscripción - Plan Plata', reasonType: 'creation', amount: '$49.990' }
   ];
+
+  const monthMap: Record<string, string> = { ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06', jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12' };
+  const parseInvoiceMonth = (date: string) => { const p = date.toLowerCase().split(' '); return p.length >= 3 ? `${p[2]}-${monthMap[p[1]] || '01'}` : ''; };
+  const filteredInvoices = invoices.filter((inv) => { const m = parseInvoiceMonth(inv.date); if (dateFrom && m < dateFrom) return false; if (dateTo && m > dateTo) return false; return true; });
 
   const handleDownload = (invoiceId: string) => console.log(`Descargando factura ${invoiceId}`);
   const handleCancelPlan = () => { setShowCancelModal(false); };
@@ -546,6 +567,41 @@ function PlanContent() {
           ))}
         </div>
       </section>
+      <section className="rounded-2xl p-6 md:p-8" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Uso del plan</h3>
+        <div className="space-y-5">
+          {(usageLimits[currentPlan] || []).map(({ label, used, limit }) => {
+            const pct = limit === -1 ? 0 : Math.round((used / limit) * 100);
+            const barColor = pct >= 100 ? '#DC2626' : pct >= 80 ? '#F59E0B' : '#006B4E';
+            return (
+              <div key={label}>
+                <div className="flex items-center justify-between" style={{ marginBottom: '8px' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: limit === -1 ? '#006B4E' : pct >= 100 ? '#DC2626' : '#0A0A0A' }}>
+                    {limit === -1 ? 'Ilimitado' : `${used} de ${limit}`}
+                  </span>
+                </div>
+                {limit !== -1 ? (
+                  <div className="w-full rounded-full" style={{ height: '6px', backgroundColor: '#F0F0F0' }}>
+                    <div className="rounded-full" style={{ height: '6px', width: `${Math.min(pct, 100)}%`, backgroundColor: barColor }} />
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: '#006B4E' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Sin límite en tu plan actual</span>
+                  </div>
+                )}
+                {pct >= 100 && limit !== -1 && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626', marginTop: '4px' }}>Límite alcanzado · considera actualizar tu plan</p>
+                )}
+                {pct >= 80 && pct < 100 && limit !== -1 && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#92400E', marginTop: '4px' }}>Cerca del límite</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
       <section id="re-compara-planes">
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -585,6 +641,19 @@ function PlanContent() {
           </div>
           <button onClick={() => setShowCancelModal(true)} className="px-6 py-2.5 transition-all self-start sm:self-auto" style={{ backgroundColor: '#FFFFFF', color: '#737373', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', whiteSpace: 'nowrap' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.borderColor = '#DC2626'; e.currentTarget.style.color = '#DC2626'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#737373'; }}>Cancelar suscripción</button>
         </div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', whiteSpace: 'nowrap' }}>Desde</span>
+            <input type="month" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="px-3 py-1.5 rounded-lg" style={{ border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', outline: 'none', backgroundColor: '#FFFFFF' }} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', whiteSpace: 'nowrap' }}>Hasta</span>
+            <input type="month" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="px-3 py-1.5 rounded-lg" style={{ border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)', outline: 'none', backgroundColor: '#FFFFFF' }} />
+          </div>
+          {(dateFrom || dateTo) && (
+            <button onClick={() => { setDateFrom(''); setDateTo(''); }} className="px-4 py-1.5 rounded-full transition-colors" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', border: '1px solid #DEDEDE', backgroundColor: '#FFFFFF', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#0A0A0A'; e.currentTarget.style.color = '#0A0A0A'; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#737373'; }}>Limpiar</button>
+          )}
+        </div>
         <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}><div className="overflow-x-auto"><div style={{ minWidth: '540px' }}>
           <div className="grid grid-cols-12 gap-4 px-6 py-4" style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #DEDEDE' }}>
             <div className="col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Fecha</span></div>
@@ -593,8 +662,16 @@ function PlanContent() {
             <div className="col-span-2 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Acción</span></div>
           </div>
           <div>
-            {invoices.map((invoice, index) => (
-              <div key={invoice.id} className="grid grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < invoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+            {filteredInvoices.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#F5F5F5' }}>
+                  <CalendarDays className="w-6 h-6" style={{ color: '#A3A3A3' }} />
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Sin facturas en este período</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Prueba con otro rango de fechas</p>
+              </div>
+            ) : filteredInvoices.map((invoice, index) => (
+              <div key={invoice.id} className="grid grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < filteredInvoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
                 <div className="col-span-2 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>{invoice.date}</span></div>
                 <div className="col-span-5 flex items-center"><span className="inline-flex items-center px-3 py-1.5 rounded-full" style={{ ...getReasonBadgeStyle(invoice.reasonType), fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)' }}>{invoice.reason}</span></div>
                 <div className="col-span-3 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>{invoice.amount}</span></div>
