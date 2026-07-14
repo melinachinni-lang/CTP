@@ -2829,8 +2829,7 @@ function PlanContent() {
               <CreditCard className="w-6 h-6" style={{ color: '#A3A3A3' }} />
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 600, color: 'var(--foreground)', marginBottom: '4px' }}>Aún no tienes facturas</p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '20px', maxWidth: '280px' }}>Cuando contratas un plan de pago, tus facturas aparecerán aquí.</p>
-            <button onClick={() => document.getElementById('person-compara-planes')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', border: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}>Ver planes disponibles</button>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '280px' }}>Cuando contratas un plan de pago, tus facturas aparecerán aquí.</p>
           </div>
         </div>
       </section>
