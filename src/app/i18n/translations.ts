@@ -330,7 +330,7 @@ const es: Translations = {
   nav: {
     home: 'Inicio', explore: 'Explorar parcelas', listings: 'Mis publicaciones',
     saved: 'Guardados', inquiries: 'Consultas', calendarios: 'Calendarios',
-    compare: 'Comparar', purchases: 'Mis compras', plan: 'Planes y Facturación',
+    compare: 'Comparar', purchases: 'Mis compras', plan: 'Plan y Facturación',
     help: 'Ayuda', settings: 'Configuración', profile: 'Perfil', myAccount: 'Mi cuenta', signOut: 'Cerrar sesión',
     myProfile: 'Mi perfil', notifications: 'Notificaciones',
     parcelas: 'Parcelas', inmobiliarias: 'Inmobiliarias',
