@@ -1086,6 +1086,7 @@ function PlanContent() {
   }, []);
   const [invoicesLoading, setInvoicesLoading] = React.useState(true);
   React.useEffect(() => { const t = setTimeout(() => setInvoicesLoading(false), 1400); return () => clearTimeout(t); }, []);
+  const [planCancelled, setPlanCancelled] = React.useState(false);
 
   const plans = [
     {
@@ -1152,14 +1153,14 @@ function PlanContent() {
     ],
   };
 
-  const invoices = [
+  const [invoices, setInvoices] = React.useState([
     { id: 'INV-2025-001', date: '28 Ene 2025', reason: 'Ciclo de suscripción - Plan Plata', reasonType: 'subscription', amount: '$49.990' },
     { id: 'INV-2024-012', date: '28 Dic 2024', reason: 'Ciclo de suscripción - Plan Plata', reasonType: 'subscription', amount: '$49.990' },
     { id: 'INV-2024-011', date: '28 Nov 2024', reason: 'Ciclo de suscripción - Plan Plata', reasonType: 'subscription', amount: '$49.990' },
     { id: 'INV-2024-010', date: '28 Oct 2024', reason: 'Ciclo de suscripción - Plan Plata', reasonType: 'subscription', amount: '$49.990' },
     { id: 'INV-2024-009', date: '28 Sep 2024', reason: 'Upgrade a Plan Plata', reasonType: 'upgrade', amount: '$49.990' },
     { id: 'INV-2024-008', date: '28 Ago 2024', reason: 'Creación de suscripción - Plan Bronce', reasonType: 'creation', amount: '$29.990' }
-  ];
+  ]);
 
   const invoiceMonthMap: Record<string, string> = { ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06', jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12' };
   const parseInvoiceDate = (date: string) => { const p = date.toLowerCase().split(' '); return p.length >= 3 ? `${p[2]}-${invoiceMonthMap[p[1]] || '01'}-${p[0].padStart(2, '0')}` : ''; };
@@ -1167,7 +1168,14 @@ function PlanContent() {
   const filteredInvoices = invoiceRange ? invoices.filter((inv) => { const d = parseInvoiceDate(inv.date); if (invoiceRange.from && d < invoiceRange.from) return false; if (invoiceRange.to && d > invoiceRange.to) return false; return true; }) : invoices;
 
   const handleDownload = (invoiceId: string) => console.log(`Descargando factura ${invoiceId}`);
-  const handleCancelPlan = () => { setShowCancelModal(false); };
+  const handleCancelPlan = () => {
+    setPlanCancelled(true);
+    setInvoices(prev => [
+      { id: 'INV-2025-CANCEL', date: '14 Feb 2025', reason: 'Cancelación de suscripción', reasonType: 'cancellation', amount: '$0' },
+      ...prev
+    ]);
+    setShowCancelModal(false);
+  };
   const handleUpgrade = () => {
     if (pendingPlan) {
       setCurrentPlan(pendingPlan);
@@ -1184,6 +1192,7 @@ function PlanContent() {
       case 'subscription': return { backgroundColor: '#E8E7E6', color: 'var(--foreground)' };
       case 'creation': return { backgroundColor: '#DCFCE7', color: '#16A34A' };
       case 'upgrade': return { backgroundColor: '#FEF3C7', color: '#CA8A04' };
+      case 'cancellation': return { backgroundColor: '#FEE2E2', color: '#DC2626' };
       default: return { backgroundColor: '#E8E7E6', color: '#737373' };
     }
   };
@@ -1230,10 +1239,17 @@ function PlanContent() {
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>Plan {currentPlanData?.name}</h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>Perfil: Broker</p>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#16A34A' }}>
-            <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-            <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
-          </div>
+          {planCancelled ? (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#FEF3C7' }}>
+              <AlertCircle className="w-4 h-4" style={{ color: '#D97706' }} />
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Cancelado · activo hasta 28 Feb 2025</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#16A34A' }}>
+              <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Activo</span>
+            </div>
+          )}
         </div>
         <button onClick={() => document.getElementById('broker-compara-planes')?.scrollIntoView({ behavior: 'smooth' })} className="py-2.5 px-6 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#E8E7E6'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>Ver otros planes</button>
       </section>
