@@ -30,7 +30,7 @@ function KPICardSkeleton() {
 
 function SectionSkeleton({ height = 280, title = true }: { height?: number; title?: boolean }) {
   return (
-    <div className="rounded-2xl p-6 animate-pulse" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+    <div className="rounded-2xl p-4 md:p-6 animate-pulse" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
       {title && (
         <>
           <div className="h-5 w-40 rounded-lg mb-2" style={{ backgroundColor: '#F0F0F0' }} />
@@ -293,14 +293,14 @@ export function AdminAnaliticaView() {
       </div>
 
       {/* KPIs */}
-      <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         {trafficKPIs.map((kpi, i) => (
           <KPICard key={i} {...kpi} />
         ))}
       </section>
 
       {/* Gráfico principal unificado estilo GA4 */}
-      <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+      <section className="rounded-2xl p-4 md:p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-6">
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
@@ -347,7 +347,7 @@ export function AdminAnaliticaView() {
 
       {/* Visitas por día + Por dispositivo */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <section className="md:col-span-8 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <section className="md:col-span-8 rounded-2xl p-4 md:p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
             Visitas por día
           </h2>
@@ -367,7 +367,7 @@ export function AdminAnaliticaView() {
           </div>
         </section>
 
-        <section className="md:col-span-4 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <section className="md:col-span-4 rounded-2xl p-4 md:p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '24px' }}>
             Por dispositivo
           </h2>
@@ -406,7 +406,7 @@ export function AdminAnaliticaView() {
       </div>
 
       {/* Usuarios nuevos vs recurrentes */}
-      <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+      <section className="rounded-2xl p-4 md:p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
           Usuarios nuevos vs recurrentes
         </h2>
@@ -451,11 +451,11 @@ export function AdminAnaliticaView() {
             <div className="relative">
               <button
                 onClick={() => { setShowOrigenDropdown(!showOrigenDropdown); setShowOrigenRango(false); }}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl"
                 style={{ border: `1px solid ${origenApplied ? '#E5E5E5' : '#E5E5E5'}`, backgroundColor: origenApplied ? '#FAFAFA' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenApplied ? '#9CA3AF' : '#374151', cursor: 'pointer', opacity: origenApplied ? 0.6 : 1 }}
               >
                 <Calendar className="w-3.5 h-3.5" style={{ color: '#737373' }} />
-                {origenApplied ? formatOrigenRangeLabel(origenApplied.from, origenApplied.to) : ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}
+                <span className="hidden sm:inline">{origenApplied ? formatOrigenRangeLabel(origenApplied.from, origenApplied.to) : ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}</span>
                 <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373' }} />
               </button>
               {showOrigenDropdown && (
@@ -477,7 +477,7 @@ export function AdminAnaliticaView() {
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors"
                 style={{ border: `1px solid ${origenApplied ? '#006B4E' : '#E5E5E5'}`, backgroundColor: origenApplied ? '#E8F5EE' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenApplied ? '#006B4E' : '#374151', cursor: 'pointer', fontWeight: origenApplied ? 600 : 400 }}>
                 <Calendar className="w-3.5 h-3.5" />
-                Rango
+                <span className="hidden sm:inline">Rango</span>
               </button>
               {showOrigenRango && (
                 <div className="absolute right-0 top-full mt-1 z-20 rounded-xl p-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.10)', minWidth: '240px' }}>
@@ -525,14 +525,14 @@ export function AdminAnaliticaView() {
                   const deltaUp = delta >= 0;
                   return (
                     <div key={i} className="flex items-center gap-4">
-                      <span style={{ width: '120px', flexShrink: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>{f.nombre}</span>
+                      <span style={{ width: '90px', minWidth: '60px', flexShrink: 1, fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>{f.nombre}</span>
                       <div style={{ flex: 1 }}>
                         <div style={{ height: '14px', width: `${actualPct}%`, backgroundColor: '#006B4E', borderRadius: '3px', marginBottom: origenApplied ? 0 : '5px', minWidth: '4px' }} />
                         {!origenApplied && (
                           <div style={{ height: '10px', width: `${anteriorPct}%`, borderRadius: '3px', minWidth: '4px', backgroundColor: '#A7E3C8', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.55) 3px, rgba(255,255,255,0.55) 6px)' }} />
                         )}
                       </div>
-                      <div style={{ width: '100px', flexShrink: 0, textAlign: 'right' }}>
+                      <div style={{ width: '80px', flexShrink: 0, textAlign: 'right' }}>
                         <div style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{f.actual.toLocaleString('es-CL')}</div>
                         <div className="flex items-center justify-end gap-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px' }}>
                           <span style={{ color: '#9CA3AF' }}>{sharePct}%</span>
@@ -574,7 +574,8 @@ export function AdminAnaliticaView() {
               Proyectos más visitados
             </h2>
           </div>
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="w-full" style={{ minWidth: '380px' }}>
             <thead style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E5E5' }}>
               <tr>
                 {['#', 'Proyecto', 'Visitas', 'Ratio'].map((h, i) => (
@@ -603,9 +604,10 @@ export function AdminAnaliticaView() {
               ))}
             </tbody>
           </table>
+          </div>
         </section>
 
-        <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <section className="rounded-2xl p-4 md:p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
             Interacciones clave
           </h2>

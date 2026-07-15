@@ -305,12 +305,12 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
 
   if (isLoading) {
     return (
-      <main className="px-6 py-6 space-y-6">
+      <main className="px-4 py-4 md:px-6 md:py-6 space-y-6">
         <div className="space-y-2">
           <div className="h-7 rounded-full animate-pulse" style={{ backgroundColor: '#E5E7EB', width: '220px' }} />
           <div className="h-3.5 rounded-full animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '340px' }} />
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="p-5 rounded-2xl animate-pulse" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF', height: '118px' }} />
           ))}
@@ -324,7 +324,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <main className="px-6 py-6 space-y-6">
+    <main className="px-4 py-4 md:px-6 md:py-6 space-y-6">
       {/* Header */}
       <div className="space-y-1">
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
@@ -336,7 +336,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
       </div>
 
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {kpis.map((kpi, i) => {
           const pos = kpi.change >= 0;
           return (
@@ -402,13 +402,13 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             <div className="relative">
               <button
                 onClick={() => { setShowDropdown(v => !v); setShowCustomRange(false); }}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
                 style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
               >
                 <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                {appliedRange ? PERIODO_LABELS[periodo] : PERIODO_LABELS[periodo]}
+                <span className="hidden sm:inline">{PERIODO_LABELS[periodo]}</span>
                 <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
               </button>
 
@@ -456,7 +456,10 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 onMouseLeave={e => { if (!appliedRange) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
               >
                 <CalendarDays className="w-3.5 h-3.5" />
-                {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : 'Rango'}
+                {appliedRange
+                  ? <span className="hidden sm:inline">{formatRangeLabel(appliedRange.from, appliedRange.to)}</span>
+                  : <span className="hidden sm:inline">Rango</span>
+                }
                 {appliedRange && (
                   <span
                     role="button"
@@ -547,13 +550,13 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
               <div className="relative">
                 <button
                   onClick={() => { setShowRankingDropdown(v => !v); setShowRankingCustomRange(false); }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
                   style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', fontWeight: 500, cursor: 'pointer' }}
                   onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                 >
                   <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                  {PERIODO_LABELS[rankingPeriodo]}
+                  <span className="hidden sm:inline">{PERIODO_LABELS[rankingPeriodo]}</span>
                   <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRankingDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
                 </button>
                 {showRankingDropdown && (
@@ -579,7 +582,10 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                   onMouseLeave={e => { if (!rankingAppliedRange) e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                 >
                   <CalendarDays className="w-3.5 h-3.5" />
-                  {rankingAppliedRange ? formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to) : 'Rango'}
+                  {rankingAppliedRange
+                    ? <span className="hidden sm:inline">{formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to)}</span>
+                    : <span className="hidden sm:inline">Rango</span>
+                  }
                   {rankingAppliedRange && (
                     <span role="button" onClick={e => { e.stopPropagation(); setRankingAppliedRange(null); setRankingCustomFrom(''); setRankingCustomTo(''); setShowRankingCustomRange(false); }} className="hover:opacity-60 transition-opacity">
                       <X className="w-3 h-3" />
