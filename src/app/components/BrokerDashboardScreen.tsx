@@ -1202,7 +1202,6 @@ function PlanContent() {
       setShowPaymentModal(false);
       setPaymentMethod(null);
       setPlanChanged(true);
-      setTimeout(() => setPlanChanged(false), 8000);
     }
   };
   const getReasonBadgeStyle = (type: string) => {
@@ -1229,33 +1228,31 @@ function PlanContent() {
   return (
     <main className="px-4 py-6 md:px-8 md:py-8 space-y-8">
       {planChanged && (
-        <div className="fixed bottom-6 left-1/2 z-[100] rounded-2xl overflow-hidden" style={{ transform: 'translateX(-50%)', backgroundColor: '#FFFFFF', boxShadow: '0 8px 40px rgba(0,0,0,0.18)', width: '360px', border: '1px solid #E5E5E5' }}>
-          <div className="flex items-start gap-3 px-4 py-4" style={{ backgroundColor: '#16A34A' }}>
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-              <CheckCircle className="w-5 h-5" style={{ color: '#FFFFFF' }} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', marginBottom: '2px' }}>
-                ¡Plan {currentPlanData?.name} activado con éxito!
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setPlanChanged(false)}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full" style={{ border: '1px solid #E5E5E5', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+            <div className="text-center mb-6">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#F0FDF4' }}>
+                <CheckCircle className="w-7 h-7" style={{ color: '#16A34A' }} />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '8px' }}>
+                ¡Plan {currentPlanData?.name} activado!
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: 'var(--line-height-body)' }}>
+                Tu plan está activo desde hoy, <strong>{new Date().toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>. Ya puedes disfrutar todos los beneficios.
               </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.85)' }}>
-                Activo desde hoy · {new Date().toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })}
-              </p>
             </div>
-            <button onClick={() => setPlanChanged(false)} style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 0, flexShrink: 0 }}>
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="px-4 py-4">
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Lo que incluye tu plan</p>
-            <div className="space-y-2">
-              {currentPlanData?.features.filter(f => f.included).slice(0, 4).map((f, i) => (
+            <div className="rounded-xl p-4 mb-6 space-y-2" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Lo que incluye tu plan</p>
+              {currentPlanData?.features.filter(f => f.included).map((f, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#16A34A' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>{f.name}</span>
+                  <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#15803D' }}>{f.name}</span>
                 </div>
               ))}
             </div>
+            <button onClick={() => setPlanChanged(false)} className="w-full px-6 py-3 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: '2px solid #006B4E', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+              Entendido
+            </button>
           </div>
         </div>
       )}
