@@ -301,7 +301,7 @@ export function AdminAnaliticaView() {
 
       {/* Gráfico principal unificado estilo GA4 */}
       <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-6">
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
               Tráfico de la plataforma
@@ -437,7 +437,7 @@ export function AdminAnaliticaView() {
 
       {/* Origen del tráfico */}
       <section className="rounded-2xl" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="px-6 py-5 flex items-center justify-between" style={{ borderBottom: '1px solid #E5E5E5' }}>
+        <div className="px-6 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
               Origen del tráfico

@@ -369,7 +369,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
 
       {/* Chart Section */}
       <div className="p-5 rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-        <div className="flex items-start justify-between mb-5">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5">
           {/* Título + subtítulo + leyenda a la izquierda */}
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
@@ -396,7 +396,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
           </div>
 
           {/* Controles de período — wrapper con ref para click-outside */}
-          <div className="flex items-center gap-2" ref={datePickerRef}>
+          <div className="flex items-center gap-2 flex-shrink-0" ref={datePickerRef}>
 
             {/* Dropdown de períodos predefinidos */}
             <div className="relative">
@@ -533,7 +533,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
       <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
         {/* Table header */}
         <div className="px-5 pt-4 pb-0">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
             <div>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
                 {viewType === 'inmobiliaria' ? 'Ranking de publicaciones' : 'Propiedades en seguimiento'}
@@ -542,7 +542,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 Top 10 parcelas y proyectos por interacción — {rankingAppliedRange ? formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to) : PERIODO_LABELS[rankingPeriodo]}
               </p>
             </div>
-            <div className="flex items-center gap-2" ref={rankingPickerRef}>
+            <div className="flex items-center gap-2 flex-shrink-0" ref={rankingPickerRef}>
               {/* Dropdown períodos */}
               <div className="relative">
                 <button
@@ -641,6 +641,10 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             ))}
           </div>
         </div>
+
+        {/* Scrollable table */}
+        <div className="overflow-x-auto">
+        <div style={{ minWidth: '520px' }}>
 
         {/* Column headers */}
         <div
@@ -755,6 +759,9 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
             </p>
           </div>
         )}
+
+        </div>
+        </div>
       </div>
     </main>
   );
