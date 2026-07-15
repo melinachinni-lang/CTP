@@ -20,6 +20,7 @@ interface BrokerDashboardScreenProps {
 export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashboardScreenProps>(
   ({ onNavigate }, ref) => {
     const [showMenu, setShowMenu] = React.useState(false);
+    const [sidebarOpen, setSidebarOpen] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
 
@@ -138,8 +139,23 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
   return (
     <>
       <div className="fixed inset-0" style={{ backgroundColor: '#002F23', zIndex: 5 }} />
+      {sidebarOpen && (
+        <div className="fixed inset-0 sm:hidden" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 25 }} onClick={() => setSidebarOpen(false)} />
+      )}
+      <button
+        className="sm:hidden fixed top-3 left-3 z-40 w-9 h-9 flex items-center justify-center rounded-lg"
+        style={{ backgroundColor: '#002F23' }}
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Menú"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
       {/* Nav Rail - Left Sidebar */}
-      <aside className="w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-20" style={{ backgroundColor: '#002F23' }}>
+      <aside className={`w-56 flex-shrink-0 fixed left-0 top-0 bottom-0 z-30 sm:z-20 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}`} style={{ backgroundColor: '#002F23' }}>
         <div className="h-full flex flex-col">
           {/* Logo Area */}
           <div className="p-2 mt-8">
@@ -246,7 +262,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       </aside>
 
       {/* Main Content Area */}
-      <div className="fixed overflow-y-auto bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.45)]" style={{ left: '224px', top: 'calc(32px + 12px)', right: '12px', bottom: '12px', zIndex: 10 }}>
+      <div className="fixed overflow-y-auto bg-white sm:rounded-2xl sm:shadow-[0_0_40px_rgba(0,0,0,0.45)] inset-0 sm:inset-auto sm:left-[224px] sm:top-[44px] sm:right-3 sm:bottom-3" style={{ zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} />}
         {currentSection === 'listings' && <MyPublicationsView userType="broker" userId="broker-456" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="broker" />}
