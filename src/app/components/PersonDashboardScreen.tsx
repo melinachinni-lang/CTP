@@ -2868,22 +2868,20 @@ function PlanContent() {
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '280px' }}>Cuando contratas un plan de pago, tus facturas aparecerán aquí.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <div style={{ minWidth: '540px' }}>
-                <div className="grid grid-cols-12 gap-4 px-6 py-3" style={{ borderBottom: '1px solid #DEDEDE', backgroundColor: '#FAFAFA' }}>
-                  <div className="col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fecha</span></div>
-                  <div className="col-span-6"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Descripción</span></div>
-                  <div className="col-span-3"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Monto</span></div>
-                </div>
-                {invoices.map((invoice, index) => (
-                  <div key={invoice.id} className="grid grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < invoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
-                    <div className="col-span-2 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{invoice.date}</span></div>
-                    <div className="col-span-6 flex items-center"><span className="inline-flex items-center px-3 py-1.5 rounded-full" style={{ ...getReasonBadgeStyle(invoice.reasonType), fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}>{invoice.reason}</span></div>
-                    <div className="col-span-3 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--foreground)' }}>{invoice.amount}</span></div>
-                  </div>
-                ))}
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-12 gap-4 px-6 py-3" style={{ borderBottom: '1px solid #DEDEDE', backgroundColor: '#FAFAFA' }}>
+                <div className="col-span-1 sm:col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fecha</span></div>
+                <div className="hidden sm:block sm:col-span-6"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Descripción</span></div>
+                <div className="col-span-1 sm:col-span-3 text-right sm:text-left"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Monto</span></div>
               </div>
-            </div>
+              {invoices.map((invoice, index) => (
+                <div key={invoice.id} className="grid grid-cols-2 sm:grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < invoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                  <div className="col-span-1 sm:col-span-2 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{invoice.date}</span></div>
+                  <div className="hidden sm:flex sm:col-span-6 items-center"><span className="inline-flex items-center px-3 py-1.5 rounded-full" style={{ ...getReasonBadgeStyle(invoice.reasonType), fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}>{invoice.reason}</span></div>
+                  <div className="col-span-1 sm:col-span-3 flex items-center justify-end sm:justify-start"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--foreground)' }}>{invoice.amount}</span></div>
+                </div>
+              ))}
+            </>
           )}
         </div>
       </section>

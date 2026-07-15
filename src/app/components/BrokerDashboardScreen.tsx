@@ -1398,21 +1398,21 @@ function PlanContent() {
           )}
         </div>
         </div>
-        <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}><div className="overflow-x-auto"><div style={{ minWidth: '680px' }}>
-          <div className="grid grid-cols-12 gap-4 px-6 py-4" style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #DEDEDE' }}>
-            <div className="col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Fecha</span></div>
-            <div className="col-span-5"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Motivo</span></div>
-            <div className="col-span-3"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Monto</span></div>
-            <div className="col-span-2 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Acción</span></div>
+        <div className="rounded-xl" style={{ border: '2px solid #DEDEDE', overflow: 'hidden' }}>
+          <div className="grid grid-cols-2 sm:grid-cols-12 gap-4 px-6 py-4" style={{ backgroundColor: '#FAFAFA', borderBottom: '1px solid #DEDEDE' }}>
+            <div className="col-span-1 sm:col-span-2"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Fecha</span></div>
+            <div className="hidden sm:block sm:col-span-5"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Motivo</span></div>
+            <div className="col-span-1 sm:col-span-3 text-right sm:text-left"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Monto</span></div>
+            <div className="hidden sm:block sm:col-span-2 text-right"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', letterSpacing: 'var(--letter-spacing-wide)', textTransform: 'uppercase' }}>Acción</span></div>
           </div>
           <div>
             {invoicesLoading ? (
               <>{[1,2,3].map(i => (
-                <div key={i} className="grid grid-cols-12 gap-4 px-6 py-5" style={{ borderBottom: i < 3 ? '1px solid #DEDEDE' : 'none' }}>
-                  <div className="col-span-2 flex items-center"><div className="h-3.5 rounded-full animate-pulse" style={{ width: '72%', backgroundColor: '#F0F0F0' }} /></div>
-                  <div className="col-span-5 flex items-center"><div className="h-6 rounded-full animate-pulse" style={{ width: '78%', backgroundColor: '#F0F0F0' }} /></div>
-                  <div className="col-span-3 flex items-center"><div className="h-3.5 rounded-full animate-pulse" style={{ width: '54%', backgroundColor: '#F0F0F0' }} /></div>
-                  <div className="col-span-2 flex items-center justify-end"><div className="h-8 rounded-full animate-pulse" style={{ width: '80px', backgroundColor: '#F0F0F0' }} /></div>
+                <div key={i} className="grid grid-cols-2 sm:grid-cols-12 gap-4 px-6 py-5" style={{ borderBottom: i < 3 ? '1px solid #DEDEDE' : 'none' }}>
+                  <div className="col-span-1 sm:col-span-2 flex items-center"><div className="h-3.5 rounded-full animate-pulse" style={{ width: '72%', backgroundColor: '#F0F0F0' }} /></div>
+                  <div className="hidden sm:flex sm:col-span-5 items-center"><div className="h-6 rounded-full animate-pulse" style={{ width: '78%', backgroundColor: '#F0F0F0' }} /></div>
+                  <div className="col-span-1 sm:col-span-3 flex items-center justify-end sm:justify-start"><div className="h-3.5 rounded-full animate-pulse" style={{ width: '54%', backgroundColor: '#F0F0F0' }} /></div>
+                  <div className="hidden sm:flex sm:col-span-2 items-center justify-end"><div className="h-8 rounded-full animate-pulse" style={{ width: '80px', backgroundColor: '#F0F0F0' }} /></div>
                 </div>
               ))}</>
             ) : invoiceError ? (
@@ -1442,15 +1442,15 @@ function PlanContent() {
                 )}
               </div>
             ) : filteredInvoices.map((invoice, index) => (
-              <div key={invoice.id} className="grid grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < filteredInvoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
-                <div className="col-span-2 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>{invoice.date}</span></div>
-                <div className="col-span-5 flex items-center"><span className="inline-flex items-center px-3 py-1.5 rounded-full" style={{ ...getReasonBadgeStyle(invoice.reasonType), fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)' }}>{invoice.reason}</span></div>
-                <div className="col-span-3 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>{invoice.amount}</span></div>
-                <div className="col-span-2 flex items-center justify-end"><button onClick={() => handleDownload(invoice.id)} className="inline-flex items-center gap-2 px-4 py-2 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '1px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0A0A0A'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = 'var(--foreground)'; }}><CreditCard className="w-4 h-4" />Descargar</button></div>
+              <div key={invoice.id} className="grid grid-cols-2 sm:grid-cols-12 gap-4 px-6 py-5 transition-colors" style={{ borderBottom: index < filteredInvoices.length - 1 ? '1px solid #DEDEDE' : 'none' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                <div className="col-span-1 sm:col-span-2 flex items-center"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-regular)', color: '#737373', lineHeight: 'var(--line-height-ui)' }}>{invoice.date}</span></div>
+                <div className="hidden sm:flex sm:col-span-5 items-center"><span className="inline-flex items-center px-3 py-1.5 rounded-full" style={{ ...getReasonBadgeStyle(invoice.reasonType), fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-ui)' }}>{invoice.reason}</span></div>
+                <div className="col-span-1 sm:col-span-3 flex items-center justify-end sm:justify-start"><span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--foreground)', lineHeight: 'var(--line-height-ui)' }}>{invoice.amount}</span></div>
+                <div className="hidden sm:flex sm:col-span-2 items-center justify-end"><button onClick={() => handleDownload(invoice.id)} className="inline-flex items-center gap-2 px-4 py-2 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '1px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0A0A0A'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = 'var(--foreground)'; }}><CreditCard className="w-4 h-4" />Descargar</button></div>
               </div>
             ))}
           </div>
-        </div></div></div>
+        </div>
       </section>
       {showCancelModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setShowCancelModal(false)}>
