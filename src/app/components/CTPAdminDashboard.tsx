@@ -10,6 +10,7 @@ import {
   Bookmark, UserCheck, type LucideIcon,
   UserPlus, ToggleLeft, ToggleRight, AlertTriangle, X, Check,
   Download, Activity, Mail, Globe, Share2, Menu,
+  Trash2, Pencil,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -1699,25 +1700,35 @@ function CTPUsuariosView() {
   function AccionesBtns({ id, nombre, estado }: { id: number; nombre: string; estado: string }) {
     const esActivo = estado === 'activo';
     return (
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setAccion({ tipo: 'suspender', id, nombre })}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors"
-          style={{ fontFamily: 'var(--font-body)', color: esActivo ? '#B7791F' : '#006B4E', backgroundColor: esActivo ? '#FEF9E7' : '#E8F5EE', border: `1px solid ${esActivo ? '#FDE68A' : '#B2D8C5'}` }}
-          onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
-          onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-        >
-          {esActivo ? 'Suspender' : 'Reactivar'}
-        </button>
-        <button
-          onClick={() => setAccion({ tipo: 'editar', id, nombre })}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors"
-          style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}
-          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0F0F0'; }}
-          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-        >
-          Editar cuenta
-        </button>
+      <div className="flex items-center gap-1">
+        <div className="relative group/tip1">
+          <button
+            onClick={() => setAccion({ tipo: 'suspender', id, nombre })}
+            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
+            style={{ color: esActivo ? '#B7791F' : '#16A34A', backgroundColor: 'transparent' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = esActivo ? '#FEF9E7' : '#DCFCE7'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+          >
+            {esActivo ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+          </button>
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover/tip1:opacity-100 pointer-events-none transition-opacity z-20" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
+            {esActivo ? 'Suspender' : 'Reactivar'}
+          </div>
+        </div>
+        <div className="relative group/tip2">
+          <button
+            onClick={() => setAccion({ tipo: 'editar', id, nombre })}
+            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
+            style={{ color: '#737373', backgroundColor: 'transparent' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#0A0A0A'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#737373'; }}
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover/tip2:opacity-100 pointer-events-none transition-opacity z-20" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
+            Editar cuenta
+          </div>
+        </div>
       </div>
     );
   }
@@ -1727,21 +1738,22 @@ function CTPUsuariosView() {
       <SectionShell title="Usuarios" subtitle="Gestiona inmobiliarias, brokers y compradores de la plataforma." />
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit" style={{ backgroundColor: '#F5F5F5' }}>
+      <div className="inline-flex p-1 gap-1 mb-6 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
         {tabs.map(t => (
           <button
             key={t.id}
             onClick={() => { setTab(t.id); setSearch(''); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+            className="flex items-center gap-1.5 px-6 py-2 rounded-full text-sm transition-all duration-200"
             style={{
               fontFamily: 'var(--font-body)',
+              fontWeight: tab === t.id ? 500 : 400,
               backgroundColor: tab === t.id ? '#FFFFFF' : 'transparent',
-              color: tab === t.id ? '#0A0A0A' : '#737373',
-              boxShadow: tab === t.id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
+              color: tab === t.id ? '#0A0A0A' : '#6B6B6B',
+              boxShadow: tab === t.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             }}
           >
             {t.label}
-            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: tab === t.id ? '#E8F5EE' : '#E5E5E5', color: tab === t.id ? '#006B4E' : '#737373', fontWeight: 600 }}>
+            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: tab === t.id ? '#F0F0F0' : '#E5E5E5', color: tab === t.id ? '#0A0A0A' : '#9CA3AF', fontWeight: 500 }}>
               {t.count}
             </span>
           </button>
@@ -2180,34 +2192,25 @@ function CTPPublicacionesView() {
                     <td className="px-5 py-4"><span className="px-2.5 py-0.5 rounded-full text-xs font-semibold" style={{ fontFamily: 'var(--font-body)', backgroundColor: s.bg, color: s.color }}>{s.label}</span></td>
                     <td className="px-5 py-4"><span style={{ fontSize: '12px', color: '#A3A3A3', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>{p.fecha}</span></td>
                     <td className="px-5 py-4">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => setAccion({ tipo: 'destacar', id: p.id, titulo: p.titulo })}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors"
-                          style={{ fontFamily: 'var(--font-body)', color: '#B7791F', backgroundColor: '#FEF9E7', border: '1px solid #FDE68A' }}
-                          onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
-                          onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-                        >
-                          {p.destacada ? 'Quitar destacado' : 'Destacar'}
-                        </button>
-                        <button
-                          onClick={() => setAccion({ tipo: 'suspender', id: p.id, titulo: p.titulo })}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors"
-                          style={{ fontFamily: 'var(--font-body)', color: p.estado === 'activa' ? '#B7791F' : '#006B4E', backgroundColor: p.estado === 'activa' ? '#FEF9E7' : '#E8F5EE', border: `1px solid ${p.estado === 'activa' ? '#FDE68A' : '#B2D8C5'}` }}
-                          onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
-                          onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-                        >
-                          {p.estado === 'activa' ? 'Suspender' : 'Reactivar'}
-                        </button>
-                        <button
-                          onClick={() => setAccion({ tipo: 'eliminar', id: p.id, titulo: p.titulo })}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors"
-                          style={{ fontFamily: 'var(--font-body)', color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}
-                          onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
-                          onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-                        >
-                          Eliminar
-                        </button>
+                      <div className="flex items-center gap-1">
+                        <div className="relative group/pd1">
+                          <button onClick={() => setAccion({ tipo: 'destacar', id: p.id, titulo: p.titulo })} className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors" style={{ color: p.destacada ? '#CA8A04' : '#A3A3A3', backgroundColor: 'transparent' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEF9E7'; e.currentTarget.style.color = '#CA8A04'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = p.destacada ? '#CA8A04' : '#A3A3A3'; }}>
+                            <Bookmark className="w-4 h-4" style={{ fill: p.destacada ? '#CA8A04' : 'none' }} />
+                          </button>
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover/pd1:opacity-100 pointer-events-none transition-opacity z-20" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>{p.destacada ? 'Quitar destacado' : 'Destacar'}</div>
+                        </div>
+                        <div className="relative group/pd2">
+                          <button onClick={() => setAccion({ tipo: 'suspender', id: p.id, titulo: p.titulo })} className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors" style={{ color: p.estado === 'activa' ? '#B7791F' : '#16A34A', backgroundColor: 'transparent' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = p.estado === 'activa' ? '#FEF9E7' : '#DCFCE7'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                            {p.estado === 'activa' ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                          </button>
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover/pd2:opacity-100 pointer-events-none transition-opacity z-20" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>{p.estado === 'activa' ? 'Suspender' : 'Reactivar'}</div>
+                        </div>
+                        <div className="relative group/pd3">
+                          <button onClick={() => setAccion({ tipo: 'eliminar', id: p.id, titulo: p.titulo })} className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors" style={{ color: '#A3A3A3', backgroundColor: 'transparent' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; e.currentTarget.style.color = '#DC2626'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#A3A3A3'; }}>
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover/pd3:opacity-100 pointer-events-none transition-opacity z-20" style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>Eliminar</div>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -2232,10 +2235,16 @@ function CTPPublicacionesView() {
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold flex-shrink-0" style={{ fontFamily: 'var(--font-body)', backgroundColor: s.bg, color: s.color }}>{s.label}</span>
                 </div>
                 <p style={{ fontSize: '12px', color: '#737373', fontFamily: 'var(--font-body)', margin: '0 0 10px' }}>{p.inmobiliaria} · {p.tipo} · {p.precio}</p>
-                <div className="flex flex-wrap gap-2">
-                  <button onClick={() => setAccion({ tipo: 'destacar', id: p.id, titulo: p.titulo })} className="px-3 py-1.5 rounded-xl text-xs font-medium" style={{ fontFamily: 'var(--font-body)', color: '#B7791F', backgroundColor: '#FEF9E7', border: '1px solid #FDE68A' }}>{p.destacada ? 'Quitar destacado' : 'Destacar'}</button>
-                  <button onClick={() => setAccion({ tipo: 'suspender', id: p.id, titulo: p.titulo })} className="px-3 py-1.5 rounded-xl text-xs font-medium" style={{ fontFamily: 'var(--font-body)', color: p.estado === 'activa' ? '#B7791F' : '#006B4E', backgroundColor: p.estado === 'activa' ? '#FEF9E7' : '#E8F5EE', border: `1px solid ${p.estado === 'activa' ? '#FDE68A' : '#B2D8C5'}` }}>{p.estado === 'activa' ? 'Suspender' : 'Reactivar'}</button>
-                  <button onClick={() => setAccion({ tipo: 'eliminar', id: p.id, titulo: p.titulo })} className="px-3 py-1.5 rounded-xl text-xs font-medium" style={{ fontFamily: 'var(--font-body)', color: '#DC2626', backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>Eliminar</button>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => setAccion({ tipo: 'destacar', id: p.id, titulo: p.titulo })} className="w-8 h-8 flex items-center justify-center rounded-lg" style={{ color: p.destacada ? '#CA8A04' : '#A3A3A3', backgroundColor: '#FEF9E7' }}>
+                    <Bookmark className="w-4 h-4" style={{ fill: p.destacada ? '#CA8A04' : 'none' }} />
+                  </button>
+                  <button onClick={() => setAccion({ tipo: 'suspender', id: p.id, titulo: p.titulo })} className="w-8 h-8 flex items-center justify-center rounded-lg" style={{ color: p.estado === 'activa' ? '#B7791F' : '#16A34A', backgroundColor: p.estado === 'activa' ? '#FEF9E7' : '#DCFCE7' }}>
+                    {p.estado === 'activa' ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                  </button>
+                  <button onClick={() => setAccion({ tipo: 'eliminar', id: p.id, titulo: p.titulo })} className="w-8 h-8 flex items-center justify-center rounded-lg" style={{ color: '#DC2626', backgroundColor: '#FEF2F2' }}>
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             );
