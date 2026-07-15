@@ -124,11 +124,11 @@ export function AdminFiltrosAnalytics() {
   return (
     <div className="max-w-6xl mx-auto">
       <section
-        className="rounded-2xl p-8"
+        className="rounded-2xl p-4 md:p-8"
         style={{ backgroundColor: 'var(--background)', border: '1px solid var(--border)', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 mb-6">
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-medium)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '6px' }}>
               Tendencias de búsqueda
@@ -144,13 +144,13 @@ export function AdminFiltrosAnalytics() {
             <div className="relative">
               <button
                 onClick={() => { setShowRango(v => !v); setShowCustomRango(false); }}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
                 style={{ border: '1px solid var(--border)', backgroundColor: 'var(--background)', fontFamily: 'var(--font-body)', fontSize: '13px', color: appliedRange ? '#9CA3AF' : 'var(--foreground)', fontWeight: 500, opacity: appliedRange ? 0.6 : 1 }}
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--background)'; }}
               >
                 <Calendar className="w-4 h-4" style={{ color: '#737373' }} />
-                {appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : rangoLabel}
+                <span className="hidden md:inline">{appliedRange ? formatRangeLabel(appliedRange.from, appliedRange.to) : rangoLabel}</span>
                 <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRango ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
               </button>
               {showRango && (
@@ -173,10 +173,10 @@ export function AdminFiltrosAnalytics() {
             <div className="relative">
               <button
                 onClick={() => { setShowCustomRango(v => !v); setShowRango(false); }}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors"
                 style={{ border: `1px solid ${appliedRange ? '#006B4E' : 'var(--border)'}`, backgroundColor: appliedRange ? '#E8F5EE' : 'var(--background)', fontFamily: 'var(--font-body)', fontSize: '13px', color: appliedRange ? '#006B4E' : 'var(--foreground)', fontWeight: appliedRange ? 600 : 500, cursor: 'pointer' }}>
                 <Calendar className="w-4 h-4" />
-                Rango
+                <span className="hidden md:inline">Rango</span>
               </button>
               {showCustomRango && (
                 <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4"
@@ -213,7 +213,7 @@ export function AdminFiltrosAnalytics() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-6">
           {TABS.map(tab => (
             <button
               key={tab.id}
@@ -269,21 +269,21 @@ export function AdminFiltrosAnalytics() {
         </ResponsiveContainer>
 
         {/* Resumen */}
-        <div className="mt-6 rounded-2xl p-6 flex items-center justify-between" style={{ backgroundColor: 'var(--input-background)', border: '1px solid var(--border)' }}>
+        <div className="mt-6 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0" style={{ backgroundColor: 'var(--input-background)', border: '1px solid var(--border)' }}>
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Total búsquedas</span>
             <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-medium)', color: 'var(--foreground)' }}>
               {datos.reduce((s, d) => s + d.busquedas, 0).toLocaleString('es-CL')}
             </span>
           </div>
-          <div style={{ width: '1px', height: '40px', backgroundColor: 'var(--border)' }} />
+          <div className="hidden md:block" style={{ width: '1px', height: '40px', backgroundColor: 'var(--border)' }} />
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Más buscado</span>
             <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-medium)', color: 'var(--foreground)' }}>
               {datos[0].nombre}
             </span>
           </div>
-          <div style={{ width: '1px', height: '40px', backgroundColor: 'var(--border)' }} />
+          <div className="hidden md:block" style={{ width: '1px', height: '40px', backgroundColor: 'var(--border)' }} />
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Período</span>
             <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-medium)', color: 'var(--foreground)' }}>
