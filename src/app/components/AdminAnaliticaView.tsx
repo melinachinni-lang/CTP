@@ -301,7 +301,7 @@ export function AdminAnaliticaView() {
 
       {/* Gráfico principal unificado estilo GA4 */}
       <section className="rounded-2xl p-4 md:p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-6">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 mb-6">
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
               Tráfico de la plataforma
@@ -437,7 +437,7 @@ export function AdminAnaliticaView() {
 
       {/* Origen del tráfico */}
       <section className="rounded-2xl" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="px-6 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
+        <div className="px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
               Origen del tráfico
@@ -455,7 +455,7 @@ export function AdminAnaliticaView() {
                 style={{ border: `1px solid ${origenApplied ? '#E5E5E5' : '#E5E5E5'}`, backgroundColor: origenApplied ? '#FAFAFA' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenApplied ? '#9CA3AF' : '#374151', cursor: 'pointer', opacity: origenApplied ? 0.6 : 1 }}
               >
                 <Calendar className="w-3.5 h-3.5" style={{ color: '#737373' }} />
-                <span className="hidden sm:inline">{origenApplied ? formatOrigenRangeLabel(origenApplied.from, origenApplied.to) : ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}</span>
+                <span className="hidden md:inline">{origenApplied ? formatOrigenRangeLabel(origenApplied.from, origenApplied.to) : ORIGEN_PRESETS.find(p => p.id === origenPeriodo)?.label}</span>
                 <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373' }} />
               </button>
               {showOrigenDropdown && (
@@ -477,7 +477,7 @@ export function AdminAnaliticaView() {
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors"
                 style={{ border: `1px solid ${origenApplied ? '#006B4E' : '#E5E5E5'}`, backgroundColor: origenApplied ? '#E8F5EE' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: origenApplied ? '#006B4E' : '#374151', cursor: 'pointer', fontWeight: origenApplied ? 600 : 400 }}>
                 <Calendar className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Rango</span>
+                <span className="hidden md:inline">Rango</span>
               </button>
               {showOrigenRango && (
                 <div className="absolute right-0 top-full mt-1 z-20 rounded-xl p-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.10)', minWidth: '240px' }}>

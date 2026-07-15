@@ -369,7 +369,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
 
       {/* Chart Section */}
       <div className="p-5 rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 mb-5">
           {/* Título + subtítulo + leyenda a la izquierda */}
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
@@ -408,7 +408,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
               >
                 <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                <span className="hidden sm:inline">{PERIODO_LABELS[periodo]}</span>
+                <span className="hidden md:inline">{PERIODO_LABELS[periodo]}</span>
                 <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
               </button>
 
@@ -457,8 +457,8 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
               >
                 <CalendarDays className="w-3.5 h-3.5" />
                 {appliedRange
-                  ? <span className="hidden sm:inline">{formatRangeLabel(appliedRange.from, appliedRange.to)}</span>
-                  : <span className="hidden sm:inline">Rango</span>
+                  ? <span className="hidden md:inline">{formatRangeLabel(appliedRange.from, appliedRange.to)}</span>
+                  : <span className="hidden md:inline">Rango</span>
                 }
                 {appliedRange && (
                   <span
@@ -536,7 +536,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
       <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
         {/* Table header */}
         <div className="px-5 pt-4 pb-0">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
             <div>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
                 {viewType === 'inmobiliaria' ? 'Ranking de publicaciones' : 'Propiedades en seguimiento'}
@@ -556,7 +556,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                 >
                   <CalendarDays className="w-4 h-4" style={{ color: '#737373' }} />
-                  <span className="hidden sm:inline">{PERIODO_LABELS[rankingPeriodo]}</span>
+                  <span className="hidden md:inline">{PERIODO_LABELS[rankingPeriodo]}</span>
                   <ChevronDown className="w-3.5 h-3.5" style={{ color: '#737373', transform: showRankingDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
                 </button>
                 {showRankingDropdown && (
@@ -583,8 +583,8 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 >
                   <CalendarDays className="w-3.5 h-3.5" />
                   {rankingAppliedRange
-                    ? <span className="hidden sm:inline">{formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to)}</span>
-                    : <span className="hidden sm:inline">Rango</span>
+                    ? <span className="hidden md:inline">{formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to)}</span>
+                    : <span className="hidden md:inline">Rango</span>
                   }
                   {rankingAppliedRange && (
                     <span role="button" onClick={e => { e.stopPropagation(); setRankingAppliedRange(null); setRankingCustomFrom(''); setRankingCustomTo(''); setShowRankingCustomRange(false); }} className="hover:opacity-60 transition-opacity">
