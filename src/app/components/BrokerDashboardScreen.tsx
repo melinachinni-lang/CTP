@@ -1202,7 +1202,7 @@ function PlanContent() {
       setShowPaymentModal(false);
       setPaymentMethod(null);
       setPlanChanged(true);
-      setTimeout(() => setPlanChanged(false), 3500);
+      setTimeout(() => setPlanChanged(false), 8000);
     }
   };
   const getReasonBadgeStyle = (type: string) => {
@@ -1229,17 +1229,33 @@ function PlanContent() {
   return (
     <main className="px-4 py-6 md:px-8 md:py-8 space-y-8">
       {planChanged && (
-        <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '320px', maxWidth: '440px' }}>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#16A34A' }}>
-            <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+        <div className="fixed bottom-6 left-1/2 z-[100] rounded-2xl overflow-hidden" style={{ transform: 'translateX(-50%)', backgroundColor: '#FFFFFF', boxShadow: '0 8px 40px rgba(0,0,0,0.18)', width: '360px', border: '1px solid #E5E5E5' }}>
+          <div className="flex items-start gap-3 px-4 py-4" style={{ backgroundColor: '#16A34A' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <CheckCircle className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', marginBottom: '2px' }}>
+                ¡Plan {currentPlanData?.name} activado con éxito!
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.85)' }}>
+                Activo desde hoy · {new Date().toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+            </div>
+            <button onClick={() => setPlanChanged(false)} style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 0, flexShrink: 0 }}>
+              <X className="w-4 h-4" />
+            </button>
           </div>
-          <div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', marginBottom: '1px' }}>
-              Plan actualizado correctamente
-            </p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
-              Ya puedes disfrutar los beneficios de tu nuevo plan.
-            </p>
+          <div className="px-4 py-4">
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Lo que incluye tu plan</p>
+            <div className="space-y-2">
+              {currentPlanData?.features.filter(f => f.included).slice(0, 4).map((f, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Check className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#16A34A' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>{f.name}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
