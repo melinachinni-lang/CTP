@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Users, UserPlus, UserCheck, Activity, MousePointer, ArrowUpRight, ArrowDownRight, ChevronDown, Calendar, type LucideIcon } from 'lucide-react';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
@@ -12,6 +12,35 @@ const RANGO_PRESETS = [
   { id: 'mes_ant', label: 'El mes pasado' },
   { id: '90d',     label: 'Últimos 90 días' },
 ];
+
+// ─── Skeletons ───────────────────────────────────────────────────────────────
+
+function KPICardSkeleton() {
+  return (
+    <div className="rounded-2xl p-5 animate-pulse" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+      <div className="flex items-center justify-between mb-3">
+        <div className="w-9 h-9 rounded-xl" style={{ backgroundColor: '#F0F0F0' }} />
+        <div className="h-5 w-14 rounded-full" style={{ backgroundColor: '#F0F0F0' }} />
+      </div>
+      <div className="h-7 w-20 rounded-lg mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+      <div className="h-3 w-32 rounded-full" style={{ backgroundColor: '#F0F0F0' }} />
+    </div>
+  );
+}
+
+function SectionSkeleton({ height = 280, title = true }: { height?: number; title?: boolean }) {
+  return (
+    <div className="rounded-2xl p-6 animate-pulse" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+      {title && (
+        <>
+          <div className="h-5 w-40 rounded-lg mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+          <div className="h-3 w-56 rounded-full mb-6" style={{ backgroundColor: '#F0F0F0' }} />
+        </>
+      )}
+      <div className="rounded-xl" style={{ height: `${height}px`, backgroundColor: '#F5F5F5' }} />
+    </div>
+  );
+}
 
 // ─── KPI Card ────────────────────────────────────────────────────────────────
 
@@ -47,6 +76,7 @@ function KPICard({ label, value, change, up, icon: Icon, iconBg, iconColor }: {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export function AdminAnaliticaView() {
+  const [loading, setLoading] = useState(true);
   const [rango, setRango] = useState('30d');
   const [traficoApplied, setTraficoApplied] = useState<AppliedRange | null>(null);
 
@@ -57,6 +87,11 @@ export function AdminAnaliticaView() {
   const [origenTo, setOrigenTo] = useState('');
   const [origenApplied, setOrigenApplied] = useState<{ from: string; to: string } | null>(null);
   const origenPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1400);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -208,8 +243,33 @@ export function AdminAnaliticaView() {
     style: { fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' },
   };
 
+  if (loading) {
+    return (
+      <div className="p-4 md:p-6 space-y-6">
+        <div>
+          <div className="h-8 w-52 rounded-lg animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+          <div className="h-4 w-72 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[1,2,3,4,5].map(i => <KPICardSkeleton key={i} />)}
+        </div>
+        <SectionSkeleton height={300} />
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-8"><SectionSkeleton height={280} /></div>
+          <div className="md:col-span-4"><SectionSkeleton height={280} /></div>
+        </div>
+        <SectionSkeleton height={280} />
+        <SectionSkeleton height={180} title={false} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SectionSkeleton height={320} />
+          <SectionSkeleton height={320} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
 
       {/* Header */}
       <div>
@@ -233,7 +293,7 @@ export function AdminAnaliticaView() {
       </div>
 
       {/* KPIs */}
-      <section className="grid grid-cols-5 gap-4">
+      <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {trafficKPIs.map((kpi, i) => (
           <KPICard key={i} {...kpi} />
         ))}
@@ -286,8 +346,8 @@ export function AdminAnaliticaView() {
       </section>
 
       {/* Visitas por día + Por dispositivo */}
-      <div className="grid grid-cols-12 gap-6">
-        <section className="col-span-8 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <section className="md:col-span-8 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
             Visitas por día
           </h2>
@@ -307,7 +367,7 @@ export function AdminAnaliticaView() {
           </div>
         </section>
 
-        <section className="col-span-4 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+        <section className="md:col-span-4 rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '24px' }}>
             Por dispositivo
           </h2>
@@ -507,7 +567,7 @@ export function AdminAnaliticaView() {
       </section>
 
       {/* Proyectos + Interacciones */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
           <div className="px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>

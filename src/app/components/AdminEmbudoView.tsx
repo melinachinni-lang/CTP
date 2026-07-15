@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrendingDown, Info } from 'lucide-react';
 import { AdminFiltrosAnalytics } from '@/app/components/AdminFiltrosAnalytics';
 
 export function AdminEmbudoView() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1400);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Datos del embudo
   const embudoData = [
@@ -39,8 +53,27 @@ export function AdminEmbudoView() {
     return item.caida > embudoData[maxIndex].caida ? index : maxIndex;
   }, 1);
 
+  if (loading) {
+    return (
+      <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6">
+        <div>
+          <div className="h-7 w-52 rounded-lg animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0' }} />
+          <div className="h-4 w-72 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
+        </div>
+        <div className="space-y-4">
+          {[100, 80, 65, 50].map((w, i) => (
+            <div key={i} className="flex justify-end w-full">
+              <div className="animate-pulse rounded-2xl" style={{ width: isMobile ? '100%' : `${w}%`, height: '130px', backgroundColor: '#F0F0F0' }} />
+            </div>
+          ))}
+        </div>
+        <div className="animate-pulse rounded-2xl h-20" style={{ backgroundColor: '#F0F0F0' }} />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8">
       {/* Módulo principal: Proceso de conversión */}
       <section
         className="rounded-2xl p-8"
@@ -91,9 +124,9 @@ export function AdminEmbudoView() {
             
             return (
               <div key={index} className="w-full flex justify-end">
-                <div 
+                <div
                   className="relative"
-                  style={{ width: `${anchoEtapa}%` }}
+                  style={{ width: isMobile ? '100%' : `${anchoEtapa}%` }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
@@ -272,7 +305,7 @@ export function AdminEmbudoView() {
         </div>
 
         {/* Resumen ejecutivo - estilo unificado */}
-        <div 
+        <div
           className="mt-8 rounded-2xl p-6"
           style={{
             backgroundColor: 'var(--input-background)',
@@ -280,7 +313,7 @@ export function AdminEmbudoView() {
             boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
           }}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
             <div className="flex flex-col gap-1">
               <span
                 style={{
@@ -310,7 +343,8 @@ export function AdminEmbudoView() {
             </div>
             
             <div 
-              style={{
+              className="hidden md:block"
+            style={{
                 width: '1px',
                 height: '40px',
                 backgroundColor: 'var(--border)'
@@ -346,7 +380,8 @@ export function AdminEmbudoView() {
             </div>
             
             <div 
-              style={{
+              className="hidden md:block"
+            style={{
                 width: '1px',
                 height: '40px',
                 backgroundColor: 'var(--border)'
