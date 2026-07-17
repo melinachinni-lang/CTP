@@ -35,9 +35,10 @@ interface EditorProps {
   recurso: Recurso | null;
   onBack: () => void;
   onSave: (data: Omit<Recurso, 'id' | 'fecha'>) => void;
+  startInArticle?: boolean;
 }
 
-function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
+function RecursoEditor({ recurso, onBack, onSave, startInArticle = false }: EditorProps) {
   const [formTitulo, setFormTitulo] = useState(recurso?.titulo || '');
   const [formDescripcion, setFormDescripcion] = useState(recurso?.descripcion || '');
   const [formTopico, setFormTopico] = useState(recurso?.topico || 'Inversión');
@@ -49,7 +50,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(false);
   const [vistaPrevia, setVistaPrevia] = useState(false);
-  const [showArticle, setShowArticle] = useState(false);
+  const [showArticle, setShowArticle] = useState(startInArticle);
   const [currentBlockType, setCurrentBlockType] = useState<'p' | 'h1' | 'h2' | 'h3'>('p');
 
   const editorRef = useRef<HTMLDivElement>(null);
@@ -215,7 +216,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3 min-w-0">
           <button
-            onClick={showArticle ? () => { setShowArticle(false); onBack(); } : vistaPrevia ? () => setVistaPrevia(false) : onBack}
+            onClick={showArticle ? (startInArticle ? onBack : () => { setShowArticle(false); }) : vistaPrevia ? () => setVistaPrevia(false) : onBack}
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors flex-shrink-0"
             style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
@@ -233,7 +234,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
             </>
           ) : (
             <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-              {recurso ? 'Editar recurso' : 'Nuevo recurso'}
+              {startInArticle ? 'Ver recurso' : recurso ? 'Editar recurso' : 'Nuevo recurso'}
             </span>
           )}
         </div>
@@ -555,6 +556,7 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
   const [filtroTopico, setFiltroTopico] = useState('todos');
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos');
   const [editorView, setEditorView] = useState<'list' | 'create' | Recurso>(autoOpenNew ? 'create' : 'list');
+  const [openAsArticle, setOpenAsArticle] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const toggleEstado = (id: string) => {
@@ -589,8 +591,9 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
     return (
       <RecursoEditor
         recurso={typeof editorView === 'object' ? editorView : null}
-        onBack={() => setEditorView('list')}
+        onBack={() => { setEditorView('list'); setOpenAsArticle(false); }}
         onSave={handleSave}
+        startInArticle={openAsArticle}
       />
     );
   }
@@ -712,20 +715,20 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
         ) : (
           <div>
             <div className="hidden md:grid px-6 py-3" style={{ gridTemplateColumns: '1fr 110px 100px 110px 124px', gap: '16px', borderBottom: '1px solid #F5F5F5' }}>
-              {['Recurso', 'Tópico', 'Estado', 'Publicado', 'Acciones'].map(col => (
-                <span key={col} style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '500', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{col}</span>
+              {['Recurso', 'Tópico', 'Estado', 'Publicado', 'Acciones'].map((col, i) => (
+                <span key={col} style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '500', color: '#A3A3A3', textTransform: 'uppercase', letterSpacing: '0.05em', textAlign: i === 0 ? 'left' : 'center' }}>{col}</span>
               ))}
             </div>
             {filtrados.map((recurso, idx) => {
               const imgPpal = recurso.imagenes.find(img => img.esPrincipal) || recurso.imagenes[0];
               return (
                 <div key={recurso.id} className="px-6 py-4 flex flex-col md:grid md:items-center gap-3 md:gap-4 transition-colors" style={{ gridTemplateColumns: '1fr 110px 100px 110px 124px', backgroundColor: '#FFFFFF', borderBottom: idx < filtrados.length - 1 ? '1px solid #F5F5F5' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+                  <div className="flex items-center gap-3 min-w-0 cursor-pointer group/row" onClick={() => { setOpenAsArticle(true); setEditorView(recurso); }}>
+                    <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden transition-opacity group-hover/row:opacity-80" style={{ border: '1px solid #E5E5E5' }}>
                       {imgPpal ? <img src={imgPpal.url} alt={recurso.titulo} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}><BookOpen className="w-6 h-6" style={{ color: '#3D5E28' }} /></div>}
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>{recurso.titulo}</p>
+                      <p className="truncate group-hover/row:underline" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>{recurso.titulo}</p>
                       <p className="truncate mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{recurso.descripcion.substring(0, 75)}...</p>
                       {recurso.palabrasClave.length > 0 && (
                         <div className="flex gap-1 mt-1 flex-wrap">
@@ -735,16 +738,16 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
                       )}
                     </div>
                   </div>
-                  <div><span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Tag className="w-3 h-3" />{recurso.topico}</span></div>
-                  <div>
+                  <div className="flex justify-center"><span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Tag className="w-3 h-3" />{recurso.topico}</span></div>
+                  <div className="flex justify-center">
                     {recurso.estado === 'activo'
                       ? <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Globe className="w-3 h-3" />Activo</span>
                       : <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', fontWeight: '500' }}><EyeOff className="w-3 h-3" />Inactivo</span>
                     }
                   </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>{recurso.fecha}</p>
-                  <div className="flex items-center gap-2">
-                    <button title="Editar" onClick={() => setEditorView(recurso)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><Edit2 className="w-3.5 h-3.5" /></button>
+                  <p className="text-center" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>{recurso.fecha}</p>
+                  <div className="flex items-center justify-center gap-2">
+                    <button title="Editar" onClick={() => { setOpenAsArticle(false); setEditorView(recurso); }} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><Edit2 className="w-3.5 h-3.5" /></button>
                     <button title={recurso.estado === 'activo' ? 'Desactivar' : 'Activar'} onClick={() => toggleEstado(recurso.id)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5', color: recurso.estado === 'activo' ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5'; }}>
                       {recurso.estado === 'activo' ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                     </button>
