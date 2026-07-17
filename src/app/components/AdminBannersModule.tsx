@@ -131,7 +131,7 @@ function BannerEditor({ banner, onBack, onSave }: {
   return (
     <div className="p-4 md:p-6">
       {/* Top bar */}
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
         <button
           onClick={onBack}
           className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors flex-shrink-0"
@@ -475,7 +475,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
             <div key={i} className="rounded-xl p-5 flex gap-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div className="flex-shrink-0 rounded-lg animate-pulse" style={{ width: '140px', height: '90px', backgroundColor: '#F3F4F6' }} />
+              <div className="flex-shrink-0 rounded-lg animate-pulse" style={{ width: 'clamp(72px, 20vw, 140px)', height: 'clamp(52px, 14vw, 90px)', backgroundColor: '#F3F4F6' }} />
               <div className="flex-1 space-y-2 py-1">
                 <div className="h-4 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '55%' }} />
                 <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '85%' }} />
@@ -541,27 +541,27 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
                 </div>
 
                 {/* Imagen */}
-                <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: '120px', height: '80px', backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5' }}>
+                <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 'clamp(72px, 20vw, 120px)', height: 'clamp(52px, 14vw, 80px)', backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5' }}>
                   {banner.imagen ? (
                     <img src={banner.imagen} alt={banner.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <ImageIcon className="w-7 h-7" style={{ color: '#C3C3C3' }} />
+                      <ImageIcon className="w-5 h-5" style={{ color: '#C3C3C3' }} />
                     </div>
                   )}
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-3 mb-1.5">
-                    <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: '600', color: '#0A0A0A', lineHeight: '1.3' }}>
+                  <div className="flex items-start justify-between gap-2 mb-1.5">
+                    <h3 className="min-w-0" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: '600', color: '#0A0A0A', lineHeight: '1.3', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                       {banner.titulo}
                     </h3>
-                    <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
                       {isVigente(banner) && banner.activo && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)' }}>Vigente</span>
+                        <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)' }}>Vigente</span>
                       )}
-                      <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
                         {banner.activo ? 'Activo' : 'Inactivo'}
                       </span>
                     </div>
