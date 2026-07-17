@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, Check, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, Info, Bell, RefreshCw } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle } from 'lucide-react';
 
 interface BannerAdmin {
   id: number;
@@ -20,15 +20,15 @@ interface MensajeInfo {
 }
 
 const initialBanners: BannerAdmin[] = [
-  { id: 1, titulo: 'Lanzamiento Parcelas Región Metropolitana', descripcion: 'Nuevas parcelas disponibles desde $18.000.000. Financiamiento directo con el propietario.', imagen: null, fechaInicio: '2025-02-01', fechaFin: '2025-03-31', activo: true },
-  { id: 2, titulo: 'Feria de Parcelas — Febrero 2025', descripcion: 'Visita nuestros proyectos en terreno este fin de semana. Transporte incluido desde Santiago.', imagen: null, fechaInicio: '2025-02-14', fechaFin: '2025-02-16', activo: true },
-  { id: 3, titulo: 'Plan Oro — Oferta temporada', descripcion: 'Publica ilimitado durante 3 meses al precio del plan Bronce. Solo hasta el 28 de febrero.', imagen: null, fechaInicio: '2025-02-01', fechaFin: '2025-02-28', activo: false },
+  { id: 1, titulo: 'Lanzamiento Parcelas Región Metropolitana', descripcion: 'Nuevas parcelas disponibles desde $18.000.000. Financiamiento directo con el propietario.', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80', fechaInicio: '2025-02-01', fechaFin: '2025-03-31', activo: true },
+  { id: 2, titulo: 'Feria de Parcelas — Febrero 2025', descripcion: 'Visita nuestros proyectos en terreno este fin de semana. Transporte incluido desde Santiago.', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80', fechaInicio: '2025-02-14', fechaFin: '2025-02-16', activo: true },
+  { id: 3, titulo: 'Plan Oro — Oferta temporada', descripcion: 'Publica ilimitado durante 3 meses al precio del plan Bronce. Solo hasta el 28 de febrero.', imagen: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80', fechaInicio: '2025-02-01', fechaFin: '2025-02-28', activo: false },
 ];
 
 const initialMensajes: MensajeInfo[] = [
-  { id: 1, titulo: 'Mantenimiento programado', descripcion: 'El 15 de febrero entre las 02:00 y 04:00 hrs la plataforma estará en mantención. Las publicaciones no se verán afectadas.', topico: 'mantenimiento', activo: true },
+  { id: 1, titulo: 'Mantenimiento programado', descripcion: 'El 15 de febrero entre las 02:00 y 04:00 hrs la plataforma estará en mantención.', topico: 'mantenimiento', activo: true },
   { id: 2, titulo: 'Nueva funcionalidad: Comparador de parcelas', descripcion: 'Ya puedes comparar hasta 3 parcelas simultáneamente desde la página de catálogo.', topico: 'novedad', activo: true },
-  { id: 3, titulo: 'Descuento en plan anual', descripcion: 'Contrata tu plan anual antes del 28 de febrero y obtén 2 meses gratis. Aplica para planes Bronce y Oro.', topico: 'oferta', activo: false },
+  { id: 3, titulo: 'Descuento en plan anual', descripcion: 'Contrata tu plan anual antes del 28 de febrero y obtén 2 meses gratis.', topico: 'oferta', activo: false },
 ];
 
 const TOPICOS: { value: MensajeInfo['topico']; label: string; color: string; bg: string }[] = [
@@ -38,19 +38,18 @@ const TOPICOS: { value: MensajeInfo['topico']; label: string; color: string; bg:
   { value: 'alerta', label: 'Alerta', color: '#D97706', bg: '#FEF3C7' },
 ];
 
-function topicoStyle(topico: MensajeInfo['topico']) {
-  return TOPICOS.find(t => t.value === topico) ?? TOPICOS[2];
+function formatDate(d: string) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}/${y}`;
 }
 
-// ---------- MODAL BANNER ----------
-function BannerModal({
-  banner,
-  onSave,
-  onClose,
-}: {
+// ─── BANNER EDITOR (full page) ────────────────────────────────────────────────
+
+function BannerEditor({ banner, onBack, onSave }: {
   banner: BannerAdmin | null;
+  onBack: () => void;
   onSave: (data: Omit<BannerAdmin, 'id'>) => void;
-  onClose: () => void;
 }) {
   const [titulo, setTitulo] = useState(banner?.titulo ?? '');
   const [descripcion, setDescripcion] = useState(banner?.descripcion ?? '');
@@ -59,8 +58,9 @@ function BannerModal({
   const [activo, setActivo] = useState(banner?.activo ?? true);
   const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [errors, setErrors] = useState({ titulo: false, descripcion: false, fechaInicio: false, fechaFin: false });
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const isEdit = !!banner;
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -70,296 +70,234 @@ function BannerModal({
     reader.onload = ev => setImagenUrl(ev.target?.result as string);
     reader.readAsDataURL(file);
   }
-  const canSave = titulo.trim() && descripcion.trim() && fechaInicio && fechaFin;
+
+  const handleSave = () => {
+    const newErrors = {
+      titulo: !titulo.trim(),
+      descripcion: !descripcion.trim(),
+      fechaInicio: !fechaInicio,
+      fechaFin: !fechaFin,
+    };
+    setErrors(newErrors);
+    if (Object.values(newErrors).some(Boolean)) return;
+    onSave({ titulo, descripcion, imagen: imagenUrl, fechaInicio, fechaFin, activo });
+    if (isEdit) {
+      setSaveSuccess(true);
+      setTimeout(() => { setSaveSuccess(false); onBack(); }, 1200);
+    }
+  };
+
+  const inputStyle = (hasError: boolean) => ({
+    width: '100%',
+    padding: '10px 14px',
+    borderRadius: '12px',
+    border: `1.5px solid ${hasError ? '#EF4444' : '#E5E5E5'}`,
+    fontFamily: 'var(--font-body)',
+    fontSize: 'var(--font-size-body-sm)',
+    color: '#0A0A0A',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    backgroundColor: '#FAFAFA',
+  });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.2)', maxHeight: '90vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
-          <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A' }}>
-              {isEdit ? 'Editar banner' : 'Nuevo banner'}
-            </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
-              {isEdit ? 'Modifica los datos del banner' : 'Completa los datos para crear el banner'}
-            </p>
-          </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-            <X className="w-4 h-4" />
+    <div className="p-4 md:p-6">
+      {/* Top bar */}
+      <div className="flex items-center gap-3 mb-6">
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors flex-shrink-0"
+          style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5' }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Volver al listado
+        </button>
+        <span style={{ color: '#D5D5D5' }}>/</span>
+        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+          {isEdit ? 'Editar banner' : 'Nuevo banner'}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-2xl mx-auto">
+        {/* Toggle editar/previsualizar */}
+        <div className="flex gap-2 p-1 rounded-full mb-6" style={{ backgroundColor: '#F5F5F5', maxWidth: '260px' }}>
+          <button
+            onClick={() => setPreview(false)}
+            className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all"
+            style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+          >
+            Editar
+          </button>
+          <button
+            onClick={() => setPreview(true)}
+            className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1.5"
+            style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+          >
+            <Eye className="w-3.5 h-3.5" /> Previsualizar
           </button>
         </div>
 
-        <div className="px-6 py-5 space-y-5">
-          {/* Toggle vista */}
-          <div className="flex gap-2 p-1 rounded-full" style={{ backgroundColor: '#F5F5F5' }}>
-            <button onClick={() => setPreview(false)} className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>Editar</button>
-            <button onClick={() => setPreview(true)} className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1.5" style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
-              <Eye className="w-3.5 h-3.5" /> Previsualizar
-            </button>
-          </div>
-
-          {!preview ? (
-            <>
-              {/* Imagen */}
-              <div>
-                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Imagen</label>
-                <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" style={{ display: 'none' }} onChange={handleFileChange} />
-                {imagenUrl ? (
-                  <div className="rounded-xl overflow-hidden relative" style={{ border: '1px solid #E5E5E5' }}>
-                    <img src={imagenUrl} alt="Preview" style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }} />
-                    <button onClick={() => { setImagenUrl(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF' }}>
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                    <button onClick={() => fileInputRef.current?.click()} className="absolute bottom-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: '500' }}>
-                      <Upload className="w-3 h-3" /> Cambiar
-                    </button>
-                  </div>
-                ) : (
-                  <div onClick={() => fileInputRef.current?.click()} className="rounded-xl flex flex-col items-center justify-center gap-2 py-8 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { (e.currentTarget.style as any).borderColor = '#006B4E'; (e.currentTarget.style as any).backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { (e.currentTarget.style as any).borderColor = '#D1D5DB'; (e.currentTarget.style as any).backgroundColor = '#FAFAFA'; }}>
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
-                      <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
-                    </div>
-                    <div className="text-center">
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>PNG, JPG o WEBP · Máx. 2 MB · Recomendado 1200×400 px</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Título */}
-              <div>
-                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Título *</label>
-                <input
-                  value={titulo}
-                  onChange={e => setTitulo(e.target.value)}
-                  placeholder="Ej: Lanzamiento Parcelas Zona Sur"
-                  style={{ width: '100%', padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none', boxSizing: 'border-box' }}
-                  onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-                  onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-                />
-              </div>
-
-              {/* Descripción */}
-              <div>
-                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Descripción *</label>
-                <textarea
-                  value={descripcion}
-                  onChange={e => setDescripcion(e.target.value)}
-                  placeholder="Describe brevemente la promoción o campaña"
-                  rows={3}
-                  style={{ width: '100%', padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
-                  onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-                  onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-                />
-              </div>
-
-              {/* Fechas */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Fecha inicio *</label>
-                  <input
-                    type="date"
-                    value={fechaInicio}
-                    onChange={e => setFechaInicio(e.target.value)}
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none', boxSizing: 'border-box' }}
-                    onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-                    onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Fecha término *</label>
-                  <input
-                    type="date"
-                    value={fechaFin}
-                    onChange={e => setFechaFin(e.target.value)}
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none', boxSizing: 'border-box' }}
-                    onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-                    onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-                  />
-                </div>
-              </div>
-
-              {/* Estado */}
-              <div className="flex items-center justify-between py-3 px-4 rounded-xl" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-                <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar al guardar</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '1px' }}>El banner será visible en el portal inmediatamente</p>
-                </div>
-                <button onClick={() => setActivo(v => !v)} className="w-11 h-6 rounded-full transition-all relative" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
-                  <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
-                </button>
-              </div>
-            </>
-          ) : (
-            /* Preview */
-            <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+        {!preview ? (
+          <div className="space-y-5">
+            {/* Imagen */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '10px' }}>Imagen</label>
+              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" style={{ display: 'none' }} onChange={handleFileChange} />
               {imagenUrl ? (
-                <img src={imagenUrl} alt="Banner preview" style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block', borderBottom: '1px solid #E5E5E5' }} />
+                <div className="rounded-xl overflow-hidden relative" style={{ border: '1px solid #E5E5E5' }}>
+                  <img src={imagenUrl} alt="Preview" style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }} />
+                  <button onClick={() => { setImagenUrl(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF' }}>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={() => fileInputRef.current?.click()} className="absolute bottom-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: '500' }}>
+                    <Upload className="w-3 h-3" /> Cambiar
+                  </button>
+                </div>
               ) : (
-                <div className="flex items-center justify-center" style={{ height: '140px', backgroundColor: '#F3F4F6', borderBottom: '1px solid #E5E5E5' }}>
-                  <div className="flex flex-col items-center gap-2">
-                    <ImageIcon className="w-8 h-8" style={{ color: '#C3C3C3' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Imagen del banner</span>
+                <div onClick={() => fileInputRef.current?.click()} className="rounded-xl flex flex-col items-center justify-center gap-2 py-10 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
+                    <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                  </div>
+                  <div className="text-center">
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>PNG, JPG o WEBP · Máx. 2 MB · Recomendado 1200×400 px</p>
                   </div>
                 </div>
               )}
-              <div className="p-5" style={{ backgroundColor: '#FFFFFF' }}>
-                <div className="flex items-start justify-between mb-2">
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', lineHeight: '1.3' }}>
-                    {titulo || <span style={{ color: '#C3C3C3' }}>Título del banner</span>}
-                  </h3>
-                  <span className="ml-3 flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: activo ? '#DCFCE7' : '#F3F4F6', color: activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
-                    {activo ? 'Activo' : 'Inactivo'}
-                  </span>
+            </div>
+
+            {/* Título */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Título <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <input
+                value={titulo}
+                onChange={e => setTitulo(e.target.value)}
+                placeholder="Ej: Lanzamiento Parcelas Zona Sur"
+                style={inputStyle(errors.titulo)}
+                onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = errors.titulo ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              />
+              {errors.titulo && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> El título es obligatorio</p>}
+            </div>
+
+            {/* Descripción */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Descripción <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <textarea
+                value={descripcion}
+                onChange={e => setDescripcion(e.target.value)}
+                placeholder="Describe brevemente la promoción o campaña"
+                rows={3}
+                style={{ ...inputStyle(errors.descripcion), resize: 'vertical', lineHeight: '1.65' }}
+                onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = errors.descripcion ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              />
+              {errors.descripcion && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La descripción es obligatoria</p>}
+            </div>
+
+            {/* Fechas */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                    Fecha inicio <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} style={inputStyle(errors.fechaInicio)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaInicio ? '#EF4444' : '#E5E5E5'; }} />
+                  {errors.fechaInicio && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
                 </div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5' }}>
-                  {descripcion || <span style={{ color: '#C3C3C3' }}>Descripción del banner</span>}
-                </p>
-                {(fechaInicio || fechaFin) && (
-                  <div className="flex items-center gap-1.5 mt-3" style={{ color: '#737373' }}>
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
-                      {fechaInicio || '—'} → {fechaFin || '—'}
-                    </span>
-                  </div>
-                )}
+                <div>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                    Fecha término <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)} style={inputStyle(errors.fechaFin)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaFin ? '#EF4444' : '#E5E5E5'; }} />
+                  {errors.fechaFin && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
+                </div>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Footer */}
-        <div className="flex gap-3 px-6 py-5" style={{ borderTop: '1px solid #E5E5E5' }}>
-          <button onClick={onClose} className="flex-1 py-2.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
-            Cancelar
-          </button>
-          <button
-            onClick={() => { if (canSave) onSave({ titulo, descripcion, imagen: imagenUrl, fechaInicio, fechaFin, activo }); }}
-            disabled={!canSave}
-            className="flex-1 py-2.5 transition-all"
-            style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
-            onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-          >
-            {isEdit ? 'Guardar cambios' : 'Crear banner'}
-          </button>
-        </div>
+            {/* Estado */}
+            <div className="rounded-2xl p-5 flex items-center justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar al guardar</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
+                  {activo ? 'El banner será visible en el portal inmediatamente' : 'El banner quedará inactivo hasta que lo actives'}
+                </p>
+              </div>
+              <button onClick={() => setActivo(v => !v)} className="w-11 h-6 rounded-full transition-all relative flex-shrink-0" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
+                <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Vista previa */
+          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            {imagenUrl ? (
+              <img src={imagenUrl} alt="Banner preview" style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }} />
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-2" style={{ height: '180px', backgroundColor: '#F3F4F6' }}>
+                <ImageIcon className="w-10 h-10" style={{ color: '#C3C3C3' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Sin imagen de banner</span>
+              </div>
+            )}
+            <div className="p-6" style={{ backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-start justify-between mb-3">
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: '500', color: '#0A0A0A', lineHeight: '1.3' }}>
+                  {titulo || <span style={{ color: '#C3C3C3' }}>Título del banner</span>}
+                </h3>
+                <span className="ml-3 flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: activo ? '#DCFCE7' : '#F3F4F6', color: activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
+                  {activo ? 'Activo' : 'Inactivo'}
+                </span>
+              </div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6' }}>
+                {descripcion || <span style={{ color: '#C3C3C3' }}>Descripción del banner</span>}
+              </p>
+              {(fechaInicio || fechaFin) && (
+                <div className="flex items-center gap-1.5 mt-4" style={{ color: '#737373' }}>
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
+                    {formatDate(fechaInicio)} → {formatDate(fechaFin)}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer sticky */}
+      <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all"
+          style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5', color: '#737373', fontFamily: 'var(--font-body)' }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+        >
+          Cancelar
+        </button>
+        <button
+          onClick={handleSave}
+          className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all"
+          style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+          onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }}
+          onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}
+        >
+          {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : isEdit ? 'Guardar cambios' : 'Crear banner'}
+        </button>
       </div>
     </div>
   );
 }
 
-// ---------- MODAL MENSAJE ----------
-function MensajeModal({
-  mensaje,
-  onSave,
-  onClose,
-}: {
-  mensaje: MensajeInfo | null;
-  onSave: (data: Omit<MensajeInfo, 'id'>) => void;
-  onClose: () => void;
-}) {
-  const [titulo, setTitulo] = useState(mensaje?.titulo ?? '');
-  const [descripcion, setDescripcion] = useState(mensaje?.descripcion ?? '');
-  const [topico, setTopico] = useState<MensajeInfo['topico']>(mensaje?.topico ?? 'novedad');
-  const [activo, setActivo] = useState(mensaje?.activo ?? true);
+// ─── MODAL ELIMINAR ───────────────────────────────────────────────────────────
 
-  const isEdit = !!mensaje;
-  const canSave = titulo.trim() && descripcion.trim();
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #E5E5E5' }}>
-          <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A' }}>
-              {isEdit ? 'Editar mensaje' : 'Nuevo mensaje'}
-            </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
-              Mensaje informativo para los usuarios del portal
-            </p>
-          </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="px-6 py-5 space-y-5">
-          {/* Tópico */}
-          <div>
-            <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Tópico *</label>
-            <div className="grid grid-cols-2 gap-2">
-              {TOPICOS.map(t => (
-                <button key={t.value} onClick={() => setTopico(t.value)} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-left transition-all" style={{ border: `1.5px solid ${topico === t.value ? t.color : '#E5E5E5'}`, backgroundColor: topico === t.value ? t.bg : '#FAFAFA' }}>
-                  <Tag className="w-3.5 h-3.5 flex-shrink-0" style={{ color: topico === t.value ? t.color : '#9CA3AF' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: topico === t.value ? '600' : '400', color: topico === t.value ? t.color : '#374151' }}>{t.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Título */}
-          <div>
-            <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Título *</label>
-            <input
-              value={titulo}
-              onChange={e => setTitulo(e.target.value)}
-              placeholder="Ej: Mantenimiento programado del sistema"
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none', boxSizing: 'border-box' }}
-              onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-              onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-            />
-          </div>
-
-          {/* Descripción */}
-          <div>
-            <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '8px' }}>Descripción *</label>
-            <textarea
-              value={descripcion}
-              onChange={e => setDescripcion(e.target.value)}
-              placeholder="Describe el mensaje de forma clara y concisa"
-              rows={3}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
-              onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-              onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-            />
-          </div>
-
-          {/* Estado */}
-          <div className="flex items-center justify-between py-3 px-4 rounded-xl" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-            <div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar al guardar</p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '1px' }}>El mensaje será visible en el portal inmediatamente</p>
-            </div>
-            <button onClick={() => setActivo(v => !v)} className="w-11 h-6 rounded-full transition-all relative" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
-              <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex gap-3 px-6 py-5" style={{ borderTop: '1px solid #E5E5E5' }}>
-          <button onClick={onClose} className="flex-1 py-2.5 transition-all" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
-            Cancelar
-          </button>
-          <button
-            onClick={() => { if (canSave) onSave({ titulo, descripcion, topico, activo }); }}
-            disabled={!canSave}
-            className="flex-1 py-2.5 transition-all"
-            style={{ backgroundColor: canSave ? '#006B4E' : '#E5E5E5', color: canSave ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', cursor: canSave ? 'pointer' : 'not-allowed' }}
-            onMouseEnter={e => { if (canSave) e.currentTarget.style.backgroundColor = '#01533E'; }}
-            onMouseLeave={e => { if (canSave) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-          >
-            {isEdit ? 'Guardar cambios' : 'Crear mensaje'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ---------- MODAL DELETE ----------
 function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm: () => void; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
@@ -368,7 +306,7 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
           <AlertTriangle className="w-6 h-6" style={{ color: '#DC2626' }} />
         </div>
         <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
-          Eliminar contenido
+          Eliminar banner
         </h3>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '24px' }}>
           ¿Deseas eliminar <strong style={{ color: '#0A0A0A' }}>"{nombre}"</strong>? Esta acción no se puede deshacer y dejará de mostrarse en el portal.
@@ -386,22 +324,21 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
   );
 }
 
-// ---------- MÓDULO PRINCIPAL ----------
+// ─── MÓDULO PRINCIPAL ─────────────────────────────────────────────────────────
+
 export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [banners, setBanners] = useState<BannerAdmin[]>(initialBanners);
-
-  const [showBannerModal, setShowBannerModal] = useState(false);
-
-  useEffect(() => {
-    if (autoOpenNew) setShowBannerModal(true);
-  }, []);
-  const [editingBanner, setEditingBanner] = useState<BannerAdmin | null>(null);
+  const [view, setView] = useState<'list' | 'create' | BannerAdmin>(autoOpenNew ? 'create' : 'list');
   const [bannerToDelete, setBannerToDelete] = useState<BannerAdmin | null>(null);
-
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedLabel, setSavedLabel] = useState('');
   const [deleted, setDeleted] = useState(false);
+
+  // Drag to reorder
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const nextId = () => Math.max(...banners.map(b => b.id), 0) + 1;
 
@@ -412,15 +349,15 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   }
 
   function handleSaveBanner(data: Omit<BannerAdmin, 'id'>) {
-    if (editingBanner) {
-      setBanners(prev => prev.map(b => b.id === editingBanner.id ? { ...b, ...data } : b));
+    if (typeof view === 'object') {
+      setBanners(prev => prev.map(b => b.id === (view as BannerAdmin).id ? { ...b, ...data } : b));
       showSuccess('Banner actualizado correctamente');
+      setTimeout(() => setView('list'), 1200);
     } else {
       setBanners(prev => [{ id: nextId(), ...data }, ...prev]);
       showSuccess('Banner creado correctamente');
+      setView('list');
     }
-    setShowBannerModal(false);
-    setEditingBanner(null);
   }
 
   function handleDeleteBanner() {
@@ -431,26 +368,40 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
     setTimeout(() => setDeleted(false), 3000);
   }
 
-  function simulateLoading() {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1400);
-  }
-
-  function formatDate(d: string) {
-    if (!d) return '—';
-    const [y, m, day] = d.split('-');
-    return `${day}/${m}/${y}`;
-  }
-
   function isVigente(b: BannerAdmin) {
     const today = new Date().toISOString().slice(0, 10);
     return b.fechaInicio <= today && b.fechaFin >= today;
   }
 
+  // Drag handlers
+  const handleDragStart = (idx: number) => setDragIndex(idx);
+  const handleDragOver = (e: React.DragEvent, idx: number) => { e.preventDefault(); setDragOverIndex(idx); };
+  const handleDrop = (idx: number) => {
+    if (dragIndex === null || dragIndex === idx) { setDragIndex(null); setDragOverIndex(null); return; }
+    const next = [...banners];
+    const [removed] = next.splice(dragIndex, 1);
+    next.splice(idx, 0, removed);
+    setBanners(next);
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
+  const handleDragEnd = () => { setDragIndex(null); setDragOverIndex(null); };
+
+  // Mostrar editor si corresponde
+  if (view !== 'list') {
+    return (
+      <BannerEditor
+        banner={typeof view === 'object' ? view : null}
+        onBack={() => setView('list')}
+        onSave={handleSaveBanner}
+      />
+    );
+  }
+
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
         <div>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
             Banners promocionales
@@ -459,155 +410,161 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
             Gestiona contenido promocional e informativo del portal
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <button
-            onClick={simulateLoading}
+            onClick={() => { setLoadError(false); setLoading(true); setTimeout(() => { setLoading(false); setLoadError(true); }, 1400); }}
             className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all"
             title="Actualizar"
             style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E2EDCC'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0F5EB'}
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
-            onClick={() => { setEditingBanner(null); setShowBannerModal(true); }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all"
+            onClick={() => setView('create')}
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', fontFamily: 'var(--font-body)', fontWeight: '500' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
-            <Plus className="w-4 h-4" />
-            Nuevo banner
+            <Plus className="w-4 h-4" /> Nuevo banner
           </button>
         </div>
       </div>
 
-
-      {/* ── BANNERS ── */}
-      <>
-          {loading ? (
-            /* Skeleton */
-            <div className="space-y-3">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="rounded-xl p-5 flex gap-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-                  <div className="flex-shrink-0 rounded-lg animate-pulse" style={{ width: '120px', height: '80px', backgroundColor: '#F3F4F6' }} />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '60%' }} />
-                    <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '90%' }} />
-                    <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '40%' }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : banners.length === 0 ? (
-            /* Empty state */
-            <div className="rounded-2xl py-16 flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}>
-                <Megaphone className="w-8 h-8" style={{ color: '#3D5E28' }} />
-              </div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
-                Sin banners creados
-              </h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '320px', lineHeight: '1.5', marginBottom: '20px' }}>
-                Crea el primer banner promocional para comunicar ofertas o destacar proyectos a los usuarios del portal.
-              </p>
-              <button onClick={() => { setEditingBanner(null); setShowBannerModal(true); }} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-                <Plus className="w-4 h-4" /> Crear primer banner
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {banners.map(banner => (
-                <div key={banner.id} className="rounded-xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
-                  <div className="flex items-start gap-4 p-5">
-                    {/* Imagen */}
-                    <div className="flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center" style={{ width: '120px', height: '80px', backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5' }}>
-                      {banner.imagen ? (
-                        <img src={banner.imagen} alt={banner.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : (
-                        <ImageIcon className="w-7 h-7" style={{ color: '#C3C3C3' }} />
-                      )}
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-3 mb-1.5">
-                        <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: '600', color: '#0A0A0A', lineHeight: '1.3' }}>
-                          {banner.titulo}
-                        </h3>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          {isVigente(banner) && banner.activo && (
-                            <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)' }}>Vigente</span>
-                          )}
-                          <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
-                            {banner.activo ? 'Activo' : 'Inactivo'}
-                          </span>
-                        </div>
-                      </div>
-
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '10px' }}>
-                        {banner.descripcion}
-                      </p>
-
-                      <div className="flex items-center justify-between flex-wrap gap-3">
-                        <div className="flex items-center gap-1.5" style={{ color: '#737373' }}>
-                          <Calendar className="w-3.5 h-3.5" />
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
-                            {formatDate(banner.fechaInicio)} → {formatDate(banner.fechaFin)}
-                          </span>
-                        </div>
-
-                        {/* Acciones */}
-                        <div className="flex items-center gap-2">
-                          <button
-                            title="Editar"
-                            onClick={() => { setEditingBanner(banner); setShowBannerModal(true); }}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                            style={{ backgroundColor: '#F5F5F5', color: '#737373' }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            title={banner.activo ? 'Desactivar' : 'Activar'}
-                            onClick={() => setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: !b.activo } : b))}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                            style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'; }}
-                          >
-                            {banner.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                          </button>
-                          <button
-                            title="Eliminar"
-                            onClick={() => setBannerToDelete(banner)}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                            style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-      </>
-
-      {/* Modales */}
-      {showBannerModal && (
-        <BannerModal
-          banner={editingBanner}
-          onSave={handleSaveBanner}
-          onClose={() => { setShowBannerModal(false); setEditingBanner(null); }}
-        />
+      {/* Hint carrusel */}
+      {banners.length > 1 && !loading && !loadError && (
+        <div className="flex items-center gap-2 mb-4 px-1">
+          <GripVertical className="w-3.5 h-3.5" style={{ color: '#A3A3A3' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>
+            Arrastra los banners para cambiar el orden en el carrusel del inicio
+          </p>
+        </div>
       )}
+
+      {/* Lista */}
+      {loading ? (
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="rounded-xl p-5 flex gap-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div className="flex-shrink-0 rounded-lg animate-pulse" style={{ width: '140px', height: '90px', backgroundColor: '#F3F4F6' }} />
+              <div className="flex-1 space-y-2 py-1">
+                <div className="h-4 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '55%' }} />
+                <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '85%' }} />
+                <div className="h-3 rounded animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '35%' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : loadError ? (
+        <div className="rounded-2xl py-16 flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#FEF2F2' }}>
+            <AlertCircle className="w-8 h-8" style={{ color: '#EF4444' }} />
+          </div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
+            No se pudieron cargar los banners
+          </h3>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '320px', lineHeight: '1.5', marginBottom: '20px' }}>
+            Hubo un problema al conectar con el servidor. Verifica tu conexión e intenta de nuevo.
+          </p>
+          <button onClick={() => { setLoadError(false); setLoading(true); setTimeout(() => setLoading(false), 1400); }} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all" style={{ backgroundColor: '#EF4444', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#DC2626'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#EF4444'}>
+            <RefreshCw className="w-4 h-4" /> Reintentar
+          </button>
+        </div>
+      ) : banners.length === 0 ? (
+        <div className="rounded-2xl py-16 flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0F5EB' }}>
+            <Megaphone className="w-8 h-8" style={{ color: '#3D5E28' }} />
+          </div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
+            Sin banners creados
+          </h3>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '320px', lineHeight: '1.5', marginBottom: '20px' }}>
+            Crea el primer banner promocional para comunicar ofertas o destacar proyectos a los usuarios del portal.
+          </p>
+          <button onClick={() => setView('create')} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+            <Plus className="w-4 h-4" /> Crear primer banner
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {banners.map((banner, idx) => (
+            <div
+              key={banner.id}
+              draggable
+              onDragStart={() => handleDragStart(idx)}
+              onDragOver={e => handleDragOver(e, idx)}
+              onDrop={() => handleDrop(idx)}
+              onDragEnd={handleDragEnd}
+              className="rounded-xl overflow-hidden transition-all"
+              style={{
+                backgroundColor: '#FFFFFF',
+                border: dragOverIndex === idx && dragIndex !== idx ? '2px solid #006B4E' : '1px solid #E5E5E5',
+                boxShadow: dragIndex === idx ? '0 8px 24px rgba(0,0,0,0.12)' : '0 1px 2px rgba(0,0,0,0.04)',
+                opacity: dragIndex === idx ? 0.5 : 1,
+                cursor: 'grab',
+              }}
+            >
+              <div className="flex items-start gap-3 p-4">
+                {/* Drag handle + posición */}
+                <div className="flex flex-col items-center gap-1 flex-shrink-0 pt-1 select-none" style={{ width: '24px' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: '700', color: '#A3A3A3', lineHeight: '1' }}>{idx + 1}</span>
+                  <GripVertical className="w-4 h-4" style={{ color: '#C3C3C3' }} />
+                </div>
+
+                {/* Imagen */}
+                <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: '120px', height: '80px', backgroundColor: '#F3F4F6', border: '1px solid #E5E5E5' }}>
+                  {banner.imagen ? (
+                    <img src={banner.imagen} alt={banner.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ImageIcon className="w-7 h-7" style={{ color: '#C3C3C3' }} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3 mb-1.5">
+                    <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: '600', color: '#0A0A0A', lineHeight: '1.3' }}>
+                      {banner.titulo}
+                    </h3>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {isVigente(banner) && banner.activo && (
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)' }}>Vigente</span>
+                      )}
+                      <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
+                        {banner.activo ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="hidden sm:block" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '10px' }}>
+                    {banner.descripcion}
+                  </p>
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-1.5" style={{ color: '#737373' }}>
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
+                        {formatDate(banner.fechaInicio)} → {formatDate(banner.fechaFin)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                      <button title="Editar" onClick={() => setView(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}><Edit2 className="w-3.5 h-3.5" /></button>
+                      <button title={banner.activo ? 'Desactivar' : 'Activar'} onClick={() => setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: !b.activo } : b))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'}>
+                        {banner.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                      <button title="Eliminar" onClick={() => setBannerToDelete(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}><Trash2 className="w-3.5 h-3.5" /></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal eliminar */}
       {bannerToDelete && (
         <DeleteModal nombre={bannerToDelete.titulo} onConfirm={handleDeleteBanner} onClose={() => setBannerToDelete(null)} />
       )}
@@ -618,9 +575,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
           <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#16A34A' }}>
             <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#FFFFFF' }}>
-            {savedLabel}
-          </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#FFFFFF' }}>{savedLabel}</p>
         </div>
       )}
       {deleted && (
@@ -628,9 +583,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
           <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#737373' }}>
             <Trash2 className="w-4 h-4" style={{ color: '#FFFFFF' }} />
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#FFFFFF' }}>
-            Contenido eliminado
-          </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#FFFFFF' }}>Banner eliminado</p>
         </div>
       )}
     </div>
