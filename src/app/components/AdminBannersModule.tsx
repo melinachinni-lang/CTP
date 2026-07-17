@@ -59,6 +59,7 @@ function BannerEditor({ banner, onBack, onSave }: {
   const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [createSuccess, setCreateSuccess] = useState(false);
   const [errors, setErrors] = useState({ titulo: false, descripcion: false, fechaInicio: false, fechaFin: false });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!banner;
@@ -84,6 +85,8 @@ function BannerEditor({ banner, onBack, onSave }: {
     if (isEdit) {
       setSaveSuccess(true);
       setTimeout(() => { setSaveSuccess(false); onBack(); }, 1200);
+    } else {
+      setCreateSuccess(true);
     }
   };
 
@@ -271,8 +274,32 @@ function BannerEditor({ banner, onBack, onSave }: {
         )}
       </div>
 
+      {/* Pantalla éxito creación */}
+      {createSuccess && (
+        <div className="flex flex-col items-center justify-center py-20 px-6 text-center max-w-sm mx-auto">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style={{ backgroundColor: '#DCFCE7' }}>
+            <CheckCircle className="w-8 h-8" style={{ color: '#16A34A' }} />
+          </div>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
+            ¡Banner creado!
+          </h2>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6', marginBottom: '24px' }}>
+            <strong style={{ color: '#0A0A0A' }}>"{titulo}"</strong> ya está disponible en el listado de banners{activo ? ' y visible en el portal' : ''}.
+          </p>
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+          >
+            Ver listado
+          </button>
+        </div>
+      )}
+
       {/* Footer sticky */}
-      <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
+      {!createSuccess && <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
         <button
           onClick={onBack}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all"
@@ -291,7 +318,7 @@ function BannerEditor({ banner, onBack, onSave }: {
         >
           {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : isEdit ? 'Guardar cambios' : 'Crear banner'}
         </button>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -355,8 +382,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
       setTimeout(() => setView('list'), 1200);
     } else {
       setBanners(prev => [{ id: nextId(), ...data }, ...prev]);
-      showSuccess('Banner creado correctamente');
-      setView('list');
+      // la navegación la maneja BannerEditor desde la pantalla de éxito
     }
   }
 
