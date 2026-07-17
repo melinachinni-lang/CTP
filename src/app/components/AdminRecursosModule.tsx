@@ -380,7 +380,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
         </div>
       ) : (
         /* ── Formulario ── */
-        <div className="flex gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
 
           {/* Columna principal */}
           <div className="flex-1 space-y-5">
@@ -466,7 +466,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
           </div>
 
           {/* Sidebar derecho */}
-          <div className="flex-shrink-0 space-y-4" style={{ width: '300px' }}>
+          <div className="w-full lg:flex-shrink-0 lg:w-[300px] space-y-4">
 
             {/* Tópico + Estado */}
             <div className="rounded-2xl p-5 space-y-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
@@ -678,7 +678,7 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
               {recursosSearch || filtroTopico !== 'todos' || filtroEstado !== 'todos' ? 'Sin resultados' : 'Aún no hay recursos publicados'}
             </h3>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '24px', maxWidth: '360px' }}>
-              {recursosSearch || filtroTopico !== 'todos' || filtroEstado !== 'todos' ? 'Probá con otros filtros.' : 'Creá tu primer recurso para que aparezca en el portal público.'}
+              {recursosSearch || filtroTopico !== 'todos' || filtroEstado !== 'todos' ? 'Prueba con otros filtros.' : 'Crea tu primer recurso para que aparezca en el portal público.'}
             </p>
             {!(recursosSearch || filtroTopico !== 'todos' || filtroEstado !== 'todos') && (
               <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium" style={{ backgroundColor: '#3D5E28', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
