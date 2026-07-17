@@ -74,6 +74,27 @@ export function AdminEmbudoView() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8">
+      {/* Header */}
+      <div>
+        <h1 style={{
+          fontFamily: 'var(--font-heading)',
+          fontWeight: 'var(--font-weight-regular)',
+          fontSize: 'var(--font-size-h2)',
+          lineHeight: 'var(--line-height-heading)',
+          color: '#0A0A0A',
+          marginBottom: '8px'
+        }}>
+          Embudo digital
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 'var(--font-size-body-base)',
+          color: '#737373'
+        }}>
+          Proceso de conversión de usuarios desde visitas hasta ventas
+        </p>
+      </div>
+
       {/* Módulo principal: Proceso de conversión */}
       <section
         className="rounded-2xl p-4 md:p-8"
