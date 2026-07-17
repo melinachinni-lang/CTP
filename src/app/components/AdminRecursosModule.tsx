@@ -627,22 +627,24 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A3A3A3' }} />
           <input type="text" placeholder="Buscar recurso..." value={recursosSearch} onChange={e => setRecursosSearch(e.target.value)} className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A' }} />
         </div>
-        <div className="relative">
-          <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
-          <select value={filtroTopico} onChange={e => setFiltroTopico(e.target.value)} className="appearance-none pl-10 pr-9 py-2.5 rounded-full text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '160px' }}>
-            <option value="todos">Todos los tópicos</option>
-            {TOPICOS.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
-        </div>
-        <div className="relative">
-          <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
-          <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value as typeof filtroEstado)} className="appearance-none pl-10 pr-9 py-2.5 rounded-full text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '150px' }}>
-            <option value="todos">Todos los estados</option>
-            <option value="activo">Activo</option>
-            <option value="inactivo">Inactivo</option>
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+        <div className="flex gap-2">
+          <div className="relative flex-1 md:flex-none">
+            <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+            <select value={filtroTopico} onChange={e => setFiltroTopico(e.target.value)} className="appearance-none w-full pl-10 pr-9 py-2.5 rounded-full text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '0' }}>
+              <option value="todos">Todos los tópicos</option>
+              {TOPICOS.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+          </div>
+          <div className="relative flex-1 md:flex-none">
+            <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+            <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value as typeof filtroEstado)} className="appearance-none w-full pl-10 pr-9 py-2.5 rounded-full text-sm outline-none cursor-pointer" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', minWidth: '0' }}>
+              <option value="todos">Todos los estados</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
+          </div>
         </div>
         <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
           <Plus className="w-4 h-4" /> Nuevo recurso
@@ -721,37 +723,55 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
             </div>
             {filtrados.map((recurso, idx) => {
               const imgPpal = recurso.imagenes.find(img => img.esPrincipal) || recurso.imagenes[0];
+              const thumbnail = imgPpal
+                ? <img src={imgPpal.url} alt={recurso.titulo} className="w-full h-full object-cover" />
+                : <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}><BookOpen className="w-6 h-6" style={{ color: '#3D5E28' }} /></div>;
+              const topicoBadge = <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Tag className="w-3 h-3" />{recurso.topico}</span>;
+              const estadoBadge = recurso.estado === 'activo'
+                ? <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Globe className="w-3 h-3" />Activo</span>
+                : <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', fontWeight: '500' }}><EyeOff className="w-3 h-3" />Inactivo</span>;
+              const actionBtns = <>
+                <button title="Editar" onClick={() => { setOpenAsArticle(false); setEditorView(recurso); }} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><Edit2 className="w-3.5 h-3.5" /></button>
+                <button title={recurso.estado === 'activo' ? 'Desactivar' : 'Activar'} onClick={() => toggleEstado(recurso.id)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5', color: recurso.estado === 'activo' ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5'; }}>{recurso.estado === 'activo' ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}</button>
+                <button title="Eliminar" onClick={() => setDeleteConfirmId(recurso.id)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}><Trash2 className="w-3.5 h-3.5" /></button>
+              </>;
               return (
-                <div key={recurso.id} className="px-6 py-4 flex flex-col md:grid md:items-center gap-3 md:gap-4 transition-colors" style={{ gridTemplateColumns: '1fr 110px 100px 110px 124px', backgroundColor: '#FFFFFF', borderBottom: idx < filtrados.length - 1 ? '1px solid #F5F5F5' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
-                  <div className="flex items-center gap-3 min-w-0 cursor-pointer group/row" onClick={() => { setOpenAsArticle(true); setEditorView(recurso); }}>
-                    <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden transition-opacity group-hover/row:opacity-80" style={{ border: '1px solid #E5E5E5' }}>
-                      {imgPpal ? <img src={imgPpal.url} alt={recurso.titulo} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}><BookOpen className="w-6 h-6" style={{ color: '#3D5E28' }} /></div>}
+                <div key={recurso.id} className="transition-colors" style={{ backgroundColor: '#FFFFFF', borderBottom: idx < filtrados.length - 1 ? '1px solid #F5F5F5' : 'none' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FAFAFA'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}>
+
+                  {/* Mobile card */}
+                  <div className="flex items-start gap-3 px-4 py-4 md:hidden">
+                    <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden cursor-pointer" style={{ border: '1px solid #E5E5E5' }} onClick={() => { setOpenAsArticle(true); setEditorView(recurso); }}>{thumbnail}</div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium cursor-pointer hover:underline" onClick={() => { setOpenAsArticle(true); setEditorView(recurso); }} style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', marginBottom: '2px' }}>{recurso.titulo}</p>
+                      <p className="truncate" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{recurso.descripcion.substring(0, 75)}...</p>
+                      <div className="flex items-center gap-2 mt-2 flex-wrap">
+                        {topicoBadge}
+                        {estadoBadge}
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', color: '#A3A3A3' }}>{recurso.fecha}</span>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="truncate group-hover/row:underline" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>{recurso.titulo}</p>
-                      <p className="truncate mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{recurso.descripcion.substring(0, 75)}...</p>
-                      {recurso.palabrasClave.length > 0 && (
-                        <div className="flex gap-1 mt-1 flex-wrap">
-                          {recurso.palabrasClave.slice(0, 3).map(k => <span key={k} className="px-1.5 py-0.5 rounded text-xs" style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)' }}>{k}</span>)}
-                          {recurso.palabrasClave.length > 3 && <span className="px-1.5 py-0.5 rounded text-xs" style={{ backgroundColor: '#F5F5F5', color: '#A3A3A3', fontFamily: 'var(--font-body)' }}>+{recurso.palabrasClave.length - 3}</span>}
-                        </div>
-                      )}
+                    <div className="flex flex-col gap-1.5 flex-shrink-0">{actionBtns}</div>
+                  </div>
+
+                  {/* Desktop grid */}
+                  <div className="hidden md:grid px-6 py-4 items-center gap-4" style={{ gridTemplateColumns: '1fr 110px 100px 110px 124px' }}>
+                    <div className="flex items-center gap-3 min-w-0 cursor-pointer group/row" onClick={() => { setOpenAsArticle(true); setEditorView(recurso); }}>
+                      <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden transition-opacity group-hover/row:opacity-80" style={{ border: '1px solid #E5E5E5' }}>{thumbnail}</div>
+                      <div className="min-w-0">
+                        <p className="truncate group-hover/row:underline" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>{recurso.titulo}</p>
+                        <p className="truncate mt-0.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>{recurso.descripcion.substring(0, 75)}...</p>
+                        {recurso.palabrasClave.length > 0 && (
+                          <div className="flex gap-1 mt-1 flex-wrap">
+                            {recurso.palabrasClave.slice(0, 3).map(k => <span key={k} className="px-1.5 py-0.5 rounded text-xs" style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)' }}>{k}</span>)}
+                            {recurso.palabrasClave.length > 3 && <span className="px-1.5 py-0.5 rounded text-xs" style={{ backgroundColor: '#F5F5F5', color: '#A3A3A3', fontFamily: 'var(--font-body)' }}>+{recurso.palabrasClave.length - 3}</span>}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-center"><span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Tag className="w-3 h-3" />{recurso.topico}</span></div>
-                  <div className="flex justify-center">
-                    {recurso.estado === 'activo'
-                      ? <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontWeight: '500' }}><Globe className="w-3 h-3" />Activo</span>
-                      : <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs" style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', fontWeight: '500' }}><EyeOff className="w-3 h-3" />Inactivo</span>
-                    }
-                  </div>
-                  <p className="text-center" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>{recurso.fecha}</p>
-                  <div className="flex items-center justify-center gap-2">
-                    <button title="Editar" onClick={() => { setOpenAsArticle(false); setEditorView(recurso); }} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}><Edit2 className="w-3.5 h-3.5" /></button>
-                    <button title={recurso.estado === 'activo' ? 'Desactivar' : 'Activar'} onClick={() => toggleEstado(recurso.id)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5', color: recurso.estado === 'activo' ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#E2EDCC' : '#E5E5E5'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = recurso.estado === 'activo' ? '#F0F5EB' : '#F5F5F5'; }}>
-                      {recurso.estado === 'activo' ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                    </button>
-                    <button title="Eliminar" onClick={() => setDeleteConfirmId(recurso.id)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#FEE2E2'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FEF2F2'; }}><Trash2 className="w-3.5 h-3.5" /></button>
+                    <div className="flex justify-center">{topicoBadge}</div>
+                    <div className="flex justify-center">{estadoBadge}</div>
+                    <p className="text-center" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#A3A3A3' }}>{recurso.fecha}</p>
+                    <div className="flex items-center justify-center gap-2">{actionBtns}</div>
                   </div>
                 </div>
               );
