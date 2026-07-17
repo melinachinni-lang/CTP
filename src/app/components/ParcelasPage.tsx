@@ -2056,7 +2056,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <button
                           onClick={() => { setAiSearchError(false); handleSmartSearch(); }}
-                          className="h-10 sm:h-11 px-5 sm:px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center gap-2"
+                          className="h-11 px-6 text-sm leading-none font-medium rounded-[200px] transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
                           style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
                           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
                           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
@@ -2065,7 +2065,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         </button>
                         <button
                           onClick={() => { setAiSearchError(false); setSmartSearchValue(''); setSelectedBadges([]); }}
-                          className="h-10 sm:h-11 px-5 sm:px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                          className="h-11 px-6 text-sm leading-none font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap"
                           style={{ backgroundColor: 'transparent', color: '#0A0A0A', border: '2px solid #DEDEDE', fontFamily: 'var(--font-body)' }}
                           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
                           onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
