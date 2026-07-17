@@ -1253,7 +1253,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   <button
                     onClick={handleSmartSearch}
                     disabled={!smartSearchValue.trim() && selectedBadges.length === 0}
-                    className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 h-9 sm:h-10 lg:h-12 px-3 sm:px-4 lg:px-5 text-xs sm:text-sm leading-[1.5] font-medium rounded-[8px] sm:rounded-[12px] transition-all flex items-center justify-center gap-1.5 sm:gap-2 disabled:opacity-40"
+                    className="absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 h-9 sm:h-10 lg:h-12 px-3 sm:px-4 lg:px-5 text-xs sm:text-sm leading-[1.5] font-medium rounded-[200px] transition-all flex items-center justify-center gap-1.5 sm:gap-2 disabled:opacity-40"
                     style={{
                       backgroundColor: (smartSearchValue.trim() || selectedBadges.length > 0) ? '#006B4E' : '#efefef',
                       color: (smartSearchValue.trim() || selectedBadges.length > 0) ? '#FFFFFF' : '#0A0A0A',
@@ -2053,10 +2053,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       <p className="mb-6" style={{ color: '#737373', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)', maxWidth: '380px' }}>
                         Hubo un problema al analizar tu consulta. Puedes intentarlo de nuevo o explorar usando los filtros.
                       </p>
-                      <div className="flex flex-wrap gap-3 justify-center">
+                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <button
                           onClick={() => { setAiSearchError(false); handleSmartSearch(); }}
-                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                          className="h-10 sm:h-11 px-5 sm:px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center gap-2"
                           style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
                           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
                           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
@@ -2065,10 +2065,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         </button>
                         <button
                           onClick={() => { setAiSearchError(false); setSmartSearchValue(''); setSelectedBadges([]); }}
-                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
-                          style={{ backgroundColor: '#F5F5F5', color: '#737373', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }}
-                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
-                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                          className="h-10 sm:h-11 px-5 sm:px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
+                          style={{ backgroundColor: 'transparent', color: '#0A0A0A', border: '2px solid #DEDEDE', fontFamily: 'var(--font-body)' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
                           Usar filtros manuales
                         </button>
