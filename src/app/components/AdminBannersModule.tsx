@@ -123,18 +123,18 @@ function BannerEditor({ banner, onBack, onSave }: {
       {/* Content */}
       <div className="max-w-2xl mx-auto">
         {/* Toggle editar/previsualizar */}
-        <div className="flex gap-2 p-1 rounded-full mb-6" style={{ backgroundColor: '#F5F5F5', maxWidth: '260px' }}>
+        <div className="inline-flex gap-1 p-1 rounded-full mb-6" style={{ backgroundColor: '#F5F5F5' }}>
           <button
             onClick={() => setPreview(false)}
-            className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all"
-            style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+            className="py-1.5 px-5 rounded-full text-sm font-medium transition-all"
+            style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', whiteSpace: 'nowrap' }}
           >
             Editar
           </button>
           <button
             onClick={() => setPreview(true)}
-            className="flex-1 py-1.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1.5"
-            style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+            className="py-1.5 px-5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5"
+            style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', whiteSpace: 'nowrap' }}
           >
             <Eye className="w-3.5 h-3.5" /> Previsualizar
           </button>
@@ -309,7 +309,7 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
           Eliminar banner
         </h3>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '24px' }}>
-          ¿Deseas eliminar <strong style={{ color: '#0A0A0A' }}>"{nombre}"</strong>? Esta acción no se puede deshacer y dejará de mostrarse en el portal.
+          ¿Eliminar <strong style={{ color: '#0A0A0A' }}>"{nombre}"</strong>? Esta acción no se puede deshacer.
         </p>
         <div className="flex gap-3">
           <button onClick={onClose} className="flex-1 py-2.5" style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>
