@@ -6,7 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tool
 const RANGO_PRESETS = [
   { id: 'hoy',     label: 'Hoy' },
   { id: '7d',      label: 'Últimos 7 días' },
-  { id: '28d',     label: 'Últimos 28 días' },
+  { id: '28d',     label: 'Último mes' },
   { id: '30d',     label: 'Últimos 30 días' },
   { id: 'mes',     label: 'Este mes' },
   { id: 'mes_ant', label: 'El mes pasado' },
@@ -120,7 +120,7 @@ export function AdminAnaliticaView() {
 
   const ORIGEN_PRESETS = [
     { id: '7d',  label: 'Últimos 7 días' },
-    { id: '28d', label: 'Últimos 28 días' },
+    { id: '28d', label: 'Último mes' },
     { id: '90d', label: 'Últimos 90 días' },
     { id: 'mes', label: 'Este mes' },
   ];

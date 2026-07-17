@@ -5,7 +5,7 @@ import { ChevronDown, Calendar } from 'lucide-react';
 const RANGO_PRESETS = [
   { id: 'hoy',     label: 'Hoy' },
   { id: '7d',      label: 'Últimos 7 días' },
-  { id: '28d',     label: 'Últimos 28 días' },
+  { id: '28d',     label: 'Último mes' },
   { id: '30d',     label: 'Últimos 30 días' },
   { id: 'mes',     label: 'Este mes' },
   { id: 'mes_ant', label: 'El mes pasado' },
