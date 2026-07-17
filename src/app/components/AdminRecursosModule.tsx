@@ -550,6 +550,7 @@ function RecursoEditor({ recurso, onBack, onSave }: EditorProps) {
 export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [recursos, setRecursos] = useState<Recurso[]>(MOCK);
   const [recursosLoading, setRecursosLoading] = useState(false);
+  const [recursosError, setRecursosError] = useState(false);
   const [recursosSearch, setRecursosSearch] = useState('');
   const [filtroTopico, setFiltroTopico] = useState('todos');
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos');
@@ -649,13 +650,14 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
       <section className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)' }}>
         <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #F0F0F0' }}>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{filtrados.length} recurso{filtrados.length !== 1 ? 's' : ''}</p>
-          <button onClick={() => { setRecursosLoading(true); setTimeout(() => setRecursosLoading(false), 1400); }} className="flex items-center justify-center w-8 h-8 rounded-lg transition-all" title="Actualizar" style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
+          <button onClick={() => { setRecursosError(false); setRecursosLoading(true); setTimeout(() => { setRecursosLoading(false); setRecursosError(true); }, 1400); }} className="flex items-center justify-center w-8 h-8 rounded-lg transition-all" title="Actualizar" style={{ backgroundColor: '#F0F5EB', border: '1px solid #C5D9A8', color: '#3D5E28' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2EDCC'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F0F5EB'; }}>
             <RefreshCw className={`w-3.5 h-3.5 ${recursosLoading ? 'animate-spin' : ''}`} />
           </button>
         </div>
 
         {recursosLoading ? (
           <div className="divide-y divide-gray-50">
+
             {[1,2,3,4].map(i => (
               <div key={i} className="px-6 py-4 flex items-center gap-4 animate-pulse">
                 <div className="w-14 h-14 rounded-xl flex-shrink-0" style={{ backgroundColor: '#F0F0F0' }} />
@@ -668,6 +670,27 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
                 <div className="flex gap-2">{[1,2,3].map(j => <div key={j} className="h-8 w-8 rounded-lg" style={{ backgroundColor: '#F0F0F0' }} />)}</div>
               </div>
             ))}
+          </div>
+        ) : recursosError ? (
+          <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#FEF2F2' }}>
+              <AlertCircle className="w-8 h-8" style={{ color: '#EF4444' }} />
+            </div>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
+              No se pudieron cargar los recursos
+            </h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '24px', maxWidth: '360px' }}>
+              Hubo un problema al conectar con el servidor. Verifica tu conexión e intenta de nuevo.
+            </p>
+            <button
+              onClick={() => { setRecursosError(false); setRecursosLoading(true); setTimeout(() => setRecursosLoading(false), 1400); }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+              style={{ backgroundColor: '#EF4444', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#DC2626'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#EF4444'; }}
+            >
+              <RefreshCw className="w-4 h-4" /> Reintentar
+            </button>
           </div>
         ) : filtrados.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
