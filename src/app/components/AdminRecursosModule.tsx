@@ -646,7 +646,7 @@ export function AdminRecursosModule({ autoOpenNew }: { autoOpenNew?: boolean }) 
             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#737373' }} />
           </div>
         </div>
-        <button onClick={() => setEditorView('create')} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
+        <button onClick={() => setEditorView('create')} className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>
           <Plus className="w-4 h-4" /> Nuevo recurso
         </button>
       </div>
