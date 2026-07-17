@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { showAiOverlay, hideAiOverlay } from '../utils/aiOverlay';
-import { ChevronDown, ChevronUp, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale } from 'lucide-react';
+import { ChevronDown, ChevronUp, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale, AlertCircle, RefreshCw } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { VendedorCaptacionSection } from '@/app/components/VendedorCaptacionSection';
@@ -106,6 +106,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const [smartSearchValue, setSmartSearchValue] = useState('');
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
   const [isAiProcessing, setIsAiProcessing] = useState(false);
+  const [aiSearchError, setAiSearchError] = useState(false);
   const [aiInterpretedQuery, setAiInterpretedQuery] = useState<string | null>(null);
   const [aiChipExpanded, setAiChipExpanded] = useState(false);
   const [aiChipEditValue, setAiChipEditValue] = useState('');
@@ -705,6 +706,15 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     setTimeout(() => {
       hideAiOverlay();
       setIsAiProcessing(false);
+
+      // Simular error ocasional (~25%)
+      if (Math.random() < 0.25) {
+        setAiSearchError(true);
+        setFiltersApplied(false);
+        return;
+      }
+
+      setAiSearchError(false);
       setFiltersApplied(true);
       if (query) {
         setAiInterpretedQuery(query);
@@ -774,6 +784,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     setTimeout(() => {
       hideAiOverlay();
       setIsAiProcessing(false);
+
+      if (Math.random() < 0.25) {
+        setAiSearchError(true);
+        setFiltersApplied(false);
+        return;
+      }
+
+      setAiSearchError(false);
       setFiltersApplied(true);
       setAiInterpretedQuery(query);
       setAiChipEditValue(query);
@@ -2022,6 +2040,41 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           ))}
                         </div>
                       </div>
+                    ) : aiSearchError ? (
+                  // Error state búsqueda IA
+                  <div className="col-span-2 py-12 sm:py-16 md:py-20">
+                    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto px-4">
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#FEF2F2' }}>
+                        <AlertCircle size={32} style={{ color: '#EF4444' }} strokeWidth={1.5} />
+                      </div>
+                      <h3 className="mb-2" style={{ color: '#0A0A0A', fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-heading)' }}>
+                        No se pudo procesar tu búsqueda
+                      </h3>
+                      <p className="mb-6" style={{ color: '#737373', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)', maxWidth: '380px' }}>
+                        Hubo un problema al analizar tu consulta. Puedes intentarlo de nuevo o explorar usando los filtros.
+                      </p>
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        <button
+                          onClick={() => { setAiSearchError(false); handleSmartSearch(); }}
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
+                        >
+                          <RefreshCw size={14} /> Reintentar búsqueda
+                        </button>
+                        <button
+                          onClick={() => { setAiSearchError(false); setSmartSearchValue(''); setSelectedBadges([]); }}
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all"
+                          style={{ backgroundColor: '#F5F5F5', color: '#737373', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)' }}
+                          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                        >
+                          Usar filtros manuales
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                     ) : parcelas.length === 0 && filtersApplied ? (
                   // Empty State cuando no hay resultados con filtros aplicados
                   <div className="col-span-2 py-12 sm:py-16 md:py-20">
