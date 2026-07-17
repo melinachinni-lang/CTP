@@ -76,14 +76,14 @@ export function AdminEmbudoView() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8">
       {/* Módulo principal: Proceso de conversión */}
       <section
-        className="rounded-2xl p-8"
+        className="rounded-2xl p-4 md:p-8"
         style={{
           backgroundColor: 'var(--background)',
           border: '1px solid var(--border)',
           boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
         }}
       >
-        <div className="mb-8">
+        <div className="mb-4 md:mb-8">
           <h2
             style={{
               fontFamily: 'var(--font-heading)',
@@ -306,7 +306,7 @@ export function AdminEmbudoView() {
 
         {/* Resumen ejecutivo - estilo unificado */}
         <div
-          className="mt-8 rounded-2xl p-6"
+          className="mt-4 md:mt-8 rounded-2xl p-4 md:p-6"
           style={{
             backgroundColor: 'var(--input-background)',
             border: '1px solid var(--border)',

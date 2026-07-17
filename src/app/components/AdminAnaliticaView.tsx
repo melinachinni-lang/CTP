@@ -250,7 +250,7 @@ export function AdminAnaliticaView() {
           <div className="h-8 w-52 rounded-lg animate-pulse mb-2" style={{ backgroundColor: '#F0F0F0' }} />
           <div className="h-4 w-72 rounded-full animate-pulse" style={{ backgroundColor: '#F0F0F0' }} />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {[1,2,3,4,5].map(i => <KPICardSkeleton key={i} />)}
         </div>
         <SectionSkeleton height={300} />
@@ -293,7 +293,7 @@ export function AdminAnaliticaView() {
       </div>
 
       {/* KPIs */}
-      <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {trafficKPIs.map((kpi, i) => (
           <KPICard key={i} {...kpi} />
         ))}
@@ -437,7 +437,7 @@ export function AdminAnaliticaView() {
 
       {/* Origen del tráfico */}
       <section className="rounded-2xl" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-        <div className="px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
+        <div className="px-4 py-4 md:px-6 md:py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3" style={{ borderBottom: '1px solid #E5E5E5' }}>
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>
               Origen del tráfico
@@ -508,7 +508,7 @@ export function AdminAnaliticaView() {
             </div>
           </div>
         </div>
-        <div className="px-6 py-5">
+        <div className="px-4 py-4 md:px-6 md:py-5">
           {(() => {
             const fuentes = origenData[origenApplied ? '28d' : origenPeriodo].fuentes;
             const total = fuentes.reduce((s, f) => s + f.actual, 0);

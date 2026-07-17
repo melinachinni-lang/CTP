@@ -310,7 +310,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
           <div className="h-7 rounded-full animate-pulse" style={{ backgroundColor: '#E5E7EB', width: '220px' }} />
           <div className="h-3.5 rounded-full animate-pulse" style={{ backgroundColor: '#F3F4F6', width: '340px' }} />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="p-5 rounded-2xl animate-pulse" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF', height: '118px' }} />
           ))}
@@ -336,7 +336,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {kpis.map((kpi, i) => {
           const pos = kpi.change >= 0;
           return (
@@ -545,7 +545,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                 Top 10 parcelas y proyectos por interacción — {rankingAppliedRange ? formatRangeLabel(rankingAppliedRange.from, rankingAppliedRange.to) : PERIODO_LABELS[rankingPeriodo]}
               </p>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0" ref={rankingPickerRef}>
+            <div className="flex flex-wrap items-center gap-2 flex-shrink-0" ref={rankingPickerRef}>
               {/* Dropdown períodos */}
               <div className="relative">
                 <button
@@ -617,7 +617,7 @@ export function RendimientoView({ viewType }: RendimientoViewProps) {
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0A0A0A'}
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  Agregar propiedad
+                  <span className="hidden md:inline">Agregar propiedad</span>
                 </button>
               )}
             </div>

@@ -92,6 +92,7 @@ export function AdminFiltrosAnalytics() {
   const [customFrom, setCustomFrom] = useState('');
   const [customTo, setCustomTo] = useState('');
   const [appliedRange, setAppliedRange] = useState<{ from: string; to: string } | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -103,6 +104,13 @@ export function AdminFiltrosAnalytics() {
     }
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   function formatRangeLabel(from: string, to: string) {
@@ -254,8 +262,8 @@ export function AdminFiltrosAnalytics() {
             <YAxis
               type="category"
               dataKey="nombre"
-              width={140}
-              tick={{ fontFamily: 'var(--font-body)', fontSize: 12, fill: '#374151' }}
+              width={isMobile ? 90 : 140}
+              tick={{ fontFamily: 'var(--font-body)', fontSize: isMobile ? 10 : 12, fill: '#374151' }}
               axisLine={false}
               tickLine={false}
             />
