@@ -2152,29 +2152,27 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       )}
 
                       {/* Botones de acción */}
-                      <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                        {aiInterpretedQuery && (
-                          <button
-                            onClick={() => {
-                              setAiInterpretedQuery(null);
-                              setSmartSearchValue('');
-                              setSelectedBadges([]);
-                              setActiveFilters(prev => {
-                                const updated = { ...prev };
-                                delete updated.smartSearchText;
-                                updated.smartBadges = [];
-                                return updated;
-                              });
-                            }}
-                            className="h-10 sm:h-11 px-5 sm:px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors w-full sm:w-auto flex items-center justify-center gap-2"
-                            style={{ fontFamily: 'var(--font-body)', backgroundColor: '#006B4E', color: '#FFFFFF' }}
-                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
-                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-                          >
-                            <Sparkles className="w-4 h-4" />
-                            Probar otra búsqueda
-                          </button>
-                        )}
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          onClick={() => {
+                            setAiInterpretedQuery(null);
+                            setSmartSearchValue('');
+                            setSelectedBadges([]);
+                            setActiveFilters(prev => {
+                              const updated = { ...prev };
+                              delete updated.smartSearchText;
+                              updated.smartBadges = [];
+                              return updated;
+                            });
+                          }}
+                          className="h-10 sm:h-11 px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center gap-2"
+                          style={{ fontFamily: 'var(--font-body)', backgroundColor: '#006B4E', color: '#FFFFFF' }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
+                        >
+                          <Sparkles className="w-4 h-4" />
+                          Probar otra búsqueda
+                        </button>
                         <button
                           onClick={() => {
                             setActiveFilters({ tipos: [], destacadas: false, nuevas: false });
@@ -2192,42 +2190,17 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             setSelectedBadges([]);
                             setFiltersApplied(false);
                           }}
-                          className="h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base leading-[1.5] font-medium rounded-[200px] transition-colors shadow-sm w-full sm:w-auto"
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            backgroundColor: aiInterpretedQuery ? 'transparent' : '#006B4E',
-                            color: aiInterpretedQuery ? '#0A0A0A' : '#FFFFFF',
-                            border: aiInterpretedQuery ? '2px solid #DEDEDE' : 'none'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = aiInterpretedQuery ? '#F5F5F5' : '#01533E';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = aiInterpretedQuery ? 'transparent' : '#006B4E';
-                          }}
-                        >
-                          {aiInterpretedQuery ? 'Ver todas las parcelas' : t.filters.clearFilters}
-                        </button>
-
-                        <button
-                          onClick={() => onNavigate('home')}
-                          className="h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base leading-[1.5] font-medium rounded-[200px] transition-colors border-2 w-full sm:w-auto"
+                          className="h-10 sm:h-11 px-6 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors whitespace-nowrap"
                           style={{
                             fontFamily: 'var(--font-body)',
                             backgroundColor: 'transparent',
                             color: '#0A0A0A',
-                            borderColor: '#DEDEDE'
+                            border: '2px solid #DEDEDE'
                           }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#F5F5F5';
-                            e.currentTarget.style.borderColor = '#C3C3C3';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                            e.currentTarget.style.borderColor = '#DEDEDE';
-                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                          {t.home.backToHome}
+                          Ver todas las parcelas
                         </button>
                       </div>
                     </div>
