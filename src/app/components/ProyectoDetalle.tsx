@@ -74,6 +74,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const [isConsultaOnlineOpen, setIsConsultaOnlineOpen] = useState(false);
   const [isComprarProyectoOpen, setIsComprarProyectoOpen] = useState(false);
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
+  const [hoveredCompraButton, setHoveredCompraButton] = useState<string | null>(null);
 
   // Obtener datos dinámicos del proyecto
   // Si proyectoId es null o undefined, usar 1 por defecto
@@ -989,25 +990,64 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             </p>
                           </div>
                         </div>
-                        <div 
-                          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
-                          style={{ 
-                            backgroundColor: parcela.estado === 'disponible' ? '#DCFCE7' : parcela.estado === 'reservado' ? '#FEF3C7' : '#F5F5F5',
-                            border: `1px solid ${parcela.estado === 'disponible' ? '#BBF7D0' : parcela.estado === 'reservado' ? '#FDE68A' : '#E5E5E5'}`
-                          }}
-                        >
-                          <div 
-                            className="w-1.5 h-1.5 rounded-full" 
-                            style={{ backgroundColor: parcela.estado === 'disponible' ? '#16A34A' : parcela.estado === 'reservado' ? '#CA8A04' : '#737373' }} 
-                          />
-                          <span style={{ 
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-xs)',
-                            fontWeight: 'var(--font-weight-medium)',
-                            color: parcela.estado === 'disponible' ? '#166534' : parcela.estado === 'reservado' ? '#854D0E' : '#525252'
-                          }}>
-                            {parcela.estadoLabel}
-                          </span>
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
+                            style={{
+                              backgroundColor: parcela.estado === 'disponible' ? '#DCFCE7' : parcela.estado === 'reservado' ? '#FEF3C7' : '#F5F5F5',
+                              border: `1px solid ${parcela.estado === 'disponible' ? '#BBF7D0' : parcela.estado === 'reservado' ? '#FDE68A' : '#E5E5E5'}`
+                            }}
+                          >
+                            <div
+                              className="w-1.5 h-1.5 rounded-full"
+                              style={{ backgroundColor: parcela.estado === 'disponible' ? '#16A34A' : parcela.estado === 'reservado' ? '#CA8A04' : '#737373' }}
+                            />
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--font-size-xs)',
+                              fontWeight: 'var(--font-weight-medium)',
+                              color: parcela.estado === 'disponible' ? '#166534' : parcela.estado === 'reservado' ? '#854D0E' : '#525252'
+                            }}>
+                              {parcela.estadoLabel}
+                            </span>
+                          </div>
+                          <div className="relative">
+                            <button
+                              onClick={parcela.estado === 'disponible' ? () => setIsComprarProyectoOpen(true) : undefined}
+                              disabled={parcela.estado !== 'disponible'}
+                              className="w-10 h-10 rounded-full flex items-center justify-center border transition-all"
+                              style={{
+                                backgroundColor: parcela.estado !== 'disponible' ? '#F5F5F5' : '#FFFFFF',
+                                borderColor: parcela.estado !== 'disponible' ? '#E5E5E5' : '#D4D4D4',
+                                cursor: parcela.estado !== 'disponible' ? 'not-allowed' : 'pointer',
+                                opacity: parcela.estado !== 'disponible' ? 0.5 : 1
+                              }}
+                              onMouseEnter={(e) => {
+                                if (parcela.estado === 'disponible') {
+                                  setHoveredCompraButton(parcela.codigo);
+                                  e.currentTarget.style.borderColor = '#A3A3A3';
+                                  e.currentTarget.style.backgroundColor = '#FAFAFA';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (parcela.estado === 'disponible') {
+                                  setHoveredCompraButton(null);
+                                  e.currentTarget.style.borderColor = '#D4D4D4';
+                                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                                }
+                              }}
+                            >
+                              <ShoppingCart className="w-4 h-4" style={{ color: parcela.estado !== 'disponible' ? '#A3A3A3' : '#0A0A0A' }} />
+                            </button>
+                            {hoveredCompraButton === parcela.codigo && parcela.estado === 'disponible' && (
+                              <div
+                                className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg whitespace-nowrap pointer-events-none z-10"
+                                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}
+                              >
+                                Comprar esta parcela
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
