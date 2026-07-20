@@ -1291,7 +1291,9 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     {/* CTA secundario */}
                     <button
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
-                      style={{ backgroundColor: '#F0FBF7', color: '#006B4E', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
+                      style={{ backgroundColor: '#F5F5F0', color: '#006B4E', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
                     >
                       <Download className="w-4 h-4" />
                       Descargar brochure
