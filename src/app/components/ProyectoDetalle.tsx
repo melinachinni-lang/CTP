@@ -318,9 +318,31 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 </div>
               </div>
 
-              {/* Información general del proyecto - Cards con iconos */}
+              {/* Descripción del proyecto */}
               <div className="bg-white rounded-xl border border-gray-200 p-8">
                 <h2 style={{ 
+                  fontFamily: 'var(--font-heading)',
+                  fontWeight: 'var(--font-weight-regular)',
+                  fontSize: 'var(--font-size-h3)',
+                  color: '#0A0A0A',
+                  marginBottom: '16px'
+                }}>
+                  {t.detail.aboutProject}
+                </h2>
+                <p style={{ 
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-body-md)',
+                  color: '#525252',
+                  lineHeight: 'var(--line-height-body)',
+                  whiteSpace: 'pre-line'
+                }}>
+                  {proyecto.descripcionCompleta}
+                </p>
+              </div>
+
+              {/* Información general del proyecto - Cards con iconos */}
+              <div className="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 style={{
                   fontFamily: 'var(--font-heading)',
                   fontWeight: 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-h3)',
@@ -329,7 +351,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 }}>
                   {t.detail.generalInfo}
                 </h2>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {/* Total de parcelas */}
                   <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
@@ -429,26 +451,112 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 </div>
               </div>
 
-              {/* Descripción del proyecto */}
+              {/* Ubicación */}
               <div className="bg-white rounded-xl border border-gray-200 p-8">
-                <h2 style={{ 
+                <h2 style={{
                   fontFamily: 'var(--font-heading)',
                   fontWeight: 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-h3)',
                   color: '#0A0A0A',
-                  marginBottom: '16px'
+                  marginBottom: '24px'
                 }}>
-                  {t.detail.aboutProject}
+                  {t.detail.location}
                 </h2>
-                <p style={{ 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--font-size-body-md)',
-                  color: '#525252',
-                  lineHeight: 'var(--line-height-body)',
-                  whiteSpace: 'pre-line'
-                }}>
-                  {proyecto.descripcionCompleta}
-                </p>
+
+                {/* Dirección */}
+                <div className="flex items-start gap-2 mb-6 px-4 py-3 rounded-xl" style={{ backgroundColor: '#F5F5F5' }}>
+                  <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#006B4E' }} />
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginBottom: '2px' }}>
+                      {proyecto.ubicacion}, {proyecto.region}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>
+                      {proyecto.direccion}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex mb-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
+                  <button
+                    onClick={() => setUbicacionTab('panoramica')}
+                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: ubicacionTab === 'panoramica' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
+                      color: ubicacionTab === 'panoramica' ? '#006B4E' : '#737373',
+                      borderBottom: ubicacionTab === 'panoramica' ? '2px solid #006B4E' : '2px solid transparent',
+                      marginBottom: '-1px'
+                    }}
+                  >
+                    <Maximize2 className="w-4 h-4" />
+                    360°
+                  </button>
+                  <button
+                    onClick={() => setUbicacionTab('plano')}
+                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: ubicacionTab === 'plano' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
+                      color: ubicacionTab === 'plano' ? '#006B4E' : '#737373',
+                      borderBottom: ubicacionTab === 'plano' ? '2px solid #006B4E' : '2px solid transparent',
+                      marginBottom: '-1px'
+                    }}
+                  >
+                    <FileText className="w-4 h-4" />
+                    Plano
+                  </button>
+                  <button
+                    onClick={() => setUbicacionTab('mapa')}
+                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: ubicacionTab === 'mapa' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
+                      color: ubicacionTab === 'mapa' ? '#006B4E' : '#737373',
+                      borderBottom: ubicacionTab === 'mapa' ? '2px solid #006B4E' : '2px solid transparent',
+                      marginBottom: '-1px'
+                    }}
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Mapa
+                  </button>
+                </div>
+
+                {/* Contenido de tabs */}
+                {ubicacionTab === 'mapa' ? (
+                  <div className="aspect-[16/9] bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      style={{ border: 0 }}
+                      src={`https://www.google.com/maps?q=${proyecto.coordenadas.lat},${proyecto.coordenadas.lng}&output=embed`}
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ) : ubicacionTab === 'plano' ? (
+                  <div className="aspect-[16/9] bg-white overflow-hidden rounded-xl border border-gray-200 flex items-center justify-center">
+                    <ImageWithFallback
+                      src={proyecto.masterplan}
+                      alt="Plano del proyecto"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-[16/9] overflow-hidden rounded-xl border border-gray-200">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      src={`https://www.google.com/maps/embed?pb=!4v1705234567890!6m8!1m7!1sCAoSLEFGMVFpcE5oVXZ4cGtWZjR0ZXN0!2m2!1d${proyecto.coordenadas.lat}!2d${proyecto.coordenadas.lng}!3f0!4f0!5f0.7`}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Características - COPIADO EXACTO DE PARCELADETALLE */}
@@ -617,147 +725,6 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   </div>
                 </div>
               )}
-
-              {/* Masterplan y planos */}
-              <div className="bg-white rounded-xl border border-gray-200 p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 style={{ 
-                    fontFamily: 'var(--font-heading)',
-                    fontWeight: 'var(--font-weight-regular)',
-                    fontSize: 'var(--font-size-h3)',
-                    color: '#0A0A0A'
-                  }}>
-                    {t.detail.masterplan}
-                  </h2>
-                  <button
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      color: '#0A0A0A'
-                    }}
-                  >
-                    <Download className="w-4 h-4" />
-                    {t.common.download}
-                  </button>
-                </div>
-
-                <div className="aspect-[16/10] bg-white overflow-hidden rounded-lg border border-gray-200 cursor-pointer hover:border-gray-400 transition-colors">
-                  <ImageWithFallback 
-                    src={proyecto.masterplan} 
-                    alt="Masterplan del proyecto"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Ubicación */}
-              <div className="bg-white rounded-xl border border-gray-200 p-8">
-                <h2 style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontWeight: 'var(--font-weight-regular)',
-                  fontSize: 'var(--font-size-h3)',
-                  color: '#0A0A0A',
-                  marginBottom: '24px'
-                }}>
-                  {t.detail.location}
-                </h2>
-
-                {/* Dirección */}
-                <div className="flex items-start gap-2 mb-6 px-4 py-3 rounded-xl" style={{ backgroundColor: '#F5F5F5' }}>
-                  <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#006B4E' }} />
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginBottom: '2px' }}>
-                      {proyecto.ubicacion}, {proyecto.region}
-                    </p>
-                    <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>
-                      {proyecto.direccion}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Tabs */}
-                <div className="flex mb-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
-                  <button
-                    onClick={() => setUbicacionTab('panoramica')}
-                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: ubicacionTab === 'panoramica' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
-                      color: ubicacionTab === 'panoramica' ? '#006B4E' : '#737373',
-                      borderBottom: ubicacionTab === 'panoramica' ? '2px solid #006B4E' : '2px solid transparent',
-                      marginBottom: '-1px'
-                    }}
-                  >
-                    <Maximize2 className="w-4 h-4" />
-                    360°
-                  </button>
-                  <button
-                    onClick={() => setUbicacionTab('plano')}
-                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: ubicacionTab === 'plano' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
-                      color: ubicacionTab === 'plano' ? '#006B4E' : '#737373',
-                      borderBottom: ubicacionTab === 'plano' ? '2px solid #006B4E' : '2px solid transparent',
-                      marginBottom: '-1px'
-                    }}
-                  >
-                    <FileText className="w-4 h-4" />
-                    Plano
-                  </button>
-                  <button
-                    onClick={() => setUbicacionTab('mapa')}
-                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-sm)',
-                      fontWeight: ubicacionTab === 'mapa' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
-                      color: ubicacionTab === 'mapa' ? '#006B4E' : '#737373',
-                      borderBottom: ubicacionTab === 'mapa' ? '2px solid #006B4E' : '2px solid transparent',
-                      marginBottom: '-1px'
-                    }}
-                  >
-                    <MapPin className="w-4 h-4" />
-                    Mapa
-                  </button>
-                </div>
-
-                {/* Contenido de tabs */}
-                {ubicacionTab === 'mapa' ? (
-                  <div className="aspect-[16/9] bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      style={{ border: 0 }}
-                      src={`https://www.google.com/maps?q=${proyecto.coordenadas.lat},${proyecto.coordenadas.lng}&output=embed`}
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                ) : ubicacionTab === 'plano' ? (
-                  <div className="aspect-[16/9] bg-white overflow-hidden rounded-xl border border-gray-200 flex items-center justify-center">
-                    <ImageWithFallback
-                      src={proyecto.masterplan}
-                      alt="Plano del proyecto"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-[16/9] overflow-hidden rounded-xl border border-gray-200">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      loading="lazy"
-                      allowFullScreen
-                      src={`https://www.google.com/maps/embed?pb=!4v1705234567890!6m8!1m7!1sCAoSLEFGMVFpcE5oVXZ4cGtWZjR0ZXN0!2m2!1d${proyecto.coordenadas.lat}!2d${proyecto.coordenadas.lng}!3f0!4f0!5f0.7`}
-                    />
-                  </div>
-                )}
-              </div>
 
               {/* Información del entorno */}
               {proyecto.entorno && (
@@ -969,6 +936,31 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       {isDocumentosOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
                   </div>
+
+                  {/* Masterplan */}
+                  {proyecto.masterplan && (
+                    <div className="mb-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
+                          {t.detail.masterplan}
+                        </h3>
+                        <button
+                          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
+                          style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
+                        >
+                          <Download className="w-4 h-4" />
+                          {t.common.download}
+                        </button>
+                      </div>
+                      <div className="aspect-[16/10] bg-white overflow-hidden rounded-lg border border-gray-200 cursor-pointer hover:border-gray-400 transition-colors">
+                        <ImageWithFallback
+                          src={proyecto.masterplan}
+                          alt="Masterplan del proyecto"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   {isDocumentosOpen && (
                     <div className="space-y-3">
