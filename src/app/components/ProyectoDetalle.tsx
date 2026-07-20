@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2 } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -63,7 +63,7 @@ const getTipoIcon = (tipo: string) => {
 export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps) {
   const { t } = useI18n();
   const [selectedImage, setSelectedImage] = useState(0);
-  const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'mapa'>('mapa');
+  const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'plano' | 'mapa'>('mapa');
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
   const [isStockOpen, setIsStockOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -328,10 +328,9 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       key={index}
                       onClick={() => setSelectedImage(index)}
                       className={`aspect-[4/3] bg-white overflow-hidden rounded-lg transition-all border-2 ${
-                        selectedImage === index 
-                          ? 'border-gray-900 shadow-md' 
-                          : 'border-gray-200 hover:border-gray-400'
+                        selectedImage !== index ? 'border-gray-200 hover:border-gray-400' : ''
                       }`}
+                      style={selectedImage === index ? { borderColor: '#006B4E', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' } : {}}
                     >
                       <ImageWithFallback 
                         src={imagen} 
@@ -510,7 +509,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   className="w-14 h-14 rounded-full bg-white flex items-center justify-center border border-gray-200 flex-shrink-0"
                                   style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                                 >
-                                  <div className="text-gray-900">{carac.icon}</div>
+                                  <div style={{ color: '#006B4E' }}>{carac.icon}</div>
                                 </div>
                               )}
                               <div className="w-full">
@@ -560,7 +559,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   className="w-14 h-14 rounded-full bg-white flex items-center justify-center border border-gray-200 flex-shrink-0"
                                   style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                                 >
-                                  <div className="text-gray-900">{carac.icon}</div>
+                                  <div style={{ color: '#006B4E' }}>{carac.icon}</div>
                                 </div>
                               )}
                               <div className="w-full">
@@ -610,7 +609,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   className="w-14 h-14 rounded-full bg-white flex items-center justify-center border border-gray-200 flex-shrink-0"
                                   style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05)' }}
                                 >
-                                  <div className="text-gray-900">{carac.icon}</div>
+                                  <div style={{ color: '#006B4E' }}>{carac.icon}</div>
                                 </div>
                               )}
                               <div>
@@ -781,7 +780,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
               {/* Ubicación */}
               <div className="bg-white rounded-xl border border-gray-200 p-8">
-                <h2 style={{ 
+                <h2 style={{
                   fontFamily: 'var(--font-heading)',
                   fontWeight: 'var(--font-weight-regular)',
                   fontSize: 'var(--font-size-h3)',
@@ -792,49 +791,70 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 </h2>
 
                 {/* Dirección */}
-                <p className="flex items-start gap-2 mb-6" style={{ 
-                  fontFamily: 'var(--font-body)',
-                  color: '#525252',
-                  fontSize: 'var(--font-size-body-md)',
-                  lineHeight: 'var(--line-height-body)'
-                }}>
-                  <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#737373' }} />
-                  {proyecto.direccion}
-                </p>
+                <div className="flex items-start gap-2 mb-6 px-4 py-3 rounded-xl" style={{ backgroundColor: '#F5F5F5' }}>
+                  <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#006B4E' }} />
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginBottom: '2px' }}>
+                      {proyecto.ubicacion}, {proyecto.region}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>
+                      {proyecto.direccion}
+                    </p>
+                  </div>
+                </div>
 
                 {/* Tabs */}
-                <div className="flex gap-4 mb-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
-                  <button
-                    onClick={() => setUbicacionTab('mapa')}
-                    className="pb-3 px-1 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-md)',
-                      fontWeight: ubicacionTab === 'mapa' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
-                      color: ubicacionTab === 'mapa' ? '#0A0A0A' : '#737373',
-                      borderBottom: ubicacionTab === 'mapa' ? '2px solid #0A0A0A' : 'none'
-                    }}
-                  >
-                    {t.detail.map}
-                  </button>
+                <div className="flex mb-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
                   <button
                     onClick={() => setUbicacionTab('panoramica')}
-                    className="pb-3 px-1 transition-colors"
+                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--font-size-body-md)',
+                      fontSize: 'var(--font-size-body-sm)',
                       fontWeight: ubicacionTab === 'panoramica' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
-                      color: ubicacionTab === 'panoramica' ? '#0A0A0A' : '#737373',
-                      borderBottom: ubicacionTab === 'panoramica' ? '2px solid #0A0A0A' : 'none'
+                      color: ubicacionTab === 'panoramica' ? '#006B4E' : '#737373',
+                      borderBottom: ubicacionTab === 'panoramica' ? '2px solid #006B4E' : '2px solid transparent',
+                      marginBottom: '-1px'
                     }}
                   >
-                    {t.detail.environment}
+                    <Maximize2 className="w-4 h-4" />
+                    360°
+                  </button>
+                  <button
+                    onClick={() => setUbicacionTab('plano')}
+                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: ubicacionTab === 'plano' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
+                      color: ubicacionTab === 'plano' ? '#006B4E' : '#737373',
+                      borderBottom: ubicacionTab === 'plano' ? '2px solid #006B4E' : '2px solid transparent',
+                      marginBottom: '-1px'
+                    }}
+                  >
+                    <FileText className="w-4 h-4" />
+                    Plano
+                  </button>
+                  <button
+                    onClick={() => setUbicacionTab('mapa')}
+                    className="flex items-center gap-2 pb-3 px-4 transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      fontWeight: ubicacionTab === 'mapa' ? 'var(--font-weight-semibold)' : 'var(--font-weight-regular)',
+                      color: ubicacionTab === 'mapa' ? '#006B4E' : '#737373',
+                      borderBottom: ubicacionTab === 'mapa' ? '2px solid #006B4E' : '2px solid transparent',
+                      marginBottom: '-1px'
+                    }}
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Mapa
                   </button>
                 </div>
 
                 {/* Contenido de tabs */}
                 {ubicacionTab === 'mapa' ? (
-                  <div className="aspect-[16/9] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                  <div className="aspect-[16/9] bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
                     <iframe
                       width="100%"
                       height="100%"
@@ -844,10 +864,18 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       allowFullScreen
                     ></iframe>
                   </div>
+                ) : ubicacionTab === 'plano' ? (
+                  <div className="aspect-[16/9] bg-white overflow-hidden rounded-xl border border-gray-200 flex items-center justify-center">
+                    <ImageWithFallback
+                      src={proyecto.masterplan}
+                      alt="Plano del proyecto"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                 ) : (
-                  <div className="aspect-[16/9] bg-white overflow-hidden rounded-lg border border-gray-200">
-                    <ImageWithFallback 
-                      src={proyecto.imagenPanoramica} 
+                  <div className="aspect-[16/9] bg-white overflow-hidden rounded-xl border border-gray-200">
+                    <ImageWithFallback
+                      src={proyecto.imagenPanoramica}
                       alt="Vista panorámica del entorno"
                       className="w-full h-full object-cover"
                     />
@@ -870,8 +898,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                          <Navigation className="w-5 h-5 text-gray-700" />
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                          <Navigation className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
                           {t.detail.accessConnectivity}
@@ -884,14 +912,14 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>{proyecto.entorno.accesos.tiempoAlCentro}</span>
                           </div>
                           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gray-900 rounded-full transition-all duration-500" style={{ width: `${Math.min((proyecto.entorno.accesos.tiempoAlCentroMinutos / 60) * 100, 100)}%` }} />
+                            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((proyecto.entorno.accesos.tiempoAlCentroMinutos / 60) * 100, 100)}%`, backgroundColor: '#006B4E' }} />
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#A3A3A3', fontSize: 'var(--font-size-xs)', marginTop: '0.5rem' }}>{proyecto.entorno.accesos.ciudadCercana}</p>
                         </div>
                         <div>
                           <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.75rem' }}>{t.detail.accessType}</span>
                           <div className="flex items-center gap-2">
-                            {[1, 2, 3, 4].map((bar) => (<div key={bar} className={`flex-1 h-2 rounded-full ${bar <= proyecto.entorno!.accesos.calidadAcceso ? 'bg-gray-900' : 'bg-gray-100'}`} />))}
+                            {[1, 2, 3, 4].map((bar) => (<div key={bar} className="flex-1 h-2 rounded-full" style={{ backgroundColor: bar <= proyecto.entorno!.accesos.calidadAcceso ? '#006B4E' : '#F3F4F6' }} />))}
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginTop: '0.75rem' }}>{proyecto.entorno.accesos.tipoAcceso}</p>
                         </div>
@@ -906,8 +934,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                          <ShoppingBag className="w-5 h-5 text-gray-700" />
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                          <ShoppingBag className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{t.detail.nearbyServices}</h3>
                       </div>
@@ -921,7 +949,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.educacion.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gray-900 rounded-full" style={{ width: `${proyecto.entorno.servicios.educacion.porcentaje}%` }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.educacion.porcentaje}%`, backgroundColor: '#006B4E' }} />
                           </div>
                         </div>
                         <div>
@@ -933,7 +961,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.comercio.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gray-900 rounded-full" style={{ width: `${proyecto.entorno.servicios.comercio.porcentaje}%` }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.comercio.porcentaje}%`, backgroundColor: '#006B4E' }} />
                           </div>
                         </div>
                         <div>
@@ -945,7 +973,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.salud.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gray-900 rounded-full" style={{ width: `${proyecto.entorno.servicios.salud.porcentaje}%` }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.salud.porcentaje}%`, backgroundColor: '#006B4E' }} />
                           </div>
                         </div>
                         <div>
@@ -957,7 +985,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.recreacion.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gray-900 rounded-full" style={{ width: `${proyecto.entorno.servicios.recreacion.porcentaje}%` }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.recreacion.porcentaje}%`, backgroundColor: '#006B4E' }} />
                           </div>
                         </div>
                       </div>
@@ -965,8 +993,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                          <TreePine className="w-5 h-5 text-gray-700" />
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                          <TreePine className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{t.detail.naturalSurroundings}</h3>
                       </div>
@@ -975,7 +1003,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-3">
                             <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.nature}</span>
                             <div className="flex gap-1">
-                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className={`w-2 h-8 rounded-sm ${bar <= proyecto.entorno!.naturaleza.nivel ? 'bg-gray-900' : 'bg-gray-100'}`} />))}
+                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.nivel ? '#006B4E' : '#F3F4F6' }} />))}
                             </div>
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{proyecto.entorno.naturaleza.descripcion}</p>
@@ -984,7 +1012,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-3">
                             <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.views}</span>
                             <div className="flex gap-1">
-                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className={`w-2 h-8 rounded-sm ${bar <= proyecto.entorno!.naturaleza.vistas ? 'bg-gray-900' : 'bg-gray-100'}`} />))}
+                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.vistas ? '#006B4E' : '#F3F4F6' }} />))}
                             </div>
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{proyecto.entorno.naturaleza.descripcionVistas}</p>
@@ -1006,8 +1034,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                          <TrendingUp className="w-5 h-5 text-gray-700" />
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                          <TrendingUp className="w-5 h-5" style={{ color: '#006B4E' }} />
                         </div>
                         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>{t.detail.areaContext}</h3>
                       </div>
@@ -1259,12 +1287,12 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     </div>
 
                     {/* CTA principal */}
-                    <button 
+                    <button
                       onClick={() => setIsReservaVisitaOpen(true)}
                       className="w-full px-6 py-3 rounded-full transition-all hover:opacity-90"
-                      style={{ 
+                      style={{
                         fontFamily: 'var(--font-body)',
-                        backgroundColor: '#0A0A0A',
+                        backgroundColor: '#006B4E',
                         color: '#FFFFFF',
                         fontWeight: 'var(--font-weight-semibold)',
                         fontSize: 'var(--font-size-body-base)'
