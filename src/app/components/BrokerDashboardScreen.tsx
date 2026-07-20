@@ -9,7 +9,7 @@ import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
-import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard, Calendar } from 'lucide-react';
+import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard, Calendar, ChevronDown } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
 
@@ -23,6 +23,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
+    const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({ rendimiento: true, cuenta: true });
 
     // Exponer función para abrir modal de publicación
     React.useImperativeHandle(ref, () => ({
@@ -32,25 +33,39 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       }
     }));
 
+    const toggleGroup = (key: string) => setOpenGroups(prev => ({ ...prev, [key]: !prev[key] }));
+
   const navGroups = [
-    [
-      { id: 'home', label: 'Inicio', icon: 'home' },
-      { id: 'listings', label: 'Mis publicaciones', icon: 'list' },
-      { id: 'inquiries', label: 'Consultas', icon: 'message' },
-      { id: 'reservas', label: 'Reservas', icon: 'file' },
-      { id: 'calendarios', label: 'Calendarios', icon: 'calendar' },
-      { id: 'asignaciones', label: 'Asignaciones', icon: 'users' },
-    ],
-    [
-      { id: 'performance', label: 'Rendimiento', icon: 'chart' },
-      { id: 'insights',    label: 'Insights IA', icon: 'sparkles' },
-    ],
-    [
-      { id: 'profile',  label: 'Perfil',             icon: 'profile'   },
-      { id: 'plan',     label: 'Plan y facturación',  icon: 'card'      },
-      { id: 'settings', label: 'Configuración',       icon: 'settings'  },
-      { id: 'help',     label: 'Ayuda',               icon: 'help'      },
-    ],
+    {
+      key: null,
+      label: null,
+      items: [
+        { id: 'home',        label: 'Inicio',            icon: 'home'     },
+        { id: 'listings',    label: 'Mis publicaciones', icon: 'list'     },
+        { id: 'inquiries',   label: 'Consultas',         icon: 'message'  },
+        { id: 'reservas',    label: 'Reservas',          icon: 'file'     },
+        { id: 'calendarios', label: 'Calendarios',       icon: 'calendar' },
+        { id: 'asignaciones',label: 'Asignaciones',      icon: 'users'    },
+      ],
+    },
+    {
+      key: 'rendimiento',
+      label: 'Rendimiento',
+      items: [
+        { id: 'performance', label: 'Rendimiento', icon: 'chart'    },
+        { id: 'insights',    label: 'Insights IA', icon: 'sparkles' },
+      ],
+    },
+    {
+      key: 'cuenta',
+      label: 'Cuenta',
+      items: [
+        { id: 'profile',  label: 'Perfil',             icon: 'profile'  },
+        { id: 'plan',     label: 'Plan y facturación',  icon: 'card'     },
+        { id: 'settings', label: 'Configuración',       icon: 'settings' },
+        { id: 'help',     label: 'Ayuda',               icon: 'help'     },
+      ],
+    },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -165,43 +180,55 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 py-4 overflow-y-auto scrollbar-hide">
-            {navGroups.map((group, groupIdx) => (
-              <React.Fragment key={groupIdx}>
-                {groupIdx > 0 && (
-                  <div style={{ height: '1px', margin: '6px 16px', backgroundColor: 'rgba(255,255,255,0.08)' }} />
-                )}
-                {group.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setCurrentSection(item.id)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
-                    style={{
-                      backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
-                      color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: currentSection === item.id ? 600 : 400,
-                      fontSize: '13px',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentSection !== item.id) {
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentSection !== item.id) {
-                        e.currentTarget.style.backgroundColor = '';
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                      }
-                    }}
-                  >
-                    {renderIcon(item.icon, currentSection === item.id)}
-                    <span>{item.label}</span>
-                  </button>
-                ))}
-              </React.Fragment>
-            ))}
+          <nav className="flex-1 py-2 overflow-y-auto scrollbar-hide px-2">
+            {navGroups.map((group, groupIdx) => {
+              const isOpen = group.key ? openGroups[group.key] : true;
+              const hasActive = group.items.some(i => i.id === currentSection);
+              return (
+                <div key={groupIdx} className="mb-0.5">
+                  {group.label && (
+                    <button
+                      onClick={() => group.key && toggleGroup(group.key)}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors"
+                      style={{ backgroundColor: 'transparent' }}
+                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                    >
+                      <span style={{ fontSize: '10.5px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', color: hasActive ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.42)' }}>
+                        {group.label}
+                      </span>
+                      <ChevronDown className="w-3 h-3 transition-transform duration-200 flex-shrink-0" style={{ color: 'rgba(255,255,255,0.35)', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                    </button>
+                  )}
+                  {isOpen && (
+                    <div className={group.label ? 'mb-1' : 'mb-2'}>
+                      {group.items.map((item) => {
+                        const isActive = currentSection === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => setCurrentSection(item.id)}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
+                            style={{
+                              backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                              color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                              fontFamily: 'var(--font-body)',
+                              fontWeight: isActive ? 600 : 400,
+                              fontSize: '13px',
+                            }}
+                            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; } }}
+                            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; } }}
+                          >
+                            {renderIcon(item.icon, isActive)}
+                            <span>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           {/* Sugerencias */}
