@@ -286,7 +286,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       </aside>
 
       {/* Main Content Area */}
-      <div className="fixed overflow-y-auto bg-white sm:rounded-2xl sm:shadow-[0_0_40px_rgba(0,0,0,0.45)] inset-0 sm:inset-auto sm:left-[268px] sm:top-[44px] sm:right-3 sm:bottom-3" style={{ zIndex: 10 }}>
+      <div className="fixed overflow-y-auto bg-white sm:rounded-2xl sm:shadow-[0_0_40px_rgba(0,0,0,0.45)] inset-0 sm:inset-auto sm:left-[256px] sm:top-[44px] sm:right-3 sm:bottom-3" style={{ zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} />}
         {currentSection === 'listings' && <MyPublicationsView userType="broker" userId="broker-456" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} />}
         {currentSection === 'inquiries' && <ConsultasView viewType="broker" />}
