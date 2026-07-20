@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -64,7 +64,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const { t } = useI18n();
   const [selectedImage, setSelectedImage] = useState(0);
   const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'plano' | 'mapa'>('mapa');
-  const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
+  const [isDocumentosOpen, setIsDocumentosOpen] = useState(true);
   const [isStockOpen, setIsStockOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReservaVisitaOpen, setIsReservaVisitaOpen] = useState(false);
@@ -212,7 +212,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
               {/* Título principal y metadatos */}
               <div className="space-y-4">
                 <div className="flex items-start justify-between gap-4">
-                  <h1 style={{ 
+                  <h1 style={{
                     fontFamily: 'var(--font-heading)',
                     fontWeight: 'var(--font-weight-light)',
                     fontSize: 'var(--font-size-h1)',
@@ -222,55 +222,30 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   }}>
                     {proyecto.nombre}
                   </h1>
-                  
-                  {/* Badges */}
+
+                  {/* Botones de acción */}
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {/* Badge de tipo */}
-                    <div 
-                      className="px-3 py-1.5 rounded-full flex items-center gap-1.5"
-                      style={{
-                        backgroundColor: 'rgba(10, 10, 10, 0.05)',
-                        border: '1px solid rgba(10, 10, 10, 0.1)'
-                      }}
-                    >
-                      <div style={{ color: '#0A0A0A' }}>
-                        {getTipoIcon(proyecto.tipo)}
-                      </div>
-                      <span style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        color: '#0A0A0A'
-                      }}>
-                        {proyecto.tipo}
-                      </span>
-                    </div>
-                    
-                    {/* Badge de estado */}
-                    <div 
-                      className="px-3 py-1.5 rounded-full"
-                      style={estadoStyles}
-                    >
-                      <span style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 500
-                      }}>
-                        {proyecto.estado}
-                      </span>
-                    </div>
+                    <button className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ border: '1px solid #E5E5E5' }}>
+                      <Sparkles className="w-4 h-4" style={{ color: '#0A0A0A' }} />
+                    </button>
+                    <button className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ border: '1px solid #E5E5E5' }}>
+                      <Map className="w-4 h-4" style={{ color: '#0A0A0A' }} />
+                    </button>
+                    <button className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ border: '1px solid #E5E5E5' }}>
+                      <Heart className="w-4 h-4" style={{ color: '#0A0A0A' }} />
+                    </button>
                   </div>
                 </div>
-                
+
                 {/* Subtítulo - Ubicación */}
-                <p className="flex items-center gap-2" style={{ 
+                <p className="flex items-center gap-2" style={{
                   fontFamily: 'var(--font-body)',
                   color: '#737373',
                   fontSize: 'var(--font-size-body-lg)',
                   fontWeight: 'var(--font-weight-regular)',
                   lineHeight: 'var(--line-height-body)'
                 }}>
-                  <MapPin className="w-5 h-5" style={{ color: '#737373' }} />
+                  <MapPin className="w-5 h-5" style={{ color: '#006B4E' }} />
                   {proyecto.ubicacion}, {proyecto.region}
                 </p>
               </div>
@@ -646,15 +621,20 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
               {(proyecto.plano || (proyecto.documentos && proyecto.documentos.length > 0)) && (
                 <div className="bg-white rounded-xl border border-gray-200 p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 style={{ 
-                      fontFamily: 'var(--font-heading)',
-                      fontWeight: 'var(--font-weight-regular)',
-                      fontSize: 'var(--font-size-h2)',
-                      color: '#0A0A0A',
-                      margin: 0
-                    }}>
-                      {t.detail.plansDocuments}
-                    </h2>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 107, 78, 0.08)' }}>
+                        <FileText className="w-5 h-5" style={{ color: '#006B4E' }} />
+                      </div>
+                      <h2 style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontWeight: 'var(--font-weight-regular)',
+                        fontSize: 'var(--font-size-h2)',
+                        color: '#0A0A0A',
+                        margin: 0
+                      }}>
+                        {t.detail.plansDocuments}
+                      </h2>
+                    </div>
                     {proyecto.documentos && proyecto.documentos.length > 0 && (
                       <button
                         onClick={() => setIsDocumentosOpen(!isDocumentosOpen)}
@@ -1248,71 +1228,80 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
               <div className="sticky top-32 space-y-6">
                 {/* Card de resumen y CTA */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                  <div className="space-y-6">
-                    {/* Precio destacado */}
+                  <div className="space-y-4">
+                    {/* Precio */}
                     <div>
-                      <p style={{ 
-                        fontFamily: 'var(--font-body)',
-                        color: '#A3A3A3',
-                        fontSize: 'var(--font-size-xs)',
-                        fontWeight: 'var(--font-weight-medium)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        marginBottom: '0.5rem'
-                      }}>
+                      <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
                         {t.detail.basePricePerParcel}
                       </p>
-                      <div className="flex items-baseline gap-3">
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-body-sm)',
-                          color: '#737373'
-                        }}>
-                          {t.common.from}
-                        </span>
-                        <PrecioDisplay 
-                          precioCLP={proyecto.precioDesde}
-                          precioSize="xl"
-                        />
+                      <PrecioDisplay precioCLP={proyecto.precioDesde} precioSize="xl" />
+                    </div>
+
+                    {/* Primer dueño badge */}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ border: '1px solid #E5E5E5' }}>
+                      <Info className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
+                      <span style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Primer dueño</span>
+                    </div>
+
+                    {/* Separador */}
+                    <div style={{ height: '1px', backgroundColor: '#E5E5E5' }} />
+
+                    {/* Features grid */}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
+                      <div className="flex items-center gap-1.5">
+                        <Expand className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.superficieDesde}</span>
                       </div>
-                      <div className="mt-2">
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-body-sm)',
-                          color: '#737373'
-                        }}>
-                          {t.detail.priceTo} {proyecto.precioHasta}
-                        </span>
+                      <div className="flex items-center gap-1.5">
+                        <Home className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.totalParcelas} parcelas</span>
                       </div>
+                      <div className="flex items-center gap-1.5">
+                        <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.parcelasDisponibles} disponibles</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.tipo}</span>
+                      </div>
+                    </div>
+
+                    {/* Badges de estado */}
+                    <div className="flex flex-wrap gap-1.5">
+                      <span style={{ backgroundColor: '#006B4E', color: '#fff', fontSize: '11px', fontWeight: 600, padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
+                        disponible
+                      </span>
+                      {['reservándose', 'pago-en-validación', 'reservada'].map(s => (
+                        <span key={s} style={{ border: '1px solid #E5E5E5', color: '#737373', fontSize: '11px', padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
+                          {s}
+                        </span>
+                      ))}
                     </div>
 
                     {/* CTA principal */}
                     <button
                       onClick={() => setIsReservaVisitaOpen(true)}
-                      className="w-full px-6 py-3 rounded-full transition-all hover:opacity-90"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        backgroundColor: '#006B4E',
-                        color: '#FFFFFF',
-                        fontWeight: 'var(--font-weight-semibold)',
-                        fontSize: 'var(--font-size-body-base)'
-                      }}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
+                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
+                      <ShoppingCart className="w-4 h-4" />
                       {t.detail.bookVisit}
                     </button>
 
                     {/* CTA secundario */}
-                    <button 
+                    <button
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
+                      style={{ backgroundColor: '#F0FBF7', color: '#006B4E', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
+                    >
+                      <Download className="w-4 h-4" />
+                      Descargar brochure
+                    </button>
+
+                    {/* CTA terciario */}
+                    <button
                       onClick={() => setIsConsultaOnlineOpen(true)}
-                      className="w-full px-6 py-3 rounded-full transition-all hover:bg-muted flex items-center justify-center gap-2"
-                      style={{ 
-                        fontFamily: 'var(--font-body)',
-                        backgroundColor: 'var(--secondary)',
-                        color: 'var(--secondary-foreground)',
-                        fontWeight: 'var(--font-weight-medium)',
-                        fontSize: 'var(--font-size-body-base)',
-                        border: '1px solid var(--border)'
-                      }}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:bg-gray-50"
+                      style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
                     >
                       <MessageSquare className="w-4 h-4" />
                       {t.detail.onlineConsult}
