@@ -313,13 +313,14 @@ function HomeContent({ setCurrentSection, setTriggerPublishModal }: HomeContentP
 
   return (
     <div className="p-4 md:p-8">
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px' }}>Bienvenido, Propiedades del Sur</h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373' }}>Visión general de tu cuenta en CompraTuParcela.</p>
+      <div className="flex items-start justify-between gap-3 mb-6 md:mb-8">
+        <div className="min-w-0">
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(16px, 4vw, 22px)', fontWeight: 700, color: '#0A0A0A', margin: '0 0 4px', lineHeight: 1.2 }}>Bienvenido, Propiedades del Sur</h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>Visión general de tu cuenta en CompraTuParcela.</p>
         </div>
-        <button onClick={handleActualizar} className="flex items-center gap-2 px-4 py-2 rounded-[200px] text-sm transition-colors flex-shrink-0" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
-          <Zap className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Actualizar datos
+        <button onClick={handleActualizar} className="flex items-center gap-1.5 px-3 py-2 rounded-[200px] text-xs md:text-sm transition-colors flex-shrink-0 whitespace-nowrap" style={{ color: '#006B4E', backgroundColor: '#E8F5EE', border: '1px solid #B2D8C5', fontFamily: 'var(--font-body)', fontWeight: 500 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#D4EDDF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#E8F5EE'; }}>
+          <Zap className={`w-3.5 h-3.5 flex-shrink-0 ${loading ? 'animate-spin' : ''}`} />
+          <span className="hidden sm:inline">Actualizar datos</span>
         </button>
       </div>
 
