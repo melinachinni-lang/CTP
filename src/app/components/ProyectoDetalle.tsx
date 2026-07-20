@@ -7,6 +7,8 @@ import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
 import { ReservaVisitaModal } from '@/app/components/ReservaVisitaModal';
 import { ConsultaOnlineModal } from '@/app/components/ConsultaOnlineModal';
+import { ComprarProyectoModal } from '@/app/components/ComprarProyectoModal';
+import { ConsultarModal } from '@/app/components/ConsultarModal';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 import { getProyectoByIdWithIcons } from '@/app/data/proyectosDataWithIcons';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
@@ -70,6 +72,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReservaVisitaOpen, setIsReservaVisitaOpen] = useState(false);
   const [isConsultaOnlineOpen, setIsConsultaOnlineOpen] = useState(false);
+  const [isComprarProyectoOpen, setIsComprarProyectoOpen] = useState(false);
+  const [isConsultarOpen, setIsConsultarOpen] = useState(false);
 
   // Obtener datos dinámicos del proyecto
   // Si proyectoId es null o undefined, usar 1 por defecto
@@ -1144,12 +1148,12 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                     {/* CTA principal */}
                     <button
-                      onClick={() => setIsReservaVisitaOpen(true)}
+                      onClick={() => setIsComprarProyectoOpen(true)}
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
                       style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
                       <ShoppingCart className="w-4 h-4" />
-                      {t.detail.bookVisit}
+                      Comprar proyecto
                     </button>
 
                     {/* CTA secundario */}
@@ -1165,12 +1169,12 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                     {/* CTA terciario */}
                     <button
-                      onClick={() => setIsConsultaOnlineOpen(true)}
+                      onClick={() => setIsConsultarOpen(true)}
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:bg-gray-50"
                       style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
                     >
                       <MessageSquare className="w-4 h-4" />
-                      {t.detail.onlineConsult}
+                      Consultar
                     </button>
                   </div>
                 </div>
@@ -1238,9 +1242,41 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
         agente={{
           nombre: proyecto.publicadoPor,
           telefono: proyecto.telefonoVendedor,
-          calendlyUrl: undefined // Aquí puedes agregar la URL de Calendly del agente si está disponible
+          calendlyUrl: undefined
         }}
       />
+
+      {/* Modal de comprar proyecto */}
+      <ComprarProyectoModal
+        isOpen={isComprarProyectoOpen}
+        onClose={() => setIsComprarProyectoOpen(false)}
+        onComprarAhora={() => setIsComprarProyectoOpen(false)}
+        onReservar={() => {
+          setIsComprarProyectoOpen(false);
+          setIsReservaVisitaOpen(true);
+        }}
+        proyectoNombre={proyecto.nombre}
+      />
+
+      {/* Modal de consultar */}
+      <ConsultarModal
+        isOpen={isConsultarOpen}
+        onClose={() => setIsConsultarOpen(false)}
+        onReservarVisita={() => {
+          setIsConsultarOpen(false);
+          setIsReservaVisitaOpen(true);
+        }}
+        onWhatsApp={() => {
+          setIsConsultarOpen(false);
+          window.open(`https://wa.me/${proyecto.telefonoVendedor?.replace(/\D/g, '')}`, '_blank');
+        }}
+        onVideollamada={() => {
+          setIsConsultarOpen(false);
+          setIsConsultaOnlineOpen(true);
+        }}
+        parcelaNombre={proyecto.nombre}
+      />
+
       <SiteFooter onNavigate={onNavigate} />
     </div>
   );
