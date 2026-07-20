@@ -613,15 +613,20 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
 
       {/* ── KPI SUMMARY ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        {[
-          { label: 'Total insights',        value: allInsights.length, color: '#006B4E', bg: '#F0F5EB', border: '#C5D9A8' },
-          { label: 'Alta prioridad',        value: altaCount,       color: '#B91C1C', bg: '#FEF2F2', border: '#FECACA' },
-          { label: 'Media prioridad',       value: mediaCount,      color: '#92400E', bg: '#FFFBEB', border: '#FDE68A' },
-          { label: 'Publicaciones afectadas', value: afectadas,     color: '#374151', bg: '#F5F5F5', border: '#E5E5E5' },
-        ].map(kpi => (
-          <div key={kpi.label} className="rounded-2xl p-4" style={{ backgroundColor: kpi.bg, border: `1px solid ${kpi.border}` }}>
-            <p className="text-xs mb-1" style={{ color: kpi.color, opacity: 0.8 }}>{kpi.label}</p>
-            <p className="text-3xl font-bold" style={{ color: kpi.color, fontFamily: 'var(--font-heading)' }}>{kpi.value}</p>
+        {([
+          { label: 'Total insights',          value: allInsights.length, Icon: Sparkles,      bg: '#E8F5EE', color: '#006B4E' },
+          { label: 'Alta prioridad',          value: altaCount,          Icon: AlertTriangle, bg: '#FEF2F2', color: '#DC2626' },
+          { label: 'Media prioridad',         value: mediaCount,         Icon: AlertCircle,   bg: '#FFFBEB', color: '#D97706' },
+          { label: 'Publicaciones afectadas', value: afectadas,          Icon: FileText,      bg: '#F5F3FF', color: '#7C3AED' },
+        ] as const).map(({ label, value, Icon: KIcon, bg, color }) => (
+          <div key={label} className="rounded-2xl p-3 md:p-5" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+            <div className="mb-2 md:mb-3">
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: bg }}>
+                <KIcon className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color }} />
+              </div>
+            </div>
+            <p className="text-xl md:text-[26px]" style={{ fontWeight: 700, color: '#0A0A0A', fontFamily: 'var(--font-heading)', margin: '0 0 2px' }}>{value}</p>
+            <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', margin: 0 }}>{label}</p>
           </div>
         ))}
       </div>
