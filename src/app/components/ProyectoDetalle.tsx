@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -65,6 +65,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const [selectedImage, setSelectedImage] = useState(0);
   const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'plano' | 'mapa'>('mapa');
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(true);
+  const [isDocTecnicaOpen, setIsDocTecnicaOpen] = useState(false);
   const [isStockOpen, setIsStockOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReservaVisitaOpen, setIsReservaVisitaOpen] = useState(false);
@@ -657,37 +658,38 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     {isDocumentosOpen && proyecto.documentos && proyecto.documentos.length > 0 && (
                       <div className="space-y-3">
                         {proyecto.documentos.map((doc, index) => (
-                          <div 
+                          <div
                             key={index}
-                            className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
+                            className="flex items-start justify-between p-5 rounded-xl border border-gray-200 hover:border-gray-300 transition-all"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                                <FileText className="w-5 h-5 text-gray-600" />
+                            <div className="flex items-start gap-4 flex-1">
+                              <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}>
+                                <FileText className="w-4 h-4" style={{ color: '#525252' }} />
                               </div>
-                              <div>
-                                <p style={{ 
+                              <div className="flex-1">
+                                <p style={{
                                   fontFamily: 'var(--font-body)',
                                   color: '#0A0A0A',
-                                  fontSize: 'var(--font-size-body-sm)',
-                                  fontWeight: 'var(--font-weight-medium)',
-                                  marginBottom: '0.125rem'
+                                  fontSize: 'var(--font-size-body-base)',
+                                  fontWeight: 'var(--font-weight-semibold)',
+                                  marginBottom: '0.375rem'
                                 }}>
                                   {doc.nombre}
                                 </p>
-                                <p style={{ 
+                                <p style={{
                                   fontFamily: 'var(--font-body)',
-                                  color: '#A3A3A3',
-                                  fontSize: 'var(--font-size-xs)'
+                                  color: '#737373',
+                                  fontSize: 'var(--font-size-body-sm)',
+                                  lineHeight: 'var(--line-height-body)'
                                 }}>
                                   {doc.tipo}
                                 </p>
                               </div>
                             </div>
                             {doc.disponible ? (
-                              <button 
-                                className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 hover:border-gray-900 transition-colors"
-                                style={{ 
+                              <button
+                                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300 hover:bg-gray-50 hover:border-gray-900 transition-all flex-shrink-0 ml-4"
+                                style={{
                                   fontFamily: 'var(--font-body)',
                                   color: '#0A0A0A',
                                   fontSize: 'var(--font-size-body-sm)',
@@ -698,16 +700,57 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                 <span>{t.common.download}</span>
                               </button>
                             ) : (
-                              <span style={{ 
-                                fontFamily: 'var(--font-body)',
-                                color: '#A3A3A3',
-                                fontSize: 'var(--font-size-xs)'
-                              }}>
+                              <span style={{ fontFamily: 'var(--font-body)', color: '#A3A3A3', fontSize: 'var(--font-size-xs)' }}>
                                 {t.detail.notAvailable}
                               </span>
                             )}
                           </div>
                         ))}
+
+                        {/* Documentación técnica adicional */}
+                        <div className="mt-2 pt-6 border-t" style={{ borderColor: '#E5E5E5' }}>
+                          <button
+                            onClick={() => setIsDocTecnicaOpen(!isDocTecnicaOpen)}
+                            className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-50 transition-colors"
+                          >
+                            <div className="flex items-center gap-3">
+                              <Settings className="w-5 h-5" style={{ color: '#737373' }} />
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#525252', fontWeight: 'var(--font-weight-medium)' }}>
+                                Documentación técnica adicional
+                              </span>
+                            </div>
+                            {isDocTecnicaOpen ? <ChevronUp className="w-4 h-4" style={{ color: '#737373' }} /> : <ChevronDown className="w-4 h-4" style={{ color: '#737373' }} />}
+                          </button>
+
+                          {isDocTecnicaOpen && (
+                            <div className="mt-4 space-y-3 pl-4">
+                              {[
+                                { nombre: 'Estudio de suelo', icon: <FileText className="w-5 h-5" style={{ color: '#737373' }} /> },
+                                { nombre: 'Certificado de informaciones previas', icon: <FileCheck className="w-5 h-5" style={{ color: '#737373' }} /> },
+                                { nombre: 'Plano regulador comunal', icon: <FileText className="w-5 h-5" style={{ color: '#737373' }} /> },
+                                { nombre: 'Informe hidrológico', icon: <Droplet className="w-5 h-5" style={{ color: '#737373' }} /> },
+                              ].map((doc) => (
+                                <div key={doc.nombre} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-all">
+                                  <div className="flex items-center gap-3 flex-1">
+                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                      {doc.icon}
+                                    </div>
+                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', fontWeight: 'var(--font-weight-medium)' }}>
+                                      {doc.nombre}
+                                    </span>
+                                  </div>
+                                  <button
+                                    className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-300 hover:bg-gray-50 transition-all"
+                                    style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}
+                                  >
+                                    <Download className="w-3.5 h-3.5" />
+                                    <span>Descargar</span>
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
 
@@ -853,11 +896,14 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     />
                   </div>
                 ) : (
-                  <div className="aspect-[16/9] bg-white overflow-hidden rounded-xl border border-gray-200">
-                    <ImageWithFallback
-                      src={proyecto.imagenPanoramica}
-                      alt="Vista panorámica del entorno"
-                      className="w-full h-full object-cover"
+                  <div className="aspect-[16/9] overflow-hidden rounded-xl border border-gray-200">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      src={`https://www.google.com/maps/embed?pb=!4v1705234567890!6m8!1m7!1sCAoSLEFGMVFpcE5oVXZ4cGtWZjR0ZXN0!2m2!1d${proyecto.coordenadas.lat}!2d${proyecto.coordenadas.lng}!3f0!4f0!5f0.7`}
                     />
                   </div>
                 )}
