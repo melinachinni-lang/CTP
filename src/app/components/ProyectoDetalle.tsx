@@ -755,14 +755,14 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>{proyecto.entorno.accesos.tiempoAlCentro}</span>
                           </div>
                           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((proyecto.entorno.accesos.tiempoAlCentroMinutos / 60) * 100, 100)}%`, backgroundColor: '#006B4E' }} />
+                            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((proyecto.entorno.accesos.tiempoAlCentroMinutos / 60) * 100, 100)}%`, backgroundColor: '#647E3F' }} />
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#A3A3A3', fontSize: 'var(--font-size-xs)', marginTop: '0.5rem' }}>{proyecto.entorno.accesos.ciudadCercana}</p>
                         </div>
                         <div>
                           <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)', display: 'block', marginBottom: '0.75rem' }}>{t.detail.accessType}</span>
                           <div className="flex items-center gap-2">
-                            {[1, 2, 3, 4].map((bar) => (<div key={bar} className="flex-1 h-2 rounded-full" style={{ backgroundColor: bar <= proyecto.entorno!.accesos.calidadAcceso ? '#006B4E' : '#F3F4F6' }} />))}
+                            {[1, 2, 3, 4].map((bar) => (<div key={bar} className="flex-1 h-2 rounded-full" style={{ backgroundColor: bar <= proyecto.entorno!.accesos.calidadAcceso ? '#647E3F' : '#F3F4F6' }} />))}
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginTop: '0.75rem' }}>{proyecto.entorno.accesos.tipoAcceso}</p>
                         </div>
@@ -792,7 +792,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.educacion.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.educacion.porcentaje}%`, backgroundColor: '#006B4E' }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.educacion.porcentaje}%`, backgroundColor: '#647E3F' }} />
                           </div>
                         </div>
                         <div>
@@ -804,7 +804,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.comercio.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.comercio.porcentaje}%`, backgroundColor: '#006B4E' }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.comercio.porcentaje}%`, backgroundColor: '#647E3F' }} />
                           </div>
                         </div>
                         <div>
@@ -816,7 +816,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.salud.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.salud.porcentaje}%`, backgroundColor: '#006B4E' }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.salud.porcentaje}%`, backgroundColor: '#647E3F' }} />
                           </div>
                         </div>
                         <div>
@@ -828,7 +828,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.recreacion.nivel}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.recreacion.porcentaje}%`, backgroundColor: '#006B4E' }} />
+                            <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.recreacion.porcentaje}%`, backgroundColor: '#647E3F' }} />
                           </div>
                         </div>
                       </div>
@@ -846,7 +846,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-3">
                             <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.nature}</span>
                             <div className="flex gap-1">
-                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.nivel ? '#006B4E' : '#F3F4F6' }} />))}
+                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.nivel ? '#647E3F' : '#F3F4F6' }} />))}
                             </div>
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{proyecto.entorno.naturaleza.descripcion}</p>
@@ -855,7 +855,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center justify-between mb-3">
                             <span style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>{t.detail.views}</span>
                             <div className="flex gap-1">
-                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.vistas ? '#006B4E' : '#F3F4F6' }} />))}
+                              {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.vistas ? '#647E3F' : '#F3F4F6' }} />))}
                             </div>
                           </div>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{proyecto.entorno.naturaleza.descripcionVistas}</p>
