@@ -2837,7 +2837,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     {/* Demo toggle para wireframe */}
                     <div className="flex gap-1 flex-wrap">
                       {(['disponible', 'reservandose', 'pago-en-validacion', 'reservada'] as const).map(e => (
-                        <button key={e} onClick={() => setEstadoCompra(e)} className="text-[10px] px-2 py-0.5 rounded border transition-colors" style={{ backgroundColor: estadoCompra === e ? '#006B4E' : '#F5F5F5', color: estadoCompra === e ? '#fff' : '#6B7280', borderColor: estadoCompra === e ? '#006B4E' : '#E5E5E5', fontFamily: 'var(--font-body)' }}>
+                        <button key={e} onClick={() => setEstadoCompra(e)} className="text-[10px] px-2 py-0.5 rounded-full border transition-colors" style={{ backgroundColor: estadoCompra === e ? '#006B4E' : '#F5F5F5', color: estadoCompra === e ? '#fff' : '#6B7280', borderColor: estadoCompra === e ? '#006B4E' : '#E5E5E5', fontFamily: 'var(--font-body)' }}>
                           {e}
                         </button>
                       ))}
