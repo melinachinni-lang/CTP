@@ -939,26 +939,24 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
                   {/* Masterplan */}
                   {proyecto.masterplan && (
-                    <div className="mb-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
-                          {t.detail.masterplan}
-                        </h3>
-                        <button
-                          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
-                          style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
-                        >
-                          <Download className="w-4 h-4" />
-                          {t.common.download}
-                        </button>
+                    <div className="flex items-center justify-between p-5 rounded-xl border border-gray-200 hover:border-gray-300 transition-all mb-3">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5' }}>
+                          <FileText className="w-4 h-4" style={{ color: '#525252' }} />
+                        </div>
+                        <div>
+                          <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', marginBottom: '0.375rem' }}>
+                            {t.detail.masterplan}
+                          </p>
+                          <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-body-sm)' }}>
+                            Plano general del proyecto
+                          </p>
+                        </div>
                       </div>
-                      <div className="aspect-[16/10] bg-white overflow-hidden rounded-lg border border-gray-200 cursor-pointer hover:border-gray-400 transition-colors">
-                        <ImageWithFallback
-                          src={proyecto.masterplan}
-                          alt="Masterplan del proyecto"
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
+                      <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300 hover:bg-gray-50 hover:border-gray-900 transition-all flex-shrink-0 ml-4" style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}>
+                        <Download className="w-4 h-4" />
+                        <span>{t.common.download}</span>
+                      </button>
                     </div>
                   )}
 
