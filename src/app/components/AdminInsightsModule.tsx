@@ -632,7 +632,8 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
       </div>
 
       {/* ── FILTER TABS ── */}
-      <div className="flex gap-1 p-1 rounded-full mb-6 overflow-x-auto" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
+      <div className="overflow-x-auto mb-6 -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="flex gap-1 p-1 rounded-full w-max" style={{ backgroundColor: '#F3F4F6' }}>
         {tabs.map(tab => {
           const isActive = filterTab === tab.key;
           const dotColor = tab.key === 'alta' ? '#DC2626' : tab.key === 'media' ? '#D97706' : tab.key === 'baja' ? '#3B82F6' : undefined;
@@ -658,6 +659,7 @@ export function AdminInsightsModule({ onNavigate, onNavigatePage }: AdminInsight
             </button>
           );
         })}
+      </div>
       </div>
 
       {/* ── LOADING ── */}
