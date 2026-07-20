@@ -1810,8 +1810,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 {[
                   {
                     id: 1,
-                    nombre: 'Condominio Alto Refugio',
-                    nombreEn: 'High Refuge Condominium',
+                    nombre: 'Parcelas Valle Verde',
+                    nombreEn: 'Green Valley Parcels',
                     ubicacion: 'San José de Maipo, RM',
                     imagen: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
                     imagenes: [
@@ -1829,8 +1829,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   },
                   {
                     id: 2,
-                    nombre: 'Parcelación Valle Verde',
-                    nombreEn: 'Green Valley Subdivision',
+                    nombre: 'Condominio Los Robles',
+                    nombreEn: 'The Oaks Community',
                     ubicacion: 'Colina, RM',
                     imagen: 'https://images.unsplash.com/photo-1602497485099-e41a116a272c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwY29uc3RydWN0aW9ufGVufDF8fHx8MTc2ODg2NjMzOXww&ixlib=rb-4.1.0&q=80&w=1080',
                     imagenes: [
@@ -1848,8 +1848,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   },
                   {
                     id: 3,
-                    nombre: 'Las Lomas del Sur',
-                    nombreEn: 'Southern Hills',
+                    nombre: 'Parcelas Río Claro',
+                    nombreEn: 'Clear River Parcels',
                     ubicacion: 'Buin, RM',
                     imagen: 'https://images.unsplash.com/photo-1592595896616-c37162298647?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9wZXJ0eSUyMHN1YmRpdmlzaW9ufGVufDF8fHx8MTc2ODg2NjMzOXww&ixlib=rb-4.1.0&q=80&w=1080',
                     imagenes: [
@@ -1866,8 +1866,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   },
                   {
                     id: 4,
-                    nombre: 'Proyecto Cordillera',
-                    nombreEn: 'Cordillera Project',
+                    nombre: 'Terrazas del Lago',
+                    nombreEn: 'Lakeside Terraces',
                     ubicacion: 'Farellones, RM',
                     imagen: 'https://images.unsplash.com/photo-1765260905437-992ca7850485?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGRldmVsb3BtZW50JTIwbGFuZHxlbnwxfHx8fDE3Njg4NjYzMzl8MA&ixlib=rb-4.1.0&q=80&w=1080',
                     imagenes: [
