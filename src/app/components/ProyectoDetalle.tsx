@@ -1032,43 +1032,36 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   </div>
                 )}
 
-                {/* Barra de selección sticky */}
+                {/* Panel de acciones inline */}
                 {selectedParcelas.length > 0 && (
-                  <div
-                    className="fixed bottom-6 left-1/2 z-50 flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl"
-                    style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', minWidth: '380px' }}
-                  >
-                    <div className="flex-1">
-                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '15px', color: '#FFFFFF' }}>
+                  <div className="mt-4 pt-4 space-y-3" style={{ borderTop: '1px solid #E5E5E5' }}>
+                    <div className="flex items-center justify-between">
+                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px', color: '#0A0A0A' }}>
                         {selectedParcelas.length} {selectedParcelas.length === 1 ? 'parcela seleccionada' : 'parcelas seleccionadas'}
                       </p>
+                      <button
+                        onClick={() => setSelectedParcelas([])}
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}
+                      >
+                        Limpiar selección
+                      </button>
                     </div>
                     <button
                       onClick={() => setIsCompraMultipleOpen(true)}
-                      className="px-5 py-2.5 rounded-full transition-all whitespace-nowrap"
-                      style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.3)', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)')}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
+                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
-                      Comprar selección
+                      <ShoppingCart className="w-4 h-4" />
+                      Comprar {selectedParcelas.length === 1 ? 'parcela' : `${selectedParcelas.length} parcelas`}
                     </button>
                     <button
                       onClick={() => setIsReservaMultipleOpen(true)}
-                      className="px-5 py-2.5 rounded-full transition-all whitespace-nowrap"
-                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#01533E')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#006B4E')}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
+                      style={{ backgroundColor: '#F5F5F0', color: '#006B4E', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
                     >
-                      Reservar selección
-                    </button>
-                    <button
-                      onClick={() => setSelectedParcelas([])}
-                      className="p-1.5 rounded-full transition-all"
-                      style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)')}
-                    >
-                      <X className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                      Reservar {selectedParcelas.length === 1 ? 'parcela' : `${selectedParcelas.length} parcelas`}
                     </button>
                   </div>
                 )}
