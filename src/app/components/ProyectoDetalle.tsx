@@ -1145,60 +1145,75 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
               <div className="sticky top-32 space-y-6">
                 {/* Card de resumen y CTA */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                  <div className="space-y-5">
+                  <div className="space-y-4">
                     {/* Rango de precios */}
                     <div>
-                      <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.04em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
-                        rango de precios
+                      <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
+                        Rango de precios
                       </p>
                       <PrecioDisplay precioCLP={proyecto.precioDesde} precioSize="xl" />
                     </div>
 
+                    {/* Primer dueño badge */}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ border: '1px solid #E5E5E5' }}>
+                      <Info className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
+                      <span style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Primer dueño</span>
+                    </div>
+
                     {/* Separador */}
-                    <div style={{ height: '1px', backgroundColor: '#E5E5E0' }} />
+                    <div style={{ height: '1px', backgroundColor: '#E5E5E5' }} />
 
-                    {/* Grid: superficie + total parcelas */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>superficie</p>
-                        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, color: '#0A0A0A', fontSize: '15px' }}>{proyecto.superficieDesde}</p>
+                    {/* Features grid con iconos */}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
+                      <div className="flex items-center gap-1.5">
+                        <Expand className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.superficieDesde}</span>
                       </div>
-                      <div>
-                        <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>total parcelas</p>
-                        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, color: '#0A0A0A', fontSize: '15px' }}>{proyecto.totalParcelas}</p>
+                      <div className="flex items-center gap-1.5">
+                        <Home className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.totalParcelas} parcelas</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.parcelasDisponibles} disponibles</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.tipo}</span>
                       </div>
                     </div>
 
-                    {/* Badge disponibilidad */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, padding: '4px 12px', borderRadius: '200px' }}>
-                        {proyecto.parcelasDisponibles} disponibles
+                    {/* Badges de estado */}
+                    <div className="flex flex-wrap gap-1.5">
+                      <span style={{ backgroundColor: '#006B4E', color: '#fff', fontSize: '11px', fontWeight: 600, padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
+                        disponible
                       </span>
-                      <span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                        de {proyecto.totalParcelas} en total
-                      </span>
+                      {['reservandose', 'pago-en-validacion', 'reservada'].map(s => (
+                        <span key={s} style={{ border: '1px solid #E5E5E5', color: '#737373', fontSize: '11px', padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
+                          {s}
+                        </span>
+                      ))}
                     </div>
 
-                    {/* CTA principal: Ver parcelas */}
+                    {/* CTA principal: Ver parcelas disponibles */}
                     <button
                       onClick={() => {
                         setIsStockOpen(true);
                         setTimeout(() => stockRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
                       }}
-                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
-                      style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#262626')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#0A0A0A')}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
+                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
+                      <ShoppingCart className="w-4 h-4" />
                       Ver parcelas disponibles
                     </button>
 
                     {/* CTA secundario: Brochure */}
                     <button
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
-                      style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F5F5F5')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
+                      style={{ backgroundColor: '#F5F5F0', color: '#006B4E', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
                     >
                       <Download className="w-4 h-4" />
                       Descargar brochure
@@ -1207,10 +1222,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     {/* CTA terciario: Consultar */}
                     <button
                       onClick={() => setIsConsultarOpen(true)}
-                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
-                      style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', backgroundColor: '#FFFFFF' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F5F5F5')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:bg-gray-50"
+                      style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
                     >
                       <MessageSquare className="w-4 h-4" />
                       Consultar
