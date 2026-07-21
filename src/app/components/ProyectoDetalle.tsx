@@ -9,6 +9,7 @@ import { ReservaVisitaModal } from '@/app/components/ReservaVisitaModal';
 import { ConsultaOnlineModal } from '@/app/components/ConsultaOnlineModal';
 import { ComprarProyectoModal } from '@/app/components/ComprarProyectoModal';
 import { ConsultarModal } from '@/app/components/ConsultarModal';
+import { FlujoCompraModal } from '@/app/components/FlujoCompraModal';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
 import { getProyectoByIdWithIcons } from '@/app/data/proyectosDataWithIcons';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
@@ -76,8 +77,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
   const [hoveredCompraButton, setHoveredCompraButton] = useState<string | null>(null);
   const [selectedParcelas, setSelectedParcelas] = useState<string[]>([]);
-  const [isReservaMultipleOpen, setIsReservaMultipleOpen] = useState(false);
-  const [isCompraMultipleOpen, setIsCompraMultipleOpen] = useState(false);
+  const [isFlujoCompraMultipleOpen, setIsFlujoCompraMultipleOpen] = useState(false);
+  const [tipoCompraMultiple, setTipoCompraMultiple] = useState<'comprar' | 'reservar'>('comprar');
   const stockRef = useRef<HTMLDivElement>(null);
 
   // Obtener datos dinámicos del proyecto
@@ -107,6 +108,20 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   };
 
   const estadoStyles = getEstadoBadgeStyles();
+
+  const stockParcelasPrices: Record<string, string> = {
+    'Parcela A-1': '$38.500.000', 'Parcela A-2': '$39.800.000',
+    'Parcela B-1': '$48.000.000', 'Parcela B-3': '$50.000.000',
+    'Parcela C-1': '$52.000.000',
+  };
+
+  const precioSeleccion = (() => {
+    const total = selectedParcelas.reduce((sum, cod) => {
+      const raw = stockParcelasPrices[cod] ?? proyecto.precioDesde;
+      return sum + parseInt(raw.replace(/\D/g, ''), 10);
+    }, 0);
+    return '$' + total.toLocaleString('es-CL');
+  })();
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
@@ -1047,7 +1062,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       </button>
                     </div>
                     <button
-                      onClick={() => setIsCompraMultipleOpen(true)}
+                      onClick={() => { setTipoCompraMultiple('comprar'); setIsFlujoCompraMultipleOpen(true); }}
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
                       style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
@@ -1055,7 +1070,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       Comprar {selectedParcelas.length === 1 ? 'parcela' : `${selectedParcelas.length} parcelas`}
                     </button>
                     <button
-                      onClick={() => setIsReservaMultipleOpen(true)}
+                      onClick={() => { setTipoCompraMultiple('reservar'); setIsFlujoCompraMultipleOpen(true); }}
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
                       style={{ backgroundColor: '#F5F5F0', color: '#006B4E', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
                       onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
@@ -1334,113 +1349,14 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
         parcelaNombre={proyecto.nombre}
       />
 
-      {/* Modal de compra múltiple */}
-      {isCompraMultipleOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-          onClick={e => { if (e.target === e.currentTarget) setIsCompraMultipleOpen(false); }}
-        >
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-            <div className="px-6 py-5 border-b" style={{ borderColor: '#E5E5E5' }}>
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '0.25rem' }}>
-                    Comprar {selectedParcelas.length} {selectedParcelas.length === 1 ? 'parcela' : 'parcelas'}
-                  </h2>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                    {proyecto.nombre}
-                  </p>
-                </div>
-                <button onClick={() => setIsCompraMultipleOpen(false)} className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
-                  <X className="w-5 h-5" style={{ color: '#525252' }} />
-                </button>
-              </div>
-            </div>
-            <div className="px-6 py-6 space-y-4">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#525252', lineHeight: '1.6' }}>
-                Vas a iniciar el proceso de compra para las siguientes parcelas:
-              </p>
-              <div className="space-y-2">
-                {selectedParcelas.map(codigo => (
-                  <div key={codigo} className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-                    <ShoppingCart className="w-4 h-4 flex-shrink-0" style={{ color: '#0A0A0A' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: '#0A0A0A' }}>{codigo}</span>
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={() => setIsCompraMultipleOpen(false)}
-                className="w-full flex items-center justify-center gap-2 rounded-full transition-all mt-2"
-                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
-                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#262626')}
-                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#0A0A0A')}
-              >
-                Continuar con la compra
-              </button>
-            </div>
-            <div className="px-6 py-4 rounded-b-2xl" style={{ backgroundColor: '#F9F9F9' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: '1.5', textAlign: 'center' }}>
-                Te guiaremos paso a paso hasta completar la adquisición de todas las parcelas
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de reserva múltiple */}
-      {isReservaMultipleOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-          onClick={e => { if (e.target === e.currentTarget) setIsReservaMultipleOpen(false); }}
-        >
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-            <div className="px-6 py-5 border-b" style={{ borderColor: '#E5E5E5' }}>
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '0.25rem' }}>
-                    Reservar {selectedParcelas.length} {selectedParcelas.length === 1 ? 'parcela' : 'parcelas'}
-                  </h2>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                    {proyecto.nombre}
-                  </p>
-                </div>
-                <button onClick={() => setIsReservaMultipleOpen(false)} className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
-                  <X className="w-5 h-5" style={{ color: '#525252' }} />
-                </button>
-              </div>
-            </div>
-            <div className="px-6 py-6 space-y-4">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#525252', lineHeight: '1.6' }}>
-                Vas a reservar las siguientes parcelas en una única operación:
-              </p>
-              <div className="space-y-2">
-                {selectedParcelas.map(codigo => (
-                  <div key={codigo} className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: '#F0FDF4' }}>
-                    <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: '#0A0A0A' }}>{codigo}</span>
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={() => setIsReservaMultipleOpen(false)}
-                className="w-full flex items-center justify-center gap-2 rounded-full transition-all mt-2"
-                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
-                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#01533E')}
-                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#006B4E')}
-              >
-                Confirmar reserva
-              </button>
-            </div>
-            <div className="px-6 py-4 rounded-b-2xl" style={{ backgroundColor: '#F9F9F9' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: '1.5', textAlign: 'center' }}>
-                La reserva genera un único identificador para todas las parcelas seleccionadas
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Flujo de compra/reserva múltiple — mismo flujo que parcela individual */}
+      <FlujoCompraModal
+        isOpen={isFlujoCompraMultipleOpen}
+        onClose={() => setIsFlujoCompraMultipleOpen(false)}
+        parcelaNombre={selectedParcelas.join(', ')}
+        precio={precioSeleccion}
+        tipoCompra={tipoCompraMultiple}
+      />
 
       <SiteFooter onNavigate={onNavigate} />
     </div>
