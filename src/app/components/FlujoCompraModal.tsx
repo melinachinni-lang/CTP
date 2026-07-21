@@ -328,7 +328,7 @@ interface FlujoCompraModalProps {
 }
 
 export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoCompra, onEstadoChange }: FlujoCompraModalProps) {
-  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'mp-checkout' | 'mp-success' | 'expirado' | 'error'>(1);
+  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'mp-checkout' | 'mp-success' | 'mp-pendiente' | 'mp-rechazado' | 'expirado' | 'error'>(1);
   const [metodoPago, setMetodoPago] = useState<'transferencia' | 'mercadopago'>('transferencia');
   const [aceptoTyC, setAceptoTyC] = useState(false);
   const [todoCopiado, setTodoCopiado] = useState(false);
@@ -462,7 +462,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const pasoLabels = ['Tus datos', 'Método de pago', metodoPago === 'transferencia' ? 'Comprobante' : 'Pago online'];
 
   const handleIntentoCerrar = () => {
-    if (enviado || paso === 'mp-success') { onClose(); return; }
+    if (enviado || paso === 'mp-success' || paso === 'mp-pendiente' || paso === 'mp-rechazado') { onClose(); return; }
     setShowExitWarning(true);
   };
 
@@ -476,7 +476,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
 
         {/* Header */}
-        {!enviado && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && (
+        {!enviado && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && (
           <div className="px-6 py-5 border-b bg-white z-10" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -906,6 +906,30 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 >
                   ← Cambiar método de pago
                 </button>
+
+                {/* Simuladores de estado — solo wireframe */}
+                <div className="pt-2 border-t" style={{ borderColor: '#F3F4F6' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Simular resultado (wireframe)
+                  </p>
+                  <div className="flex gap-2">
+                    <button onClick={handleMpPagar}
+                      className="flex-1 py-1.5 rounded-lg text-xs font-medium transition-all"
+                      style={{ backgroundColor: '#D1FAE5', color: '#065F46', fontFamily: 'var(--font-body)' }}>
+                      ✓ Aprobado
+                    </button>
+                    <button onClick={() => setPaso('mp-pendiente')}
+                      className="flex-1 py-1.5 rounded-lg text-xs font-medium transition-all"
+                      style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
+                      ⏳ Pendiente
+                    </button>
+                    <button onClick={() => setPaso('mp-rechazado')}
+                      className="flex-1 py-1.5 rounded-lg text-xs font-medium transition-all"
+                      style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontFamily: 'var(--font-body)' }}>
+                      ✕ Rechazado
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -966,6 +990,117 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#009EE3'}>
                 Entendido
               </button>
+            </div>
+          )}
+
+          {/* ── MP PAGO PENDIENTE ── */}
+          {paso === 'mp-pendiente' && (
+            <div className="py-4 text-center space-y-6">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
+                <Clock className="w-9 h-9" style={{ color: '#D97706' }} />
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>
+                  Pago en proceso
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', marginTop: '6px', lineHeight: '1.5' }}>
+                  Mercado Pago está verificando tu pago. Esto puede tardar unos minutos.
+                </p>
+              </div>
+
+              <div className="rounded-xl overflow-hidden text-left" style={{ border: '1px solid #E5E5E5' }}>
+                <div className="px-4 py-3" style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Resumen de la operación
+                  </p>
+                </div>
+                {[
+                  { label: 'Tipo', value: tipoCompra === 'reservar' ? 'Reserva de parcela' : 'Compra de parcela' },
+                  { label: 'Parcela', value: parcelaNombre },
+                  { label: 'Monto', value: montoPagoLabel },
+                  { label: 'Método', value: 'Mercado Pago' },
+                  { label: 'Estado', value: 'En proceso' },
+                ].map((item, i, arr) => (
+                  <div key={item.label} className="flex items-center justify-between px-4 py-3"
+                    style={{ borderBottom: i < arr.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? '#FFFFFF' : '#FAFAFA' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{item.label}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: item.label === 'Estado' ? 600 : 500, color: item.label === 'Estado' ? '#D97706' : '#111827' }}>{item.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-xl p-4 text-left space-y-2" style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#92400E' }}>
+                  ¿Qué pasa ahora?
+                </p>
+                {[
+                  'La parcela quedará bloqueada para ti mientras se confirma el pago.',
+                  'Recibirás un email cuando Mercado Pago acredite el pago (puede tardar hasta 48 h hábiles si pagaste en efectivo).',
+                  'Si el pago no se confirma en el plazo indicado, la reserva se liberará automáticamente.',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5" style={{ backgroundColor: '#D97706' }} />
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#78350F', lineHeight: '1.6' }}>{item}</p>
+                  </div>
+                ))}
+              </div>
+
+              <button onClick={onClose} className="w-full py-3 rounded-full text-sm font-semibold transition-all"
+                style={{ backgroundColor: '#D97706', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B45309'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#D97706'}>
+                Entendido, esperaré el email
+              </button>
+            </div>
+          )}
+
+          {/* ── MP PAGO RECHAZADO ── */}
+          {paso === 'mp-rechazado' && (
+            <div className="py-4 text-center space-y-6">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: '#FEE2E2', border: '4px solid #FECACA' }}>
+                <X className="w-9 h-9" style={{ color: '#DC2626' }} />
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>
+                  Pago rechazado
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', marginTop: '6px', lineHeight: '1.5' }}>
+                  Mercado Pago no pudo procesar tu pago. La parcela sigue disponible.
+                </p>
+              </div>
+
+              <div className="rounded-xl p-4 text-left space-y-2" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#991B1B' }}>
+                  Posibles motivos
+                </p>
+                {[
+                  'Fondos insuficientes en la tarjeta o cuenta.',
+                  'La tarjeta fue bloqueada por el banco emisor.',
+                  'Los datos ingresados no coincidieron con los del banco.',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5" style={{ backgroundColor: '#DC2626' }} />
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#7F1D1D', lineHeight: '1.6' }}>{item}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={() => setPaso(2)}
+                  className="w-full py-3 rounded-full text-sm font-semibold transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+                  Intentar con otro método de pago
+                </button>
+                <button onClick={onClose} className="w-full py-2 text-sm transition-colors"
+                  style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#374151'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
+                  Cancelar
+                </button>
+              </div>
             </div>
           )}
 
@@ -1140,7 +1275,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
         </div>
 
         {/* Footer */}
-        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-checkout' && paso !== 'mp-success' && (
+        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-checkout' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && (
           <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             {paso !== 1 ? (
               <button
