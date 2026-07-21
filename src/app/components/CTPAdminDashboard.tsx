@@ -21,6 +21,7 @@ import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
+import { PagosInmobiliariasAdminView } from '@/app/components/PagosInmobiliariasAdminView';
 
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
@@ -38,7 +39,7 @@ type NavSection =
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
   | 'team' | 'configuracion' | 'help'
-  | 'leads' | 'brokers';
+  | 'leads' | 'brokers' | 'pagos';
 
 interface CTPAdminDashboardProps {
   onNavigate: (screen: string, data?: any) => void;
@@ -68,8 +69,9 @@ const NAV_GROUPS = [
     id: 'comercial',
     label: 'Comercial',
     items: [
-      { id: 'leads' as NavSection,   label: 'Leads',   icon: Users },
-      { id: 'brokers' as NavSection, label: 'Brokers', icon: UserCheck },
+      { id: 'leads' as NavSection,   label: 'Leads',               icon: Users },
+      { id: 'brokers' as NavSection, label: 'Brokers',             icon: UserCheck },
+      { id: 'pagos' as NavSection,   label: 'Pagos inmobiliarias', icon: Download },
     ],
   },
   {
@@ -326,6 +328,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'interacciones'   && <InteraccionesContent />}
         {currentSection === 'leads'           && <CTPLeadsView autoFilterUnassigned={quickAction === 'leads-unassigned'} />}
         {currentSection === 'brokers'         && <CTPBrokersView />}
+        {currentSection === 'pagos'           && <PagosInmobiliariasAdminView />}
       </div>
     </>
   );
