@@ -554,7 +554,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
     if (bannerHovered) return;
     const timer = setInterval(() => {
       setBannerSlide(s => (s + 1) % 3);
-    }, 4500);
+    }, 6000);
     return () => clearInterval(timer);
   }, [bannerHovered]);
 
@@ -1753,7 +1753,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 <div
                   className="flex h-full"
                   style={{
-                    transform: `translateX(-${bannerSlide * 100}%)`,
+                    transform: `translateX(-${bannerSlide * (100 / bannerItems.length)}%)`,
                     transition: 'transform 0.5s ease-in-out',
                     width: `${bannerItems.length * 100}%`,
                   }}
