@@ -1111,8 +1111,8 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
           {/* ── ENVIADO ── */}
           {enviado && (
             <div className="py-4 text-center space-y-6">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: '#FEF3C7' }}>
-                <Clock className="w-9 h-9" style={{ color: '#D97706' }} />
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: '#DCFCE7', border: '4px solid #BBF7D0' }}>
+                <CheckCircle className="w-9 h-9" style={{ color: '#16A34A' }} />
               </div>
               <div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>
