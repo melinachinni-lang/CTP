@@ -278,7 +278,7 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
   );
 }
 
-function CountdownTimer({ segundos }: { segundos: number }) {
+function CountdownTimer({ segundos, plural = false }: { segundos: number; plural?: boolean }) {
   const mins = Math.floor(segundos / 60).toString().padStart(2, '0');
   const secs = (segundos % 60).toString().padStart(2, '0');
   const urgente = segundos <= 300;
@@ -294,10 +294,10 @@ function CountdownTimer({ segundos }: { segundos: number }) {
         </div>
         <div className="flex-1 min-w-0">
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: urgente ? '#DC2626' : '#111827', marginBottom: '2px' }}>
-            {urgente ? '⚠ Tiempo limitado' : 'Reserva bloqueada para ti'}
+            {urgente ? '⚠ Tiempo limitado' : (plural ? 'Parcelas reservadas para ti' : 'Parcela reservada para ti')}
           </p>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: urgente ? '#DC2626' : '#6B7280' }}>
-            {urgente ? 'Completa el pago antes de que expire la reserva.' : 'Tienes tiempo para completar el pago.'}
+            {urgente ? 'Completa el pago antes de que expire la reserva.' : (plural ? 'Nadie más puede comprarlas mientras completas el pago.' : 'Nadie más puede comprarla mientras completas el pago.')}
           </p>
         </div>
         <div className="text-right flex-shrink-0">
@@ -523,7 +523,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             {/* Timer — visible y fijo en el header durante los pasos 2 y 3 */}
             {(paso === 2 || paso === 3 || paso === 'mp-checkout') && (
               <div className="mt-4">
-                <CountdownTimer segundos={segundosTimer} />
+                <CountdownTimer segundos={segundosTimer} plural={parcelaNombre.includes(',')} />
               </div>
             )}
           </div>
