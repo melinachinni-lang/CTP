@@ -328,7 +328,8 @@ interface FlujoCompraModalProps {
 }
 
 export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoCompra, onEstadoChange }: FlujoCompraModalProps) {
-  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'mp-checkout' | 'mp-success' | 'mp-pendiente' | 'mp-rechazado' | 'expirado' | 'error'>(1);
+  const [paso, setPaso] = useState<1 | 'aviso' | 2 | 3 | 'mp-checkout' | 'mp-success' | 'mp-pendiente' | 'mp-rechazado' | 'disponibilidad-error' | 'expirado' | 'error'>(1);
+  const [reservaId, setReservaId] = useState('');
   const [metodoPago, setMetodoPago] = useState<'transferencia' | 'mercadopago'>('transferencia');
   const [aceptoTyC, setAceptoTyC] = useState(false);
   const [todoCopiado, setTodoCopiado] = useState(false);
@@ -370,6 +371,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   useEffect(() => {
     if (!isOpen) return;
     setPaso(1);
+    setReservaId(`RES-${Math.random().toString(36).slice(2, 8).toUpperCase()}`);
     setMetodoPago('transferencia');
     setAceptoTyC(false);
     setTodoCopiado(false);
@@ -462,7 +464,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const pasoLabels = ['Tus datos', 'Método de pago', metodoPago === 'transferencia' ? 'Comprobante' : 'Pago online'];
 
   const handleIntentoCerrar = () => {
-    if (enviado || paso === 'mp-success' || paso === 'mp-pendiente' || paso === 'mp-rechazado') { onClose(); return; }
+    if (enviado || paso === 'mp-success' || paso === 'mp-pendiente' || paso === 'mp-rechazado' || paso === 'disponibilidad-error') { onClose(); return; }
     setShowExitWarning(true);
   };
 
@@ -476,7 +478,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
 
         {/* Header */}
-        {!enviado && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && (
+        {!enviado && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && paso !== 'disponibilidad-error' && (
           <div className="px-6 py-5 border-b bg-white z-10" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -752,6 +754,20 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   <span style={{ color: '#DC2626' }}>*</span>
                 </p>
               </div>
+
+              {/* Simulador disponibilidad — solo wireframe */}
+              {parcelaNombre.includes(',') && (
+                <div className="pt-3 border-t" style={{ borderColor: '#F3F4F6' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Simular (wireframe)
+                  </p>
+                  <button onClick={() => setPaso('disponibilidad-error')}
+                    className="w-full py-1.5 rounded-lg text-xs font-medium transition-all"
+                    style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
+                    ⚠ Parcela ya no disponible
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -960,6 +976,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   </p>
                 </div>
                 {[
+                  { label: 'N° de operación', value: reservaId },
                   { label: 'Tipo', value: tipoCompra === 'reservar' ? 'Reserva de parcela' : 'Compra de parcela' },
                   { label: 'Parcela', value: parcelaNombre },
                   { label: 'Monto pagado', value: montoPagoLabel },
@@ -1108,6 +1125,56 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             </div>
           )}
 
+          {/* ── DISPONIBILIDAD ERROR ── */}
+          {paso === 'disponibilidad-error' && (
+            <div className="py-4 text-center space-y-6">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
+                <AlertCircle className="w-9 h-9" style={{ color: '#D97706' }} />
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h3)', color: '#0A0A0A' }}>
+                  Parcela no disponible
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', marginTop: '6px', lineHeight: '1.5' }}>
+                  Una o más parcelas de tu selección ya no están disponibles.
+                </p>
+              </div>
+
+              <div className="rounded-xl overflow-hidden text-left" style={{ border: '1px solid #FDE68A' }}>
+                <div className="px-4 py-3" style={{ backgroundColor: '#FFFBEB', borderBottom: '1px solid #FDE68A' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Parcelas con problema
+                  </p>
+                </div>
+                <div className="px-4 py-3 flex items-center justify-between" style={{ backgroundColor: '#FFFBEB' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#111827' }}>
+                    {parcelaNombre.split(',')[0].trim()}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontFamily: 'var(--font-body)' }}>
+                    No disponible
+                  </span>
+                </div>
+              </div>
+
+              <div className="rounded-xl p-4 text-left" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.6' }}>
+                  Esta parcela fue reservada por otro comprador mientras completabas el proceso. Actualiza tu selección para continuar.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={onClose}
+                  className="w-full py-3 rounded-full font-semibold transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+                  Actualizar selección
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* ── ENVIADO ── */}
           {enviado && (
             <div className="py-4 text-center space-y-6">
@@ -1128,6 +1195,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   </p>
                 </div>
                 {[
+                  { label: 'N° de operación', value: reservaId },
                   { label: 'Tipo', value: tipoCompra === 'reservar' ? 'Reserva de parcela' : 'Compra de parcela' },
                   { label: 'Parcela', value: parcelaNombre },
                   { label: 'Monto pagado', value: montoPagoLabel },
@@ -1279,7 +1347,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
         </div>
 
         {/* Footer */}
-        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-checkout' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && (
+        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-checkout' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && paso !== 'disponibilidad-error' && (
           <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             {paso !== 1 ? (
               <button
@@ -1339,7 +1407,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   Antes de continuar
                 </h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.7' }}>
-                  Al aceptar, la parcela quedará bloqueada para ti y se activará un <strong>temporizador de 30 minutos</strong> por razones de seguridad para completar el pago.
+                  Al aceptar, {parcelaNombre.includes(',') ? 'las parcelas quedarán bloqueadas' : 'la parcela quedará bloqueada'} para ti y se activará un <strong>temporizador de 30 minutos</strong> por razones de seguridad para completar el pago.
                 </p>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', lineHeight: '1.6', marginTop: '6px' }}>
                   Si el tiempo expira sin recibir el comprobante, la reserva se liberará automáticamente.
