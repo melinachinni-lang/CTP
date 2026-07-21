@@ -535,6 +535,19 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
           {/* ── PASO 1: Datos del cliente ── */}
           {paso === 1 && !enviado && (
             <div className="space-y-5">
+              {tipoCompra === 'reservar' && (
+                <div className="rounded-xl p-4 text-center" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
+                    Monto de reserva
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 600, color: '#065F46' }}>
+                    $500.000
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginTop: '4px' }}>
+                    UF 12,9 · El resto se paga al firmar la escritura
+                  </p>
+                </div>
+              )}
               <div>
                 <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-lg)', color: '#0A0A0A' }}>
                   Datos del Cliente{' '}
