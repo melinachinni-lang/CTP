@@ -988,7 +988,10 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       { codigo: 'Parcela B-3', superficie: '6.700 m²', precio: '$50.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
                       { codigo: 'Parcela C-1', superficie: '8.000 m²', precio: '$52.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
                       { codigo: 'Parcela C-2', superficie: '7.800 m²', precio: '$51.000.000', estado: 'reservado', estadoLabel: 'Reservado' },
-                    ].map((parcela, index) => {
+                    ].sort((a, b) => {
+                      const order: Record<string, number> = { disponible: 0, reservado: 1, vendido: 2 };
+                      return (order[a.estado] ?? 3) - (order[b.estado] ?? 3);
+                    }).map((parcela, index) => {
                       const isSelected = selectedParcelas.includes(parcela.codigo);
                       const isDisponible = parcela.estado === 'disponible';
                       return (
