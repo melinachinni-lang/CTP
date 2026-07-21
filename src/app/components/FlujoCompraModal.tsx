@@ -686,14 +686,16 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
               {/* Monto de reserva */}
               <div className="rounded-xl p-4 text-center" style={{ backgroundColor: '#EBFEF5', border: '2px solid #006B4E' }}>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
-                  Monto de reserva
+                  {tipoCompra === 'reservar' ? 'Monto de reserva' : 'Monto a pagar'}
                 </p>
                 <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 600, color: '#065F46' }}>
-                  $500.000
+                  {tipoCompra === 'reservar' ? '$500.000' : precio}
                 </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginTop: '4px' }}>
-                  UF 12,9
-                </p>
+                {tipoCompra === 'reservar' && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#047857', marginTop: '4px' }}>
+                    UF 12,9
+                  </p>
+                )}
               </div>
 
               <div>
