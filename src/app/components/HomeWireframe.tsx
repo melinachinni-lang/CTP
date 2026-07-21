@@ -2032,7 +2032,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     >
                       {/* Left: text + CTA */}
                       <div
-                        className="flex flex-col justify-center px-8 md:px-12 flex-shrink-0"
+                        className="flex flex-col justify-center px-8 md:px-12 py-6 flex-shrink-0 overflow-hidden"
                         style={{ width: '42%', backgroundColor: banner.bgColor }}
                       >
                         <p
