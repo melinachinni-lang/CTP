@@ -1151,7 +1151,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
                         Rango de precios
                       </p>
-                      <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(22px, 3vw, 28px)', color: '#0A0A0A', lineHeight: 1.1, marginBottom: '4px' }}>
+                      <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#0A0A0A', lineHeight: 1.2, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                         {proyecto.precioDesde} – {proyecto.precioHasta}
                       </p>
                     </div>
