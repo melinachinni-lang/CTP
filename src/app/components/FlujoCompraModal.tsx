@@ -333,10 +333,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   const [aceptoTyC, setAceptoTyC] = useState(false);
   const [todoCopiado, setTodoCopiado] = useState(false);
   const [archivo, setArchivo] = useState<string | null>(null);
-  // MP Checkout Pro state
-  const [mpMetodo, setMpMetodo] = useState<'credito' | 'debito'>('credito');
-  const [mpTarjeta, setMpTarjeta] = useState({ numero: '', vencimiento: '', cvv: '', nombre: '', rut: '' });
-  const [mpCuotas, setMpCuotas] = useState('1');
   const [mpProcesando, setMpProcesando] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -466,7 +462,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
   const montoPago = tipoCompra === 'comprar' ? precio : '$500.000';
   const montoPagoLabel = tipoCompra === 'comprar' ? precio : '$500.000 (UF 12,9)';
-  const mpFormValido = mpTarjeta.numero.trim() && mpTarjeta.vencimiento.trim() && mpTarjeta.cvv.trim() && mpTarjeta.nombre.trim() && mpTarjeta.rut.trim();
   const pasoLabels = ['Tus datos', 'Método de pago', metodoPago === 'transferencia' ? 'Comprobante' : 'Pago online'];
 
   const handleIntentoCerrar = () => {
@@ -837,7 +832,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             </div>
           )}
 
-          {/* ── MERCADO PAGO CHECKOUT PRO ── */}
+          {/* ── MERCADO PAGO — REDIRECCIÓN ── */}
           {paso === 'mp-checkout' && (
             <div className="space-y-5">
               {/* MP branding header */}
@@ -856,7 +851,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 </div>
               </div>
 
-              {/* Order summary */}
+              {/* Resumen */}
               <div className="rounded-xl p-4" style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD' }}>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 600, color: '#0369A1', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
                   Resumen del pago
@@ -872,120 +867,46 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 )}
               </div>
 
-              {/* Payment method selector */}
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#111827', marginBottom: '10px' }}>
-                  ¿Cómo querés pagar?
+              {/* Explicación de redirección */}
+              <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.6' }}>
+                  Al continuar serás redirigido a la plataforma de <strong>Mercado Pago</strong> para completar el pago de forma segura. Podés usar:
                 </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {([
-                    { id: 'credito', label: 'Tarjeta de crédito' },
-                    { id: 'debito', label: 'Tarjeta de débito' },
-                  ] as const).map(m => (
-                    <button key={m.id} onClick={() => setMpMetodo(m.id)}
-                      className="flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left"
-                      style={{ borderColor: mpMetodo === m.id ? '#009EE3' : '#E5E5E5', backgroundColor: mpMetodo === m.id ? '#EFF9FF' : '#FFFFFF' }}>
-                      <CreditCard className="w-4 h-4 flex-shrink-0" style={{ color: mpMetodo === m.id ? '#009EE3' : '#9CA3AF' }} />
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: mpMetodo === m.id ? 600 : 400, color: '#374151' }}>{m.label}</span>
-                    </button>
+                <ul className="space-y-1.5">
+                  {['Tarjeta de crédito o débito', 'Saldo de cuenta Mercado Pago', 'Transferencia bancaria vía MP'].map(item => (
+                    <li key={item} className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#009EE3' }} />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#4B5563' }}>{item}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
-              {/* Card form */}
-              <div className="space-y-3">
-                <div>
-                  <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Número de tarjeta <span style={{ color: '#DC2626' }}>*</span></label>
-                  <input
-                    type="text" maxLength={19} value={mpTarjeta.numero} placeholder="0000 0000 0000 0000"
-                    onChange={e => {
-                      const raw = e.target.value.replace(/\D/g, '').slice(0, 16);
-                      const formatted = raw.replace(/(.{4})/g, '$1 ').trim();
-                      setMpTarjeta(t => ({ ...t, numero: formatted }));
-                    }}
-                    className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
-                    style={{ ...inputStyle, '--tw-ring-color': '#009EE3' } as React.CSSProperties}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Vencimiento <span style={{ color: '#DC2626' }}>*</span></label>
-                    <input
-                      type="text" maxLength={5} value={mpTarjeta.vencimiento} placeholder="MM/AA"
-                      onChange={e => {
-                        const raw = e.target.value.replace(/\D/g, '').slice(0, 4);
-                        const formatted = raw.length > 2 ? raw.slice(0, 2) + '/' + raw.slice(2) : raw;
-                        setMpTarjeta(t => ({ ...t, vencimiento: formatted }));
-                      }}
-                      className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
-                      style={inputStyle}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>CVV <span style={{ color: '#DC2626' }}>*</span></label>
-                    <input
-                      type="text" maxLength={4} value={mpTarjeta.cvv} placeholder="123"
-                      onChange={e => setMpTarjeta(t => ({ ...t, cvv: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
-                      className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
-                      style={inputStyle}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Nombre en la tarjeta <span style={{ color: '#DC2626' }}>*</span></label>
-                  <input
-                    type="text" value={mpTarjeta.nombre} placeholder="NOMBRE APELLIDO"
-                    onChange={e => setMpTarjeta(t => ({ ...t, nombre: e.target.value.toUpperCase() }))}
-                    className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
-                    style={inputStyle}
-                  />
-                </div>
-                <div>
-                  <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>RUT del titular <span style={{ color: '#DC2626' }}>*</span></label>
-                  <input
-                    type="text" value={mpTarjeta.rut} placeholder="12.345.678-9"
-                    onChange={e => setMpTarjeta(t => ({ ...t, rut: e.target.value }))}
-                    className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
-                    style={inputStyle}
-                  />
-                </div>
-                {mpMetodo === 'credito' && (
-                  <div>
-                    <label style={{ ...labelStyle, fontSize: 'var(--font-size-xs)' }}>Cuotas <span style={{ color: '#DC2626' }}>*</span></label>
-                    <select value={mpCuotas} onChange={e => setMpCuotas(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2"
-                      style={{ ...inputStyle, cursor: 'pointer', appearance: 'auto' }}>
-                      <option value="1">1 cuota sin interés</option>
-                      <option value="3">3 cuotas</option>
-                      <option value="6">6 cuotas</option>
-                      <option value="12">12 cuotas</option>
-                      <option value="18">18 cuotas</option>
-                      <option value="24">24 cuotas</option>
-                    </select>
-                  </div>
-                )}
-              </div>
-
-              {/* Pay button */}
+              {/* Botón de redirección */}
               <div className="space-y-3 pt-1">
-                <button onClick={handleMpPagar} disabled={mpProcesando || !mpFormValido}
-                  className="w-full py-3 rounded-full font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                <button
+                  onClick={handleMpPagar}
+                  disabled={mpProcesando}
+                  className="w-full py-3 rounded-full font-semibold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   style={{ backgroundColor: '#009EE3', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)' }}
-                  onMouseEnter={e => { if (!mpProcesando && mpFormValido) e.currentTarget.style.backgroundColor = '#0082C2'; }}
-                  onMouseLeave={e => { if (!mpProcesando && mpFormValido) e.currentTarget.style.backgroundColor = '#009EE3'; }}>
+                  onMouseEnter={e => { if (!mpProcesando) e.currentTarget.style.backgroundColor = '#0082C2'; }}
+                  onMouseLeave={e => { if (!mpProcesando) e.currentTarget.style.backgroundColor = '#009EE3'; }}
+                >
                   {mpProcesando
-                    ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Procesando...</>
-                    : `Pagar ${montoPago}`}
+                    ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Redirigiendo...</>
+                    : 'Ir a Mercado Pago'}
                 </button>
                 <div className="flex items-center justify-center gap-1.5">
                   <Lock className="w-3 h-3" style={{ color: '#9CA3AF' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>Operación segura procesada por Mercado Pago</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>Serás redirigido a un entorno seguro de Mercado Pago</span>
                 </div>
-                <button onClick={() => setPaso(2)}
+                <button
+                  onClick={() => setPaso(2)}
                   className="w-full py-2 text-sm transition-colors"
                   style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#374151'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
+                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}
+                >
                   ← Cambiar método de pago
                 </button>
               </div>
