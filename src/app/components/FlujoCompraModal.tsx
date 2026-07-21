@@ -694,6 +694,20 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   </div>
                 )}
               </div>
+
+              {/* Simulador disponibilidad — solo wireframe */}
+              {parcelaNombre.includes(',') && (
+                <div className="pt-3 border-t" style={{ borderColor: '#F3F4F6' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Simular (wireframe)
+                  </p>
+                  <button onClick={() => setPaso('disponibilidad-error')}
+                    className="w-full py-1.5 rounded-lg text-xs font-medium transition-all"
+                    style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
+                    ⚠ Parcela ya no disponible
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -768,19 +782,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 </p>
               </div>
 
-              {/* Simulador disponibilidad — solo wireframe */}
-              {parcelaNombre.includes(',') && (
-                <div className="pt-3 border-t" style={{ borderColor: '#F3F4F6' }}>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                    Simular (wireframe)
-                  </p>
-                  <button onClick={() => setPaso('disponibilidad-error')}
-                    className="w-full py-1.5 rounded-lg text-xs font-medium transition-all"
-                    style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
-                    ⚠ Parcela ya no disponible
-                  </button>
-                </div>
-              )}
             </div>
           )}
 
