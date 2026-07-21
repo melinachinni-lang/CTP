@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import { useI18n } from '@/app/i18n/i18nContext';
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet, Check, X } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -75,6 +75,9 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const [isComprarProyectoOpen, setIsComprarProyectoOpen] = useState(false);
   const [isConsultarOpen, setIsConsultarOpen] = useState(false);
   const [hoveredCompraButton, setHoveredCompraButton] = useState<string | null>(null);
+  const [selectedParcelas, setSelectedParcelas] = useState<string[]>([]);
+  const [isReservaMultipleOpen, setIsReservaMultipleOpen] = useState(false);
+  const stockRef = useRef<HTMLDivElement>(null);
 
   // Obtener datos dinámicos del proyecto
   // Si proyectoId es null o undefined, usar 1 por defecto
@@ -922,7 +925,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
               )}
 
               {/* Stock y disponibilidad */}
-              <div className="bg-white rounded-xl border border-gray-200 p-8">
+              <div ref={stockRef} className="bg-white rounded-xl border border-gray-200 p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
@@ -956,41 +959,60 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 {/* Listado de parcelas - Colapsable */}
                 {isStockOpen && (
                   <div className="space-y-3">
+                    {/* Hint de selección */}
+                    <p style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>
+                      Selecciona una o más parcelas disponibles para reservarlas en una sola operación.
+                    </p>
                     {[
-                      { codigo: 'Parcela A-1', superficie: '5.000 m²', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela A-2', superficie: '5.200 m²', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela A-3', superficie: '4.800 m²', estado: 'reservado', estadoLabel: 'Reservado' },
-                      { codigo: 'Parcela B-1', superficie: '6.500 m²', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela B-2', superficie: '6.300 m²', estado: 'vendido', estadoLabel: 'Vendido' },
-                      { codigo: 'Parcela B-3', superficie: '6.700 m²', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela C-1', superficie: '8.000 m²', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela C-2', superficie: '7.800 m²', estado: 'reservado', estadoLabel: 'Reservado' },
-                    ].map((parcela, index) => (
-                      <div 
-                        key={index}
-                        className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
-                      >
-                        <div className="flex items-center gap-4 flex-1">
-                          <div>
-                            <p style={{ 
-                              fontFamily: 'var(--font-body)',
-                              color: 'var(--foreground)',
-                              fontSize: 'var(--font-size-body-base)',
-                              fontWeight: 'var(--font-weight-semibold)',
-                              marginBottom: '0.25rem'
-                            }}>
-                              {parcela.codigo}
-                            </p>
-                            <p style={{ 
-                              fontFamily: 'var(--font-body)',
-                              color: '#737373',
-                              fontSize: 'var(--font-size-xs)'
-                            }}>
-                              {parcela.superficie}
-                            </p>
+                      { codigo: 'Parcela A-1', superficie: '5.000 m²', precio: '$38.500.000', estado: 'disponible', estadoLabel: 'Disponible' },
+                      { codigo: 'Parcela A-2', superficie: '5.200 m²', precio: '$39.800.000', estado: 'disponible', estadoLabel: 'Disponible' },
+                      { codigo: 'Parcela A-3', superficie: '4.800 m²', precio: '$36.200.000', estado: 'reservado', estadoLabel: 'Reservado' },
+                      { codigo: 'Parcela B-1', superficie: '6.500 m²', precio: '$48.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
+                      { codigo: 'Parcela B-2', superficie: '6.300 m²', precio: '$46.500.000', estado: 'vendido', estadoLabel: 'Vendido' },
+                      { codigo: 'Parcela B-3', superficie: '6.700 m²', precio: '$50.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
+                      { codigo: 'Parcela C-1', superficie: '8.000 m²', precio: '$52.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
+                      { codigo: 'Parcela C-2', superficie: '7.800 m²', precio: '$51.000.000', estado: 'reservado', estadoLabel: 'Reservado' },
+                    ].map((parcela, index) => {
+                      const isSelected = selectedParcelas.includes(parcela.codigo);
+                      const isDisponible = parcela.estado === 'disponible';
+                      return (
+                        <div
+                          key={index}
+                          onClick={() => {
+                            if (!isDisponible) return;
+                            setSelectedParcelas(prev =>
+                              prev.includes(parcela.codigo)
+                                ? prev.filter(c => c !== parcela.codigo)
+                                : [...prev, parcela.codigo]
+                            );
+                          }}
+                          className="flex items-center justify-between p-4 rounded-lg border transition-all"
+                          style={{
+                            borderColor: isSelected ? '#006B4E' : '#E5E5E5',
+                            backgroundColor: isSelected ? '#F0FDF4' : '#FFFFFF',
+                            cursor: isDisponible ? 'pointer' : 'default',
+                          }}
+                        >
+                          <div className="flex items-center gap-3 flex-1">
+                            {/* Checkbox */}
+                            <div
+                              className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all"
+                              style={{
+                                backgroundColor: isSelected ? '#006B4E' : '#FFFFFF',
+                                border: `2px solid ${isSelected ? '#006B4E' : isDisponible ? '#D4D4D4' : '#E5E5E5'}`,
+                              }}
+                            >
+                              {isSelected && <Check className="w-3 h-3" style={{ color: '#FFFFFF' }} />}
+                            </div>
+                            <div>
+                              <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', marginBottom: '2px' }}>
+                                {parcela.codigo}
+                              </p>
+                              <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-xs)' }}>
+                                {parcela.superficie} · {parcela.precio}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-3">
                           <div
                             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
                             style={{
@@ -998,59 +1020,46 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               border: `1px solid ${parcela.estado === 'disponible' ? '#BBF7D0' : parcela.estado === 'reservado' ? '#FDE68A' : '#E5E5E5'}`
                             }}
                           >
-                            <div
-                              className="w-1.5 h-1.5 rounded-full"
-                              style={{ backgroundColor: parcela.estado === 'disponible' ? '#16A34A' : parcela.estado === 'reservado' ? '#CA8A04' : '#737373' }}
-                            />
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 'var(--font-size-xs)',
-                              fontWeight: 'var(--font-weight-medium)',
-                              color: parcela.estado === 'disponible' ? '#166534' : parcela.estado === 'reservado' ? '#854D0E' : '#525252'
-                            }}>
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: parcela.estado === 'disponible' ? '#16A34A' : parcela.estado === 'reservado' ? '#CA8A04' : '#737373' }} />
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: parcela.estado === 'disponible' ? '#166534' : parcela.estado === 'reservado' ? '#854D0E' : '#525252' }}>
                               {parcela.estadoLabel}
                             </span>
                           </div>
-                          <div className="relative">
-                            <button
-                              onClick={parcela.estado === 'disponible' ? () => setIsComprarProyectoOpen(true) : undefined}
-                              disabled={parcela.estado !== 'disponible'}
-                              className="w-10 h-10 rounded-full flex items-center justify-center border transition-all"
-                              style={{
-                                backgroundColor: parcela.estado !== 'disponible' ? '#F5F5F5' : '#FFFFFF',
-                                borderColor: parcela.estado !== 'disponible' ? '#E5E5E5' : '#D4D4D4',
-                                cursor: parcela.estado !== 'disponible' ? 'not-allowed' : 'pointer',
-                                opacity: parcela.estado !== 'disponible' ? 0.5 : 1
-                              }}
-                              onMouseEnter={(e) => {
-                                if (parcela.estado === 'disponible') {
-                                  setHoveredCompraButton(parcela.codigo);
-                                  e.currentTarget.style.borderColor = '#A3A3A3';
-                                  e.currentTarget.style.backgroundColor = '#FAFAFA';
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (parcela.estado === 'disponible') {
-                                  setHoveredCompraButton(null);
-                                  e.currentTarget.style.borderColor = '#D4D4D4';
-                                  e.currentTarget.style.backgroundColor = '#FFFFFF';
-                                }
-                              }}
-                            >
-                              <ShoppingCart className="w-4 h-4" style={{ color: parcela.estado !== 'disponible' ? '#A3A3A3' : '#0A0A0A' }} />
-                            </button>
-                            {hoveredCompraButton === parcela.codigo && parcela.estado === 'disponible' && (
-                              <div
-                                className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg whitespace-nowrap pointer-events-none z-10"
-                                style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}
-                              >
-                                Comprar esta parcela
-                              </div>
-                            )}
-                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Barra de selección sticky */}
+                {selectedParcelas.length > 0 && (
+                  <div
+                    className="fixed bottom-6 left-1/2 z-50 flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl"
+                    style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', minWidth: '380px' }}
+                  >
+                    <div className="flex-1">
+                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '15px', color: '#FFFFFF' }}>
+                        {selectedParcelas.length} {selectedParcelas.length === 1 ? 'parcela seleccionada' : 'parcelas seleccionadas'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsReservaMultipleOpen(true)}
+                      className="px-5 py-2.5 rounded-full transition-all whitespace-nowrap"
+                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#01533E')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#006B4E')}
+                    >
+                      Reservar selección
+                    </button>
+                    <button
+                      onClick={() => setSelectedParcelas([])}
+                      className="p-1.5 rounded-full transition-all"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)')}
+                    >
+                      <X className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                    </button>
                   </div>
                 )}
               </div>
@@ -1136,82 +1145,72 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
               <div className="sticky top-32 space-y-6">
                 {/* Card de resumen y CTA */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                  <div className="space-y-4">
-                    {/* Precio */}
+                  <div className="space-y-5">
+                    {/* Rango de precios */}
                     <div>
-                      <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
-                        {t.detail.basePricePerParcel}
+                      <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', letterSpacing: '0.04em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
+                        rango de precios
                       </p>
                       <PrecioDisplay precioCLP={proyecto.precioDesde} precioSize="xl" />
                     </div>
 
-                    {/* Primer dueño badge */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ border: '1px solid #E5E5E5' }}>
-                      <Info className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
-                      <span style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Primer dueño</span>
-                    </div>
-
                     {/* Separador */}
-                    <div style={{ height: '1px', backgroundColor: '#E5E5E5' }} />
+                    <div style={{ height: '1px', backgroundColor: '#E5E5E0' }} />
 
-                    {/* Features grid */}
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
-                      <div className="flex items-center gap-1.5">
-                        <Expand className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.superficieDesde}</span>
+                    {/* Grid: superficie + total parcelas */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>superficie</p>
+                        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, color: '#0A0A0A', fontSize: '15px' }}>{proyecto.superficieDesde}</p>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Home className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.totalParcelas} parcelas</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.parcelasDisponibles} disponibles</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.tipo}</span>
+                      <div>
+                        <p style={{ fontSize: '11px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>total parcelas</p>
+                        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, color: '#0A0A0A', fontSize: '15px' }}>{proyecto.totalParcelas}</p>
                       </div>
                     </div>
 
-                    {/* Badges de estado */}
-                    <div className="flex flex-wrap gap-1.5">
-                      <span style={{ backgroundColor: '#006B4E', color: '#fff', fontSize: '11px', fontWeight: 600, padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
-                        disponible
+                    {/* Badge disponibilidad */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, padding: '4px 12px', borderRadius: '200px' }}>
+                        {proyecto.parcelasDisponibles} disponibles
                       </span>
-                      {['reservándose', 'pago-en-validación', 'reservada'].map(s => (
-                        <span key={s} style={{ border: '1px solid #E5E5E5', color: '#737373', fontSize: '11px', padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
-                          {s}
-                        </span>
-                      ))}
+                      <span style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)' }}>
+                        de {proyecto.totalParcelas} en total
+                      </span>
                     </div>
 
-                    {/* CTA principal */}
+                    {/* CTA principal: Ver parcelas */}
                     <button
-                      onClick={() => setIsComprarProyectoOpen(true)}
-                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
-                      style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
+                      onClick={() => {
+                        setIsStockOpen(true);
+                        setTimeout(() => stockRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
+                      style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#262626')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#0A0A0A')}
                     >
-                      <ShoppingCart className="w-4 h-4" />
-                      Comprar proyecto
+                      Ver parcelas disponibles
                     </button>
 
-                    {/* CTA secundario */}
+                    {/* CTA secundario: Brochure */}
                     <button
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
-                      style={{ backgroundColor: '#F5F5F0', color: '#006B4E', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
+                      style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F5F5F5')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
                     >
                       <Download className="w-4 h-4" />
                       Descargar brochure
                     </button>
 
-                    {/* CTA terciario */}
+                    {/* CTA terciario: Consultar */}
                     <button
                       onClick={() => setIsConsultarOpen(true)}
-                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:bg-gray-50"
-                      style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
+                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
+                      style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', backgroundColor: '#FFFFFF' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F5F5F5')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#FFFFFF')}
                     >
                       <MessageSquare className="w-4 h-4" />
                       Consultar
@@ -1316,6 +1315,60 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
         }}
         parcelaNombre={proyecto.nombre}
       />
+
+      {/* Modal de reserva múltiple */}
+      {isReservaMultipleOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          onClick={e => { if (e.target === e.currentTarget) setIsReservaMultipleOpen(false); }}
+        >
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="px-6 py-5 border-b" style={{ borderColor: '#E5E5E5' }}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '0.25rem' }}>
+                    Reservar {selectedParcelas.length} {selectedParcelas.length === 1 ? 'parcela' : 'parcelas'}
+                  </h2>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                    {proyecto.nombre}
+                  </p>
+                </div>
+                <button onClick={() => setIsReservaMultipleOpen(false)} className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
+                  <X className="w-5 h-5" style={{ color: '#525252' }} />
+                </button>
+              </div>
+            </div>
+            <div className="px-6 py-6 space-y-4">
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#525252', lineHeight: '1.6' }}>
+                Vas a reservar las siguientes parcelas en una única operación:
+              </p>
+              <div className="space-y-2">
+                {selectedParcelas.map(codigo => (
+                  <div key={codigo} className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: '#F0FDF4' }}>
+                    <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: '#0A0A0A' }}>{codigo}</span>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => setIsReservaMultipleOpen(false)}
+                className="w-full flex items-center justify-center gap-2 rounded-full transition-all mt-2"
+                style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#01533E')}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#006B4E')}
+              >
+                Confirmar reserva
+              </button>
+            </div>
+            <div className="px-6 py-4 rounded-b-2xl" style={{ backgroundColor: '#F9F9F9' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', lineHeight: '1.5', textAlign: 'center' }}>
+                La reserva genera un único identificador para todas las parcelas seleccionadas
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <SiteFooter onNavigate={onNavigate} />
     </div>
