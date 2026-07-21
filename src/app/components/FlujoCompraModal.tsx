@@ -481,7 +481,9 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '0.25rem' }}>
-                  {tipoCompra === 'comprar' ? 'Comprar parcela' : 'Reservar parcela'}
+                  {tipoCompra === 'comprar'
+                    ? (parcelaNombre.includes(',') ? 'Comprar parcelas' : 'Comprar parcela')
+                    : (parcelaNombre.includes(',') ? 'Reservar parcelas' : 'Reservar parcela')}
                 </h2>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
                   {parcelaNombre} · {precio}
