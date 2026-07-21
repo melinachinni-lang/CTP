@@ -1025,6 +1025,14 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#009EE3'}>
                 Entendido
               </button>
+              <div className="pt-3 border-t" style={{ borderColor: '#F3F4F6' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Simular otro resultado (wireframe)</p>
+                <div className="flex gap-2">
+                  <button onClick={() => setPaso('mp-success')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#D1FAE5', color: '#065F46', fontFamily: 'var(--font-body)', outline: paso === 'mp-success' ? '2px solid #065F46' : 'none' }}>✓ Aprobado</button>
+                  <button onClick={() => setPaso('mp-pendiente')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>⏳ Pendiente</button>
+                  <button onClick={() => setPaso('mp-rechazado')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontFamily: 'var(--font-body)' }}>✕ Rechazado</button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1086,6 +1094,14 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#D97706'}>
                 Entendido, esperaré el email
               </button>
+              <div className="pt-3 border-t" style={{ borderColor: '#F3F4F6' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Simular otro resultado (wireframe)</p>
+                <div className="flex gap-2">
+                  <button onClick={() => setPaso('mp-success')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#D1FAE5', color: '#065F46', fontFamily: 'var(--font-body)' }}>✓ Aprobado</button>
+                  <button onClick={() => setPaso('mp-pendiente')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)', outline: '2px solid #92400E' }}>⏳ Pendiente</button>
+                  <button onClick={() => setPaso('mp-rechazado')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontFamily: 'var(--font-body)' }}>✕ Rechazado</button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1135,6 +1151,14 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
                   onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
                   Cancelar
                 </button>
+              </div>
+              <div className="pt-3 border-t" style={{ borderColor: '#F3F4F6' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '10px', color: '#D1D5DB', textAlign: 'center', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Simular otro resultado (wireframe)</p>
+                <div className="flex gap-2">
+                  <button onClick={() => setPaso('mp-success')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#D1FAE5', color: '#065F46', fontFamily: 'var(--font-body)' }}>✓ Aprobado</button>
+                  <button onClick={() => setPaso('mp-pendiente')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>⏳ Pendiente</button>
+                  <button onClick={() => setPaso('mp-rechazado')} className="flex-1 py-1.5 rounded-lg text-xs font-medium" style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontFamily: 'var(--font-body)', outline: '2px solid #991B1B' }}>✕ Rechazado</button>
+                </div>
               </div>
             </div>
           )}
