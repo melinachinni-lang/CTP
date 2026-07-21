@@ -195,6 +195,10 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isPlanesModalOpen, setIsPlanesModalOpen] = useState(false);
 
+  // Estados para banner carousel
+  const [bannerSlide, setBannerSlide] = useState(0);
+  const [bannerHovered, setBannerHovered] = useState(false);
+
   // Actualizar estado cuando cambie la prop initialLoadingError
   useEffect(() => {
     setLoadingError(initialLoadingError);
@@ -544,6 +548,45 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
       carousel.scrollLeft = setWidth;
     }, 0);
   }, [selectedTab]);
+
+  // Auto-avance del banner carousel
+  useEffect(() => {
+    if (bannerHovered) return;
+    const timer = setInterval(() => {
+      setBannerSlide(s => (s + 1) % 3);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [bannerHovered]);
+
+  const bannerItems = [
+    {
+      bgColor: '#002F23',
+      accentColor: '#7DB89A',
+      category: 'Financiamiento',
+      title: 'Tu parcela en cuotas accesibles',
+      subtitle: 'Planes de pago flexibles pensados para que puedas invertir sin apuros.',
+      cta: 'Ver planes',
+      image: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
+    },
+    {
+      bgColor: '#006B4E',
+      accentColor: '#A8D5C2',
+      category: 'Proceso 100% online',
+      title: 'Desde la búsqueda hasta la escritura',
+      subtitle: 'Todo en un solo lugar, con respaldo legal y acompañamiento en cada paso.',
+      cta: 'Cómo funciona',
+      image: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
+    },
+    {
+      bgColor: '#01533E',
+      accentColor: '#90C5A8',
+      category: 'Inversión',
+      title: 'La tierra que no se devalúa',
+      subtitle: 'Invertir en parcelas es apostar por un activo real que crece con el tiempo.',
+      cta: 'Ver proyectos',
+      image: 'https://images.unsplash.com/photo-1748711243680-1c4ab4f9979f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmR8ZW58MXx8fHwxNzY4ODY1MzExfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    },
+  ];
 
   // Datos de las parcelas
   const parcelas = [
@@ -1693,6 +1736,144 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                 >
                   {t.home.viewAllParcels}
                 </button>
+              </div>
+            </div>
+          </section>
+
+          {/* Banner Carousel */}
+          <section className="py-8 md:py-10 bg-white relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div
+                className="relative overflow-hidden rounded-2xl"
+                style={{ height: '200px' }}
+                onMouseEnter={() => setBannerHovered(true)}
+                onMouseLeave={() => setBannerHovered(false)}
+              >
+                {/* Slides wrapper */}
+                <div
+                  className="flex h-full"
+                  style={{
+                    transform: `translateX(-${bannerSlide * 100}%)`,
+                    transition: 'transform 0.5s ease-in-out',
+                    width: `${bannerItems.length * 100}%`,
+                  }}
+                >
+                  {bannerItems.map((banner, index) => (
+                    <div
+                      key={index}
+                      className="flex h-full"
+                      style={{ width: `${100 / bannerItems.length}%` }}
+                    >
+                      {/* Left: text + CTA */}
+                      <div
+                        className="flex flex-col justify-center px-8 md:px-12 flex-shrink-0"
+                        style={{ width: '42%', backgroundColor: banner.bgColor }}
+                      >
+                        <p
+                          className="text-xs font-medium uppercase mb-2"
+                          style={{
+                            color: banner.accentColor,
+                            letterSpacing: '0.1em',
+                            fontFamily: 'var(--font-body)'
+                          }}
+                        >
+                          {banner.category}
+                        </p>
+                        <h3
+                          className="mb-2"
+                          style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 'var(--font-weight-semibold)',
+                            fontSize: 'clamp(18px, 2.2vw, 26px)',
+                            color: '#FFFFFF',
+                            lineHeight: '1.25',
+                          }}
+                        >
+                          {banner.title}
+                        </h3>
+                        <p
+                          className="mb-5 hidden md:block"
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '13px',
+                            color: 'rgba(255,255,255,0.7)',
+                            lineHeight: '1.5',
+                          }}
+                        >
+                          {banner.subtitle}
+                        </p>
+                        <button
+                          className="self-start px-5 py-2 rounded-full text-sm font-medium transition-all"
+                          style={{
+                            backgroundColor: '#FFFFFF',
+                            color: banner.bgColor,
+                            fontFamily: 'var(--font-body)',
+                            fontWeight: 'var(--font-weight-medium)',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.85)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#FFFFFF';
+                          }}
+                        >
+                          {banner.cta}
+                        </button>
+                      </div>
+                      {/* Right: image */}
+                      <div className="flex-1 relative overflow-hidden">
+                        <img
+                          src={banner.image}
+                          alt={banner.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div
+                          className="absolute inset-y-0 left-0 w-20 pointer-events-none"
+                          style={{ background: `linear-gradient(to right, ${banner.bgColor}, transparent)` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Chevron izquierdo */}
+                <button
+                  onClick={() => setBannerSlide(s => (s - 1 + bannerItems.length) % bannerItems.length)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.4)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
+                >
+                  <ChevronLeft className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                </button>
+
+                {/* Chevron derecho */}
+                <button
+                  onClick={() => setBannerSlide(s => (s + 1) % bannerItems.length)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.4)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
+                >
+                  <ChevronRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                </button>
+              </div>
+
+              {/* Dots de navegación */}
+              <div className="flex justify-center items-center gap-2 mt-4">
+                {bannerItems.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setBannerSlide(i)}
+                    className="transition-all duration-300"
+                    style={{
+                      width: bannerSlide === i ? '24px' : '8px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      backgroundColor: bannerSlide === i ? '#006B4E' : '#D4D4D4',
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </section>
