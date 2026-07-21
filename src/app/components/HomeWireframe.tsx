@@ -2011,7 +2011,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div
                 className="relative overflow-hidden rounded-2xl"
-                style={{ height: '200px' }}
+                style={{ height: '220px' }}
                 onMouseEnter={() => setBannerHovered(true)}
                 onMouseLeave={() => setBannerHovered(false)}
               >
@@ -2032,7 +2032,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     >
                       {/* Left: text + CTA */}
                       <div
-                        className="flex flex-col justify-center px-8 md:px-12 py-6 flex-shrink-0 overflow-hidden"
+                        className="flex flex-col justify-center px-8 md:px-12 py-4 flex-shrink-0 overflow-hidden"
                         style={{ width: '42%', backgroundColor: banner.bgColor }}
                       >
                         <p
@@ -2046,7 +2046,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                           {banner.category}
                         </p>
                         <h3
-                          className="mb-2"
+                          className="mb-5"
                           style={{
                             fontFamily: 'var(--font-heading)',
                             fontWeight: 'var(--font-weight-semibold)',
@@ -2057,17 +2057,6 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         >
                           {banner.title}
                         </h3>
-                        <p
-                          className="mb-5 hidden md:block"
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '13px',
-                            color: 'rgba(255,255,255,0.7)',
-                            lineHeight: '1.5',
-                          }}
-                        >
-                          {banner.subtitle}
-                        </p>
                         <button
                           className="self-start px-5 py-2 rounded-full text-sm font-medium transition-all"
                           style={{
