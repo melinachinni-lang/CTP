@@ -1740,144 +1740,6 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
             </div>
           </section>
 
-          {/* Banner Carousel */}
-          <section className="py-8 md:py-10 bg-white relative z-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
-              <div
-                className="relative overflow-hidden rounded-2xl"
-                style={{ height: '200px' }}
-                onMouseEnter={() => setBannerHovered(true)}
-                onMouseLeave={() => setBannerHovered(false)}
-              >
-                {/* Slides wrapper */}
-                <div
-                  className="flex h-full"
-                  style={{
-                    transform: `translateX(-${bannerSlide * (100 / bannerItems.length)}%)`,
-                    transition: 'transform 0.5s ease-in-out',
-                    width: `${bannerItems.length * 100}%`,
-                  }}
-                >
-                  {bannerItems.map((banner, index) => (
-                    <div
-                      key={index}
-                      className="flex h-full"
-                      style={{ width: `${100 / bannerItems.length}%` }}
-                    >
-                      {/* Left: text + CTA */}
-                      <div
-                        className="flex flex-col justify-center px-8 md:px-12 flex-shrink-0"
-                        style={{ width: '42%', backgroundColor: banner.bgColor }}
-                      >
-                        <p
-                          className="text-xs font-medium uppercase mb-2"
-                          style={{
-                            color: banner.accentColor,
-                            letterSpacing: '0.1em',
-                            fontFamily: 'var(--font-body)'
-                          }}
-                        >
-                          {banner.category}
-                        </p>
-                        <h3
-                          className="mb-2"
-                          style={{
-                            fontFamily: 'var(--font-heading)',
-                            fontWeight: 'var(--font-weight-semibold)',
-                            fontSize: 'clamp(18px, 2.2vw, 26px)',
-                            color: '#FFFFFF',
-                            lineHeight: '1.25',
-                          }}
-                        >
-                          {banner.title}
-                        </h3>
-                        <p
-                          className="mb-5 hidden md:block"
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '13px',
-                            color: 'rgba(255,255,255,0.7)',
-                            lineHeight: '1.5',
-                          }}
-                        >
-                          {banner.subtitle}
-                        </p>
-                        <button
-                          className="self-start px-5 py-2 rounded-full text-sm font-medium transition-all"
-                          style={{
-                            backgroundColor: '#FFFFFF',
-                            color: banner.bgColor,
-                            fontFamily: 'var(--font-body)',
-                            fontWeight: 'var(--font-weight-medium)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.85)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#FFFFFF';
-                          }}
-                        >
-                          {banner.cta}
-                        </button>
-                      </div>
-                      {/* Right: image */}
-                      <div className="flex-1 relative overflow-hidden">
-                        <img
-                          src={banner.image}
-                          alt={banner.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div
-                          className="absolute inset-y-0 left-0 w-20 pointer-events-none"
-                          style={{ background: `linear-gradient(to right, ${banner.bgColor}, transparent)` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Chevron izquierdo */}
-                <button
-                  onClick={() => setBannerSlide(s => (s - 1 + bannerItems.length) % bannerItems.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.4)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
-                >
-                  <ChevronLeft className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-                </button>
-
-                {/* Chevron derecho */}
-                <button
-                  onClick={() => setBannerSlide(s => (s + 1) % bannerItems.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.4)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
-                >
-                  <ChevronRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-                </button>
-              </div>
-
-              {/* Dots de navegación */}
-              <div className="flex justify-center items-center gap-2 mt-4">
-                {bannerItems.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setBannerSlide(i)}
-                    className="transition-all duration-300"
-                    style={{
-                      width: bannerSlide === i ? '24px' : '8px',
-                      height: '8px',
-                      borderRadius: '4px',
-                      backgroundColor: bannerSlide === i ? '#006B4E' : '#D4D4D4',
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-
           {/* Sección de valor: Asesoría gratuita */}
           <section 
             className="py-12 md:py-16 lg:py-20 relative z-10 overflow-hidden"
@@ -2139,6 +2001,140 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                       />
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Banner Carousel */}
+          <section className="py-8 md:py-10 bg-white relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div
+                className="relative overflow-hidden rounded-2xl"
+                style={{ height: '200px' }}
+                onMouseEnter={() => setBannerHovered(true)}
+                onMouseLeave={() => setBannerHovered(false)}
+              >
+                {/* Slides wrapper */}
+                <div
+                  className="flex h-full"
+                  style={{
+                    transform: `translateX(-${bannerSlide * (100 / bannerItems.length)}%)`,
+                    transition: 'transform 0.5s ease-in-out',
+                    width: `${bannerItems.length * 100}%`,
+                  }}
+                >
+                  {bannerItems.map((banner, index) => (
+                    <div
+                      key={index}
+                      className="flex h-full"
+                      style={{ width: `${100 / bannerItems.length}%` }}
+                    >
+                      {/* Left: text + CTA */}
+                      <div
+                        className="flex flex-col justify-center px-8 md:px-12 flex-shrink-0"
+                        style={{ width: '42%', backgroundColor: banner.bgColor }}
+                      >
+                        <p
+                          className="text-xs font-medium uppercase mb-2"
+                          style={{
+                            color: banner.accentColor,
+                            letterSpacing: '0.1em',
+                            fontFamily: 'var(--font-body)'
+                          }}
+                        >
+                          {banner.category}
+                        </p>
+                        <h3
+                          className="mb-2"
+                          style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 'var(--font-weight-semibold)',
+                            fontSize: 'clamp(18px, 2.2vw, 26px)',
+                            color: '#FFFFFF',
+                            lineHeight: '1.25',
+                          }}
+                        >
+                          {banner.title}
+                        </h3>
+                        <p
+                          className="mb-5 hidden md:block"
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '13px',
+                            color: 'rgba(255,255,255,0.7)',
+                            lineHeight: '1.5',
+                          }}
+                        >
+                          {banner.subtitle}
+                        </p>
+                        <button
+                          className="self-start px-5 py-2 rounded-full text-sm font-medium transition-all"
+                          style={{
+                            backgroundColor: '#FFFFFF',
+                            color: banner.bgColor,
+                            fontFamily: 'var(--font-body)',
+                            fontWeight: 'var(--font-weight-medium)',
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.85)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                        >
+                          {banner.cta}
+                        </button>
+                      </div>
+                      {/* Right: image */}
+                      <div className="flex-1 relative overflow-hidden">
+                        <img
+                          src={banner.image}
+                          alt={banner.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div
+                          className="absolute inset-y-0 left-0 w-20 pointer-events-none"
+                          style={{ background: `linear-gradient(to right, ${banner.bgColor}, transparent)` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Chevron izquierdo */}
+                <button
+                  onClick={() => setBannerSlide(s => (s - 1 + bannerItems.length) % bannerItems.length)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.4)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
+                >
+                  <ChevronLeft className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                </button>
+
+                {/* Chevron derecho */}
+                <button
+                  onClick={() => setBannerSlide(s => (s + 1) % bannerItems.length)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.4)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
+                >
+                  <ChevronRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                </button>
+              </div>
+
+              {/* Dots de navegación */}
+              <div className="flex justify-center items-center gap-2 mt-4">
+                {bannerItems.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setBannerSlide(i)}
+                    className="transition-all duration-300"
+                    style={{
+                      width: bannerSlide === i ? '24px' : '8px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      backgroundColor: bannerSlide === i ? '#006B4E' : '#D4D4D4',
+                    }}
+                  />
                 ))}
               </div>
             </div>
