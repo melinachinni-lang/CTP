@@ -1010,16 +1010,18 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           }}
                         >
                           <div className="flex items-center gap-3 flex-1">
-                            {/* Checkbox */}
-                            <div
-                              className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all"
-                              style={{
-                                backgroundColor: isSelected ? '#006B4E' : '#FFFFFF',
-                                border: `2px solid ${isSelected ? '#006B4E' : isDisponible ? '#D4D4D4' : '#E5E5E5'}`,
-                              }}
-                            >
-                              {isSelected && <Check className="w-3 h-3" style={{ color: '#FFFFFF' }} />}
-                            </div>
+                            {/* Checkbox — solo en disponibles */}
+                            {isDisponible && (
+                              <div
+                                className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all"
+                                style={{
+                                  backgroundColor: isSelected ? '#006B4E' : '#FFFFFF',
+                                  border: `2px solid ${isSelected ? '#006B4E' : '#D4D4D4'}`,
+                                }}
+                              >
+                                {isSelected && <Check className="w-3 h-3" style={{ color: '#FFFFFF' }} />}
+                              </div>
+                            )}
                             <div>
                               <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', marginBottom: '2px' }}>
                                 {parcela.codigo}
