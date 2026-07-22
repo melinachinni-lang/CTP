@@ -478,7 +478,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
       onClick={e => { if (e.target === e.currentTarget) handleIntentoCerrar(); }}>
 
       {/* Modal */}
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh', height: paso === 'aviso' ? '90vh' : undefined }}>
 
         {/* Header */}
         {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && paso !== 'disponibilidad-error' && (
