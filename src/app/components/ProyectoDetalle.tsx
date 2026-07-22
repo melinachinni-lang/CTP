@@ -1209,18 +1209,6 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       </div>
                     </div>
 
-                    {/* Badges de estado */}
-                    <div className="flex flex-wrap gap-1.5">
-                      <span style={{ backgroundColor: '#006B4E', color: '#fff', fontSize: '11px', fontWeight: 600, padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
-                        disponible
-                      </span>
-                      {['reservandose', 'pago-en-validacion', 'reservada'].map(s => (
-                        <span key={s} style={{ border: '1px solid #E5E5E5', color: '#737373', fontSize: '11px', padding: '4px 10px', borderRadius: '200px', fontFamily: 'var(--font-body)' }}>
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-
                     {/* CTA principal: Ver parcelas disponibles */}
                     <button
                       onClick={() => {
