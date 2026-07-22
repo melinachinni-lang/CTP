@@ -192,7 +192,7 @@ function BannerEditor({ banner, onBack, onSave }: {
             {/* Imagen */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
               <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '10px' }}>Imagen</label>
-              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" style={{ display: 'none' }} onChange={handleFileChange} />
+              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg" style={{ display: 'none' }} onChange={handleFileChange} />
               {imagenUrl ? (
                 <div className="rounded-xl overflow-hidden relative" style={{ border: '1px solid #E5E5E5' }}>
                   <img src={imagenUrl} alt="Preview" style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }} />
@@ -214,7 +214,7 @@ function BannerEditor({ banner, onBack, onSave }: {
                 </div>
               )}
               <p className="mt-2.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                Formatos aceptados: <strong style={{ color: '#6B7280' }}>PNG, JPG, WEBP</strong> · Peso máximo: <strong style={{ color: '#6B7280' }}>2 MB</strong> · Dimensiones recomendadas: <strong style={{ color: '#6B7280' }}>1200 × 400 px</strong>
+                Formatos aceptados: <strong style={{ color: '#6B7280' }}>PNG, JPG</strong> · Peso máximo: <strong style={{ color: '#6B7280' }}>2 MB</strong> · Dimensiones recomendadas: <strong style={{ color: '#6B7280' }}>1200 × 400 px</strong>
               </p>
             </div>
 
