@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, X, Upload, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle, Link } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, X, Upload, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle, Link, Calendar } from 'lucide-react';
+
+const MAX_TITULO = 60;
+const MAX_DESC = 120;
 
 interface BannerAdmin {
   id: number;
@@ -7,8 +10,16 @@ interface BannerAdmin {
   descripcion: string;
   textoBoton: string;
   urlBoton: string;
+  fechaInicio: string;
+  fechaFin: string;
   imagen: string | null;
   activo: boolean;
+}
+
+function formatDate(d: string) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}/${y}`;
 }
 
 const BG = '#002F23';
@@ -20,6 +31,8 @@ const initialBanners: BannerAdmin[] = [
     descripcion: 'Planes de pago flexibles pensados para que puedas invertir sin apuros.',
     textoBoton: 'Ver planes',
     urlBoton: '/planes',
+    fechaInicio: '2025-02-01',
+    fechaFin: '2025-03-31',
     imagen: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
     activo: true,
   },
@@ -29,6 +42,8 @@ const initialBanners: BannerAdmin[] = [
     descripcion: 'Todo en un solo lugar, con respaldo legal y acompañamiento en cada paso.',
     textoBoton: 'Cómo funciona',
     urlBoton: '/como-funciona',
+    fechaInicio: '2025-02-14',
+    fechaFin: '2025-04-30',
     imagen: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
     activo: true,
   },
@@ -38,6 +53,8 @@ const initialBanners: BannerAdmin[] = [
     descripcion: 'Invertir en parcelas es apostar por un activo real que crece con el tiempo.',
     textoBoton: 'Ver proyectos',
     urlBoton: '/proyectos',
+    fechaInicio: '2025-02-01',
+    fechaFin: '2025-05-31',
     imagen: 'https://images.unsplash.com/photo-1748711243680-1c4ab4f9979f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmR8ZW58MXx8fHwxNzY4ODY1MzExfDA&ixlib=rb-4.1.0&q=80&w=1080',
     activo: true,
   },
@@ -54,12 +71,14 @@ function BannerEditor({ banner, onBack, onSave }: {
   const [descripcion, setDescripcion] = useState(banner?.descripcion ?? '');
   const [textoBoton, setTextoBoton] = useState(banner?.textoBoton ?? '');
   const [urlBoton, setUrlBoton] = useState(banner?.urlBoton ?? '');
+  const [fechaInicio, setFechaInicio] = useState(banner?.fechaInicio ?? '');
+  const [fechaFin, setFechaFin] = useState(banner?.fechaFin ?? '');
   const [activo, setActivo] = useState(banner?.activo ?? true);
   const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [createSuccess, setCreateSuccess] = useState(false);
-  const [errors, setErrors] = useState({ titulo: false, descripcion: false, textoBoton: false, urlBoton: false });
+  const [errors, setErrors] = useState({ titulo: false, descripcion: false, textoBoton: false, urlBoton: false, fechaInicio: false, fechaFin: false });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!banner;
 
@@ -77,10 +96,12 @@ function BannerEditor({ banner, onBack, onSave }: {
       descripcion: !descripcion.trim(),
       textoBoton: !textoBoton.trim(),
       urlBoton: !urlBoton.trim(),
+      fechaInicio: !fechaInicio,
+      fechaFin: !fechaFin,
     };
     setErrors(newErrors);
     if (Object.values(newErrors).some(Boolean)) return;
-    onSave({ titulo, descripcion, textoBoton, urlBoton, imagen: imagenUrl, activo });
+    onSave({ titulo, descripcion, textoBoton, urlBoton, fechaInicio, fechaFin, imagen: imagenUrl, activo });
     if (isEdit) {
       setSaveSuccess(true);
       setTimeout(() => { setSaveSuccess(false); onBack(); }, 1200);
@@ -197,12 +218,17 @@ function BannerEditor({ banner, onBack, onSave }: {
 
             {/* Título */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                Título <span style={{ color: '#EF4444' }}>*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>
+                  Título <span style={{ color: '#EF4444' }}>*</span>
+                </label>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: titulo.length > MAX_TITULO ? '#EF4444' : '#9CA3AF' }}>
+                  {titulo.length}/{MAX_TITULO}
+                </span>
+              </div>
               <input
                 value={titulo}
-                onChange={e => setTitulo(e.target.value)}
+                onChange={e => { if (e.target.value.length <= MAX_TITULO) setTitulo(e.target.value); }}
                 placeholder="Ej: Lanzamiento Parcelas Zona Sur"
                 style={inputStyle(errors.titulo)}
                 onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
@@ -213,12 +239,17 @@ function BannerEditor({ banner, onBack, onSave }: {
 
             {/* Descripción */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                Descripción <span style={{ color: '#EF4444' }}>*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>
+                  Descripción <span style={{ color: '#EF4444' }}>*</span>
+                </label>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: descripcion.length > MAX_DESC ? '#EF4444' : '#9CA3AF' }}>
+                  {descripcion.length}/{MAX_DESC}
+                </span>
+              </div>
               <textarea
                 value={descripcion}
-                onChange={e => setDescripcion(e.target.value)}
+                onChange={e => { if (e.target.value.length <= MAX_DESC) setDescripcion(e.target.value); }}
                 placeholder="Subtítulo que aparece bajo el título en el banner"
                 rows={3}
                 style={{ ...inputStyle(errors.descripcion), resize: 'vertical', lineHeight: '1.65' }}
@@ -228,12 +259,12 @@ function BannerEditor({ banner, onBack, onSave }: {
               {errors.descripcion && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La descripción es obligatoria</p>}
             </div>
 
-            {/* Botón */}
+            {/* Botón — en una sola fila */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '600', color: '#0A0A0A', display: 'block', marginBottom: '14px' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '600', color: '#0A0A0A', display: 'block', marginBottom: '12px' }}>
                 Botón de acción
               </label>
-              <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '6px' }}>
                     Texto del botón <span style={{ color: '#EF4444' }}>*</span>
@@ -246,7 +277,7 @@ function BannerEditor({ banner, onBack, onSave }: {
                     onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                     onBlur={e => { e.currentTarget.style.borderColor = errors.textoBoton ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
                   />
-                  {errors.textoBoton && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> El texto del botón es obligatorio</p>}
+                  {errors.textoBoton && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
                 </div>
                 <div>
                   <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '6px' }}>
@@ -257,13 +288,33 @@ function BannerEditor({ banner, onBack, onSave }: {
                     <input
                       value={urlBoton}
                       onChange={e => setUrlBoton(e.target.value)}
-                      placeholder="/proyectos o https://..."
+                      placeholder="/proyectos"
                       style={{ ...inputStyle(errors.urlBoton), paddingLeft: '36px' }}
                       onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                       onBlur={e => { e.currentTarget.style.borderColor = errors.urlBoton ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
                     />
                   </div>
-                  {errors.urlBoton && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La URL es obligatoria</p>}
+                  {errors.urlBoton && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Fechas */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                    Fecha inicio <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} style={inputStyle(errors.fechaInicio)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaInicio ? '#EF4444' : '#E5E5E5'; }} />
+                  {errors.fechaInicio && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                    Fecha término <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)} style={inputStyle(errors.fechaFin)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaFin ? '#EF4444' : '#E5E5E5'; }} />
+                  {errors.fechaFin && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
                 </div>
               </div>
             </div>
@@ -656,8 +707,13 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
                   <p className="hidden sm:block" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '8px' }}>
                     {banner.descripcion}
                   </p>
-                  {/* Botón */}
-                  <div className="flex items-center gap-1.5 mb-10px">
+                  <div className="flex items-center justify-between flex-wrap gap-2 mt-1 mb-1">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                        {formatDate(banner.fechaInicio)} → {formatDate(banner.fechaFin)}
+                      </span>
+                    </div>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ backgroundColor: '#F3F4F6', fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
                       <Link className="w-3 h-3" />
                       {banner.textoBoton}
