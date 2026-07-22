@@ -470,7 +470,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
   return (
     <>
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
       onClick={e => { if (e.target === e.currentTarget) handleIntentoCerrar(); }}>
 
@@ -1500,7 +1500,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     {/* ── WARNING SALIR — overlay fixed encima de todo ── */}
     {showExitWarning && (
       <div
-        className="fixed inset-0 z-[60] flex items-center justify-center p-6"
+        className="fixed inset-0 z-[300] flex items-center justify-center p-6"
         style={{ backgroundColor: 'rgba(10, 10, 10, 0.65)' }}
       >
         <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm space-y-5 text-center">
