@@ -1064,7 +1064,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 )}
 
                 {/* Panel de acciones inline */}
-                {selectedParcelas.length > 0 && (
+                {selectedParcelas.length > 0 && !isFlujoCompraMultipleOpen && (
                   <div className="mt-4 pt-4 space-y-3" style={{ borderTop: '1px solid #E5E5E5' }}>
                     <div className="flex items-center justify-between">
                       <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px', color: '#0A0A0A' }}>
