@@ -218,14 +218,9 @@ function BannerEditor({ banner, onBack, onSave }: {
 
             {/* Título */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div className="flex items-center justify-between mb-1.5">
-                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>
-                  Título <span style={{ color: '#EF4444' }}>*</span>
-                </label>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: titulo.length > MAX_TITULO ? '#EF4444' : '#9CA3AF' }}>
-                  {titulo.length}/{MAX_TITULO}
-                </span>
-              </div>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Título <span style={{ color: '#EF4444' }}>*</span>
+              </label>
               <input
                 value={titulo}
                 onChange={e => { if (e.target.value.length <= MAX_TITULO) setTitulo(e.target.value); }}
@@ -234,19 +229,17 @@ function BannerEditor({ banner, onBack, onSave }: {
                 onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                 onBlur={e => { e.currentTarget.style.borderColor = errors.titulo ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
               />
-              {errors.titulo && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> El título es obligatorio</p>}
+              <div className="flex items-center justify-between mt-1.5">
+                {errors.titulo ? <p className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> El título es obligatorio</p> : <span />}
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: titulo.length >= MAX_TITULO ? '#EF4444' : '#9CA3AF' }}>{titulo.length}/{MAX_TITULO}</span>
+              </div>
             </div>
 
             {/* Descripción */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div className="flex items-center justify-between mb-1.5">
-                <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>
-                  Descripción <span style={{ color: '#EF4444' }}>*</span>
-                </label>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: descripcion.length > MAX_DESC ? '#EF4444' : '#9CA3AF' }}>
-                  {descripcion.length}/{MAX_DESC}
-                </span>
-              </div>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Descripción <span style={{ color: '#EF4444' }}>*</span>
+              </label>
               <textarea
                 value={descripcion}
                 onChange={e => { if (e.target.value.length <= MAX_DESC) setDescripcion(e.target.value); }}
@@ -256,7 +249,10 @@ function BannerEditor({ banner, onBack, onSave }: {
                 onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
                 onBlur={e => { e.currentTarget.style.borderColor = errors.descripcion ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
               />
-              {errors.descripcion && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La descripción es obligatoria</p>}
+              <div className="flex items-center justify-between mt-1.5">
+                {errors.descripcion ? <p className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La descripción es obligatoria</p> : <span />}
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: descripcion.length >= MAX_DESC ? '#EF4444' : '#9CA3AF' }}>{descripcion.length}/{MAX_DESC}</span>
+              </div>
             </div>
 
             {/* Botón — en una sola fila */}
