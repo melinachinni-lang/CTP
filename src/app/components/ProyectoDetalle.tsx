@@ -144,7 +144,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   })();
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA', visibility: isFlujoCompraMultipleOpen ? 'hidden' : 'visible' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50" style={{ borderBottom: '1px solid #E5E5E5' }}>
         <div className="max-w-[1400px] mx-auto px-8 py-4">

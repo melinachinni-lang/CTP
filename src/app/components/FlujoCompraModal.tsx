@@ -478,7 +478,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
       onClick={e => { if (e.target === e.currentTarget) handleIntentoCerrar(); }}>
 
       {/* Modal */}
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh', height: paso === 'aviso' ? '90vh' : undefined }}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
 
         {/* Header */}
         {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && paso !== 'disponibilidad-error' && (
@@ -534,6 +534,64 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
 
         {/* Contenido scrollable */}
         <div className="px-6 py-6" style={{ overflowY: 'auto', flex: 1 }}>
+
+          {/* ── AVISO ── */}
+          {paso === 'aviso' && !enviado && (
+            <div className="flex flex-col items-center space-y-5 text-center py-2">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+                style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
+                <Clock className="w-8 h-8" style={{ color: '#D97706' }} />
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '10px' }}>
+                  Antes de continuar
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.7' }}>
+                  Al aceptar, {parcelaNombre.includes(',') ? 'las parcelas quedarán bloqueadas' : 'la parcela quedará bloqueada'} para ti y se activará un <strong>temporizador de 30 minutos</strong> por razones de seguridad para completar el pago.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', lineHeight: '1.6', marginTop: '6px' }}>
+                  Si el tiempo expira sin recibir el comprobante, la reserva se liberará automáticamente.
+                </p>
+              </div>
+              <div className="rounded-xl p-4 text-left space-y-2.5 w-full" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '12px', color: '#111827' }}>
+                  Asegúrate de tener listo:
+                </p>
+                {[
+                  'Acceso a tu banco para realizar la transferencia',
+                  'El comprobante de pago (imagen o PDF) para subir',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
+                      <Check className="w-2.5 h-2.5" style={{ color: '#059669' }} />
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151', lineHeight: '1.5' }}>
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-2 w-full">
+                <button
+                  onClick={() => { setPaso(2); onEstadoChange?.('reservandose'); }}
+                  className="w-full py-3 rounded-full font-semibold transition-all"
+                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+                  Aceptar y comenzar
+                </button>
+                <button
+                  onClick={() => setPaso(1)}
+                  className="w-full py-2 transition-colors text-sm"
+                  style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#374151'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
+                  ← Volver a mis datos
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* ── PASO 1: Datos del cliente ── */}
           {paso === 1 && !enviado && (
@@ -1430,72 +1488,6 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
           </div>
         )}
 
-        {/* ── AVISO OVERLAY — aparece como capa sobre el modal ── */}
-        {paso === 'aviso' && !enviado && (
-          <div
-            className="absolute inset-0 rounded-2xl z-20 flex items-center justify-center p-6"
-            style={{ backgroundColor: '#FFFFFF' }}
-          >
-            <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm space-y-5 text-center">
-
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
-                style={{ backgroundColor: '#FEF3C7', border: '4px solid #FDE68A' }}>
-                <Clock className="w-8 h-8" style={{ color: '#D97706' }} />
-              </div>
-
-              <div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'var(--font-size-h3)', color: '#0A0A0A', marginBottom: '10px' }}>
-                  Antes de continuar
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151', lineHeight: '1.7' }}>
-                  Al aceptar, {parcelaNombre.includes(',') ? 'las parcelas quedarán bloqueadas' : 'la parcela quedará bloqueada'} para ti y se activará un <strong>temporizador de 30 minutos</strong> por razones de seguridad para completar el pago.
-                </p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#6B7280', lineHeight: '1.6', marginTop: '6px' }}>
-                  Si el tiempo expira sin recibir el comprobante, la reserva se liberará automáticamente.
-                </p>
-              </div>
-
-              <div className="rounded-xl p-4 text-left space-y-2.5" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '12px', color: '#111827' }}>
-                  Asegúrate de tener listo:
-                </p>
-                {[
-                  'Acceso a tu banco para realizar la transferencia',
-                  'El comprobante de pago (imagen o PDF) para subir',
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
-                      <Check className="w-2.5 h-2.5" style={{ color: '#059669' }} />
-                    </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#374151', lineHeight: '1.5' }}>
-                      {item}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="space-y-2">
-                <button
-                  onClick={() => { setPaso(2); onEstadoChange?.('reservandose'); }}
-                  className="w-full py-3 rounded-full font-semibold transition-all"
-                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-                  Aceptar y comenzar
-                </button>
-                <button
-                  onClick={() => setPaso(1)}
-                  className="w-full py-2 transition-colors text-sm"
-                  style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#374151'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
-                  ← Volver a mis datos
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
       </div>
     </div>
