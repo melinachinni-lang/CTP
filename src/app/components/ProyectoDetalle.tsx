@@ -144,7 +144,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   })();
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA', isolation: 'isolate' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA', visibility: isFlujoCompraMultipleOpen ? 'hidden' : 'visible' }}>
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50" style={{ borderBottom: '1px solid #E5E5E5' }}>
         <div className="max-w-[1400px] mx-auto px-8 py-4">
@@ -1354,11 +1354,6 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
         }}
         parcelaNombre={proyecto.nombre}
       />
-
-      {/* Backdrop local que cubre todos los elementos de ProyectoDetalle cuando el modal está abierto */}
-      {isFlujoCompraMultipleOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 9989, backgroundColor: 'rgba(0,0,0,0.5)', pointerEvents: 'none' }} />
-      )}
 
       {/* Flujo de compra/reserva múltiple — mismo flujo que parcela individual */}
       <FlujoCompraModal
