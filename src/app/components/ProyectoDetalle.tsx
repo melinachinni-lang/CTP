@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet, Check, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet, Check, X, CheckCircle2 } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -1200,7 +1200,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.totalParcelas} parcelas</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                        <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
                         <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.parcelasDisponibles} disponibles</span>
                       </div>
                       <div className="flex items-center gap-1.5">
