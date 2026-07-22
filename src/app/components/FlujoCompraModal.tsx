@@ -474,7 +474,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
   return ReactDOM.createPortal(
     <>
     <div className="fixed inset-0 z-[9990] flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0)' }}
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
       onClick={e => { if (e.target === e.currentTarget) handleIntentoCerrar(); }}>
 
       {/* Modal */}
