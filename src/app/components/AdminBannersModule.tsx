@@ -1,50 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Calendar, X, Upload, Tag, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, X, Upload, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle, Link } from 'lucide-react';
 
 interface BannerAdmin {
   id: number;
   titulo: string;
   descripcion: string;
+  textoBoton: string;
+  urlBoton: string;
   imagen: string | null;
-  fechaInicio: string;
-  fechaFin: string;
   activo: boolean;
 }
 
-interface MensajeInfo {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  topico: 'oferta' | 'mantenimiento' | 'novedad' | 'alerta';
-  activo: boolean;
-}
+const BG = '#002F23';
 
 const initialBanners: BannerAdmin[] = [
-  { id: 1, titulo: 'Lanzamiento Parcelas Región Metropolitana', descripcion: 'Nuevas parcelas disponibles desde $18.000.000. Financiamiento directo con el propietario.', imagen: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80', fechaInicio: '2025-02-01', fechaFin: '2025-03-31', activo: true },
-  { id: 2, titulo: 'Feria de Parcelas — Febrero 2025', descripcion: 'Visita nuestros proyectos en terreno este fin de semana. Transporte incluido desde Santiago.', imagen: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80', fechaInicio: '2025-02-14', fechaFin: '2025-02-16', activo: true },
-  { id: 3, titulo: 'Plan Oro — Oferta temporada', descripcion: 'Publica ilimitado durante 3 meses al precio del plan Bronce. Solo hasta el 28 de febrero.', imagen: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80', fechaInicio: '2025-02-01', fechaFin: '2025-02-28', activo: false },
+  {
+    id: 1,
+    titulo: 'Tu parcela en cuotas accesibles',
+    descripcion: 'Planes de pago flexibles pensados para que puedas invertir sin apuros.',
+    textoBoton: 'Ver planes',
+    urlBoton: '/planes',
+    imagen: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
+    activo: true,
+  },
+  {
+    id: 2,
+    titulo: 'Desde la búsqueda hasta la escritura',
+    descripcion: 'Todo en un solo lugar, con respaldo legal y acompañamiento en cada paso.',
+    textoBoton: 'Cómo funciona',
+    urlBoton: '/como-funciona',
+    imagen: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
+    activo: true,
+  },
+  {
+    id: 3,
+    titulo: 'La tierra que no se devalúa',
+    descripcion: 'Invertir en parcelas es apostar por un activo real que crece con el tiempo.',
+    textoBoton: 'Ver proyectos',
+    urlBoton: '/proyectos',
+    imagen: 'https://images.unsplash.com/photo-1748711243680-1c4ab4f9979f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmR8ZW58MXx8fHwxNzY4ODY1MzExfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    activo: true,
+  },
 ];
 
-const initialMensajes: MensajeInfo[] = [
-  { id: 1, titulo: 'Mantenimiento programado', descripcion: 'El 15 de febrero entre las 02:00 y 04:00 hrs la plataforma estará en mantención.', topico: 'mantenimiento', activo: true },
-  { id: 2, titulo: 'Nueva funcionalidad: Comparador de parcelas', descripcion: 'Ya puedes comparar hasta 3 parcelas simultáneamente desde la página de catálogo.', topico: 'novedad', activo: true },
-  { id: 3, titulo: 'Descuento en plan anual', descripcion: 'Contrata tu plan anual antes del 28 de febrero y obtén 2 meses gratis.', topico: 'oferta', activo: false },
-];
-
-const TOPICOS: { value: MensajeInfo['topico']; label: string; color: string; bg: string }[] = [
-  { value: 'oferta', label: 'Oferta', color: '#CA8A04', bg: '#FEF9C3' },
-  { value: 'mantenimiento', label: 'Mantenimiento', color: '#DC2626', bg: '#FEE2E2' },
-  { value: 'novedad', label: 'Novedad', color: '#006B4E', bg: '#DCFCE7' },
-  { value: 'alerta', label: 'Alerta', color: '#D97706', bg: '#FEF3C7' },
-];
-
-function formatDate(d: string) {
-  if (!d) return '—';
-  const [y, m, day] = d.split('-');
-  return `${day}/${m}/${y}`;
-}
-
-// ─── BANNER EDITOR (full page) ────────────────────────────────────────────────
+// ─── BANNER EDITOR ────────────────────────────────────────────────────────────
 
 function BannerEditor({ banner, onBack, onSave }: {
   banner: BannerAdmin | null;
@@ -53,14 +52,14 @@ function BannerEditor({ banner, onBack, onSave }: {
 }) {
   const [titulo, setTitulo] = useState(banner?.titulo ?? '');
   const [descripcion, setDescripcion] = useState(banner?.descripcion ?? '');
-  const [fechaInicio, setFechaInicio] = useState(banner?.fechaInicio ?? '');
-  const [fechaFin, setFechaFin] = useState(banner?.fechaFin ?? '');
+  const [textoBoton, setTextoBoton] = useState(banner?.textoBoton ?? '');
+  const [urlBoton, setUrlBoton] = useState(banner?.urlBoton ?? '');
   const [activo, setActivo] = useState(banner?.activo ?? true);
   const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [createSuccess, setCreateSuccess] = useState(false);
-  const [errors, setErrors] = useState({ titulo: false, descripcion: false, fechaInicio: false, fechaFin: false });
+  const [errors, setErrors] = useState({ titulo: false, descripcion: false, textoBoton: false, urlBoton: false });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!banner;
 
@@ -76,12 +75,12 @@ function BannerEditor({ banner, onBack, onSave }: {
     const newErrors = {
       titulo: !titulo.trim(),
       descripcion: !descripcion.trim(),
-      fechaInicio: !fechaInicio,
-      fechaFin: !fechaFin,
+      textoBoton: !textoBoton.trim(),
+      urlBoton: !urlBoton.trim(),
     };
     setErrors(newErrors);
     if (Object.values(newErrors).some(Boolean)) return;
-    onSave({ titulo, descripcion, imagen: imagenUrl, fechaInicio, fechaFin, activo });
+    onSave({ titulo, descripcion, textoBoton, urlBoton, imagen: imagenUrl, activo });
     if (isEdit) {
       setSaveSuccess(true);
       setTimeout(() => { setSaveSuccess(false); onBack(); }, 1200);
@@ -148,21 +147,20 @@ function BannerEditor({ banner, onBack, onSave }: {
         </span>
       </div>
 
-      {/* Content */}
       <div className="max-w-2xl mx-auto">
         {/* Toggle editar/previsualizar */}
         <div className="inline-flex gap-1 p-1 rounded-full mb-6" style={{ backgroundColor: '#F5F5F5' }}>
           <button
             onClick={() => setPreview(false)}
             className="py-1.5 px-5 rounded-full text-sm font-medium transition-all"
-            style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', whiteSpace: 'nowrap' }}
+            style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
           >
             Editar
           </button>
           <button
             onClick={() => setPreview(true)}
             className="py-1.5 px-5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5"
-            style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', whiteSpace: 'nowrap' }}
+            style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
           >
             <Eye className="w-3.5 h-3.5" /> Previsualizar
           </button>
@@ -221,7 +219,7 @@ function BannerEditor({ banner, onBack, onSave }: {
               <textarea
                 value={descripcion}
                 onChange={e => setDescripcion(e.target.value)}
-                placeholder="Describe brevemente la promoción o campaña"
+                placeholder="Subtítulo que aparece bajo el título en el banner"
                 rows={3}
                 style={{ ...inputStyle(errors.descripcion), resize: 'vertical', lineHeight: '1.65' }}
                 onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
@@ -230,22 +228,42 @@ function BannerEditor({ banner, onBack, onSave }: {
               {errors.descripcion && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La descripción es obligatoria</p>}
             </div>
 
-            {/* Fechas */}
+            {/* Botón */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div className="grid grid-cols-2 gap-4">
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '600', color: '#0A0A0A', display: 'block', marginBottom: '14px' }}>
+                Botón de acción
+              </label>
+              <div className="space-y-4">
                 <div>
-                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                    Fecha inicio <span style={{ color: '#EF4444' }}>*</span>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '6px' }}>
+                    Texto del botón <span style={{ color: '#EF4444' }}>*</span>
                   </label>
-                  <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} style={inputStyle(errors.fechaInicio)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaInicio ? '#EF4444' : '#E5E5E5'; }} />
-                  {errors.fechaInicio && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
+                  <input
+                    value={textoBoton}
+                    onChange={e => setTextoBoton(e.target.value)}
+                    placeholder="Ej: Ver proyectos"
+                    style={inputStyle(errors.textoBoton)}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = errors.textoBoton ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                  />
+                  {errors.textoBoton && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> El texto del botón es obligatorio</p>}
                 </div>
                 <div>
-                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                    Fecha término <span style={{ color: '#EF4444' }}>*</span>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '6px' }}>
+                    URL de destino <span style={{ color: '#EF4444' }}>*</span>
                   </label>
-                  <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)} style={inputStyle(errors.fechaFin)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaFin ? '#EF4444' : '#E5E5E5'; }} />
-                  {errors.fechaFin && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
+                  <div className="relative">
+                    <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF', pointerEvents: 'none' }} />
+                    <input
+                      value={urlBoton}
+                      onChange={e => setUrlBoton(e.target.value)}
+                      placeholder="/proyectos o https://..."
+                      style={{ ...inputStyle(errors.urlBoton), paddingLeft: '36px' }}
+                      onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                      onBlur={e => { e.currentTarget.style.borderColor = errors.urlBoton ? '#EF4444' : '#E5E5E5'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+                    />
+                  </div>
+                  {errors.urlBoton && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> La URL es obligatoria</p>}
                 </div>
               </div>
             </div>
@@ -264,36 +282,78 @@ function BannerEditor({ banner, onBack, onSave }: {
             </div>
           </div>
         ) : (
-          /* Vista previa */
-          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-            {imagenUrl ? (
-              <img src={imagenUrl} alt="Banner preview" style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }} />
-            ) : (
-              <div className="flex flex-col items-center justify-center gap-2" style={{ height: '180px', backgroundColor: '#F3F4F6' }}>
-                <ImageIcon className="w-10 h-10" style={{ color: '#C3C3C3' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Sin imagen de banner</span>
-              </div>
-            )}
-            <div className="p-6" style={{ backgroundColor: '#FFFFFF' }}>
-              <div className="flex items-start justify-between mb-3">
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: '500', color: '#0A0A0A', lineHeight: '1.3' }}>
-                  {titulo || <span style={{ color: '#C3C3C3' }}>Título del banner</span>}
-                </h3>
-                <span className="ml-3 flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: activo ? '#DCFCE7' : '#F3F4F6', color: activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
-                  {activo ? 'Activo' : 'Inactivo'}
-                </span>
-              </div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6' }}>
-                {descripcion || <span style={{ color: '#C3C3C3' }}>Descripción del banner</span>}
-              </p>
-              {(fechaInicio || fechaFin) && (
-                <div className="flex items-center gap-1.5 mt-4" style={{ color: '#737373' }}>
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
-                    {formatDate(fechaInicio)} → {formatDate(fechaFin)}
-                  </span>
+          /* Vista previa — idéntica al carrusel del home */
+          <div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF', marginBottom: '10px' }}>
+              Así se verá en el inicio del portal
+            </p>
+            <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', height: '240px' }}>
+              <div className="flex h-full">
+                {/* Panel izquierdo */}
+                <div
+                  className="flex flex-col justify-center px-8 py-6 flex-shrink-0 overflow-hidden"
+                  style={{ width: '44%', backgroundColor: BG }}
+                >
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-heading)',
+                      fontWeight: 'var(--font-weight-semibold)',
+                      fontSize: 'clamp(16px, 2vw, 22px)',
+                      color: '#FFFFFF',
+                      lineHeight: '1.25',
+                      marginBottom: descripcion ? '10px' : '20px',
+                    }}
+                  >
+                    {titulo || <span style={{ color: 'rgba(255,255,255,0.3)' }}>Título del banner</span>}
+                  </h3>
+                  {descripcion && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '13px',
+                        color: 'rgba(255,255,255,0.72)',
+                        lineHeight: '1.5',
+                        marginBottom: '18px',
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical' as const,
+                      }}
+                    >
+                      {descripcion}
+                    </p>
+                  )}
+                  <button
+                    className="self-start px-5 py-2 rounded-full text-sm font-medium"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: BG,
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 'var(--font-weight-medium)',
+                    }}
+                  >
+                    {textoBoton || 'Ver más'}
+                  </button>
                 </div>
-              )}
+
+                {/* Panel derecho: imagen */}
+                <div className="flex-1 relative overflow-hidden">
+                  {imagenUrl ? (
+                    <>
+                      <img src={imagenUrl} alt={titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div
+                        className="absolute inset-y-0 left-0 w-16 pointer-events-none"
+                        style={{ background: `linear-gradient(to right, ${BG}, transparent)` }}
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-2" style={{ backgroundColor: '#F3F4F6' }}>
+                      <ImageIcon className="w-10 h-10" style={{ color: '#C3C3C3' }} />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>Sin imagen de banner</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -352,12 +412,42 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
   );
 }
 
+// ─── MODAL LÍMITE 3 BANNERS ───────────────────────────────────────────────────
+
+function LimitModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
+      <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FEF3C7' }}>
+          <AlertTriangle className="w-6 h-6" style={{ color: '#D97706' }} />
+        </div>
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: '500', color: '#0A0A0A', marginBottom: '8px' }}>
+          Límite de banners activos
+        </h3>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6', marginBottom: '24px' }}>
+          Ya hay <strong style={{ color: '#0A0A0A' }}>3 banners activos</strong> en el portal. Para publicar uno nuevo, desactiva o elimina alguno de los existentes.
+        </p>
+        <button
+          onClick={onClose}
+          className="w-full py-2.5 rounded-full font-medium transition-all"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+        >
+          Entendido
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── MÓDULO PRINCIPAL ─────────────────────────────────────────────────────────
 
 export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [banners, setBanners] = useState<BannerAdmin[]>(initialBanners);
   const [view, setView] = useState<'list' | 'create' | BannerAdmin>(autoOpenNew ? 'create' : 'list');
   const [bannerToDelete, setBannerToDelete] = useState<BannerAdmin | null>(null);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -376,6 +466,15 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
     setTimeout(() => setSaved(false), 3500);
   }
 
+  function handleNuevoBanner() {
+    const activos = banners.filter(b => b.activo).length;
+    if (activos >= 3) {
+      setShowLimitModal(true);
+    } else {
+      setView('create');
+    }
+  }
+
   function handleSaveBanner(data: Omit<BannerAdmin, 'id'>) {
     if (typeof view === 'object') {
       setBanners(prev => prev.map(b => b.id === (view as BannerAdmin).id ? { ...b, ...data } : b));
@@ -383,7 +482,6 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
       setTimeout(() => setView('list'), 1200);
     } else {
       setBanners(prev => [{ id: nextId(), ...data }, ...prev]);
-      // la navegación la maneja BannerEditor desde la pantalla de éxito
     }
   }
 
@@ -393,11 +491,6 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
     setBannerToDelete(null);
     setDeleted(true);
     setTimeout(() => setDeleted(false), 3000);
-  }
-
-  function isVigente(b: BannerAdmin) {
-    const today = new Date().toISOString().slice(0, 10);
-    return b.fechaInicio <= today && b.fechaFin >= today;
   }
 
   // Drag handlers
@@ -414,7 +507,6 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   };
   const handleDragEnd = () => { setDragIndex(null); setDragOverIndex(null); };
 
-  // Mostrar editor si corresponde
   if (view !== 'list') {
     return (
       <BannerEditor
@@ -434,7 +526,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
             Banners promocionales
           </h1>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>
-            Gestiona contenido promocional e informativo del portal
+            Gestiona el carrusel de banners del inicio del portal · Máx. 3 activos
           </p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -449,7 +541,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
-            onClick={() => setView('create')}
+            onClick={handleNuevoBanner}
             className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all"
             style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', fontFamily: 'var(--font-body)', fontWeight: '500' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
@@ -508,9 +600,9 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
             Sin banners creados
           </h3>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '320px', lineHeight: '1.5', marginBottom: '20px' }}>
-            Crea el primer banner promocional para comunicar ofertas o destacar proyectos a los usuarios del portal.
+            Crea el primer banner para que aparezca en el carrusel del inicio del portal.
           </p>
-          <button onClick={() => setView('create')} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+          <button onClick={handleNuevoBanner} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
             <Plus className="w-4 h-4" /> Crear primer banner
           </button>
         </div>
@@ -557,32 +649,26 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
                     <h3 className="min-w-0" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: '600', color: '#0A0A0A', lineHeight: '1.3', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                       {banner.titulo}
                     </h3>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      {isVigente(banner) && banner.activo && (
-                        <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'var(--font-body)' }}>Vigente</span>
-                      )}
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
-                        {banner.activo ? 'Activo' : 'Inactivo'}
-                      </span>
-                    </div>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
+                      {banner.activo ? 'Activo' : 'Inactivo'}
+                    </span>
                   </div>
-                  <p className="hidden sm:block" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '10px' }}>
+                  <p className="hidden sm:block" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '8px' }}>
                     {banner.descripcion}
                   </p>
-                  <div className="flex items-center justify-between flex-wrap gap-3">
-                    <div className="flex items-center gap-1.5" style={{ color: '#737373' }}>
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)' }}>
-                        {formatDate(banner.fechaInicio)} → {formatDate(banner.fechaFin)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
-                      <button title="Editar" onClick={() => setView(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}><Edit2 className="w-3.5 h-3.5" /></button>
-                      <button title={banner.activo ? 'Desactivar' : 'Activar'} onClick={() => setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: !b.activo } : b))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'}>
-                        {banner.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      </button>
-                      <button title="Eliminar" onClick={() => setBannerToDelete(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}><Trash2 className="w-3.5 h-3.5" /></button>
-                    </div>
+                  {/* Botón */}
+                  <div className="flex items-center gap-1.5 mb-10px">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ backgroundColor: '#F3F4F6', fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                      <Link className="w-3 h-3" />
+                      {banner.textoBoton}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-end flex-wrap gap-2 mt-2" onClick={e => e.stopPropagation()}>
+                    <button title="Editar" onClick={() => setView(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}><Edit2 className="w-3.5 h-3.5" /></button>
+                    <button title={banner.activo ? 'Desactivar' : 'Activar'} onClick={() => setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: !b.activo } : b))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'}>
+                      {banner.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
+                    <button title="Eliminar" onClick={() => setBannerToDelete(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
               </div>
@@ -591,12 +677,15 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
         </div>
       )}
 
-      {/* Modal eliminar */}
+      {/* Modales */}
       {bannerToDelete && (
         <DeleteModal nombre={bannerToDelete.titulo} onConfirm={handleDeleteBanner} onClose={() => setBannerToDelete(null)} />
       )}
+      {showLimitModal && (
+        <LimitModal onClose={() => setShowLimitModal(false)} />
+      )}
 
-      {/* Toast éxito */}
+      {/* Toasts */}
       {saved && (
         <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '320px', maxWidth: '440px' }}>
           <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#16A34A' }}>

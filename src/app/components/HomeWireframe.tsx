@@ -561,26 +561,20 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   const bannerItems = [
     {
       bgColor: '#002F23',
-      accentColor: '#7DB89A',
-      category: 'Financiamiento',
       title: 'Tu parcela en cuotas accesibles',
       subtitle: 'Planes de pago flexibles pensados para que puedas invertir sin apuros.',
       cta: 'Ver planes',
       image: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
-      bgColor: '#006B4E',
-      accentColor: '#A8D5C2',
-      category: 'Proceso 100% online',
+      bgColor: '#002F23',
       title: 'Desde la búsqueda hasta la escritura',
       subtitle: 'Todo en un solo lugar, con respaldo legal y acompañamiento en cada paso.',
       cta: 'Cómo funciona',
       image: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
-      bgColor: '#01533E',
-      accentColor: '#90C5A8',
-      category: 'Inversión',
+      bgColor: '#002F23',
       title: 'La tierra que no se devalúa',
       subtitle: 'Invertir en parcelas es apostar por un activo real que crece con el tiempo.',
       cta: 'Ver proyectos',
@@ -2035,18 +2029,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         className="flex flex-col justify-center px-8 md:px-12 py-4 flex-shrink-0 overflow-hidden"
                         style={{ width: '42%', backgroundColor: banner.bgColor }}
                       >
-                        <p
-                          className="text-xs font-medium uppercase mb-2"
-                          style={{
-                            color: banner.accentColor,
-                            letterSpacing: '0.1em',
-                            fontFamily: 'var(--font-body)'
-                          }}
-                        >
-                          {banner.category}
-                        </p>
                         <h3
-                          className="mb-5"
+                          className="mb-3"
                           style={{
                             fontFamily: 'var(--font-heading)',
                             fontWeight: 'var(--font-weight-semibold)',
@@ -2057,6 +2041,17 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         >
                           {banner.title}
                         </h3>
+                        <p
+                          className="mb-5"
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'clamp(12px, 1.1vw, 14px)',
+                            color: 'rgba(255,255,255,0.72)',
+                            lineHeight: '1.5',
+                          }}
+                        >
+                          {banner.subtitle}
+                        </p>
                         <button
                           className="self-start px-5 py-2 rounded-full text-sm font-medium transition-all"
                           style={{
