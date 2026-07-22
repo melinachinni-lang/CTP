@@ -478,7 +478,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '90vh' }}>
 
         {/* Header */}
-        {!enviado && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && paso !== 'disponibilidad-error' && (
+        {!enviado && paso !== 'aviso' && paso !== 'expirado' && paso !== 'error' && paso !== 'mp-success' && paso !== 'mp-pendiente' && paso !== 'mp-rechazado' && paso !== 'disponibilidad-error' && (
           <div className="px-6 py-5 border-b bg-white z-10" style={{ borderColor: '#E5E5E5', flexShrink: 0 }}>
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -1431,7 +1431,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
         {paso === 'aviso' && !enviado && (
           <div
             className="absolute inset-0 rounded-2xl z-20 flex items-center justify-center p-6"
-            style={{ backgroundColor: 'rgba(10, 10, 10, 0.55)' }}
+            style={{ backgroundColor: '#FFFFFF' }}
           >
             <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm space-y-5 text-center">
 
