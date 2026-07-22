@@ -1355,6 +1355,11 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
         parcelaNombre={proyecto.nombre}
       />
 
+      {/* Backdrop local que cubre todos los elementos de ProyectoDetalle cuando el modal está abierto */}
+      {isFlujoCompraMultipleOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9989, backgroundColor: 'rgba(0,0,0,0.5)', pointerEvents: 'none' }} />
+      )}
+
       {/* Flujo de compra/reserva múltiple — mismo flujo que parcela individual */}
       <FlujoCompraModal
         isOpen={isFlujoCompraMultipleOpen}
