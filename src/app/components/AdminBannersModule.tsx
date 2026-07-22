@@ -210,10 +210,12 @@ function BannerEditor({ banner, onBack, onSave }: {
                   </div>
                   <div className="text-center">
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>PNG, JPG o WEBP · Máx. 2 MB · Recomendado 1200×400 px</p>
                   </div>
                 </div>
               )}
+              <p className="mt-2.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                Formatos aceptados: <strong style={{ color: '#6B7280' }}>PNG, JPG, WEBP</strong> · Peso máximo: <strong style={{ color: '#6B7280' }}>2 MB</strong> · Dimensiones recomendadas: <strong style={{ color: '#6B7280' }}>1200 × 400 px</strong>
+              </p>
             </div>
 
             {/* Título */}
