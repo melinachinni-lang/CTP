@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { X, Copy, CheckCircle, Check, AlertCircle, ChevronLeft, Building2, CreditCard, Upload, FileText, Clock, ChevronDown, Lock } from 'lucide-react';
 
 const DATOS_BANCARIOS = [
@@ -468,7 +469,9 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
     setShowExitWarning(true);
   };
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return ReactDOM.createPortal(
     <>
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
@@ -1539,6 +1542,7 @@ export function FlujoCompraModal({ isOpen, onClose, parcelaNombre, precio, tipoC
         </div>
       </div>
     )}
-    </>
+    </>,
+    document.body
   );
 }
