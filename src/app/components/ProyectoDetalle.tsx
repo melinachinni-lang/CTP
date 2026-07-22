@@ -81,6 +81,28 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
   const [tipoCompraMultiple, setTipoCompraMultiple] = useState<'comprar' | 'reservar'>('comprar');
   const stockRef = useRef<HTMLDivElement>(null);
 
+  type EstadoParcela = 'disponible' | 'reservado' | 'vendido';
+  const [parcelasData, setParcelasData] = useState<{ codigo: string; superficie: string; precio: string; estado: EstadoParcela; estadoLabel: string }[]>([
+    { codigo: 'Parcela A-1', superficie: '5.000 m²', precio: '$38.500.000', estado: 'disponible', estadoLabel: 'Disponible' },
+    { codigo: 'Parcela A-2', superficie: '5.200 m²', precio: '$39.800.000', estado: 'disponible', estadoLabel: 'Disponible' },
+    { codigo: 'Parcela A-3', superficie: '4.800 m²', precio: '$36.200.000', estado: 'reservado',  estadoLabel: 'Reservado'  },
+    { codigo: 'Parcela B-1', superficie: '6.500 m²', precio: '$48.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
+    { codigo: 'Parcela B-2', superficie: '6.300 m²', precio: '$46.500.000', estado: 'vendido',    estadoLabel: 'Vendido'    },
+    { codigo: 'Parcela B-3', superficie: '6.700 m²', precio: '$50.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
+    { codigo: 'Parcela C-1', superficie: '8.000 m²', precio: '$52.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
+    { codigo: 'Parcela C-2', superficie: '7.800 m²', precio: '$51.000.000', estado: 'reservado',  estadoLabel: 'Reservado'  },
+  ]);
+
+  const handleCompletadoMultiple = (estadoModal: string) => {
+    if (estadoModal !== 'pago-en-validacion') return;
+    const nuevoEstado: EstadoParcela = tipoCompraMultiple === 'comprar' ? 'vendido' : 'reservado';
+    const nuevoLabel = tipoCompraMultiple === 'comprar' ? 'Vendido' : 'Reservado';
+    setParcelasData(prev => prev.map(p =>
+      selectedParcelas.includes(p.codigo) ? { ...p, estado: nuevoEstado, estadoLabel: nuevoLabel } : p
+    ));
+    setSelectedParcelas([]);
+  };
+
   // Obtener datos dinámicos del proyecto
   // Si proyectoId es null o undefined, usar 1 por defecto
   const idToUse = proyectoId ?? 1;
@@ -979,16 +1001,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     <p style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>
                       Selecciona una o más parcelas disponibles para reservarlas en una sola operación.
                     </p>
-                    {[
-                      { codigo: 'Parcela A-1', superficie: '5.000 m²', precio: '$38.500.000', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela A-2', superficie: '5.200 m²', precio: '$39.800.000', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela A-3', superficie: '4.800 m²', precio: '$36.200.000', estado: 'reservado', estadoLabel: 'Reservado' },
-                      { codigo: 'Parcela B-1', superficie: '6.500 m²', precio: '$48.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela B-2', superficie: '6.300 m²', precio: '$46.500.000', estado: 'vendido', estadoLabel: 'Vendido' },
-                      { codigo: 'Parcela B-3', superficie: '6.700 m²', precio: '$50.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela C-1', superficie: '8.000 m²', precio: '$52.000.000', estado: 'disponible', estadoLabel: 'Disponible' },
-                      { codigo: 'Parcela C-2', superficie: '7.800 m²', precio: '$51.000.000', estado: 'reservado', estadoLabel: 'Reservado' },
-                    ].sort((a, b) => {
+                    {[...parcelasData].sort((a, b) => {
                       const order: Record<string, number> = { disponible: 0, reservado: 1, vendido: 2 };
                       return (order[a.estado] ?? 3) - (order[b.estado] ?? 3);
                     }).map((parcela, index) => {
@@ -1361,6 +1374,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
         parcelaNombre={selectedParcelas.join(', ')}
         precio={precioSeleccion}
         tipoCompra={tipoCompraMultiple}
+        onEstadoChange={handleCompletadoMultiple}
       />
 
       <SiteFooter onNavigate={onNavigate} />
