@@ -95,10 +95,8 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
   const handleCompletadoMultiple = (estadoModal: string) => {
     if (estadoModal !== 'pago-en-validacion') return;
-    const nuevoEstado: EstadoParcela = tipoCompraMultiple === 'comprar' ? 'vendido' : 'reservado';
-    const nuevoLabel = tipoCompraMultiple === 'comprar' ? 'Vendido' : 'Reservado';
     setParcelasData(prev => prev.map(p =>
-      selectedParcelas.includes(p.codigo) ? { ...p, estado: nuevoEstado, estadoLabel: nuevoLabel } : p
+      selectedParcelas.includes(p.codigo) ? { ...p, estado: 'reservado', estadoLabel: 'Reservado' } : p
     ));
     setSelectedParcelas([]);
   };
@@ -1080,19 +1078,9 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       </button>
                     </div>
                     <button
-                      onClick={() => { setTipoCompraMultiple('comprar'); setIsFlujoCompraMultipleOpen(true); }}
+                      onClick={() => { setTipoCompraMultiple('reservar'); setIsFlujoCompraMultipleOpen(true); }}
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
                       style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                      Comprar {selectedParcelas.length === 1 ? 'parcela' : `${selectedParcelas.length} parcelas`}
-                    </button>
-                    <button
-                      onClick={() => { setTipoCompraMultiple('reservar'); setIsFlujoCompraMultipleOpen(true); }}
-                      className="w-full flex items-center justify-center gap-2 rounded-full transition-all"
-                      style={{ backgroundColor: '#F5F5F0', color: '#006B4E', border: '1px solid #E5E5E0', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px', fontWeight: 'var(--font-weight-medium)' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
                     >
                       Reservar {selectedParcelas.length === 1 ? 'parcela' : `${selectedParcelas.length} parcelas`}
                     </button>
