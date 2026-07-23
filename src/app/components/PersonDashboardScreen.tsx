@@ -2835,26 +2835,29 @@ function PlanContent() {
       <section className="rounded-2xl p-6 md:p-8" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Uso del plan</h3>
         <div className="space-y-5">
-          {[{ label: 'Publicaciones activas', used: 1, limit: 1 }].map(({ label, used, limit }) => {
-            const pct = Math.round((used / limit) * 100);
-            const barColor = pct >= 100 ? '#DC2626' : pct >= 80 ? '#F59E0B' : '#006B4E';
+          {(() => {
+            const used = 1;
+            const isUnlimited = currentPlan === 'oro';
+            const limit = currentPlan === 'plata' ? 30 : isUnlimited ? null : 1;
+            const pct = isUnlimited ? 5 : Math.round((used / (limit as number)) * 100);
+            const barColor = isUnlimited ? '#006B4E' : pct >= 100 ? '#DC2626' : pct >= 80 ? '#F59E0B' : '#006B4E';
             return (
-              <div key={label}>
+              <div>
                 <div className="flex items-center justify-between" style={{ marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>{label}</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: pct >= 100 ? '#DC2626' : '#0A0A0A' }}>
-                    {used} de {limit}
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>Publicaciones activas</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: !isUnlimited && pct >= 100 ? '#DC2626' : '#0A0A0A' }}>
+                    {isUnlimited ? `${used} · Sin límite` : `${used} de ${limit}`}
                   </span>
                 </div>
                 <div className="w-full rounded-full" style={{ height: '6px', backgroundColor: '#F0F0F0' }}>
                   <div className="rounded-full" style={{ height: '6px', width: `${Math.min(pct, 100)}%`, backgroundColor: barColor }} />
                 </div>
-                {pct >= 100 && (
+                {!isUnlimited && pct >= 100 && (
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626', marginTop: '4px' }}>Límite alcanzado · actualiza tu plan para publicar más</p>
                 )}
               </div>
             );
-          })}
+          })()}
         </div>
       </section>
       <section id="person-compara-planes">
