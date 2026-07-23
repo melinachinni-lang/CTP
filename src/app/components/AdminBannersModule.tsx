@@ -360,15 +360,28 @@ function BannerEditor({ banner, onBack, onSave }: {
                     onFocus={e => { if (!fechaIndefinida) e.currentTarget.style.borderColor = '#006B4E'; }}
                     onBlur={e => { if (!fechaIndefinida) e.currentTarget.style.borderColor = '#E5E5E5'; }}
                   />
-                  <label className="flex items-center gap-2 mt-2 cursor-pointer" style={{ width: 'fit-content' }}>
-                    <input
-                      type="checkbox"
-                      checked={fechaIndefinida}
-                      onChange={e => { setFechaIndefinida(e.target.checked); if (e.target.checked) setFechaFin(''); }}
-                      style={{ width: '14px', height: '14px', accentColor: '#006B4E', cursor: 'pointer' }}
-                    />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Indefinido</span>
-                  </label>
+                  <div className="relative" style={{ width: 'fit-content' }}>
+                    <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={fechaIndefinida}
+                        onChange={e => {
+                          setFechaIndefinida(e.target.checked);
+                          if (e.target.checked) {
+                            setFechaFin('');
+                            setShowFechaInicioTooltip(false);
+                          }
+                        }}
+                        style={{ width: '14px', height: '14px', accentColor: '#006B4E', cursor: 'pointer' }}
+                      />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: fechaIndefinida ? '#006B4E' : '#737373', fontWeight: fechaIndefinida ? 500 : 400 }}>Indefinido</span>
+                    </label>
+                    {fechaIndefinida && (
+                      <div className="absolute left-0 z-10 rounded-xl px-3 py-2 shadow-md" style={{ top: 'calc(100% + 6px)', backgroundColor: '#FEF3C7', border: '1px solid #FDE68A', whiteSpace: 'nowrap' }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#92400E' }}>Al elegir indefinido, deberás desactivarlo manualmente</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
