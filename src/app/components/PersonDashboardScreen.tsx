@@ -2802,8 +2802,8 @@ function PlanContent() {
               <Award className="w-6 h-6" style={{ color: '#FFFFFF' }} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Tu plan actual</span>
             </div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>{currentPlan ? `Plan ${plans.find(p => p.id === currentPlan)?.name ?? ''}` : 'Vendedor Particular'}</h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>{currentPlan ? `Perfil: Personal · ${plans.find(p => p.id === currentPlan)?.price ?? ''}/mes` : 'Perfil: Personal · Gratuito'}</p>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>{currentPlan ? `Plan ${plans.find(p => p.id === currentPlan)?.name ?? ''}` : 'Plan Gratis'}</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>{currentPlan ? `Perfil: Personal · ${plans.find(p => p.id === currentPlan)?.price ?? ''}/mes` : 'Perfil: Personal · $0/mes'}</p>
           </div>
           {planCancelled ? (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#FEF3C7' }}>
