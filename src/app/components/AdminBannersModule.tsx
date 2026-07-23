@@ -316,10 +316,10 @@ function BannerEditor({ banner, onBack, onSave }: {
             {/* Fechas */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
               <div className="grid grid-cols-2 gap-4">
-                {/* Fecha inicio */}
+                {/* Fecha de inicio */}
                 <div>
                   <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                    Fecha inicio {!activo && <span style={{ color: '#EF4444' }}>*</span>}
+                    Fecha de inicio {!activo && <span style={{ color: '#EF4444' }}>*</span>}
                   </label>
                   <div className="relative">
                     <input
@@ -349,7 +349,7 @@ function BannerEditor({ banner, onBack, onSave }: {
                 {/* Fecha fin — siempre opcional */}
                 <div>
                   <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                    Fecha término
+                    Fecha de fin
                   </label>
                   <input
                     type="date"
