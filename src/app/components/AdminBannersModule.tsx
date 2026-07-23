@@ -73,12 +73,14 @@ function BannerEditor({ banner, onBack, onSave }: {
   const [urlBoton, setUrlBoton] = useState(banner?.urlBoton ?? '');
   const [fechaInicio, setFechaInicio] = useState(banner?.fechaInicio ?? '');
   const [fechaFin, setFechaFin] = useState(banner?.fechaFin ?? '');
+  const [fechaIndefinida, setFechaIndefinida] = useState(false);
   const [activo, setActivo] = useState(banner?.activo ?? true);
+  const [showFechaInicioTooltip, setShowFechaInicioTooltip] = useState(false);
   const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [createSuccess, setCreateSuccess] = useState(false);
-  const [errors, setErrors] = useState({ titulo: false, descripcion: false, textoBoton: false, urlBoton: false, fechaInicio: false, fechaFin: false });
+  const [errors, setErrors] = useState({ titulo: false, descripcion: false, textoBoton: false, urlBoton: false, fechaInicio: false });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!banner;
 
@@ -91,17 +93,18 @@ function BannerEditor({ banner, onBack, onSave }: {
   }
 
   const handleSave = () => {
+    const hoy = new Date().toISOString().split('T')[0];
+    const fechaInicioFinal = activo ? hoy : fechaInicio;
     const newErrors = {
       titulo: !titulo.trim(),
       descripcion: !descripcion.trim(),
       textoBoton: !textoBoton.trim(),
       urlBoton: !urlBoton.trim(),
-      fechaInicio: !fechaInicio,
-      fechaFin: !fechaFin,
+      fechaInicio: !activo && !fechaInicio,
     };
     setErrors(newErrors);
     if (Object.values(newErrors).some(Boolean)) return;
-    onSave({ titulo, descripcion, textoBoton, urlBoton, fechaInicio, fechaFin, imagen: imagenUrl, activo });
+    onSave({ titulo, descripcion, textoBoton, urlBoton, fechaInicio: fechaInicioFinal, fechaFin: fechaIndefinida ? '' : fechaFin, imagen: imagenUrl, activo });
     if (isEdit) {
       setSaveSuccess(true);
       setTimeout(() => { setSaveSuccess(false); onBack(); }, 1200);
@@ -297,37 +300,77 @@ function BannerEditor({ banner, onBack, onSave }: {
               </div>
             </div>
 
+            {/* Publicar automáticamente — va ANTES de las fechas */}
+            <div className="rounded-2xl p-5 flex items-center justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar automáticamente</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: activo ? '#006B4E' : '#737373', marginTop: '2px' }}>
+                  {activo ? 'Se publicará automáticamente a partir de hoy' : 'El banner quedará guardado como borrador hasta que lo actives'}
+                </p>
+              </div>
+              <button onClick={() => { setActivo(v => !v); setShowFechaInicioTooltip(false); }} className="w-11 h-6 rounded-full transition-all relative flex-shrink-0" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
+                <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
+              </button>
+            </div>
+
             {/* Fechas */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
               <div className="grid grid-cols-2 gap-4">
+                {/* Fecha inicio */}
                 <div>
                   <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                    Fecha inicio <span style={{ color: '#EF4444' }}>*</span>
+                    Fecha inicio {!activo && <span style={{ color: '#EF4444' }}>*</span>}
                   </label>
-                  <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} style={inputStyle(errors.fechaInicio)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaInicio ? '#EF4444' : '#E5E5E5'; }} />
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={activo ? new Date().toISOString().split('T')[0] : fechaInicio}
+                      onChange={e => { if (!activo) setFechaInicio(e.target.value); }}
+                      readOnly={activo}
+                      style={{ ...inputStyle(errors.fechaInicio), ...(activo ? { backgroundColor: '#F3F4F6', color: '#9CA3AF', cursor: 'not-allowed', borderColor: '#E5E5E5' } : {}) }}
+                      onFocus={e => { if (!activo) e.currentTarget.style.borderColor = '#006B4E'; }}
+                      onBlur={e => { if (!activo) e.currentTarget.style.borderColor = errors.fechaInicio ? '#EF4444' : '#E5E5E5'; }}
+                    />
+                    {activo && (
+                      <div
+                        className="absolute inset-0 cursor-not-allowed"
+                        onClick={() => { setShowFechaInicioTooltip(true); setTimeout(() => setShowFechaInicioTooltip(false), 3000); }}
+                      />
+                    )}
+                    {showFechaInicioTooltip && (
+                      <div className="absolute top-full left-0 mt-1.5 z-10 rounded-xl px-3 py-2 shadow-md" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A', whiteSpace: 'nowrap' }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#92400E' }}>Con "Publicar automáticamente" activo, la fecha de inicio es hoy</p>
+                      </div>
+                    )}
+                  </div>
                   {errors.fechaInicio && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
                 </div>
+
+                {/* Fecha fin — siempre opcional */}
                 <div>
                   <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
-                    Fecha término <span style={{ color: '#EF4444' }}>*</span>
+                    Fecha término
                   </label>
-                  <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)} style={inputStyle(errors.fechaFin)} onFocus={e => { e.currentTarget.style.borderColor = '#006B4E'; }} onBlur={e => { e.currentTarget.style.borderColor = errors.fechaFin ? '#EF4444' : '#E5E5E5'; }} />
-                  {errors.fechaFin && <p className="mt-1.5 flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: '#EF4444' }}><AlertCircle className="w-3 h-3" /> Requerido</p>}
+                  <input
+                    type="date"
+                    value={fechaIndefinida ? '' : fechaFin}
+                    onChange={e => { setFechaFin(e.target.value); setFechaIndefinida(false); }}
+                    disabled={fechaIndefinida}
+                    style={{ ...inputStyle(false), ...(fechaIndefinida ? { backgroundColor: '#F3F4F6', color: '#9CA3AF', cursor: 'not-allowed', borderColor: '#E5E5E5' } : {}) }}
+                    onFocus={e => { if (!fechaIndefinida) e.currentTarget.style.borderColor = '#006B4E'; }}
+                    onBlur={e => { if (!fechaIndefinida) e.currentTarget.style.borderColor = '#E5E5E5'; }}
+                  />
+                  <label className="flex items-center gap-2 mt-2 cursor-pointer" style={{ width: 'fit-content' }}>
+                    <input
+                      type="checkbox"
+                      checked={fechaIndefinida}
+                      onChange={e => { setFechaIndefinida(e.target.checked); if (e.target.checked) setFechaFin(''); }}
+                      style={{ width: '14px', height: '14px', accentColor: '#006B4E', cursor: 'pointer' }}
+                    />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#737373' }}>Indefinido</span>
+                  </label>
                 </div>
               </div>
-            </div>
-
-            {/* Estado */}
-            <div className="rounded-2xl p-5 flex items-center justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar al guardar</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>
-                  {activo ? 'El banner será visible en el portal inmediatamente' : 'El banner quedará inactivo hasta que lo actives'}
-                </p>
-              </div>
-              <button onClick={() => setActivo(v => !v)} className="w-11 h-6 rounded-full transition-all relative flex-shrink-0" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
-                <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
-              </button>
             </div>
           </div>
         ) : (
