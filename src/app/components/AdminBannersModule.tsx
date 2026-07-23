@@ -305,7 +305,7 @@ function BannerEditor({ banner, onBack, onSave }: {
               <div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar automáticamente</p>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: activo ? '#006B4E' : '#737373', marginTop: '2px' }}>
-                  {activo ? 'Se publicará automáticamente a partir de hoy' : 'El banner quedará guardado como borrador hasta que lo actives'}
+                  {activo ? 'Se publicará automáticamente a partir de hoy' : 'Se publicará en la fecha de inicio que elijas'}
                 </p>
               </div>
               <button onClick={() => { setActivo(v => !v); setShowFechaInicioTooltip(false); }} className="w-11 h-6 rounded-full transition-all relative flex-shrink-0" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
