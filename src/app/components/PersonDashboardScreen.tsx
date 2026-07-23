@@ -2669,6 +2669,9 @@ function PlanContent() {
   const [showCancelModal, setShowCancelModal] = React.useState(false);
   const [planCancelled, setPlanCancelled] = React.useState(false);
   const [paymentError, setPaymentError] = React.useState(false);
+  const [processingPayment, setProcessingPayment] = React.useState(false);
+  const [simulatePaymentError, setSimulatePaymentError] = React.useState(false);
+  const [currentPlan, setCurrentPlan] = React.useState<string | null>(null);
   const [invoices, setInvoices] = React.useState<{ id: string; date: string; reason: string; reasonType: string; amount: string }[]>([]);
 
   const handleCancelPlan = () => {
@@ -2694,10 +2697,14 @@ function PlanContent() {
     if (pendingPlan) {
       const contracted = plans.find(p => p.id === pendingPlan) || null;
       setActivatedPlan(contracted ? { name: contracted.name, features: contracted.features } : null);
+      setCurrentPlan(pendingPlan);
       setPendingPlan(null);
       setShowUpgradeModal(false);
       setShowPaymentModal(false);
       setPaymentMethod(null);
+      setProcessingPayment(false);
+      setSimulatePaymentError(false);
+      setPaymentError(false);
       setPlanChanged(true);
     }
   };
@@ -2795,8 +2802,8 @@ function PlanContent() {
               <Award className="w-6 h-6" style={{ color: '#FFFFFF' }} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Tu plan actual</span>
             </div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>Vendedor Particular</h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>Perfil: Personal · Gratuito</p>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>{currentPlan ? `Plan ${plans.find(p => p.id === currentPlan)?.name ?? ''}` : 'Vendedor Particular'}</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>{currentPlan ? `Perfil: Personal · ${plans.find(p => p.id === currentPlan)?.price ?? ''}/mes` : 'Perfil: Personal · Gratuito'}</p>
           </div>
           {planCancelled ? (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#FEF3C7' }}>
@@ -2853,10 +2860,15 @@ function PlanContent() {
       <section id="person-compara-planes">
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {plans.map((plan) => (
-            <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+          {plans.map((plan) => {
+            const isActive = plan.id === currentPlan;
+            return (
+            <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: isActive ? '2px solid #006B4E' : '1px solid #E5E5E5', boxShadow: isActive ? '0 0 0 4px rgba(0,107,78,0.08)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
               <div className="mb-6">
-                <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '4px' }}>{plan.name}</h4>
+                <div className="flex items-center justify-between mb-1">
+                  <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)' }}>{plan.name}</h4>
+                  {isActive && <span className="px-2 py-0.5 rounded-full" style={{ backgroundColor: '#DCFCE7', color: '#166534', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em' }}>Plan activo</span>}
+                </div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '10px' }}>{plan.description}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '22px', color: '#0A0A0A' }}>{plan.price}</span>
@@ -2871,9 +2883,14 @@ function PlanContent() {
                   </div>
                 ))}
               </div>
-              <button onClick={() => { setPendingPlan(plan.id); setShowUpgradeModal(true); }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
+              {isActive ? (
+                <div className="w-full py-2.5 px-6 text-center" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '2px solid #BBF7D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}>Plan contratado</div>
+              ) : (
+                <button onClick={() => { setPendingPlan(plan.id); setShowUpgradeModal(true); }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
+              )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
       <section className="space-y-6">
@@ -3033,8 +3050,37 @@ function PlanContent() {
               </div>
             )}
             <div className="flex gap-3">
-              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); setPaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
-              <button onClick={() => { if (paymentError) { handleUpgrade(); setPaymentError(false); } else { setPaymentError(true); } }} disabled={!paymentMethod} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: paymentMethod ? '#006B4E' : '#E5E5E5', color: paymentMethod ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#006B4E'; }}>{paymentError ? 'Reintentar' : 'Pagar'}</button>
+              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); setPaymentError(false); setProcessingPayment(false); setSimulatePaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
+              <button
+                onClick={() => {
+                  const isRetry = paymentError;
+                  setPaymentError(false);
+                  setProcessingPayment(true);
+                  setTimeout(() => {
+                    setProcessingPayment(false);
+                    if (!isRetry && simulatePaymentError) { setPaymentError(true); }
+                    else { handleUpgrade(); }
+                  }, 1500);
+                }}
+                disabled={!paymentMethod || processingPayment}
+                className="flex-1 px-6 py-3 transition-all flex items-center justify-center gap-2"
+                style={{ backgroundColor: paymentMethod && !processingPayment ? '#006B4E' : '#E5E5E5', color: paymentMethod && !processingPayment ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod && !processingPayment ? 'pointer' : 'not-allowed' }}
+                onMouseEnter={e => { if (paymentMethod && !processingPayment) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { if (paymentMethod && !processingPayment) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+              >
+                {processingPayment ? (
+                  <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>{paymentMethod === 'mercadopago' ? 'Redirigiendo...' : 'Procesando...'}</>
+                ) : paymentError ? 'Reintentar' : paymentMethod === 'mercadopago' ? 'Ir a Mercado Pago →' : 'Pagar'}
+              </button>
+            </div>
+            <div className="mt-4 pt-4 flex items-center justify-between" style={{ borderTop: '1px solid #F3F4F6' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Simulación</span>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Error de pago</span>
+                <div onClick={() => setSimulatePaymentError(v => !v)} className="relative w-8 h-4 rounded-full transition-colors cursor-pointer flex-shrink-0" style={{ backgroundColor: simulatePaymentError ? '#DC2626' : '#D1D5DB' }}>
+                  <div className="absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform" style={{ transform: simulatePaymentError ? 'translateX(16px)' : 'translateX(2px)' }} />
+                </div>
+              </label>
             </div>
           </div>
         </div>

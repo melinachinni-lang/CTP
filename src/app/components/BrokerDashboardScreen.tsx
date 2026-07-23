@@ -1130,6 +1130,8 @@ function PlanContent() {
   const [planCancelled, setPlanCancelled] = React.useState(false);
   const [invoiceError, setInvoiceError] = React.useState(false);
   const [paymentError, setPaymentError] = React.useState(false);
+  const [processingPayment, setProcessingPayment] = React.useState(false);
+  const [simulatePaymentError, setSimulatePaymentError] = React.useState(false);
 
   const plans = [
     {
@@ -1226,6 +1228,9 @@ function PlanContent() {
       setShowUpgradeModal(false);
       setShowPaymentModal(false);
       setPaymentMethod(null);
+      setProcessingPayment(false);
+      setSimulatePaymentError(false);
+      setPaymentError(false);
       setPlanChanged(true);
     }
   };
@@ -1643,8 +1648,37 @@ function PlanContent() {
               </div>
             )}
             <div className="flex gap-3">
-              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); setPaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
-              <button onClick={() => { if (paymentError) { handleUpgrade(); setPaymentError(false); } else { setPaymentError(true); } }} disabled={!paymentMethod} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: paymentMethod ? '#006B4E' : '#E5E5E5', color: paymentMethod ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod ? 'pointer' : 'not-allowed' }} onMouseEnter={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={e => { if (paymentMethod) e.currentTarget.style.backgroundColor = '#006B4E'; }}>{paymentError ? 'Reintentar' : 'Pagar'}</button>
+              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); setPaymentError(false); setProcessingPayment(false); setSimulatePaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
+              <button
+                onClick={() => {
+                  const isRetry = paymentError;
+                  setPaymentError(false);
+                  setProcessingPayment(true);
+                  setTimeout(() => {
+                    setProcessingPayment(false);
+                    if (!isRetry && simulatePaymentError) { setPaymentError(true); }
+                    else { handleUpgrade(); }
+                  }, 1500);
+                }}
+                disabled={!paymentMethod || processingPayment}
+                className="flex-1 px-6 py-3 transition-all flex items-center justify-center gap-2"
+                style={{ backgroundColor: paymentMethod && !processingPayment ? '#006B4E' : '#E5E5E5', color: paymentMethod && !processingPayment ? '#FFFFFF' : '#A3A3A3', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: paymentMethod && !processingPayment ? 'pointer' : 'not-allowed' }}
+                onMouseEnter={e => { if (paymentMethod && !processingPayment) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { if (paymentMethod && !processingPayment) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+              >
+                {processingPayment ? (
+                  <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>{paymentMethod === 'mercadopago' ? 'Redirigiendo...' : 'Procesando...'}</>
+                ) : paymentError ? 'Reintentar' : paymentMethod === 'mercadopago' ? 'Ir a Mercado Pago →' : 'Pagar'}
+              </button>
+            </div>
+            <div className="mt-4 pt-4 flex items-center justify-between" style={{ borderTop: '1px solid #F3F4F6' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Simulación</span>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Error de pago</span>
+                <div onClick={() => setSimulatePaymentError(v => !v)} className="relative w-8 h-4 rounded-full transition-colors cursor-pointer flex-shrink-0" style={{ backgroundColor: simulatePaymentError ? '#DC2626' : '#D1D5DB' }}>
+                  <div className="absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform" style={{ transform: simulatePaymentError ? 'translateX(16px)' : 'translateX(2px)' }} />
+                </div>
+              </label>
             </div>
           </div>
         </div>
