@@ -561,23 +561,23 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
   const bannerItems = [
     {
       bgColor: '#002F23',
-      title: 'Tu parcela en cuotas accesibles',
-      subtitle: 'Planes de pago flexibles pensados para que puedas invertir sin apuros.',
-      cta: 'Ver planes',
+      title: t.home.banner1Title,
+      subtitle: t.home.banner1Subtitle,
+      cta: t.home.banner1Cta,
       image: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
       bgColor: '#002F23',
-      title: 'Desde la búsqueda hasta la escritura',
-      subtitle: 'Todo en un solo lugar, con respaldo legal y acompañamiento en cada paso.',
-      cta: 'Cómo funciona',
+      title: t.home.banner2Title,
+      subtitle: t.home.banner2Subtitle,
+      cta: t.home.banner2Cta,
       image: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
       bgColor: '#002F23',
-      title: 'La tierra que no se devalúa',
-      subtitle: 'Invertir en parcelas es apostar por un activo real que crece con el tiempo.',
-      cta: 'Ver proyectos',
+      title: t.home.banner3Title,
+      subtitle: t.home.banner3Subtitle,
+      cta: t.home.banner3Cta,
       image: 'https://images.unsplash.com/photo-1748711243680-1c4ab4f9979f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmR8ZW58MXx8fHwxNzY4ODY1MzExfDA&ixlib=rb-4.1.0&q=80&w=1080',
     },
   ];

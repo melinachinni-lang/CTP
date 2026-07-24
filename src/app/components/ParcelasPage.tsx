@@ -1145,7 +1145,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     className="bg-[#006B4E] hover:bg-[#01533E] text-white px-[18px] h-[40px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center whitespace-nowrap w-full md:w-auto gap-1.5"
                   >
                     {isSmartSearchExpanded && <Sparkles className="w-3.5 h-3.5" />}
-                    {isSmartSearchExpanded ? 'Buscar con IA' : t.filters.search}
+                    {isSmartSearchExpanded ? t.filters.searchWithAI : t.filters.search}
                   </button>
                 </div>
 
@@ -1174,7 +1174,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>{aiInterpretedQuery ? 'IA activa' : t.filters.smartSearch}</span>
+                    <span>{aiInterpretedQuery ? t.filters.aiActive : t.filters.smartSearch}</span>
                     {aiInterpretedQuery && (
                       <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#A8D97F' }} />
                     )}
@@ -1201,10 +1201,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     </div>
                     <div>
                       <p className="text-sm font-medium mb-1" style={{ color: '#006B4E', fontFamily: 'Inter, sans-serif' }}>
-                        La IA está analizando tu búsqueda…
+                        {t.filters.aiAnalyzing}
                       </p>
                       <p className="text-xs" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6', maxWidth: '320px' }}>
-                        Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se adaptan a lo que describes.
+                        {t.filters.aiAnalyzingDesc}
                       </p>
                     </div>
                     <div className="flex gap-1.5">
@@ -1266,7 +1266,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     }}
                   >
                     <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>Buscar con IA</span>
+                    <span>{t.filters.searchWithAI}</span>
                   </button>
                 </div>
 
@@ -1809,7 +1809,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         <Sparkles className="w-5 h-5 absolute animate-pulse" style={{ color: '#006B4E' }} />
                       </div>
                       <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#006B4E', fontWeight: 500, flex: 1 }}>
-                        La IA está analizando tu búsqueda…
+                        {t.filters.aiAnalyzing}
                       </span>
                       <div className="flex gap-1">
                         {[0, 1, 2].map(i => (

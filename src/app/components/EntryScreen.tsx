@@ -1676,7 +1676,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#737373' }}>
-                  {selectedProfile === 'person' ? t.entry.step5of5 : (language === 'en' ? 'Step 2 of 4' : 'Paso 2 de 4')}
+                  {selectedProfile === 'person' ? t.entry.step5of5 : t.entry.step2of4}
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
@@ -1811,7 +1811,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Contact Email */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    {language === 'en' ? 'Contact email' : 'Email de contacto'} <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.contactEmailLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <input
                     type="email"
@@ -2005,12 +2005,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                 {/* Inmobiliaria association (E4) */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif' }}>
-                    {language === 'en' ? 'Associated real estate agency' : 'Inmobiliaria a la que perteneces'} <span style={{ color: '#0A0A0A' }}>*</span>
+                    {t.entry.brokerAgencyLabel} <span style={{ color: '#0A0A0A' }}>*</span>
                   </label>
                   <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-                    {language === 'en'
-                      ? 'Search for your real estate agency registered in the platform'
-                      : 'Buscá tu inmobiliaria registrada en la plataforma'}
+                    {t.entry.brokerAgencyDesc}
                   </p>
 
                   {selectedInmobiliaria ? (
@@ -2030,7 +2028,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                         className="text-xs underline"
                         style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
                       >
-                        {language === 'en' ? 'Change' : 'Cambiar'}
+                        {t.entry.change}
                       </button>
                     </div>
                   ) : (
@@ -2041,7 +2039,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                         </svg>
                         <input
                           type="text"
-                          placeholder={language === 'en' ? 'e.g. Real Estate Los Andes...' : 'Ej. Inmobiliaria Los Andes...'}
+                          placeholder={t.entry.brokerAgencyPlaceholder}
                           value={inmobiliariaSearch}
                           onChange={(e) => {
                             setInmobiliariaSearch(e.target.value);
@@ -2093,12 +2091,10 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
                                 </svg>
                                 <div>
                                   <p className="text-sm font-semibold mb-1" style={{ color: '#92400E', fontFamily: 'Inter, sans-serif' }}>
-                                    {language === 'en' ? 'Agency not found' : 'Inmobiliaria no encontrada'}
+                                    {t.entry.agencyNotFound}
                                   </p>
                                   <p className="text-xs" style={{ color: '#78350F', fontFamily: 'Inter, sans-serif', lineHeight: '1.5' }}>
-                                    {language === 'en'
-                                      ? 'The real estate agency must be registered first. Ask your agency admin to register in CompraTuParcela before you can join.'
-                                      : 'La inmobiliaria debe estar registrada primero. Pedile al administrador de tu empresa que se registre en CompraTuParcela antes de que puedas unirte.'}
+                                    {t.entry.agencyNotFoundDesc}
                                   </p>
                                 </div>
                               </div>
@@ -2111,7 +2107,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
 
                   {inmobiliariaError && !selectedInmobiliaria && (
                     <p className="text-xs" style={{ color: '#EF4444', fontFamily: 'Inter, sans-serif' }}>
-                      {language === 'en' ? 'You must select a registered real estate agency to continue.' : 'Debés seleccionar una inmobiliaria registrada para continuar.'}
+                      {t.entry.agencyRequired}
                     </p>
                   )}
                 </div>
@@ -2131,7 +2127,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             >
               {selectedProfile === 'person'
                 ? t.entry.finishRegistration
-                : (language === 'en' ? 'Continue' : 'Continuar')}
+                : t.entry.continuar}
             </button>
           </div>
         </div>
@@ -2298,7 +2294,7 @@ export function EntryScreen({ onNavigate, onSelectGoogleAccount }: EntryScreenPr
             {/* Step Indicator */}
             <div className="text-center mb-6">
               <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                {t.entry.stepOf3} {brokerOnboardingStep} {language === 'en' ? 'of' : 'de'} 3
+                {t.entry.stepOf3} {brokerOnboardingStep} {t.entry.of} 3
               </p>
             </div>
 

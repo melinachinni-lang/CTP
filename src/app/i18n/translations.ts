@@ -42,6 +42,7 @@ export interface Translations {
     searchByName: string; searchPlaceholder: string;
     regionLabel: string; allRegions: string; regionMetropolitana: string;
     reviews: string; contact: string; viewAgency: string; generalInquiry: string;
+    noResults: string; noResultsDesc: string; clearFilters: string;
   };
   recursos: {
     pageTitle: string; pageSubtitle: string;
@@ -143,6 +144,7 @@ export interface Translations {
     applyFilters: string; clearFilters: string;
     parcelType: string; typeResidential: string; typeAgricultural: string;
     typeForestry: string; typeMixed: string;
+    searchWithAI: string; aiActive: string; aiAnalyzing: string; aiAnalyzingDesc: string;
   };
   home: {
     heroTitle: string; heroSubtitle: string;
@@ -185,6 +187,9 @@ export interface Translations {
     sellCard1Title: string; sellCard1Desc: string;
     sellCard2Title: string; sellCard2Desc: string;
     sellCard3Title: string; sellCard3Desc: string;
+    banner1Title: string; banner1Subtitle: string; banner1Cta: string;
+    banner2Title: string; banner2Subtitle: string; banner2Cta: string;
+    banner3Title: string; banner3Subtitle: string; banner3Cta: string;
   };
   selector: {
     language: string; currency: string; spanish: string; english: string;
@@ -284,6 +289,9 @@ export interface Translations {
     welcomeTitle: string; welcomeDesc: string; exploreParcels: string; publishParcel: string;
     attemptSingular: string; attemptsPlural: string;
     emailPlaceholder: string;
+    brokerAgencyLabel: string; brokerAgencyDesc: string; brokerAgencyPlaceholder: string;
+    step2of4: string; contactEmailLabel: string; change: string;
+    agencyNotFound: string; agencyNotFoundDesc: string; agencyRequired: string; of: string;
   };
   detail: {
     backToResults: string; backToParcels: string;
@@ -323,6 +331,8 @@ export interface Translations {
     basePricePerParcel: string; priceTo: string;
     bookVisit: string; onlineConsult: string;
     vendido: string;
+    parcelLabel: string; viewSheet: string;
+    ownerFirstTooltip: string; ownerSecondTooltip: string; ownerMultipleTooltip: string;
   };
 }
 
@@ -397,6 +407,7 @@ const es: Translations = {
     searchByName: 'Buscar por nombre', searchPlaceholder: 'Ej: Patagonia Properties',
     regionLabel: 'Región / zona', allRegions: 'Todas las regiones', regionMetropolitana: 'Región Metropolitana',
     reviews: 'reseñas', contact: 'Contactar', viewAgency: 'Ver inmobiliaria', generalInquiry: 'Consulta general',
+    noResults: 'No encontramos inmobiliarias', noResultsDesc: 'Prueba con otro nombre o selecciona otra región.', clearFilters: 'Limpiar filtros',
   },
   comoFunciona: {
     pageTitle: 'Cómo funciona CompraTuParcela',
@@ -540,6 +551,9 @@ const es: Translations = {
     applyFilters: 'Aplicar filtros', clearFilters: 'Limpiar',
     parcelType: 'Tipo de parcela', typeResidential: 'Residencial', typeAgricultural: 'Agrícola',
     typeForestry: 'Forestal', typeMixed: 'Mixta',
+    searchWithAI: 'Buscar con IA', aiActive: 'IA activa',
+    aiAnalyzing: 'La IA está analizando tu búsqueda…',
+    aiAnalyzingDesc: 'Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se adaptan a lo que describes.',
   },
   home: {
     heroTitle: 'Compra y vende parcelas fácilmente',
@@ -632,6 +646,15 @@ const es: Translations = {
     sellCard1Title: 'Publicación en minutos', sellCard1Desc: 'Sube tu parcela en menos de 5 minutos y comienza a vender.',
     sellCard2Title: 'Miles de compradores activos', sellCard2Desc: 'Tu propiedad vista por personas que buscan activamente.',
     sellCard3Title: 'Sin intermediarios', sellCard3Desc: 'Conecta y negocia directamente con los interesados.',
+    banner1Title: 'Tu parcela en cuotas accesibles',
+    banner1Subtitle: 'Planes de pago flexibles pensados para que puedas invertir sin apuros.',
+    banner1Cta: 'Ver planes',
+    banner2Title: 'Desde la búsqueda hasta la escritura',
+    banner2Subtitle: 'Todo en un solo lugar, con respaldo legal y acompañamiento en cada paso.',
+    banner2Cta: 'Cómo funciona',
+    banner3Title: 'La tierra que no se devalúa',
+    banner3Subtitle: 'Invertir en parcelas es apostar por un activo real que crece con el tiempo.',
+    banner3Cta: 'Ver proyectos',
   },
   selector: {
     language: 'Idioma', currency: 'Moneda', spanish: 'Español', english: 'English',
@@ -770,6 +793,14 @@ const es: Translations = {
     exploreParcels: 'Explorar parcelas', publishParcel: 'Publicar mi parcela',
     attemptSingular: 'intento restante antes del bloqueo.', attemptsPlural: 'intentos restantes antes del bloqueo.',
     emailPlaceholder: 'tu@email.com',
+    brokerAgencyLabel: 'Inmobiliaria a la que perteneces',
+    brokerAgencyDesc: 'Busca tu inmobiliaria registrada en la plataforma',
+    brokerAgencyPlaceholder: 'Ej. Inmobiliaria Los Andes...',
+    step2of4: 'Paso 2 de 4', contactEmailLabel: 'Email de contacto', change: 'Cambiar',
+    agencyNotFound: 'Inmobiliaria no encontrada',
+    agencyNotFoundDesc: 'La inmobiliaria debe estar registrada primero. Pídele al administrador de tu empresa que se registre en CompraTuParcela antes de que puedas unirte.',
+    agencyRequired: 'Debes seleccionar una inmobiliaria registrada para continuar.',
+    of: 'de',
   },
   detail: {
     backToResults: 'Volver a resultados', backToParcels: 'Volver a parcelas',
@@ -813,6 +844,10 @@ const es: Translations = {
     basePricePerParcel: 'Precio base por parcela', priceTo: 'hasta',
     bookVisit: 'Reservar visita', onlineConsult: 'Consulta online',
     vendido: 'Vendido',
+    parcelLabel: 'Parcela', viewSheet: 'Ver ficha',
+    ownerFirstTooltip: 'Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
+    ownerSecondTooltip: 'Esta parcela tuvo un propietario anterior.',
+    ownerMultipleTooltip: 'Esta parcela ha tenido dos o más propietarios anteriores.',
   },
 };
 
@@ -887,6 +922,7 @@ const en: Translations = {
     searchByName: 'Search by name', searchPlaceholder: 'E.g.: Patagonia Properties',
     regionLabel: 'Region / area', allRegions: 'All regions', regionMetropolitana: 'Metropolitan Region',
     reviews: 'reviews', contact: 'Contact', viewAgency: 'View agency', generalInquiry: 'General inquiry',
+    noResults: 'No agencies found', noResultsDesc: 'Try a different name or select another region.', clearFilters: 'Clear filters',
   },
   comoFunciona: {
     pageTitle: 'How CompraTuParcela works',
@@ -1030,6 +1066,9 @@ const en: Translations = {
     applyFilters: 'Apply filters', clearFilters: 'Clear',
     parcelType: 'Parcel type', typeResidential: 'Residential', typeAgricultural: 'Agricultural',
     typeForestry: 'Forestry', typeMixed: 'Mixed',
+    searchWithAI: 'Search with AI', aiActive: 'AI active',
+    aiAnalyzing: 'AI is analyzing your search…',
+    aiAnalyzingDesc: 'We are interpreting your search and finding the parcels that best match what you describe.',
   },
   home: {
     heroTitle: 'Buy and sell parcels easily',
@@ -1122,6 +1161,15 @@ const en: Translations = {
     sellCard1Title: 'Listed in minutes', sellCard1Desc: 'Upload your parcel in under 5 minutes and start selling.',
     sellCard2Title: 'Thousands of active buyers', sellCard2Desc: 'Your property seen by people actively searching.',
     sellCard3Title: 'No middlemen', sellCard3Desc: 'Connect and negotiate directly with interested parties.',
+    banner1Title: 'Your parcel in affordable installments',
+    banner1Subtitle: 'Flexible payment plans designed so you can invest without stress.',
+    banner1Cta: 'View plans',
+    banner2Title: 'From search to title deed',
+    banner2Subtitle: 'Everything in one place, with legal backing and support at every step.',
+    banner2Cta: 'How it works',
+    banner3Title: 'Land that holds its value',
+    banner3Subtitle: 'Investing in parcels means betting on a real asset that grows over time.',
+    banner3Cta: 'View projects',
   },
   selector: {
     language: 'Language', currency: 'Currency', spanish: 'Español', english: 'English',
@@ -1260,6 +1308,14 @@ const en: Translations = {
     exploreParcels: 'Explore parcels', publishParcel: 'List my parcel',
     attemptSingular: 'attempt remaining before lockout.', attemptsPlural: 'attempts remaining before lockout.',
     emailPlaceholder: 'your@email.com',
+    brokerAgencyLabel: 'Associated real estate agency',
+    brokerAgencyDesc: 'Search for your real estate agency registered in the platform',
+    brokerAgencyPlaceholder: 'e.g. Real Estate Los Andes...',
+    step2of4: 'Step 2 of 4', contactEmailLabel: 'Contact email', change: 'Change',
+    agencyNotFound: 'Agency not found',
+    agencyNotFoundDesc: 'The real estate agency must be registered first. Ask your agency admin to register in CompraTuParcela before you can join.',
+    agencyRequired: 'You must select a registered real estate agency to continue.',
+    of: 'of',
   },
   detail: {
     backToResults: 'Back to results', backToParcels: 'Back to parcels',
@@ -1303,6 +1359,10 @@ const en: Translations = {
     basePricePerParcel: 'Base price per parcel', priceTo: 'to',
     bookVisit: 'Book a visit', onlineConsult: 'Online consultation',
     vendido: 'Sold',
+    parcelLabel: 'Parcel', viewSheet: 'View listing',
+    ownerFirstTooltip: 'This parcel is sold directly by its first owner and has never changed hands.',
+    ownerSecondTooltip: 'This parcel had one previous owner.',
+    ownerMultipleTooltip: 'This parcel has had two or more previous owners.',
   },
 };
 

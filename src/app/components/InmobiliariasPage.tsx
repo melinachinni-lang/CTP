@@ -319,15 +319,15 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                       >
                         <option value="">{t.inmobiliarias.allRegions}</option>
                         <option value="metropolitana">{t.inmobiliarias.regionMetropolitana}</option>
-                        <option value="valparaiso">Valparaíso</option>
-                        <option value="ohiggins">O'Higgins</option>
-                        <option value="maule">Maule</option>
-                        <option value="biobio">Biobío</option>
-                        <option value="araucania">Araucanía</option>
-                        <option value="los-rios">Los Ríos</option>
-                        <option value="los-lagos">Los Lagos</option>
-                        <option value="aysen">Aysén</option>
-                        <option value="magallanes">Magallanes</option>
+                        <option value="valparaiso">{t.filters.valparaiso}</option>
+                        <option value="ohiggins">{t.filters.ohiggins}</option>
+                        <option value="maule">{t.filters.maule}</option>
+                        <option value="biobio">{t.filters.biobio}</option>
+                        <option value="araucania">{t.filters.araucania}</option>
+                        <option value="los-rios">{t.filters.losRios}</option>
+                        <option value="los-lagos">{t.filters.losLagos}</option>
+                        <option value="aysen">{t.filters.aysen}</option>
+                        <option value="magallanes">{t.filters.magallanes}</option>
                       </select>
                       <ChevronDown className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 w-4 md:w-5 h-4 md:h-5 text-gray-400 pointer-events-none" />
                     </div>
@@ -387,19 +387,17 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                   <Home className="w-8 h-8" style={{ color: '#647E3F' }} />
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Montserrat, sans-serif', color: '#0A0A0A' }}>
-                  {language === 'en' ? 'No agencies found' : 'No encontramos inmobiliarias'}
+                  {t.inmobiliarias.noResults}
                 </h3>
                 <p className="text-gray-500 mb-6 max-w-sm" style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', lineHeight: '1.6' }}>
-                  {language === 'en'
-                    ? 'Try a different name or select another region.'
-                    : 'Probá con otro nombre o seleccioná otra región.'}
+                  {t.inmobiliarias.noResultsDesc}
                 </p>
                 <button
                   onClick={() => { setSearchText(''); setSearchApplied(''); setSelectedRegion(''); }}
                   className="px-5 py-2.5 rounded-full border-2 text-sm font-medium transition-colors hover:bg-gray-50"
                   style={{ borderColor: '#C5D9A8', color: '#3D5E28', fontFamily: 'Inter, sans-serif' }}
                 >
-                  {language === 'en' ? 'Clear filters' : 'Limpiar filtros'}
+                  {t.inmobiliarias.clearFilters}
                 </button>
               </div>
             )}

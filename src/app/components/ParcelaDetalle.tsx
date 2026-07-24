@@ -19,11 +19,12 @@ import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 
 function OwnershipTooltip({ valor }: { valor: string }) {
   const [show, setShow] = React.useState(false);
+  const { t } = useI18n();
 
   const tooltipMap: Record<string, string> = {
-    'Primer dueño': 'Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
-    'Segundo dueño': 'Esta parcela tuvo un propietario anterior.',
-    'Tres o más dueños': 'Esta parcela ha tenido dos o más propietarios anteriores.',
+    'Primer dueño': t.detail.ownerFirstTooltip,
+    'Segundo dueño': t.detail.ownerSecondTooltip,
+    'Tres o más dueños': t.detail.ownerMultipleTooltip,
   };
   const label = valor === 'Tercer dueño' || valor === 'Cuarto dueño' ? 'Tres o más dueños' : valor;
   const tooltip = tooltipMap[label] ?? label;
@@ -364,7 +365,7 @@ function GeolocalizacionMap({
                   color: '#0A0A0A',
                   fontWeight: 'var(--font-weight-semibold)'
                 }}>
-                  Parcela {hoveredParcela}
+                  {t.detail.parcelLabel} {hoveredParcela}
                 </span>
                 <span style={{ color: '#737373' }}> — </span>
                 <span style={{ 
@@ -416,37 +417,37 @@ function GeolocalizacionMap({
                     fontSize: 'var(--font-size-body-sm)',
                     marginBottom: '0.75rem'
                   }}>
-                    Parcela {clickedParcela}
+                    {t.detail.parcelLabel} {clickedParcela}
                   </div>
-                  
-                  <div style={{ 
+
+                  <div style={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.5rem',
                     marginBottom: '1rem'
                   }}>
-                    <div style={{ 
+                    <div style={{
                       color: '#737373',
                       fontSize: 'var(--font-size-xs)',
                       display: 'flex',
                       justifyContent: 'space-between'
                     }}>
-                      <span>Superficie:</span>
-                      <span style={{ 
+                      <span>{t.common.area}:</span>
+                      <span style={{
                         color: '#0A0A0A',
                         fontWeight: 'var(--font-weight-medium)'
                       }}>
                         {parcelasGeoData.find(p => p.numero === clickedParcela)?.area}
                       </span>
                     </div>
-                    <div style={{ 
+                    <div style={{
                       color: '#737373',
                       fontSize: 'var(--font-size-xs)',
                       display: 'flex',
                       justifyContent: 'space-between'
                     }}>
-                      <span>Estado:</span>
-                      <span style={{ 
+                      <span>{t.common.status}:</span>
+                      <span style={{
                         color: getEstadoColor(parcelasGeoData.find(p => p.numero === clickedParcela)?.estado || ''),
                         fontWeight: 'var(--font-weight-medium)'
                       }}>
@@ -454,7 +455,7 @@ function GeolocalizacionMap({
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <button
                       onClick={(e) => {
@@ -475,7 +476,7 @@ function GeolocalizacionMap({
                         cursor: 'pointer'
                       }}
                     >
-                      Ver ficha
+                      {t.detail.viewSheet}
                     </button>
                     <button
                       onClick={(e) => {
@@ -493,7 +494,7 @@ function GeolocalizacionMap({
                         cursor: 'pointer'
                       }}
                     >
-                      Cerrar
+                      {t.filters.close}
                     </button>
                   </div>
                 </div>
@@ -3757,7 +3758,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
               </span>
               <button
                 onClick={closeLightbox}
-                aria-label="Cerrar"
+                aria-label={t.filters.close}
                 className="w-9 h-9 rounded-full flex items-center justify-center transition-colors"
                 style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
               >
