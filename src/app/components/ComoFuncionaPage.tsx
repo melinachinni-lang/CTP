@@ -1191,7 +1191,7 @@ export function ComoFuncionaPage({ onNavigate, isLoggedIn = false, currentUser, 
             <button
               onClick={() => setShowPublishModal(false)}
               className="absolute top-6 right-6 text-gray-500 hover:text-black transition-colors z-10"
-              aria-label="Cerrar"
+              aria-label={t.filters.close}
             >
               <X className="w-6 h-6" />
             </button>

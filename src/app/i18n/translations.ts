@@ -413,7 +413,7 @@ const es: Translations = {
     pageTitle: 'Cómo funciona CompraTuParcela',
     pageSubtitle: 'Publica, gestiona y vende parcelas de forma simple y segura',
     stepsTitle: 'El proceso paso a paso',
-    stepsSubtitle: 'Desde crear tu publicación hasta cerrar la venta, seguí estos pasos simples',
+    stepsSubtitle: 'Desde crear tu publicación hasta cerrar la venta, sigue estos pasos simples',
     step1Title: 'Publica tu parcela', step1Desc: 'Completa un formulario simple con datos, fotos y ubicación. Todo en un solo lugar.',
     step2Title: 'Recibe consultas', step2Desc: 'Los interesados te contactan directamente. Cada consulta llega a tu panel en tiempo real.',
     step3Title: 'Gestiona el seguimiento', step3Desc: 'Sigue cada conversación, responde consultas y organiza visitas desde un solo lugar.',
