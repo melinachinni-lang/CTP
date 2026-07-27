@@ -219,16 +219,16 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
       }
     ],
     servicios: [
-      { icon: <Building2 className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: 'Venta de parcelas', descripcion: 'Asesoría completa en compra y venta' },
-      { icon: <Scale className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: 'Asesoramiento legal', descripcion: 'Equipo legal especializado' },
-      { icon: <FileText className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: 'Gestión de escritura', descripcion: 'Tramitación de documentos' },
-      { icon: <Handshake className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: 'Acompañamiento posventa', descripcion: 'Seguimiento integral' }
+      { icon: <Building2 className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: t.inmobiliarias.serviceSale, descripcion: 'Asesoría completa en compra y venta' },
+      { icon: <Scale className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: t.inmobiliarias.serviceLegal, descripcion: 'Equipo legal especializado' },
+      { icon: <FileText className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: t.inmobiliarias.serviceDeed, descripcion: 'Tramitación de documentos' },
+      { icon: <Handshake className="w-5 h-5" style={{ color: 'var(--foreground)' }} />, titulo: t.inmobiliarias.serviceAfterSale, descripcion: 'Seguimiento integral' }
     ],
     badges: [
-      { icon: <Shield className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: 'Inmobiliaria verificada' },
-      { icon: <FileCheck className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: 'Documentación validada' },
-      { icon: <CheckCircle className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: 'Rol aprobado' },
-      { icon: <CreditCard className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: 'Financiamiento disponible' }
+      { icon: <Shield className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: t.inmobiliarias.badgeVerified },
+      { icon: <FileCheck className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: t.inmobiliarias.badgeDocumented },
+      { icon: <CheckCircle className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: t.inmobiliarias.badgeRol },
+      { icon: <CreditCard className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: t.inmobiliarias.badgeFinancing }
     ],
     testimonios: [
       {
@@ -925,7 +925,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       fontWeight: 'var(--font-weight-regular)',
                       color: 'var(--foreground)'
                     }}>
-                      Proyectos ({proyectosPublicados.length})
+                      {t.inmobiliarias.proyectosLabel} ({proyectosPublicados.length})
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -994,7 +994,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                               fontSize: 'var(--font-size-xs)'
                             }}
                           >
-                            {broker.estado}
+                            {broker.estado === 'Activo' ? t.inmobiliarias.statusActive : broker.estado}
                           </span>
                         </div>
 
@@ -1043,7 +1043,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                               fontFamily: 'var(--font-body)',
                               color: '#737373'
                             }}>
-                              {broker.parcelasActivas} {broker.parcelasActivas === 1 ? 'publicación' : 'publicaciones'}
+                              {broker.parcelasActivas} {broker.parcelasActivas === 1 ? t.inmobiliarias.publication : t.inmobiliarias.publications}
                             </span>
                           </div>
                         </div>
@@ -1111,7 +1111,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     color: 'var(--foreground)',
                     marginBottom: '0.25rem'
                   }}>
-                    Equipo de {inmobiliaria.nombre}
+                    {t.inmobiliarias.teamOf} {inmobiliaria.nombre}
                   </h2>
                   <p style={{ 
                     fontSize: 'var(--font-size-body-sm)',
@@ -1394,7 +1394,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     />
                     <input
                       type="email"
-                      placeholder="Tu email"
+                      placeholder={t.inmobiliarias.emailPlaceholder}
                       value={contactForm.email}
                       onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))}
                       className="w-full h-10 px-4 rounded-xl outline-none"
@@ -1446,7 +1446,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     {inmobiliaria.nombre}
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                    Inmobiliaria · {profileData.ubicacionPrincipal}
+                    {t.inmobiliarias.agencyType} · {profileData.ubicacionPrincipal}
                   </p>
                 </div>
               </div>
@@ -1484,7 +1484,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   </div>
                   <div className="space-y-3">
                     <input type="text" placeholder={t.inmobiliarias.namePlaceholder} value={contactForm.nombre} onChange={e => setContactForm(f => ({ ...f, nombre: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
-                    <input type="email" placeholder="Tu email" value={contactForm.email} onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
+                    <input type="email" placeholder={t.inmobiliarias.emailPlaceholder} value={contactForm.email} onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
                     <textarea placeholder={t.inmobiliarias.messagePlaceholder} value={contactForm.mensaje} onChange={e => setContactForm(f => ({ ...f, mensaje: e.target.value }))} rows={3} className="w-full px-4 py-3 rounded-xl outline-none resize-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
                     <button
                       onClick={() => { if (contactForm.nombre && contactForm.email) setContactSent(true); }}

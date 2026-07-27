@@ -59,6 +59,10 @@ export interface Translations {
     vendorNotFoundTitle: string; vendorNotFoundDesc: string; backToHome: string;
     naturalPerson: string; activeSince: string; activeSeller: string;
     verificationsLabel: string; aboutSellerLabel: string; noVendorParcelas: string; callBtn: string;
+    badgeVerified: string; badgeDocumented: string; badgeRol: string; badgeFinancing: string;
+    serviceSale: string; serviceLegal: string; serviceDeed: string; serviceAfterSale: string;
+    statusActive: string; teamOf: string; emailPlaceholder: string; agencyType: string;
+    proyectosLabel: string;
   };
   broker: {
     backToBrokers: string; verifiedBroker: string;
@@ -466,6 +470,10 @@ const es: Translations = {
     vendorNotFoundTitle: 'Vendedor no encontrado', vendorNotFoundDesc: 'No se encontraron datos para este vendedor.', backToHome: 'Volver al inicio',
     naturalPerson: 'Persona natural', activeSince: 'En la plataforma', activeSeller: 'Vendedor activo',
     verificationsLabel: 'Verificaciones', aboutSellerLabel: 'Sobre', noVendorParcelas: 'Este vendedor aún no tiene parcelas publicadas.', callBtn: 'Llamar',
+    badgeVerified: 'Inmobiliaria verificada', badgeDocumented: 'Documentación validada', badgeRol: 'Rol aprobado', badgeFinancing: 'Financiamiento disponible',
+    serviceSale: 'Venta de parcelas', serviceLegal: 'Asesoramiento legal', serviceDeed: 'Gestión de escritura', serviceAfterSale: 'Acompañamiento posventa',
+    statusActive: 'Activo', teamOf: 'Equipo de', emailPlaceholder: 'Tu email', agencyType: 'Inmobiliaria',
+    proyectosLabel: 'Proyectos',
   },
   broker: {
     backToBrokers: 'Volver a Brokers', verifiedBroker: 'Broker verificado',
@@ -1028,6 +1036,10 @@ const en: Translations = {
     vendorNotFoundTitle: 'Seller not found', vendorNotFoundDesc: 'No data found for this seller.', backToHome: 'Back to home',
     naturalPerson: 'Individual seller', activeSince: 'On the platform', activeSeller: 'Active seller',
     verificationsLabel: 'Verifications', aboutSellerLabel: 'About', noVendorParcelas: 'This seller has no listings yet.', callBtn: 'Call',
+    badgeVerified: 'Verified agency', badgeDocumented: 'Validated documentation', badgeRol: 'Approved deed', badgeFinancing: 'Financing available',
+    serviceSale: 'Parcel sales', serviceLegal: 'Legal advice', serviceDeed: 'Deed processing', serviceAfterSale: 'After-sales support',
+    statusActive: 'Active', teamOf: 'Team at', emailPlaceholder: 'Your email', agencyType: 'Agency',
+    proyectosLabel: 'Projects',
   },
   broker: {
     backToBrokers: 'Back to Brokers', verifiedBroker: 'Verified broker',
