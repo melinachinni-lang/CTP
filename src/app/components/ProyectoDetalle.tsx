@@ -95,6 +95,149 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
     };
     return map[label] ?? label;
   };
+  const translateTipo = (tipo: string): string => {
+    const map: Record<string, string> = {
+      'Residencial': t.detail.tipoResidencial,
+      'Turístico': t.detail.tipoTuristico,
+      'Agrícola': t.detail.tipoAgricola,
+      'Mixto': t.detail.tipoMixto,
+    };
+    return map[tipo] ?? tipo;
+  };
+  const translateDescripcionCompleta = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Valle Verde es un proyecto residencial único en Pucón, diseñado para quienes buscan un estilo de vida conectado con la naturaleza sin renunciar a las comodidades urbanas. Con una ubicación privilegiada que ofrece vistas panorámicas al lago Villarrica y los volcanes circundantes, el proyecto cuenta con 30 parcelas de entre 5.000 y 12.000 m², cada una cuidadosamente planificada para maximizar la privacidad y las vistas. El desarrollo incluye infraestructura completa con agua potable, electricidad trifásica y caminos pavimentados internos. Actualmente en etapa de comercialización con 24 parcelas disponibles para entrega inmediata.':
+        'Valle Verde is a unique residential project in Pucón, designed for those seeking a lifestyle connected with nature without giving up urban comforts. With a privileged location offering panoramic views of Lake Villarrica and the surrounding volcanoes, the project features 30 parcels ranging from 5,000 to 12,000 m², each carefully planned to maximize privacy and views. The development includes full infrastructure with drinking water, three-phase electricity, and paved internal roads. Currently in the sales phase with 24 parcels available for immediate delivery.',
+      'Los Robles es un condominio turístico diseñado para quienes buscan un refugio natural cerca de Villarrica. Con parcelas desde 3.000 m², este proyecto ofrece la oportunidad perfecta para construir tu cabaña de descanso o invertir en el creciente mercado turístico de la zona. El condominio cuenta con seguridad permanente, áreas verdes comunes y un quincho equipado para reuniones. Ideal para familias que buscan escapar de la ciudad y conectar con la naturaleza sin sacrificar comodidades.':
+        'Los Robles is a tourist condominium designed for those seeking a natural retreat near Villarrica. With parcels from 3,000 m², this project offers the perfect opportunity to build your vacation cabin or invest in the area\'s growing tourism market. The condominium features permanent security, common green areas, and an equipped BBQ area for gatherings. Ideal for families looking to escape the city and connect with nature without sacrificing comfort.',
+      'Río Claro es un proyecto agrícola que ofrece parcelas productivas desde 8.000 m² en la fértil región del Biobío. Cada parcela cuenta con infraestructura de riego tecnificado instalada, acceso directo desde camino principal y suelos certificados de alta calidad para producción agrícola. Ideal para emprendimientos agrícolas, hortofrutícolas o viñedos. El proyecto incluye asesoría técnica inicial y facilidades de pago para inversionistas serios.':
+        'Río Claro is an agricultural project offering productive parcels from 8,000 m² in the fertile Biobío region. Each parcel comes with installed technical irrigation infrastructure, direct access from the main road, and certified high-quality soils for agricultural production. Ideal for agricultural, horticultural, or vineyard ventures. The project includes initial technical advisory and flexible payment options for serious investors.',
+      'Terrazas del Lago es un desarrollo inmobiliario de categoría superior en Puerto Varas, actualmente en etapa de construcción de obras de urbanización. Este proyecto mixto combina parcelas residenciales y turísticas con una ubicación privilegiada que ofrece vistas panorámicas al lago Llanquihue y los volcanes Osorno y Calbuco. Contará con un club house equipado, senderos naturales y áreas verdes diseñadas para el esparcimiento familiar. Pre-venta con descuentos especiales para los primeros compradores. Entrega estimada: Primer semestre 2026.':
+        'Terrazas del Lago is a premium real estate development in Puerto Varas, currently in the urban infrastructure construction phase. This mixed project combines residential and tourist parcels with a privileged location offering panoramic views of Lake Llanquihue and the Osorno and Calbuco volcanoes. It will feature an equipped club house, natural trails, and green areas designed for family recreation. Pre-sale with special discounts for early buyers. Estimated delivery: First semester 2026.',
+      'Valle Andino es un exclusivo proyecto residencial de montaña en San José de Maipo, próximo a lanzarse al mercado. A solo una hora de Santiago, ofrece la oportunidad única de vivir rodeado de naturaleza cordillerana sin alejarte de la ciudad. Con parcelas desde 6.000 m², este proyecto está diseñado para quienes buscan tranquilidad, aire puro y vistas espectaculares de la Cordillera de los Andes. Incluirá seguridad privada, acceso controlado y todas las autorizaciones para construcción de viviendas. Pre-venta exclusiva con condiciones especiales.':
+        'Valle Andino is an exclusive mountain residential project in San José de Maipo, about to launch. Just one hour from Santiago, it offers the unique opportunity to live surrounded by Andean nature without leaving the city behind. With parcels from 6,000 m², this project is designed for those seeking tranquility, clean air, and spectacular views of the Andes. It will include private security, controlled access, and all permits for residential construction. Exclusive pre-sale with special conditions.',
+      'Bosque Nativo es un proyecto ecológico único en Valdivia, diseñado bajo principios de sustentabilidad y respeto por el medio ambiente. Las parcelas están inmersas en bosque nativo valdiviano protegido, con acceso a un río de aguas cristalinas que atraviesa la propiedad. El proyecto promueve construcciones de bajo impacto ambiental y ofrece asesoría en diseño sustentable. Ideal para quienes buscan un estilo de vida en armonía con la naturaleza, con posibilidad de desarrollo turístico ecológico.':
+        'Bosque Nativo is a unique ecological project in Valdivia, designed under principles of sustainability and environmental respect. The parcels are immersed in protected Valdivian native forest, with access to a crystal-clear river that runs through the property. The project promotes low-impact construction and offers advisory on sustainable design. Ideal for those seeking a lifestyle in harmony with nature, with potential for eco-tourism development.',
+    };
+    return map[desc] ?? desc;
+  };
+  const translateTipoAcceso = (tipo: string): string => {
+    if (language !== 'en') return tipo;
+    const map: Record<string, string> = {
+      'Camino pavimentado': 'Paved road',
+      'Camino de ripio consolidado': 'Consolidated gravel road',
+    };
+    return map[tipo] ?? tipo;
+  };
+  const translateNaturalezaDesc = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Rodeado de bosque nativo y volcanes': 'Surrounded by native forest and volcanoes',
+      'Bosque nativo y entorno prístino': 'Native forest and pristine surroundings',
+      'Entorno rural con río y campos': 'Rural setting with river and fields',
+      'Entorno natural con vista al lago': 'Natural setting with lake views',
+    };
+    return map[desc] ?? desc;
+  };
+  const translateNaturalezaVistas = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Vista panorámica al lago Villarrica y volcán': 'Panoramic view of Lake Villarrica and volcano',
+      'Vista a montañas y bosques': 'Views of mountains and forests',
+      'Vista a campos y río': 'Views of fields and river',
+      'Vista panorámica al lago Llanquihue': 'Panoramic view of Lake Llanquihue',
+    };
+    return map[desc] ?? desc;
+  };
+  const translateActividad = (actividad: string): string => {
+    if (language !== 'en') return actividad;
+    const map: Record<string, string> = {
+      'Turismo': 'Tourism',
+      'Servicios': 'Services',
+      'Comercio': 'Commerce',
+      'Agricultura': 'Agriculture',
+      'Ganadería': 'Livestock',
+      'Turismo rural': 'Rural tourism',
+      'Turismo cultural': 'Cultural tourism',
+    };
+    return map[actividad] ?? actividad;
+  };
+  const translateDocNombre = (nombre: string): string => {
+    if (language !== 'en') return nombre;
+    const map: Record<string, string> = {
+      'Masterplan general': 'General master plan',
+      'Reglamento de copropiedad': 'Condominium regulations',
+      'Certificado de informes previos': 'Prior information certificate',
+      'Plano de loteo aprobado': 'Approved subdivision plan',
+      'Factibilidad de servicios': 'Services feasibility report',
+      'Plano de loteo': 'Subdivision plan',
+      'Reglamento interno': 'Internal regulations',
+      'Normas de construcción': 'Construction standards',
+      'Estudio de impacto ambiental': 'Environmental impact study',
+      'Plano de subdivisión': 'Subdivision plan',
+      'Inscripción derechos de agua': 'Water rights registration',
+      'Estudio de suelos agrícolas': 'Agricultural soil study',
+      'Certificado de avalúo fiscal': 'Tax appraisal certificate',
+      'Plano topográfico detallado': 'Detailed topographic plan',
+      'Masterplan urbanístico': 'Urban master plan',
+      'Normas urbanísticas': 'Urban planning regulations',
+    };
+    return map[nombre] ?? nombre;
+  };
+  const translateCaracValor = (valor: string): string => {
+    if (language !== 'en') return valor;
+    const map: Record<string, string> = {
+      'Mixto': 'Mixed',
+      'Norte': 'North',
+      'Nor-Este': 'North-East',
+      'Oeste': 'West',
+      'Suave (5-10%)': 'Gentle (5–10%)',
+      'Suave (5-8%)': 'Gentle (5–8%)',
+      'Moderada (10-15%)': 'Moderate (10–15%)',
+      'Plana (0-5%)': 'Flat (0–5%)',
+      'Residencial, turístico': 'Residential, tourist',
+      'Residencial exclusivo': 'Exclusive residential',
+      'Turístico, cabañas': 'Tourist, cabins',
+      'Mixto: agrícola y residencial': 'Mixed: agricultural and residential',
+      'Forestal': 'Forest',
+      'Agrícola clase I': 'Agricultural class I',
+      'Arcilloso': 'Clay',
+      'Factibilidad aprobada': 'Feasibility approved',
+      'A 200 metros': '200 meters away',
+      'Camino público pavimentado': 'Paved public road',
+      'Perimetral ejecutado': 'Perimeter fence installed',
+      'Acceso vehicular': 'Vehicle access',
+      'Red instalada': 'Network installed',
+      'Disponible en parcela': 'Available at parcel',
+      'Portería 24/7': '24/7 gatehouse',
+      'Perímetro completo': 'Full perimeter',
+      'Quincho y senderos': 'BBQ area and trails',
+      'Río + pozo profundo': 'River + deep well',
+      'Trifásica disponible': 'Three-phase available',
+      'Camino ripio consolidado': 'Consolidated gravel road',
+      'Derechos de agua incluidos': 'Water rights included',
+      'Red de riego proyectada': 'Irrigation network planned',
+      'APR conectado': 'Rural water system connected',
+      'Monofásica y trifásica': 'Single-phase and three-phase',
+      'Calle pavimentada': 'Paved street',
+      'Fibra óptica disponible': 'Fiber optic available',
+      'En proyecto': 'Planned',
+      'Aprobado y al día': 'Approved and up to date',
+      'Escritura lista': 'Deed ready',
+      'Completa y verificada': 'Complete and verified',
+      'Actualizado': 'Updated',
+      'Regularizado': 'Regularized',
+      'Aprobado y vigente': 'Approved and valid',
+      'Al día y subdividido': 'Up to date and subdivided',
+      'Inscritos y traspasables': 'Registered and transferable',
+      'Títulos saneados': 'Clear title',
+      'Individual por parcela': 'Individual per parcel',
+      'Construcción aprobados': 'Construction approved',
+      'Listas para firma': 'Ready to sign',
+    };
+    return map[valor] ?? valor;
+  };
   const [selectedImage, setSelectedImage] = useState(0);
   const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'plano' | 'mapa'>('mapa');
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(true);
@@ -410,7 +553,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   lineHeight: 'var(--line-height-body)',
                   whiteSpace: 'pre-line'
                 }}>
-                  {proyecto.descripcionCompleta}
+                  {translateDescripcionCompleta(proyecto.descripcionCompleta)}
                 </p>
               </div>
 
@@ -569,7 +712,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   marginBottom: '0.375rem',
                                   lineHeight: '1.4'
                                 }}>
-                                  {carac.valor}
+                                  {translateCaracValor(carac.valor)}
                                 </p>
                                 <p style={{ 
                                   fontFamily: 'var(--font-body)',
@@ -619,7 +762,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   marginBottom: '0.375rem',
                                   lineHeight: '1.4'
                                 }}>
-                                  {carac.valor}
+                                  {translateCaracValor(carac.valor)}
                                 </p>
                                 <p style={{ 
                                   fontFamily: 'var(--font-body)',
@@ -669,7 +812,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   marginBottom: '0.375rem',
                                   lineHeight: '1.4'
                                 }}>
-                                  {carac.valor}
+                                  {translateCaracValor(carac.valor)}
                                 </p>
                                 <p style={{ 
                                   fontFamily: 'var(--font-body)',
@@ -728,7 +871,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center gap-2">
                             {[1, 2, 3, 4].map((bar) => (<div key={bar} className="flex-1 h-2 rounded-full" style={{ backgroundColor: bar <= proyecto.entorno!.accesos.calidadAcceso ? '#647E3F' : '#F3F4F6' }} />))}
                           </div>
-                          <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginTop: '0.75rem' }}>{proyecto.entorno.accesos.tipoAcceso}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', marginTop: '0.75rem' }}>{translateTipoAcceso(proyecto.entorno.accesos.tipoAcceso)}</p>
                         </div>
                         <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
                           <div className="flex items-center justify-between">
@@ -813,7 +956,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.nivel ? '#647E3F' : '#F3F4F6' }} />))}
                             </div>
                           </div>
-                          <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{proyecto.entorno.naturaleza.descripcion}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{translateNaturalezaDesc(proyecto.entorno.naturaleza.descripcion)}</p>
                         </div>
                         <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
                           <div className="flex items-center justify-between mb-3">
@@ -822,7 +965,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               {[1, 2, 3, 4, 5].map((bar) => (<div key={bar} className="w-2 h-8 rounded-sm" style={{ backgroundColor: bar <= proyecto.entorno!.naturaleza.vistas ? '#647E3F' : '#F3F4F6' }} />))}
                             </div>
                           </div>
-                          <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{proyecto.entorno.naturaleza.descripcionVistas}</p>
+                          <p style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{translateNaturalezaVistas(proyecto.entorno.naturaleza.descripcionVistas)}</p>
                         </div>
                         <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
                           <div className="grid grid-cols-2 gap-4">
@@ -862,7 +1005,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                 <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#0A0A0A' }}>{index + 1}</span>
                                 </div>
-                                <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-body-sm)' }}>{actividad}</span>
+                                <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-body-sm)' }}>{translateActividad(actividad)}</span>
                               </div>
                             ))}
                           </div>
@@ -934,7 +1077,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             </div>
                             <div className="flex-1">
                               <p style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-body-base)', fontWeight: 'var(--font-weight-semibold)', marginBottom: '0.375rem' }}>
-                                {doc.nombre}
+                                {translateDocNombre(doc.nombre)}
                               </p>
                               <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-body-sm)', lineHeight: 'var(--line-height-body)' }}>
                                 {doc.tipo}
@@ -1235,7 +1378,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       </div>
                       <div className="flex items-center gap-1.5">
                         <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.tipo}</span>
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{translateTipo(proyecto.tipo)}</span>
                       </div>
                     </div>
 

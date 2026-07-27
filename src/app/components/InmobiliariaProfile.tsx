@@ -54,6 +54,24 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
     return map[desc] ?? desc;
   };
 
+  const translateRol = (rol: string): string => {
+    if (language !== 'en') return rol;
+    const map: Record<string, string> = {
+      'Gerente Comercial': 'Sales Manager',
+      'Asesor Senior': 'Senior Advisor',
+      'Coordinadora Legal': 'Legal Coordinator',
+      'Asesor Comercial': 'Sales Advisor',
+      'Especialista en Terrenos': 'Land Specialist',
+      'Asesor de Ventas': 'Sales Advisor',
+      'Asesora Financiera': 'Financial Advisor',
+      'Coordinador de Proyectos': 'Project Coordinator',
+      'Especialista en Marketing': 'Marketing Specialist',
+      'Broker Senior': 'Senior Broker',
+      'Broker': 'Broker',
+    };
+    return map[rol] ?? rol;
+  };
+
   // Función para drag del carrusel
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!equipoScrollRef.current) return;
@@ -825,7 +843,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                               lineHeight: '1.2',
                               fontFamily: 'var(--font-body)'
                             }}>
-                              {miembro.rol}
+                              {translateRol(miembro.rol)}
                             </p>
                           </div>
                         ))}
@@ -1036,7 +1054,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                           color: '#737373',
                           marginBottom: '1rem'
                         }}>
-                          {broker.rol}
+                          {translateRol(broker.rol)}
                         </p>
 
                         {/* Información secundaria */}
@@ -1183,7 +1201,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       fontFamily: 'var(--font-body)',
                       marginBottom: '1rem'
                     }}>
-                      {miembro.rol}
+                      {translateRol(miembro.rol)}
                     </p>
                     <div className="space-y-1.5">
                       <button
@@ -1361,7 +1379,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     {selectedBroker?.nombre}
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                    {selectedBroker?.rol} · {selectedBroker?.zona}
+                    {translateRol(selectedBroker?.rol ?? '')} · {selectedBroker?.zona}
                   </p>
                 </div>
               </div>
