@@ -70,7 +70,7 @@ const getTipoIcon = (tipo: string) => {
 };
 
 export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -91,6 +91,33 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
       'Mixto': t.detail.tipoMixto,
     };
     return map[tipo] ?? tipo;
+  };
+
+  const translateCaracteristica = (c: string): string => {
+    if (language !== 'en') return c;
+    const map: Record<string, string> = {
+      'Agua potable': 'Drinking water', 'Electricidad': 'Electricity', 'Camino pavimentado': 'Paved road',
+      'Portería 24/7': '24/7 gate', 'Áreas verdes': 'Green areas', 'Quincho común': 'Common BBQ area',
+      'Riego tecnificado': 'Technical irrigation', 'Acceso directo': 'Direct access', 'Suelo fértil': 'Fertile soil',
+      'Vista panorámica': 'Panoramic view', 'Club house': 'Club house', 'Senderos': 'Trails',
+      'Entorno cordillerano': 'Mountain surroundings', 'A 1h de Santiago': '1h from Santiago',
+      'Seguridad privada': 'Private security', 'Bosque nativo': 'Native forest',
+      'Río interior': 'Interior river', 'Diseño sustentable': 'Sustainable design',
+    };
+    return map[c] ?? c;
+  };
+
+  const translateDescripcion = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Exclusivo proyecto residencial con vista al lago y volcán': 'Exclusive residential project with lake and volcano views',
+      'Proyecto turístico en entorno natural privilegiado': 'Tourist project in a privileged natural setting',
+      'Parcelas agrícolas con infraestructura de riego incluida': 'Agricultural parcels with irrigation infrastructure included',
+      'Desarrollo mixto con vistas privilegiadas al lago Llanquihue': 'Mixed development with privileged views of Lake Llanquihue',
+      'Proyecto residencial de montaña cerca de la capital': 'Mountain residential project near the capital',
+      'Proyecto ecológico inmerso en bosque nativo valdiviano': 'Ecological project immersed in Valdivian native forest',
+    };
+    return map[desc] ?? desc;
   };
 
   // Usar imagenes array si existe, sino usar la imagen única
@@ -274,7 +301,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
             lineHeight: '1.5'
           }}
         >
-          {proyecto.descripcionCorta}
+          {translateDescripcion(proyecto.descripcionCorta)}
         </p>
 
         {/* Precio */}
@@ -293,7 +320,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
               <div className="text-gray-600">
                 {getCaracteristicaIcon(caracteristica)}
               </div>
-              <span className="font-medium" style={{ fontSize: '13px' }}>{caracteristica}</span>
+              <span className="font-medium" style={{ fontSize: '13px' }}>{translateCaracteristica(caracteristica)}</span>
             </div>
           ))}
           {/* Superficie desde */}

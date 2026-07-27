@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface SiteFooterProps {
   onNavigate: (screen: string) => void;
@@ -8,6 +9,7 @@ interface SiteFooterProps {
 }
 
 export function SiteFooter({ onNavigate, isLoggedIn = false, onPublish }: SiteFooterProps) {
+  const { t } = useI18n();
   const handlePublish = () => {
     if (onPublish) onPublish();
     else onNavigate('entry');
@@ -28,53 +30,53 @@ export function SiteFooter({ onNavigate, isLoggedIn = false, onPublish }: SiteFo
               onClick={() => onNavigate('home')}
             />
             <p className="text-sm md:text-base max-w-xs" style={{ color: '#666', fontFamily: 'var(--font-body)', lineHeight: 'var(--line-height-relaxed)' }}>
-              Plataforma especializada en compra y venta de parcelas
+              {t.footer.tagline}
             </p>
           </div>
 
           {/* Explorar */}
           <div className="lg:col-span-2 space-y-3 md:space-y-4">
             <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 600 }}>
-              Explorar
+              {t.footer.exploreLabel}
             </div>
             <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)' }}>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('parcelas')}>Parcelas</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('inmobiliarias')}>Inmobiliarias</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('recursos')}>Blog</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('parcelas')}>{t.nav.parcelas}</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('inmobiliarias')}>{t.nav.inmobiliarias}</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('recursos')}>{t.footer.blog}</div>
             </div>
           </div>
 
           {/* Plataforma */}
           <div className="lg:col-span-3 space-y-3 md:space-y-4">
             <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 600 }}>
-              Plataforma
+              {t.footer.platformLabel}
             </div>
             <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)' }}>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>Cómo funciona</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={handlePublish}>Publicar propiedad</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>Planes para inmobiliarias</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes-brokers')}>Planes para brokers</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('como-funciona')}>{t.nav.howItWorks}</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={handlePublish}>{t.nav.publishProperty}</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes')}>{t.footer.plansAgencies}</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('planes-brokers')}>{t.footer.plansBrokers}</div>
             </div>
           </div>
 
           {/* Soporte */}
           <div className="lg:col-span-3 space-y-3 md:space-y-4">
             <div className="text-xs font-semibold tracking-wider" style={{ color: '#0A0A0A', textTransform: 'uppercase', fontWeight: 600 }}>
-              Soporte
+              {t.footer.supportLabel}
             </div>
             <div className="space-y-2.5 text-sm" style={{ color: '#666', fontFamily: 'var(--font-body)' }}>
               <a href="mailto:contacto@compratuparcela.cl" className="block hover:text-[#006B4E] transition-colors" style={{ color: 'inherit', textDecoration: 'none' }}>
                 contacto@compratuparcela.cl
               </a>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('terminos-condiciones')}>Términos y condiciones</div>
-              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('politica-privacidad')}>Política de privacidad</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('terminos-condiciones')}>{t.footer.terms}</div>
+              <div className="cursor-pointer hover:text-[#006B4E] transition-colors" onClick={() => onNavigate('politica-privacidad')}>{t.footer.privacy}</div>
             </div>
           </div>
         </div>
 
         <div className="pt-6 md:pt-8" style={{ borderTop: '1px solid #CDD8DE' }}>
           <p className="text-xs md:text-sm text-center" style={{ color: '#999', fontFamily: 'var(--font-body)' }}>
-            © 2026 Compra Tu Parcela. Todos los derechos reservados.
+            {t.footer.copyright}
           </p>
         </div>
       </div>

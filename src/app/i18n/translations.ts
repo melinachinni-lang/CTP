@@ -71,6 +71,12 @@ export interface Translations {
     zonesLabel: string; languagesLabel: string; certificationsLabel: string;
     viewParcelas: string; noParcelas: string;
   };
+  footer: {
+    tagline: string;
+    exploreLabel: string; platformLabel: string; supportLabel: string;
+    blog: string; plansAgencies: string; plansBrokers: string;
+    terms: string; privacy: string; copyright: string;
+  };
   recursos: {
     pageTitle: string; pageSubtitle: string;
     moreArticles: string; readLabel: string;
@@ -484,6 +490,13 @@ const es: Translations = {
     aboutLabel: 'Sobre', contactBtn: 'Contactar', contactSection: 'Contacto',
     zonesLabel: 'Zonas de operación', languagesLabel: 'Idiomas', certificationsLabel: 'Certificaciones',
     viewParcelas: 'Ver parcelas', noParcelas: 'No hay parcelas activas en este momento.',
+  },
+  footer: {
+    tagline: 'Plataforma especializada en compra y venta de parcelas',
+    exploreLabel: 'Explorar', platformLabel: 'Plataforma', supportLabel: 'Soporte',
+    blog: 'Blog', plansAgencies: 'Planes para inmobiliarias', plansBrokers: 'Planes para brokers',
+    terms: 'Términos y condiciones', privacy: 'Política de privacidad',
+    copyright: '© 2026 Compra Tu Parcela. Todos los derechos reservados.',
   },
   comoFunciona: {
     pageTitle: 'Cómo funciona CompraTuParcela',
@@ -1053,6 +1066,13 @@ const en: Translations = {
     aboutLabel: 'About', contactBtn: 'Contact', contactSection: 'Contact',
     zonesLabel: 'Areas of operation', languagesLabel: 'Languages', certificationsLabel: 'Certifications',
     viewParcelas: 'View parcels', noParcelas: 'No active parcels at this time.',
+  },
+  footer: {
+    tagline: 'Specialized platform for buying and selling rural land',
+    exploreLabel: 'Explore', platformLabel: 'Platform', supportLabel: 'Support',
+    blog: 'Blog', plansAgencies: 'Plans for agencies', plansBrokers: 'Plans for brokers',
+    terms: 'Terms and conditions', privacy: 'Privacy policy',
+    copyright: '© 2026 Compra Tu Parcela. All rights reserved.',
   },
   comoFunciona: {
     pageTitle: 'How CompraTuParcela works',
