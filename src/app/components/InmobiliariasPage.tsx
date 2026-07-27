@@ -73,6 +73,7 @@ const inmobiliariasData = [
   {
     id: 6,
     nombre: 'Sur Verde Propiedades',
+    nombreEn: 'Green South Properties',
     descripcion: 'Tu aliado en la búsqueda de terrenos naturales con acceso a ríos y bosques en Los Ríos',
     descripcionEn: 'Your partner in finding natural land with river and forest access in Los Ríos',
     rating: 4.8,
@@ -98,8 +99,22 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
     return () => clearTimeout(t);
   }, []);
 
+  const translateZona = (zona: string): string => {
+    const regionMap: Record<string, string> = {
+      'Metropolitana': t.filters.metropolitan,
+      'Aysén': t.filters.aysen,
+      'Los Lagos': t.filters.losLagos,
+      'Araucanía': t.filters.araucania,
+      'Los Ríos': t.filters.losRios,
+    };
+    return regionMap[zona] ?? zona;
+  };
+
   const filteredInmobiliarias = inmobiliariasData.filter(i => {
-    const matchesSearch = !searchApplied || i.nombre.toLowerCase().includes(searchApplied.toLowerCase());
+    const nameEs = i.nombre.toLowerCase();
+    const nameEn = ((i as any).nombreEn ?? '').toLowerCase();
+    const query = searchApplied.toLowerCase();
+    const matchesSearch = !searchApplied || nameEs.includes(query) || nameEn.includes(query);
     const matchesRegion = !selectedRegion || i.region === selectedRegion;
     return matchesSearch && matchesRegion;
   });
@@ -453,7 +468,7 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                             className="px-2 py-0.5 rounded-full text-xs"
                             style={{ backgroundColor: '#F0F5EB', color: '#3D5E28', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
                           >
-                            {zona}
+                            {translateZona(zona)}
                           </span>
                         ))}
                       </div>
