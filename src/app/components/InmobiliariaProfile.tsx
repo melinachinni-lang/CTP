@@ -9,6 +9,7 @@ import { ParcelaCard } from '@/app/components/ParcelaCard';
 import { ProjectCard } from '@/app/components/ProjectCard';
 import { Tabs } from '@/app/components/Tabs';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface InmobiliariaProfileProps {
   onNavigate: (screen: string, id?: number, data?: string) => void;
@@ -35,6 +36,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const [scrollLeft, setScrollLeft] = useState(0);
   const [testimoniosStartX, setTestimoniosStartX] = useState(0);
   const [testimoniosScrollLeft, setTestimoniosScrollLeft] = useState(0);
+  const { t, language } = useI18n();
 
   // Función para drag del carrusel
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -126,9 +128,9 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--input-background)' }}>
         <div className="text-center">
-          <h2 style={{ color: 'var(--foreground)', marginBottom: '1rem' }}>Inmobiliaria no encontrada</h2>
+          <h2 style={{ color: 'var(--foreground)', marginBottom: '1rem' }}>{t.inmobiliarias.agencyNotFoundTitle}</h2>
           <p style={{ marginBottom: '2rem', marginTop: '1rem', color: '#6B6B6B' }}>
-            No se encontraron datos para "{inmobiliariaName}"
+            {t.inmobiliarias.agencyNotFoundDesc}
           </p>
           <button 
             onClick={() => onNavigate('inmobiliarias')}
@@ -142,7 +144,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
-            Volver a Inmobiliarias
+            {t.inmobiliarias.backToAgencies}
           </button>
         </div>
       </div>
@@ -275,8 +277,8 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   };
 
   const tabs = [
-    { id: 'sobre', label: 'Sobre la inmobiliaria' },
-    { id: 'parcelas', label: 'Parcelas' },
+    { id: 'sobre', label: t.inmobiliarias.aboutUsLabel },
+    { id: 'parcelas', label: t.nav.parcelas },
     { id: 'brokers', label: 'Brokers' }
   ];
 
@@ -295,10 +297,10 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               />
               
               <nav className="flex items-center justify-center gap-0 whitespace-nowrap">
-                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Parcelas</button>
-                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Inmobiliarias</button>
-                <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Cómo funciona</button>
-                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Recursos</button>
+                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.parcelas}</button>
+                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.inmobiliarias}</button>
+                <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.howItWorks}</button>
+                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.resources}</button>
               </nav>
             </div>
 
@@ -308,13 +310,13 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                 className="h-8 text-white px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
-              >                Publicar propiedad
+              >{t.nav.publishProperty}
               </button>
               <button 
                 onClick={() => onNavigate('entry')}
                 className="h-8 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
               >
-                Ingresar
+                {t.nav.login}
               </button>
             </div>
           </div>
@@ -339,7 +341,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
               className="flex items-center gap-2 mb-8 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span style={{ fontSize: 'var(--font-size-body-sm)', fontFamily: 'var(--font-body)' }}>Volver a Inmobiliarias</span>
+              <span style={{ fontSize: 'var(--font-size-body-sm)', fontFamily: 'var(--font-body)' }}>{t.inmobiliarias.backToAgencies}</span>
             </button>
 
             {isLoading ? (
@@ -392,7 +394,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       letterSpacing: '0.01em'
                     }}>
                       <Shield className="w-4 h-4" style={{ color: 'var(--foreground)' }} />
-                      Inmobiliaria verificada
+                      {t.inmobiliarias.verifiedAgency}
                     </span>
                     
                     <div className="flex items-center gap-2 text-gray-600">
@@ -428,9 +430,9 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
-                    Contactar
+                    {t.inmobiliarias.contact}
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleTabChange('parcelas')}
                     className="h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[32px] rounded-[200px] transition-colors flex items-center justify-center"
                     style={{
@@ -439,7 +441,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       fontWeight: 'var(--font-weight-medium)'
                     }}
                   >
-                    Ver propiedades
+                    {t.inmobiliarias.viewProperties}
                   </button>
                 </div>
               </div>
@@ -530,10 +532,10 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         color: 'var(--foreground)',
                         marginBottom: '0.25rem'
                       }}>
-                        Años de experiencia
+                        {t.inmobiliarias.yearsExp}
                       </p>
                       <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                        Especialistas en la región
+                        {t.inmobiliarias.regionalSpecialists}
                       </p>
                     </div>
 
@@ -560,10 +562,10 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         color: 'var(--foreground)',
                         marginBottom: '0.25rem'
                       }}>
-                        Parcelas activas
+                        {t.inmobiliarias.activeParcelas}
                       </p>
                       <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                        Disponibles para venta
+                        {t.inmobiliarias.availableForSale}
                       </p>
                     </div>
 
@@ -590,10 +592,10 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         color: 'var(--foreground)',
                         marginBottom: '0.25rem'
                       }}>
-                        Presencia regional
+                        {t.inmobiliarias.regionalPresence}
                       </p>
                       <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373', fontFamily: 'var(--font-body)' }}>
-                        Regiones con cobertura
+                        {t.inmobiliarias.regionsCoverage}
                       </p>
                     </div>
                   </div>
@@ -610,7 +612,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         fontFamily: 'var(--font-heading)',
                         color: 'var(--foreground)'
                       }}>
-                        Servicios ofrecidos
+                        {t.inmobiliarias.servicesOffered}
                       </h3>
                     </div>
 
@@ -649,7 +651,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         fontFamily: 'var(--font-heading)',
                         color: 'var(--foreground)'
                       }}>
-                        Información de contacto
+                        {t.inmobiliarias.contactInfoLabel}
                       </h3>
                     </div>
 
@@ -669,7 +671,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                             fontWeight: 'var(--font-weight-medium)',
                             fontFamily: 'var(--font-body)'
                           }}>
-                            Teléfono
+                            {t.inmobiliarias.phoneLabel}
                           </p>
                           <p style={{ 
                             fontSize: 'var(--font-size-h4)',
@@ -729,7 +731,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         fontFamily: 'var(--font-heading)',
                         color: 'var(--foreground)'
                       }}>
-                        Quiénes somos
+                        {t.inmobiliarias.aboutUsLabel}
                       </h3>
                     </div>
 
@@ -753,7 +755,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                           fontFamily: 'var(--font-body)',
                           color: 'var(--foreground)'
                         }}>
-                          Equipo
+                          {t.inmobiliarias.teamLabel}
                         </h4>
                       </div>
 
@@ -822,7 +824,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                           borderColor: 'var(--border)'
                         }}
                       >
-                        Ver todo el equipo
+                        {t.inmobiliarias.viewFullTeam}
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -837,7 +839,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                           fontFamily: 'var(--font-body)',
                           color: 'var(--foreground)'
                         }}>
-                          Confianza y verificación
+                          {t.inmobiliarias.trustVerification}
                         </h4>
                       </div>
 
@@ -880,7 +882,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   fontWeight: 'var(--font-weight-regular)',
                   color: 'var(--foreground)'
                 }}>
-                  Parcelas ({parcelasPublicadas.length})
+                  {t.nav.parcelas} ({parcelasPublicadas.length})
                 </h2>
 
                 {parcelasPublicadas.length === 0 ? (
@@ -890,7 +892,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       color: '#737373',
                       fontFamily: 'var(--font-body)'
                     }}>
-                      Esta inmobiliaria aún no tiene parcelas publicadas.
+                      {t.inmobiliarias.noParcelas}
                     </p>
                   </div>
                 ) : (
@@ -959,7 +961,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       color: '#737373',
                       fontFamily: 'var(--font-body)'
                     }}>
-                      Esta inmobiliaria aún no tiene brokers asociados.
+                      {t.inmobiliarias.noBrokers}
                     </p>
                   </div>
                 ) : (
@@ -1062,7 +1064,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
                           >
                             <Mail className="w-4 h-4" />
-                            Contactar
+                            {t.inmobiliarias.contact}
                           </button>
                           <button
                             className="w-full h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] rounded-[200px] transition-colors flex items-center justify-center gap-2"
@@ -1073,7 +1075,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                             }}
                             onClick={() => onNavigate('broker-profile', undefined, broker.nombre)}
                           >
-                            Ver perfil
+                            {t.detail.viewProfile}
                           </button>
                         </div>
                       </div>
@@ -1116,7 +1118,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     color: '#737373',
                     fontFamily: 'var(--font-body)'
                   }}>
-                    {profileData.equipo.length} miembros
+                    {profileData.equipo.length} {t.inmobiliarias.membersLabel}
                   </p>
                 </div>
                 <button
@@ -1179,7 +1181,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
                       >
                         <Mail className="w-3.5 h-3.5" />
-                        Contactar
+                        {t.inmobiliarias.contact}
                       </button>
                       <button
                         className="w-full h-9 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] rounded-[200px] transition-colors flex items-center justify-center"
@@ -1190,7 +1192,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         }}
                         onClick={() => { setShowTeamModal(false); onNavigate('broker-profile', undefined, miembro.nombre); }}
                       >
-                        Ver perfil
+                        {t.detail.viewProfile}
                       </button>
                     </div>
                   </div>
@@ -1224,14 +1226,14 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     color: 'var(--foreground)',
                     marginBottom: '0.25rem'
                   }}>
-                    Testimonios de clientes
+                    {t.inmobiliarias.testimonialsTitle}
                   </h2>
-                  <p style={{ 
+                  <p style={{
                     fontSize: 'var(--font-size-body-sm)',
                     color: '#737373',
                     fontFamily: 'var(--font-body)'
                   }}>
-                    {profileData.testimonios.length} opiniones
+                    {profileData.testimonios.length} {t.inmobiliarias.opinionsLabel}
                   </p>
                 </div>
                 <button
@@ -1357,13 +1359,13 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     <CheckCircle className="w-7 h-7" style={{ color: '#006B4E' }} />
                   </div>
                   <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '8px' }}>
-                    ¡Consulta enviada!
+                    {t.inmobiliarias.inquirySent}
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                    {selectedBroker?.nombre} recibirá tu mensaje y te responderá a la brevedad.
+                    {selectedBroker?.nombre} {t.inmobiliarias.inquirySentDesc}
                   </p>
                   <button onClick={() => setShowContactBrokerModal(false)} className="mt-6 h-10 px-8 rounded-full text-white transition-colors" style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-                    Cerrar
+                    {t.filters.close}
                   </button>
                 </div>
               ) : (
@@ -1371,12 +1373,12 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   {/* WhatsApp CTA */}
                   <button className="w-full h-11 rounded-full flex items-center justify-center gap-2 mb-4 text-white font-medium transition-colors" style={{ backgroundColor: '#25D366', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1DA851'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#25D366'}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    Contactar por WhatsApp
+                    {t.inmobiliarias.whatsappContact}
                   </button>
 
                   <div className="flex items-center gap-3 mb-4">
                     <div className="flex-1 h-px" style={{ backgroundColor: '#E5E7EB' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>o enviá una consulta</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{t.inmobiliarias.orSendInquiry}</span>
                     <div className="flex-1 h-px" style={{ backgroundColor: '#E5E7EB' }} />
                   </div>
 
@@ -1384,7 +1386,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   <div className="space-y-3">
                     <input
                       type="text"
-                      placeholder="Tu nombre"
+                      placeholder={t.inmobiliarias.namePlaceholder}
                       value={contactForm.nombre}
                       onChange={e => setContactForm(f => ({ ...f, nombre: e.target.value }))}
                       className="w-full h-10 px-4 rounded-xl outline-none"
@@ -1399,7 +1401,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }}
                     />
                     <textarea
-                      placeholder="¿En qué te puede ayudar este broker?"
+                      placeholder={t.inmobiliarias.messagePlaceholder}
                       value={contactForm.mensaje}
                       onChange={e => setContactForm(f => ({ ...f, mensaje: e.target.value }))}
                       rows={3}
@@ -1414,7 +1416,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                       onMouseEnter={e => { if (contactForm.nombre && contactForm.email && contactForm.mensaje) e.currentTarget.style.backgroundColor = '#01533E'; }}
                       onMouseLeave={e => { if (contactForm.nombre && contactForm.email && contactForm.mensaje) e.currentTarget.style.backgroundColor = '#006B4E'; }}
                     >
-                      Enviar consulta
+                      {t.inmobiliarias.sendInquiry}
                     </button>
                   </div>
                 </>
@@ -1460,12 +1462,12 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#E8F5EE' }}>
                     <CheckCircle className="w-7 h-7" style={{ color: '#006B4E' }} />
                   </div>
-                  <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '8px' }}>¡Consulta enviada!</p>
+                  <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '8px' }}>{t.inmobiliarias.inquirySent}</p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                    {inmobiliaria.nombre} recibirá tu mensaje y te responderá a la brevedad.
+                    {inmobiliaria.nombre} {t.inmobiliarias.inquirySentDesc}
                   </p>
                   <button onClick={() => setShowHeroContactModal(false)} className="mt-6 h-10 px-8 rounded-full text-white transition-colors" style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-                    Cerrar
+                    {t.filters.close}
                   </button>
                 </div>
               ) : (
@@ -1473,23 +1475,23 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   {/* WhatsApp CTA */}
                   <button className="w-full h-11 rounded-full flex items-center justify-center gap-2 mb-4 text-white font-medium transition-colors" style={{ backgroundColor: '#25D366', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1DA851'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#25D366'}>
                     <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.118 1.523 5.846L.044 23.02a.5.5 0 0 0 .611.637l5.26-1.524A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.896 0-3.67-.516-5.189-1.416l-.372-.22-3.863 1.12 1.07-3.768-.242-.389A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-                    Contactar por WhatsApp
+                    {t.inmobiliarias.whatsappContact}
                   </button>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="flex-1 h-px" style={{ backgroundColor: '#E5E7EB' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>o envía una consulta</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>{t.inmobiliarias.orSendInquiry}</span>
                     <div className="flex-1 h-px" style={{ backgroundColor: '#E5E7EB' }} />
                   </div>
                   <div className="space-y-3">
-                    <input type="text" placeholder="Tu nombre" value={contactForm.nombre} onChange={e => setContactForm(f => ({ ...f, nombre: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
+                    <input type="text" placeholder={t.inmobiliarias.namePlaceholder} value={contactForm.nombre} onChange={e => setContactForm(f => ({ ...f, nombre: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
                     <input type="email" placeholder="Tu email" value={contactForm.email} onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))} className="w-full h-10 px-4 rounded-xl outline-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
-                    <textarea placeholder={`¿En qué te puede ayudar ${inmobiliaria.nombre}?`} value={contactForm.mensaje} onChange={e => setContactForm(f => ({ ...f, mensaje: e.target.value }))} rows={3} className="w-full px-4 py-3 rounded-xl outline-none resize-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
+                    <textarea placeholder={t.inmobiliarias.messagePlaceholder} value={contactForm.mensaje} onChange={e => setContactForm(f => ({ ...f, mensaje: e.target.value }))} rows={3} className="w-full px-4 py-3 rounded-xl outline-none resize-none" style={{ border: '1.5px solid #E5E7EB', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A' }} />
                     <button
                       onClick={() => { if (contactForm.nombre && contactForm.email) setContactSent(true); }}
                       className="w-full h-11 rounded-full font-semibold transition-colors"
                       style={{ backgroundColor: contactForm.nombre && contactForm.email ? '#006B4E' : '#E5E5E5', color: contactForm.nombre && contactForm.email ? '#FFFFFF' : '#A3A3A3', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
                     >
-                      Enviar consulta
+                      {t.inmobiliarias.sendInquiry}
                     </button>
                   </div>
                 </>

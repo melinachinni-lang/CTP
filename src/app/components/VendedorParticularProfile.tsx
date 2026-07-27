@@ -7,6 +7,7 @@ import { getAllParcelas } from '@/app/data/parcelasData';
 import { ParcelaCard } from '@/app/components/ParcelaCard';
 import { Tabs } from '@/app/components/Tabs';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface VendedorParticularProfileProps {
   onNavigate: (screen: string, id?: number, data?: string) => void;
@@ -16,6 +17,7 @@ interface VendedorParticularProfileProps {
 export function VendedorParticularProfile({ onNavigate, vendedorName }: VendedorParticularProfileProps) {
   const [activeTab, setActiveTab] = useState('sobre');
   const [showContactModal, setShowContactModal] = useState(false);
+  const { t, language } = useI18n();
 
   const parcelasPublicadas = getAllParcelas().filter(
     parcela => parcela.inmobiliaria.nombre === vendedorName
@@ -27,18 +29,18 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
     return (
       <div className="min-h-screen bg-input-background flex items-center justify-center">
         <div className="text-center">
-          <h2>Vendedor no encontrado</h2>
+          <h2>{t.inmobiliarias.vendorNotFoundTitle}</h2>
           <p style={{ marginBottom: '2rem', marginTop: '1rem' }}>
-            No se encontraron datos para "{vendedorName}"
+            {t.inmobiliarias.vendorNotFoundDesc}
           </p>
-          <button 
+          <button
             onClick={() => onNavigate('home')}
             style={{ backgroundColor: '#006B4E' }}
             className="h-10 text-white px-8 text-sm leading-[1.5] font-medium rounded-[200px] transition-colors inline-flex items-center justify-center"
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
           >
-            Volver al inicio
+            {t.inmobiliarias.backToHome}
           </button>
         </div>
       </div>
@@ -57,8 +59,8 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
   };
 
   const tabs = [
-    { id: 'sobre', label: `Sobre ${vendedorName.split(' ')[0]}` },
-    { id: 'parcelas', label: 'Parcelas en venta' }
+    { id: 'sobre', label: `${t.inmobiliarias.aboutSellerLabel} ${vendedorName.split(' ')[0]}` },
+    { id: 'parcelas', label: t.common.parcelas }
   ];
 
   return (
@@ -76,10 +78,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
               />
               
               <nav className="flex items-center justify-center gap-0 whitespace-nowrap">
-                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Parcelas</button>
-                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Inmobiliarias</button>
-                <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Cómo funciona</button>
-                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Recursos</button>
+                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.parcelas}</button>
+                <button onClick={() => onNavigate('inmobiliarias')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.inmobiliarias}</button>
+                <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.howItWorks}</button>
+                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.resources}</button>
               </nav>
             </div>
 
@@ -90,13 +92,13 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
-                Publicar propiedad
+                {t.nav.publishProperty}
               </button>
-              <button 
+              <button
                 onClick={() => onNavigate('entry')}
                 className="h-8 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px]"
               >
-                Ingresar
+                {t.nav.login}
               </button>
             </div>
           </div>
@@ -121,7 +123,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
               className="flex items-center gap-2 mb-8 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span style={{ fontSize: 'var(--font-size-body-sm)' }}>Volver</span>
+              <span style={{ fontSize: 'var(--font-size-body-sm)' }}>{t.inmobiliarias.backToHome}</span>
             </button>
 
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-5xl">
@@ -147,7 +149,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                       letterSpacing: '0.01em'
                     }}>
                       <User className="w-4 h-4" style={{ color: '#006B4E' }} />
-                      Persona natural
+                      {t.inmobiliarias.naturalPerson}
                     </span>
                     
                     <div className="flex items-center gap-2 text-gray-600">
@@ -171,13 +173,13 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
-                    Contactar
+                    {t.inmobiliarias.contact}
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('parcelas')}
                     className="h-10 bg-[#efefef] hover:bg-[#dedede] text-black hover:text-[#303030] px-[32px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center"
                   >
-                    Ver propiedades
+                    {t.inmobiliarias.viewProperties}
                   </button>
                 </div>
               </div>
@@ -226,10 +228,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         color: '#0A0A0A',
                         marginBottom: '0.25rem'
                       }}>
-                        En la plataforma
+                        {t.inmobiliarias.activeSince}
                       </p>
                       <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                        Vendedor activo
+                        {t.inmobiliarias.activeSeller}
                       </p>
                     </div>
 
@@ -255,10 +257,10 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         color: '#0A0A0A',
                         marginBottom: '0.25rem'
                       }}>
-                        {parcelasPublicadas.length === 1 ? 'Parcela' : 'Parcelas'}
+                        {parcelasPublicadas.length === 1 ? t.common.parcela : t.common.parcelas}
                       </p>
                       <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373' }}>
-                        En venta
+                        {t.status.enVenta}
                       </p>
                     </div>
                   </div>
@@ -274,7 +276,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         fontWeight: 'var(--font-weight-medium)',
                         color: '#0A0A0A'
                       }}>
-                        Sobre {vendedorName.split(' ')[0]}
+                        {t.inmobiliarias.aboutSellerLabel} {vendedorName.split(' ')[0]}
                       </h3>
                     </div>
 
@@ -298,7 +300,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         fontWeight: 'var(--font-weight-medium)',
                         color: '#0A0A0A'
                       }}>
-                        Información de contacto
+                        {t.inmobiliarias.contactInfoLabel}
                       </h3>
                     </div>
 
@@ -309,7 +311,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         </div>
                         <div className="flex-1">
                           <p style={{ fontSize: 'var(--font-size-xs)', color: '#737373', marginBottom: '0.25rem', fontWeight: 'var(--font-weight-medium)' }}>
-                            Teléfono
+                            {t.inmobiliarias.phoneLabel}
                           </p>
                           <p style={{ 
                             fontSize: 'var(--font-size-h4)',
@@ -343,7 +345,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                       <div className="pt-4 grid grid-cols-2 gap-4">
                         <button className="h-12 bg-white hover:bg-input-background text-black px-6 text-sm leading-[1.5] font-semibold rounded-[200px] transition-all border-2 border-black flex items-center justify-center gap-2 shadow-sm hover:shadow">
                           <Phone className="w-5 h-5" />
-                          Llamar
+                          {t.inmobiliarias.callBtn}
                         </button>
                         <button 
                           style={{ backgroundColor: '#006B4E' }}
@@ -369,7 +371,7 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
                         fontWeight: 'var(--font-weight-semibold)',
                         color: '#0A0A0A'
                       }}>
-                        Verificaciones
+                        {t.inmobiliarias.verificationsLabel}
                       </h4>
                     </div>
 
@@ -400,13 +402,13 @@ export function VendedorParticularProfile({ onNavigate, vendedorName }: Vendedor
             {activeTab === 'parcelas' && (
               <div>
                 <h2 style={{ marginBottom: '2rem' }}>
-                  Parcelas en venta ({parcelasPublicadas.length})
+                  {t.common.parcelas} ({parcelasPublicadas.length})
                 </h2>
 
                 {parcelasPublicadas.length === 0 ? (
                   <div className="text-center py-12">
                     <p style={{ fontSize: 'var(--font-size-body-base)', color: '#737373' }}>
-                      Este vendedor aún no tiene parcelas publicadas.
+                      {t.inmobiliarias.noVendorParcelas}
                     </p>
                   </div>
                 ) : (

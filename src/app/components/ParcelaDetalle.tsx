@@ -2150,7 +2150,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontSize: 'var(--font-size-body-lg)',
                         color: '#0A0A0A'
                       }}>
-                        Indicadores económicos y comerciales
+                        {t.detail.economicIndicators}
                       </h3>
                     </div>
                     <p style={{ 
@@ -2172,7 +2172,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#0A0A0A',
                         marginBottom: '1.5rem'
                       }}>
-                        Gráfico de Plusvalía
+                        {t.detail.appreciationChart}
                       </h4>
 
                       {parcela.plusvalia && parcela.plusvalia.length > 0 ? (
@@ -2343,7 +2343,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#0A0A0A',
                           marginBottom: '0.375rem'
                         }}>
-                          Plano del terreno
+                          {t.detail.landPlan}
                         </h3>
                         <p style={{ 
                           fontFamily: 'var(--font-body)',
@@ -2351,7 +2351,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#737373',
                           lineHeight: 'var(--line-height-body)'
                         }}>
-                          Topografía, medidas y límites oficiales de la parcela
+                          {t.detail.landPlanDesc}
                         </p>
                       </div>
                     </div>
@@ -2365,7 +2365,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       }}
                     >
                       <Download className="w-4 h-4" />
-                      <span>Descargar</span>
+                      <span>{t.common.download}</span>
                     </button>
                   </div>
 
@@ -2391,7 +2391,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#0A0A0A',
                           marginBottom: '0.375rem'
                         }}>
-                          Rol aprobado
+                          {t.common.rolAprobado}
                         </h3>
                         <p style={{ 
                           fontFamily: 'var(--font-body)',
@@ -2399,7 +2399,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#737373',
                           lineHeight: 'var(--line-height-body)'
                         }}>
-                          Certificado de inscripción y avalúo fiscal del Conservador de Bienes Raíces
+                          {t.detail.approvedRoleDesc}
                         </p>
                       </div>
                     </div>
@@ -2413,7 +2413,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       }}
                     >
                       <Download className="w-4 h-4" />
-                      <span>Descargar</span>
+                      <span>{t.common.download}</span>
                     </button>
                   </div>
 
@@ -2439,7 +2439,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#0A0A0A',
                           marginBottom: '0.375rem'
                         }}>
-                          Factibilidad de servicios
+                          {t.detail.servicesFeasibility}
                         </h3>
                         <p style={{ 
                           fontFamily: 'var(--font-body)',
@@ -2447,7 +2447,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#737373',
                           lineHeight: 'var(--line-height-body)'
                         }}>
-                          Informe de disponibilidad de agua, luz y conexiones básicas
+                          {t.detail.servicesFeasibilityDesc}
                         </p>
                       </div>
                     </div>
@@ -2461,7 +2461,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       }}
                     >
                       <Download className="w-4 h-4" />
-                      <span>Descargar</span>
+                      <span>{t.common.download}</span>
                     </button>
                   </div>
 
@@ -2481,7 +2481,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#525252',
                           fontWeight: 'var(--font-weight-medium)'
                         }}>
-                          Documentación técnica adicional
+                          {t.detail.additionalTechDocs}
                         </span>
                       </div>
                       <div className="[&_svg]:stroke-[#737373] [&_path]:fill-none [&_path]:stroke-[#737373] [&_circle]:fill-none [&_circle]:stroke-[#737373] [&_rect]:fill-none [&_rect]:stroke-[#737373] [&_line]:stroke-[#737373] [&_polyline]:stroke-[#737373]">
@@ -2505,7 +2505,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#0A0A0A',
                             fontWeight: 'var(--font-weight-medium)'
                           }}>
-                            Estudio de suelo
+                            {t.detail.soilStudy}
                           </span>
                         </div>
                         <button 
@@ -2518,7 +2518,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           }}
                         >
                           <Download className="w-3.5 h-3.5" />
-                          <span>Descargar</span>
+                          <span>{t.common.download}</span>
                         </button>
                       </div>
 
@@ -2536,7 +2536,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#0A0A0A',
                             fontWeight: 'var(--font-weight-medium)'
                           }}>
-                            Certificado de informaciones previas
+                            {t.detail.priorInfoCert}
                           </span>
                         </div>
                         <button 
@@ -2549,7 +2549,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           }}
                         >
                           <Download className="w-3.5 h-3.5" />
-                          <span>Descargar</span>
+                          <span>{t.common.download}</span>
                         </button>
                       </div>
 
@@ -2567,7 +2567,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#0A0A0A',
                             fontWeight: 'var(--font-weight-medium)'
                           }}>
-                            Plano regulador comunal
+                            {t.detail.communalPlan}
                           </span>
                         </div>
                         <button 
@@ -2580,7 +2580,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           }}
                         >
                           <Download className="w-3.5 h-3.5" />
-                          <span>Descargar</span>
+                          <span>{t.common.download}</span>
                         </button>
                       </div>
 
@@ -2598,7 +2598,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#0A0A0A',
                             fontWeight: 'var(--font-weight-medium)'
                           }}>
-                            Informe hidrológico
+                            {t.detail.hydrologicalReport}
                           </span>
                         </div>
                         <button 
@@ -2611,7 +2611,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           }}
                         >
                           <Download className="w-3.5 h-3.5" />
-                          <span>Descargar</span>
+                          <span>{t.common.download}</span>
                         </button>
                       </div>
                     </div>
@@ -2639,7 +2639,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         letterSpacing: '0.05em',
                         marginBottom: '0.5rem'
                       }}>
-                        Precio
+                        {t.detail.price}
                       </p>
                       <PrecioDisplay 
                         precioCLP={parcela.precio}
@@ -2710,7 +2710,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         <div className="[&_svg]:stroke-white [&_path]:fill-none [&_path]:stroke-white [&_circle]:fill-none [&_circle]:stroke-white [&_rect]:fill-none [&_rect]:stroke-white [&_line]:stroke-white [&_polyline]:stroke-white">
                           <ShoppingCart className="w-4 h-4" />
                         </div>
-                        Comprar parcela
+                        {t.detail.buyParcel}
                       </button>
                     )}
 
@@ -2732,7 +2732,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     {estadoCompra === 'pago-en-validacion' && (
                       <div className="w-full px-6 py-3 rounded-full flex items-center justify-center gap-2" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
                         <Activity className="w-4 h-4" style={{ color: '#2563EB' }} />
-                        <span style={{ fontFamily: 'var(--font-body)', color: '#1E40AF', fontWeight: 600, fontSize: 'var(--font-size-body-sm)' }}>Validando pago…</span>
+                        <span style={{ fontFamily: 'var(--font-body)', color: '#1E40AF', fontWeight: 600, fontSize: 'var(--font-size-body-sm)' }}>{t.detail.validatingPayment}</span>
                       </div>
                     )}
 
@@ -2754,7 +2754,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       <div className="[&_svg]:stroke-[#006B4E] [&_path]:fill-none [&_path]:stroke-[#006B4E] [&_circle]:fill-none [&_circle]:stroke-[#006B4E] [&_rect]:fill-none [&_rect]:stroke-[#006B4E] [&_line]:stroke-[#006B4E] [&_polyline]:stroke-[#006B4E]">
                         <Download className="w-4 h-4" />
                       </div>
-                      Descargar brochure
+                      {t.detail.downloadBrochure}
                     </button>
 
                     {/* CTA secundario */}
@@ -2769,7 +2769,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         <div className="[&_svg]:stroke-[#525252] [&_path]:fill-none [&_path]:stroke-[#525252] [&_circle]:fill-none [&_circle]:stroke-[#525252] [&_rect]:fill-none [&_rect]:stroke-[#525252] [&_line]:stroke-[#525252] [&_polyline]:stroke-[#525252]">
                           <MessageSquare className="w-4 h-4" />
                         </div>
-                        Consultar
+                        {t.detail.consult}
                       </button>
                     )}
 
@@ -2784,7 +2784,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       letterSpacing: '0.05em',
                       marginBottom: '1rem'
                     }}>
-                      Publicado por
+                      {t.common.publishedBy}
                     </h3>
                     
                     <div className="space-y-4">
@@ -2917,7 +2917,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               backgroundColor: 'transparent'
                             }}
                           >
-                            <span>Ver perfil</span>
+                            <span>{t.detail.viewProfile}</span>
                             <div className="[&_svg]:stroke-[#525252] [&_path]:fill-none [&_path]:stroke-[#525252] [&_circle]:fill-none [&_circle]:stroke-[#525252] [&_rect]:fill-none [&_rect]:stroke-[#525252] [&_line]:stroke-[#525252] [&_polyline]:stroke-[#525252]">
                               <ExternalLink className="w-3.5 h-3.5" />
                             </div>
@@ -3082,7 +3082,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#0A0A0A',
                       marginBottom: '0.5rem'
                     }}>
-                      Análisis de mercado
+                      {t.detail.marketAnalysis}
                     </h2>
                     <div 
                       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full"
@@ -3100,7 +3100,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         fontWeight: 'var(--font-weight-medium)',
                         color: '#525252'
                       }}>
-                        Análisis potenciado por IA
+                        {t.detail.aiPowered}
                       </span>
                     </div>
                   </div>
@@ -3171,7 +3171,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   color: '#737373',
                   marginTop: '0.25rem'
                 }}>
-                  Puntuación de inversión
+                  {t.detail.investmentScore}
                 </p>
                 {/* Última actualización */}
                 <div className="flex items-center justify-center gap-1.5 mt-3">
@@ -3197,7 +3197,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     color: '#0A0A0A',
                     marginBottom: '1rem'
                   }}>
-                    Señales de mercado
+                    {t.detail.marketSignals}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {/* Tendencia de precios */}
@@ -3346,7 +3346,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#0A0A0A',
                       marginBottom: '0.5rem'
                     }}>
-                      Insight clave
+                      {t.detail.keyInsight}
                     </h3>
                     <p style={{ 
                       fontFamily: 'var(--font-body)',
@@ -3369,7 +3369,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   color: '#0A0A0A',
                   marginBottom: '1rem'
                 }}>
-                  Fortalezas
+                  {t.detail.strengthsTitle}
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
@@ -3517,7 +3517,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     fontSize: 'var(--font-size-body-base)',
                     color: '#525252'
                   }}>
-                    Aspectos a considerar
+                    {t.detail.considerationsTitle}
                   </h3>
                 </div>
                 <div className="space-y-3 ml-11">
@@ -3650,7 +3650,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                 color: '#0A0A0A'
               }}
             >
-              ¿Quieres comprar esta parcela?
+              {t.detail.buyParcelQuestion}
             </h3>
             <div className="flex gap-3">
               <button
@@ -3673,7 +3673,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   e.currentTarget.style.borderColor = '#D4D4D4';
                 }}
               >
-                Cancelar
+                {t.detail.cancelBtn}
               </button>
               <button
                 onClick={handleConfirmCompra}
@@ -3693,7 +3693,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   e.currentTarget.style.backgroundColor = '#006B4E';
                 }}
               >
-                Continuar
+                {t.entry.continuar}
               </button>
             </div>
           </div>
