@@ -64,7 +64,13 @@ const getTipoIcon = (tipo: string) => {
 };
 
 export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const getEstadoLabel = (estado: string): string => {
+    if (estado === 'disponible') return t.status.disponible;
+    if (estado === 'reservado') return t.status.reservado;
+    if (estado === 'vendido') return t.detail.vendido;
+    return estado;
+  };
   const [selectedImage, setSelectedImage] = useState(0);
   const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'plano' | 'mapa'>('mapa');
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(true);
@@ -162,42 +168,42 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                 <button 
                   onClick={() => onNavigate('parcelas')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Parcelas
+                  {t.nav.parcelas}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('inmobiliarias')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Inmobiliarias
+                  {t.nav.inmobiliarias}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('como-funciona')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Cómo funciona
+                  {t.nav.howItWorks}
                 </button>
-                <button 
+                <button
                   onClick={() => onNavigate('recursos')}
                   className="px-4 py-2 text-sm rounded-full hover:bg-gray-50 transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: 'var(--font-body)',
                     color: '#737373'
                   }}
                 >
-                  Recursos
+                  {t.nav.resources}
                 </button>
               </nav>
             </div>
@@ -213,19 +219,19 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   fontWeight: 'var(--font-weight-medium)'
                 }}
               >
-                Publicar propiedad
+                {t.nav.publishProperty}
               </button>
-              <button 
+              <button
                 onClick={() => onNavigate('entry')}
                 className="px-5 py-2 text-sm rounded-full transition-colors"
-                style={{ 
+                style={{
                   fontFamily: 'var(--font-body)',
                   backgroundColor: '#F5F5F5',
                   color: '#0A0A0A',
                   fontWeight: 'var(--font-weight-medium)'
                 }}
               >
-                Ingresar
+                {t.nav.login}
               </button>
             </div>
           </div>
@@ -883,7 +889,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             {t.detail.masterplan}
                           </p>
                           <p style={{ fontFamily: 'var(--font-body)', color: '#737373', fontSize: 'var(--font-size-body-sm)' }}>
-                            Plano general del proyecto
+                            {t.detail.masterplanDesc}
                           </p>
                         </div>
                       </div>
@@ -928,7 +934,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           <div className="flex items-center gap-3">
                             <Settings className="w-5 h-5" style={{ color: '#737373' }} />
                             <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#525252', fontWeight: 'var(--font-weight-medium)' }}>
-                              Documentación técnica adicional
+                              {t.detail.additionalTechDocs}
                             </span>
                           </div>
                           {isDocTecnicaOpen ? <ChevronUp className="w-4 h-4" style={{ color: '#737373' }} /> : <ChevronDown className="w-4 h-4" style={{ color: '#737373' }} />}
@@ -936,10 +942,10 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                         {isDocTecnicaOpen && (
                           <div className="mt-4 space-y-3 pl-4">
                             {[
-                              { nombre: 'Estudio de suelo', icon: <FileText className="w-5 h-5" style={{ color: '#737373' }} /> },
-                              { nombre: 'Certificado de informaciones previas', icon: <FileCheck className="w-5 h-5" style={{ color: '#737373' }} /> },
-                              { nombre: 'Plano regulador comunal', icon: <FileText className="w-5 h-5" style={{ color: '#737373' }} /> },
-                              { nombre: 'Informe hidrológico', icon: <Droplet className="w-5 h-5" style={{ color: '#737373' }} /> },
+                              { nombre: t.detail.soilStudy, icon: <FileText className="w-5 h-5" style={{ color: '#737373' }} /> },
+                              { nombre: t.detail.priorInfoCert, icon: <FileCheck className="w-5 h-5" style={{ color: '#737373' }} /> },
+                              { nombre: t.detail.communalPlan, icon: <FileText className="w-5 h-5" style={{ color: '#737373' }} /> },
+                              { nombre: t.detail.hydrologicalReport, icon: <Droplet className="w-5 h-5" style={{ color: '#737373' }} /> },
                             ].map((doc) => (
                               <div key={doc.nombre} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-all">
                                 <div className="flex items-center gap-3 flex-1">
@@ -948,7 +954,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                 </div>
                                 <button className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-300 hover:bg-gray-50 transition-all" style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)' }}>
                                   <Download className="w-3.5 h-3.5" />
-                                  <span>Descargar</span>
+                                  <span>{t.common.download}</span>
                                 </button>
                               </div>
                             ))}
@@ -997,7 +1003,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   <div className="space-y-3">
                     {/* Hint de selección */}
                     <p style={{ fontSize: '13px', color: '#737373', fontFamily: 'var(--font-body)', marginBottom: '4px' }}>
-                      Selecciona una o más parcelas disponibles para reservarlas en una sola operación.
+                      {t.detail.selectParcelasHint}
                     </p>
                     {[...parcelasData].sort((a, b) => {
                       const order: Record<string, number> = { disponible: 0, reservado: 1, vendido: 2 };
@@ -1054,7 +1060,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                           >
                             <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: parcela.estado === 'disponible' ? '#16A34A' : parcela.estado === 'reservado' ? '#CA8A04' : '#737373' }} />
                             <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-medium)', color: parcela.estado === 'disponible' ? '#166534' : parcela.estado === 'reservado' ? '#854D0E' : '#525252' }}>
-                              {parcela.estadoLabel}
+                              {getEstadoLabel(parcela.estado)}
                             </span>
                           </div>
                         </div>
@@ -1068,13 +1074,13 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   <div className="mt-4 pt-4 space-y-3" style={{ borderTop: '1px solid #E5E5E5' }}>
                     <div className="flex items-center justify-between">
                       <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px', color: '#0A0A0A' }}>
-                        {selectedParcelas.length} {selectedParcelas.length === 1 ? 'parcela seleccionada' : 'parcelas seleccionadas'}
+                        {selectedParcelas.length} {selectedParcelas.length === 1 ? t.detail.parcelaSelected : t.detail.parcelasSelected}
                       </p>
                       <button
                         onClick={() => setSelectedParcelas([])}
                         style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}
                       >
-                        Limpiar selección
+                        {t.detail.clearSelection}
                       </button>
                     </div>
                     <button
@@ -1082,7 +1088,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       className="w-full flex items-center justify-center gap-2 rounded-full transition-all hover:opacity-90"
                       style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
-                      Reservar {selectedParcelas.length === 1 ? 'parcela' : `${selectedParcelas.length} parcelas`}
+                      {t.detail.reserve} {selectedParcelas.length === 1 ? t.common.parcela : `${selectedParcelas.length} ${t.common.parcelas}`}
                     </button>
                   </div>
                 )}
@@ -1098,7 +1104,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     color: '#0A0A0A',
                     marginBottom: '24px'
                   }}>
-                    Parcelas disponibles ({proyecto.parcelasDelProyecto.length})
+                    {t.detail.availableParcels} ({proyecto.parcelasDelProyecto.length})
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1173,7 +1179,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     {/* Rango de precios */}
                     <div>
                       <p style={{ fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-body)', marginBottom: '6px' }}>
-                        Rango de precios
+                        {t.filters.priceRange}
                       </p>
                       <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '21px', color: '#0A0A0A', lineHeight: 1.2, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                         {proyecto.precioDesde} – {proyecto.precioHasta}
@@ -1183,7 +1189,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     {/* Primer dueño badge */}
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ border: '1px solid #E5E5E5' }}>
                       <Info className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />
-                      <span style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>Primer dueño</span>
+                      <span style={{ fontSize: '12px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{t.filters.firstOwner}</span>
                     </div>
 
                     {/* Separador */}
@@ -1197,11 +1203,11 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Home className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.totalParcelas} parcelas</span>
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.totalParcelas} {t.common.parcelas}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
-                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.parcelasDisponibles} disponibles</span>
+                        <span style={{ fontSize: '13px', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}>{proyecto.parcelasDisponibles} {t.detail.projectAvailable}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
@@ -1219,7 +1225,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px', padding: '14px 24px' }}
                     >
                       <ShoppingCart className="w-4 h-4" />
-                      Ver parcelas disponibles
+                      {t.detail.showAvailableParcels}
                     </button>
 
                     {/* CTA secundario: Brochure */}
@@ -1230,7 +1236,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F5F5F0')}
                     >
                       <Download className="w-4 h-4" />
-                      Descargar brochure
+                      {t.detail.downloadBrochure}
                     </button>
 
                     {/* CTA terciario: Consultar */}
@@ -1240,7 +1246,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                       style={{ border: '1px solid #E5E5E5', color: '#0A0A0A', fontFamily: 'var(--font-body)', fontSize: '14px', padding: '12px 24px' }}
                     >
                       <MessageSquare className="w-4 h-4" />
-                      Consultar
+                      {t.detail.consult}
                     </button>
                   </div>
                 </div>

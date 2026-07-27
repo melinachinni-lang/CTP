@@ -44,6 +44,21 @@ export interface Translations {
     regionLabel: string; allRegions: string; regionMetropolitana: string;
     reviews: string; contact: string; viewAgency: string; generalInquiry: string;
     noResults: string; noResultsDesc: string; clearFilters: string;
+    backToAgencies: string; agencyNotFoundTitle: string; agencyNotFoundDesc: string;
+    verifiedAgency: string; viewProperties: string;
+    yearsExp: string; regionalSpecialists: string; activeParcelas: string; availableForSale: string;
+    regionalPresence: string; regionsCoverage: string;
+    servicesOffered: string; contactInfoLabel: string; phoneLabel: string;
+    aboutUsLabel: string; teamLabel: string; viewFullTeam: string; trustVerification: string;
+    noParcelas: string; noBrokers: string;
+    publication: string; publications: string; membersLabel: string; opinionsLabel: string;
+    testimonialsTitle: string;
+    inquirySent: string; inquirySentDesc: string;
+    whatsappContact: string; orSendInquiry: string;
+    namePlaceholder: string; messagePlaceholder: string; sendInquiry: string;
+    vendorNotFoundTitle: string; vendorNotFoundDesc: string; backToHome: string;
+    naturalPerson: string; activeSince: string; activeSeller: string;
+    verificationsLabel: string; aboutSellerLabel: string; noVendorParcelas: string; callBtn: string;
   };
   recursos: {
     pageTitle: string; pageSubtitle: string;
@@ -85,7 +100,7 @@ export interface Translations {
     ctaTitle: string; ctaSubtitle: string; viewParcels: string;
   };
   status: {
-    disponible: string; reservada: string; reservandose: string;
+    disponible: string; reservada: string; reservandose: string; reservado: string;
     aprobada: string; rechazada: string; activa: string; pausada: string;
     pendiente: string; aprobado: string; rechazado: string;
     preventa: string; enConstruccion: string; planosAprobados: string; lanzamiento: string;
@@ -338,6 +353,18 @@ export interface Translations {
     parcelLabel: string; viewSheet: string;
     ownerFirstTooltip: string; ownerSecondTooltip: string; ownerMultipleTooltip: string;
     noAppreciation: string;
+    price: string; buyParcel: string; validatingPayment: string; downloadBrochure: string;
+    consult: string; viewProfile: string; buyParcelQuestion: string; cancelBtn: string;
+    landPlan: string; landPlanDesc: string; approvedRoleDesc: string;
+    servicesFeasibility: string; servicesFeasibilityDesc: string;
+    additionalTechDocs: string; soilStudy: string; priorInfoCert: string;
+    communalPlan: string; hydrologicalReport: string;
+    economicIndicators: string; appreciationChart: string;
+    aiPowered: string; investmentScore: string; marketSignals: string;
+    keyInsight: string; strengthsTitle: string; considerationsTitle: string;
+    masterplanDesc: string; selectParcelasHint: string;
+    parcelaSelected: string; parcelasSelected: string; clearSelection: string;
+    reserve: string; projectAvailable: string;
   };
 }
 
@@ -414,6 +441,21 @@ const es: Translations = {
     regionLabel: 'Región / zona', allRegions: 'Todas las regiones', regionMetropolitana: 'Región Metropolitana',
     reviews: 'reseñas', contact: 'Contactar', viewAgency: 'Ver inmobiliaria', generalInquiry: 'Consulta general',
     noResults: 'No encontramos inmobiliarias', noResultsDesc: 'Prueba con otro nombre o selecciona otra región.', clearFilters: 'Limpiar filtros',
+    backToAgencies: 'Volver a Inmobiliarias', agencyNotFoundTitle: 'Inmobiliaria no encontrada', agencyNotFoundDesc: 'No se encontraron datos para esta inmobiliaria.',
+    verifiedAgency: 'Inmobiliaria verificada', viewProperties: 'Ver propiedades',
+    yearsExp: 'Años de experiencia', regionalSpecialists: 'Especialistas en la región', activeParcelas: 'Parcelas activas', availableForSale: 'Disponibles para venta',
+    regionalPresence: 'Presencia regional', regionsCoverage: 'Regiones con cobertura',
+    servicesOffered: 'Servicios ofrecidos', contactInfoLabel: 'Información de contacto', phoneLabel: 'Teléfono',
+    aboutUsLabel: 'Quiénes somos', teamLabel: 'Equipo', viewFullTeam: 'Ver todo el equipo', trustVerification: 'Confianza y verificación',
+    noParcelas: 'Esta inmobiliaria aún no tiene parcelas publicadas.', noBrokers: 'Esta inmobiliaria aún no tiene brokers asociados.',
+    publication: 'publicación', publications: 'publicaciones', membersLabel: 'miembros', opinionsLabel: 'opiniones',
+    testimonialsTitle: 'Testimonios de clientes',
+    inquirySent: '¡Consulta enviada!', inquirySentDesc: 'recibirá tu mensaje y te responderá a la brevedad.',
+    whatsappContact: 'Contactar por WhatsApp', orSendInquiry: 'o envía una consulta',
+    namePlaceholder: 'Tu nombre', messagePlaceholder: '¿En qué te puedo ayudar?', sendInquiry: 'Enviar consulta',
+    vendorNotFoundTitle: 'Vendedor no encontrado', vendorNotFoundDesc: 'No se encontraron datos para este vendedor.', backToHome: 'Volver al inicio',
+    naturalPerson: 'Persona natural', activeSince: 'En la plataforma', activeSeller: 'Vendedor activo',
+    verificationsLabel: 'Verificaciones', aboutSellerLabel: 'Sobre', noVendorParcelas: 'Este vendedor aún no tiene parcelas publicadas.', callBtn: 'Llamar',
   },
   comoFunciona: {
     pageTitle: 'Cómo funciona CompraTuParcela',
@@ -477,7 +519,7 @@ const es: Translations = {
     viewParcels: 'Ver parcelas disponibles',
   },
   status: {
-    disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose',
+    disponible: 'Disponible', reservada: 'Reservada', reservandose: 'Reservándose', reservado: 'Reservado',
     aprobada: 'Aprobada', rechazada: 'Rechazada', activa: 'Activa', pausada: 'Pausada',
     pendiente: 'Pendiente', aprobado: 'Aprobado', rechazado: 'Rechazado',
     preventa: 'Pre-venta iniciada', enConstruccion: 'En construcción',
@@ -862,6 +904,19 @@ const es: Translations = {
     ownerSecondTooltip: 'Esta parcela tuvo un propietario anterior.',
     ownerMultipleTooltip: 'Esta parcela ha tenido dos o más propietarios anteriores.',
     noAppreciation: 'No hay información de plusvalía disponible para esta parcela.',
+    price: 'Precio', buyParcel: 'Comprar parcela', validatingPayment: 'Validando pago…', downloadBrochure: 'Descargar brochure',
+    consult: 'Consultar', viewProfile: 'Ver perfil', buyParcelQuestion: '¿Quieres comprar esta parcela?', cancelBtn: 'Cancelar',
+    landPlan: 'Plano del terreno', landPlanDesc: 'Topografía, medidas y límites oficiales de la parcela',
+    approvedRoleDesc: 'Certificado de inscripción y avalúo fiscal del Conservador de Bienes Raíces',
+    servicesFeasibility: 'Factibilidad de servicios', servicesFeasibilityDesc: 'Informe de disponibilidad de agua, luz y conexiones básicas',
+    additionalTechDocs: 'Documentación técnica adicional', soilStudy: 'Estudio de suelo',
+    priorInfoCert: 'Certificado de informaciones previas', communalPlan: 'Plano regulador comunal', hydrologicalReport: 'Informe hidrológico',
+    economicIndicators: 'Indicadores económicos y comerciales', appreciationChart: 'Gráfico de Plusvalía',
+    aiPowered: 'Análisis potenciado por IA', investmentScore: 'Puntuación de inversión', marketSignals: 'Señales de mercado',
+    keyInsight: 'Insight clave', strengthsTitle: 'Fortalezas', considerationsTitle: 'Aspectos a considerar',
+    masterplanDesc: 'Plano general del proyecto', selectParcelasHint: 'Selecciona una o más parcelas disponibles para reservarlas en una sola operación.',
+    parcelaSelected: 'parcela seleccionada', parcelasSelected: 'parcelas seleccionadas', clearSelection: 'Limpiar selección',
+    reserve: 'Reservar', projectAvailable: 'disponibles',
   },
 };
 
@@ -938,6 +993,21 @@ const en: Translations = {
     regionLabel: 'Region / area', allRegions: 'All regions', regionMetropolitana: 'Metropolitan Region',
     reviews: 'reviews', contact: 'Contact', viewAgency: 'View agency', generalInquiry: 'General inquiry',
     noResults: 'No agencies found', noResultsDesc: 'Try a different name or select another region.', clearFilters: 'Clear filters',
+    backToAgencies: 'Back to agencies', agencyNotFoundTitle: 'Agency not found', agencyNotFoundDesc: 'No data found for this agency.',
+    verifiedAgency: 'Verified agency', viewProperties: 'View properties',
+    yearsExp: 'Years of experience', regionalSpecialists: 'Regional specialists', activeParcelas: 'Active parcels', availableForSale: 'Available for sale',
+    regionalPresence: 'Regional presence', regionsCoverage: 'Regions with coverage',
+    servicesOffered: 'Services offered', contactInfoLabel: 'Contact information', phoneLabel: 'Phone',
+    aboutUsLabel: 'About us', teamLabel: 'Team', viewFullTeam: 'View full team', trustVerification: 'Trust & verification',
+    noParcelas: 'This agency has no listings yet.', noBrokers: 'This agency has no associated brokers yet.',
+    publication: 'listing', publications: 'listings', membersLabel: 'members', opinionsLabel: 'reviews',
+    testimonialsTitle: 'Client testimonials',
+    inquirySent: 'Inquiry sent!', inquirySentDesc: 'will receive your message and get back to you shortly.',
+    whatsappContact: 'Contact via WhatsApp', orSendInquiry: 'or send an inquiry',
+    namePlaceholder: 'Your name', messagePlaceholder: 'How can I help you?', sendInquiry: 'Send inquiry',
+    vendorNotFoundTitle: 'Seller not found', vendorNotFoundDesc: 'No data found for this seller.', backToHome: 'Back to home',
+    naturalPerson: 'Individual seller', activeSince: 'On the platform', activeSeller: 'Active seller',
+    verificationsLabel: 'Verifications', aboutSellerLabel: 'About', noVendorParcelas: 'This seller has no listings yet.', callBtn: 'Call',
   },
   comoFunciona: {
     pageTitle: 'How CompraTuParcela works',
@@ -1001,7 +1071,7 @@ const en: Translations = {
     viewParcels: 'View available parcels',
   },
   status: {
-    disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved',
+    disponible: 'Available', reservada: 'Reserved', reservandose: 'Being reserved', reservado: 'Reserved',
     aprobada: 'Approved', rechazada: 'Rejected', activa: 'Active', pausada: 'Paused',
     pendiente: 'Pending', aprobado: 'Approved', rechazado: 'Rejected',
     preventa: 'Pre-sale started', enConstruccion: 'Under construction',
@@ -1386,6 +1456,19 @@ const en: Translations = {
     ownerSecondTooltip: 'This parcel had one previous owner.',
     ownerMultipleTooltip: 'This parcel has had two or more previous owners.',
     noAppreciation: 'No appreciation data available for this parcel.',
+    price: 'Price', buyParcel: 'Buy parcel', validatingPayment: 'Validating payment…', downloadBrochure: 'Download brochure',
+    consult: 'Inquire', viewProfile: 'View profile', buyParcelQuestion: 'Do you want to buy this parcel?', cancelBtn: 'Cancel',
+    landPlan: 'Land plan', landPlanDesc: 'Topography, measurements and official limits of the parcel',
+    approvedRoleDesc: 'Registration and fiscal valuation certificate from the Real Estate Registry',
+    servicesFeasibility: 'Services feasibility', servicesFeasibilityDesc: 'Availability report for water, electricity and basic connections',
+    additionalTechDocs: 'Additional technical documentation', soilStudy: 'Soil study',
+    priorInfoCert: 'Certificate of prior information', communalPlan: 'Communal regulatory plan', hydrologicalReport: 'Hydrological report',
+    economicIndicators: 'Economic and commercial indicators', appreciationChart: 'Appreciation Chart',
+    aiPowered: 'AI-powered analysis', investmentScore: 'Investment score', marketSignals: 'Market signals',
+    keyInsight: 'Key insight', strengthsTitle: 'Strengths', considerationsTitle: 'Considerations',
+    masterplanDesc: 'Overall project plan', selectParcelasHint: 'Select one or more available parcels to reserve them in a single operation.',
+    parcelaSelected: 'parcel selected', parcelasSelected: 'parcels selected', clearSelection: 'Clear selection',
+    reserve: 'Reserve', projectAvailable: 'available',
   },
 };
 
