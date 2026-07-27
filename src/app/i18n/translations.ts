@@ -8,7 +8,7 @@ export interface Translations {
     plan: string; help: string; settings: string; profile: string; myAccount: string; signOut: string;
     myProfile: string; notifications: string;
     parcelas: string; inmobiliarias: string; howItWorks: string; resources: string;
-    publishProperty: string; publishShort: string; login: string;
+    publishProperty: string; publishShort: string; login: string; brokers: string;
   };
   common: {
     viewDetail: string; save: string; publish: string; pause: string; edit: string;
@@ -59,6 +59,13 @@ export interface Translations {
     vendorNotFoundTitle: string; vendorNotFoundDesc: string; backToHome: string;
     naturalPerson: string; activeSince: string; activeSeller: string;
     verificationsLabel: string; aboutSellerLabel: string; noVendorParcelas: string; callBtn: string;
+  };
+  broker: {
+    backToBrokers: string; verifiedBroker: string;
+    yearsExpLabel: string; parcelasSold: string; ratingLabel: string;
+    aboutLabel: string; contactBtn: string; contactSection: string;
+    zonesLabel: string; languagesLabel: string; certificationsLabel: string;
+    viewParcelas: string; noParcelas: string;
   };
   recursos: {
     pageTitle: string; pageSubtitle: string;
@@ -380,7 +387,7 @@ const es: Translations = {
     myProfile: 'Mi perfil', notifications: 'Notificaciones',
     parcelas: 'Parcelas', inmobiliarias: 'Inmobiliarias',
     howItWorks: 'Cómo funciona', resources: 'Recursos',
-    publishProperty: 'Publicar propiedad', publishShort: 'Publicar', login: 'Ingresar',
+    publishProperty: 'Publicar propiedad', publishShort: 'Publicar', login: 'Ingresar', brokers: 'Brokers',
   },
   common: {
     viewDetail: 'Ver detalle', save: 'Guardar', publish: 'Publicar', pause: 'Pausar',
@@ -459,6 +466,13 @@ const es: Translations = {
     vendorNotFoundTitle: 'Vendedor no encontrado', vendorNotFoundDesc: 'No se encontraron datos para este vendedor.', backToHome: 'Volver al inicio',
     naturalPerson: 'Persona natural', activeSince: 'En la plataforma', activeSeller: 'Vendedor activo',
     verificationsLabel: 'Verificaciones', aboutSellerLabel: 'Sobre', noVendorParcelas: 'Este vendedor aún no tiene parcelas publicadas.', callBtn: 'Llamar',
+  },
+  broker: {
+    backToBrokers: 'Volver a Brokers', verifiedBroker: 'Broker verificado',
+    yearsExpLabel: 'años de experiencia', parcelasSold: 'parcelas vendidas', ratingLabel: 'calificación',
+    aboutLabel: 'Sobre', contactBtn: 'Contactar', contactSection: 'Contacto',
+    zonesLabel: 'Zonas de operación', languagesLabel: 'Idiomas', certificationsLabel: 'Certificaciones',
+    viewParcelas: 'Ver parcelas', noParcelas: 'No hay parcelas activas en este momento.',
   },
   comoFunciona: {
     pageTitle: 'Cómo funciona CompraTuParcela',
@@ -935,7 +949,7 @@ const en: Translations = {
     myProfile: 'My profile', notifications: 'Notifications',
     parcelas: 'Parcels', inmobiliarias: 'Real estate agencies',
     howItWorks: 'How it works', resources: 'Resources',
-    publishProperty: 'List your property', publishShort: 'List', login: 'Log in',
+    publishProperty: 'List your property', publishShort: 'List', login: 'Log in', brokers: 'Brokers',
   },
   common: {
     viewDetail: 'View detail', save: 'Save', publish: 'Publish', pause: 'Pause',
@@ -1014,6 +1028,13 @@ const en: Translations = {
     vendorNotFoundTitle: 'Seller not found', vendorNotFoundDesc: 'No data found for this seller.', backToHome: 'Back to home',
     naturalPerson: 'Individual seller', activeSince: 'On the platform', activeSeller: 'Active seller',
     verificationsLabel: 'Verifications', aboutSellerLabel: 'About', noVendorParcelas: 'This seller has no listings yet.', callBtn: 'Call',
+  },
+  broker: {
+    backToBrokers: 'Back to Brokers', verifiedBroker: 'Verified broker',
+    yearsExpLabel: 'years of experience', parcelasSold: 'parcels sold', ratingLabel: 'rating',
+    aboutLabel: 'About', contactBtn: 'Contact', contactSection: 'Contact',
+    zonesLabel: 'Areas of operation', languagesLabel: 'Languages', certificationsLabel: 'Certifications',
+    viewParcelas: 'View parcels', noParcelas: 'No active parcels at this time.',
   },
   comoFunciona: {
     pageTitle: 'How CompraTuParcela works',

@@ -7,6 +7,7 @@ import { getAllParcelas } from '@/app/data/parcelasData';
 import { ParcelaCard } from '@/app/components/ParcelaCard';
 import { Tabs } from '@/app/components/Tabs';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface BrokerProfileProps {
   onNavigate: (screen: string, id?: number, data?: string) => void;
@@ -17,6 +18,8 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
   const [activeTab, setActiveTab] = useState('sobre');
   const [showContactModal, setShowContactModal] = useState(false);
   const tabContentRef = useRef<HTMLDivElement>(null);
+
+  const { t } = useI18n();
 
   const parcelasPublicadas = getAllParcelas().filter(
     parcela => parcela.inmobiliaria.nombre === brokerName || parcela.tipoVendedor === 'Broker'
@@ -60,8 +63,8 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
   const firstName = brokerData.nombre.split(' ')[0];
 
   const tabs = [
-    { id: 'sobre', label: `Sobre ${firstName}` },
-    { id: 'parcelas', label: 'Parcelas' },
+    { id: 'sobre', label: `${t.broker.aboutLabel} ${firstName}` },
+    { id: 'parcelas', label: t.nav.parcelas },
   ];
 
   const handleTabChange = (newTab: string) => {
@@ -90,10 +93,10 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 onClick={() => onNavigate('home')}
               />
               <nav className="flex items-center justify-center gap-0 whitespace-nowrap">
-                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Parcelas</button>
-                <button onClick={() => onNavigate('brokers')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Brokers</button>
-                <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Cómo funciona</button>
-                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">Recursos</button>
+                <button onClick={() => onNavigate('parcelas')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.parcelas}</button>
+                <button onClick={() => onNavigate('brokers')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.brokers}</button>
+                <button onClick={() => onNavigate('como-funciona')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.howItWorks}</button>
+                <button onClick={() => onNavigate('recursos')} className="h-8 px-4 text-sm leading-[1.5] font-normal text-black hover:bg-[#efefef] hover:text-[#303030] rounded-[200px] transition-colors whitespace-nowrap flex items-center justify-center">{t.nav.resources}</button>
               </nav>
             </div>
             <div className="flex items-center justify-end gap-3">
@@ -103,13 +106,13 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01533E'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
-                Publicar propiedad
+                {t.nav.publishProperty}
               </button>
               <button
                 onClick={() => onNavigate('entry')}
                 className="h-8 bg-[#efefef] text-black px-[20px] text-sm leading-[1.5] font-medium rounded-[200px] transition-colors flex items-center justify-center py-[0px] hover:bg-[#dedede] hover:text-[#303030]"
               >
-                Iniciar sesión
+                {t.nav.login}
               </button>
             </div>
           </div>
@@ -135,7 +138,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
               className="flex items-center gap-2 mb-8 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span style={{ fontSize: 'var(--font-size-body-sm)', fontFamily: 'var(--font-body)' }}>Volver a Brokers</span>
+              <span style={{ fontSize: 'var(--font-size-body-sm)', fontFamily: 'var(--font-body)' }}>{t.broker.backToBrokers}</span>
             </button>
 
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-5xl">
@@ -171,7 +174,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       letterSpacing: '0.01em'
                     }}>
                       <Shield className="w-4 h-4" style={{ color: 'var(--foreground)' }} />
-                      Broker verificado
+                      {t.broker.verifiedBroker}
                     </span>
 
                     <div className="flex items-center gap-2 text-gray-600">
@@ -208,7 +211,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                   >
                     <Phone className="w-4 h-4" />
-                    Contactar
+                    {t.broker.contactBtn}
                   </button>
                   <button
                     onClick={() => handleTabChange('parcelas')}
@@ -219,7 +222,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       fontWeight: 'var(--font-weight-medium)'
                     }}
                   >
-                    Ver parcelas
+                    {t.broker.viewParcelas}
                   </button>
                 </div>
               </div>
@@ -262,7 +265,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                         fontFamily: 'var(--font-body)',
                         color: '#737373',
                         marginTop: '0.5rem'
-                      }}>años de experiencia</p>
+                      }}>{t.broker.yearsExpLabel}</p>
                     </div>
                     <div className="rounded-xl p-5 border" style={{ borderColor: 'var(--border)' }}>
                       <p style={{
@@ -277,7 +280,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                         fontFamily: 'var(--font-body)',
                         color: '#737373',
                         marginTop: '0.5rem'
-                      }}>parcelas vendidas</p>
+                      }}>{t.broker.parcelasSold}</p>
                     </div>
                     <div className="rounded-xl p-5 border" style={{ borderColor: 'var(--border)' }}>
                       <div className="flex items-center gap-0.5">
@@ -290,7 +293,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                         fontFamily: 'var(--font-body)',
                         color: '#737373',
                         marginTop: '0.5rem'
-                      }}>calificación</p>
+                      }}>{t.broker.ratingLabel}</p>
                     </div>
                   </div>
 
@@ -303,7 +306,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       color: 'var(--foreground)',
                       marginBottom: '1rem'
                     }}>
-                      Sobre {firstName}
+                      {t.broker.aboutLabel} {firstName}
                     </h3>
                     <p style={{
                       fontFamily: 'var(--font-body)',
@@ -329,7 +332,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       color: 'var(--foreground)',
                       marginBottom: '1rem'
                     }}>
-                      Contacto
+                      {t.broker.contactSection}
                     </h4>
                     <div className="space-y-3 mb-5">
                       <a href={`tel:${brokerData.telefono}`} className="flex items-center gap-3" style={{
@@ -362,7 +365,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#006B4E'}
                     >
                       <Phone className="w-4 h-4" />
-                      Contactar
+                      {t.broker.contactBtn}
                     </button>
                   </div>
 
@@ -375,7 +378,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       color: 'var(--foreground)',
                       marginBottom: '1rem'
                     }}>
-                      Zonas de operación
+                      {t.broker.zonesLabel}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {brokerData.zonasOperacion.map((zona, i) => (
@@ -400,7 +403,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       color: 'var(--foreground)',
                       marginBottom: '1rem'
                     }}>
-                      Idiomas
+                      {t.broker.languagesLabel}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {brokerData.idiomas.map((idioma, i) => (
@@ -426,7 +429,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                       color: 'var(--foreground)',
                       marginBottom: '1rem'
                     }}>
-                      Certificaciones
+                      {t.broker.certificationsLabel}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {brokerData.certificaciones.map((cert, i) => (
@@ -462,7 +465,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                 {parcelasPublicadas.length === 0 && (
                   <div className="text-center py-16">
                     <p style={{ color: '#737373', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)' }}>
-                      No hay parcelas activas en este momento.
+                      {t.broker.noParcelas}
                     </p>
                   </div>
                 )}
