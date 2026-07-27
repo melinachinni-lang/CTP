@@ -38,6 +38,22 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const [testimoniosScrollLeft, setTestimoniosScrollLeft] = useState(0);
   const { t, language } = useI18n();
 
+  const translateVendorDesc = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Especialistas en propiedades en la Patagonia con más de 15 años de experiencia': 'Specialists in Patagonian properties with over 15 years of experience',
+      'Conectamos personas con la naturaleza a través de propiedades únicas en el sur de Chile': 'We connect people with nature through unique properties in southern Chile',
+      'Propietario directo - Sin intermediarios': 'Direct owner – No intermediaries',
+      'Especialistas en propiedades y proyectos en la Patagonia': 'Specialists in properties and projects in Patagonia',
+      'Especialistas en proyectos residenciales premium en la Región de La Araucanía': 'Specialists in premium residential projects in La Araucanía Region',
+      'Broker especializada en proyectos turísticos y de inversión en La Araucanía': 'Broker specialized in tourist and investment projects in La Araucanía',
+      'Especializados en parcelas turísticas y agrícolas de la región': 'Specialized in tourist and agricultural parcels in the region',
+      'Especialista en inversiones residenciales de montaña en la Región Metropolitana': 'Specialist in mountain residential investments in the Metropolitan Region',
+      'Propietaria directa comprometida con proyectos sustentables y respetuosos con el medio ambiente': 'Direct owner committed to sustainable and environmentally friendly projects',
+    };
+    return map[desc] ?? desc;
+  };
+
   // Función para drag del carrusel
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!equipoScrollRef.current) return;
@@ -416,7 +432,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   fontWeight: 'var(--font-weight-light)',
                   lineHeight: 'var(--line-height-body)'
                 }}>
-                  {inmobiliaria.descripcion}
+                  {translateVendorDesc(inmobiliaria.descripcion)}
                 </p>
 
                 <div className="flex gap-3 flex-wrap pt-3">
