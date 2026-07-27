@@ -3,6 +3,7 @@ import { Home, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountai
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { Proyecto } from '@/app/data/proyectosData';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface ProjectCardProps {
   proyecto: Proyecto;
@@ -69,8 +70,28 @@ const getTipoIcon = (tipo: string) => {
 };
 
 export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
+  const { t } = useI18n();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+
+  const translateEstado = (estado: string): string => {
+    const map: Record<string, string> = {
+      'En venta': t.detail.estadoEnVenta,
+      'Próximamente': t.detail.estadoProximamente,
+      'En construcción': t.detail.estadoEnConstruccion,
+    };
+    return map[estado] ?? estado;
+  };
+
+  const translateTipo = (tipo: string): string => {
+    const map: Record<string, string> = {
+      'Residencial': t.detail.tipoResidencial,
+      'Turístico': t.detail.tipoTuristico,
+      'Agrícola': t.detail.tipoAgricola,
+      'Mixto': t.detail.tipoMixto,
+    };
+    return map[tipo] ?? tipo;
+  };
 
   // Usar imagenes array si existe, sino usar la imagen única
   const imageArray = proyecto.imagenes && proyecto.imagenes.length > 0 ? proyecto.imagenes : [proyecto.imagen];
@@ -149,7 +170,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
             backdropFilter: 'blur(8px)'
           }}
         >
-          {proyecto.estado}
+          {translateEstado(proyecto.estado)}
         </div>
 
         {/* Flechas de navegación - solo si hay más de 1 imagen */}
@@ -224,7 +245,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
                 color: '#0A0A0A'
               }}
             >
-              Proyecto {proyecto.tipo}
+              {t.common.project} {translateTipo(proyecto.tipo)}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -237,7 +258,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
                 color: '#16a34a'
               }}
             >
-              {proyecto.parcelasDisponibles} disponibles
+              {proyecto.parcelasDisponibles} {t.detail.projectAvailable}
             </span>
           </div>
         </div>
@@ -258,7 +279,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
 
         {/* Precio */}
         <div className="pt-3 border-t border-gray-200">
-          <div className="text-xs text-gray-500 mb-1" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</div>
+          <div className="text-xs text-gray-500 mb-1" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.common.from}</div>
           <PrecioDisplay 
             precioCLP={proyecto.precioDesde}
             precioSize="lg"
@@ -280,7 +301,7 @@ export function ProjectCard({ proyecto, onViewProject }: ProjectCardProps) {
             <div className="text-gray-600">
               <Expand className="w-4 h-4" />
             </div>
-            <span className="font-medium" style={{ fontSize: '13px' }}>Desde {proyecto.superficieDesde}</span>
+            <span className="font-medium" style={{ fontSize: '13px' }}>{t.common.from} {proyecto.superficieDesde}</span>
           </div>
         </div>
 

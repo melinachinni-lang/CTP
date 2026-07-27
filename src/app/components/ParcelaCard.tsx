@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { PrecioDisplay } from '@/app/components/PrecioDisplay';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface ParcelaCardProps {
   id: number;
@@ -32,6 +33,8 @@ export function ParcelaCard({
   tipoVendedor,
   onClick
 }: ParcelaCardProps) {
+  const { t } = useI18n();
+
   // Asegurar que siempre tengamos al menos 4 características para mostrar
   const displayCaracteristicas = [...caracteristicas];
   while (displayCaracteristicas.length < 4) {
@@ -90,7 +93,7 @@ export function ParcelaCard({
                 fontWeight: 'var(--font-weight-medium)'
               }}
             >
-              Sin imagen disponible
+              {t.detail.noImage}
             </p>
           </div>
         </div>
@@ -193,7 +196,7 @@ export function ParcelaCard({
 
         <div className="pt-2.5" style={{ borderTop: '1px solid #CDD8DE' }}>
           <div className="mb-2">
-            <div className="text-xs mb-0.5" style={{ color: '#462611', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.625rem' }}>Desde</div>
+            <div className="text-xs mb-0.5" style={{ color: '#462611', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.625rem' }}>{t.common.from}</div>
             <PrecioDisplay 
               precioCLP={precio}
               precioSize="md"

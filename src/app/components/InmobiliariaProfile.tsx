@@ -156,7 +156,9 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
     añosExperiencia: 15,
     zonasOperacion: ['Aysén', 'Los Lagos', 'Patagonia'],
     tiposPropiedad: ['Parcelas rurales', 'Terrenos turísticos', 'Campos'],
-    quienesSomos: 'Con años de trayectoria en la región, somos especialistas en conectar a personas con propiedades en la Patagonia. Nuestro compromiso es brindarte asesoría transparente y acompañamiento profesional en cada etapa de tu inversión.',
+    quienesSomos: language === 'en'
+      ? 'With years of experience in the region, we specialize in connecting people with properties in Patagonia. Our commitment is to provide you with transparent advice and professional support at every stage of your investment.'
+      : 'Con años de trayectoria en la región, somos especialistas en conectar a personas con propiedades en la Patagonia. Nuestro compromiso es brindarte asesoría transparente y acompañamiento profesional en cada etapa de tu inversión.',
     equipo: [
       { nombre: 'María González', rol: 'Gerente Comercial', imagen: 'https://images.unsplash.com/photo-1581065178047-8ee15951ede6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMHdvbWFuJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzY5NTc1Mzk1fDA&ixlib=rb-4.1.0&q=80&w=1080' },
       { nombre: 'Carlos Ramírez', rol: 'Asesor Senior', imagen: 'https://images.unsplash.com/photo-1629507208649-70919ca33793?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG1hbiUyMHBvcnRyYWl0fGVufDF8fHx8MTc2OTYwODg3Nnww&ixlib=rb-4.1.0&q=80&w=1080' },

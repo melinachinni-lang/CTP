@@ -379,6 +379,9 @@ export interface Translations {
     levelHigh: string; levelMedium: string; levelLow: string; levelVeryHigh: string;
     totalArea: string; soilType: string; orientation: string; slope: string; permittedUse: string;
     water: string; electricity: string; access: string; fence: string; gate: string;
+    noImage: string;
+    tipoResidencial: string; tipoTuristico: string; tipoAgricola: string; tipoMixto: string;
+    estadoEnVenta: string; estadoProximamente: string; estadoEnConstruccion: string;
   };
 }
 
@@ -945,6 +948,9 @@ const es: Translations = {
     levelHigh: 'Alta', levelMedium: 'Media', levelLow: 'Baja', levelVeryHigh: 'Muy alta',
     totalArea: 'Superficie total', soilType: 'Tipo de suelo', orientation: 'Orientación', slope: 'Pendiente', permittedUse: 'Uso permitido',
     water: 'Agua', electricity: 'Electricidad', access: 'Acceso', fence: 'Cerco', gate: 'Portón',
+    noImage: 'Sin imagen disponible',
+    tipoResidencial: 'Residencial', tipoTuristico: 'Turístico', tipoAgricola: 'Agrícola', tipoMixto: 'Mixto',
+    estadoEnVenta: 'En venta', estadoProximamente: 'Próximamente', estadoEnConstruccion: 'En construcción',
   },
 };
 
@@ -1511,6 +1517,9 @@ const en: Translations = {
     levelHigh: 'High', levelMedium: 'Medium', levelLow: 'Low', levelVeryHigh: 'Very high',
     totalArea: 'Total area', soilType: 'Soil type', orientation: 'Orientation', slope: 'Slope', permittedUse: 'Permitted use',
     water: 'Water', electricity: 'Electricity', access: 'Access', fence: 'Fence', gate: 'Gate',
+    noImage: 'No image available',
+    tipoResidencial: 'Residential', tipoTuristico: 'Tourist', tipoAgricola: 'Agricultural', tipoMixto: 'Mixed',
+    estadoEnVenta: 'For sale', estadoProximamente: 'Coming soon', estadoEnConstruccion: 'Under construction',
   },
 };
 
