@@ -1832,7 +1832,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       }}
                     >
                       {isAiProcessing ? (
-                        <span style={{ color: '#737373' }}>Buscando parcelas…</span>
+                        <span style={{ color: '#737373' }}>{t.filters.searchingParcels}</span>
                       ) : (
                         <>{parcelas.length} {t.explore.parcelasFoundSuffix}</>
                       )}
@@ -2020,10 +2020,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#006B4E' }} />
                         </div>
                         <h3 className="mb-2" style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>
-                          Buscando con IA…
+                          {t.filters.aiSearchingTitle}
                         </h3>
                         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#737373', maxWidth: '340px', lineHeight: '1.6' }}>
-                          Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se ajustan a lo que describes.
+                          {t.filters.aiSearchingDesc}
                         </p>
                         <div className="flex gap-2 mt-5">
                           {[0, 1, 2, 3].map(i => (
@@ -2048,10 +2048,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         <AlertCircle size={32} style={{ color: '#EF4444' }} strokeWidth={1.5} />
                       </div>
                       <h3 className="mb-2" style={{ color: '#0A0A0A', fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 'var(--font-weight-medium)', lineHeight: 'var(--line-height-heading)' }}>
-                        No se pudo procesar tu búsqueda
+                        {t.filters.aiErrorTitle}
                       </h3>
                       <p className="mb-6" style={{ color: '#737373', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', lineHeight: 'var(--line-height-body)', maxWidth: '380px' }}>
-                        Hubo un problema al analizar tu consulta. Puedes intentarlo de nuevo o explorar usando los filtros.
+                        {t.filters.aiErrorDesc}
                       </p>
                       <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <button
@@ -2061,7 +2061,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#01533E'; }}
                           onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#006B4E'; }}
                         >
-                          <RefreshCw size={14} /> Reintentar búsqueda
+                          <RefreshCw size={14} /> {t.filters.retrySearch}
                         </button>
                         <button
                           onClick={() => { setAiSearchError(false); setSmartSearchValue(''); setSelectedBadges([]); }}
@@ -2070,7 +2070,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
                           onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
-                          Usar filtros manuales
+                          {t.filters.useManualFilters}
                         </button>
                       </div>
                     </div>
@@ -3474,10 +3474,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1" style={{ color: '#006B4E', fontFamily: 'Inter, sans-serif' }}>
-                      La IA está analizando tu búsqueda…
+                      {t.filters.aiAnalyzing}
                     </p>
                     <p className="text-xs" style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6', maxWidth: '280px' }}>
-                      Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se adaptan a lo que describes.
+                      {t.filters.aiSearchingDescShort}
                     </p>
                   </div>
                   <div className="flex gap-1.5">
@@ -3793,13 +3793,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 className="text-lg font-semibold mb-2"
                 style={{ color: '#006B4E', fontFamily: 'Montserrat, sans-serif' }}
               >
-                La IA está analizando tu búsqueda…
+                {t.filters.aiAnalyzing}
               </p>
               <p
                 className="text-sm"
                 style={{ color: '#737373', fontFamily: 'Inter, sans-serif', lineHeight: '1.6', maxWidth: '320px' }}
               >
-                Estamos encontrando las parcelas que mejor se adaptan a lo que describes.
+                {t.filters.aiSearchingDescShort}
               </p>
             </div>
             <div className="flex gap-2">

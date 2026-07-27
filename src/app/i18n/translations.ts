@@ -24,6 +24,7 @@ export interface Translations {
     vendorInmobiliaria: string; vendorBroker: string; vendorPersona: string;
     openMenu: string; previous: string; next: string;
     saveParcel: string; removeFromSaved: string; saveProject: string;
+    loadingPage: string;
   };
   features: {
     portonAcceso: string; rolAprobado: string; factibilidadAgua: string;
@@ -121,6 +122,7 @@ export interface Translations {
     zoneAconcagua: string; zoneCasablanca: string; zoneCordillera: string; zoneLitoral: string; zoneValleCentral: string;
     typeAgrado: string; selectType: string; calculate: string;
     searchOnMap: string; mapView: string; inDevelopment: string;
+    noParcelasNow: string; noParcelasNowDesc: string; loadError: string; loadErrorDesc: string;
   };
   filters: {
     location: string; area: string; condition: string; priceRange: string;
@@ -145,6 +147,8 @@ export interface Translations {
     parcelType: string; typeResidential: string; typeAgricultural: string;
     typeForestry: string; typeMixed: string;
     searchWithAI: string; aiActive: string; aiAnalyzing: string; aiAnalyzingDesc: string;
+    searchingParcels: string; aiSearchingTitle: string; aiSearchingDesc: string; aiSearchingDescShort: string;
+    aiErrorTitle: string; aiErrorDesc: string; retrySearch: string; useManualFilters: string;
   };
   home: {
     heroTitle: string; heroSubtitle: string;
@@ -333,6 +337,7 @@ export interface Translations {
     vendido: string;
     parcelLabel: string; viewSheet: string;
     ownerFirstTooltip: string; ownerSecondTooltip: string; ownerMultipleTooltip: string;
+    noAppreciation: string;
   };
 }
 
@@ -362,6 +367,7 @@ const es: Translations = {
     vendorInmobiliaria: 'Inmobiliaria', vendorBroker: 'Broker', vendorPersona: 'Persona natural',
     openMenu: 'Abrir menú', previous: 'Anterior', next: 'Siguiente',
     saveParcel: 'Guardar parcela', removeFromSaved: 'Eliminar de guardados', saveProject: 'Guardar proyecto',
+    loadingPage: 'Cargando página...',
   },
   features: {
     portonAcceso: 'Portón acceso', rolAprobado: 'Rol aprobado', factibilidadAgua: 'Factibilidad agua',
@@ -521,6 +527,8 @@ const es: Translations = {
     zoneAconcagua: 'Valle del Aconcagua', zoneCasablanca: 'Valle de Casablanca', zoneCordillera: 'Cordillera de Los Andes', zoneLitoral: 'Litoral Central', zoneValleCentral: 'Valle Central',
     typeAgrado: 'Agrado/Residencial', selectType: 'Seleccionar tipo', calculate: 'Calcular',
     searchOnMap: 'Buscar en mapa', mapView: 'Vista de mapa', inDevelopment: 'Funcionalidad en desarrollo',
+    noParcelasNow: 'No hay parcelas disponibles en este momento', noParcelasNowDesc: 'Por ahora no hay publicaciones activas. Puedes volver más tarde o explorar otras opciones.',
+    loadError: 'No pudimos cargar las parcelas', loadErrorDesc: 'Estamos teniendo un problema temporal al obtener los datos. Puedes intentar nuevamente.',
   },
   filters: {
     location: 'Ubicación', area: 'Superficie', condition: 'Condición', priceRange: 'Rango de precio',
@@ -554,6 +562,11 @@ const es: Translations = {
     searchWithAI: 'Buscar con IA', aiActive: 'IA activa',
     aiAnalyzing: 'La IA está analizando tu búsqueda…',
     aiAnalyzingDesc: 'Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se adaptan a lo que describes.',
+    searchingParcels: 'Buscando parcelas…', aiSearchingTitle: 'Buscando con IA…',
+    aiSearchingDesc: 'Estamos interpretando tu búsqueda y encontrando las parcelas que mejor se ajustan a lo que describes.',
+    aiSearchingDescShort: 'Estamos encontrando las parcelas que mejor se adaptan a lo que describes.',
+    aiErrorTitle: 'No se pudo procesar tu búsqueda', aiErrorDesc: 'Hubo un problema al analizar tu consulta. Puedes intentarlo de nuevo o explorar usando los filtros.',
+    retrySearch: 'Reintentar búsqueda', useManualFilters: 'Usar filtros manuales',
   },
   home: {
     heroTitle: 'Compra y vende parcelas fácilmente',
@@ -848,6 +861,7 @@ const es: Translations = {
     ownerFirstTooltip: 'Esta parcela es vendida directamente por su primer propietario, nunca ha cambiado de manos.',
     ownerSecondTooltip: 'Esta parcela tuvo un propietario anterior.',
     ownerMultipleTooltip: 'Esta parcela ha tenido dos o más propietarios anteriores.',
+    noAppreciation: 'No hay información de plusvalía disponible para esta parcela.',
   },
 };
 
@@ -877,6 +891,7 @@ const en: Translations = {
     vendorInmobiliaria: 'Agency', vendorBroker: 'Broker', vendorPersona: 'Private seller',
     openMenu: 'Open menu', previous: 'Previous', next: 'Next',
     saveParcel: 'Save parcel', removeFromSaved: 'Remove from saved', saveProject: 'Save project',
+    loadingPage: 'Loading page...',
   },
   features: {
     portonAcceso: 'Access gate', rolAprobado: 'Approved title', factibilidadAgua: 'Water study',
@@ -1036,6 +1051,8 @@ const en: Translations = {
     zoneAconcagua: 'Valle del Aconcagua', zoneCasablanca: 'Valle de Casablanca', zoneCordillera: 'Cordillera de los Andes', zoneLitoral: 'Central Coast', zoneValleCentral: 'Central Valley',
     typeAgrado: 'Residential/Leisure', selectType: 'Select type', calculate: 'Calculate',
     searchOnMap: 'Search on map', mapView: 'Map view', inDevelopment: 'Feature in development',
+    noParcelasNow: 'No parcels available at this time', noParcelasNowDesc: 'There are no active listings right now. You can come back later or explore other options.',
+    loadError: 'Could not load parcels', loadErrorDesc: 'We are having a temporary issue fetching data. You can try again.',
   },
   filters: {
     location: 'Location', area: 'Area', condition: 'Condition', priceRange: 'Price range',
@@ -1069,6 +1086,11 @@ const en: Translations = {
     searchWithAI: 'Search with AI', aiActive: 'AI active',
     aiAnalyzing: 'AI is analyzing your search…',
     aiAnalyzingDesc: 'We are interpreting your search and finding the parcels that best match what you describe.',
+    searchingParcels: 'Searching parcels…', aiSearchingTitle: 'Searching with AI…',
+    aiSearchingDesc: 'We\'re interpreting your search and finding the parcels that best match what you describe.',
+    aiSearchingDescShort: 'We\'re finding the parcels that best match what you describe.',
+    aiErrorTitle: 'Could not process your search', aiErrorDesc: 'There was a problem analyzing your query. You can try again or explore using filters.',
+    retrySearch: 'Retry search', useManualFilters: 'Use manual filters',
   },
   home: {
     heroTitle: 'Buy and sell parcels easily',
@@ -1363,6 +1385,7 @@ const en: Translations = {
     ownerFirstTooltip: 'This parcel is sold directly by its first owner and has never changed hands.',
     ownerSecondTooltip: 'This parcel had one previous owner.',
     ownerMultipleTooltip: 'This parcel has had two or more previous owners.',
+    noAppreciation: 'No appreciation data available for this parcel.',
   },
 };
 

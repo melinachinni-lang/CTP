@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, AlertCircle, CloudOff } from 'lucide-react';
+import { useI18n } from '@/app/i18n/i18nContext';
 import { getAllProyectos } from '@/app/data/proyectosData';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
@@ -9,6 +10,7 @@ interface ParcelasPageErrorProps {
 }
 
 export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
+  const { t } = useI18n();
   const [showMap, setShowMap] = useState(false);
   const [sortBy, setSortBy] = useState('relevancia');
   const proyectosCarouselRef = useRef<HTMLDivElement>(null);
@@ -592,7 +594,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
             marginBottom: '12px',
             textAlign: 'center'
           }}>
-            No pudimos cargar las parcelas
+            {t.explore.loadError}
           </h2>
 
           {/* Description */}
@@ -606,7 +608,7 @@ export function ParcelasPageError({ onNavigate }: ParcelasPageErrorProps) {
             maxWidth: '500px',
             lineHeight: 'var(--line-height-body)'
           }}>
-            Estamos teniendo un problema temporal al obtener los datos. Puedes intentar nuevamente.
+            {t.explore.loadErrorDesc}
           </p>
 
           {/* Retry Button */}

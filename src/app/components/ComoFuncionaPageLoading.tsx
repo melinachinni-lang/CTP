@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navbar } from '@/app/components/Navbar';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface ComoFuncionaPageLoadingProps {
   onNavigate: (page: string) => void;
@@ -11,6 +12,7 @@ interface ComoFuncionaPageLoadingProps {
 }
 
 export function ComoFuncionaPageLoading({ onNavigate, isLoggedIn = false, currentUser, onLogout, onOpenPublishModal, onNavigateToPublish }: ComoFuncionaPageLoadingProps) {
+  const { t } = useI18n();
   // Auto-navigate to the real page after 2 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,7 +46,7 @@ export function ComoFuncionaPageLoading({ onNavigate, isLoggedIn = false, curren
               textAlign: 'center'
             }}
           >
-            Cargando página...
+            {t.common.loadingPage}
           </p>
 
           {/* Animated Dots Loader */}

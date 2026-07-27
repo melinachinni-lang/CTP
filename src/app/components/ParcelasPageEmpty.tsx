@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, MapPin } from 'lucide-react';
 import { Navbar } from '@/app/components/Navbar';
+import { useI18n } from '@/app/i18n/i18nContext';
 import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 import heroBackground from 'figma:asset/46be9646c60608d21a829a86b189efb4cfc6cbbc.png';
 
@@ -9,6 +10,7 @@ interface ParcelasPageEmptyProps {
 }
 
 export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
+  const { t } = useI18n();
   const [heroFilters, setHeroFilters] = useState({
     ubicacion: '',
     tipo: '',
@@ -274,7 +276,7 @@ export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
                   fontWeight: 'var(--font-weight-medium)'
                 }}
               >
-                No hay parcelas disponibles en este momento
+                {t.explore.noParcelasNow}
               </h2>
               
               {/* Texto descriptivo */}
@@ -288,7 +290,7 @@ export function ParcelasPageEmpty({ onNavigate }: ParcelasPageEmptyProps) {
                   maxWidth: '540px'
                 }}
               >
-                Por ahora no hay publicaciones activas. Puedes volver más tarde o explorar otras opciones.
+                {t.explore.noParcelasNowDesc}
               </p>
               
               {/* Botón primario */}

@@ -2258,7 +2258,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             fontSize: 'var(--font-size-body-sm)',
                             textAlign: 'center'
                           }}>
-                            No hay información de plusvalía disponible para esta parcela.
+                            {t.detail.noAppreciation}
                           </p>
                         </div>
                       )}
