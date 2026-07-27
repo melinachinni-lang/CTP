@@ -684,6 +684,30 @@ interface ParcelaDetalleProps {
 
 export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange, savedParcelaIds = [], onToggleSaved, isLoggedIn, compareParcelaIds = [], onToggleCompare }: ParcelaDetalleProps) {
   const { t } = useI18n();
+  const translateNivel = (nivel: string): string => {
+    const map: Record<string, string> = {
+      'Alta': t.detail.levelHigh,
+      'Media': t.detail.levelMedium,
+      'Baja': t.detail.levelLow,
+      'Muy alta': t.detail.levelVeryHigh,
+    };
+    return map[nivel] ?? nivel;
+  };
+  const translateCaracLabel = (label: string): string => {
+    const map: Record<string, string> = {
+      'Superficie total': t.detail.totalArea,
+      'Tipo de suelo': t.detail.soilType,
+      'Orientación': t.detail.orientation,
+      'Pendiente': t.detail.slope,
+      'Uso permitido': t.detail.permittedUse,
+      'Agua': t.detail.water,
+      'Electricidad': t.detail.electricity,
+      'Acceso': t.detail.access,
+      'Cerco': t.detail.fence,
+      'Portón': t.detail.gate,
+    };
+    return map[label] ?? label;
+  };
   const [selectedImage, setSelectedImage] = useState(0);
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
   const [isDocTecnicaOpen, setIsDocTecnicaOpen] = useState(false);
@@ -1519,7 +1543,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               fontWeight: 'var(--font-weight-regular)',
                               lineHeight: '1.4'
                             }}>
-                              {carac.label}
+                              {translateCaracLabel(carac.label)}
                             </p>
                           </div>
                         </div>
@@ -1567,7 +1591,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               fontWeight: 'var(--font-weight-regular)',
                               lineHeight: '1.4'
                             }}>
-                              {carac.label}
+                              {translateCaracLabel(carac.label)}
                             </p>
                           </div>
                         </div>
@@ -1615,7 +1639,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               fontWeight: 'var(--font-weight-regular)',
                               lineHeight: '1.4'
                             }}>
-                              {carac.label}
+                              {translateCaracLabel(carac.label)}
                             </p>
                           </div>
                         </div>
@@ -1785,13 +1809,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               {t.detail.education}
                             </span>
                           </div>
-                          <span style={{ 
+                          <span style={{
                             fontFamily: 'var(--font-body)',
                             color: '#0A0A0A',
                             fontSize: 'var(--font-size-xs)',
                             fontWeight: 'var(--font-weight-semibold)'
                           }}>
-                            Alta
+                            {translateNivel('Alta')}
                           </span>
                         </div>
                         <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -1815,13 +1839,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               {t.detail.commerce}
                             </span>
                           </div>
-                          <span style={{ 
+                          <span style={{
                             fontFamily: 'var(--font-body)',
                             color: '#0A0A0A',
                             fontSize: 'var(--font-size-xs)',
                             fontWeight: 'var(--font-weight-semibold)'
                           }}>
-                            Alta
+                            {translateNivel('Alta')}
                           </span>
                         </div>
                         <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -1845,13 +1869,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               {t.detail.health}
                             </span>
                           </div>
-                          <span style={{ 
+                          <span style={{
                             fontFamily: 'var(--font-body)',
                             color: '#0A0A0A',
                             fontSize: 'var(--font-size-xs)',
                             fontWeight: 'var(--font-weight-semibold)'
                           }}>
-                            Media
+                            {translateNivel('Media')}
                           </span>
                         </div>
                         <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -1875,13 +1899,13 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               {t.detail.recreation}
                             </span>
                           </div>
-                          <span style={{ 
+                          <span style={{
                             fontFamily: 'var(--font-body)',
                             color: '#0A0A0A',
                             fontSize: 'var(--font-size-xs)',
                             fontWeight: 'var(--font-weight-semibold)'
                           }}>
-                            Alta
+                            {translateNivel('Alta')}
                           </span>
                         </div>
                         <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">

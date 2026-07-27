@@ -365,6 +365,9 @@ export interface Translations {
     masterplanDesc: string; selectParcelasHint: string;
     parcelaSelected: string; parcelasSelected: string; clearSelection: string;
     reserve: string; projectAvailable: string;
+    levelHigh: string; levelMedium: string; levelLow: string; levelVeryHigh: string;
+    totalArea: string; soilType: string; orientation: string; slope: string; permittedUse: string;
+    water: string; electricity: string; access: string; fence: string; gate: string;
   };
 }
 
@@ -917,6 +920,9 @@ const es: Translations = {
     masterplanDesc: 'Plano general del proyecto', selectParcelasHint: 'Selecciona una o más parcelas disponibles para reservarlas en una sola operación.',
     parcelaSelected: 'parcela seleccionada', parcelasSelected: 'parcelas seleccionadas', clearSelection: 'Limpiar selección',
     reserve: 'Reservar', projectAvailable: 'disponibles',
+    levelHigh: 'Alta', levelMedium: 'Media', levelLow: 'Baja', levelVeryHigh: 'Muy alta',
+    totalArea: 'Superficie total', soilType: 'Tipo de suelo', orientation: 'Orientación', slope: 'Pendiente', permittedUse: 'Uso permitido',
+    water: 'Agua', electricity: 'Electricidad', access: 'Acceso', fence: 'Cerco', gate: 'Portón',
   },
 };
 
@@ -1469,6 +1475,9 @@ const en: Translations = {
     masterplanDesc: 'Overall project plan', selectParcelasHint: 'Select one or more available parcels to reserve them in a single operation.',
     parcelaSelected: 'parcel selected', parcelasSelected: 'parcels selected', clearSelection: 'Clear selection',
     reserve: 'Reserve', projectAvailable: 'available',
+    levelHigh: 'High', levelMedium: 'Medium', levelLow: 'Low', levelVeryHigh: 'Very high',
+    totalArea: 'Total area', soilType: 'Soil type', orientation: 'Orientation', slope: 'Slope', permittedUse: 'Permitted use',
+    water: 'Water', electricity: 'Electricity', access: 'Access', fence: 'Fence', gate: 'Gate',
   },
 };
 

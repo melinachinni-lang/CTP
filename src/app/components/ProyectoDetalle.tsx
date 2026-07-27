@@ -71,6 +71,30 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
     if (estado === 'vendido') return t.detail.vendido;
     return estado;
   };
+  const translateNivel = (nivel: string): string => {
+    const map: Record<string, string> = {
+      'Alta': t.detail.levelHigh,
+      'Media': t.detail.levelMedium,
+      'Baja': t.detail.levelLow,
+      'Muy alta': t.detail.levelVeryHigh,
+    };
+    return map[nivel] ?? nivel;
+  };
+  const translateCaracLabel = (label: string): string => {
+    const map: Record<string, string> = {
+      'Superficie total': t.detail.totalArea,
+      'Tipo de suelo': t.detail.soilType,
+      'Orientación': t.detail.orientation,
+      'Pendiente': t.detail.slope,
+      'Uso permitido': t.detail.permittedUse,
+      'Agua': t.detail.water,
+      'Electricidad': t.detail.electricity,
+      'Acceso': t.detail.access,
+      'Cerco': t.detail.fence,
+      'Portón': t.detail.gate,
+    };
+    return map[label] ?? label;
+  };
   const [selectedImage, setSelectedImage] = useState(0);
   const [ubicacionTab, setUbicacionTab] = useState<'panoramica' | 'plano' | 'mapa'>('mapa');
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(true);
@@ -446,7 +470,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     }}
                   >
                     <FileText className="w-4 h-4" />
-                    Plano
+                    {t.detail.plan}
                   </button>
                   <button
                     onClick={() => setUbicacionTab('mapa')}
@@ -461,7 +485,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     }}
                   >
                     <MapPin className="w-4 h-4" />
-                    Mapa
+                    {t.detail.map}
                   </button>
                 </div>
 
@@ -554,7 +578,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   fontWeight: 'var(--font-weight-regular)',
                                   lineHeight: '1.4'
                                 }}>
-                                  {carac.label}
+                                  {translateCaracLabel(carac.label)}
                                 </p>
                               </div>
                             </div>
@@ -604,7 +628,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   fontWeight: 'var(--font-weight-regular)',
                                   lineHeight: '1.4'
                                 }}>
-                                  {carac.label}
+                                  {translateCaracLabel(carac.label)}
                                 </p>
                               </div>
                             </div>
@@ -654,7 +678,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                                   fontWeight: 'var(--font-weight-regular)',
                                   lineHeight: '1.4'
                                 }}>
-                                  {carac.label}
+                                  {translateCaracLabel(carac.label)}
                                 </p>
                               </div>
                             </div>
@@ -729,7 +753,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               <School className="w-4 h-4 text-gray-500" />
                               <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.education}</span>
                             </div>
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.educacion.nivel}</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{translateNivel(proyecto.entorno.servicios.educacion.nivel)}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.educacion.porcentaje}%`, backgroundColor: '#647E3F' }} />
@@ -741,7 +765,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               <ShoppingBag className="w-4 h-4 text-gray-500" />
                               <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.commerce}</span>
                             </div>
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.comercio.nivel}</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{translateNivel(proyecto.entorno.servicios.comercio.nivel)}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.comercio.porcentaje}%`, backgroundColor: '#647E3F' }} />
@@ -753,7 +777,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               <Home className="w-4 h-4 text-gray-500" />
                               <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.health}</span>
                             </div>
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.salud.nivel}</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{translateNivel(proyecto.entorno.servicios.salud.nivel)}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.salud.porcentaje}%`, backgroundColor: '#647E3F' }} />
@@ -765,7 +789,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                               <TreePine className="w-4 h-4 text-gray-500" />
                               <span style={{ fontFamily: 'var(--font-body)', color: '#525252', fontSize: 'var(--font-size-xs)' }}>{t.detail.recreation}</span>
                             </div>
-                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{proyecto.entorno.servicios.recreacion.nivel}</span>
+                            <span style={{ fontFamily: 'var(--font-body)', color: '#0A0A0A', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)' }}>{translateNivel(proyecto.entorno.servicios.recreacion.nivel)}</span>
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full" style={{ width: `${proyecto.entorno.servicios.recreacion.porcentaje}%`, backgroundColor: '#647E3F' }} />
