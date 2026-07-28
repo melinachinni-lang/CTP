@@ -19,7 +19,7 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
   const [showContactModal, setShowContactModal] = useState(false);
   const tabContentRef = useRef<HTMLDivElement>(null);
 
-  const { t } = useI18n();
+  const { t, language } = useI18n();
 
   const parcelasPublicadas = getAllParcelas().filter(
     parcela => parcela.inmobiliaria.nombre === brokerName || parcela.tipoVendedor === 'Broker'
@@ -28,34 +28,46 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
   const brokerData = {
     nombre: brokerName || 'Broker',
     foto: 'https://images.unsplash.com/photo-1629507208649-70919ca33793?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2Zlc3Npb25hbCUyMHBvcnRyYWl0fGVufDF8fHx8MTc2OTA2Njg5Mnww&ixlib=rb-4.1.0&q=80&w=1080',
-    titulo: 'Broker Inmobiliario',
-    ubicacion: 'Región Metropolitana, Chile',
+    titulo: language === 'en' ? 'Real Estate Broker' : 'Broker Inmobiliario',
+    ubicacion: language === 'en' ? 'Metropolitan Region, Chile' : 'Región Metropolitana, Chile',
     telefono: '+56 9 7771 4626',
     email: 'contacto@broker.cl',
-    descripcion: 'Especialista en parcelas y terrenos rurales con más de 10 años de experiencia en el mercado inmobiliario. Comprometido con brindar asesoría personalizada y transparente en cada transacción.',
+    descripcion: language === 'en'
+      ? 'Land and rural property specialist with over 10 years of experience in the real estate market. Committed to providing personalized and transparent advice in every transaction.'
+      : 'Especialista en parcelas y terrenos rurales con más de 10 años de experiencia en el mercado inmobiliario. Comprometido con brindar asesoría personalizada y transparente en cada transacción.',
     añosExperiencia: 10,
     parcelasVendidas: 45,
-    zonasOperacion: ['Región Metropolitana', 'Valparaíso', "O'Higgins"],
-    idiomas: ['Español', 'Inglés'],
-    certificaciones: ['Certificado CChC', 'Mediador Inmobiliario'],
+    zonasOperacion: language === 'en'
+      ? ['Metropolitan Region', 'Valparaíso', "O'Higgins"]
+      : ['Región Metropolitana', 'Valparaíso', "O'Higgins"],
+    idiomas: language === 'en' ? ['Spanish', 'English'] : ['Español', 'Inglés'],
+    certificaciones: language === 'en'
+      ? ['CChC Certificate', 'Real Estate Mediator']
+      : ['Certificado CChC', 'Mediador Inmobiliario'],
     testimonios: [
       {
         nombre: 'María González',
         ubicacion: 'Pirque',
         calificacion: 5,
-        testimonio: 'Excelente profesional, me ayudó a encontrar la parcela perfecta para mi familia. Muy transparente y dedicado.',
+        testimonio: language === 'en'
+          ? 'Excellent professional, helped me find the perfect property for my family. Very transparent and dedicated.'
+          : 'Excelente profesional, me ayudó a encontrar la parcela perfecta para mi familia. Muy transparente y dedicado.',
       },
       {
         nombre: 'Carlos Muñoz',
         ubicacion: 'Colina',
         calificacion: 5,
-        testimonio: 'Súper recomendado. Conoce muy bien el mercado y fue muy honesto con todas mis consultas.',
+        testimonio: language === 'en'
+          ? 'Highly recommended. Knows the market very well and was very honest with all my questions.'
+          : 'Súper recomendado. Conoce muy bien el mercado y fue muy honesto con todas mis consultas.',
       },
       {
         nombre: 'Andrea Silva',
         ubicacion: 'San José de Maipo',
         calificacion: 5,
-        testimonio: 'Gracias a su asesoría pude hacer una excelente inversión. Muy profesional y atento.',
+        testimonio: language === 'en'
+          ? 'Thanks to their advice I was able to make an excellent investment. Very professional and attentive.'
+          : 'Gracias a su asesoría pude hacer una excelente inversión. Muy profesional y atento.',
       }
     ]
   };
