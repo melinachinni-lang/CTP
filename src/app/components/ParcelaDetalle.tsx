@@ -19,14 +19,20 @@ import logo from 'figma:asset/a4719ce43ce52ee49df30a2a5c090c8a8b743667.png';
 
 function OwnershipTooltip({ valor }: { valor: string }) {
   const [show, setShow] = React.useState(false);
-  const { t } = useI18n();
+  const { t, language } = useI18n();
 
   const tooltipMap: Record<string, string> = {
     'Primer dueño': t.detail.ownerFirstTooltip,
     'Segundo dueño': t.detail.ownerSecondTooltip,
     'Tres o más dueños': t.detail.ownerMultipleTooltip,
   };
+  const labelEnMap: Record<string, string> = {
+    'Primer dueño': 'First owner',
+    'Segundo dueño': 'Second owner',
+    'Tres o más dueños': 'Three or more owners',
+  };
   const label = valor === 'Tercer dueño' || valor === 'Cuarto dueño' ? 'Tres o más dueños' : valor;
+  const displayLabel = language === 'en' ? (labelEnMap[label] ?? label) : label;
   const tooltip = tooltipMap[label] ?? label;
 
   return (
@@ -36,7 +42,7 @@ function OwnershipTooltip({ valor }: { valor: string }) {
       onMouseLeave={() => setShow(false)}>
       <Info className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#006B4E' }} />
       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#525252', fontWeight: 'var(--font-weight-medium)' }}>
-        {label}
+        {displayLabel}
       </span>
       {show && (
         <div className="absolute z-50 rounded-xl p-3 shadow-lg"
@@ -683,7 +689,7 @@ interface ParcelaDetalleProps {
 }
 
 export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onEstadoChange, savedParcelaIds = [], onToggleSaved, isLoggedIn, compareParcelaIds = [], onToggleCompare }: ParcelaDetalleProps) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const translateNivel = (nivel: string): string => {
     const map: Record<string, string> = {
       'Alta': t.detail.levelHigh,
@@ -694,6 +700,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
     return map[nivel] ?? nivel;
   };
   const translateCaracLabel = (label: string): string => {
+    if (language !== 'en') return label;
     const map: Record<string, string> = {
       'Superficie total': t.detail.totalArea,
       'Tipo de suelo': t.detail.soilType,
@@ -705,8 +712,87 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
       'Acceso': t.detail.access,
       'Cerco': t.detail.fence,
       'Portón': t.detail.gate,
+      'Rol de avalúo': 'Deed roll',
+      'Estado legal': 'Legal status',
+      'Documentación': 'Documentation',
+      'Topografía': 'Topography',
+      'Vegetación': 'Vegetation',
+      'Vista': 'View',
+      'Condominio': 'Development',
+      'Seguridad': 'Security',
+      'Uso': 'Use',
+      'Clasificación': 'Classification',
+      'Ubicación': 'Location',
+      'Luz': 'Power',
+      'Rol': 'Deed roll',
+      'Estado': 'Status',
+      'Escritura': 'Deed',
+      'Permiso': 'Permit',
+      'Uso suelo': 'Land use',
     };
     return map[label] ?? label;
+  };
+  const translateCaracValor = (valor: string): string => {
+    if (language !== 'en') return valor;
+    const map: Record<string, string> = {
+      'Agrícola': 'Agricultural', 'Agrícola premium': 'Premium agricultural', 'Agrícola, agroturismo': 'Agricultural, agrotourism', 'Agrícola/Ganadero': 'Agricultural/Livestock',
+      'Norte': 'North', 'Sur-Oeste': 'Southwest', 'Noroeste': 'Northwest', 'Este': 'East',
+      'Suave (5-10%)': 'Gentle (5-10%)', 'Moderada (10-20%)': 'Moderate (10-20%)', 'Plano (0-3%)': 'Flat (0-3%)', 'Moderada con terrazas': 'Moderate with terraces', 'Plana': 'Flat', 'Semi-plana': 'Semi-flat', 'Ondulada': 'Rolling',
+      'Residencial, turístico, agrícola': 'Residential, tourism, agricultural', 'Residencial, turístico': 'Residential, tourism', 'Turístico, comercial': 'Tourism, commercial', 'Turístico': 'Tourism',
+      'Apto construcción': 'Build-ready', 'Lago': 'Lake', 'Cordillera': 'Mountain range', 'Montañas': 'Mountains',
+      'Bosque nativo': 'Native forest', 'Nativa': 'Native', 'Mixta': 'Mixed', 'Mixto': 'Mixed', 'Cerrado': 'Gated', 'Panorámica': 'Panoramic', 'Estratégica': 'Strategic',
+      'Factibilidad aprobada': 'Approved feasibility', 'Pozo autorizado': 'Authorized well', 'Riego tecnificado instalado': 'Drip irrigation installed',
+      'Red pública disponible': 'Public network available', 'Red pública': 'Public network', 'Canal de riego': 'Irrigation canal',
+      'Pozo propio': 'Own well', 'Pozo y red': 'Well and network', 'Vertiente natural': 'Natural spring', 'Vertiente': 'Spring', 'Río': 'River',
+      'A 200 metros': '200 meters away', 'Instalada en límite': 'Installed at boundary', 'Conexión en límite': 'Connection at boundary',
+      'Instalada': 'Installed', 'Trifásica conectada': 'Three-phase connected', 'Trifásica instalada': 'Three-phase installed', 'Trifásica': 'Three-phase', 'Factibilidad': 'Feasibility study',
+      'Camino público pavimentado': 'Paved public road', 'Camino ripiado': 'Gravel road', 'Camino pavimentado': 'Paved road', 'Camino público': 'Public road',
+      'Ruta 7 pavimentada': 'Route 7 paved', 'Ruta asfaltada': 'Paved route', 'Ruta pavimentada': 'Paved route', 'Ruta principal': 'Main route',
+      'Perimetral ejecutado': 'Perimeter completed', 'Perimetral con malla': 'Perimeter with mesh', 'Parcial lateral': 'Lateral partial', 'Parcial': 'Partial',
+      'Acceso vehicular': 'Vehicle access', 'Dos accesos vehiculares': 'Two vehicle entrances', 'Eléctrico': 'Electric', 'No disponible': 'Not available', 'Disponible': 'Available',
+      'Aprobado y al día': 'Approved and current', 'Al día': 'Current', 'Actualizado': 'Updated', 'Vigente': 'Current',
+      'Escritura lista': 'Deed ready', 'Escritura pública': 'Public deed', 'Lista': 'Ready',
+      'En proceso de regularización': 'Under regularization process', 'Saneado': 'Clear title',
+      'Completa y verificada': 'Complete and verified', 'Completa': 'Complete', 'Disponible para revisión': 'Available for review',
+      'A instalar': 'To be installed', 'Construcción': 'Construction', 'Libre de gravámenes': 'Free of encumbrances',
+    };
+    return map[valor] ?? valor;
+  };
+  const translateDestacado = (text: string): string => {
+    if (language !== 'en') return text;
+    const map: Record<string, string> = {
+      'Portón acceso': 'Access gate', 'Rol aprobado': 'Approved deed roll', 'Factibilidad agua': 'Water study',
+      'Vista cordillera': 'Mountain view', 'Luz instalada': 'Power installed', 'Pozo propio': 'Own well',
+      'Riego tecnificado': 'Drip irrigation', 'Luz trifásica': 'Three-phase power', 'En producción': 'In production',
+      'Zona turística': 'Tourist area', 'Alta valorización': 'High appreciation', 'Sobre Ruta 7': 'On Route 7',
+      'Riego disponible': 'Irrigation available', 'Rol al día': 'Deed roll current',
+      'Vista al lago': 'Lake view', 'Condominio cerrado': 'Gated community', 'Todos los servicios': 'All utilities',
+      'Potencial turístico': 'Tourism potential', 'Vertiente natural': 'Natural spring',
+      'Acceso al río': 'River access', 'Bosque nativo': 'Native forest',
+      'Uso agrícola': 'Agricultural use', 'Agua disponible': 'Water available',
+      'Ubicación premium': 'Premium location', 'Alto potencial turístico': 'High tourism potential',
+      'Vista Cerro Castillo': 'Cerro Castillo view', 'Potencial ecoturístico': 'Ecotourism potential',
+    };
+    return map[text] ?? text;
+  };
+  const translateVendedorTipo = (tipo: string): string => {
+    if (language !== 'en') return tipo;
+    const map: Record<string, string> = {
+      'Inmobiliaria': 'Real estate agency',
+      'Vendedor particular': 'Private seller',
+      'Broker': 'Broker',
+    };
+    return map[tipo] ?? tipo;
+  };
+  const translateVendedorDesc = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Especialistas en propiedades en la Patagonia con más de 15 años de experiencia': 'Specialists in Patagonian properties with over 15 years of experience',
+      'Especialistas en propiedades y proyectos en la Patagonia': 'Specialists in properties and projects in Patagonia',
+      'Conectamos personas con la naturaleza a través de propiedades únicas en el sur de Chile': 'We connect people with nature through unique properties in southern Chile',
+      'Propietario directo - Sin intermediarios': 'Direct owner – No intermediaries',
+    };
+    return map[desc] ?? desc;
   };
   const [selectedImage, setSelectedImage] = useState(0);
   const [isDocumentosOpen, setIsDocumentosOpen] = useState(false);
@@ -1534,7 +1620,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               marginBottom: '0.375rem',
                               lineHeight: '1.4'
                             }}>
-                              {carac.valor}
+                              {translateCaracValor(carac.valor)}
                             </p>
                             <p style={{ 
                               fontFamily: 'var(--font-body)',
@@ -1582,7 +1668,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               marginBottom: '0.375rem',
                               lineHeight: '1.4'
                             }}>
-                              {carac.valor}
+                              {translateCaracValor(carac.valor)}
                             </p>
                             <p style={{ 
                               fontFamily: 'var(--font-body)',
@@ -1630,7 +1716,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               marginBottom: '0.375rem',
                               lineHeight: '1.4'
                             }}>
-                              {carac.valor}
+                              {translateCaracValor(carac.valor)}
                             </p>
                             <p style={{ 
                               fontFamily: 'var(--font-body)',
@@ -1960,7 +2046,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#525252',
                           fontSize: 'var(--font-size-xs)'
                         }}>
-                          Rodeado de naturaleza patagónica
+                          {language === 'en' ? 'Surrounded by Patagonian nature' : 'Rodeado de naturaleza patagónica'}
                         </p>
                       </div>
 
@@ -1987,7 +2073,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           color: '#525252',
                           fontSize: 'var(--font-size-xs)'
                         }}>
-                          Vista panorámica al lago
+                          {language === 'en' ? 'Panoramic lake view' : 'Vista panorámica al lago'}
                         </p>
                       </div>
 
@@ -2029,7 +2115,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               fontSize: 'var(--font-size-body-sm)',
                               fontWeight: 'var(--font-weight-medium)'
                             }}>
-                              Moderadas
+                              {language === 'en' ? 'Moderate' : 'Moderadas'}
                             </span>
                           </div>
                         </div>
@@ -2114,7 +2200,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-body-sm)'
                             }}>
-                              Turismo
+                              {language === 'en' ? 'Tourism' : 'Turismo'}
                             </span>
                           </div>
                           <div className="flex items-center gap-3">
@@ -2133,7 +2219,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-body-sm)'
                             }}>
-                              Agricultura
+                              {language === 'en' ? 'Agriculture' : 'Agricultura'}
                             </span>
                           </div>
                           <div className="flex items-center gap-3">
@@ -2152,7 +2238,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               color: '#525252',
                               fontSize: 'var(--font-size-body-sm)'
                             }}>
-                              Ganadería
+                              {language === 'en' ? 'Livestock farming' : 'Ganadería'}
                             </span>
                           </div>
                         </div>
@@ -2686,7 +2772,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                             color: '#525252',
                             fontSize: 'var(--font-size-body-sm)'
                           }}>
-                            {item.text}
+                            {translateDestacado(item.text)}
                           </span>
                         </div>
                       ))}
@@ -2863,7 +2949,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                               letterSpacing: '0.01em'
                             }}
                           >
-                            {parcela.inmobiliaria.tipoVendedor}
+                            {translateVendedorTipo(parcela.inmobiliaria.tipoVendedor)}
                           </span>
                         </div>
                       </div>
@@ -2882,7 +2968,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                 lineHeight: '1.5'
                               }}
                             >
-                              {parcela.inmobiliaria.descripcion}
+                              {translateVendedorDesc(parcela.inmobiliaria.descripcion)}
                             </p>
                           )}
 
