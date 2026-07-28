@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, ExternalLink } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface PublicadoPorProps {
   // Información del publicador
@@ -26,6 +27,16 @@ export function PublicadoPor({
   onContactar,
   onVerPerfil
 }: PublicadoPorProps) {
+  const { t, language } = useI18n();
+
+  const translateTipoVendedor = (tipo: string): string => {
+    if (language !== 'en') return tipo;
+    if (tipo === 'Inmobiliaria') return t.common.vendorInmobiliaria;
+    if (tipo === 'Broker') return t.common.vendorBroker;
+    if (tipo === 'Vendedor particular') return t.common.vendorPersona;
+    return tipo;
+  };
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <h3 style={{ 
@@ -37,7 +48,7 @@ export function PublicadoPor({
         letterSpacing: '0.05em',
         marginBottom: '1rem'
       }}>
-        Publicado por
+        {t.common.publishedBy}
       </h3>
       
       <div className="space-y-4">
@@ -68,7 +79,7 @@ export function PublicadoPor({
                 letterSpacing: '0.01em'
               }}
             >
-              {tipoVendedor}
+              {translateTipoVendedor(tipoVendedor)}
             </span>
           </div>
         </div>
@@ -115,7 +126,7 @@ export function PublicadoPor({
               fontWeight: 'var(--font-weight-medium)'
             }}
           >
-            <span>Ver perfil</span>
+            <span>{t.detail.viewProfile}</span>
             <ExternalLink className="w-4 h-4" />
           </button>
         </div>

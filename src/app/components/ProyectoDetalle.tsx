@@ -65,6 +65,23 @@ const getTipoIcon = (tipo: string) => {
 
 export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps) {
   const { t, language } = useI18n();
+  const translateDescVendedor = (desc: string): string => {
+    if (language !== 'en') return desc;
+    const map: Record<string, string> = {
+      'Especialistas en proyectos residenciales premium en la Región de La Araucanía': 'Specialists in premium residential projects in the La Araucanía Region',
+      'Broker especializada en proyectos turísticos y de inversión en La Araucanía': 'Broker specializing in tourism and investment projects in La Araucanía',
+      'Especializados en parcelas turísticas y agrícolas de la región': 'Specialists in tourist and agricultural parcels in the region',
+      'Especialista en inversiones residenciales de montaña en la Región Metropolitana': 'Specialist in mountain residential investments in the Metropolitan Region',
+      'Propietaria directa comprometida con proyectos sustentables y respetuosos con el medio ambiente': 'Direct owner committed to sustainable and environmentally responsible projects',
+    };
+    return map[desc] ?? desc;
+  };
+
+  const translateParcelaNombre = (nombre: string): string => {
+    if (language !== 'en') return nombre;
+    return nombre.replace(/^Parcela\b/, 'Parcel');
+  };
+
   const getEstadoLabel = (estado: string): string => {
     if (estado === 'disponible') return t.status.disponible;
     if (estado === 'reservado') return t.status.reservado;
@@ -1297,7 +1314,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                             fontWeight: 'var(--font-weight-semibold)',
                             color: '#0A0A0A'
                           }}>
-                            {parcela.nombre}
+                            {translateParcelaNombre(parcela.nombre)}
                           </h3>
 
                           <div className="flex items-center justify-between">
@@ -1423,7 +1440,7 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   nombre={proyecto.publicadoPor}
                   tipoVendedor={proyecto.tipoVendedor}
                   logo={proyecto.imagenVendedor}
-                  descripcion={proyecto.descripcionVendedor}
+                  descripcion={proyecto.descripcionVendedor ? translateDescVendedor(proyecto.descripcionVendedor) : undefined}
                   telefono={proyecto.telefonoVendedor}
                   email={proyecto.emailVendedor}
                   onContactar={() => setIsContactModalOpen(true)}
