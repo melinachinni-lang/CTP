@@ -1853,7 +1853,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
       {showInviteModal && (() => {
         const roles: { value: UserRol; label: string; desc: string }[] = [
           { value: 'Admin',        label: 'Admin',        desc: 'Acceso completo a configuración, equipo y datos' },
-          { value: 'Broker',       label: 'Broker',       desc: 'Gestión de publicaciones y consultas asignadas' },
           { value: 'Editor',       label: 'Editor',       desc: 'Puede crear y editar contenido, sin configuración' },
           { value: 'Moderador',    label: 'Moderador',    desc: 'Revisión y aprobación de contenido publicado' },
           { value: 'Solo lectura', label: 'Solo lectura', desc: 'Visualización sin posibilidad de editar' },
