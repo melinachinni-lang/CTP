@@ -474,12 +474,12 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
 
   // Datos de inmobiliarias
   const inmobiliarias = [
-    { id: 1, nombre: 'Inmobiliaria Austral', logo: 'https://images.unsplash.com/photo-1763479169474-728a7de108c3?w=300&q=80' },
-    { id: 2, nombre: 'Propiedades del Sur', logo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=300&q=80' },
-    { id: 3, nombre: 'Patagonia Properties', logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80' },
-    { id: 4, nombre: 'Inmobiliaria Valle Verde', logo: 'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=300&q=80' },
-    { id: 5, nombre: 'Araucanía Bienes Raíces', logo: 'https://images.unsplash.com/photo-1760636803392-85a2a18e562d?w=300&q=80' },
-    { id: 6, nombre: 'Inmobiliaria Lagos del Sur', logo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&q=80' },
+    { id: 1, nombre: 'Inmobiliaria Austral', nombreEn: 'Austral Real Estate', logo: 'https://images.unsplash.com/photo-1763479169474-728a7de108c3?w=300&q=80' },
+    { id: 2, nombre: 'Propiedades del Sur', nombreEn: 'Southern Properties', logo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=300&q=80' },
+    { id: 3, nombre: 'Patagonia Properties', nombreEn: 'Patagonia Properties', logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80' },
+    { id: 4, nombre: 'Inmobiliaria Valle Verde', nombreEn: 'Valle Verde Real Estate', logo: 'https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?w=300&q=80' },
+    { id: 5, nombre: 'Araucanía Bienes Raíces', nombreEn: 'Araucanía Real Estate', logo: 'https://images.unsplash.com/photo-1760636803392-85a2a18e562d?w=300&q=80' },
+    { id: 6, nombre: 'Inmobiliaria Lagos del Sur', nombreEn: 'Lagos del Sur Real Estate', logo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&q=80' },
   ];
 
   // Datos de brokers
@@ -1437,7 +1437,7 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                               marginTop: '10px',
                               lineHeight: '1.3'
                             }}>
-                              {item.nombre}
+                              {language === 'en' && item.nombreEn ? item.nombreEn : item.nombre}
                             </p>
                           </div>
                         ))
