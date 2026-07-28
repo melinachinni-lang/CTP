@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, UserCheck, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { CalendariosView } from '@/app/components/CalendariosView';
@@ -53,6 +53,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     {
       key: 'gestion', label: 'Gestión',
       items: [
+        { id: 'leads',       label: 'Leads',               icon: Users },
+        { id: 'brokers',     label: 'Brokers',             icon: UserCheck },
         { id: 'reservas',    label: 'Valores de reservas', icon: FileText },
         { id: 'asignaciones',label: 'Asignaciones',        icon: Users },
         { id: 'whatsapp',    label: 'Números WhatsApp',    icon: Phone },
@@ -241,6 +243,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       <div className="fixed overflow-y-auto bg-white sm:rounded-2xl sm:shadow-[0_0_40px_rgba(0,0,0,0.45)] inset-0 sm:inset-auto sm:left-[256px] sm:top-[44px] sm:right-3 sm:bottom-3" style={{ zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} onTypeModalCancel={() => setCurrentSection(publishModalOrigin)} />}
+        {currentSection === 'leads'     && <ConsultasView viewType="inmobiliaria" />}
+        {currentSection === 'brokers'   && <TeamContent />}
         {currentSection === 'inquiries' && <ConsultasView viewType="inmobiliaria" />}
         {currentSection === 'reservas' && (
           <div className="p-8">

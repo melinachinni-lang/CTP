@@ -69,8 +69,6 @@ const NAV_GROUPS = [
     id: 'comercial',
     label: 'Comercial',
     items: [
-      { id: 'leads' as NavSection,   label: 'Leads',               icon: Users },
-      { id: 'brokers' as NavSection, label: 'Brokers',             icon: UserCheck },
       { id: 'pagos' as NavSection,   label: 'Pagos inmobiliarias', icon: Download },
     ],
   },
