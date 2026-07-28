@@ -1,64 +1,52 @@
 import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
+import { useI18n } from '@/app/i18n/i18nContext';
 
 interface PlanesModalProps {
   onClose: () => void;
   onNavigatePlanes: () => void;
 }
 
-const planes = [
-  {
-    nombre: 'Bronce',
-    descripcion: 'Ideal para inmobiliarias que inician',
-    precioMensual: 150000,
-    precioAnual: 1500000,
-    destacado: false,
-    caracteristicas: [
-      'Hasta 10 parcelas publicadas',
-      '2 publicaciones destacadas',
-      'Visibilidad estándar',
-      'Estadísticas básicas',
-      'Soporte por email',
-    ],
-  },
-  {
-    nombre: 'Plata',
-    descripcion: 'Para inmobiliarias en crecimiento',
-    precioMensual: 300000,
-    precioAnual: 3000000,
-    destacado: true,
-    caracteristicas: [
-      'Hasta 30 parcelas publicadas',
-      '5 publicaciones destacadas',
-      'Visibilidad alta',
-      'Estadísticas avanzadas',
-      'Soporte prioritario',
-      'Panel de equipo y brokers',
-    ],
-  },
-  {
-    nombre: 'Oro',
-    descripcion: 'Máxima exposición para empresas',
-    precioMensual: 600000,
-    precioAnual: 6000000,
-    destacado: false,
-    caracteristicas: [
-      'Publicaciones ilimitadas',
-      '15 publicaciones destacadas',
-      'Visibilidad premium',
-      'Estadísticas completas + exportación',
-      'Soporte 24/7',
-      'Panel completo de equipo y brokers',
-      'Asesor comercial dedicado',
-    ],
-  },
-];
-
 const fmt = (n: number) =>
   new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 }).format(n);
 
 export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
+  const { language } = useI18n();
+  const en = language === 'en';
   const [periodo, setPeriodo] = useState<'monthly' | 'annual'>('monthly');
+
+  const planes = [
+    {
+      nombre: en ? 'Bronze' : 'Bronce',
+      descripcion: en ? 'Ideal for agencies just starting out' : 'Ideal para inmobiliarias que inician',
+      precioMensual: 150000,
+      precioAnual: 1500000,
+      destacado: false,
+      caracteristicas: en
+        ? ['Up to 10 published parcels', '2 featured listings', 'Standard visibility', 'Basic analytics', 'Email support']
+        : ['Hasta 10 parcelas publicadas', '2 publicaciones destacadas', 'Visibilidad estándar', 'Estadísticas básicas', 'Soporte por email'],
+    },
+    {
+      nombre: en ? 'Silver' : 'Plata',
+      descripcion: en ? 'For growing real estate agencies' : 'Para inmobiliarias en crecimiento',
+      precioMensual: 300000,
+      precioAnual: 3000000,
+      destacado: true,
+      caracteristicas: en
+        ? ['Up to 30 published parcels', '5 featured listings', 'High visibility', 'Advanced analytics', 'Priority support', 'Team and brokers panel']
+        : ['Hasta 30 parcelas publicadas', '5 publicaciones destacadas', 'Visibilidad alta', 'Estadísticas avanzadas', 'Soporte prioritario', 'Panel de equipo y brokers'],
+    },
+    {
+      nombre: en ? 'Gold' : 'Oro',
+      descripcion: en ? 'Maximum exposure for companies' : 'Máxima exposición para empresas',
+      precioMensual: 600000,
+      precioAnual: 6000000,
+      destacado: false,
+      caracteristicas: en
+        ? ['Unlimited listings', '15 featured listings', 'Premium visibility', 'Full analytics + export', '24/7 support', 'Full team and brokers panel', 'Dedicated commercial advisor']
+        : ['Publicaciones ilimitadas', '15 publicaciones destacadas', 'Visibilidad premium', 'Estadísticas completas + exportación', 'Soporte 24/7', 'Panel completo de equipo y brokers', 'Asesor comercial dedicado'],
+    },
+  ];
 
   return (
     <div
@@ -74,10 +62,10 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
         <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'var(--border)' }}>
           <div>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: '22px', color: '#0A0A0A' }}>
-              Planes para inmobiliarias
+              {en ? 'Plans for real estate agencies' : 'Planes para inmobiliarias'}
             </h3>
             <p style={{ color: '#6B6B6B', fontSize: '14px', marginTop: '4px' }}>
-              Elegí el plan que mejor se adapta a tu operación.
+              {en ? 'Choose the plan that best fits your operation.' : 'Elegí el plan que mejor se adapta a tu operación.'}
             </p>
           </div>
           <button
@@ -109,7 +97,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
                   boxShadow: periodo === p ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
-                {p === 'monthly' ? 'Mensual' : 'Anual'}
+                {p === 'monthly' ? (en ? 'Monthly' : 'Mensual') : (en ? 'Annual' : 'Anual')}
                 {p === 'annual' && (
                   <span
                     className="ml-2 px-2 py-0.5 rounded-full text-xs"
@@ -140,7 +128,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
                   className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-semibold"
                   style={{ backgroundColor: '#006B4E', color: '#FFFFFF', whiteSpace: 'nowrap' }}
                 >
-                  Más popular
+                  {en ? 'Most popular' : 'Más popular'}
                 </div>
               )}
               <div className="mb-4">
@@ -153,10 +141,10 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
                 <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: '28px', color: '#0A0A0A' }}>
                   {fmt(periodo === 'monthly' ? plan.precioMensual : Math.round(plan.precioAnual / 12))}
                 </span>
-                <span style={{ color: '#6B6B6B', fontSize: '13px' }}>/mes</span>
+                <span style={{ color: '#6B6B6B', fontSize: '13px' }}>{en ? '/mo' : '/mes'}</span>
                 {periodo === 'annual' && (
                   <div style={{ color: '#006B4E', fontSize: '12px', marginTop: '2px' }}>
-                    {fmt(plan.precioAnual)} al año
+                    {fmt(plan.precioAnual)} {en ? 'per year' : 'al año'}
                   </div>
                 )}
               </div>
@@ -184,7 +172,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
                   else { e.currentTarget.style.borderColor = '#DEDEDE'; e.currentTarget.style.color = '#0A0A0A'; }
                 }}
               >
-                Empezar con {plan.nombre}
+                {en ? `Get started with ${plan.nombre}` : `Empezar con ${plan.nombre}`}
               </button>
             </div>
           ))}
@@ -198,7 +186,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
             onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
             onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
           >
-            Ver página completa de planes →
+            {en ? 'View full plans page →' : 'Ver página completa de planes →'}
           </button>
         </div>
       </div>
