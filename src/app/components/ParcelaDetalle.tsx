@@ -1836,7 +1836,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           fontWeight: 'var(--font-weight-medium)',
                           marginTop: '0.75rem'
                         }}>
-                          Camino pavimentado
+                          {language === 'en' ? 'Paved road' : 'Camino pavimentado'}
                         </p>
                       </div>
 
@@ -2333,7 +2333,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                                 }}
                                 formatter={(value: number) => [
                                   `$${value.toLocaleString('es-CL')}`,
-                                  'Valor'
+                                  language === 'en' ? 'Value' : 'Valor'
                                 ]}
                               />
                               <Line 
@@ -3273,7 +3273,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                   fontWeight: 'var(--font-weight-semibold)',
                   color: '#0A0A0A'
                 }}>
-                  Excelente
+                  {language === 'en' ? 'Excellent' : 'Excelente'}
                 </p>
                 <p style={{ 
                   fontFamily: 'var(--font-body)',
@@ -3293,7 +3293,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                     fontSize: 'var(--font-size-xs)',
                     color: '#737373'
                   }}>
-                    Análisis actualizado hace 2 días
+                    {language === 'en' ? 'Analysis updated 2 days ago' : 'Análisis actualizado hace 2 días'}
                   </span>
                 </div>
               </div>
@@ -3335,7 +3335,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           fontWeight: 'var(--font-weight-semibold)',
                           color: '#0A0A0A'
                         }}>
-                          Tendencia de precio
+                          {language === 'en' ? 'Price trend' : 'Tendencia de precio'}
                         </span>
                       </div>
                       <p style={{ 
@@ -3344,7 +3344,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        +8% últimos 6 meses
+                        {language === 'en' ? '+8% last 6 months' : '+8% últimos 6 meses'}
                       </p>
                     </div>
 
@@ -3373,7 +3373,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           fontWeight: 'var(--font-weight-semibold)',
                           color: '#0A0A0A'
                         }}>
-                          Nivel de demanda
+                          {language === 'en' ? 'Demand level' : 'Nivel de demanda'}
                         </span>
                       </div>
                       <p style={{ 
@@ -3382,7 +3382,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        Alto en esta zona
+                        {language === 'en' ? 'High in this area' : 'Alto en esta zona'}
                       </p>
                     </div>
 
@@ -3411,7 +3411,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                           fontWeight: 'var(--font-weight-semibold)',
                           color: '#0A0A0A'
                         }}>
-                          Interés de usuarios
+                          {language === 'en' ? 'User interest' : 'Interés de usuarios'}
                         </span>
                       </div>
                       <p style={{ 
@@ -3420,7 +3420,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        127 vistas en 7 días
+                        {language === 'en' ? '127 views in 7 days' : '127 vistas en 7 días'}
                       </p>
                     </div>
                   </div>
@@ -3464,7 +3464,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#525252',
                       lineHeight: 'var(--line-height-body)'
                     }}>
-                      Esta parcela presenta una excelente relación calidad-precio en comparación con propiedades similares en la zona. La ubicación estratégica cerca del lago y el crecimiento sostenido del turismo regional la posicionan como una inversión prometedora.
+                      {language === 'en' ? 'This parcel offers an excellent value-for-money compared to similar properties in the area. Its strategic location near the lake and the sustained growth of regional tourism position it as a promising investment.' : 'Esta parcela presenta una excelente relación calidad-precio en comparación con propiedades similares en la zona. La ubicación estratégica cerca del lago y el crecimiento sostenido del turismo regional la posicionan como una inversión prometedora.'}
                     </p>
                   </div>
                 </div>
@@ -3507,7 +3507,7 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        Proximidad al lago y acceso pavimentado facilitan conectividad y aumentan el valor.
+                        {language === 'en' ? 'Lake proximity and paved access enhance connectivity and increase value.' : 'Proximidad al lago y acceso pavimentado facilitan conectividad y aumentan el valor.'}
                       </p>
                     </div>
                   </div>
@@ -3529,15 +3529,15 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#0A0A0A',
                         marginBottom: '0.25rem'
                       }}>
-                        Potencial turístico
+                        {language === 'en' ? 'Tourism potential' : 'Potencial turístico'}
                       </p>
-                      <p style={{ 
+                      <p style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        El aumento del turismo en la región genera oportunidades de valorización y renta.
+                        {language === 'en' ? 'Growing regional tourism creates appreciation and rental income opportunities.' : 'El aumento del turismo en la región genera oportunidades de valorización y renta.'}
                       </p>
                     </div>
                   </div>
@@ -3559,15 +3559,15 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#0A0A0A',
                         marginBottom: '0.25rem'
                       }}>
-                        Servicios disponibles
+                        {language === 'en' ? 'Available utilities' : 'Servicios disponibles'}
                       </p>
-                      <p style={{ 
+                      <p style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        Electricidad y agua aseguran habitabilidad inmediata y reducen costos iniciales.
+                        {language === 'en' ? 'Electricity and water ensure immediate habitability and reduce start-up costs.' : 'Electricidad y agua aseguran habitabilidad inmediata y reducen costos iniciales.'}
                       </p>
                     </div>
                   </div>
@@ -3589,15 +3589,15 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         color: '#0A0A0A',
                         marginBottom: '0.25rem'
                       }}>
-                        Documentación en orden
+                        {language === 'en' ? 'Documentation in order' : 'Documentación en orden'}
                       </p>
-                      <p style={{ 
+                      <p style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--font-size-xs)',
                         color: '#737373',
                         lineHeight: 'var(--line-height-body)'
                       }}>
-                        Títulos saneados y permisos vigentes minimizan riesgos legales.
+                        {language === 'en' ? 'Clear titles and valid permits minimize legal risks.' : 'Títulos saneados y permisos vigentes minimizan riesgos legales.'}
                       </p>
                     </div>
                   </div>
@@ -3639,15 +3639,15 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#525252',
                       marginBottom: '0.25rem'
                     }}>
-                      Clima patagónico
+                      {language === 'en' ? 'Patagonian climate' : 'Clima patagónico'}
                     </p>
-                    <p style={{ 
+                    <p style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-xs)',
                       color: '#737373',
                       lineHeight: 'var(--line-height-body)'
                     }}>
-                      Considera las condiciones climáticas para planificar construcciones y actividades.
+                      {language === 'en' ? 'Consider weather conditions when planning construction and activities.' : 'Considera las condiciones climáticas para planificar construcciones y actividades.'}
                     </p>
                   </div>
 
@@ -3659,15 +3659,15 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       color: '#525252',
                       marginBottom: '0.25rem'
                     }}>
-                      Distancia a centros urbanos
+                      {language === 'en' ? 'Distance to urban centers' : 'Distancia a centros urbanos'}
                     </p>
-                    <p style={{ 
+                    <p style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--font-size-xs)',
                       color: '#737373',
                       lineHeight: 'var(--line-height-body)'
                     }}>
-                      Evalúa los tiempos de traslado según tu proyecto y necesidades.
+                      {language === 'en' ? 'Evaluate travel times based on your project and needs.' : 'Evalúa los tiempos de traslado según tu proyecto y necesidades.'}
                     </p>
                   </div>
                 </div>
