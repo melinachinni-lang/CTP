@@ -54,6 +54,19 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
     return map[desc] ?? desc;
   };
 
+  const translateNombreInmobiliaria = (nombre: string): string => {
+    if (language !== 'en') return nombre;
+    const map: Record<string, string> = {
+      'Inmobiliaria Austral': 'Austral Real Estate',
+      'Propiedades del Sur': 'Southern Properties',
+      'Patagonia Properties': 'Patagonia Properties',
+      'Inmobiliaria Valle Verde': 'Valle Verde Real Estate',
+      'Araucanía Bienes Raíces': 'Araucanía Real Estate',
+      'Inmobiliaria Lagos del Sur': 'Lagos del Sur Real Estate',
+    };
+    return map[nombre] ?? nombre;
+  };
+
   const translateRol = (rol: string): string => {
     if (language !== 'en') return rol;
     const map: Record<string, string> = {
@@ -418,7 +431,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     lineHeight: 'var(--line-height-heading)',
                     letterSpacing: 'var(--letter-spacing-tighter)'
                   }}>
-                    {inmobiliaria.nombre}
+                    {translateNombreInmobiliaria(inmobiliaria.nombre)}
                   </h1>
                   
                   <div className="flex items-center gap-4 flex-wrap mb-3">
@@ -943,7 +956,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                         imagenes={parcela.imagenes}
                         precio={parcela.precio}
                         caracteristicas={parcela.destacados}
-                        inmobiliaria={parcela.inmobiliaria.nombre}
+                        inmobiliaria={translateNombreInmobiliaria(parcela.inmobiliaria.nombre)}
                         brokerImagen={parcela.inmobiliaria.logo}
                         tipoVendedor={parcela.inmobiliaria.tipoVendedor}
                         onClick={() => onNavigate('parcela-detalle', parcela.id)}
@@ -1147,7 +1160,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                     color: 'var(--foreground)',
                     marginBottom: '0.25rem'
                   }}>
-                    {t.inmobiliarias.teamOf} {inmobiliaria.nombre}
+                    {t.inmobiliarias.teamOf} {translateNombreInmobiliaria(inmobiliaria.nombre)}
                   </h2>
                   <p style={{ 
                     fontSize: 'var(--font-size-body-sm)',
@@ -1479,7 +1492,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                 </div>
                 <div>
                   <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#0A0A0A', marginBottom: '2px' }}>
-                    {inmobiliaria.nombre}
+                    {translateNombreInmobiliaria(inmobiliaria.nombre)}
                   </p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>
                     {t.inmobiliarias.agencyType} · {profileData.ubicacionPrincipal}
@@ -1500,7 +1513,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   </div>
                   <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'var(--font-size-h4)', color: '#0A0A0A', marginBottom: '8px' }}>{t.inmobiliarias.inquirySent}</p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                    {inmobiliaria.nombre} {t.inmobiliarias.inquirySentDesc}
+                    {translateNombreInmobiliaria(inmobiliaria.nombre)} {t.inmobiliarias.inquirySentDesc}
                   </p>
                   <button onClick={() => setShowHeroContactModal(false)} className="mt-6 h-10 px-8 rounded-full text-white transition-colors" style={{ backgroundColor: '#006B4E', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
                     {t.filters.close}
