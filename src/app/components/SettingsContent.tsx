@@ -1855,7 +1855,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
           { value: 'Admin',        label: 'Admin',        desc: 'Acceso completo a configuración, equipo y datos' },
           { value: 'Editor',       label: 'Editor',       desc: 'Puede crear y editar contenido, sin configuración' },
           { value: 'Moderador',    label: 'Moderador',    desc: 'Revisión y aprobación de contenido publicado' },
-          { value: 'Solo lectura', label: 'Solo lectura', desc: 'Visualización sin posibilidad de editar' },
         ];
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
