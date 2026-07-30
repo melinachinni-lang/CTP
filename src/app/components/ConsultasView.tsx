@@ -236,10 +236,10 @@ const NOTIFICACIONES_MOCK = [
 ];
 
 const LEADS_MOCK: Lead[] = [
-  { id: 'l1', nombre: 'Juan Martínez', email: 'juan.m@gmail.com', telefono: '+56 9 8834 5566', parcela: 'Parcela Vista Cordillera', origen: 'Portal web', fecha: '2026-05-15', estado: 'nuevo' },
+  { id: 'l1', nombre: 'Juan Martínez', email: 'juan.m@gmail.com', telefono: '+56 9 8834 5566', parcela: 'Parcela Vista Cordillera', origen: 'Portal web', fecha: '2026-05-15', estado: 'pendiente' },
   { id: 'l2', nombre: 'Andrea López', email: 'andrea.l@outlook.com', telefono: '+56 9 7723 4411', parcela: 'Parcela Lago Azul', origen: 'Portal web', fecha: '2026-05-14', estado: 'pendiente', brokerAsignado: 'Ana Silva' },
   { id: 'l3', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
-  { id: 'l4', nombre: 'Camila Herrera', email: 'c.herrera@gmail.com', telefono: '+56 9 5501 2299', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-12', estado: 'nuevo' },
+  { id: 'l4', nombre: 'Camila Herrera', email: 'c.herrera@gmail.com', telefono: '+56 9 5501 2299', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-12', estado: 'pendiente' },
   { id: 'l5', nombre: 'Roberto Díaz', email: 'rdiaz@yahoo.com', telefono: '+56 9 4490 1188', parcela: 'Parcela Lago Azul', origen: 'Formulario', fecha: '2026-05-10', estado: 'cerrado', brokerAsignado: 'Ana Silva' },
 ];
 
