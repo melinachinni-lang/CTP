@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck, Users } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck, Users, SlidersHorizontal } from 'lucide-react';
 
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
@@ -280,6 +280,18 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [showAsignarLeadBroker, setShowAsignarLeadBroker] = useState<string | null>(null);
   const [leadBrokerSeleccionado, setLeadBrokerSeleccionado] = useState('');
   const [leadFiltro, setLeadFiltro] = useState<'todos' | 'asignados' | 'sin_asignar'>('todos');
+  const [showLeadFiltroDropdown, setShowLeadFiltroDropdown] = useState(false);
+  const leadFiltroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (leadFiltroRef.current && !leadFiltroRef.current.contains(e.target as Node)) {
+        setShowLeadFiltroDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
   const [repFecha, setRepFecha] = useState('');
   const [repHora, setRepHora] = useState('');
   const [cancelMotivo, setCancelMotivo] = useState('');
@@ -391,33 +403,86 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
-        {[
-          { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
-          ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
-          { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
-          ...(viewType !== 'personal' ? [{ id: 'leads', label: 'Leads', count: leads.length }] : []),
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas' | 'leads'); setExpandedId(null); }}
-            className="px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1"
-            style={{
-              fontFamily: 'var(--font-body)',
-              backgroundColor: activeTab === tab.id ? '#FFFFFF' : 'transparent',
-              color: activeTab === tab.id ? '#0A0A0A' : '#6B7280',
-              boxShadow: activeTab === tab.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            }}
-          >
-            {tab.label}
-            {tab.count > 0 && (
-              <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: activeTab === tab.id ? (tab.id === 'notificaciones' ? '#DC2626' : '#006B4E') : '#E5E5E5', color: activeTab === tab.id ? '#FFFFFF' : '#9CA3AF' }}>
-                {tab.count}
+      {/* Tabs + filtro leads */}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6', width: 'fit-content' }}>
+          {[
+            { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
+            ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
+            { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
+            ...(viewType !== 'personal' ? [{ id: 'leads', label: 'Leads', count: leads.length }] : []),
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas' | 'leads'); setExpandedId(null); }}
+              className="px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1"
+              style={{
+                fontFamily: 'var(--font-body)',
+                backgroundColor: activeTab === tab.id ? '#FFFFFF' : 'transparent',
+                color: activeTab === tab.id ? '#0A0A0A' : '#6B7280',
+                boxShadow: activeTab === tab.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+              }}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: activeTab === tab.id ? (tab.id === 'notificaciones' ? '#DC2626' : '#006B4E') : '#E5E5E5', color: activeTab === tab.id ? '#FFFFFF' : '#9CA3AF' }}>
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Filtro leads dropdown */}
+        {activeTab === 'leads' && viewType === 'inmobiliaria' && (
+          <div className="relative" ref={leadFiltroRef}>
+            <button
+              onClick={() => setShowLeadFiltroDropdown(v => !v)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors"
+              style={{
+                border: '1px solid #E5E5E5',
+                backgroundColor: leadFiltro !== 'todos' ? '#F0FDF4' : '#FAFAFA',
+                fontFamily: 'var(--font-body)',
+                fontSize: '13px',
+                color: leadFiltro !== 'todos' ? '#006B4E' : '#374151',
+                cursor: 'pointer',
+              }}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" style={{ color: leadFiltro !== 'todos' ? '#006B4E' : '#737373' }} />
+              <span>
+                {leadFiltro === 'todos' ? 'Filtros' : leadFiltro === 'asignados' ? 'Asignados' : 'Sin asignar'}
               </span>
+              <ChevronDown className="w-3.5 h-3.5" style={{ color: leadFiltro !== 'todos' ? '#006B4E' : '#9CA3AF', transform: showLeadFiltroDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} />
+            </button>
+            {showLeadFiltroDropdown && (
+              <div className="absolute right-0 mt-1 rounded-xl overflow-hidden z-20" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', minWidth: '140px' }}>
+                {([
+                  { id: 'todos', label: 'Todos' },
+                  { id: 'sin_asignar', label: 'Sin asignar' },
+                  { id: 'asignados', label: 'Asignados' },
+                ] as const).map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => { setLeadFiltro(opt.id); setShowLeadFiltroDropdown(false); }}
+                    className="w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '13px',
+                      color: leadFiltro === opt.id ? '#006B4E' : '#374151',
+                      backgroundColor: leadFiltro === opt.id ? '#F0FDF4' : 'transparent',
+                      fontWeight: leadFiltro === opt.id ? 500 : 400,
+                    }}
+                    onMouseEnter={e => { if (leadFiltro !== opt.id) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                    onMouseLeave={e => { if (leadFiltro !== opt.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
+                    {opt.label}
+                    {leadFiltro === opt.id && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+                  </button>
+                ))}
+              </div>
             )}
-          </button>
-        ))}
+          </div>
+        )}
       </div>
 
       {/* Notificaciones tab content */}
@@ -508,33 +573,6 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
         })();
         return (
           <div className="space-y-3">
-            {/* Filtro (solo inmobiliaria) */}
-            {viewType === 'inmobiliaria' && (
-              <div className="flex justify-end">
-                <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
-                  {([
-                    { id: 'todos', label: 'Todos' },
-                    { id: 'sin_asignar', label: 'Sin asignar' },
-                    { id: 'asignados', label: 'Asignados' },
-                  ] as const).map(opt => (
-                    <button
-                      key={opt.id}
-                      onClick={() => setLeadFiltro(opt.id)}
-                      className="px-4 py-1.5 rounded-full text-xs font-medium transition-all"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        backgroundColor: leadFiltro === opt.id ? '#FFFFFF' : 'transparent',
-                        color: leadFiltro === opt.id ? '#0A0A0A' : '#6B7280',
-                        boxShadow: leadFiltro === opt.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                      }}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {leadsFiltered.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
