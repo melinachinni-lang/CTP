@@ -15,7 +15,7 @@ interface Lead {
   parcela: string;
   origen: string;
   fecha: string;
-  estado: 'pendiente' | 'contactado' | 'cerrado';
+  estado: 'sin_asignar' | 'asignado';
   brokerAsignado?: string;
 }
 
@@ -236,22 +236,21 @@ const NOTIFICACIONES_MOCK = [
 ];
 
 const LEADS_MOCK: Lead[] = [
-  { id: 'l1', nombre: 'Juan Martínez', email: 'juan.m@gmail.com', telefono: '+56 9 8834 5566', parcela: 'Parcela Vista Cordillera', origen: 'Portal web', fecha: '2026-05-15', estado: 'pendiente' },
-  { id: 'l2', nombre: 'Andrea López', email: 'andrea.l@outlook.com', telefono: '+56 9 7723 4411', parcela: 'Parcela Lago Azul', origen: 'Portal web', fecha: '2026-05-14', estado: 'pendiente', brokerAsignado: 'Ana Silva' },
-  { id: 'l3', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
-  { id: 'l4', nombre: 'Camila Herrera', email: 'c.herrera@gmail.com', telefono: '+56 9 5501 2299', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-12', estado: 'pendiente' },
-  { id: 'l5', nombre: 'Roberto Díaz', email: 'rdiaz@yahoo.com', telefono: '+56 9 4490 1188', parcela: 'Parcela Lago Azul', origen: 'Formulario', fecha: '2026-05-10', estado: 'cerrado', brokerAsignado: 'Ana Silva' },
+  { id: 'l1', nombre: 'Juan Martínez', email: 'juan.m@gmail.com', telefono: '+56 9 8834 5566', parcela: 'Parcela Vista Cordillera', origen: 'Portal web', fecha: '2026-05-15', estado: 'sin_asignar' },
+  { id: 'l2', nombre: 'Andrea López', email: 'andrea.l@outlook.com', telefono: '+56 9 7723 4411', parcela: 'Parcela Lago Azul', origen: 'Portal web', fecha: '2026-05-14', estado: 'asignado', brokerAsignado: 'Ana Silva' },
+  { id: 'l3', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'asignado', brokerAsignado: 'Carlos Pérez' },
+  { id: 'l4', nombre: 'Camila Herrera', email: 'c.herrera@gmail.com', telefono: '+56 9 5501 2299', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-12', estado: 'sin_asignar' },
+  { id: 'l5', nombre: 'Roberto Díaz', email: 'rdiaz@yahoo.com', telefono: '+56 9 4490 1188', parcela: 'Parcela Lago Azul', origen: 'Formulario', fecha: '2026-05-10', estado: 'asignado', brokerAsignado: 'Ana Silva' },
 ];
 
 const LEADS_BROKER_MOCK: Lead[] = [
-  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
-  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'asignado', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'asignado', brokerAsignado: 'Carlos Pérez' },
 ];
 
 const LEAD_ESTADO_CONFIG: Record<Lead['estado'], { label: string; bg: string; text: string; border: string }> = {
-  pendiente:  { label: 'Pendiente',  bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
-  contactado: { label: 'Contactado', bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
-  cerrado:    { label: 'Cerrado',    bg: '#F3F4F6', text: '#6B7280', border: '#D1D5DB' },
+  sin_asignar: { label: 'Sin asignar', bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
+  asignado:    { label: 'Asignado',    bg: '#D1FAE5', text: '#065F46', border: '#6EE7B7' },
 };
 
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
@@ -391,7 +390,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
   const handleAsignarLeadBroker = (id: string) => {
     if (!leadBrokerSeleccionado) return;
-    setLeads(prev => prev.map(l => l.id === id ? { ...l, brokerAsignado: leadBrokerSeleccionado } : l));
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, brokerAsignado: leadBrokerSeleccionado, estado: 'asignado' as const } : l));
     setShowAsignarLeadBroker(null);
     setLeadBrokerSeleccionado('');
     showFeedback(`Lead asignado a ${leadBrokerSeleccionado}. Recibirá una notificación.`);
@@ -681,43 +680,10 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{lead.nombre}</span>
-                      {/* Badge estado — clickeable para broker */}
-                      {viewType === 'broker' ? (
-                        <div className="relative" style={{ display: 'inline-block' }}>
-                          <button
-                            onClick={() => setShowLeadStatusDropdown(showLeadStatusDropdown === lead.id ? null : lead.id)}
-                            className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
-                            style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}
-                          >
-                            {leadCfg.label}
-                            <ChevronDown className="w-3 h-3" style={{ transform: showLeadStatusDropdown === lead.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} />
-                          </button>
-                          {showLeadStatusDropdown === lead.id && (
-                            <div className="absolute left-0 mt-1 rounded-xl overflow-hidden z-30" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', minWidth: '130px' }}>
-                              {(Object.entries(LEAD_ESTADO_CONFIG) as [Lead['estado'], typeof LEAD_ESTADO_CONFIG[Lead['estado']]][]).map(([estado, cfg]) => (
-                                <button
-                                  key={estado}
-                                  onClick={() => { handleCambiarEstadoLead(lead.id, estado); setShowLeadStatusDropdown(null); }}
-                                  className="w-full flex items-center justify-between px-3 py-2.5 text-left"
-                                  style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: lead.estado === estado ? '#006B4E' : '#374151', backgroundColor: lead.estado === estado ? '#F0FDF4' : 'transparent', fontWeight: lead.estado === estado ? 500 : 400 }}
-                                  onMouseEnter={e => { if (lead.estado !== estado) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
-                                  onMouseLeave={e => { if (lead.estado !== estado) e.currentTarget.style.backgroundColor = 'transparent'; }}
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.border }} />
-                                    {cfg.label}
-                                  </div>
-                                  {lead.estado === estado && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
-                          {leadCfg.label}
-                        </span>
-                      )}
+                      {/* Badge estado */}
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
+                        {leadCfg.label}
+                      </span>
                     </div>
                     <div className="flex items-center gap-3 flex-wrap mb-1">
                       <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
@@ -746,7 +712,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {viewType === 'broker' && (
                       <button
-                        onClick={() => { setShowContactarModal(lead); if (lead.estado === 'pendiente') handleCambiarEstadoLead(lead.id, 'contactado'); }}
+                        onClick={() => setShowContactarModal(lead)}
                         className="py-1.5 rounded-full text-xs font-medium transition-colors"
                         style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '90px', textAlign: 'center' }}
                         onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
