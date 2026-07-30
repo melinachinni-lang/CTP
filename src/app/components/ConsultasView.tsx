@@ -15,7 +15,7 @@ interface Lead {
   parcela: string;
   origen: string;
   fecha: string;
-  estado: 'nuevo' | 'cerrado';
+  estado: 'pendiente' | 'contactado' | 'cerrado';
   brokerAsignado?: string;
 }
 
@@ -237,20 +237,21 @@ const NOTIFICACIONES_MOCK = [
 
 const LEADS_MOCK: Lead[] = [
   { id: 'l1', nombre: 'Juan Martínez', email: 'juan.m@gmail.com', telefono: '+56 9 8834 5566', parcela: 'Parcela Vista Cordillera', origen: 'Portal web', fecha: '2026-05-15', estado: 'nuevo' },
-  { id: 'l2', nombre: 'Andrea López', email: 'andrea.l@outlook.com', telefono: '+56 9 7723 4411', parcela: 'Parcela Lago Azul', origen: 'Portal web', fecha: '2026-05-14', estado: 'nuevo', brokerAsignado: 'Ana Silva' },
-  { id: 'l3', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'nuevo', brokerAsignado: 'Carlos Pérez' },
+  { id: 'l2', nombre: 'Andrea López', email: 'andrea.l@outlook.com', telefono: '+56 9 7723 4411', parcela: 'Parcela Lago Azul', origen: 'Portal web', fecha: '2026-05-14', estado: 'pendiente', brokerAsignado: 'Ana Silva' },
+  { id: 'l3', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
   { id: 'l4', nombre: 'Camila Herrera', email: 'c.herrera@gmail.com', telefono: '+56 9 5501 2299', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-12', estado: 'nuevo' },
   { id: 'l5', nombre: 'Roberto Díaz', email: 'rdiaz@yahoo.com', telefono: '+56 9 4490 1188', parcela: 'Parcela Lago Azul', origen: 'Formulario', fecha: '2026-05-10', estado: 'cerrado', brokerAsignado: 'Ana Silva' },
 ];
 
 const LEADS_BROKER_MOCK: Lead[] = [
-  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'nuevo', brokerAsignado: 'Carlos Pérez' },
-  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'nuevo', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'pendiente', brokerAsignado: 'Carlos Pérez' },
 ];
 
 const LEAD_ESTADO_CONFIG: Record<Lead['estado'], { label: string; bg: string; text: string; border: string }> = {
-  nuevo:   { label: 'Nuevo',   bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
-  cerrado: { label: 'Cerrado', bg: '#F3F4F6', text: '#6B7280', border: '#D1D5DB' },
+  pendiente:  { label: 'Pendiente',  bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
+  contactado: { label: 'Contactado', bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
+  cerrado:    { label: 'Cerrado',    bg: '#F3F4F6', text: '#6B7280', border: '#D1D5DB' },
 };
 
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
@@ -749,7 +750,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {viewType === 'broker' && (
                       <button
-                        onClick={() => setShowContactarModal(lead)}
+                        onClick={() => { setShowContactarModal(lead); if (lead.estado === 'pendiente') handleCambiarEstadoLead(lead.id, 'contactado'); }}
                         className="py-1.5 rounded-full text-xs font-medium transition-colors"
                         style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '90px', textAlign: 'center' }}
                         onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
