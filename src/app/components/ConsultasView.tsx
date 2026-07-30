@@ -279,6 +279,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [brokerSeleccionado, setBrokerSeleccionado] = useState('');
   const [showAsignarLeadBroker, setShowAsignarLeadBroker] = useState<string | null>(null);
   const [leadBrokerSeleccionado, setLeadBrokerSeleccionado] = useState('');
+  const [leadFiltro, setLeadFiltro] = useState<'todos' | 'asignados' | 'sin_asignar'>('todos');
   const [repFecha, setRepFecha] = useState('');
   const [repHora, setRepHora] = useState('');
   const [cancelMotivo, setCancelMotivo] = useState('');
@@ -496,79 +497,116 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
       )}
 
       {/* Leads tab content */}
-      {activeTab === 'leads' && (
-        <div className="space-y-3">
-          {leads.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
-                <Users className="w-8 h-8" style={{ color: '#D1D5DB' }} />
-              </div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
-                Sin leads asignados
-              </h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                {viewType === 'broker' ? 'Los leads que te asignen aparecerán acá.' : 'Los leads captados aparecerán acá.'}
-              </p>
-            </div>
-          ) : leads.map(lead => {
-            const leadCfg = LEAD_ESTADO_CONFIG[lead.estado];
-            return (
-              <div key={lead.id} className="rounded-xl p-4 flex items-center gap-4" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
-                {/* Avatar */}
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }}>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '16px', fontWeight: 600, color: '#374151' }}>
-                    {lead.nombre.charAt(0)}
-                  </span>
+      {activeTab === 'leads' && (() => {
+        const leadsFiltered = (() => {
+          const base = leadFiltro === 'asignados'
+            ? leads.filter(l => l.brokerAsignado)
+            : leadFiltro === 'sin_asignar'
+            ? leads.filter(l => !l.brokerAsignado)
+            : [...leads].sort((a, b) => (a.brokerAsignado ? 1 : 0) - (b.brokerAsignado ? 1 : 0));
+          return base;
+        })();
+        return (
+          <div className="space-y-3">
+            {/* Filtro (solo inmobiliaria) */}
+            {viewType === 'inmobiliaria' && (
+              <div className="flex justify-end">
+                <div className="flex gap-1 p-1 rounded-full" style={{ backgroundColor: '#F3F4F6' }}>
+                  {([
+                    { id: 'todos', label: 'Todos' },
+                    { id: 'sin_asignar', label: 'Sin asignar' },
+                    { id: 'asignados', label: 'Asignados' },
+                  ] as const).map(opt => (
+                    <button
+                      key={opt.id}
+                      onClick={() => setLeadFiltro(opt.id)}
+                      className="px-4 py-1.5 rounded-full text-xs font-medium transition-all"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        backgroundColor: leadFiltro === opt.id ? '#FFFFFF' : 'transparent',
+                        color: leadFiltro === opt.id ? '#0A0A0A' : '#6B7280',
+                        boxShadow: leadFiltro === opt.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
                 </div>
+              </div>
+            )}
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{lead.nombre}</span>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
-                      {leadCfg.label}
+            {leadsFiltered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
+                  <Users className="w-8 h-8" style={{ color: '#D1D5DB' }} />
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
+                  {leadFiltro === 'sin_asignar' ? 'Sin leads pendientes' : leadFiltro === 'asignados' ? 'Sin leads asignados' : 'Sin leads'}
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                  {viewType === 'broker' ? 'Los leads que te asignen aparecerán acá.' : 'Los leads captados aparecerán acá.'}
+                </p>
+              </div>
+            ) : leadsFiltered.map(lead => {
+              const leadCfg = LEAD_ESTADO_CONFIG[lead.estado];
+              return (
+                <div key={lead.id} className="rounded-xl p-4 flex items-center gap-4" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+                  {/* Avatar */}
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '16px', fontWeight: 600, color: '#374151' }}>
+                      {lead.nombre.charAt(0)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 flex-wrap mb-1">
-                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
-                      <Mail className="w-3 h-3" style={{ color: '#9CA3AF' }} />{lead.email}
-                    </span>
-                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
-                      <Phone className="w-3 h-3" style={{ color: '#9CA3AF' }} />{lead.telefono}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#737373' }}>{lead.parcela}</span>
-                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
-                      <Tag className="w-3 h-3" />{lead.origen}
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{formatFecha(lead.fecha)}</span>
-                  </div>
-                  {lead.brokerAsignado && (
-                    <div className="flex items-center gap-1 mt-1">
-                      <UserCheck className="w-3 h-3" style={{ color: '#006B4E' }} />
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#006B4E', fontWeight: 500 }}>{lead.brokerAsignado}</span>
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{lead.nombre}</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
+                        {leadCfg.label}
+                      </span>
                     </div>
+                    <div className="flex items-center gap-3 flex-wrap mb-1">
+                      <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                        <Mail className="w-3 h-3" style={{ color: '#9CA3AF' }} />{lead.email}
+                      </span>
+                      <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                        <Phone className="w-3 h-3" style={{ color: '#9CA3AF' }} />{lead.telefono}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#737373' }}>{lead.parcela}</span>
+                      <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                        <Tag className="w-3 h-3" />{lead.origen}
+                      </span>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{formatFecha(lead.fecha)}</span>
+                    </div>
+                    {lead.brokerAsignado && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <UserCheck className="w-3 h-3" style={{ color: '#006B4E' }} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#006B4E', fontWeight: 500 }}>{lead.brokerAsignado}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action (inmobiliaria only) */}
+                  {viewType === 'inmobiliaria' && (
+                    <button
+                      onClick={() => { setShowAsignarLeadBroker(lead.id); setLeadBrokerSeleccionado(lead.brokerAsignado || ''); }}
+                      className="flex-shrink-0 py-1.5 rounded-full text-xs font-medium transition-colors"
+                      style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '120px', textAlign: 'center' }}
+                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                    >
+                      {lead.brokerAsignado ? 'Reasignar' : 'Asignar broker'}
+                    </button>
                   )}
                 </div>
-
-                {/* Action (inmobiliaria only) */}
-                {viewType === 'inmobiliaria' && (
-                  <button
-                    onClick={() => { setShowAsignarLeadBroker(lead.id); setLeadBrokerSeleccionado(lead.brokerAsignado || ''); }}
-                    className="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-                    style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', fontSize: '12px', whiteSpace: 'nowrap' }}
-                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
-                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-                  >
-                    {lead.brokerAsignado ? 'Reasignar' : 'Asignar broker'}
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        );
+      })()}
 
       {/* Lista (Recibidas / Enviadas) */}
       {activeTab !== 'notificaciones' && activeTab !== 'leads' && (isLoading ? (
