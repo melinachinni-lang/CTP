@@ -280,6 +280,8 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [leadFiltro, setLeadFiltro] = useState<'todos' | 'asignados' | 'sin_asignar'>('todos');
   const [showLeadFiltroDropdown, setShowLeadFiltroDropdown] = useState(false);
   const leadFiltroRef = useRef<HTMLDivElement>(null);
+  const [showLeadStatusDropdown, setShowLeadStatusDropdown] = useState<string | null>(null);
+  const [showContactarModal, setShowContactarModal] = useState<Lead | null>(null);
   const [showStatusDropdown, setShowStatusDropdown] = useState<string | null>(null);
   const [consultaFiltro, setConsultaFiltro] = useState<'todas' | EstadoConsulta>('todas');
   const [showConsultaFiltroDropdown, setShowConsultaFiltroDropdown] = useState(false);
@@ -389,6 +391,11 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
     showFeedback(`Lead asignado a ${leadBrokerSeleccionado}. Recibirá una notificación.`);
   };
 
+  const handleCambiarEstadoLead = (id: string, nuevoEstado: Lead['estado']) => {
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, estado: nuevoEstado } : l));
+    showFeedback('Estado actualizado.');
+  };
+
   const handleCambiarEstado = (id: string, nuevoEstado: EstadoConsulta) => {
     if (activeTab === 'reservas') {
       setReservas(prev => prev.map(c => c.id === id ? { ...c, estado: nuevoEstado } : c));
@@ -403,9 +410,12 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
   return (
     <main className="px-6 py-6 space-y-6">
-      {/* Overlay para cerrar status dropdown al hacer click afuera */}
+      {/* Overlays para cerrar dropdowns al hacer click afuera */}
       {showStatusDropdown && (
         <div className="fixed inset-0 z-20" onClick={() => setShowStatusDropdown(null)} />
+      )}
+      {showLeadStatusDropdown && (
+        <div className="fixed inset-0 z-20" onClick={() => setShowLeadStatusDropdown(null)} />
       )}
 
       {/* Feedback toast */}
@@ -672,11 +682,45 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{lead.nombre}</span>
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
-                        {leadCfg.label}
-                      </span>
+                      {/* Badge estado — clickeable para broker */}
+                      {viewType === 'broker' ? (
+                        <div className="relative" style={{ display: 'inline-block' }}>
+                          <button
+                            onClick={() => setShowLeadStatusDropdown(showLeadStatusDropdown === lead.id ? null : lead.id)}
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+                            style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}
+                          >
+                            {leadCfg.label}
+                            <ChevronDown className="w-3 h-3" style={{ transform: showLeadStatusDropdown === lead.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} />
+                          </button>
+                          {showLeadStatusDropdown === lead.id && (
+                            <div className="absolute left-0 mt-1 rounded-xl overflow-hidden z-30" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', minWidth: '130px' }}>
+                              {(Object.entries(LEAD_ESTADO_CONFIG) as [Lead['estado'], typeof LEAD_ESTADO_CONFIG[Lead['estado']]][]).map(([estado, cfg]) => (
+                                <button
+                                  key={estado}
+                                  onClick={() => { handleCambiarEstadoLead(lead.id, estado); setShowLeadStatusDropdown(null); }}
+                                  className="w-full flex items-center justify-between px-3 py-2.5 text-left"
+                                  style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: lead.estado === estado ? '#006B4E' : '#374151', backgroundColor: lead.estado === estado ? '#F0FDF4' : 'transparent', fontWeight: lead.estado === estado ? 500 : 400 }}
+                                  onMouseEnter={e => { if (lead.estado !== estado) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                                  onMouseLeave={e => { if (lead.estado !== estado) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.border }} />
+                                    {cfg.label}
+                                  </div>
+                                  {lead.estado === estado && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
+                          {leadCfg.label}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 flex-wrap mb-1">
                       <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
@@ -693,7 +737,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                       </span>
                       <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{formatFecha(lead.fecha)}</span>
                     </div>
-                    {lead.brokerAsignado && (
+                    {lead.brokerAsignado && viewType === 'inmobiliaria' && (
                       <div className="flex items-center gap-1 mt-1">
                         <UserCheck className="w-3 h-3" style={{ color: '#006B4E' }} />
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#006B4E', fontWeight: 500 }}>{lead.brokerAsignado}</span>
@@ -701,18 +745,31 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                     )}
                   </div>
 
-                  {/* Action (inmobiliaria only) */}
-                  {viewType === 'inmobiliaria' && (
-                    <button
-                      onClick={() => { setShowAsignarLeadBroker(lead.id); setLeadBrokerSeleccionado(lead.brokerAsignado || ''); }}
-                      className="flex-shrink-0 py-1.5 rounded-full text-xs font-medium transition-colors"
-                      style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '120px', textAlign: 'center' }}
-                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
-                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-                    >
-                      {lead.brokerAsignado ? 'Reasignar' : 'Asignar broker'}
-                    </button>
-                  )}
+                  {/* Acciones */}
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {viewType === 'broker' && (
+                      <button
+                        onClick={() => setShowContactarModal(lead)}
+                        className="py-1.5 rounded-full text-xs font-medium transition-colors"
+                        style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '90px', textAlign: 'center' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                      >
+                        Contactar
+                      </button>
+                    )}
+                    {viewType === 'inmobiliaria' && (
+                      <button
+                        onClick={() => { setShowAsignarLeadBroker(lead.id); setLeadBrokerSeleccionado(lead.brokerAsignado || ''); }}
+                        className="py-1.5 rounded-full text-xs font-medium transition-colors"
+                        style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '120px', textAlign: 'center' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                      >
+                        {lead.brokerAsignado ? 'Reasignar' : 'Asignar broker'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -1161,6 +1218,63 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                 style={{ backgroundColor: brokerSeleccionado ? '#006B4E' : '#E5E5E5', color: brokerSeleccionado ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: brokerSeleccionado ? 'pointer' : 'not-allowed' }}>
                 Confirmar asignación
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Contactar lead */}
+      {showContactarModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={e => { if (e.target === e.currentTarget) setShowContactarModal(null); }}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm space-y-5" style={{ border: '1px solid #E5E5E5' }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Contactar lead</h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373', marginTop: '2px' }}>{showContactarModal.nombre}</p>
+              </div>
+              <button onClick={() => setShowContactarModal(null)} className="p-1 rounded-lg hover:bg-gray-100">
+                <X className="w-4 h-4" style={{ color: '#6B7280' }} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {/* WhatsApp */}
+              <a
+                href={`https://wa.me/${showContactarModal.telefono.replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(showContactarModal.nombre)}%2C%20te%20contacto%20por%20tu%20inter%C3%A9s%20en%20${encodeURIComponent(showContactarModal.parcela)}.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 rounded-2xl transition-colors"
+                style={{ backgroundColor: '#F0FDF4', border: '1.5px solid #BBF7D0', textDecoration: 'none' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#DCFCE7'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#F0FDF4'; }}
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#25D366' }}>
+                  <svg viewBox="0 0 24 24" fill="white" style={{ width: '20px', height: '20px' }}>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: '#166534' }}>WhatsApp</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#4B7C5B' }}>{showContactarModal.telefono}</p>
+                </div>
+              </a>
+
+              {/* Email */}
+              <a
+                href={`mailto:${showContactarModal.email}?subject=${encodeURIComponent(`Consulta sobre ${showContactarModal.parcela}`)}&body=${encodeURIComponent(`Hola ${showContactarModal.nombre},\n\nMe pongo en contacto contigo por tu interés en ${showContactarModal.parcela}.\n\nQuedo a tu disposición.`)}`}
+                className="flex items-center gap-4 p-4 rounded-2xl transition-colors"
+                style={{ backgroundColor: '#EFF6FF', border: '1.5px solid #BFDBFE', textDecoration: 'none' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#DBEAFE'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#EFF6FF'; }}
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#3B82F6' }}>
+                  <Mail className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: '#1E40AF' }}>Correo electrónico</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#3B5EA6' }}>{showContactarModal.email}</p>
+                </div>
+              </a>
             </div>
           </div>
         </div>
