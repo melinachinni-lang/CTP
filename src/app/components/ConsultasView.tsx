@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck, Users, SlidersHorizontal } from 'lucide-react';
+import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck, Users, SlidersHorizontal, Plus, Minus } from 'lucide-react';
 
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
@@ -758,7 +758,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
             const canAct = canManage(c);
             const showContactInfo = (viewType === 'inmobiliaria' || viewType === 'broker') && activeTab === 'recibidas';
             return (
-              <div key={c.id} className="rounded-xl overflow-hidden" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div key={c.id} className="rounded-xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF', overflow: 'visible' }}>
                 {/* Row */}
                 <div
                   onClick={() => { setExpandedId(isExpanded ? null : c.id); setShowStatusDropdown(null); }}
@@ -854,8 +854,10 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                         </div>
                       )}
                     </div>
-                    <div onClick={e => { e.stopPropagation(); setExpandedId(isExpanded ? null : c.id); setShowStatusDropdown(null); }} style={{ cursor: 'pointer' }}>
-                      {isExpanded ? <ChevronUp className="w-4 h-4" style={{ color: '#9CA3AF' }} /> : <ChevronDown className="w-4 h-4" style={{ color: '#9CA3AF' }} />}
+                    <div onClick={e => { e.stopPropagation(); setExpandedId(isExpanded ? null : c.id); setShowStatusDropdown(null); }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                      {isExpanded
+                        ? <Minus className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+                        : <Plus className="w-4 h-4" style={{ color: '#9CA3AF' }} />}
                     </div>
                   </div>
                 </div>
