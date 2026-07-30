@@ -15,7 +15,7 @@ interface Lead {
   parcela: string;
   origen: string;
   fecha: string;
-  estado: 'sin_asignar' | 'asignado';
+  estado: 'sin_asignar' | 'asignado' | 'nuevo' | 'contactado' | 'cerrado';
   brokerAsignado?: string;
 }
 
@@ -244,13 +244,16 @@ const LEADS_MOCK: Lead[] = [
 ];
 
 const LEADS_BROKER_MOCK: Lead[] = [
-  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'asignado', brokerAsignado: 'Carlos Pérez' },
-  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'asignado', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'nuevo', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'nuevo', brokerAsignado: 'Carlos Pérez' },
 ];
 
 const LEAD_ESTADO_CONFIG: Record<Lead['estado'], { label: string; bg: string; text: string; border: string }> = {
-  sin_asignar: { label: 'Sin asignar', bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
-  asignado:    { label: 'Asignado',    bg: '#D1FAE5', text: '#065F46', border: '#6EE7B7' },
+  sin_asignar: { label: 'Sin asignar', bg: '#FEF3C7', text: '#92400E',  border: '#FCD34D' },
+  asignado:    { label: 'Asignado',    bg: '#D1FAE5', text: '#065F46',  border: '#6EE7B7' },
+  nuevo:       { label: 'Nuevo',       bg: '#EDE9FE', text: '#5B21B6',  border: '#C4B5FD' },
+  contactado:  { label: 'Contactado',  bg: '#DBEAFE', text: '#1E40AF',  border: '#93C5FD' },
+  cerrado:     { label: 'Cerrado',     bg: '#F3F4F6', text: '#6B7280',  border: '#D1D5DB' },
 };
 
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
@@ -277,7 +280,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [brokerSeleccionado, setBrokerSeleccionado] = useState('');
   const [showAsignarLeadBroker, setShowAsignarLeadBroker] = useState<string | null>(null);
   const [leadBrokerSeleccionado, setLeadBrokerSeleccionado] = useState('');
-  const [leadFiltro, setLeadFiltro] = useState<'todos' | 'asignados' | 'sin_asignar'>('todos');
+  const [leadFiltro, setLeadFiltro] = useState<'todos' | 'asignados' | 'sin_asignar' | 'nuevo' | 'contactado' | 'cerrado'>('todos');
   const [showLeadFiltroDropdown, setShowLeadFiltroDropdown] = useState(false);
   const leadFiltroRef = useRef<HTMLDivElement>(null);
   const [showLeadStatusDropdown, setShowLeadStatusDropdown] = useState<string | null>(null);
@@ -344,7 +347,9 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
   const listaBase = activeTab === 'recibidas' ? consultas.recibidas : activeTab === 'enviadas' ? consultas.enviadas : activeTab === 'reservas' ? reservas : [];
   const lista = consultaFiltro === 'todas' ? listaBase : listaBase.filter(c => c.estado === consultaFiltro);
-  const leadsFiltered = leadFiltro === 'asignados'
+  const leadsFiltered = viewType === 'broker'
+    ? (leadFiltro === 'todos' ? leads : leads.filter(l => l.estado === leadFiltro))
+    : leadFiltro === 'asignados'
     ? leads.filter(l => l.brokerAsignado)
     : leadFiltro === 'sin_asignar'
     ? leads.filter(l => !l.brokerAsignado)
@@ -522,7 +527,44 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
           </div>
         )}
 
-        {/* Filtro leads dropdown */}
+        {/* Filtro leads dropdown — broker */}
+        {activeTab === 'leads' && viewType === 'broker' && (
+          <div className="relative" ref={leadFiltroRef}>
+            <button
+              onClick={() => setShowLeadFiltroDropdown(v => !v)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors"
+              style={{ border: '1px solid #E5E5E5', backgroundColor: leadFiltro !== 'todos' ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', fontSize: '13px', color: leadFiltro !== 'todos' ? '#006B4E' : '#374151', cursor: 'pointer' }}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" style={{ color: leadFiltro !== 'todos' ? '#006B4E' : '#737373' }} />
+              <span>{leadFiltro === 'todos' ? 'Filtros' : LEAD_ESTADO_CONFIG[leadFiltro as 'nuevo' | 'contactado' | 'cerrado']?.label ?? 'Filtros'}</span>
+              <ChevronDown className="w-3.5 h-3.5" style={{ color: leadFiltro !== 'todos' ? '#006B4E' : '#9CA3AF', transform: showLeadFiltroDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} />
+            </button>
+            {showLeadFiltroDropdown && (
+              <div className="absolute right-0 mt-1 rounded-xl overflow-hidden z-20" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', minWidth: '140px' }}>
+                {([
+                  { id: 'todos', label: 'Todos' },
+                  { id: 'nuevo', label: 'Nuevo' },
+                  { id: 'contactado', label: 'Contactado' },
+                  { id: 'cerrado', label: 'Cerrado' },
+                ] as const).map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => { setLeadFiltro(opt.id); setShowLeadFiltroDropdown(false); }}
+                    className="w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors"
+                    style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: leadFiltro === opt.id ? '#006B4E' : '#374151', backgroundColor: leadFiltro === opt.id ? '#F0FDF4' : 'transparent', fontWeight: leadFiltro === opt.id ? 500 : 400 }}
+                    onMouseEnter={e => { if (leadFiltro !== opt.id) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                    onMouseLeave={e => { if (leadFiltro !== opt.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
+                    {opt.label}
+                    {leadFiltro === opt.id && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Filtro leads dropdown — inmobiliaria */}
         {activeTab === 'leads' && viewType === 'inmobiliaria' && (
           <div className="relative" ref={leadFiltroRef}>
             <button
@@ -680,10 +722,46 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{lead.nombre}</span>
-                      {/* Badge estado */}
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
-                        {leadCfg.label}
-                      </span>
+                      {/* Badge estado — clickeable para broker */}
+                      {viewType === 'broker' ? (
+                        <div className="relative" style={{ display: 'inline-block' }}>
+                          <button
+                            onClick={() => setShowLeadStatusDropdown(showLeadStatusDropdown === lead.id ? null : lead.id)}
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+                            style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}
+                          >
+                            {leadCfg.label}
+                            <ChevronDown className="w-3 h-3" style={{ transform: showLeadStatusDropdown === lead.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }} />
+                          </button>
+                          {showLeadStatusDropdown === lead.id && (
+                            <div className="absolute left-0 mt-1 rounded-xl overflow-hidden z-30" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', minWidth: '130px' }}>
+                              {(['nuevo', 'contactado', 'cerrado'] as const).map(estado => {
+                                const cfg = LEAD_ESTADO_CONFIG[estado];
+                                return (
+                                  <button
+                                    key={estado}
+                                    onClick={() => { handleCambiarEstadoLead(lead.id, estado); setShowLeadStatusDropdown(null); }}
+                                    className="w-full flex items-center justify-between px-3 py-2.5 text-left"
+                                    style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: lead.estado === estado ? '#006B4E' : '#374151', backgroundColor: lead.estado === estado ? '#F0FDF4' : 'transparent', fontWeight: lead.estado === estado ? 500 : 400 }}
+                                    onMouseEnter={e => { if (lead.estado !== estado) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                                    onMouseLeave={e => { if (lead.estado !== estado) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.border }} />
+                                      {cfg.label}
+                                    </div>
+                                    {lead.estado === estado && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
+                          {leadCfg.label}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 flex-wrap mb-1">
                       <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
@@ -712,7 +790,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {viewType === 'broker' && (
                       <button
-                        onClick={() => setShowContactarModal(lead)}
+                        onClick={() => { setShowContactarModal(lead); if (lead.estado === 'nuevo') handleCambiarEstadoLead(lead.id, 'contactado'); }}
                         className="py-1.5 rounded-full text-xs font-medium transition-colors"
                         style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', width: '90px', textAlign: 'center' }}
                         onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
