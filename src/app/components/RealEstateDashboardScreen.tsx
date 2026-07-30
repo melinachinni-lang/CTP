@@ -53,18 +53,17 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     {
       key: 'gestion', label: 'Gestión',
       items: [
-        { id: 'leads',       label: 'Leads',               icon: Users },
-        { id: 'brokers',     label: 'Brokers',             icon: UserCheck },
+        { id: 'consultas',   label: 'Consultas',          icon: MessageCircle },
+        { id: 'brokers',     label: 'Brokers',            icon: UserCheck },
         { id: 'reservas',    label: 'Valores de reservas', icon: FileText },
-        { id: 'asignaciones',label: 'Asignaciones',        icon: Users },
-        { id: 'whatsapp',    label: 'Números WhatsApp',    icon: Phone },
-        { id: 'calendarios', label: 'Calendarios',         icon: Calendar },
+        { id: 'asignaciones',label: 'Asignaciones',       icon: Users },
+        { id: 'whatsapp',    label: 'Números WhatsApp',   icon: Phone },
+        { id: 'calendarios', label: 'Calendarios',        icon: Calendar },
       ],
     },
     {
       key: 'interacciones', label: 'Actividad',
       items: [
-        { id: 'inquiries',     label: 'Consultas',     icon: MessageCircle },
         { id: 'interacciones', label: 'Interacciones', icon: MessageSquare },
         { id: 'citas',         label: 'Citas',         icon: CalendarCheck },
       ],
@@ -243,9 +242,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       <div className="fixed overflow-y-auto bg-white sm:rounded-2xl sm:shadow-[0_0_40px_rgba(0,0,0,0.45)] inset-0 sm:inset-auto sm:left-[256px] sm:top-[44px] sm:right-3 sm:bottom-3" style={{ zIndex: 10 }}>
         {currentSection === 'home' && <HomeContent setCurrentSection={setCurrentSection} setTriggerPublishModal={setTriggerPublishModal} />}
         {currentSection === 'my-publications' && <MyPublicationsView userType="inmobiliaria" userId="inmob-123" onNavigate={onNavigate} onNavigateToSection={setCurrentSection} autoOpenModal={triggerPublishModal} onTypeModalCancel={() => setCurrentSection(publishModalOrigin)} />}
-        {currentSection === 'leads'     && <ConsultasView viewType="inmobiliaria" />}
+        {currentSection === 'consultas' && <ConsultasView viewType="inmobiliaria" />}
         {currentSection === 'brokers'   && <TeamContent />}
-        {currentSection === 'inquiries' && <ConsultasView viewType="inmobiliaria" />}
         {currentSection === 'reservas' && (
           <div className="p-8">
             <div className="mb-6">

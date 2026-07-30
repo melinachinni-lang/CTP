@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
-import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck } from 'lucide-react';
+import { Calendar, MessageCircle, Phone, Video, X, Check, Clock, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Bell, Info, FileText, Send, Reply, Tag, Mail, UserCheck, Users } from 'lucide-react';
 
 interface ConsultasViewProps {
   viewType?: 'personal' | 'broker' | 'inmobiliaria';
   onFeedback?: (msg: string) => void;
-  defaultTab?: 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas';
+  defaultTab?: 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas' | 'leads';
+}
+
+interface Lead {
+  id: string;
+  nombre: string;
+  email: string;
+  telefono: string;
+  parcela: string;
+  origen: string;
+  fecha: string;
+  estado: 'nuevo' | 'contactado' | 'en_seguimiento' | 'cerrado';
+  brokerAsignado?: string;
 }
 
 type EstadoConsulta = 'pendiente' | 'confirmada' | 'reprogramada' | 'cancelada' | 'expirada';
@@ -223,8 +235,28 @@ const NOTIFICACIONES_MOCK = [
   { id: 'n5', type: 'sistema' as const, text: 'Recuerda completar tu perfil para más visibilidad', time: 'Hace 2 días', read: true },
 ];
 
+const LEADS_MOCK: Lead[] = [
+  { id: 'l1', nombre: 'Juan Martínez', email: 'juan.m@gmail.com', telefono: '+56 9 8834 5566', parcela: 'Parcela Vista Cordillera', origen: 'Portal web', fecha: '2026-05-15', estado: 'nuevo' },
+  { id: 'l2', nombre: 'Andrea López', email: 'andrea.l@outlook.com', telefono: '+56 9 7723 4411', parcela: 'Parcela Lago Azul', origen: 'Portal web', fecha: '2026-05-14', estado: 'contactado', brokerAsignado: 'Ana Silva' },
+  { id: 'l3', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'en_seguimiento', brokerAsignado: 'Carlos Pérez' },
+  { id: 'l4', nombre: 'Camila Herrera', email: 'c.herrera@gmail.com', telefono: '+56 9 5501 2299', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-12', estado: 'nuevo' },
+  { id: 'l5', nombre: 'Roberto Díaz', email: 'rdiaz@yahoo.com', telefono: '+56 9 4490 1188', parcela: 'Parcela Lago Azul', origen: 'Formulario', fecha: '2026-05-10', estado: 'cerrado', brokerAsignado: 'Ana Silva' },
+];
+
+const LEADS_BROKER_MOCK: Lead[] = [
+  { id: 'lb1', nombre: 'Felipe Torres', email: 'ftorres@email.com', telefono: '+56 9 6612 3300', parcela: 'Parcela Vista Cordillera', origen: 'WhatsApp', fecha: '2026-05-13', estado: 'en_seguimiento', brokerAsignado: 'Carlos Pérez' },
+  { id: 'lb2', nombre: 'Valentina Soto', email: 'vsoto@gmail.com', telefono: '+56 9 3312 7744', parcela: 'Parcela Los Robles', origen: 'Portal web', fecha: '2026-05-09', estado: 'contactado', brokerAsignado: 'Carlos Pérez' },
+];
+
+const LEAD_ESTADO_CONFIG: Record<Lead['estado'], { label: string; bg: string; text: string; border: string }> = {
+  nuevo:          { label: 'Nuevo',          bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
+  contactado:     { label: 'Contactado',     bg: '#DBEAFE', text: '#1E40AF', border: '#93C5FD' },
+  en_seguimiento: { label: 'En seguimiento', bg: '#DCFCE7', text: '#166534', border: '#86EFAC' },
+  cerrado:        { label: 'Cerrado',        bg: '#F3F4F6', text: '#6B7280', border: '#D1D5DB' },
+};
+
 export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 'recibidas' }: ConsultasViewProps) {
-  const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones' | 'reservas'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'recibidas' | 'enviadas' | 'notificaciones' | 'reservas' | 'leads'>(defaultTab);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -240,10 +272,13 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
   const [consultas, setConsultas] = useState<{ recibidas: Consulta[]; enviadas: Consulta[] }>({ recibidas: RECIBIDAS, enviadas: ENVIADAS });
   const [reservas, setReservas] = useState<Consulta[]>(RESERVAS_MOCK);
   const [notificaciones, setNotificaciones] = useState(NOTIFICACIONES_MOCK);
+  const [leads, setLeads] = useState<Lead[]>(viewType === 'broker' ? LEADS_BROKER_MOCK : LEADS_MOCK);
   const [showReprogramar, setShowReprogramar] = useState<string | null>(null);
   const [showCancelar, setShowCancelar] = useState<string | null>(null);
   const [showAsignarBroker, setShowAsignarBroker] = useState<string | null>(null);
   const [brokerSeleccionado, setBrokerSeleccionado] = useState('');
+  const [showAsignarLeadBroker, setShowAsignarLeadBroker] = useState<string | null>(null);
+  const [leadBrokerSeleccionado, setLeadBrokerSeleccionado] = useState('');
   const [repFecha, setRepFecha] = useState('');
   const [repHora, setRepHora] = useState('');
   const [cancelMotivo, setCancelMotivo] = useState('');
@@ -327,6 +362,14 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
     showFeedback(`Broker asignado correctamente. Se notificó a ${brokerSeleccionado}.`);
   };
 
+  const handleAsignarLeadBroker = (id: string) => {
+    if (!leadBrokerSeleccionado) return;
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, brokerAsignado: leadBrokerSeleccionado, estado: 'contactado' as Lead['estado'] } : l));
+    setShowAsignarLeadBroker(null);
+    setLeadBrokerSeleccionado('');
+    showFeedback(`Lead asignado a ${leadBrokerSeleccionado}. Recibirá una notificación.`);
+  };
+
   return (
     <main className="px-6 py-6 space-y-6">
       {/* Feedback toast */}
@@ -353,10 +396,11 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
           { id: 'recibidas', label: 'Recibidas', count: consultas.recibidas.length },
           ...(viewType === 'personal' ? [{ id: 'enviadas', label: 'Enviadas', count: consultas.enviadas.length }] : []),
           { id: 'notificaciones', label: 'Notificaciones', count: unreadNotifCount },
+          ...(viewType !== 'personal' ? [{ id: 'leads', label: 'Leads', count: leads.length }] : []),
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas'); setExpandedId(null); }}
+            onClick={() => { setActiveTab(tab.id as 'recibidas' | 'enviadas' | 'notificaciones' | 'reservas' | 'leads'); setExpandedId(null); }}
             className="px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1"
             style={{
               fontFamily: 'var(--font-body)',
@@ -451,8 +495,83 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
         </div>
       )}
 
+      {/* Leads tab content */}
+      {activeTab === 'leads' && (
+        <div className="space-y-3">
+          {leads.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
+                <Users className="w-8 h-8" style={{ color: '#D1D5DB' }} />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>
+                Sin leads asignados
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+                {viewType === 'broker' ? 'Los leads que te asignen aparecerán acá.' : 'Los leads captados aparecerán acá.'}
+              </p>
+            </div>
+          ) : leads.map(lead => {
+            const leadCfg = LEAD_ESTADO_CONFIG[lead.estado];
+            return (
+              <div key={lead.id} className="rounded-xl p-4 flex items-center gap-4" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+                {/* Avatar */}
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F3F4F6' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '16px', fontWeight: 600, color: '#374151' }}>
+                    {lead.nombre.charAt(0)}
+                  </span>
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A' }}>{lead.nombre}</span>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: leadCfg.bg, color: leadCfg.text, border: `1px solid ${leadCfg.border}`, fontFamily: 'var(--font-body)' }}>
+                      {leadCfg.label}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 flex-wrap mb-1">
+                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                      <Mail className="w-3 h-3" style={{ color: '#9CA3AF' }} />{lead.email}
+                    </span>
+                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#6B7280' }}>
+                      <Phone className="w-3 h-3" style={{ color: '#9CA3AF' }} />{lead.telefono}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#737373' }}>{lead.parcela}</span>
+                    <span className="flex items-center gap-1" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                      <Tag className="w-3 h-3" />{lead.origen}
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{formatFecha(lead.fecha)}</span>
+                  </div>
+                  {lead.brokerAsignado && (
+                    <div className="flex items-center gap-1 mt-1">
+                      <UserCheck className="w-3 h-3" style={{ color: '#006B4E' }} />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#006B4E', fontWeight: 500 }}>{lead.brokerAsignado}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action (inmobiliaria only) */}
+                {viewType === 'inmobiliaria' && (
+                  <button
+                    onClick={() => { setShowAsignarLeadBroker(lead.id); setLeadBrokerSeleccionado(lead.brokerAsignado || ''); }}
+                    className="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+                    style={{ border: '1px solid #006B4E', color: '#006B4E', backgroundColor: 'transparent', fontFamily: 'var(--font-body)', fontSize: '12px', whiteSpace: 'nowrap' }}
+                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
+                    {lead.brokerAsignado ? 'Reasignar' : 'Asignar broker'}
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* Lista (Recibidas / Enviadas) */}
-      {activeTab !== 'notificaciones' && (isLoading ? (
+      {activeTab !== 'notificaciones' && activeTab !== 'leads' && (isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
@@ -851,6 +970,67 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
                 disabled={!brokerSeleccionado}
                 className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
                 style={{ backgroundColor: brokerSeleccionado ? '#006B4E' : '#E5E5E5', color: brokerSeleccionado ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: brokerSeleccionado ? 'pointer' : 'not-allowed' }}>
+                Confirmar asignación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Asignar Broker a Lead */}
+      {showAsignarLeadBroker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm mx-4 space-y-4" style={{ border: '1px solid #E5E5E5' }}>
+            <div className="flex items-center justify-between">
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A' }}>Asignar broker al lead</h3>
+              <button onClick={() => { setShowAsignarLeadBroker(null); setLeadBrokerSeleccionado(''); }} className="p-1 rounded-lg hover:bg-gray-100">
+                <X className="w-4 h-4" style={{ color: '#6B7280' }} />
+              </button>
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', lineHeight: '1.5' }}>
+              Elegí el broker que se encargará de este lead. Recibirá una notificación con los datos de contacto.
+            </p>
+            <div className="space-y-2">
+              {BROKERS_MOCK.map(b => (
+                <button
+                  key={b.id}
+                  onClick={() => b.disponible && setLeadBrokerSeleccionado(b.nombre)}
+                  disabled={!b.disponible}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all"
+                  style={{
+                    border: `1.5px solid ${leadBrokerSeleccionado === b.nombre ? '#006B4E' : '#E5E5E5'}`,
+                    backgroundColor: leadBrokerSeleccionado === b.nombre ? '#F0FDF4' : b.disponible ? '#FFFFFF' : '#F9FAFB',
+                    opacity: b.disponible ? 1 : 0.5,
+                    cursor: b.disponible ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: leadBrokerSeleccionado === b.nombre ? '#DCFCE7' : '#F3F4F6' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 600, color: leadBrokerSeleccionado === b.nombre ? '#166534' : '#6B7280' }}>
+                      {b.nombre.charAt(0)}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>{b.nombre}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: b.disponible ? '#737373' : '#D1D5DB' }}>
+                      {b.rol} · {b.disponible ? 'Disponible' : 'No disponible'}
+                    </p>
+                  </div>
+                  {leadBrokerSeleccionado === b.nombre && (
+                    <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#006B4E' }} />
+                  )}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-3 pt-1">
+              <button onClick={() => { setShowAsignarLeadBroker(null); setLeadBrokerSeleccionado(''); }} className="px-4 py-2.5 rounded-full text-sm font-medium"
+                style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>
+                Cancelar
+              </button>
+              <button
+                onClick={() => handleAsignarLeadBroker(showAsignarLeadBroker)}
+                disabled={!leadBrokerSeleccionado}
+                className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+                style={{ backgroundColor: leadBrokerSeleccionado ? '#006B4E' : '#E5E5E5', color: leadBrokerSeleccionado ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', cursor: leadBrokerSeleccionado ? 'pointer' : 'not-allowed' }}>
                 Confirmar asignación
               </button>
             </div>
