@@ -345,6 +345,11 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
 
   const listaBase = activeTab === 'recibidas' ? consultas.recibidas : activeTab === 'enviadas' ? consultas.enviadas : activeTab === 'reservas' ? reservas : [];
   const lista = consultaFiltro === 'todas' ? listaBase : listaBase.filter(c => c.estado === consultaFiltro);
+  const leadsFiltered = leadFiltro === 'asignados'
+    ? leads.filter(l => l.brokerAsignado)
+    : leadFiltro === 'sin_asignar'
+    ? leads.filter(l => !l.brokerAsignado)
+    : [...leads].sort((a, b) => (a.brokerAsignado ? 1 : 0) - (b.brokerAsignado ? 1 : 0));
   const canManage = (c: Consulta) => {
     const manageable = c.tipo !== 'whatsapp' && c.tipo !== 'formulario';
     if (activeTab === 'reservas') return manageable && (c.estado === 'confirmada' || c.estado === 'reprogramada');
@@ -647,18 +652,9 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
       )}
 
       {/* Leads tab content */}
-      {activeTab === 'leads' && (() => {
-        const leadsFiltered = (() => {
-          const base = leadFiltro === 'asignados'
-            ? leads.filter(l => l.brokerAsignado)
-            : leadFiltro === 'sin_asignar'
-            ? leads.filter(l => !l.brokerAsignado)
-            : [...leads].sort((a, b) => (a.brokerAsignado ? 1 : 0) - (b.brokerAsignado ? 1 : 0));
-          return base;
-        })();
-        return (
-          <div className="space-y-3">
-            {leadsFiltered.length === 0 ? (
+      {activeTab === 'leads' && (
+        <div className="space-y-3">
+          {leadsFiltered.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F5F5F5' }}>
                   <Users className="w-8 h-8" style={{ color: '#D1D5DB' }} />
@@ -775,8 +771,7 @@ export function ConsultasView({ viewType = 'personal', onFeedback, defaultTab = 
               );
             })}
           </div>
-        );
-      })()}
+      )}
 
       {/* Lista (Recibidas / Enviadas) */}
       {activeTab !== 'notificaciones' && activeTab !== 'leads' && (isLoading ? (
