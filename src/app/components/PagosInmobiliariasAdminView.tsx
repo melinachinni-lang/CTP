@@ -268,7 +268,7 @@ export function PagosInmobiliariasAdminView() {
         {/* Fila de totales */}
         <div className="grid px-6 py-4 items-center" style={{ gridTemplateColumns: '1fr 160px 200px', backgroundColor: '#F9FAFB', borderTop: '2px solid #E5E5E5' }}>
           <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
-            Total {mesSeleccionado}
+            Total {appliedRange ? `${appliedRange.from} – ${appliedRange.to}` : PERIODO_LABELS[periodo]}
           </span>
           <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
             {totalReservas} reservas
