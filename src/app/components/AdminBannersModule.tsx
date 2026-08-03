@@ -3,6 +3,7 @@ import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, X, Upload, AlertT
 
 const MAX_TITULO = 60;
 const MAX_DESC = 120;
+const MAX_BANNERS_ACTIVOS = 4;
 
 interface BannerAdmin {
   id: number;
@@ -14,6 +15,7 @@ interface BannerAdmin {
   fechaFin: string;
   imagen: string | null;
   activo: boolean;
+  borrador: boolean;
 }
 
 function formatDate(d: string) {
@@ -35,6 +37,7 @@ const initialBanners: BannerAdmin[] = [
     fechaFin: '2025-03-31',
     imagen: 'https://images.unsplash.com/photo-1609126917056-243a15e2e789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2YWxsZXklMjBsYW5kfGVufDF8fHx8MTc2ODg2NTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
     activo: true,
+    borrador: false,
   },
   {
     id: 2,
@@ -46,6 +49,7 @@ const initialBanners: BannerAdmin[] = [
     fechaFin: '2025-04-30',
     imagen: 'https://images.unsplash.com/photo-1766830110938-0ea8a6d78ecb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYW5kJTIwZGV2ZWxvcG1lbnQlMjBwcm9qZWN0fGVufDF8fHx8MTc2ODg2NjMzOHww&ixlib=rb-4.1.0&q=80&w=1080',
     activo: true,
+    borrador: false,
   },
   {
     id: 3,
@@ -57,15 +61,17 @@ const initialBanners: BannerAdmin[] = [
     fechaFin: '2025-05-31',
     imagen: 'https://images.unsplash.com/photo-1748711243680-1c4ab4f9979f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmR8ZW58MXx8fHwxNzY4ODY1MzExfDA&ixlib=rb-4.1.0&q=80&w=1080',
     activo: true,
+    borrador: false,
   },
 ];
 
 // ─── BANNER EDITOR ────────────────────────────────────────────────────────────
 
-function BannerEditor({ banner, onBack, onSave }: {
+function BannerEditor({ banner, onBack, onSave, activeBannersCount }: {
   banner: BannerAdmin | null;
   onBack: () => void;
   onSave: (data: Omit<BannerAdmin, 'id'>) => void;
+  activeBannersCount: number;
 }) {
   const [titulo, setTitulo] = useState(banner?.titulo ?? '');
   const [descripcion, setDescripcion] = useState(banner?.descripcion ?? '');
@@ -80,6 +86,8 @@ function BannerEditor({ banner, onBack, onSave }: {
   const [preview, setPreview] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [createSuccess, setCreateSuccess] = useState(false);
+  const [saveDraftSuccess, setSaveDraftSuccess] = useState(false);
+  const [limitError, setLimitError] = useState(false);
   const [errors, setErrors] = useState({ titulo: false, descripcion: false, textoBoton: false, urlBoton: false, fechaInicio: false });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!banner;
@@ -104,13 +112,26 @@ function BannerEditor({ banner, onBack, onSave }: {
     };
     setErrors(newErrors);
     if (Object.values(newErrors).some(Boolean)) return;
-    onSave({ titulo, descripcion, textoBoton, urlBoton, fechaInicio: fechaInicioFinal, fechaFin: fechaIndefinida ? '' : fechaFin, imagen: imagenUrl, activo });
+    if (activo && activeBannersCount >= MAX_BANNERS_ACTIVOS) {
+      setLimitError(true);
+      return;
+    }
+    setLimitError(false);
+    onSave({ titulo, descripcion, textoBoton, urlBoton, fechaInicio: fechaInicioFinal, fechaFin: fechaIndefinida ? '' : fechaFin, imagen: imagenUrl, activo, borrador: false });
     if (isEdit) {
       setSaveSuccess(true);
       setTimeout(() => { setSaveSuccess(false); onBack(); }, 1200);
     } else {
       setCreateSuccess(true);
     }
+  };
+
+  const handleSaveDraft = () => {
+    if (!titulo.trim()) { setErrors(e => ({ ...e, titulo: true })); return; }
+    const hoy = new Date().toISOString().split('T')[0];
+    onSave({ titulo, descripcion, textoBoton, urlBoton, fechaInicio: fechaInicio || hoy, fechaFin: fechaIndefinida ? '' : fechaFin, imagen: imagenUrl, activo: false, borrador: true });
+    setSaveDraftSuccess(true);
+    setTimeout(() => { setSaveDraftSuccess(false); onBack(); }, 1200);
   };
 
   const inputStyle = (hasError: boolean) => ({
@@ -464,6 +485,16 @@ function BannerEditor({ banner, onBack, onSave }: {
         )}
       </div>
 
+      {/* Limit error */}
+      {limitError && (
+        <div className="flex items-center gap-2 mt-4 px-4 py-3 rounded-xl" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A' }}>
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#D97706' }} />
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#92400E' }}>
+            Ya hay {MAX_BANNERS_ACTIVOS} banners activos. Desactiva uno antes de publicar, o guarda este como borrador.
+          </p>
+        </div>
+      )}
+
       {/* Footer sticky */}
       <div className="flex items-center justify-end gap-3 pt-6 mt-6" style={{ borderTop: '1px solid #E5E5E5', position: 'sticky', bottom: 0, backgroundColor: '#FAFAFA', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px', paddingRight: '24px' }}>
         <button
@@ -476,13 +507,22 @@ function BannerEditor({ banner, onBack, onSave }: {
           Cancelar
         </button>
         <button
+          onClick={handleSaveDraft}
+          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all"
+          style={{ backgroundColor: saveDraftSuccess ? '#DCFCE7' : '#F5F5F5', color: saveDraftSuccess ? '#166534' : '#737373', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+          onMouseEnter={e => { if (!saveDraftSuccess) e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
+          onMouseLeave={e => { if (!saveDraftSuccess) e.currentTarget.style.backgroundColor = saveDraftSuccess ? '#DCFCE7' : '#F5F5F5'; }}
+        >
+          {saveDraftSuccess ? <><Check className="w-4 h-4" /> Borrador guardado</> : 'Guardar como borrador'}
+        </button>
+        <button
           onClick={handleSave}
           className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all"
           style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
           onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }}
           onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}
         >
-          {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : isEdit ? 'Guardar cambios' : 'Crear banner'}
+          {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : isEdit ? 'Guardar cambios' : 'Publicar'}
         </button>
       </div>
     </div>
@@ -530,7 +570,7 @@ function LimitModal({ onClose }: { onClose: () => void }) {
           Límite de banners activos
         </h3>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6', marginBottom: '24px' }}>
-          Ya hay <strong style={{ color: '#0A0A0A' }}>3 banners activos</strong> en el portal. Para publicar uno nuevo, desactiva o elimina alguno de los existentes.
+          Ya hay <strong style={{ color: '#0A0A0A' }}>{MAX_BANNERS_ACTIVOS} banners activos</strong> en el portal. Para publicar uno nuevo, desactiva o elimina alguno de los existentes.
         </p>
         <button
           onClick={onClose}
@@ -573,7 +613,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
 
   function handleNuevoBanner() {
     const activos = banners.filter(b => b.activo).length;
-    if (activos >= 3) {
+    if (activos >= MAX_BANNERS_ACTIVOS) {
       setShowLimitModal(true);
     } else {
       setView('create');
@@ -583,8 +623,10 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   function handleSaveBanner(data: Omit<BannerAdmin, 'id'>) {
     if (typeof view === 'object') {
       setBanners(prev => prev.map(b => b.id === (view as BannerAdmin).id ? { ...b, ...data } : b));
-      showSuccess('Banner actualizado correctamente');
-      setTimeout(() => setView('list'), 1200);
+      if (!data.borrador) {
+        showSuccess('Banner actualizado correctamente');
+        setTimeout(() => setView('list'), 1200);
+      }
     } else {
       setBanners(prev => [{ id: nextId(), ...data }, ...prev]);
     }
@@ -613,11 +655,15 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const handleDragEnd = () => { setDragIndex(null); setDragOverIndex(null); };
 
   if (view !== 'list') {
+    const activeBannersCount = typeof view === 'object'
+      ? banners.filter(b => b.activo && b.id !== (view as BannerAdmin).id).length
+      : banners.filter(b => b.activo).length;
     return (
       <BannerEditor
         banner={typeof view === 'object' ? view : null}
         onBack={() => setView('list')}
         onSave={handleSaveBanner}
+        activeBannersCount={activeBannersCount}
       />
     );
   }
@@ -631,7 +677,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
             Banners promocionales
           </h1>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>
-            Gestiona el carrusel de banners del inicio del portal · Máx. 3 activos
+            Gestiona el carrusel de banners del inicio del portal · Máx. {MAX_BANNERS_ACTIVOS} activos
           </p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -754,8 +800,8 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
                     <h3 className="min-w-0" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: '600', color: '#0A0A0A', lineHeight: '1.3', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                       {banner.titulo}
                     </h3>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0" style={{ backgroundColor: banner.activo ? '#DCFCE7' : '#F3F4F6', color: banner.activo ? '#16A34A' : '#737373', fontFamily: 'var(--font-body)' }}>
-                      {banner.activo ? 'Activo' : 'Inactivo'}
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0" style={{ backgroundColor: banner.activo ? '#DCFCE7' : banner.borrador ? '#FEF3C7' : '#F3F4F6', color: banner.activo ? '#16A34A' : banner.borrador ? '#D97706' : '#737373', fontFamily: 'var(--font-body)' }}>
+                      {banner.activo ? 'Activo' : banner.borrador ? 'Borrador' : 'Inactivo'}
                     </span>
                   </div>
                   <p className="hidden sm:block" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '8px' }}>
@@ -775,7 +821,14 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
                   </div>
                   <div className="flex items-center justify-end flex-wrap gap-2 mt-2" onClick={e => e.stopPropagation()}>
                     <button title="Editar" onClick={() => setView(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}><Edit2 className="w-3.5 h-3.5" /></button>
-                    <button title={banner.activo ? 'Desactivar' : 'Activar'} onClick={() => setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: !b.activo } : b))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'}>
+                    <button title={banner.activo ? 'Desactivar' : 'Activar'} onClick={() => {
+                      if (!banner.activo) {
+                        if (banners.filter(b => b.activo).length >= MAX_BANNERS_ACTIVOS) { setShowLimitModal(true); return; }
+                        setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: true, borrador: false } : b));
+                      } else {
+                        setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, activo: false } : b));
+                      }
+                    }} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: banner.activo ? '#F0F5EB' : '#F5F5F5', color: banner.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = banner.activo ? '#E2EDCC' : '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = banner.activo ? '#F0F5EB' : '#F5F5F5'}>
                       {banner.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
                     <button title="Eliminar" onClick={() => setBannerToDelete(banner)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}><Trash2 className="w-3.5 h-3.5" /></button>
