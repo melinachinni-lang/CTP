@@ -79,11 +79,12 @@ const initialBanners: BannerAdmin[] = [
 
 // ─── BANNER EDITOR ────────────────────────────────────────────────────────────
 
-function BannerEditor({ banner, onBack, onSave, activeBannersCount }: {
+function BannerEditor({ banner, onBack, onSave, activeBannersCount, defaultActivo = true }: {
   banner: BannerAdmin | null;
   onBack: () => void;
   onSave: (data: Omit<BannerAdmin, 'id'>) => void;
   activeBannersCount: number;
+  defaultActivo?: boolean;
 }) {
   const [titulo, setTitulo] = useState(banner?.titulo ?? '');
   const [descripcion, setDescripcion] = useState(banner?.descripcion ?? '');
@@ -92,7 +93,7 @@ function BannerEditor({ banner, onBack, onSave, activeBannersCount }: {
   const [fechaInicio, setFechaInicio] = useState(banner?.fechaInicio ?? '');
   const [fechaFin, setFechaFin] = useState(banner?.fechaFin ?? '');
   const [fechaIndefinida, setFechaIndefinida] = useState(false);
-  const [activo, setActivo] = useState(banner?.activo ?? true);
+  const [activo, setActivo] = useState(banner?.activo ?? defaultActivo);
   const [showFechaInicioTooltip, setShowFechaInicioTooltip] = useState(false);
   const [imagenUrl, setImagenUrl] = useState<string | null>(banner?.imagen ?? null);
   const [preview, setPreview] = useState(false);
@@ -613,7 +614,7 @@ function LimitModal({ onClose, onCreateDraft }: { onClose: () => void; onCreateD
 
 export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   const [banners, setBanners] = useState<BannerAdmin[]>(initialBanners);
-  const [view, setView] = useState<'list' | 'create' | BannerAdmin>(autoOpenNew ? 'create' : 'list');
+  const [view, setView] = useState<'list' | 'create' | 'create-draft' | BannerAdmin>(autoOpenNew ? 'create' : 'list');
   const [bannerToDelete, setBannerToDelete] = useState<BannerAdmin | null>(null);
   const [showLimitModal, setShowLimitModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -687,6 +688,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
         onBack={() => setView('list')}
         onSave={handleSaveBanner}
         activeBannersCount={activeBannersCount}
+        defaultActivo={view !== 'create-draft'}
       />
     );
   }
@@ -868,7 +870,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
         <DeleteModal nombre={bannerToDelete.titulo} onConfirm={handleDeleteBanner} onClose={() => setBannerToDelete(null)} />
       )}
       {showLimitModal && (
-        <LimitModal onClose={() => setShowLimitModal(false)} onCreateDraft={() => { setShowLimitModal(false); setView('create'); }} />
+        <LimitModal onClose={() => setShowLimitModal(false)} onCreateDraft={() => { setShowLimitModal(false); setView('create-draft'); }} />
       )}
 
       {/* Toasts */}
