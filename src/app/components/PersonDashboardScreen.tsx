@@ -2227,14 +2227,6 @@ function MyPurchasesContent() {
     },
   ];
 
-  const STEPPER = [t.status.reservandose, t.status.reservada, t.status.aprobada];
-  const pasoActivo: Record<EstadoCompra, number> = {
-    reservandose: 0,
-    reservada:    1,
-    aprobada:     2,
-    rechazada:    -1,
-  };
-
   type EstadoPago = 'aprobado' | 'pendiente' | 'rechazado';
   type Pago = { fecha: string; monto: string; estado: EstadoPago; medio: string };
   type Documento = { nombre: string; tipo: string; fecha: string };
@@ -2270,7 +2262,6 @@ function MyPurchasesContent() {
   if (selectedId !== null) {
     const compra = compras.find(c => c.id === selectedId)!;
     const cfg = estadoConfig[compra.estado];
-    const pasoIdx = pasoActivo[compra.estado];
 
     return (
       <main className="px-8 py-8 space-y-6">
@@ -2319,102 +2310,6 @@ function MyPurchasesContent() {
             </div>
           </div>
         </div>
-
-        {/* Stepper */}
-        <div className="rounded-xl p-5" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#0A0A0A', marginBottom: '20px' }}>
-            {t.purchases.operationTracking}
-          </p>
-          {compra.estado === 'rechazada' ? (
-            <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #FECACA' }}>
-              {/* Información del rechazo */}
-              <div className="flex items-start gap-4 p-5" style={{ backgroundColor: '#FFF5F5' }}>
-                <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEE2E2' }}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M15 9l-6 6M9 9l6 6" />
-                  </svg>
-                </div>
-                <div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', fontWeight: 700, color: '#0A0A0A' }}>
-                    {t.purchases.operationRejected}
-                  </p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#6B7280', marginTop: '5px', lineHeight: '1.6' }}>
-                    {t.purchases.msg_rechazada}
-                  </p>
-                </div>
-              </div>
-              {/* Acción */}
-              <div className="flex items-center justify-between px-5 py-3" style={{ backgroundColor: '#FEF2F2', borderTop: '1px solid #FECACA' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                  ¿Necesitas ayuda con tu pago?
-                </p>
-                <a
-                  href="https://wa.me/56977714626?text=Hola%2C%20tuve%20un%20problema%20con%20el%20pago%20de%20mi%20reserva%20y%20necesito%20ayuda"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors flex-shrink-0"
-                  style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, textDecoration: 'none' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#01533E'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#006B4E'}
-                >
-                  Contactar soporte
-                </a>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center">
-              {STEPPER.map((label, i) => {
-                const done = pasoIdx > i;
-                const active = pasoIdx === i;
-                return (
-                  <React.Fragment key={label}>
-                    <div className="flex flex-col items-center gap-2 flex-shrink-0">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: done ? '#006B4E' : active ? '#FFFBEB' : '#F5F5F5', border: `2px solid ${done ? '#006B4E' : active ? '#F59E0B' : '#E5E5E5'}` }}>
-                        {done ? (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                        ) : (
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: active ? '#F59E0B' : '#D1D5DB' }} />
-                        )}
-                      </div>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: active ? 600 : 400, color: active ? '#0A0A0A' : done ? '#006B4E' : '#9CA3AF', whiteSpace: 'nowrap' }}>
-                        {label}
-                      </p>
-                    </div>
-                    {i < STEPPER.length - 1 && (
-                      <div className="flex-1 h-0.5 mx-2 mb-6" style={{ backgroundColor: done ? '#006B4E' : '#E5E5E5' }} />
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Mensaje contextual */}
-        {compra.estado === 'reservandose' && (
-          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 8v4l2 2" /></svg>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#92400E', lineHeight: '1.5' }}>
-              {t.purchases.msg_reservandose}
-            </p>
-          </div>
-        )}
-        {compra.estado === 'reservada' && (
-          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#EBFEF5', border: '1px solid #A7F3D0' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006B4E" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#065F46', lineHeight: '1.5' }}>
-              {t.purchases.msg_reservada}
-            </p>
-          </div>
-        )}
-        {compra.estado === 'aprobada' && (
-          <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: '#DCFCE7', border: '1px solid #86EFAC' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" strokeWidth="2" style={{ marginTop: '1px', flexShrink: 0 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#166534', lineHeight: '1.5' }}>
-              {t.purchases.msg_aprobada}
-            </p>
-          </div>
-        )}
 
         {/* Resumen de la operación */}
         <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
