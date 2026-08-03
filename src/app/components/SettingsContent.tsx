@@ -24,12 +24,6 @@ function getColor(name: string) {
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
-const TESTIMONIOS_INIT = [
-  { id: 1, nombre: 'Rodrigo Fuentes', fecha: 'Mayo 2026', estrellas: 5, texto: 'Excelente atención, muy profesionales. Nos ayudaron a encontrar la parcela perfecta en tiempo récord.', visible: true },
-  { id: 2, nombre: 'Camila Torres', fecha: 'Abril 2026', estrellas: 5, texto: 'Proceso muy transparente y el equipo siempre disponible para resolver dudas. Muy recomendable.', visible: true },
-  { id: 3, nombre: 'Sebastián Mora', fecha: 'Marzo 2026', estrellas: 4, texto: 'Buena experiencia general. El trámite tomó un poco más de lo esperado pero el resultado fue excelente.', visible: false },
-];
-
 const EQUIPO_MOCK = [
   { id: 1, nombre: 'Carlos Andrés Muñoz', rol: 'Broker Senior', publicaciones: 12 },
   { id: 2, nombre: 'Javiera Paz Rojas', rol: 'Broker', publicaciones: 7 },
@@ -106,16 +100,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [certificaciones, setCertificaciones] = useState(['Miembro CCHC', 'ISO 9001:2015']);
   const [newServicio, setNewServicio] = useState('');
   const [newCertificacion, setNewCertificacion] = useState('');
-  const [testimonios, setTestimonios] = useState(TESTIMONIOS_INIT);
-  const [linkCopiado, setLinkCopiado] = useState(false);
-  const [showCompartirModal, setShowCompartirModal] = useState(false);
-  const [showCompartirModalBroker, setShowCompartirModalBroker] = useState(false);
-  const [testimoniosBroker, setTestimoniosBroker] = useState([
-    { id: 1, nombre: 'María González', fecha: 'Mayo 2026', estrellas: 5, texto: 'Excelente profesional, me ayudó a encontrar la parcela perfecta para mi familia. Muy transparente y dedicado.', visible: true },
-    { id: 2, nombre: 'Carlos Muñoz', fecha: 'Abril 2026', estrellas: 5, texto: 'Súper recomendado. Conoce muy bien el mercado y fue muy honesto con todas mis consultas.', visible: true },
-    { id: 3, nombre: 'Andrea Silva', fecha: 'Marzo 2026', estrellas: 5, texto: 'Gracias a su asesoría pude hacer una excelente inversión. Muy profesional y atento.', visible: false },
-  ]);
-  const [linkCopiadoBroker, setLinkCopiadoBroker] = useState(false);
 
   // — Perfil personal state
   const [perfilPersonal, setPerfilPersonal] = useState({
@@ -203,8 +187,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     setTimeout(() => setPasswordSaved(false), 3500);
   };
 
-  const handleCopiarLink = () => setShowCompartirModal(true);
-  const handleCopiarLinkBroker = () => setShowCompartirModalBroker(true);
 
   const handleInviteUser = () => {
     if (!inviteEmail.trim() || !inviteEmail.includes('@')) {
@@ -755,71 +737,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </div>
             </div>
 
-            {/* Testimonios broker */}
-            <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4" style={{ color: '#6B7280' }} />
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Testimonios de clientes</p>
-                  <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0', fontFamily: 'var(--font-body)' }}>
-                    {testimoniosBroker.length}
-                  </span>
-                </div>
-                <button
-                  onClick={handleCopiarLinkBroker}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
-                  style={{ backgroundColor: linkCopiadoBroker ? '#F0FDF4' : '#006B4E', color: linkCopiadoBroker ? '#166534' : '#FFFFFF', border: linkCopiadoBroker ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)' }}
-                  onMouseEnter={e => { if (!linkCopiadoBroker) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                  onMouseLeave={e => { if (!linkCopiadoBroker) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-                >
-                  {linkCopiadoBroker ? <><Check className="w-3.5 h-3.5" /> ¡Link copiado!</> : <><Copy className="w-3.5 h-3.5" /> Compartir link</>}
-                </button>
-              </div>
-              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Comparte el link para que tus clientes dejen su testimonio en tu perfil público. Puedes mostrar u ocultar cada uno.
-              </p>
-              <div className="space-y-3">
-                {testimoniosBroker.map(t => {
-                  const color = getColor(t.nombre);
-                  return (
-                    <div key={t.id} className="p-4 rounded-xl" style={{ border: `1.5px solid ${t.visible ? '#E5E5E5' : '#F3F4F6'}`, backgroundColor: t.visible ? '#FAFAFA' : '#F9FAFB', opacity: t.visible ? 1 : 0.6 }}>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-3 flex-1">
-                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, color: color.text }}>{getInitials(t.nombre)}</span>
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{t.nombre}</p>
-                              <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{t.fecha}</p>
-                            </div>
-                            <div className="flex gap-0.5 mb-2">
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} className="w-3.5 h-3.5" fill={i < t.estrellas ? '#F59E0B' : 'none'} style={{ color: i < t.estrellas ? '#F59E0B' : '#E5E7EB' }} />
-                              ))}
-                            </div>
-                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#374151', lineHeight: '1.5' }}>{t.texto}</p>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-center gap-1 flex-shrink-0">
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: t.visible ? '#166534' : '#9CA3AF' }}>
-                            {t.visible ? 'Visible' : 'Oculto'}
-                          </span>
-                          <button
-                            onClick={() => setTestimoniosBroker(prev => prev.map(x => x.id === t.id ? { ...x, visible: !x.visible } : x))}
-                            className="relative flex-shrink-0"
-                            style={{ width: '36px', height: '20px', borderRadius: '200px', backgroundColor: t.visible ? '#006B4E' : '#D1D5DB', padding: '2px', transition: 'background-color 0.2s' }}
-                          >
-                            <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: '#FFFFFF', position: 'absolute', top: '2px', left: t.visible ? 'calc(100% - 18px)' : '2px', transition: 'left 0.2s' }} />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* Inmobiliaria asociada (read-only) */}
             <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
               <div className="flex items-center gap-2 mb-1">
@@ -1186,77 +1103,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                       <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{stat.sub}</p>
                     </div>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {/* Testimonios — solo inmobiliaria */}
-            {userType === 'inmobiliaria' && (
-              <div style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4" style={{ color: '#6B7280' }} />
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>
-                      Testimonios de clientes
-                    </p>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0', fontFamily: 'var(--font-body)' }}>
-                      {testimonios.length}
-                    </span>
-                  </div>
-                  <button
-                    onClick={handleCopiarLink}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
-                    style={{ backgroundColor: linkCopiado ? '#F0FDF4' : '#006B4E', color: linkCopiado ? '#166534' : '#FFFFFF', border: linkCopiado ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)' }}
-                    onMouseEnter={e => { if (!linkCopiado) e.currentTarget.style.backgroundColor = '#01533E'; }}
-                    onMouseLeave={e => { if (!linkCopiado) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-                  >
-                    {linkCopiado ? <><Check className="w-3.5 h-3.5" /> ¡Link copiado!</> : <><Copy className="w-3.5 h-3.5" /> Compartir link</>}
-                  </button>
-                </div>
-                <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                  Comparte el link para que tus clientes puedan dejar su testimonio en tu perfil público
-                </p>
-                <div className="space-y-3">
-                  {testimonios.map(t => {
-                    const color = getColor(t.nombre);
-                    return (
-                      <div key={t.id} className="p-4 rounded-xl" style={{ border: `1.5px solid ${t.visible ? '#E5E5E5' : '#F3F4F6'}`, backgroundColor: t.visible ? '#FAFAFA' : '#F9FAFB', opacity: t.visible ? 1 : 0.6 }}>
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex items-start gap-3 flex-1">
-                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color.bg }}>
-                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, color: color.text }}>{getInitials(t.nombre)}</span>
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#0A0A0A' }}>{t.nombre}</p>
-                                <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{t.fecha}</p>
-                              </div>
-                              <div className="flex gap-0.5 mb-2">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                  <Star key={i} className="w-3.5 h-3.5" fill={i < t.estrellas ? '#F59E0B' : 'none'} style={{ color: i < t.estrellas ? '#F59E0B' : '#E5E7EB' }} />
-                                ))}
-                              </div>
-                              <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#374151', lineHeight: '1.5' }}>{t.texto}</p>
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-center gap-1 flex-shrink-0">
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: t.visible ? '#166534' : '#9CA3AF' }}>
-                              {t.visible ? 'Visible' : 'Oculto'}
-                            </span>
-                            <button
-                              onClick={() => setTestimonios(prev => prev.map(x => x.id === t.id ? { ...x, visible: !x.visible } : x))}
-                              className="relative flex-shrink-0"
-                              style={{ width: '36px', height: '20px', borderRadius: '200px', backgroundColor: t.visible ? '#006B4E' : '#D1D5DB', padding: '2px', transition: 'background-color 0.2s' }}
-                            >
-                              <div
-                                style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: '#FFFFFF', position: 'absolute', top: '2px', left: t.visible ? 'calc(100% - 18px)' : '2px', transition: 'left 0.2s' }}
-                              />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
                 </div>
               </div>
             )}
@@ -1848,81 +1694,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
               >
                 Confirmar cambio
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Modal compartir link — inmobiliaria */}
-      {showCompartirModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={() => setShowCompartirModal(false)}>
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DCFCE7' }}>
-                  <Link2 className="w-5 h-5" style={{ color: '#006B4E' }} />
-                </div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A' }}>Compartir link de testimonios</h3>
-              </div>
-              <button onClick={() => setShowCompartirModal(false)} className="p-1 rounded-full hover:bg-gray-100 transition-colors">
-                <X className="w-5 h-5" style={{ color: '#737373' }} />
-              </button>
-            </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373', marginBottom: '20px', lineHeight: '1.5' }}>
-              Comparte este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
-            </p>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                readOnly
-                value="compratuparcela.cl/testimonial/valle-central"
-                className="flex-1 px-4 py-3 rounded-xl text-sm"
-                style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', outline: 'none' }}
-              />
-              <button
-                onClick={() => { setLinkCopiado(true); setTimeout(() => setLinkCopiado(false), 2500); }}
-                className="px-4 py-3 rounded-xl flex items-center gap-2 transition-all flex-shrink-0"
-                style={{ backgroundColor: linkCopiado ? '#F0FDF4' : '#006B4E', color: linkCopiado ? '#166534' : '#FFFFFF', border: linkCopiado ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500 }}
-              >
-                {linkCopiado ? <><Check className="w-4 h-4" />Copiado</> : <><Copy className="w-4 h-4" />Copiar</>}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal compartir link — broker */}
-      {showCompartirModalBroker && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={() => setShowCompartirModalBroker(false)}>
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#DCFCE7' }}>
-                  <Link2 className="w-5 h-5" style={{ color: '#006B4E' }} />
-                </div>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 600, color: '#0A0A0A' }}>Compartir link de testimonios</h3>
-              </div>
-              <button onClick={() => setShowCompartirModalBroker(false)} className="p-1 rounded-full hover:bg-gray-100 transition-colors">
-                <X className="w-5 h-5" style={{ color: '#737373' }} />
-              </button>
-            </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#737373', marginBottom: '20px', lineHeight: '1.5' }}>
-              Comparte este link con tus clientes para que puedan dejar su testimonio en tu perfil público.
-            </p>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                readOnly
-                value="compratuparcela.cl/testimonial/broker/carlos-rodriguez"
-                className="flex-1 px-4 py-3 rounded-xl text-sm"
-                style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', backgroundColor: '#FAFAFA', outline: 'none' }}
-              />
-              <button
-                onClick={() => { setLinkCopiadoBroker(true); setTimeout(() => setLinkCopiadoBroker(false), 2500); }}
-                className="px-4 py-3 rounded-xl flex items-center gap-2 transition-all flex-shrink-0"
-                style={{ backgroundColor: linkCopiadoBroker ? '#F0FDF4' : '#006B4E', color: linkCopiadoBroker ? '#166534' : '#FFFFFF', border: linkCopiadoBroker ? '1.5px solid #BBF7D0' : 'none', fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500 }}
-              >
-                {linkCopiadoBroker ? <><Check className="w-4 h-4" />Copiado</> : <><Copy className="w-4 h-4" />Copiar</>}
               </button>
             </div>
           </div>

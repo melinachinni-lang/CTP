@@ -25,17 +25,12 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
   const [selectedBroker, setSelectedBroker] = useState<{ nombre: string; rol: string; imagen: string; zona: string; parcelasActivas: number; estado: string } | null>(null);
   const [contactForm, setContactForm] = useState({ nombre: '', email: '', mensaje: '' });
   const [contactSent, setContactSent] = useState(false);
-  const [showTestimoniosModal, setShowTestimoniosModal] = useState(false);
   const tabContentRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
   const equipoScrollRef = useRef<HTMLDivElement>(null);
-  const testimoniosScrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isDraggingTestimonios, setIsDraggingTestimonios] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [testimoniosStartX, setTestimoniosStartX] = useState(0);
-  const [testimoniosScrollLeft, setTestimoniosScrollLeft] = useState(0);
   const { t, language } = useI18n();
 
   const translateVendorDesc = (desc: string): string => {
@@ -107,30 +102,6 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
 
   const handleMouseLeave = () => {
     setIsDragging(false);
-  };
-
-  // Función para drag del carrusel de testimonios
-  const handleTestimoniosMouseDown = (e: React.MouseEvent) => {
-    if (!testimoniosScrollRef.current) return;
-    setIsDraggingTestimonios(true);
-    setTestimoniosStartX(e.pageX - testimoniosScrollRef.current.offsetLeft);
-    setTestimoniosScrollLeft(testimoniosScrollRef.current.scrollLeft);
-  };
-
-  const handleTestimoniosMouseMove = (e: React.MouseEvent) => {
-    if (!isDraggingTestimonios || !testimoniosScrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - testimoniosScrollRef.current.offsetLeft;
-    const walk = (x - testimoniosStartX) * 2; // Multiplicador para velocidad de scroll
-    testimoniosScrollRef.current.scrollLeft = testimoniosScrollLeft - walk;
-  };
-
-  const handleTestimoniosMouseUp = () => {
-    setIsDraggingTestimonios(false);
-  };
-
-  const handleTestimoniosMouseLeave = () => {
-    setIsDraggingTestimonios(false);
   };
 
   useEffect(() => {
@@ -279,50 +250,6 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
       { icon: <CheckCircle className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: t.inmobiliarias.badgeRol },
       { icon: <CreditCard className="w-4 h-4" style={{ color: 'var(--foreground)' }} />, texto: t.inmobiliarias.badgeFinancing }
     ],
-    testimonios: [
-      {
-        nombre: 'Carolina Muñoz',
-        ubicacion: 'Puerto Varas',
-        calificacion: 5,
-        testimonio: 'Excelente servicio y asesoría. Me ayudaron en cada paso de la compra de mi parcela en la zona de Los Lagos. Muy profesionales y confiables.',
-        tipo: 'Compra de parcela'
-      },
-      {
-        nombre: 'Roberto Sepúlveda',
-        ubicacion: 'Coyhaique',
-        calificacion: 5,
-        testimonio: 'Quedé muy satisfecho con la atención recibida. El equipo fue transparente y me acompañó durante todo el proceso legal y de escrituración.',
-        tipo: 'Compra de parcela'
-      },
-      {
-        nombre: 'Daniela Torres',
-        ubicacion: 'Chile Chico',
-        calificacion: 5,
-        testimonio: 'La mejor decisión fue trabajar con ellos. Conocen muy bien la zona y me ayudaron a encontrar exactamente lo que buscaba.',
-        tipo: 'Compra de parcela'
-      },
-      {
-        nombre: 'Martín Valdés',
-        ubicacion: 'Osorno',
-        calificacion: 5,
-        testimonio: 'Profesionales serios y comprometidos. Me asesoraron de principio a fin y respondieron todas mis dudas con paciencia.',
-        tipo: 'Compra de parcela'
-      },
-      {
-        nombre: 'Andrea Rojas',
-        ubicacion: 'Puerto Montt',
-        calificacion: 5,
-        testimonio: 'Muy buena experiencia. El proceso fue rápido y claro. Recomiendo totalmente sus servicios para quien busque invertir en parcelas.',
-        tipo: 'Compra de parcela'
-      },
-      {
-        nombre: 'Felipe González',
-        ubicacion: 'Futaleufú',
-        calificacion: 5,
-        testimonio: 'Encontré la parcela perfecta gracias a su conocimiento del mercado local. Excelente atención y seguimiento posventa.',
-        tipo: 'Compra de parcela'
-      }
-    ]
   };
 
   const tabs = [
@@ -1252,127 +1179,6 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
         </div>
       )}
 
-      {/* MODAL TESTIMONIOS COMPLETO */}
-      {showTestimoniosModal && (
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-          onClick={() => setShowTestimoniosModal(false)}
-        >
-          <div 
-            className="bg-white rounded-2xl max-w-5xl w-full max-h-[85vh] overflow-y-auto relative"
-            style={{ boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header del modal */}
-            <div className="sticky top-0 bg-white border-b z-10 px-8 py-6 rounded-t-2xl" style={{ borderColor: 'var(--border)' }}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 style={{ 
-                    fontSize: 'var(--font-size-h2)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    fontFamily: 'var(--font-heading)',
-                    color: 'var(--foreground)',
-                    marginBottom: '0.25rem'
-                  }}>
-                    {t.inmobiliarias.testimonialsTitle}
-                  </h2>
-                  <p style={{
-                    fontSize: 'var(--font-size-body-sm)',
-                    color: '#737373',
-                    fontFamily: 'var(--font-body)'
-                  }}>
-                    {profileData.testimonios.length} {t.inmobiliarias.opinionsLabel}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowTestimoniosModal(false)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-                  style={{ color: 'var(--foreground)' }}
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Contenido del modal */}
-            <div className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {profileData.testimonios.map((testimonio, index) => (
-                  <div 
-                    key={index}
-                    className="bg-white rounded-xl border p-6 hover:shadow-md transition-all"
-                    style={{ borderColor: 'var(--border)' }}
-                  >
-                    {/* Estrellas */}
-                    <div className="flex gap-1 mb-4">
-                      {[...Array(testimonio.calificacion)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className="w-5 h-5" 
-                          style={{ color: '#FFA500', fill: '#FFA500' }} 
-                        />
-                      ))}
-                    </div>
-
-                    {/* Testimonio */}
-                    <p style={{ 
-                      fontSize: 'var(--font-size-body-base)',
-                      color: 'var(--foreground)',
-                      lineHeight: 'var(--line-height-body)',
-                      fontFamily: 'var(--font-body)',
-                      marginBottom: '1.5rem'
-                    }}>
-                      "{testimonio.testimonio}"
-                    </p>
-
-                    {/* Información del cliente */}
-                    <div className="pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-                      <p style={{ 
-                        fontSize: 'var(--font-size-body-base)',
-                        fontWeight: 'var(--font-weight-semibold)',
-                        fontFamily: 'var(--font-body)',
-                        color: 'var(--foreground)',
-                        marginBottom: '0.5rem'
-                      }}>
-                        {testimonio.nombre}
-                      </p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <div className="flex items-center gap-1.5" style={{ color: '#737373' }}>
-                          <MapPin className="w-4 h-4" />
-                          <span style={{ 
-                            fontSize: 'var(--font-size-body-sm)',
-                            fontFamily: 'var(--font-body)'
-                          }}>
-                            {testimonio.ubicacion}
-                          </span>
-                        </div>
-                        {testimonio.tipo && (
-                          <>
-                            <span style={{ color: '#D4D4D4' }}>•</span>
-                            <span 
-                              className="px-2.5 py-1 rounded-full"
-                              style={{ 
-                                fontSize: 'var(--font-size-xs)',
-                                fontWeight: 'var(--font-weight-medium)',
-                                fontFamily: 'var(--font-body)',
-                                backgroundColor: 'var(--input-background)',
-                                color: '#737373'
-                              }}
-                            >
-                              {testimonio.tipo}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       {/* MODAL CONTACTAR BROKER */}
       {showContactBrokerModal && createPortal(
         <div

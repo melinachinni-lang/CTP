@@ -130,25 +130,6 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
     onNavigate('inmobiliaria-profile', undefined, nombre);
   };
 
-  // Renderizar estrellas (reutilizando el patrón de Parcelas)
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <Star
-          key={i}
-          className="w-3.5 h-3.5"
-          fill={i < fullStars ? '#FFA500' : 'none'}
-          stroke={i < fullStars ? '#FFA500' : '#DEDEDE'}
-          strokeWidth={1.5}
-        />
-      );
-    }
-    
-    return stars;
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -448,16 +429,6 @@ export function InmobiliariasPage({ onNavigate }: InmobiliariasPageProps) {
                       <p className="text-sm text-gray-600 line-clamp-2 flex-grow" style={{ fontSize: 'var(--font-size-body-sm)', lineHeight: 'var(--line-height-body)' }}>
                         {language === 'en' && (inmobiliaria as any).descripcionEn ? (inmobiliaria as any).descripcionEn : inmobiliaria.descripcion}
                       </p>
-
-                      {/* Rating */}
-                      <div className="flex items-center gap-2">
-                        <div className="flex gap-0.5">
-                          {renderStars(inmobiliaria.rating)}
-                        </div>
-                        <span style={{ fontSize: 'var(--font-size-xs)', color: '#525252', fontFamily: 'Inter, sans-serif' }}>
-                          {inmobiliaria.rating.toFixed(1)} · {inmobiliaria.numResenas} {t.inmobiliarias.reviews}
-                        </span>
-                      </div>
 
                       {/* Zonas de operación — badges */}
                       <div className="flex flex-wrap gap-1.5">

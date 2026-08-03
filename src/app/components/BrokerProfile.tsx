@@ -44,32 +44,6 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
     certificaciones: language === 'en'
       ? ['CChC Certificate', 'Real Estate Mediator']
       : ['Certificado CChC', 'Mediador Inmobiliario'],
-    testimonios: [
-      {
-        nombre: 'María González',
-        ubicacion: 'Pirque',
-        calificacion: 5,
-        testimonio: language === 'en'
-          ? 'Excellent professional, helped me find the perfect property for my family. Very transparent and dedicated.'
-          : 'Excelente profesional, me ayudó a encontrar la parcela perfecta para mi familia. Muy transparente y dedicado.',
-      },
-      {
-        nombre: 'Carlos Muñoz',
-        ubicacion: 'Colina',
-        calificacion: 5,
-        testimonio: language === 'en'
-          ? 'Highly recommended. Knows the market very well and was very honest with all my questions.'
-          : 'Súper recomendado. Conoce muy bien el mercado y fue muy honesto con todas mis consultas.',
-      },
-      {
-        nombre: 'Andrea Silva',
-        ubicacion: 'San José de Maipo',
-        calificacion: 5,
-        testimonio: language === 'en'
-          ? 'Thanks to their advice I was able to make an excellent investment. Very professional and attentive.'
-          : 'Gracias a su asesoría pude hacer una excelente inversión. Muy profesional y atento.',
-      }
-    ]
   };
 
   const firstName = brokerData.nombre.split(' ')[0];
@@ -293,19 +267,6 @@ export function BrokerProfile({ onNavigate, brokerName }: BrokerProfileProps) {
                         color: '#737373',
                         marginTop: '0.5rem'
                       }}>{t.broker.parcelasSold}</p>
-                    </div>
-                    <div className="rounded-xl p-5 border" style={{ borderColor: 'var(--border)' }}>
-                      <div className="flex items-center gap-0.5">
-                        {[1, 2, 3, 4, 5].map(i => (
-                          <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#F59E0B' }} />
-                        ))}
-                      </div>
-                      <p style={{
-                        fontSize: 'var(--font-size-body-sm)',
-                        fontFamily: 'var(--font-body)',
-                        color: '#737373',
-                        marginTop: '0.5rem'
-                      }}>{t.broker.ratingLabel}</p>
                     </div>
                   </div>
 

@@ -96,25 +96,6 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
     setContactModalOpen(true);
   };
 
-  // Renderizar estrellas
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <Star
-          key={i}
-          className="w-3.5 h-3.5"
-          fill={i < fullStars ? '#FFA500' : 'none'}
-          stroke={i < fullStars ? '#FFA500' : '#DEDEDE'}
-          strokeWidth={1.5}
-        />
-      );
-    }
-    
-    return stars;
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -390,11 +371,10 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
 
                   {/* Contenido */}
                   <div className="p-6">
-                    {/* Nombre y rating */}
+                    {/* Nombre */}
                     <div className="mb-3">
-                      <h3 
-                        className="mb-2"
-                        style={{ 
+                      <h3
+                        style={{
                           color: '#0A0A0A',
                           fontFamily: 'var(--font-heading)',
                           fontSize: 'var(--font-size-h4)',
@@ -404,31 +384,6 @@ export function BrokersPage({ onNavigate }: BrokersPageProps) {
                       >
                         {broker.nombre}
                       </h3>
-                      
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1">
-                          {renderStars(broker.rating)}
-                        </div>
-                        <span 
-                          style={{ 
-                            color: '#0A0A0A',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            fontWeight: 'var(--font-weight-medium)'
-                          }}
-                        >
-                          {broker.rating}
-                        </span>
-                        <span 
-                          style={{ 
-                            color: '#737373',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)'
-                          }}
-                        >
-                          ({broker.numResenas} reseñas)
-                        </span>
-                      </div>
                     </div>
 
                     {/* Especialidad */}
