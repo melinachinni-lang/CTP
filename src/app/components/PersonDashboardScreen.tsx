@@ -2166,13 +2166,12 @@ function MyPurchasesContent() {
     return next;
   });
 
-  type EstadoCompra = 'reservada' | 'aprobada' | 'rechazada';
+  type EstadoCompra = 'reservada' | 'aprobada';
   type TipoCompra = 'reserva' | 'compra';
 
   const estadoConfig: Record<EstadoCompra, { label: string; bg: string; color: string; border: string }> = {
-    reservada:    { label: t.status.reservada,    bg: '#EBFEF5', color: '#006B4E', border: '#A7F3D0' },
-    aprobada:     { label: t.status.aprobada,     bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
-    rechazada:    { label: t.status.rechazada,    bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
+    reservada: { label: t.status.reservada, bg: '#EBFEF5', color: '#006B4E', border: '#A7F3D0' },
+    aprobada:  { label: t.status.aprobada,  bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
   };
 
   const compras: { id: number; nombre: string; ubicacion: string; superficie: string; fecha: string; monto: string; estado: EstadoCompra; tipo: TipoCompra; metodoPago: string; imagen: string }[] = [
@@ -2219,7 +2218,7 @@ function MyPurchasesContent() {
       superficie: '4.500 m²',
       fecha: '3 Mar 2026',
       monto: '$500.000',
-      estado: 'rechazada',
+      estado: 'reservada',
       tipo: 'reserva',
       metodoPago: 'Transferencia bancaria',
       imagen: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=300&fit=crop&q=80',
