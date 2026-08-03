@@ -9,7 +9,7 @@ import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
-import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard, Calendar, ChevronDown, User, Settings, HelpCircle, Lightbulb, LogOut } from 'lucide-react';
+import { Eye, MessageCircle, Heart, Bookmark, ArrowUp, ArrowDown, Plus, Share2, Building2, Users, AlertCircle, CheckCircle, TrendingUp, Star, Zap, Award, Check, X, CreditCard, Calendar, ChevronDown } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
 
@@ -23,8 +23,7 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
-    const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({ rendimiento: true });
-    const [showSugerencias, setShowSugerencias] = React.useState(false);
+    const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({ rendimiento: true, cuenta: true });
 
     // Exponer función para abrir modal de publicación
     React.useImperativeHandle(ref, () => ({
@@ -41,13 +40,12 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       key: null,
       label: null,
       items: [
-        { id: 'home',        label: 'Inicio',             icon: 'home'        },
-        { id: 'listings',    label: 'Mis publicaciones',  icon: 'list'        },
-        { id: 'inquiries',   label: 'Consultas',          icon: 'message'     },
-        { id: 'reservas',    label: 'Reservas',           icon: 'file'        },
-        { id: 'calendarios', label: 'Calendarios',        icon: 'calendar'    },
-        { id: 'asignaciones',label: 'Asignaciones',       icon: 'users'       },
-        { id: 'plan',        label: 'Plan y facturación', icon: 'credit-card' },
+        { id: 'home',        label: 'Inicio',            icon: 'home'     },
+        { id: 'listings',    label: 'Mis publicaciones', icon: 'list'     },
+        { id: 'inquiries',   label: 'Consultas',         icon: 'message'  },
+        { id: 'reservas',    label: 'Reservas',          icon: 'file'     },
+        { id: 'calendarios', label: 'Calendarios',       icon: 'calendar' },
+        { id: 'asignaciones',label: 'Asignaciones',      icon: 'users'    },
       ],
     },
     {
@@ -56,6 +54,16 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
       items: [
         { id: 'performance', label: 'Rendimiento', icon: 'chart'    },
         { id: 'insights',    label: 'Insights IA', icon: 'sparkles' },
+      ],
+    },
+    {
+      key: 'cuenta',
+      label: 'Cuenta',
+      items: [
+        { id: 'profile',  label: 'Perfil',             icon: 'profile'  },
+        { id: 'plan',     label: 'Plan y facturación',  icon: 'card'     },
+        { id: 'settings', label: 'Configuración',       icon: 'settings' },
+        { id: 'help',     label: 'Ayuda',               icon: 'help'     },
       ],
     },
   ];
@@ -224,40 +232,52 @@ export const BrokerDashboardScreen = React.forwardRef<DashboardRef, BrokerDashbo
           </nav>
 
           {/* Sugerencias */}
-          <SugerenciasButton open={showSugerencias} onClose={() => setShowSugerencias(false)} />
+          <div className="px-4 py-5">
+            <SugerenciasButton />
+          </div>
 
           {/* User Profile Area */}
-          <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm transition-colors rounded-lg px-2 py-2"
-              style={{ color: 'rgba(255,255,255,0.65)', backgroundColor: 'transparent' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
-            >
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
-                <User className="w-4 h-4" />
-              </div>
-              <span className="flex-1 text-left font-medium text-sm">Mi cuenta</span>
-              <ChevronDown className="w-4 h-4 flex-shrink-0 transition-transform duration-200" style={{ transform: showMenu ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-            </button>
+          <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex items-center gap-3 flex-1 transition-colors"
+                style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'rgba(255,255,255,0.65)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1 text-left">
+                  <div style={{ fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', fontSize: 'var(--font-size-body-sm)' }}>Mi cuenta</div>
+                  <div style={{ fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>Plan Básico</div>
+                </div>
+              </button>
+              {showMenu && (
+                <button
+                  onClick={() => setShowMenu(false)}
+                  className="flex-shrink-0 p-1 rounded transition-colors"
+                  style={{ lineHeight: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.5)' }} />
+                </button>
+              )}
+            </div>
             {showMenu && (
-              <div className="mt-1.5 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <button onClick={() => { setCurrentSection('profile'); setShowMenu(false); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <User className="w-3.5 h-3.5 flex-shrink-0" />Mi perfil
-                </button>
-                <button onClick={() => { setCurrentSection('settings'); setShowMenu(false); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />Configuración
-                </button>
-                <button onClick={() => { setShowMenu(false); setShowSugerencias(true); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <Lightbulb className="w-3.5 h-3.5 flex-shrink-0" />Sugerencias
-                </button>
-                <button onClick={() => { setCurrentSection('help'); setShowMenu(false); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <HelpCircle className="w-3.5 h-3.5 flex-shrink-0" />Ayuda
-                </button>
-                <div style={{ height: '1px', margin: '2px 8px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-                <button onClick={() => onNavigate('entry')} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />Cerrar sesión
+              <div className="mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+                <button
+                  onClick={() => onNavigate('entry')}
+                  className="w-full text-left text-xs py-2 px-3"
+                  style={{ color: 'rgba(255,255,255,0.8)', backgroundColor: 'transparent' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                >
+                  Cerrar sesión
                 </button>
               </div>
             )}

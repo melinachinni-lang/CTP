@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, UserCheck, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles, Lightbulb, LogOut } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, UserCheck, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { CalendariosView } from '@/app/components/CalendariosView';
@@ -30,9 +30,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
     const [publishModalOrigin, setPublishModalOrigin] = React.useState('home');
     const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-      gestion: true, interacciones: true, rendimiento: true,
+      gestion: true, interacciones: true, rendimiento: true, cuenta: false,
     });
-    const [showSugerencias, setShowSugerencias] = React.useState(false);
     const toggleGroup = (id: string) => setOpenGroups(prev => ({ ...prev, [id]: !prev[id] }));
 
     // Exponer función para abrir modal de publicación
@@ -47,9 +46,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
     {
       key: null, label: null,
       items: [
-        { id: 'home',           label: 'Inicio',             icon: Home       },
-        { id: 'my-publications',label: 'Mis publicaciones',  icon: FolderOpen },
-        { id: 'plan',           label: 'Plan y facturación', icon: CreditCard },
+        { id: 'home',           label: 'Inicio',            icon: Home },
+        { id: 'my-publications',label: 'Mis publicaciones', icon: FolderOpen },
       ],
     },
     {
@@ -75,6 +73,15 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
       items: [
         { id: 'performance', label: 'Rendimiento', icon: TrendingUp },
         { id: 'insights',    label: 'Insights IA', icon: Sparkles },
+      ],
+    },
+    {
+      key: 'cuenta', label: 'Cuenta',
+      items: [
+        { id: 'profile',  label: 'Perfil',             icon: User        },
+        { id: 'plan',     label: 'Plan y facturación',  icon: CreditCard  },
+        { id: 'settings', label: 'Configuración',       icon: Settings    },
+        { id: 'help',     label: 'Ayuda',               icon: HelpCircle  },
       ],
     },
   ];
@@ -167,40 +174,63 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
           </nav>
 
           {/* Sugerencias */}
-          <SugerenciasButton open={showSugerencias} onClose={() => setShowSugerencias(false)} />
+          <div className="px-4 py-5">
+            <SugerenciasButton />
+          </div>
 
           {/* User Profile Area */}
-          <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm transition-colors rounded-lg px-2 py-2"
-              style={{ color: 'rgba(255,255,255,0.65)', backgroundColor: 'transparent' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
-            >
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
-                <User className="w-4 h-4" />
-              </div>
-              <span className="flex-1 text-left font-medium text-sm">Mi cuenta</span>
-              <ChevronDown className="w-4 h-4 flex-shrink-0 transition-transform duration-200" style={{ transform: showMenu ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-            </button>
+          <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex items-center gap-3 flex-1 transition-colors"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-body-sm)',
+                  color: 'rgba(255,255,255,0.65)'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <User className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.65)' }} />
+                </div>
+                <div className="flex-1 text-left">
+                  <div style={{ fontWeight: 'var(--font-weight-medium)', color: '#FFFFFF', fontSize: 'var(--font-size-body-sm)' }}>
+                    Mi cuenta
+                  </div>
+                  <div style={{ fontSize: 'var(--font-size-xs)', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>
+                    Plan Profesional
+                  </div>
+                </div>
+              </button>
+              {showMenu && (
+                <button
+                  onClick={() => setShowMenu(false)}
+                  className="flex-shrink-0 p-1 rounded transition-colors"
+                  style={{ lineHeight: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.5)' }} />
+                </button>
+              )}
+            </div>
             {showMenu && (
-              <div className="mt-1.5 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <button onClick={() => { setCurrentSection('profile'); setShowMenu(false); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <User className="w-3.5 h-3.5 flex-shrink-0" />Mi perfil
-                </button>
-                <button onClick={() => { setCurrentSection('settings'); setShowMenu(false); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />Configuración
-                </button>
-                <button onClick={() => { setShowMenu(false); setShowSugerencias(true); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <Lightbulb className="w-3.5 h-3.5 flex-shrink-0" />Sugerencias
-                </button>
-                <button onClick={() => { setCurrentSection('help'); setShowMenu(false); }} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <HelpCircle className="w-3.5 h-3.5 flex-shrink-0" />Ayuda
-                </button>
-                <div style={{ height: '1px', margin: '2px 8px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-                <button onClick={() => onNavigate('entry')} className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors" style={{ color: 'rgba(255,255,255,0.65)' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}>
-                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />Cerrar sesión
+              <div className="mt-3 rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', boxShadow: '0 4px 12px 0 rgba(0, 107, 78, 0.08)' }}>
+                <button
+                  onClick={() => onNavigate('entry')}
+                  className="w-full text-left px-4 py-2.5 transition-colors"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--font-size-body-sm)',
+                    color: '#0A0A0A',
+                    backgroundColor: 'transparent',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                >
+                  Cerrar sesión
                 </button>
               </div>
             )}
