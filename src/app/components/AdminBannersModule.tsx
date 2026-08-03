@@ -63,6 +63,18 @@ const initialBanners: BannerAdmin[] = [
     activo: true,
     borrador: false,
   },
+  {
+    id: 4,
+    titulo: 'Encuentra tu parcela ideal hoy',
+    descripcion: 'Más de 500 proyectos disponibles en todo Chile. Compara, filtra y reserva en minutos.',
+    textoBoton: 'Explorar ahora',
+    urlBoton: '/proyectos',
+    fechaInicio: '2025-03-01',
+    fechaFin: '2025-06-30',
+    imagen: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    activo: true,
+    borrador: false,
+  },
 ];
 
 // ─── BANNER EDITOR ────────────────────────────────────────────────────────────
