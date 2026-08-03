@@ -69,7 +69,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'home',      label: t.nav.home,      icon: 'home',         separator: false },
     { id: 'saved',     label: t.nav.saved,     icon: 'heart',        separator: false },
     { id: 'compare',   label: t.nav.compare,   icon: 'chart',        separator: false },
-    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag', separator: false },
+    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
     { id: 'listings',  label: t.nav.listings,  icon: 'list',         separator: false },
     { id: 'inquiries', label: t.nav.inquiries, icon: 'message',      separator: false },
     { id: 'plan',      label: t.nav.plan,      icon: 'credit-card',  separator: false },
@@ -259,9 +259,6 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
               const isActive = currentSection === item.id;
               return (
                 <React.Fragment key={item.id}>
-                  {item.separator && (
-                    <div style={{ height: '1px', margin: '6px 12px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-                  )}
                   <button
                     onClick={() => {
                       if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
