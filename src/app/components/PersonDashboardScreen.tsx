@@ -4,7 +4,7 @@ import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSect
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp, CreditCard } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, ChevronDown, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp, CreditCard } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -22,6 +22,8 @@ interface PersonDashboardScreenProps {
 export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashboardScreenProps>(
   ({ onNavigate, savedParcelaIds = [], onToggleSaved }, ref) => {
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
+    const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({ cuenta: true });
+    const toggleGroup = (key: string) => setOpenGroups(prev => ({ ...prev, [key]: !prev[key] }));
     const [showSugerencias, setShowSugerencias] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
@@ -65,14 +67,29 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
   const { t } = useI18n();
 
-  const navItems = [
-    { id: 'home', label: t.nav.home, icon: 'home' },
-    { id: 'saved', label: t.nav.saved, icon: 'heart' },
-    { id: 'compare', label: t.nav.compare, icon: 'chart' },
-    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
-    { id: 'listings', label: t.nav.listings, icon: 'list' },
-    { id: 'inquiries', label: t.nav.inquiries, icon: 'message' },
-    { id: 'plan', label: t.nav.plan, icon: 'credit-card' },
+  const navGroups = [
+    {
+      key: null,
+      label: null,
+      items: [
+        { id: 'home',      label: t.nav.home,      icon: 'home'         },
+        { id: 'saved',     label: t.nav.saved,     icon: 'heart'        },
+        { id: 'compare',   label: t.nav.compare,   icon: 'chart'        },
+        { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
+        { id: 'listings',  label: t.nav.listings,  icon: 'list'         },
+        { id: 'inquiries', label: t.nav.inquiries, icon: 'message'      },
+        { id: 'plan',      label: t.nav.plan,      icon: 'credit-card'  },
+      ],
+    },
+    {
+      key: 'cuenta',
+      label: 'Cuenta',
+      items: [
+        { id: 'profile',  label: 'Mi perfil',      icon: 'profile'  },
+        { id: 'settings', label: 'Configuración',  icon: 'settings' },
+        { id: 'help',     label: 'Ayuda',          icon: 'help'     },
+      ],
+    },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -252,79 +269,60 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
           {/* Navigation Items */}
           <nav className="flex-1 py-2 overflow-y-auto scrollbar-hide px-2">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
-                  setCurrentSection(item.id);
-                }}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-all ${
-                  currentSection === item.id ? 'font-medium' : ''
-                }`}
-                style={{
-                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                  }
-                }}
-              >
-                {renderIcon(item.icon, currentSection === item.id)}
-                <span style={{ fontSize: '13px' }}>{item.label}</span>
-                {item.id === 'inquiries' && (
-                  <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
-                )}
-              </button>
-            ))}
-
-            {/* CUENTA group */}
-            <div className="mt-4 mb-1 px-3">
-              <span style={{ fontSize: '10px', fontWeight: 600, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Cuenta</span>
-            </div>
-            {[
-              { id: 'profile', label: 'Mi perfil', icon: <User className="w-4 h-4 flex-shrink-0" /> },
-              { id: 'settings', label: 'Configuración', icon: <Settings className="w-4 h-4 flex-shrink-0" /> },
-              { id: 'help', label: 'Ayuda', icon: <HelpCircle className="w-4 h-4 flex-shrink-0" /> },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setCurrentSection(item.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-all ${
-                  currentSection === item.id ? 'font-medium' : ''
-                }`}
-                style={{
-                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                  backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (currentSection !== item.id) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
-                  }
-                }}
-              >
-                {React.cloneElement(item.icon, {
-                  stroke: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
-                })}
-                <span style={{ fontSize: '13px' }}>{item.label}</span>
-              </button>
-            ))}
+            {navGroups.map((group, groupIdx) => {
+              const isOpen = group.key ? openGroups[group.key] : true;
+              const hasActive = group.items.some(i => i.id === currentSection);
+              return (
+                <div key={groupIdx} className="mb-0.5">
+                  {group.label && (
+                    <button
+                      onClick={() => group.key && toggleGroup(group.key)}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors"
+                      style={{ backgroundColor: 'transparent' }}
+                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                    >
+                      <span style={{ fontSize: '10.5px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', color: hasActive ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.42)' }}>
+                        {group.label}
+                      </span>
+                      <ChevronDown className="w-3 h-3 transition-transform duration-200 flex-shrink-0" style={{ color: 'rgba(255,255,255,0.35)', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                    </button>
+                  )}
+                  {isOpen && (
+                    <div className={group.label ? 'mb-1' : 'mb-2'}>
+                      {group.items.map((item) => {
+                        const isActive = currentSection === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
+                              setCurrentSection(item.id);
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
+                            style={{
+                              backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                              color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                              fontFamily: 'var(--font-body)',
+                              fontWeight: isActive ? 600 : 400,
+                              fontSize: '13px',
+                            }}
+                            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; } }}
+                            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; } }}
+                          >
+                            {renderIcon(item.icon, isActive)}
+                            <span>{item.label}</span>
+                            {item.id === 'inquiries' && (
+                              <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           {/* Sugerencias */}
