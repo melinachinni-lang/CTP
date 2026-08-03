@@ -79,12 +79,13 @@ const initialBanners: BannerAdmin[] = [
 
 // ─── BANNER EDITOR ────────────────────────────────────────────────────────────
 
-function BannerEditor({ banner, onBack, onSave, activeBannersCount, defaultActivo = true }: {
+function BannerEditor({ banner, onBack, onSave, activeBannersCount, defaultActivo = true, forceDraft = false }: {
   banner: BannerAdmin | null;
   onBack: () => void;
   onSave: (data: Omit<BannerAdmin, 'id'>) => void;
   activeBannersCount: number;
   defaultActivo?: boolean;
+  forceDraft?: boolean;
 }) {
   const [titulo, setTitulo] = useState(banner?.titulo ?? '');
   const [descripcion, setDescripcion] = useState(banner?.descripcion ?? '');
@@ -335,16 +336,22 @@ function BannerEditor({ banner, onBack, onSave, activeBannersCount, defaultActiv
             </div>
 
             {/* Publicar automáticamente — va ANTES de las fechas */}
-            <div className="rounded-2xl p-5 flex items-center justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar automáticamente</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: activo ? '#006B4E' : '#737373', marginTop: '2px' }}>
-                  {activo ? 'Se publicará automáticamente a partir de hoy' : 'Se publicará en la fecha de inicio que elijas'}
-                </p>
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: `1px solid ${forceDraft ? '#FDE68A' : '#E5E5E5'}` }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar automáticamente</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: forceDraft ? '#D97706' : activo ? '#006B4E' : '#737373', marginTop: '2px' }}>
+                    {forceDraft ? `No disponible: ya hay ${MAX_BANNERS_ACTIVOS} banners activos` : activo ? 'Se publicará automáticamente a partir de hoy' : 'Se publicará en la fecha de inicio que elijas'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => { if (!forceDraft) { setActivo(v => !v); setShowFechaInicioTooltip(false); } }}
+                  className="w-11 h-6 rounded-full transition-all relative flex-shrink-0"
+                  style={{ backgroundColor: activo && !forceDraft ? '#006B4E' : '#D1D5DB', cursor: forceDraft ? 'not-allowed' : 'pointer', opacity: forceDraft ? 0.5 : 1 }}
+                >
+                  <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo && !forceDraft ? '22px' : '2px' }} />
+                </button>
               </div>
-              <button onClick={() => { setActivo(v => !v); setShowFechaInicioTooltip(false); }} className="w-11 h-6 rounded-full transition-all relative flex-shrink-0" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
-                <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
-              </button>
             </div>
 
             {/* Fechas */}
@@ -522,21 +529,23 @@ function BannerEditor({ banner, onBack, onSave, activeBannersCount, defaultActiv
         <button
           onClick={handleSaveDraft}
           className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all"
-          style={{ backgroundColor: saveDraftSuccess ? '#DCFCE7' : '#F5F5F5', color: saveDraftSuccess ? '#166534' : '#737373', border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-          onMouseEnter={e => { if (!saveDraftSuccess) e.currentTarget.style.backgroundColor = '#E5E5E5'; }}
-          onMouseLeave={e => { if (!saveDraftSuccess) e.currentTarget.style.backgroundColor = saveDraftSuccess ? '#DCFCE7' : '#F5F5F5'; }}
+          style={{ backgroundColor: saveDraftSuccess ? '#DCFCE7' : forceDraft ? '#006B4E' : '#F5F5F5', color: saveDraftSuccess ? '#166534' : forceDraft ? '#FFFFFF' : '#737373', border: forceDraft ? 'none' : '1px solid #E5E5E5', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+          onMouseEnter={e => { if (!saveDraftSuccess) e.currentTarget.style.backgroundColor = forceDraft ? '#01533E' : '#E5E5E5'; }}
+          onMouseLeave={e => { if (!saveDraftSuccess) e.currentTarget.style.backgroundColor = saveDraftSuccess ? '#DCFCE7' : forceDraft ? '#006B4E' : '#F5F5F5'; }}
         >
           {saveDraftSuccess ? <><Check className="w-4 h-4" /> Borrador guardado</> : 'Guardar como borrador'}
         </button>
-        <button
-          onClick={handleSave}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all"
-          style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
-          onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }}
-          onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}
-        >
-          {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : isEdit ? 'Guardar cambios' : 'Publicar'}
-        </button>
+        {!forceDraft && (
+          <button
+            onClick={handleSave}
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all"
+            style={{ backgroundColor: saveSuccess ? '#166534' : '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', borderRadius: '200px' }}
+            onMouseEnter={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = '#01533E'; }}
+            onMouseLeave={e => { if (!saveSuccess) e.currentTarget.style.backgroundColor = saveSuccess ? '#166534' : '#006B4E'; }}
+          >
+            {saveSuccess ? <><Check className="w-4 h-4" /> Guardado</> : isEdit ? 'Guardar cambios' : 'Publicar'}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -689,6 +698,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
         onSave={handleSaveBanner}
         activeBannersCount={activeBannersCount}
         defaultActivo={view !== 'create-draft'}
+        forceDraft={view === 'create-draft'}
       />
     );
   }
