@@ -341,7 +341,7 @@ function BannerEditor({ banner, onBack, onSave, activeBannersCount, defaultActiv
                 <div>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Publicar automáticamente</p>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: forceDraft ? '#D97706' : activo ? '#006B4E' : '#737373', marginTop: '2px' }}>
-                    {forceDraft ? `No disponible: ya hay ${MAX_BANNERS_ACTIVOS} banners activos` : activo ? 'Se publicará automáticamente a partir de hoy' : 'Se publicará en la fecha de inicio que elijas'}
+                    {forceDraft ? `No disponible: ya tienes ${MAX_BANNERS_ACTIVOS} banners activos` : activo ? 'Se publicará automáticamente a partir de hoy' : 'Se publicará en la fecha de inicio que elijas'}
                   </p>
                 </div>
                 <button
