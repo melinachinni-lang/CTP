@@ -4,7 +4,7 @@ import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSect
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, ChevronDown, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp, CreditCard } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp, CreditCard } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -22,8 +22,6 @@ interface PersonDashboardScreenProps {
 export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashboardScreenProps>(
   ({ onNavigate, savedParcelaIds = [], onToggleSaved }, ref) => {
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
-    const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({ cuenta: true });
-    const toggleGroup = (key: string) => setOpenGroups(prev => ({ ...prev, [key]: !prev[key] }));
     const [showSugerencias, setShowSugerencias] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
     const [triggerPublishModal, setTriggerPublishModal] = React.useState(0);
@@ -67,29 +65,17 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
   const { t } = useI18n();
 
-  const navGroups = [
-    {
-      key: null,
-      label: null,
-      items: [
-        { id: 'home',      label: t.nav.home,      icon: 'home'         },
-        { id: 'saved',     label: t.nav.saved,     icon: 'heart'        },
-        { id: 'compare',   label: t.nav.compare,   icon: 'chart'        },
-        { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
-        { id: 'listings',  label: t.nav.listings,  icon: 'list'         },
-        { id: 'inquiries', label: t.nav.inquiries, icon: 'message'      },
-        { id: 'plan',      label: t.nav.plan,      icon: 'credit-card'  },
-      ],
-    },
-    {
-      key: 'cuenta',
-      label: 'Cuenta',
-      items: [
-        { id: 'profile',  label: 'Mi perfil',      icon: 'profile'  },
-        { id: 'settings', label: 'Configuración',  icon: 'settings' },
-        { id: 'help',     label: 'Ayuda',          icon: 'help'     },
-      ],
-    },
+  const navItems = [
+    { id: 'home',      label: t.nav.home,      icon: 'home',         separator: false },
+    { id: 'saved',     label: t.nav.saved,     icon: 'heart',        separator: false },
+    { id: 'compare',   label: t.nav.compare,   icon: 'chart',        separator: false },
+    { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag', separator: false },
+    { id: 'listings',  label: t.nav.listings,  icon: 'list',         separator: false },
+    { id: 'inquiries', label: t.nav.inquiries, icon: 'message',      separator: false },
+    { id: 'plan',      label: t.nav.plan,      icon: 'credit-card',  separator: false },
+    { id: 'profile',   label: 'Mi perfil',     icon: 'profile',      separator: true  },
+    { id: 'settings',  label: 'Configuración', icon: 'settings',     separator: false },
+    { id: 'help',      label: 'Ayuda',         icon: 'help',         separator: false },
   ];
 
   const renderIcon = (iconType: string, isActive: boolean) => {
@@ -269,58 +255,36 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
           {/* Navigation Items */}
           <nav className="flex-1 py-2 overflow-y-auto scrollbar-hide px-2">
-            {navGroups.map((group, groupIdx) => {
-              const isOpen = group.key ? openGroups[group.key] : true;
-              const hasActive = group.items.some(i => i.id === currentSection);
+            {navItems.map((item) => {
+              const isActive = currentSection === item.id;
               return (
-                <div key={groupIdx} className="mb-0.5">
-                  {group.label && (
-                    <button
-                      onClick={() => group.key && toggleGroup(group.key)}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors"
-                      style={{ backgroundColor: 'transparent' }}
-                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-                    >
-                      <span style={{ fontSize: '10.5px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'var(--font-body)', color: hasActive ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.42)' }}>
-                        {group.label}
-                      </span>
-                      <ChevronDown className="w-3 h-3 transition-transform duration-200 flex-shrink-0" style={{ color: 'rgba(255,255,255,0.35)', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-                    </button>
+                <React.Fragment key={item.id}>
+                  {item.separator && (
+                    <div style={{ height: '1px', margin: '6px 12px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
                   )}
-                  {isOpen && (
-                    <div className={group.label ? 'mb-1' : 'mb-2'}>
-                      {group.items.map((item) => {
-                        const isActive = currentSection === item.id;
-                        return (
-                          <button
-                            key={item.id}
-                            onClick={() => {
-                              if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
-                              setCurrentSection(item.id);
-                            }}
-                            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
-                            style={{
-                              backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                              color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
-                              fontFamily: 'var(--font-body)',
-                              fontWeight: isActive ? 600 : 400,
-                              fontSize: '13px',
-                            }}
-                            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; } }}
-                            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; } }}
-                          >
-                            {renderIcon(item.icon, isActive)}
-                            <span>{item.label}</span>
-                            {item.id === 'inquiries' && (
-                              <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                  <button
+                    onClick={() => {
+                      if (item.id === 'inquiries') setConsultasDefaultTab('recibidas');
+                      setCurrentSection(item.id);
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                      color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: isActive ? 600 : 400,
+                      fontSize: '13px',
+                    }}
+                    onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; } }}
+                    onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; } }}
+                  >
+                    {renderIcon(item.icon, isActive)}
+                    <span>{item.label}</span>
+                    {item.id === 'inquiries' && (
+                      <span className="ml-auto w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
+                    )}
+                  </button>
+                </React.Fragment>
               );
             })}
           </nav>
