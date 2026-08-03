@@ -17,7 +17,6 @@ import { CalendariosView } from '@/app/components/CalendariosView';
 import { RendimientoView } from '@/app/components/RendimientoView';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { TeamContent } from '@/app/components/TeamContent';
-import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -38,7 +37,7 @@ type NavSection =
   | 'performance' | 'analitica' | 'embudo' | 'verificacion'
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
-  | 'team' | 'configuracion' | 'help'
+  | 'team' | 'configuracion'
   | 'leads' | 'brokers' | 'pagos';
 
 interface CTPAdminDashboardProps {
@@ -80,7 +79,6 @@ const NAV_GROUPS = [
       { id: 'team' as NavSection,          label: 'Equipo CTP',         icon: Building2 },
       { id: 'regiones' as NavSection,      label: 'Regiones y Comunas', icon: MapPin },
       { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
-      { id: 'help' as NavSection,          label: 'Ayuda',              icon: HelpCircle },
     ],
   },
 ];
@@ -319,7 +317,6 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'regiones'        && <AdminRegionesView autoOpenNew={quickAction === 'regiones-new'} />}
         {currentSection === 'recursos'        && <AdminRecursosModule autoOpenNew={quickAction === 'recursos-new'} />}
         {currentSection === 'team'            && <TeamContent autoOpenInvite={quickAction === 'team-invite'} />}
-        {currentSection === 'help'            && <HelpContent />}
         {currentSection === 'verificacion'    && <AdminVerificacionView />}
         {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="inmobiliaria" />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
