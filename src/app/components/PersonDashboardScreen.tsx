@@ -21,7 +21,6 @@ interface PersonDashboardScreenProps {
 
 export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashboardScreenProps>(
   ({ onNavigate, savedParcelaIds = [], onToggleSaved }, ref) => {
-    const [showMenu, setShowMenu] = React.useState(false);
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
     const [showSugerencias, setShowSugerencias] = React.useState(false);
     const [currentSection, setCurrentSection] = React.useState('home');
@@ -287,6 +286,45 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
                 )}
               </button>
             ))}
+
+            {/* CUENTA group */}
+            <div className="mt-4 mb-1 px-3">
+              <span style={{ fontSize: '10px', fontWeight: 600, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Cuenta</span>
+            </div>
+            {[
+              { id: 'profile', label: 'Mi perfil', icon: <User className="w-4 h-4 flex-shrink-0" /> },
+              { id: 'settings', label: 'Configuración', icon: <Settings className="w-4 h-4 flex-shrink-0" /> },
+              { id: 'help', label: 'Ayuda', icon: <HelpCircle className="w-4 h-4 flex-shrink-0" /> },
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setCurrentSection(item.id)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-all ${
+                  currentSection === item.id ? 'font-medium' : ''
+                }`}
+                style={{
+                  color: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                  backgroundColor: currentSection === item.id ? '#FFFFFF' : 'transparent',
+                }}
+                onMouseEnter={(e) => {
+                  if (currentSection !== item.id) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (currentSection !== item.id) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.65)';
+                  }
+                }}
+              >
+                {React.cloneElement(item.icon, {
+                  stroke: currentSection === item.id ? '#002F23' : 'rgba(255,255,255,0.65)',
+                })}
+                <span style={{ fontSize: '13px' }}>{item.label}</span>
+              </button>
+            ))}
           </nav>
 
           {/* Sugerencias */}
@@ -314,77 +352,25 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
 
           {/* User Profile Area */}
           <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="w-full flex items-center gap-3 text-sm transition-colors rounded-lg px-2 py-2"
-              style={{ color: 'rgba(255,255,255,0.65)', backgroundColor: 'transparent' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
-            >
+            <div className="flex items-center gap-3 px-2 py-2">
               <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}>
-                <User className="w-4 h-4" />
+                <User className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.65)' }} />
               </div>
-              <span className="flex-1 text-left font-medium text-sm">{t.nav.myAccount}</span>
-              <ChevronRight
-                className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
-                style={{ transform: showMenu ? 'rotate(90deg)' : 'rotate(0deg)' }}
-              />
-            </button>
-            {showMenu && (
-              <div className="mt-1.5 rounded-lg overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <button
-                  onClick={() => { setCurrentSection('profile'); setShowMenu(false); }}
-                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.65)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-                >
-                  <User className="w-3.5 h-3.5 flex-shrink-0" />
-                  Mi perfil
-                </button>
-                <button
-                  onClick={() => { setCurrentSection('settings'); setShowMenu(false); }}
-                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.65)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-                >
-                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />
-                  Configuración
-                </button>
-                <button
-                  onClick={() => { setShowMenu(false); setShowSugerencias(true); }}
-                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.65)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-                >
-                  <Lightbulb className="w-3.5 h-3.5 flex-shrink-0" />
-                  Sugerencias
-                </button>
-                <button
-                  onClick={() => { setCurrentSection('help'); setShowMenu(false); }}
-                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.65)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-                >
-                  <HelpCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                  Ayuda
-                </button>
-                <div style={{ height: '1px', margin: '2px 8px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-                <button
-                  onClick={() => onNavigate('entry')}
-                  className="w-full text-left text-xs py-2.5 px-3 flex items-center gap-2 transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.65)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-                >
-                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
-                  {t.nav.signOut}
-                </button>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm truncate" style={{ color: 'rgba(255,255,255,0.9)' }}>Mi cuenta</p>
+                <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.4)' }}>Plan Gratuito</p>
               </div>
-            )}
+              <button
+                onClick={() => onNavigate('entry')}
+                className="flex-shrink-0 p-1.5 rounded-lg transition-colors"
+                style={{ color: 'rgba(255,255,255,0.4)' }}
+                title={t.nav.signOut}
+                onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </aside>
