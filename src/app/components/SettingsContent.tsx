@@ -1851,11 +1851,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
 
       {/* Modal: Agregar usuario */}
       {showInviteModal && (() => {
-        const roles: { value: UserRol; label: string; desc: string }[] = [
-          { value: 'Admin',        label: 'Admin',        desc: 'Acceso completo a configuración, equipo y datos' },
-          { value: 'Editor',       label: 'Editor',       desc: 'Puede crear y editar contenido, sin configuración' },
-          { value: 'Moderador',    label: 'Moderador',    desc: 'Revisión y aprobación de contenido publicado' },
-        ];
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 space-y-5" style={{ border: '1px solid #E5E5E5' }}>
@@ -1883,39 +1878,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   onBlur={e => { if (!inviteError) e.target.style.borderColor = '#E5E5E5'; }}
                 />
                 {inviteError && <p className="mt-1" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#DC2626' }}>{inviteError}</p>}
-              </div>
-              <div>
-                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  Tipo de usuario
-                </label>
-                <div className="flex flex-col gap-1.5">
-                  {roles.map(({ value, label, desc }) => (
-                    <button
-                      key={value}
-                      onClick={() => setInviteRol(value)}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left transition-all"
-                      style={{
-                        border: `1.5px solid ${inviteRol === value ? '#006B4E' : '#E5E5E5'}`,
-                        backgroundColor: inviteRol === value ? '#F0FDF4' : '#FAFAFA',
-                        fontFamily: 'var(--font-body)',
-                      }}
-                    >
-                      <span
-                        className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center"
-                        style={{
-                          border: `2px solid ${inviteRol === value ? '#006B4E' : '#D1D5DB'}`,
-                          backgroundColor: inviteRol === value ? '#006B4E' : 'transparent',
-                        }}
-                      >
-                        {inviteRol === value && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
-                      </span>
-                      <div className="flex flex-col gap-0.5">
-                        <span style={{ fontSize: '13px', fontWeight: 500, color: inviteRol === value ? '#006B4E' : '#0A0A0A', lineHeight: '1.3' }}>{label}</span>
-                        <span style={{ fontSize: '11px', color: '#9CA3AF', lineHeight: '1.3' }}>{desc}</span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
               </div>
               <div className="flex gap-3 pt-1">
                 <button
