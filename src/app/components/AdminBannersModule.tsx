@@ -557,9 +557,9 @@ function DeleteModal({ nombre, onConfirm, onClose }: { nombre: string; onConfirm
   );
 }
 
-// ─── MODAL LÍMITE 3 BANNERS ───────────────────────────────────────────────────
+// ─── MODAL LÍMITE BANNERS ─────────────────────────────────────────────────────
 
-function LimitModal({ onClose }: { onClose: () => void }) {
+function LimitModal({ onClose, onCreateDraft }: { onClose: () => void; onCreateDraft: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
@@ -570,17 +570,28 @@ function LimitModal({ onClose }: { onClose: () => void }) {
           Límite de banners activos
         </h3>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.6', marginBottom: '24px' }}>
-          Ya hay <strong style={{ color: '#0A0A0A' }}>{MAX_BANNERS_ACTIVOS} banners activos</strong> en el portal. Para publicar uno nuevo, desactiva o elimina alguno de los existentes.
+          Ya hay <strong style={{ color: '#0A0A0A' }}>{MAX_BANNERS_ACTIVOS} banners activos</strong> en el portal. Puedes desactivar uno primero, o crear el nuevo banner como borrador para publicarlo después.
         </p>
-        <button
-          onClick={onClose}
-          className="w-full py-2.5 rounded-full font-medium transition-all"
-          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
-          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-        >
-          Entendido
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={onCreateDraft}
+            className="w-full py-2.5 rounded-full font-medium transition-all"
+            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+          >
+            Crear como borrador
+          </button>
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 rounded-full font-medium transition-all"
+            style={{ backgroundColor: '#FFFFFF', color: '#737373', border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+          >
+            Entendido
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -845,7 +856,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
         <DeleteModal nombre={bannerToDelete.titulo} onConfirm={handleDeleteBanner} onClose={() => setBannerToDelete(null)} />
       )}
       {showLimitModal && (
-        <LimitModal onClose={() => setShowLimitModal(false)} />
+        <LimitModal onClose={() => setShowLimitModal(false)} onCreateDraft={() => { setShowLimitModal(false); setView('create'); }} />
       )}
 
       {/* Toasts */}
