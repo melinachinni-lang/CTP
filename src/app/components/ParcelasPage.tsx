@@ -2592,7 +2592,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
             </div>
 
             {/* Sección de Proyectos */}
-            {!includeProjects && <div id="proyectos-section" className="py-12 sm:py-14 md:py-16 bg-white">
+            {false && <div id="proyectos-section" className="py-12 sm:py-14 md:py-16 bg-white">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
                 {/* Título */}
                 <div className="mb-6 sm:mb-8 text-center">
@@ -2844,13 +2844,6 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
               </div>
             </div>}
 
-            {/* Sección de captación para vendedores - Full Width */}
-            <VendedorCaptacionSection 
-              onPublicarClick={() => {
-                // Aquí puedes implementar la navegación a la página de publicación
-                console.log('Navegar a página de publicación');
-              }}
-            />
           </div>
         </section>
       </main>
