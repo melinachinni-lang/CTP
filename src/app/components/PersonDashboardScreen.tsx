@@ -2166,12 +2166,12 @@ function MyPurchasesContent() {
     return next;
   });
 
-  type EstadoCompra = 'reservada' | 'aprobada';
+  type EstadoCompra = 'aprobada' | 'rechazada';
   type TipoCompra = 'reserva' | 'compra';
 
   const estadoConfig: Record<EstadoCompra, { label: string; bg: string; color: string; border: string }> = {
-    reservada: { label: t.status.reservada, bg: '#EBFEF5', color: '#006B4E', border: '#A7F3D0' },
     aprobada:  { label: t.status.aprobada,  bg: '#DCFCE7', color: '#166534', border: '#86EFAC' },
+    rechazada: { label: t.status.rechazada, bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
   };
 
   const compras: { id: number; nombre: string; ubicacion: string; superficie: string; fecha: string; monto: string; estado: EstadoCompra; tipo: TipoCompra; metodoPago: string; imagen: string }[] = [
@@ -2182,7 +2182,7 @@ function MyPurchasesContent() {
       superficie: '5.000 m²',
       fecha: '15 May 2026',
       monto: '$500.000',
-      estado: 'reservada',
+      estado: 'rechazada',
       tipo: 'reserva',
       metodoPago: 'Transferencia bancaria',
       imagen: 'https://images.unsplash.com/photo-1765574780421-451d6b943191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxydXJhbCUyMGxhbmQlMjB2YWxsZXklMjBjaGlsZSUyMGNvdW50cnlzaWRlfGVufDF8fHx8MTc2OTc5MjgzMHww&ixlib=rb-4.1.0&q=80&w=400',
@@ -2194,7 +2194,7 @@ function MyPurchasesContent() {
       superficie: '7.200 m²',
       fecha: '28 Abr 2026',
       monto: '$500.000',
-      estado: 'reservada',
+      estado: 'aprobada',
       tipo: 'reserva',
       metodoPago: 'Mercado Pago',
       imagen: 'https://images.unsplash.com/photo-1761786271694-66020392b461?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxncmVlbiUyMGZvcmVzdCUyMHByb3BlcnR5JTIwYWVyaWFsfGVufDF8fHx8MTc2OTc5MjgzM3ww&ixlib=rb-4.1.0&q=80&w=400',
@@ -2218,7 +2218,7 @@ function MyPurchasesContent() {
       superficie: '4.500 m²',
       fecha: '3 Mar 2026',
       monto: '$500.000',
-      estado: 'reservada',
+      estado: 'rechazada',
       tipo: 'reserva',
       metodoPago: 'Transferencia bancaria',
       imagen: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=300&fit=crop&q=80',
