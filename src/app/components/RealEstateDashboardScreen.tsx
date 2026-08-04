@@ -12,6 +12,7 @@ import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
+import { Tabs } from '@/app/components/Tabs';
 import { AsignacionesContent, InteraccionesContent } from '@/app/components/CTPAdminDashboard';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
@@ -25,60 +26,34 @@ interface RealEstateDashboardScreenProps {
 
 type ReservasTab = 'solicitudes' | 'valores';
 
+const RESERVAS_TABS = [
+  { id: 'solicitudes', label: 'Solicitudes de reserva' },
+  { id: 'valores',     label: 'Valores de reserva' },
+];
+
+const RESERVAS_DESCRIPCIONES: Record<string, string> = {
+  solicitudes: 'Revisa y confirma los comprobantes de pago enviados por los compradores.',
+  valores:     'Administra los montos de reserva asociados a tus parcelas y proyectos.',
+};
+
 function ReservasSection() {
   const [tab, setTab] = useState<ReservasTab>('solicitudes');
 
-  const TABS: { id: ReservasTab; label: string; descripcion: string }[] = [
-    { id: 'solicitudes', label: 'Solicitudes de reserva', descripcion: 'Revisa y confirma los comprobantes de pago enviados por los compradores.' },
-    { id: 'valores',     label: 'Valores de reserva',     descripcion: 'Administra los montos de reserva asociados a tus parcelas y proyectos.' },
-  ];
-
-  const activeTab = TABS.find(t => t.id === tab)!;
-
   return (
     <div>
-      {/* Header con tabs */}
-      <div className="px-8 pt-8 pb-0">
+      <div className="px-8 pt-8 pb-6">
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 600, color: '#0A0A0A', marginBottom: '4px' }}>
           Reservas
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '20px' }}>
-          {activeTab.descripcion}
+          {RESERVAS_DESCRIPCIONES[tab]}
         </p>
-
-        {/* Tab pills */}
-        <div className="flex gap-1 border-b" style={{ borderColor: '#E5E5E5' }}>
-          {TABS.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className="relative px-4 pb-3 text-sm font-medium transition-colors"
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                color: tab === t.id ? '#006B4E' : '#737373',
-                fontWeight: tab === t.id ? 600 : 400,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              {t.label}
-              {tab === t.id && (
-                <span
-                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                  style={{ backgroundColor: '#006B4E' }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
+        <Tabs tabs={RESERVAS_TABS} activeTab={tab} onTabChange={(id) => setTab(id as ReservasTab)} />
       </div>
 
-      {/* Contenido */}
       {tab === 'solicitudes' && <ReservasAdminView />}
-      {tab === 'valores'     && (
-        <div className="rounded-2xl overflow-hidden mx-8 mt-6" style={{ border: '1px solid #E5E5E5' }}>
+      {tab === 'valores' && (
+        <div className="rounded-2xl overflow-hidden mx-8 mb-8" style={{ border: '1px solid #E5E5E5' }}>
           <MontosReservaAdminView />
         </div>
       )}

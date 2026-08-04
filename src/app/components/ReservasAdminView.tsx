@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, ChevronRight, ChevronDown, X, CheckCircle, XCircle, Clock, FileText, MapPin, DollarSign, User, Mail, Phone, Calendar, Eye, AlertTriangle } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, Clock, FileText, MapPin, DollarSign, User, Mail, Phone, Calendar, Eye, AlertTriangle } from 'lucide-react';
 
 type EstadoReserva = 'pendiente' | 'reservada' | 'rechazada';
 
@@ -319,7 +319,7 @@ const FILTRO_OPCIONES: { id: FiltroEstado; label: string }[] = [
 function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v: FiltroEstado) => void }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const selected = FILTRO_OPCIONES.find(o => o.id === value)!;
+  const hasFilter = value !== 'todas';
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -333,20 +333,21 @@ function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 px-3.5 py-2 text-sm transition-colors"
+        className="flex items-center gap-2 px-3.5 py-2 transition-colors"
         style={{
-          border: '1px solid #E5E5E5',
-          backgroundColor: open ? '#F9FAFB' : '#FFFFFF',
-          color: '#374151',
+          border: `1px solid ${hasFilter ? '#006B4E' : '#E5E5E5'}`,
+          backgroundColor: hasFilter ? '#F0FAF5' : '#FFFFFF',
+          color: hasFilter ? '#006B4E' : '#374151',
           borderRadius: '200px',
           fontFamily: 'var(--font-body)',
           fontSize: 'var(--font-size-body-sm)',
+          fontWeight: 500,
           cursor: 'pointer',
         }}
       >
-        <span style={{ color: '#9CA3AF', fontSize: 'var(--font-size-xs)' }}>Estado:</span>
-        <span style={{ fontWeight: 500 }}>{selected.label}</span>
-        <ChevronDown className="w-3.5 h-3.5" style={{ color: '#9CA3AF', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+        <SlidersHorizontal className="w-3.5 h-3.5" />
+        Filtros
+        <ChevronDown className="w-3.5 h-3.5" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
       </button>
 
       {open && (
@@ -358,7 +359,7 @@ function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v
             <button
               key={opcion.id}
               onClick={() => { onChange(opcion.id); setOpen(false); }}
-              className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
+              className="w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors"
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--font-size-body-sm)',
@@ -409,10 +410,8 @@ export function ReservasAdminView() {
   return (
     <div className="p-8 space-y-6">
       {/* Toolbar */}
-      <div className="flex flex-row gap-3 items-center justify-between">
-        <div className="flex items-center gap-3">
-          <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
-        </div>
+      <div className="flex flex-row gap-3 items-center">
+        <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
           <input
