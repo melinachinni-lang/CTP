@@ -4,13 +4,9 @@ import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRange
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
 
 const RANGO_PRESETS = [
-  { id: 'hoy',     label: 'Hoy' },
-  { id: '7d',      label: 'Últimos 7 días' },
-  { id: '28d',     label: 'Último mes' },
-  { id: '30d',     label: 'Últimos 30 días' },
-  { id: 'mes',     label: 'Este mes' },
-  { id: 'mes_ant', label: 'El mes pasado' },
-  { id: '90d',     label: 'Últimos 90 días' },
+  { id: '7d',  label: 'Últimos 7 días' },
+  { id: '30d', label: 'Últimos 30 días' },
+  { id: '90d', label: 'Últimos 90 días' },
 ];
 
 // ─── Skeletons ───────────────────────────────────────────────────────────────
