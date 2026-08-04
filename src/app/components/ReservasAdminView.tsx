@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Search, ChevronRight, X, CheckCircle, XCircle, Clock, FileText, MapPin, DollarSign, User, Mail, Phone, Calendar, Eye, AlertTriangle } from 'lucide-react';
-import { Tabs } from '@/app/components/Tabs';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, ChevronRight, ChevronDown, X, CheckCircle, XCircle, Clock, FileText, MapPin, DollarSign, User, Mail, Phone, Calendar, Eye, AlertTriangle } from 'lucide-react';
 
-type EstadoReserva = 'por-revisar' | 'reservada' | 'rechazada';
+type EstadoReserva = 'pendiente' | 'reservada' | 'rechazada';
 
 interface ParcelaReserva {
   id: string;
@@ -38,7 +37,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     superficie: '5.000 m²',
     tipo: 'proyecto',
     proyecto: 'Proyecto Patagonia Sur',
-    estado: 'por-revisar',
+    estado: 'pendiente',
     comprobante: { monto: '$45.000.000', fecha: '2026-04-25', referencia: '000123456789', archivo: 'comprobante_transferencia.pdf', mensaje: 'Transferí ayer al mediodía, quedo atento.' },
     usuario: { nombre: 'Sebastián Torres', email: 'sebastian.torres@gmail.com', telefono: '+56 9 8765 4321' },
     fechaSolicitud: '25 Abr 2026',
@@ -50,7 +49,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     precio: '$32.000.000',
     superficie: '8.500 m²',
     tipo: 'individual',
-    estado: 'por-revisar',
+    estado: 'pendiente',
     comprobante: { monto: '$32.000.000', fecha: '2026-04-24', referencia: '000987654321', archivo: 'transferencia_banco_estado.jpg' },
     usuario: { nombre: 'Valentina Morales', email: 'vmorales@outlook.com', telefono: '+56 9 6543 2109' },
     fechaSolicitud: '24 Abr 2026',
@@ -98,9 +97,9 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
 
 function BadgeEstado({ estado }: { estado: EstadoReserva }) {
   const config = {
-    'por-revisar': { bg: '#FEF3C7', color: '#92400E', border: '#FDE68A', label: 'Por revisar', Icon: Clock },
-    'reservada': { bg: '#ECFDF5', color: '#065F46', border: '#6EE7B7', label: 'Reservada', Icon: CheckCircle },
-    'rechazada': { bg: '#FEF2F2', color: '#991B1B', border: '#FECACA', label: 'Rechazada', Icon: XCircle },
+    'pendiente':  { bg: '#FEF3C7', color: '#92400E', border: '#FDE68A', label: 'Pendiente',  Icon: Clock },
+    'reservada':  { bg: '#ECFDF5', color: '#065F46', border: '#6EE7B7', label: 'Reservada',  Icon: CheckCircle },
+    'rechazada':  { bg: '#FEF2F2', color: '#991B1B', border: '#FECACA', label: 'Rechazada',  Icon: XCircle },
   }[estado];
   const Icon = config.Icon;
   return (
@@ -229,7 +228,7 @@ function DetalleDrawer({ reserva, onClose, onValidar, onRechazar }: {
         </div>
 
         {/* Footer acciones */}
-        {reserva.estado === 'por-revisar' && (
+        {reserva.estado === 'pendiente' && (
           <div className="px-6 py-4 border-t flex gap-3" style={{ borderColor: '#E5E5E5' }}>
             <button
               onClick={() => onRechazar(reserva.id)}
@@ -308,19 +307,91 @@ function RechazarModal({ reserva, onClose, onConfirmar }: {
   );
 }
 
+type FiltroEstado = 'todas' | 'pendiente' | 'reservada' | 'rechazada';
+
+const FILTRO_OPCIONES: { id: FiltroEstado; label: string }[] = [
+  { id: 'todas',     label: 'Todos los estados' },
+  { id: 'pendiente', label: 'Pendiente' },
+  { id: 'reservada', label: 'Reservada' },
+  { id: 'rechazada', label: 'Rechazada' },
+];
+
+function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v: FiltroEstado) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = FILTRO_OPCIONES.find(o => o.id === value)!;
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-2 px-3.5 py-2 text-sm transition-colors"
+        style={{
+          border: '1px solid #E5E5E5',
+          backgroundColor: open ? '#F9FAFB' : '#FFFFFF',
+          color: '#374151',
+          borderRadius: '200px',
+          fontFamily: 'var(--font-body)',
+          fontSize: 'var(--font-size-body-sm)',
+          cursor: 'pointer',
+        }}
+      >
+        <span style={{ color: '#9CA3AF', fontSize: 'var(--font-size-xs)' }}>Estado:</span>
+        <span style={{ fontWeight: 500 }}>{selected.label}</span>
+        <ChevronDown className="w-3.5 h-3.5" style={{ color: '#9CA3AF', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+      </button>
+
+      {open && (
+        <div
+          className="absolute left-0 top-full mt-1.5 rounded-xl overflow-hidden z-20"
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', minWidth: '180px' }}
+        >
+          {FILTRO_OPCIONES.map(opcion => (
+            <button
+              key={opcion.id}
+              onClick={() => { onChange(opcion.id); setOpen(false); }}
+              className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--font-size-body-sm)',
+                color: value === opcion.id ? '#006B4E' : '#374151',
+                backgroundColor: value === opcion.id ? '#F0FAF5' : 'transparent',
+                fontWeight: value === opcion.id ? 600 : 400,
+              }}
+              onMouseEnter={e => { if (value !== opcion.id) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+              onMouseLeave={e => { if (value !== opcion.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >
+              {opcion.label}
+              {value === opcion.id && <CheckCircle className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function ReservasAdminView() {
   const [reservas, setReservas] = useState<ParcelaReserva[]>(MOCK_RESERVAS);
-  const [filtroEstado, setFiltroEstado] = useState<'todas' | 'por-revisar' | 'reservada'>('todas');
+  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('todas');
   const [busqueda, setBusqueda] = useState('');
   const [detalleAbierto, setDetalleAbierto] = useState<ParcelaReserva | null>(null);
   const [rechazarTarget, setRechazarTarget] = useState<ParcelaReserva | null>(null);
 
-  const porRevisar = reservas.filter(r => r.estado === 'por-revisar').length;
-  const reservadas = reservas.filter(r => r.estado === 'reservada').length;
-
   const filtradas = reservas.filter(r => {
     const matchEstado = filtroEstado === 'todas' || r.estado === filtroEstado;
-    const matchBusqueda = !busqueda || r.nombre.toLowerCase().includes(busqueda.toLowerCase()) || r.usuario.nombre.toLowerCase().includes(busqueda.toLowerCase()) || r.ubicacion.toLowerCase().includes(busqueda.toLowerCase());
+    const q = busqueda.toLowerCase();
+    const matchBusqueda = !busqueda
+      || r.nombre.toLowerCase().includes(q)
+      || (r.proyecto ?? '').toLowerCase().includes(q);
     return matchEstado && matchBusqueda;
   });
 
@@ -335,26 +406,18 @@ export function ReservasAdminView() {
     setRechazarTarget(null);
   };
 
-  const TABS: { id: 'todas' | 'por-revisar' | 'reservada'; label: string; count?: number }[] = [
-    { id: 'todas', label: 'Todas', count: reservas.length },
-    { id: 'por-revisar', label: 'Por revisar', count: porRevisar },
-    { id: 'reservada', label: 'Reservadas', count: reservadas },
-  ];
-
   return (
     <div className="p-8 space-y-6">
       {/* Toolbar */}
       <div className="flex flex-row gap-3 items-center justify-between">
-        <Tabs
-          tabs={TABS}
-          activeTab={filtroEstado}
-          onTabChange={(id) => setFiltroEstado(id as typeof filtroEstado)}
-        />
+        <div className="flex items-center gap-3">
+          <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
+        </div>
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
           <input
             type="text"
-            placeholder="Buscar parcela o comprador..."
+            placeholder="Buscar por parcela o proyecto..."
             value={busqueda}
             onChange={e => setBusqueda(e.target.value)}
             className="pl-9 pr-4 py-2 text-sm"

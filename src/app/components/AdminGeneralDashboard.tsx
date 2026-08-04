@@ -397,7 +397,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
       { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
       { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
-      { id: 'reservas' as NavItem, icon: FileText, label: 'Valores de reserva' },
+      { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
     ],
     [
       { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
