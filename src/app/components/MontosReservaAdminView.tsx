@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, DollarSign, Link, Check, AlertTriangle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, SlidersHorizontal, DollarSign, Link, Check, AlertTriangle } from 'lucide-react';
 
 interface Asignacion {
   tipo: 'parcela' | 'proyecto';
@@ -368,6 +368,87 @@ function ConfirmDeleteModal({ etiqueta, onConfirm, onClose }: {
 
 type Tab = 'todos' | 'con-asignaciones' | 'sin-asignar';
 
+const TAB_OPCIONES: { id: Tab; label: string }[] = [
+  { id: 'todos',            label: 'Todos' },
+  { id: 'con-asignaciones', label: 'Con asignaciones' },
+  { id: 'sin-asignar',      label: 'Sin asignar' },
+];
+
+function MontosFiltroDropdown({ value, onChange, sinAsignarCount }: {
+  value: Tab;
+  onChange: (v: Tab) => void;
+  sinAsignarCount: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const hasFilter = value !== 'todos';
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-2 px-3.5 py-2 transition-colors"
+        style={{
+          border: `1px solid ${hasFilter ? '#006B4E' : '#E5E5E5'}`,
+          backgroundColor: hasFilter ? '#F0FAF5' : '#FFFFFF',
+          color: hasFilter ? '#006B4E' : '#374151',
+          borderRadius: '8px',
+          fontFamily: 'var(--font-body)',
+          fontSize: 'var(--font-size-body-sm)',
+          fontWeight: 500,
+          cursor: 'pointer',
+        }}
+      >
+        <SlidersHorizontal className="w-3.5 h-3.5" />
+        Filtros
+        <ChevronDown className="w-3.5 h-3.5" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+      </button>
+
+      {open && (
+        <div
+          className="absolute right-0 top-full mt-1.5 rounded-xl overflow-hidden z-50"
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '180px' }}
+        >
+          {TAB_OPCIONES.map(opcion => (
+            <button
+              key={opcion.id}
+              onClick={() => { onChange(opcion.id); setOpen(false); }}
+              className="w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors"
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--font-size-body-sm)',
+                color: value === opcion.id ? '#006B4E' : '#374151',
+                backgroundColor: value === opcion.id ? '#F0FAF5' : 'transparent',
+                fontWeight: value === opcion.id ? 600 : 400,
+              }}
+              onMouseEnter={e => { if (value !== opcion.id) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+              onMouseLeave={e => { if (value !== opcion.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >
+              <span className="flex items-center gap-2">
+                {opcion.label}
+                {opcion.id === 'sin-asignar' && sinAsignarCount > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>
+                    {sinAsignarCount}
+                  </span>
+                )}
+              </span>
+              {value === opcion.id && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function MontosReservaAdminView() {
   const [montos, setMontos] = useState<MontoReserva[]>(MOCK_MONTOS);
   const [defaultCLP, setDefaultCLP] = useState('50000');
@@ -415,12 +496,6 @@ export function MontosReservaAdminView() {
     setConfirmDelete(null);
     if (expandedId === monto.id) setExpandedId(null);
   };
-
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'todos', label: 'Todos' },
-    { id: 'con-asignaciones', label: 'Con asignaciones' },
-    { id: 'sin-asignar', label: 'Sin asignar' },
-  ];
 
   return (
     <div className="p-6">
@@ -471,31 +546,8 @@ export function MontosReservaAdminView() {
         </button>
       </div>
 
-      {/* Tabs + Buscador */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-1" style={{ borderBottom: '2px solid #F3F4F6' }}>
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className="px-4 py-2 text-sm font-medium transition-colors relative"
-              style={{
-                fontFamily: 'var(--font-body)',
-                color: tab === t.id ? '#006B4E' : '#6B7280',
-                borderBottom: tab === t.id ? '2px solid #006B4E' : '2px solid transparent',
-                marginBottom: '-2px',
-                backgroundColor: 'transparent',
-              }}>
-              {t.label}
-              {t.id === 'sin-asignar' && montos.filter(m => m.asignaciones.length === 0).length > 0 && (
-                <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-xs"
-                  style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontFamily: 'var(--font-body)' }}>
-                  {montos.filter(m => m.asignaciones.length === 0).length}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
+      {/* Buscador + Filtros */}
+      <div className="flex items-center justify-end gap-3 mb-4">
         <div className="relative">
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
           <input
@@ -503,10 +555,17 @@ export function MontosReservaAdminView() {
             placeholder="Buscar por etiqueta..."
             value={busqueda}
             onChange={e => setBusqueda(e.target.value)}
-            className="pl-9 pr-4 py-2 rounded-lg text-sm"
-            style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '220px' }}
+            className="pl-9 pr-4 py-2 text-sm"
+            style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '220px', borderRadius: '8px' }}
+            onFocus={e => e.target.style.borderColor = '#006B4E'}
+            onBlur={e => e.target.style.borderColor = '#E5E5E5'}
           />
         </div>
+        <MontosFiltroDropdown
+          value={tab}
+          onChange={setTab}
+          sinAsignarCount={montos.filter(m => m.asignaciones.length === 0).length}
+        />
       </div>
 
       {/* Cabecera de tabla */}
