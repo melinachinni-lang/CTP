@@ -568,16 +568,7 @@ export function MontosReservaAdminView() {
         />
       </div>
 
-      {/* Cabecera de tabla */}
-      <div className="grid px-5 py-2 mb-1" style={{ gridTemplateColumns: '1fr 140px 1fr 80px' }}>
-        {['ETIQUETA', 'VALOR', 'ASIGNACIONES', ''].map(col => (
-          <p key={col} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            {col}
-          </p>
-        ))}
-      </div>
-
-      {/* Lista */}
+      {/* Tabla */}
       {filtrados.length === 0 ? (
         <div className="rounded-2xl p-12 text-center" style={{ border: '1px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}>
           <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: '#F3F4F6' }}>
@@ -591,11 +582,19 @@ export function MontosReservaAdminView() {
           </p>
         </div>
       ) : (
-        <div className="space-y-1">
-          {filtrados.map(monto => {
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+          {/* Header */}
+          <div className="grid px-5 py-3" style={{ gridTemplateColumns: '1fr 140px 1fr 80px', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+            {['ETIQUETA', 'VALOR', 'ASIGNACIONES', ''].map(col => (
+              <p key={col} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                {col}
+              </p>
+            ))}
+          </div>
+          {filtrados.map((monto, idx) => {
             const isExpanded = expandedId === monto.id;
             return (
-              <div key={monto.id} className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div key={monto.id} style={{ borderBottom: idx < filtrados.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: '#FFFFFF' }}>
                 <div className="grid items-center px-5 py-4 gap-4" style={{ gridTemplateColumns: '1fr 140px 1fr 80px' }}>
                   {/* Etiqueta */}
                   <div className="flex items-center gap-3 min-w-0">
