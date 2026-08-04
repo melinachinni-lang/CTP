@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, FileText, MapPin, DollarSign, User, Mail, Phone, Eye, AlertTriangle } from 'lucide-react';
+import { Search, SearchX, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, FileText, MapPin, DollarSign, User, Mail, Phone, Eye, AlertTriangle } from 'lucide-react';
 
 type EstadoReserva = 'aprobada' | 'rechazada';
 
@@ -382,8 +382,18 @@ export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda: string
 
         {/* Rows */}
         {filtradas.length === 0 ? (
-          <div className="py-12 text-center">
-            <p style={{ fontFamily: 'var(--font-body)', color: '#9CA3AF' }}>No hay reservas con este filtro.</p>
+          <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#F3F4F6' }}>
+              <SearchX className="w-6 h-6" style={{ color: '#D1D5DB' }} />
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#374151', marginBottom: '4px' }}>
+              {busqueda || filtroEstado !== 'todas' ? 'Sin resultados' : 'Sin reservas'}
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', maxWidth: '280px' }}>
+              {busqueda || filtroEstado !== 'todas'
+                ? 'No se encontraron reservas que coincidan con tu búsqueda o filtro.'
+                : 'Aún no hay solicitudes de reserva registradas.'}
+            </p>
           </div>
         ) : (
           filtradas.map((reserva, idx) => (

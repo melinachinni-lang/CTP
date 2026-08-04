@@ -570,15 +570,17 @@ export function MontosReservaAdminView() {
 
       {/* Tabla */}
       {filtrados.length === 0 ? (
-        <div className="rounded-2xl p-12 text-center" style={{ border: '1px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}>
-          <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: '#F3F4F6' }}>
+        <div className="rounded-xl flex flex-col items-center justify-center py-16 px-6 text-center" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+          <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#F3F4F6' }}>
             <DollarSign className="w-6 h-6" style={{ color: '#D1D5DB' }} />
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: '#374151', marginBottom: '4px' }}>
-            {busqueda ? 'Sin resultados' : 'No hay valores configurados'}
+          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'var(--font-size-body-base)', color: '#374151', marginBottom: '4px' }}>
+            {busqueda || tab !== 'todos' ? 'Sin resultados' : 'No hay valores configurados'}
           </p>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF' }}>
-            {busqueda ? 'Intenta con otro término.' : 'Agrega el primer valor de reserva.'}
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#9CA3AF', maxWidth: '280px' }}>
+            {busqueda || tab !== 'todos'
+              ? 'No se encontraron valores que coincidan con tu búsqueda o filtro.'
+              : 'Agrega el primer valor de reserva para comenzar.'}
           </p>
         </div>
       ) : (
