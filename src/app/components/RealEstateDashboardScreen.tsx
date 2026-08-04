@@ -10,7 +10,7 @@ import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { TeamContent } from '@/app/components/TeamContent';
 import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { ReservasAdminView } from '@/app/components/ReservasAdminView';
+import { ReservasAdminView, FiltroDropdown, type FiltroEstado } from '@/app/components/ReservasAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { Tabs } from '@/app/components/Tabs';
 import { AsignacionesContent, InteraccionesContent } from '@/app/components/CTPAdminDashboard';
@@ -38,6 +38,8 @@ const RESERVAS_DESCRIPCIONES: Record<string, string> = {
 
 function ReservasSection() {
   const [tab, setTab] = useState<ReservasTab>('solicitudes');
+  const [busqueda, setBusqueda] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('todas');
 
   return (
     <div>
@@ -48,10 +50,34 @@ function ReservasSection() {
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '20px' }}>
           {RESERVAS_DESCRIPCIONES[tab]}
         </p>
-        <Tabs tabs={RESERVAS_TABS} activeTab={tab} onTabChange={(id) => setTab(id as ReservasTab)} />
+
+        {/* Tabs + buscador + filtro en la misma fila */}
+        <div className="flex items-center justify-between">
+          <Tabs tabs={RESERVAS_TABS} activeTab={tab} onTabChange={(id) => { setTab(id as ReservasTab); setBusqueda(''); setFiltroEstado('todas'); }} />
+          {tab === 'solicitudes' && (
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <svg className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Buscar por parcela o proyecto..."
+                  value={busqueda}
+                  onChange={e => setBusqueda(e.target.value)}
+                  className="pl-9 pr-4 py-2 text-sm"
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#F9FAFB', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '260px', borderRadius: '200px' }}
+                  onFocus={e => e.target.style.borderColor = '#006B4E'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+              </div>
+              <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
+            </div>
+          )}
+        </div>
       </div>
 
-      {tab === 'solicitudes' && <ReservasAdminView />}
+      {tab === 'solicitudes' && <ReservasAdminView busqueda={busqueda} filtroEstado={filtroEstado} />}
       {tab === 'valores' && (
         <div className="rounded-2xl overflow-hidden mx-8 mb-8" style={{ border: '1px solid #E5E5E5' }}>
           <MontosReservaAdminView />

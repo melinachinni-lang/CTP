@@ -307,7 +307,7 @@ function RechazarModal({ reserva, onClose, onConfirmar }: {
   );
 }
 
-type FiltroEstado = 'todas' | 'pendiente' | 'reservada' | 'rechazada';
+export type FiltroEstado = 'todas' | 'pendiente' | 'reservada' | 'rechazada';
 
 const FILTRO_OPCIONES: { id: FiltroEstado; label: string }[] = [
   { id: 'todas',     label: 'Todos los estados' },
@@ -316,7 +316,7 @@ const FILTRO_OPCIONES: { id: FiltroEstado; label: string }[] = [
   { id: 'rechazada', label: 'Rechazada' },
 ];
 
-function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v: FiltroEstado) => void }) {
+export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v: FiltroEstado) => void }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const hasFilter = value !== 'todas';
@@ -380,10 +380,8 @@ function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v
   );
 }
 
-export function ReservasAdminView() {
+export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda: string; filtroEstado: FiltroEstado }) {
   const [reservas, setReservas] = useState<ParcelaReserva[]>(MOCK_RESERVAS);
-  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('todas');
-  const [busqueda, setBusqueda] = useState('');
   const [detalleAbierto, setDetalleAbierto] = useState<ParcelaReserva | null>(null);
   const [rechazarTarget, setRechazarTarget] = useState<ParcelaReserva | null>(null);
 
@@ -408,24 +406,7 @@ export function ReservasAdminView() {
   };
 
   return (
-    <div className="p-8 space-y-6">
-      {/* Toolbar */}
-      <div className="flex flex-row gap-3 items-center justify-end">
-        <div className="relative">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
-          <input
-            type="text"
-            placeholder="Buscar por parcela o proyecto..."
-            value={busqueda}
-            onChange={e => setBusqueda(e.target.value)}
-            className="pl-9 pr-4 py-2 text-sm"
-            style={{ border: '1px solid #E5E5E5', backgroundColor: '#F9FAFB', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '260px', borderRadius: '200px' }}
-            onFocus={e => e.target.style.borderColor = '#006B4E'}
-            onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-          />
-        </div>
-        <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
-      </div>
+    <div className="px-8 pb-8 space-y-6">
 
       {/* Tabla */}
       <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
