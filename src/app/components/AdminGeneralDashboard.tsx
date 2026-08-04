@@ -8,7 +8,6 @@ import { NewProjectFlow } from '@/app/components/NewProjectFlow';
 import { AdminPublicacionesSection } from '@/app/components/AdminPublicacionesSection';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
-import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
@@ -21,7 +20,7 @@ interface AdminGeneralDashboardProps {
   onNavigate: (page: string, data?: any) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'insights' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'reservas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'insights' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -397,7 +396,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
       { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
       { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
-      { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
     ],
     [
       { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
@@ -741,7 +739,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'asignaciones' && 'Asignación de leads a brokers'}
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
-                  {activeNav === 'reservas' && 'Comprobantes de transferencia recibidos — revisión y validación de pagos'}
                   {activeNav === 'whatsapp' && 'Números telefónicos asignados a publicaciones de parcelas y proyectos'}
                   {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
@@ -1727,12 +1724,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
             <CitasAdminView />
           )}
 
-          {/* SECCIÓN: VALORES DE RESERVA */}
-          {activeNav === 'reservas' && (
-            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-              <MontosReservaAdminView />
-            </div>
-          )}
 
           {/* SECCIÓN: WHATSAPP */}
           {activeNav === 'whatsapp' && (
