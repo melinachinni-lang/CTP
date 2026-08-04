@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Download, ChevronDown, CalendarDays, X } from 'lucide-react';
+import { Download, ChevronDown, CalendarDays, X, SearchX } from 'lucide-react';
 
 type Periodo = '7d' | '30d' | '90d';
 const PERIODO_LABELS: Record<Periodo, string> = { '7d': 'Últimos 7 días', '30d': 'Últimos 30 días', '90d': 'Últimos 90 días' };
@@ -97,7 +97,7 @@ export function PagosInmobiliariasAdminView() {
     setShowCustomRange(false);
   };
 
-  const filas = DATOS['Julio 2026'] ?? [];
+  const filas = appliedRange ? [] : (DATOS['Julio 2026'] ?? []);
   const totalReservas = filas.reduce((s, f) => s + f.reservas, 0);
   const totalMonto = filas.reduce((s, f) => s + f.monto, 0);
 
@@ -215,69 +215,83 @@ export function PagosInmobiliariasAdminView() {
         </div>
       </div>
 
-      {/* Tabla */}
-      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-        {/* Cabecera */}
-        <div className="grid px-6 py-3" style={{ gridTemplateColumns: '1fr 160px 200px', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
-          {['INMOBILIARIA', 'RESERVAS', 'MONTO TOTAL'].map(col => (
-            <p key={col} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-              {col}
-            </p>
-          ))}
+      {/* Tabla / Empty state */}
+      {filas.length === 0 ? (
+        <div className="rounded-2xl flex flex-col items-center justify-center text-center py-16 px-6" style={{ border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E5E5' }}>
+            <SearchX className="w-7 h-7" style={{ color: '#9CA3AF' }} />
+          </div>
+          <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '6px' }}>
+            Sin pagos en este período
+          </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '320px', lineHeight: '1.6' }}>
+            No se registraron reservas confirmadas para las fechas seleccionadas. Prueba con otro rango de fechas.
+          </p>
         </div>
+      ) : (
+        <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
+          {/* Cabecera */}
+          <div className="grid px-6 py-3" style={{ gridTemplateColumns: '1fr 160px 200px', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E5E5' }}>
+            {['INMOBILIARIA', 'RESERVAS', 'MONTO TOTAL'].map(col => (
+              <p key={col} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                {col}
+              </p>
+            ))}
+          </div>
 
-        {/* Filas */}
-        {filas.map((fila, i) => (
-          <div
-            key={fila.inmobiliaria}
-            className="grid px-6 py-4 items-center"
-            style={{
-              gridTemplateColumns: '1fr 160px 200px',
-              borderBottom: i < filas.length - 1 ? '1px solid #F3F4F6' : 'none',
-              backgroundColor: '#FFFFFF',
-            }}
-          >
-            {/* Inmobiliaria */}
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, color: '#006B4E' }}>
-                  {fila.inmobiliaria.charAt(0)}
+          {/* Filas */}
+          {filas.map((fila, i) => (
+            <div
+              key={fila.inmobiliaria}
+              className="grid px-6 py-4 items-center"
+              style={{
+                gridTemplateColumns: '1fr 160px 200px',
+                borderBottom: i < filas.length - 1 ? '1px solid #F3F4F6' : 'none',
+                backgroundColor: '#FFFFFF',
+              }}
+            >
+              {/* Inmobiliaria */}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, color: '#006B4E' }}>
+                    {fila.inmobiliaria.charAt(0)}
+                  </span>
+                </div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
+                  {fila.inmobiliaria}
                 </span>
               </div>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
-                {fila.inmobiliaria}
+
+              {/* Reservas */}
+              <div>
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full"
+                  style={{ backgroundColor: '#EFF6FF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#1E40AF' }}>
+                  {fila.reservas} reserva{fila.reservas !== 1 ? 's' : ''}
+                </span>
+              </div>
+
+              {/* Monto */}
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#006B4E' }}>
+                {formatCLP(fila.monto)}
               </span>
             </div>
+          ))}
 
-            {/* Reservas */}
-            <div>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: '#EFF6FF', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#1E40AF' }}>
-                {fila.reservas} reserva{fila.reservas !== 1 ? 's' : ''}
-              </span>
-            </div>
-
-            {/* Monto */}
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#006B4E' }}>
-              {formatCLP(fila.monto)}
+          {/* Fila de totales */}
+          <div className="grid px-6 py-4 items-center" style={{ gridTemplateColumns: '1fr 160px 200px', backgroundColor: '#F9FAFB', borderTop: '2px solid #E5E5E5' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
+              Total {appliedRange ? `${appliedRange.from} – ${appliedRange.to}` : PERIODO_LABELS[periodo]}
+            </span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
+              {totalReservas} reservas
+            </span>
+            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-lg)', fontWeight: 700, color: '#006B4E' }}>
+              {formatCLP(totalMonto)}
             </span>
           </div>
-        ))}
-
-        {/* Fila de totales */}
-        <div className="grid px-6 py-4 items-center" style={{ gridTemplateColumns: '1fr 160px 200px', backgroundColor: '#F9FAFB', borderTop: '2px solid #E5E5E5' }}>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
-            Total {appliedRange ? `${appliedRange.from} – ${appliedRange.to}` : PERIODO_LABELS[periodo]}
-          </span>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: '#0A0A0A' }}>
-            {totalReservas} reservas
-          </span>
-          <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-body-lg)', fontWeight: 700, color: '#006B4E' }}>
-            {formatCLP(totalMonto)}
-          </span>
         </div>
-      </div>
+      )}
     </div>
   );
 }
