@@ -410,8 +410,7 @@ export function ReservasAdminView() {
   return (
     <div className="p-8 space-y-6">
       {/* Toolbar */}
-      <div className="flex flex-row gap-3 items-center">
-        <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
+      <div className="flex flex-row gap-3 items-center justify-end">
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
           <input
@@ -425,6 +424,7 @@ export function ReservasAdminView() {
             onBlur={e => e.target.style.borderColor = '#E5E5E5'}
           />
         </div>
+        <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
       </div>
 
       {/* Tabla */}
