@@ -397,7 +397,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       { id: 'asignaciones' as NavItem, icon: ClipboardList, label: 'Asignaciones' },
       { id: 'interacciones' as NavItem, icon: MessageSquare, label: 'Interacciones' },
       { id: 'citas' as NavItem, icon: Calendar, label: 'Citas' },
-      { id: 'reservas' as NavItem, icon: FileText, label: 'Reservas' },
+      { id: 'reservas' as NavItem, icon: FileText, label: 'Valores de reserva' },
     ],
     [
       { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
@@ -1727,7 +1727,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
             <CitasAdminView />
           )}
 
-          {/* SECCIÓN: RESERVAS */}
+          {/* SECCIÓN: VALORES DE RESERVA */}
           {activeNav === 'reservas' && (
             <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
               <MontosReservaAdminView />
