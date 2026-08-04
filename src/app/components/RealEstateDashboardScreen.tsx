@@ -66,7 +66,7 @@ function ReservasSection() {
                   value={busqueda}
                   onChange={e => setBusqueda(e.target.value)}
                   className="pl-9 pr-4 py-2 text-sm"
-                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#F9FAFB', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '260px', borderRadius: '200px' }}
+                  style={{ border: '1px solid #E5E5E5', backgroundColor: '#F9FAFB', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '260px', borderRadius: '8px' }}
                   onFocus={e => e.target.style.borderColor = '#006B4E'}
                   onBlur={e => e.target.style.borderColor = '#E5E5E5'}
                 />

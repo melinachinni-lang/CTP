@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, Clock, FileText, MapPin, DollarSign, User, Mail, Phone, Calendar, Eye, AlertTriangle } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, FileText, MapPin, DollarSign, User, Mail, Phone, Eye, AlertTriangle } from 'lucide-react';
 
-type EstadoReserva = 'pendiente' | 'reservada' | 'rechazada';
+type EstadoReserva = 'aprobada' | 'rechazada';
 
 interface ParcelaReserva {
   id: string;
@@ -37,7 +37,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     superficie: '5.000 m²',
     tipo: 'proyecto',
     proyecto: 'Proyecto Patagonia Sur',
-    estado: 'pendiente',
+    estado: 'aprobada',
     comprobante: { monto: '$45.000.000', fecha: '2026-04-25', referencia: '000123456789', archivo: 'comprobante_transferencia.pdf', mensaje: 'Transferí ayer al mediodía, quedo atento.' },
     usuario: { nombre: 'Sebastián Torres', email: 'sebastian.torres@gmail.com', telefono: '+56 9 8765 4321' },
     fechaSolicitud: '25 Abr 2026',
@@ -49,7 +49,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     precio: '$32.000.000',
     superficie: '8.500 m²',
     tipo: 'individual',
-    estado: 'pendiente',
+    estado: 'aprobada',
     comprobante: { monto: '$32.000.000', fecha: '2026-04-24', referencia: '000987654321', archivo: 'transferencia_banco_estado.jpg' },
     usuario: { nombre: 'Valentina Morales', email: 'vmorales@outlook.com', telefono: '+56 9 6543 2109' },
     fechaSolicitud: '24 Abr 2026',
@@ -62,7 +62,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     superficie: '6.200 m²',
     tipo: 'proyecto',
     proyecto: 'Proyecto Lomas del Sur',
-    estado: 'reservada',
+    estado: 'aprobada',
     comprobante: { monto: '$28.500.000', fecha: '2026-04-20', referencia: '000456123789', archivo: 'comprobante.pdf' },
     usuario: { nombre: 'Andrés Fuentes', email: 'afuentes@gmail.com', telefono: '+56 9 1234 5678' },
     fechaSolicitud: '20 Abr 2026',
@@ -74,7 +74,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     precio: '$120.000.000',
     superficie: '12.000 m²',
     tipo: 'individual',
-    estado: 'reservada',
+    estado: 'aprobada',
     comprobante: { monto: '$120.000.000', fecha: '2026-04-18', referencia: '000741852963', archivo: 'pago_parcela_pirque.pdf', mensaje: 'Pago realizado en cuotas según acuerdo.' },
     usuario: { nombre: 'Camila Reyes', email: 'camila.reyes@empresa.cl', telefono: '+56 9 9876 5432' },
     fechaSolicitud: '18 Abr 2026',
@@ -97,9 +97,8 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
 
 function BadgeEstado({ estado }: { estado: EstadoReserva }) {
   const config = {
-    'pendiente':  { bg: '#FEF3C7', color: '#92400E', border: '#FDE68A', label: 'Pendiente',  Icon: Clock },
-    'reservada':  { bg: '#ECFDF5', color: '#065F46', border: '#6EE7B7', label: 'Reservada',  Icon: CheckCircle },
-    'rechazada':  { bg: '#FEF2F2', color: '#991B1B', border: '#FECACA', label: 'Rechazada',  Icon: XCircle },
+    'aprobada':  { bg: '#ECFDF5', color: '#065F46', border: '#6EE7B7', label: 'Aprobada',  Icon: CheckCircle },
+    'rechazada': { bg: '#FEF2F2', color: '#991B1B', border: '#FECACA', label: 'Rechazada', Icon: XCircle },
   }[estado];
   const Icon = config.Icon;
   return (
@@ -111,11 +110,9 @@ function BadgeEstado({ estado }: { estado: EstadoReserva }) {
   );
 }
 
-function DetalleDrawer({ reserva, onClose, onValidar, onRechazar }: {
+function DetalleDrawer({ reserva, onClose }: {
   reserva: ParcelaReserva;
   onClose: () => void;
-  onValidar: (id: string) => void;
-  onRechazar: (id: string) => void;
 }) {
   return (
     <>
@@ -227,29 +224,6 @@ function DetalleDrawer({ reserva, onClose, onValidar, onRechazar }: {
           )}
         </div>
 
-        {/* Footer acciones */}
-        {reserva.estado === 'pendiente' && (
-          <div className="px-6 py-4 border-t flex gap-3" style={{ borderColor: '#E5E5E5' }}>
-            <button
-              onClick={() => onRechazar(reserva.id)}
-              className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-              style={{ backgroundColor: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA', fontFamily: 'var(--font-body)' }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}
-            >
-              Rechazar
-            </button>
-            <button
-              onClick={() => onValidar(reserva.id)}
-              className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
-              style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
-            >
-              Confirmar reserva
-            </button>
-          </div>
-        )}
       </div>
     </>
   );
@@ -307,12 +281,11 @@ function RechazarModal({ reserva, onClose, onConfirmar }: {
   );
 }
 
-export type FiltroEstado = 'todas' | 'pendiente' | 'reservada' | 'rechazada';
+export type FiltroEstado = 'todas' | 'aprobada' | 'rechazada';
 
 const FILTRO_OPCIONES: { id: FiltroEstado; label: string }[] = [
-  { id: 'todas',     label: 'Todos los estados' },
-  { id: 'pendiente', label: 'Pendiente' },
-  { id: 'reservada', label: 'Reservada' },
+  { id: 'todas',     label: 'Todos' },
+  { id: 'aprobada',  label: 'Aprobada' },
   { id: 'rechazada', label: 'Rechazada' },
 ];
 
@@ -338,7 +311,7 @@ export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onCha
           border: `1px solid ${hasFilter ? '#006B4E' : '#E5E5E5'}`,
           backgroundColor: hasFilter ? '#F0FAF5' : '#FFFFFF',
           color: hasFilter ? '#006B4E' : '#374151',
-          borderRadius: '200px',
+          borderRadius: '8px',
           fontFamily: 'var(--font-body)',
           fontSize: 'var(--font-size-body-sm)',
           fontWeight: 500,
@@ -352,8 +325,8 @@ export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onCha
 
       {open && (
         <div
-          className="absolute left-0 top-full mt-1.5 rounded-xl overflow-hidden z-20"
-          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', minWidth: '180px' }}
+          className="absolute right-0 top-full mt-1.5 rounded-xl overflow-hidden z-50"
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '160px' }}
         >
           {FILTRO_OPCIONES.map(opcion => (
             <button
@@ -381,9 +354,8 @@ export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onCha
 }
 
 export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda: string; filtroEstado: FiltroEstado }) {
-  const [reservas, setReservas] = useState<ParcelaReserva[]>(MOCK_RESERVAS);
+  const [reservas] = useState<ParcelaReserva[]>(MOCK_RESERVAS);
   const [detalleAbierto, setDetalleAbierto] = useState<ParcelaReserva | null>(null);
-  const [rechazarTarget, setRechazarTarget] = useState<ParcelaReserva | null>(null);
 
   const filtradas = reservas.filter(r => {
     const matchEstado = filtroEstado === 'todas' || r.estado === filtroEstado;
@@ -393,17 +365,6 @@ export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda: string
       || (r.proyecto ?? '').toLowerCase().includes(q);
     return matchEstado && matchBusqueda;
   });
-
-  const handleValidar = (id: string) => {
-    setReservas(prev => prev.map(r => r.id === id ? { ...r, estado: 'reservada' as EstadoReserva } : r));
-    setDetalleAbierto(prev => prev?.id === id ? { ...prev, estado: 'reservada' as EstadoReserva } : prev);
-  };
-
-  const handleRechazarConfirmar = (id: string, motivo: string) => {
-    setReservas(prev => prev.map(r => r.id === id ? { ...r, estado: 'rechazada' as EstadoReserva, motivoRechazo: motivo } : r));
-    setDetalleAbierto(null);
-    setRechazarTarget(null);
-  };
 
   return (
     <div className="px-8 pb-8 space-y-6">
@@ -493,20 +454,6 @@ export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda: string
         <DetalleDrawer
           reserva={detalleAbierto}
           onClose={() => setDetalleAbierto(null)}
-          onValidar={handleValidar}
-          onRechazar={(id) => {
-            const r = reservas.find(x => x.id === id);
-            if (r) { setRechazarTarget(r); }
-          }}
-        />
-      )}
-
-      {/* Modal rechazo */}
-      {rechazarTarget && (
-        <RechazarModal
-          reserva={rechazarTarget}
-          onClose={() => setRechazarTarget(null)}
-          onConfirmar={handleRechazarConfirmar}
         />
       )}
     </div>
