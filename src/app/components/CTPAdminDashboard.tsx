@@ -16,7 +16,7 @@ import { ReservasAdminView } from '@/app/components/ReservasAdminView';
 import { CalendariosView } from '@/app/components/CalendariosView';
 import { RendimientoView } from '@/app/components/RendimientoView';
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
-import { TeamContent } from '@/app/components/TeamContent';
+
 import { SettingsContent } from '@/app/components/SettingsContent';
 import { AdminAnaliticaView } from '@/app/components/AdminAnaliticaView';
 import { AdminEmbudoView } from '@/app/components/AdminEmbudoView';
@@ -37,7 +37,7 @@ type NavSection =
   | 'performance' | 'analitica' | 'embudo' | 'verificacion'
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
-  | 'team' | 'configuracion'
+  | 'configuracion'
   | 'leads' | 'brokers' | 'pagos';
 
 interface CTPAdminDashboardProps {
@@ -76,7 +76,6 @@ const NAV_GROUPS = [
     label: 'Administración',
     items: [
       { id: 'verificacion' as NavSection,   label: 'Verificación',       icon: ShieldCheck },
-      { id: 'team' as NavSection,          label: 'Equipo CTP',         icon: Building2 },
       { id: 'regiones' as NavSection,      label: 'Regiones y Comunas', icon: MapPin },
       { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
     ],
@@ -316,7 +315,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'banners'         && <AdminBannersModule autoOpenNew={quickAction === 'banners-new'} />}
         {currentSection === 'regiones'        && <AdminRegionesView autoOpenNew={quickAction === 'regiones-new'} />}
         {currentSection === 'recursos'        && <AdminRecursosModule autoOpenNew={quickAction === 'recursos-new'} />}
-        {currentSection === 'team'            && <TeamContent autoOpenInvite={quickAction === 'team-invite'} />}
+
         {currentSection === 'verificacion'    && <AdminVerificacionView />}
         {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="ctp" />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
@@ -497,7 +496,7 @@ function CTPHomeContent({ setCurrentSection, setQuickAction }: {
           </p>
           <div className="space-y-2">
             {[
-              { label: 'Invitar nuevo miembro',    section: 'team'         as NavSection, action: 'team-invite',       icon: UserPlus },
+
               { label: 'Asignar lead sin broker',  section: 'leads'        as NavSection, action: 'leads-unassigned',  icon: UserCheck },
               { label: 'Crear nuevo banner',       section: 'banners'      as NavSection, action: 'banners-new',       icon: Megaphone },
               { label: 'Publicar nuevo recurso',   section: 'recursos'     as NavSection, action: 'recursos-new',      icon: BookOpen },
