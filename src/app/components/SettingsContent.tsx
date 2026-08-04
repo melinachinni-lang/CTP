@@ -78,7 +78,7 @@ const BROKERS_MOCK = [
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }: { mode?: 'profile' | 'settings'; userType?: 'inmobiliaria' | 'broker' | 'personal' }) {
+export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }: { mode?: 'profile' | 'settings'; userType?: 'inmobiliaria' | 'broker' | 'personal' | 'ctp' }) {
   const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security'>(
     mode === 'profile' ? 'profile' : 'preferences'
   );
@@ -1236,8 +1236,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               Usuarios y permisos
             </h2>
 
-            {/* ── Sección: Brokers ── */}
-            <div className="space-y-4">
+            {/* ── Sección: Brokers (solo inmobiliaria/broker) ── */}
+            {userType !== 'ctp' && <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Brokers</p>
@@ -1360,7 +1360,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div>}
 
             {/* ── Sección: Equipo administrativo ── */}
             <div className="space-y-4" style={{ paddingTop: '8px', borderTop: '1px solid #F0F0F0' }}>

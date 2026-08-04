@@ -318,7 +318,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'recursos'        && <AdminRecursosModule autoOpenNew={quickAction === 'recursos-new'} />}
         {currentSection === 'team'            && <TeamContent autoOpenInvite={quickAction === 'team-invite'} />}
         {currentSection === 'verificacion'    && <AdminVerificacionView />}
-        {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="inmobiliaria" />}
+        {currentSection === 'configuracion'   && <SettingsContent mode="settings" userType="ctp" />}
         {currentSection === 'asignaciones'    && <AsignacionesContent />}
         {currentSection === 'interacciones'   && <InteraccionesContent />}
         {currentSection === 'leads'           && <CTPLeadsView autoFilterUnassigned={quickAction === 'leads-unassigned'} />}
