@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle, ChevronDown } from 'lucide-react';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -114,6 +114,9 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   });
   const [hasAvatarPersonal, setHasAvatarPersonal] = useState(false);
   const [hasBannerPersonal, setHasBannerPersonal] = useState(false);
+  const [tipoNumeroPersonal, setTipoNumeroPersonal] = useState<'Celular' | 'Teléfono'>('Celular');
+  const [tipoNumeroOpen, setTipoNumeroOpen] = useState(false);
+  const tipoNumeroRef = useRef<HTMLDivElement>(null);
 
   // — Perfil broker state
   const [perfilBroker, setPerfilBroker] = useState({
@@ -170,6 +173,14 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   ];
   const passMatch = newPass === confirmPass && newPass.length > 0;
   const passValid = passReqs.every(r => r.met) && passMatch && currentPass.length > 0;
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (tipoNumeroRef.current && !tipoNumeroRef.current.contains(e.target as Node)) setTipoNumeroOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
 
@@ -471,58 +482,91 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 </p>
               </div>
               <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Esta información aparecerá en los botones "Llamar" y "WhatsApp" de tu perfil público
+                Este número aparecerá en los botones de contacto de tu perfil público
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                {([
-                  { key: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 1234 5678', icon: Phone },
-                  { key: 'email', label: 'Email de contacto', type: 'email', placeholder: 'tu@email.cl', icon: Mail },
-                ] as const).map(field => {
-                  const FieldIcon = field.icon;
-                  return (
-                    <div key={field.key}>
-                      <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                        {field.label}
-                      </label>
-                      <div className="relative">
-                        <FieldIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
-                        <input
-                          type={field.type}
-                          value={perfilPersonal[field.key]}
-                          placeholder={field.placeholder}
-                          onChange={e => setPerfilPersonal(p => ({ ...p, [field.key]: e.target.value }))}
-                          className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors"
-                          style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
-                          onFocus={e => e.target.style.borderColor = '#006B4E'}
-                          onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
 
-              {/* WhatsApp */}
-              <div className="mt-4" style={{ maxWidth: 'calc(50% - 8px)' }}>
-                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
-                  WhatsApp
-                </label>
-                <div className="relative">
-                  <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
-                  <input
-                    type="tel"
-                    value={perfilPersonal.whatsapp}
-                    placeholder="+56 9 1234 5678"
-                    onChange={e => setPerfilPersonal(p => ({ ...p, whatsapp: e.target.value }))}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors"
-                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
-                    onFocus={e => e.target.style.borderColor = '#006B4E'}
-                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-                  />
+                {/* WhatsApp o número de contacto con dropdown de tipo */}
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                    WhatsApp o número de contacto
+                  </label>
+                  <div className="flex rounded-xl overflow-visible" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}
+                    onFocus={() => {}} >
+                    {/* Dropdown tipo */}
+                    <div className="relative flex-shrink-0" ref={tipoNumeroRef}>
+                      <button
+                        type="button"
+                        onClick={() => setTipoNumeroOpen(prev => !prev)}
+                        className="flex items-center gap-1.5 px-3 h-full text-sm transition-colors"
+                        style={{
+                          borderRight: '1.5px solid #E5E5E5',
+                          backgroundColor: '#F5F5F5',
+                          color: '#374151',
+                          fontFamily: 'var(--font-body)',
+                          borderRadius: '0',
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {tipoNumeroPersonal}
+                        <ChevronDown className="w-3.5 h-3.5" style={{ color: '#9CA3AF' }} />
+                      </button>
+                      {tipoNumeroOpen && (
+                        <div className="absolute left-0 top-full mt-1 rounded-xl shadow-lg z-50 overflow-hidden"
+                          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', minWidth: '120px' }}>
+                          {(['Celular', 'Teléfono'] as const).map(tipo => (
+                            <button key={tipo} type="button"
+                              onClick={() => { setTipoNumeroPersonal(tipo); setTipoNumeroOpen(false); }}
+                              className="w-full flex items-center justify-between px-4 py-2.5 text-sm"
+                              style={{
+                                fontFamily: 'var(--font-body)',
+                                color: tipoNumeroPersonal === tipo ? '#006B4E' : '#374151',
+                                fontWeight: tipoNumeroPersonal === tipo ? 500 : 400,
+                                backgroundColor: tipoNumeroPersonal === tipo ? '#F0FDF4' : '#FFFFFF',
+                                cursor: 'pointer',
+                              }}
+                              onMouseEnter={e => { if (tipoNumeroPersonal !== tipo) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                              onMouseLeave={e => { e.currentTarget.style.backgroundColor = tipoNumeroPersonal === tipo ? '#F0FDF4' : '#FFFFFF'; }}
+                            >
+                              {tipo}
+                              {tipoNumeroPersonal === tipo && <Check className="w-3.5 h-3.5" style={{ color: '#006B4E' }} />}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {/* Input número */}
+                    <input
+                      type="tel"
+                      value={perfilPersonal.telefono}
+                      placeholder="+56 9 1234 5678"
+                      onChange={e => setPerfilPersonal(p => ({ ...p, telefono: e.target.value, whatsapp: e.target.value }))}
+                      className="flex-1 px-3 py-3 text-sm"
+                      style={{ border: 'none', outline: 'none', backgroundColor: 'transparent', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}
+                    />
+                  </div>
                 </div>
-                <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
-                  Este número se usa para el botón "Consultar por WhatsApp" en tu perfil público
-                </p>
+
+                {/* Email */}
+                <div>
+                  <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                    Email de contacto
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                    <input
+                      type="email"
+                      value={perfilPersonal.email}
+                      placeholder="tu@email.cl"
+                      onChange={e => setPerfilPersonal(p => ({ ...p, email: e.target.value }))}
+                      className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors"
+                      style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                      onFocus={e => e.target.style.borderColor = '#006B4E'}
+                      onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
