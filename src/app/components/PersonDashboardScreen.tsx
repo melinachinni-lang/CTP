@@ -4,7 +4,7 @@ import { PersonalInquiriesSection } from '@/app/components/PersonalInquiriesSect
 import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp, CreditCard } from 'lucide-react';
+import { Eye, MessageCircle, FileText, Star, Plus, Edit, Pause, Play, ArrowUp, AlertCircle, Zap, Info, Image as ImageIcon, Heart, MapPin, Bell, ChevronRight, Lock, LogOut, Search, Shield, Calendar, MoreVertical, Link as LinkIcon, Share2, Award, Check, X, CheckCircle, Settings, User, HelpCircle, Lightbulb, TrendingUp, TrendingDown, CreditCard, Home as HomeIcon } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { DashboardRef } from '@/app/App';
@@ -70,8 +70,9 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
     { id: 'saved',     label: t.nav.saved,     icon: 'heart',        separator: false },
     { id: 'compare',   label: t.nav.compare,   icon: 'chart',        separator: false },
     { id: 'purchases', label: t.nav.purchases, icon: 'shopping-bag' },
-    { id: 'listings',  label: t.nav.listings,  icon: 'list',         separator: false },
-    { id: 'inquiries', label: t.nav.inquiries, icon: 'message',      separator: false },
+    { id: 'listings',     label: t.nav.listings,  icon: 'list',         separator: false },
+    { id: 'performance',  label: 'Rendimiento',   icon: 'trending',     separator: false },
+    { id: 'inquiries',    label: t.nav.inquiries, icon: 'message',      separator: false },
     { id: 'plan',      label: t.nav.plan,      icon: 'credit-card',  separator: false },
     { id: 'profile',   label: 'Mi perfil',     icon: 'profile',      separator: true  },
     { id: 'settings',  label: 'Configuración', icon: 'settings',     separator: false },
@@ -154,6 +155,13 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
           <svg className="w-4 h-4" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        );
+      case 'trending':
+        return (
+          <svg className="w-4 h-4" fill="none" stroke={color} viewBox="0 0 24 24" strokeWidth={strokeWidth}>
+            <polyline strokeLinecap="round" strokeLinejoin="round" points="23 6 13.5 15.5 8.5 10.5 1 18" />
+            <polyline strokeLinecap="round" strokeLinejoin="round" points="17 6 23 6 23 12" />
           </svg>
         );
       default:
@@ -360,6 +368,7 @@ export const PersonDashboardScreen = React.forwardRef<DashboardRef, PersonDashbo
         {currentSection === 'purchases' && <MyPurchasesContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
+        {currentSection === 'performance' && <RendimientoPersonalView />}
         {currentSection === 'profile' && <SettingsContent mode="profile" userType="personal" />}
         {currentSection === 'settings' && <PersonSettingsContent />}
       </div>
@@ -3793,6 +3802,61 @@ function PersonSettingsContent() {
         </div>
       </div>
 
+    </main>
+  );
+}
+
+// ─── Rendimiento Personal ─────────────────────────────────────────────────────
+
+function RendimientoPersonalView() {
+  const kpis = [
+    { label: 'Parcelas publicadas', value: 2,   change: 8,   desc: 'vs mes anterior', icon: <HomeIcon className="w-5 h-5" style={{ color: '#006B4E' }} />, iconBg: '#F0FDF4' },
+    { label: 'Visualizaciones',     value: 234, change: 15,  desc: 'vs mes anterior', icon: <Eye className="w-5 h-5" style={{ color: '#2563EB' }} />, iconBg: '#EFF6FF' },
+    { label: 'Consultas recibidas', value: 7,   change: 16,  desc: 'vs mes anterior', icon: <MessageCircle className="w-5 h-5" style={{ color: '#7C3AED' }} />, iconBg: '#F5F3FF' },
+    { label: 'Favoritos usuarios',  value: 12,  change: -3,  desc: 'vs mes anterior', icon: <Heart className="w-5 h-5" style={{ color: '#DC2626' }} />, iconBg: '#FFF1F2' },
+  ];
+
+  return (
+    <main className="px-4 py-4 md:px-6 md:py-6 space-y-6">
+      <div className="space-y-1">
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 500, color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+          Rendimiento
+        </h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#6B6B6B', lineHeight: 'var(--line-height-body)' }}>
+          Actividad e indicadores de tus publicaciones en la plataforma
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {kpis.map((kpi, i) => {
+          const pos = kpi.change >= 0;
+          return (
+            <div key={i} className="p-5 rounded-2xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: kpi.iconBg }}>
+                  {kpi.icon}
+                </div>
+                <span
+                  className="flex items-center gap-1 px-2 py-1 rounded-full"
+                  style={{ backgroundColor: pos ? '#DCFCE7' : '#FEE2E2', color: pos ? '#166534' : '#991B1B', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-body)' }}
+                >
+                  {pos ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                  {pos ? '+' : ''}{kpi.change}%
+                </span>
+              </div>
+              <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 600, color: '#0A0A0A', lineHeight: 1.1, marginBottom: '4px' }}>
+                {kpi.value.toLocaleString('es-CL')}
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                {kpi.label}
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#A3A3A3', marginTop: '2px' }}>
+                {kpi.desc}
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </main>
   );
 }
