@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, MessageSquare, CheckCircle, Phone, Link, AlertTriangle, Check } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, Plus, Edit2, Trash2, X, ChevronRight, ChevronDown, MessageSquare, CheckCircle, Phone, Link, AlertTriangle, Check, SlidersHorizontal } from 'lucide-react';
+
+const FILTRO_OPCIONES: { id: 'todos' | 'con-asignacion' | 'sin-asignar'; label: string }[] = [
+  { id: 'todos',          label: 'Todos' },
+  { id: 'con-asignacion', label: 'Con asignaciones' },
+  { id: 'sin-asignar',    label: 'Sin asignar' },
+];
 
 interface Asignacion {
   tipo: 'parcela' | 'proyecto';
@@ -578,6 +584,8 @@ export function ContactosWhatsAppAdminView() {
   const [numeros, setNumeros] = useState<NumeroWhatsApp[]>(MOCK_NUMEROS);
   const [busqueda, setBusqueda] = useState('');
   const [filtroAsignacion, setFiltroAsignacion] = useState<'todos' | 'con-asignacion' | 'sin-asignar'>('todos');
+  const [filtroOpen, setFiltroOpen] = useState(false);
+  const filtroRef = useRef<HTMLDivElement>(null);
   const [detalleAbierto, setDetalleAbierto] = useState<NumeroWhatsApp | null>(null);
   const [editando, setEditando] = useState<NumeroWhatsApp | null | 'nuevo'>('');
   const [eliminando, setEliminando] = useState<NumeroWhatsApp | null>(null);
@@ -597,9 +605,13 @@ export function ContactosWhatsAppAdminView() {
     return () => clearTimeout(t);
   }, [assignToast]);
 
-  const conAsignaciones = numeros.filter(n => n.asignaciones.length > 0).length;
-  const sinAsignar = numeros.filter(n => n.asignaciones.length === 0).length;
-  const totalAsignaciones = numeros.reduce((sum, n) => sum + n.asignaciones.length, 0);
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (filtroRef.current && !filtroRef.current.contains(e.target as Node)) setFiltroOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const filtrados = numeros.filter(n => {
     const matchBusqueda = !busqueda || n.etiqueta.toLowerCase().includes(busqueda.toLowerCase()) || n.numero.includes(busqueda);
@@ -672,63 +684,69 @@ export function ContactosWhatsAppAdminView() {
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Total números', value: numeros.length, color: '#0A0A0A' },
-          { label: 'Con asignaciones', value: conAsignaciones, color: '#065F46' },
-          { label: 'Sin asignar', value: sinAsignar, color: '#D97706' },
-          { label: 'Total asignaciones', value: totalAsignaciones, color: '#1E40AF' },
-        ].map(stat => (
-          <div key={stat.label} className="rounded-2xl p-5" style={cardStyle}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginBottom: '8px' }}>{stat.label}</p>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: stat.color }} />
-              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', fontWeight: 600, color: stat.color, lineHeight: 1 }}>{stat.value}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        <div className="flex gap-1 p-1" style={{ backgroundColor: '#F5F5F5', borderRadius: '200px' }}>
-          {([
-            ['todos', 'Todos'],
-            ['con-asignacion', 'Con asignaciones'],
-            ['sin-asignar', 'Sin asignar'],
-          ] as const).map(([id, label]) => (
-            <button key={id} onClick={() => setFiltroAsignacion(id)}
-              className="px-3 py-1.5 text-sm font-medium transition-all"
-              style={{
-                borderRadius: '200px',
-                backgroundColor: filtroAsignacion === id ? '#FFFFFF' : 'transparent',
-                color: filtroAsignacion === id ? '#006B4E' : '#6B7280',
-                fontFamily: 'var(--font-body)',
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: filtroAsignacion === id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-              }}>
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex gap-2">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          {/* Buscador */}
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#9CA3AF' }} />
             <input type="text" placeholder="Buscar etiqueta o número..." value={busqueda} onChange={e => setBusqueda(e.target.value)}
-              className="pl-9 pr-4 py-2 rounded-lg text-sm"
-              style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '280px' }} />
+              className="pl-9 pr-4 py-2 text-sm"
+              style={{ border: '1px solid #E5E5E5', borderRadius: '8px', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', width: '260px' }} />
           </div>
-          <button onClick={() => setEditando('nuevo')}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
-            style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
-            <Plus className="w-4 h-4" /> Agregar número
-          </button>
+          {/* Filtro dropdown */}
+          <div className="relative" ref={filtroRef}>
+            <button
+              onClick={() => setFiltroOpen(prev => !prev)}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all"
+              style={{
+                border: '1px solid #E5E5E5',
+                borderRadius: '8px',
+                backgroundColor: filtroAsignacion !== 'todos' ? '#F0FDF4' : '#FAFAFA',
+                color: filtroAsignacion !== 'todos' ? '#006B4E' : '#374151',
+                fontFamily: 'var(--font-body)',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {filtroAsignacion === 'todos' ? 'Filtros' : FILTRO_OPCIONES.find(o => o.id === filtroAsignacion)?.label}
+              {filtroAsignacion !== 'todos' && (
+                <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#006B4E' }} />
+              )}
+            </button>
+            {filtroOpen && (
+              <div className="absolute left-0 top-full mt-1 rounded-xl shadow-lg z-50 overflow-hidden"
+                style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', minWidth: '180px' }}>
+                {FILTRO_OPCIONES.map(op => (
+                  <button key={op.id}
+                    onClick={() => { setFiltroAsignacion(op.id); setFiltroOpen(false); }}
+                    className="w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      color: filtroAsignacion === op.id ? '#006B4E' : '#374151',
+                      fontWeight: filtroAsignacion === op.id ? 500 : 400,
+                      backgroundColor: filtroAsignacion === op.id ? '#F0FDF4' : '#FFFFFF',
+                    }}
+                    onMouseEnter={e => { if (filtroAsignacion !== op.id) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = filtroAsignacion === op.id ? '#F0FDF4' : '#FFFFFF'; }}
+                  >
+                    {op.label}
+                    {filtroAsignacion === op.id && <Check className="w-4 h-4" style={{ color: '#006B4E' }} />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+
+        <button onClick={() => setEditando('nuevo')}
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}>
+          <Plus className="w-4 h-4" /> Agregar número
+        </button>
       </div>
 
       {/* Tabla */}
