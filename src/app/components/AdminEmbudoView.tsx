@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingDown, Info } from 'lucide-react';
+import { TrendingDown } from 'lucide-react';
 import { AdminFiltrosAnalytics } from '@/app/components/AdminFiltrosAnalytics';
 
 export function AdminEmbudoView() {
@@ -205,12 +205,6 @@ export function AdminEmbudoView() {
                       </div>
                       
                       <div className="flex items-center gap-1.5">
-                        {index > 0 && (
-                          <Info
-                            className="w-4 h-4 flex-shrink-0"
-                            style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}
-                          />
-                        )}
                       </div>
                     </div>
                     
