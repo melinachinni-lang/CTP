@@ -228,8 +228,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const tabs = [
     { id: 'preferences', label: 'Preferencias',         icon: Bell },
     { id: 'users',       label: 'Usuarios y permisos',  icon: User },
+    ...((userType === 'inmobiliaria' || userType === 'broker') ? [{ id: 'whatsapp', label: 'Canales de contacto', icon: MessageCircle }] : []),
     { id: 'security',    label: 'Seguridad',             icon: Shield },
-    ...((userType === 'inmobiliaria' || userType === 'broker') ? [{ id: 'whatsapp', label: 'WhatsApp', icon: MessageCircle }] : []),
   ];
 
   return (
