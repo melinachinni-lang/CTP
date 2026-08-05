@@ -481,9 +481,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   Información de contacto
                 </p>
               </div>
-              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                Este número aparecerá en los botones de contacto de tu perfil público
-              </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
 
                 {/* WhatsApp o número de contacto con dropdown de tipo */}
@@ -546,6 +543,9 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                       style={{ border: 'none', outline: 'none', backgroundColor: 'transparent', color: '#0A0A0A', fontFamily: 'var(--font-body)' }}
                     />
                   </div>
+                  <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                    Este número aparecerá en los botones de contacto de tu perfil público
+                  </p>
                 </div>
 
                 {/* Email */}
