@@ -204,31 +204,10 @@ export function AdminEmbudoView() {
                         )}
                       </div>
                       
-                      {/* Badge de conversión */}
                       <div className="flex items-center gap-1.5">
-                        {etapa.conversion !== null && (
-                          <div
-                            className="flex items-center gap-1 px-2.5 py-1 rounded-full"
-                            style={{
-                              backgroundColor: '#DCFCE7'
-                            }}
-                          >
-                            <span
-                              style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: '11px',
-                                fontWeight: 'var(--font-weight-semibold)',
-                                color: '#16A34A',
-                                whiteSpace: 'nowrap'
-                              }}
-                            >
-                              +{etapa.conversion}%
-                            </span>
-                          </div>
-                        )}
                         {index > 0 && (
-                          <Info 
-                            className="w-4 h-4 flex-shrink-0" 
+                          <Info
+                            className="w-4 h-4 flex-shrink-0"
                             style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}
                           />
                         )}
