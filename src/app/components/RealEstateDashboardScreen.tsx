@@ -15,7 +15,6 @@ import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView'
 import { Tabs } from '@/app/components/Tabs';
 import { AsignacionesContent, InteraccionesContent } from '@/app/components/CTPAdminDashboard';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
-import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
@@ -122,8 +121,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         { id: 'brokers',     label: 'Brokers',            icon: UserCheck },
         { id: 'reservas',    label: 'Reservas',            icon: FileText },
         { id: 'asignaciones',label: 'Asignaciones',       icon: Users },
-        { id: 'whatsapp',    label: 'Números WhatsApp',   icon: Phone },
-        { id: 'calendarios', label: 'Calendarios',        icon: Calendar },
+{ id: 'calendarios', label: 'Calendarios',        icon: Calendar },
       ],
     },
     {
@@ -316,8 +314,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'asignaciones'  && <AsignacionesContent />}
         {currentSection === 'interacciones' && <InteraccionesContent />}
         {currentSection === 'citas'         && <CitasAdminView />}
-        {currentSection === 'whatsapp'      && <ContactosWhatsAppAdminView />}
-        {currentSection === 'performance' && <RendimientoView viewType="inmobiliaria" />}
+{currentSection === 'performance' && <RendimientoView viewType="inmobiliaria" />}
         {currentSection === 'insights'    && <AdminInsightsModule onNavigate={setCurrentSection} />}
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}

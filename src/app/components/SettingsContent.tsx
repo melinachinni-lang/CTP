@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle } from 'lucide-react';
+import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -79,7 +80,7 @@ const BROKERS_MOCK = [
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }: { mode?: 'profile' | 'settings'; userType?: 'inmobiliaria' | 'broker' | 'personal' | 'ctp' }) {
-  const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security'>(
+  const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security' | 'whatsapp'>(
     mode === 'profile' ? 'profile' : 'preferences'
   );
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'success'>('idle');
@@ -228,6 +229,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     { id: 'preferences', label: 'Preferencias',         icon: Bell },
     { id: 'users',       label: 'Usuarios y permisos',  icon: User },
     { id: 'security',    label: 'Seguridad',             icon: Shield },
+    ...((userType === 'inmobiliaria' || userType === 'broker') ? [{ id: 'whatsapp', label: 'WhatsApp', icon: MessageCircle }] : []),
   ];
 
   return (
@@ -498,6 +500,29 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                     </div>
                   );
                 })}
+              </div>
+
+              {/* WhatsApp */}
+              <div className="mt-4" style={{ maxWidth: 'calc(50% - 8px)' }}>
+                <label className="block mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' }}>
+                  WhatsApp
+                </label>
+                <div className="relative">
+                  <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+                  <input
+                    type="tel"
+                    value={perfilPersonal.whatsapp}
+                    placeholder="+56 9 1234 5678"
+                    onChange={e => setPerfilPersonal(p => ({ ...p, whatsapp: e.target.value }))}
+                    className="w-full pl-9 pr-4 py-3 rounded-xl text-sm transition-colors"
+                    style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' }}
+                    onFocus={e => e.target.style.borderColor = '#006B4E'}
+                    onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                  />
+                </div>
+                <p className="mt-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>
+                  Este número se usa para el botón "Consultar por WhatsApp" en tu perfil público
+                </p>
               </div>
             </div>
 
@@ -1536,6 +1561,11 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
             </div>
 
           </div>
+        )}
+
+        {/* ── Tab: WhatsApp ────────────────────────────────────────────────── */}
+        {activeTab === 'whatsapp' && (userType === 'inmobiliaria' || userType === 'broker') && (
+          <ContactosWhatsAppAdminView />
         )}
       </div>
 

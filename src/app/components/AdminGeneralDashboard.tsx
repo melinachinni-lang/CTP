@@ -8,7 +8,6 @@ import { NewProjectFlow } from '@/app/components/NewProjectFlow';
 import { AdminPublicacionesSection } from '@/app/components/AdminPublicacionesSection';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { WhitelistAdminView } from '@/app/components/WhitelistAdminView';
-import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
 import { AdminBannersModule } from '@/app/components/AdminBannersModule';
@@ -20,7 +19,7 @@ interface AdminGeneralDashboardProps {
   onNavigate: (page: string, data?: any) => void;
 }
 
-type NavItem = 'inicio' | 'analitica' | 'insights' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'whatsapp' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
+type NavItem = 'inicio' | 'analitica' | 'insights' | 'embudo' | 'brokers' | 'asignaciones' | 'interacciones' | 'citas' | 'whitelist' | 'publicaciones' | 'recursos' | 'banners' | 'usuarios' | 'configuracion';
 
 // Tipos de datos
 interface Broker {
@@ -401,8 +400,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
       { id: 'publicaciones' as NavItem, icon: Layout, label: 'Publicaciones' },
       { id: 'recursos' as NavItem, icon: BookOpen, label: 'Recursos & Blog' },
       { id: 'banners' as NavItem, icon: Megaphone, label: 'Banners & mensajes' },
-      { id: 'whatsapp' as NavItem, icon: MessageSquare, label: 'Números telefónicos' },
-      { id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
+{ id: 'whitelist' as NavItem, icon: Shield, label: 'Whitelist' },
     ],
     [
       { id: 'usuarios' as NavItem, icon: Shield, label: 'Usuarios & permisos' },
@@ -739,8 +737,7 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
                   {activeNav === 'asignaciones' && 'Asignación de leads a brokers'}
                   {activeNav === 'interacciones' && 'Registro de interacciones cliente-broker'}
                   {activeNav === 'citas' && 'Solicitudes de visita y videollamada enviadas por usuarios'}
-                  {activeNav === 'whatsapp' && 'Números telefónicos asignados a publicaciones de parcelas y proyectos'}
-                  {activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
+{activeNav === 'whitelist' && 'Correos electrónicos autorizados para acceder a la plataforma'}
                   {activeNav === 'publicaciones' && 'Gestión de contenidos visibles del Home'}
                   {activeNav === 'recursos' && 'Publicación y gestión de recursos informativos y noticias'}
                   {activeNav === 'usuarios' && 'Gestión de usuarios y permisos'}
@@ -1724,11 +1721,6 @@ export function AdminGeneralDashboard({ onNavigate }: AdminGeneralDashboardProps
             <CitasAdminView />
           )}
 
-
-          {/* SECCIÓN: WHATSAPP */}
-          {activeNav === 'whatsapp' && (
-            <ContactosWhatsAppAdminView />
-          )}
 
           {/* SECCIÓN: WHITELIST */}
           {activeNav === 'whitelist' && (
