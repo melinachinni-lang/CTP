@@ -108,7 +108,7 @@ function MensajePopupPreview({ titulo, descripcion, topico, imagen, noMostrarOpc
           </button>
         )}
         <button className="px-5 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
-          Ver más
+          Entendido
         </button>
       </div>
     </div>
