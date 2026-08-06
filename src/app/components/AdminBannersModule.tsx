@@ -12,7 +12,8 @@ interface MensajeInformativo {
   roles: string[];
   fechaInicio: string;
   fechaFin: string;
-  vecesAMostrar: 'una-vez' | 'tres-veces' | 'siempre';
+  vecesAMostrar: 'una-vez' | 'por-semana' | 'siempre';
+  noMostrarOpcion: boolean;
   activo: boolean;
 }
 
@@ -23,12 +24,13 @@ const ROLES_OPCIONES = [
   { id: 'inmobiliaria', label: 'Inmobiliaria' },
   { id: 'broker',       label: 'Broker' },
   { id: 'personal',     label: 'Personal' },
+  { id: 'anonimo',      label: 'Usuario no logueado' },
 ];
 
-const VECES_OPCIONES: { id: MensajeInformativo['vecesAMostrar']; label: string }[] = [
-  { id: 'una-vez',     label: '1 vez por usuario' },
-  { id: 'tres-veces',  label: '3 veces por usuario' },
-  { id: 'siempre',     label: 'Siempre (hasta cerrar)' },
+const VECES_OPCIONES: { id: MensajeInformativo['vecesAMostrar']; label: string; desc: string }[] = [
+  { id: 'una-vez',    label: 'Una sola vez al ingresar',  desc: 'Se muestra una vez y no vuelve a aparecer' },
+  { id: 'por-semana', label: 'Una vez por semana',        desc: 'Aparece como máximo una vez por semana por usuario' },
+  { id: 'siempre',    label: 'Cada vez que ingresa',      desc: 'Se muestra en cada sesión durante el período activo' },
 ];
 
 const MENSAJES_MOCK: MensajeInformativo[] = [
@@ -42,6 +44,7 @@ const MENSAJES_MOCK: MensajeInformativo[] = [
     fechaInicio: '2025-08-01',
     fechaFin: '2025-08-31',
     vecesAMostrar: 'una-vez',
+    noMostrarOpcion: true,
     activo: true,
   },
   {
@@ -54,14 +57,15 @@ const MENSAJES_MOCK: MensajeInformativo[] = [
     fechaInicio: '2025-08-08',
     fechaFin: '2025-08-10',
     vecesAMostrar: 'siempre',
+    noMostrarOpcion: false,
     activo: true,
   },
 ];
 
 // ─── MENSAJE POPUP PREVIEW ────────────────────────────────────────────────────
 
-function MensajePopupPreview({ titulo, descripcion, topico, imagen }: {
-  titulo: string; descripcion: string; topico: string; imagen: string | null;
+function MensajePopupPreview({ titulo, descripcion, topico, imagen, noMostrarOpcion = true }: {
+  titulo: string; descripcion: string; topico: string; imagen: string | null; noMostrarOpcion?: boolean;
 }) {
   return (
     <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ maxWidth: '360px', border: '1px solid #E5E5E5' }}>
@@ -98,9 +102,11 @@ function MensajePopupPreview({ titulo, descripcion, topico, imagen }: {
       </div>
       {/* Footer */}
       <div className="px-6 py-4 flex items-center justify-end gap-3" style={{ backgroundColor: '#FFFFFF' }}>
-        <button className="text-sm" style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
-          No volver a mostrar
-        </button>
+        {noMostrarOpcion && (
+          <button className="text-sm" style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            No volver a mostrar
+          </button>
+        )}
         <button className="px-5 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
           Ver más
         </button>
@@ -123,6 +129,7 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
   const [fechaInicio, setFechaInicio] = useState(mensaje?.fechaInicio || '');
   const [fechaFin, setFechaFin] = useState(mensaje?.fechaFin || '');
   const [vecesAMostrar, setVecesAMostrar] = useState<MensajeInformativo['vecesAMostrar']>(mensaje?.vecesAMostrar || 'una-vez');
+  const [noMostrarOpcion, setNoMostrarOpcion] = useState(mensaje?.noMostrarOpcion ?? true);
   const [activo, setActivo] = useState(mensaje?.activo ?? true);
   const [imagen, setImagen] = useState<string | null>(mensaje?.imagen || null);
   const [preview, setPreview] = useState(false);
@@ -155,7 +162,7 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
 
   function handleSave() {
     if (!canSave) return;
-    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio, fechaFin, vecesAMostrar, activo });
+    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio, fechaFin, vecesAMostrar, noMostrarOpcion, activo });
     setSaved(true);
     setTimeout(() => { setSaved(false); onBack(); }, 1200);
   }
@@ -348,21 +355,39 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
             {/* Veces a mostrar */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
               <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '12px' }}>
-                Cantidad de veces a mostrar
+                Frecuencia de visualización
               </label>
               <div className="space-y-2">
                 {VECES_OPCIONES.map(op => (
                   <button key={op.id} type="button" onClick={() => setVecesAMostrar(op.id)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-all"
-                    style={{ border: `1.5px solid ${vecesAMostrar === op.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: vecesAMostrar === op.id ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: vecesAMostrar === op.id ? '#065F46' : '#374151' }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all"
+                    style={{ border: `1.5px solid ${vecesAMostrar === op.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: vecesAMostrar === op.id ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)' }}
                   >
                     <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: `2px solid ${vecesAMostrar === op.id ? '#006B4E' : '#D1D5DB'}`, backgroundColor: vecesAMostrar === op.id ? '#006B4E' : '#FFFFFF' }}>
                       {vecesAMostrar === op.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
-                    {op.label}
+                    <div className="flex-1 min-w-0">
+                      <p style={{ fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: vecesAMostrar === op.id ? '#065F46' : '#0A0A0A', marginBottom: '2px' }}>{op.label}</p>
+                      <p style={{ fontSize: '12px', color: vecesAMostrar === op.id ? '#047857' : '#9CA3AF' }}>{op.desc}</p>
+                    </div>
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* No volver a mostrar */}
+            <div className="rounded-2xl p-5 flex items-start justify-between gap-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>Opción "No volver a mostrar"</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5' }}>
+                  Permite al usuario marcar que no quiere ver este mensaje nuevamente.<br />Se muestra como enlace en el popup.
+                </p>
+              </div>
+              <button type="button" onClick={() => setNoMostrarOpcion(p => !p)} className="flex-shrink-0 mt-0.5">
+                <div className="w-11 h-6 rounded-full flex items-center px-0.5 transition-colors" style={{ backgroundColor: noMostrarOpcion ? '#006B4E' : '#D1D5DB' }}>
+                  <div className="w-5 h-5 rounded-full bg-white shadow transition-transform" style={{ transform: noMostrarOpcion ? 'translateX(20px)' : 'translateX(0)' }} />
+                </div>
+              </button>
             </div>
 
             {/* Activo */}
@@ -403,7 +428,7 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF' }}>
               Así verán el popup los usuarios según la configuración establecida
             </p>
-            <MensajePopupPreview titulo={titulo} descripcion={descripcion} topico={topico} imagen={imagen} />
+            <MensajePopupPreview titulo={titulo} descripcion={descripcion} topico={topico} imagen={imagen} noMostrarOpcion={noMostrarOpcion} />
             <button onClick={() => setPreview(false)} className="mt-2 text-sm" style={{ color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
               ← Volver a editar
             </button>
