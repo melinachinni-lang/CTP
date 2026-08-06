@@ -125,9 +125,12 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
   const [vecesAMostrar, setVecesAMostrar] = useState<MensajeInformativo['vecesAMostrar']>(mensaje?.vecesAMostrar || 'una-vez');
   const [activo, setActivo] = useState(mensaje?.activo ?? true);
   const [imagen, setImagen] = useState<string | null>(mensaje?.imagen || null);
+  const [preview, setPreview] = useState(false);
   const [topicoOpen, setTopicoOpen] = useState(false);
-  const topicoRef = useRef<HTMLDivElement>(null);
   const [saved, setSaved] = useState(false);
+  const topicoRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const isEdit = !!mensaje;
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -136,6 +139,14 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => setImagen(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  }
 
   const toggleRol = (id: string) =>
     setRoles(prev => prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]);
@@ -149,218 +160,255 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
     setTimeout(() => { setSaved(false); onBack(); }, 1200);
   }
 
-  const labelStyle = { fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' } as const;
-  const inputStyle = { border: '1.5px solid #E5E5E5', borderRadius: '10px', fontFamily: 'var(--font-body)', fontSize: '14px', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' } as const;
+  const inputStyle = {
+    width: '100%', padding: '10px 14px', borderRadius: '12px',
+    border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)',
+    fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A',
+    outline: 'none', boxSizing: 'border-box' as const, backgroundColor: '#FAFAFA',
+  };
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
-          <ArrowLeft className="w-4 h-4" style={{ color: '#374151' }} />
+    <div className="p-4 md:p-6">
+      {/* Breadcrumb */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
+        <button onClick={onBack}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors flex-shrink-0"
+          style={{ backgroundColor: '#F5F5F5', color: '#737373', fontFamily: 'var(--font-body)', border: '1px solid #E5E5E5' }}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+        >
+          <ArrowLeft className="w-4 h-4" /> Volver al listado
         </button>
-        <div>
-          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
-            {mensaje ? 'Editar mensaje' : 'Nuevo mensaje informativo'}
-          </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>
-            El mensaje aparecerá como popup según la configuración
-          </p>
-        </div>
+        <span style={{ color: '#D5D5D5' }}>/</span>
+        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
+          {isEdit ? 'Editar mensaje' : 'Nuevo mensaje'}
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Formulario */}
-        <div className="space-y-5">
+      <div className="max-w-2xl mx-auto">
+        {/* Toggle Editar / Previsualizar */}
+        <div className="inline-flex gap-1 p-1 rounded-full mb-6" style={{ backgroundColor: '#F5F5F5' }}>
+          <button onClick={() => setPreview(false)}
+            className="py-1.5 px-5 rounded-full text-sm font-medium transition-all"
+            style={{ backgroundColor: !preview ? '#FFFFFF' : 'transparent', color: !preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: !preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+          >
+            Editar
+          </button>
+          <button onClick={() => setPreview(true)}
+            className="py-1.5 px-5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5"
+            style={{ backgroundColor: preview ? '#FFFFFF' : 'transparent', color: preview ? '#0A0A0A' : '#737373', fontFamily: 'var(--font-body)', boxShadow: preview ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+          >
+            <Eye className="w-3.5 h-3.5" /> Previsualizar
+          </button>
+        </div>
 
-          {/* Imagen */}
-          <div>
-            <label className="block mb-2" style={labelStyle}>Imagen</label>
-            {imagen ? (
-              <div className="relative rounded-xl overflow-hidden" style={{ height: '140px' }}>
-                <img src={imagen} alt="" className="w-full h-full object-cover" />
-                <button onClick={() => setImagen(null)} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                  <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
-                </button>
-              </div>
-            ) : (
-              <button onClick={() => setImagen('https://images.unsplash.com/photo-1609126917056-243a15e2e789?w=400&q=80')}
-                className="w-full flex flex-col items-center justify-center gap-2 rounded-xl transition-all"
-                style={{ height: '100px', border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
-              >
-                <Upload className="w-5 h-5" style={{ color: '#9CA3AF' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6B7280' }}>Subir imagen (opcional)</span>
-              </button>
-            )}
-          </div>
-
-          {/* Título */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label style={labelStyle}>Título <span style={{ color: '#DC2626' }}>*</span></label>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{titulo.length}/80</span>
-            </div>
-            <input type="text" value={titulo} maxLength={80} onChange={e => setTitulo(e.target.value)}
-              placeholder="Ej: Nueva funcionalidad disponible"
-              className="w-full px-4 py-3"
-              style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#006B4E'}
-              onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-            />
-          </div>
-
-          {/* Descripción */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label style={labelStyle}>Descripción <span style={{ color: '#DC2626' }}>*</span></label>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{descripcion.length}/200</span>
-            </div>
-            <textarea value={descripcion} maxLength={200} rows={3} onChange={e => setDescripcion(e.target.value)}
-              placeholder="Descripción breve que verá el usuario en el popup"
-              className="w-full px-4 py-3 resize-none"
-              style={{ ...inputStyle, lineHeight: '1.6' }}
-              onFocus={e => e.target.style.borderColor = '#006B4E'}
-              onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-            />
-          </div>
-
-          {/* Tópico */}
-          <div>
-            <label className="block mb-2" style={labelStyle}>Tópico <span style={{ color: '#DC2626' }}>*</span></label>
-            <div className="relative" ref={topicoRef}>
-              <button type="button" onClick={() => setTopicoOpen(p => !p)}
-                className="w-full flex items-center justify-between px-4 py-3 text-sm text-left"
-                style={{ ...inputStyle, cursor: 'pointer' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
-                onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
-              >
-                <span style={{ color: topico ? '#0A0A0A' : '#9CA3AF' }}>{topico || 'Seleccionar tópico'}</span>
-                <ChevronDown className="w-4 h-4" style={{ color: '#9CA3AF' }} />
-              </button>
-              {topicoOpen && (
-                <div className="absolute left-0 top-full mt-1 w-full rounded-xl shadow-lg z-50 overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-                  {TOPICOS.map(t => (
-                    <button key={t} type="button" onClick={() => { setTopico(t); setTopicoOpen(false); }}
-                      className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
-                      style={{ fontFamily: 'var(--font-body)', color: topico === t ? '#006B4E' : '#374151', backgroundColor: topico === t ? '#F0FDF4' : '#FFFFFF', fontWeight: topico === t ? 500 : 400 }}
-                      onMouseEnter={e => { if (topico !== t) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
-                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = topico === t ? '#F0FDF4' : '#FFFFFF'; }}
-                    >
-                      {t}
-                      {topico === t && <Check className="w-4 h-4" style={{ color: '#006B4E' }} />}
-                    </button>
-                  ))}
+        {!preview ? (
+          <div className="space-y-4">
+            {/* Imagen */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: '600', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '10px' }}>Imagen</label>
+              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg" style={{ display: 'none' }} onChange={handleFileChange} />
+              {imagen ? (
+                <div className="rounded-xl overflow-hidden relative" style={{ border: '1px solid #E5E5E5' }}>
+                  <img src={imagen} alt="Preview" style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }} />
+                  <button onClick={() => { setImagen(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF' }}>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={() => fileInputRef.current?.click()} className="absolute bottom-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF', fontFamily: 'var(--font-body)', fontWeight: '500' }}>
+                    <Upload className="w-3 h-3" /> Cambiar
+                  </button>
+                </div>
+              ) : (
+                <div onClick={() => fileInputRef.current?.click()} className="rounded-xl flex flex-col items-center justify-center gap-2 py-10 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
+                    <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
                 </div>
               )}
+              <p className="mt-2.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
+                Formatos aceptados: <strong style={{ color: '#6B7280' }}>PNG, JPG</strong> · Peso máximo: <strong style={{ color: '#6B7280' }}>2 MB</strong> · Dimensiones recomendadas: <strong style={{ color: '#6B7280' }}>800 × 500 px</strong>
+              </p>
             </div>
-          </div>
 
-          {/* Roles */}
-          <div>
-            <label className="block mb-3" style={labelStyle}>
-              Mostrar a <span style={{ color: '#DC2626' }}>*</span>
-              <span className="ml-2 font-normal" style={{ color: '#9CA3AF', fontSize: '12px' }}>Selecciona los perfiles que verán este mensaje</span>
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              {ROLES_OPCIONES.map(rol => {
-                const checked = roles.includes(rol.id);
-                return (
-                  <button key={rol.id} type="button" onClick={() => toggleRol(rol.id)}
-                    className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm text-left transition-all"
-                    style={{ border: `1.5px solid ${checked ? '#006B4E' : '#E5E5E5'}`, backgroundColor: checked ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: checked ? '#065F46' : '#374151', fontWeight: checked ? 500 : 400 }}
-                  >
-                    <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0" style={{ backgroundColor: checked ? '#006B4E' : '#FFFFFF', border: `2px solid ${checked ? '#006B4E' : '#D1D5DB'}` }}>
-                      {checked && <Check className="w-2.5 h-2.5" style={{ color: '#FFFFFF' }} />}
-                    </div>
-                    {rol.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Período activo */}
-          <div>
-            <label className="block mb-3" style={labelStyle}>Período activo <span style={{ color: '#DC2626' }}>*</span></label>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Desde</label>
-                <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
-                  className="w-full px-3 py-2.5 text-sm" style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = '#006B4E'}
-                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-                />
-              </div>
-              <div>
-                <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Hasta</label>
-                <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
-                  className="w-full px-3 py-2.5 text-sm" style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = '#006B4E'}
-                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
-                />
+            {/* Título */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Título <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <input type="text" value={titulo} maxLength={80} onChange={e => setTitulo(e.target.value)}
+                placeholder="Ej: Nueva funcionalidad disponible"
+                style={inputStyle}
+                onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
+                onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+              />
+              <div className="flex justify-end mt-1.5">
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: titulo.length >= 80 ? '#EF4444' : '#9CA3AF' }}>{titulo.length}/80</span>
               </div>
             </div>
-          </div>
 
-          {/* Veces a mostrar */}
-          <div>
-            <label className="block mb-3" style={labelStyle}>Cantidad de veces a mostrar</label>
-            <div className="space-y-2">
-              {VECES_OPCIONES.map(op => (
-                <button key={op.id} type="button" onClick={() => setVecesAMostrar(op.id)}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-all"
-                  style={{ border: `1.5px solid ${vecesAMostrar === op.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: vecesAMostrar === op.id ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: vecesAMostrar === op.id ? '#065F46' : '#374151' }}
+            {/* Descripción */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Descripción <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <textarea value={descripcion} maxLength={200} rows={3} onChange={e => setDescripcion(e.target.value)}
+                placeholder="Descripción breve que verá el usuario en el popup"
+                style={{ ...inputStyle, resize: 'none', lineHeight: '1.6' }}
+                onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
+                onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+              />
+              <div className="flex justify-end mt-1.5">
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: descripcion.length >= 200 ? '#EF4444' : '#9CA3AF' }}>{descripcion.length}/200</span>
+              </div>
+            </div>
+
+            {/* Tópico */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                Tópico <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <div className="relative" ref={topicoRef}>
+                <button type="button" onClick={() => setTopicoOpen(p => !p)}
+                  className="w-full flex items-center justify-between text-sm text-left"
+                  style={{ ...inputStyle, cursor: 'pointer' }}
+                  onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
+                  onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
                 >
-                  <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: `2px solid ${vecesAMostrar === op.id ? '#006B4E' : '#D1D5DB'}`, backgroundColor: vecesAMostrar === op.id ? '#006B4E' : '#FFFFFF' }}>
-                    {vecesAMostrar === op.id && <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#FFFFFF' }} />}
-                  </div>
-                  {op.label}
+                  <span style={{ color: topico ? '#0A0A0A' : '#9CA3AF' }}>{topico || 'Seleccionar tópico'}</span>
+                  <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#9CA3AF' }} />
                 </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Activo */}
-          <div className="flex items-center justify-between px-4 py-3 rounded-xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
-            <div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500, color: '#374151' }}>Mensaje activo</p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Si está inactivo, no se mostrará a ningún usuario</p>
-            </div>
-            <button type="button" onClick={() => setActivo(p => !p)} className="flex-shrink-0">
-              <div className="w-11 h-6 rounded-full flex items-center px-0.5 transition-colors" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
-                <div className="w-5 h-5 rounded-full bg-white shadow transition-transform" style={{ transform: activo ? 'translateX(20px)' : 'translateX(0)' }} />
+                {topicoOpen && (
+                  <div className="absolute left-0 top-full mt-1 w-full rounded-xl shadow-lg z-50 overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+                    {TOPICOS.map(t => (
+                      <button key={t} type="button" onClick={() => { setTopico(t); setTopicoOpen(false); }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
+                        style={{ fontFamily: 'var(--font-body)', color: topico === t ? '#006B4E' : '#374151', backgroundColor: topico === t ? '#F0FDF4' : '#FFFFFF', fontWeight: topico === t ? 500 : 400 }}
+                        onMouseEnter={e => { if (topico !== t) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = topico === t ? '#F0FDF4' : '#FFFFFF'; }}
+                      >
+                        {t}
+                        {topico === t && <Check className="w-4 h-4" style={{ color: '#006B4E' }} />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
+
+            {/* Roles */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '4px' }}>
+                Asignar roles <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <p className="mb-4" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF' }}>Selecciona los perfiles que verán este mensaje</p>
+              <div className="grid grid-cols-2 gap-2">
+                {ROLES_OPCIONES.map(rol => {
+                  const checked = roles.includes(rol.id);
+                  return (
+                    <button key={rol.id} type="button" onClick={() => toggleRol(rol.id)}
+                      className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm text-left transition-all"
+                      style={{ border: `1.5px solid ${checked ? '#006B4E' : '#E5E5E5'}`, backgroundColor: checked ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: checked ? '#065F46' : '#374151', fontWeight: checked ? 500 : 400 }}
+                    >
+                      <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0" style={{ backgroundColor: checked ? '#006B4E' : '#FFFFFF', border: `2px solid ${checked ? '#006B4E' : '#D1D5DB'}` }}>
+                        {checked && <Check className="w-2.5 h-2.5" style={{ color: '#FFFFFF' }} />}
+                      </div>
+                      {rol.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Período activo */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '12px' }}>
+                Período activo <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Desde</label>
+                  <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
+                    style={inputStyle}
+                    onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
+                    onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Hasta</label>
+                  <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
+                    style={inputStyle}
+                    onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
+                    onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Veces a mostrar */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '12px' }}>
+                Cantidad de veces a mostrar
+              </label>
+              <div className="space-y-2">
+                {VECES_OPCIONES.map(op => (
+                  <button key={op.id} type="button" onClick={() => setVecesAMostrar(op.id)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-all"
+                    style={{ border: `1.5px solid ${vecesAMostrar === op.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: vecesAMostrar === op.id ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: vecesAMostrar === op.id ? '#065F46' : '#374151' }}
+                  >
+                    <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: `2px solid ${vecesAMostrar === op.id ? '#006B4E' : '#D1D5DB'}`, backgroundColor: vecesAMostrar === op.id ? '#006B4E' : '#FFFFFF' }}>
+                      {vecesAMostrar === op.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                    </div>
+                    {op.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Activo */}
+            <div className="rounded-2xl p-5 flex items-center justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>Mensaje activo</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF' }}>Si está inactivo, no se mostrará a ningún usuario</p>
+              </div>
+              <button type="button" onClick={() => setActivo(p => !p)} className="flex-shrink-0">
+                <div className="w-11 h-6 rounded-full flex items-center px-0.5 transition-colors" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
+                  <div className="w-5 h-5 rounded-full bg-white shadow transition-transform" style={{ transform: activo ? 'translateX(20px)' : 'translateX(0)' }} />
+                </div>
+              </button>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex gap-3 pt-2 pb-8">
+              <button onClick={onBack} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+                style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}
+              >
+                Cancelar
+              </button>
+              <button onClick={handleSave} disabled={!canSave || saved}
+                className="flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 transition-all"
+                style={{ backgroundColor: canSave && !saved ? '#006B4E' : '#E5E5E5', color: canSave && !saved ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', border: 'none', cursor: canSave && !saved ? 'pointer' : 'not-allowed' }}
+                onMouseEnter={e => { if (canSave && !saved) e.currentTarget.style.backgroundColor = '#01533E'; }}
+                onMouseLeave={e => { if (canSave && !saved) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+              >
+                {saved ? <><CheckCircle className="w-4 h-4" /> Guardado</> : (isEdit ? 'Guardar cambios' : 'Publicar mensaje')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Vista previa */
+          <div className="flex flex-col items-center py-8 gap-4">
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF' }}>
+              Así verán el popup los usuarios según la configuración establecida
+            </p>
+            <MensajePopupPreview titulo={titulo} descripcion={descripcion} topico={topico} imagen={imagen} />
+            <button onClick={() => setPreview(false)} className="mt-2 text-sm" style={{ color: '#006B4E', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              ← Volver a editar
             </button>
           </div>
-
-          {/* CTA */}
-          <div className="flex gap-3 pt-2">
-            <button onClick={onBack} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
-              Cancelar
-            </button>
-            <button onClick={handleSave} disabled={!canSave || saved}
-              className="flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 transition-all"
-              style={{ backgroundColor: canSave && !saved ? '#006B4E' : '#E5E5E5', color: canSave && !saved ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', border: 'none', cursor: canSave && !saved ? 'pointer' : 'not-allowed' }}
-              onMouseEnter={e => { if (canSave && !saved) e.currentTarget.style.backgroundColor = '#01533E'; }}
-              onMouseLeave={e => { if (canSave && !saved) e.currentTarget.style.backgroundColor = '#006B4E'; }}
-            >
-              {saved ? <><CheckCircle className="w-4 h-4" /> Guardado</> : (mensaje ? 'Guardar cambios' : 'Publicar mensaje')}
-            </button>
-          </div>
-        </div>
-
-        {/* Preview sticky */}
-        <div className="lg:sticky lg:top-6 h-fit">
-          <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Vista previa del popup
-          </p>
-          <MensajePopupPreview titulo={titulo} descripcion={descripcion} topico={topico} imagen={imagen} />
-          <p className="mt-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-            Así verán el mensaje los usuarios según la configuración establecida
-          </p>
-        </div>
+        )}
       </div>
     </div>
   );
