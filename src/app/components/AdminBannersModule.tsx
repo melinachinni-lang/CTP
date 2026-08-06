@@ -447,7 +447,10 @@ function formatDate(dateStr: string) {
 
 // ─── MENSAJES INFORMATIVOS MODULE ─────────────────────────────────────────────
 
-function MensajesInformativosModule() {
+function MensajesInformativosModule({ setTab, moduleTabs }: {
+  setTab: (t: 'banners' | 'mensajes') => void;
+  moduleTabs: { id: 'banners' | 'mensajes'; label: string; icon: React.ReactNode }[];
+}) {
   const [mensajes, setMensajes] = useState<MensajeInformativo[]>(MENSAJES_MOCK);
   const [vista, setVista] = useState<'list' | 'create' | MensajeInformativo>('list');
   const [mensajeToDelete, setMensajeToDelete] = useState<MensajeInformativo | null>(null);
@@ -491,6 +494,24 @@ function MensajesInformativosModule() {
   };
 
   return (
+    <div>
+      {/* Tabs — solo visibles en la vista de lista */}
+      <div className="px-4 md:px-8 pt-4 md:pt-6">
+        <div className="flex gap-1 p-1 rounded-2xl" style={{ backgroundColor: '#F3F4F6', display: 'inline-flex' }}>
+          {moduleTabs.map(t => {
+            const isActive = t.id === 'mensajes';
+            return (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all whitespace-nowrap"
+                style={{ fontFamily: 'var(--font-body)', borderRadius: '200px', backgroundColor: isActive ? '#FFFFFF' : 'transparent', color: isActive ? '#0A0A0A' : '#6B7280', boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+              >
+                {t.icon}{t.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
     <div className="p-4 md:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
@@ -619,6 +640,7 @@ function MensajesInformativosModule() {
           <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500, color: '#FFFFFF' }}>Mensaje eliminado</p>
         </div>
       )}
+    </div>
     </div>
   );
 }
@@ -1327,27 +1349,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   ];
 
   if (tab === 'mensajes') {
-    return (
-      <div>
-        {/* Tabs */}
-        <div className="px-4 md:px-8 pt-4 md:pt-6">
-          <div className="flex gap-1 p-1 rounded-2xl" style={{ backgroundColor: '#F3F4F6', display: 'inline-flex' }}>
-            {MODULE_TABS.map(t => {
-              const isActive = t.id === tab;
-              return (
-                <button key={t.id} onClick={() => setTab(t.id)}
-                  className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all whitespace-nowrap"
-                  style={{ fontFamily: 'var(--font-body)', borderRadius: '200px', backgroundColor: isActive ? '#FFFFFF' : 'transparent', color: isActive ? '#0A0A0A' : '#6B7280', boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
-                >
-                  {t.icon}{t.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        <MensajesInformativosModule />
-      </div>
-    );
+    return <MensajesInformativosModule setTab={setTab} moduleTabs={MODULE_TABS} />;
   }
 
   return (
