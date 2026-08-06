@@ -1,5 +1,554 @@
-import React, { useState, useRef } from 'react';
-import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, X, Upload, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle, Link, Calendar } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, X, Upload, AlertTriangle, CheckCircle, Megaphone, RefreshCw, GripVertical, ArrowLeft, Check, AlertCircle, Link, Calendar, Bell, Users, Tag, Info, ChevronDown } from 'lucide-react';
+
+// ─── MENSAJES INFORMATIVOS — Tipos y constantes ────────────────────────────────
+
+interface MensajeInformativo {
+  id: number;
+  imagen: string | null;
+  titulo: string;
+  descripcion: string;
+  topico: string;
+  roles: string[];
+  fechaInicio: string;
+  fechaFin: string;
+  vecesAMostrar: 'una-vez' | 'tres-veces' | 'siempre';
+  activo: boolean;
+}
+
+const TOPICOS = ['Novedades', 'Mantenimiento', 'Actualización', 'Oferta especial', 'Información importante'];
+
+const ROLES_OPCIONES = [
+  { id: 'admin',        label: 'Admin CTP' },
+  { id: 'inmobiliaria', label: 'Inmobiliaria' },
+  { id: 'broker',       label: 'Broker' },
+  { id: 'personal',     label: 'Personal' },
+];
+
+const VECES_OPCIONES: { id: MensajeInformativo['vecesAMostrar']; label: string }[] = [
+  { id: 'una-vez',     label: '1 vez por usuario' },
+  { id: 'tres-veces',  label: '3 veces por usuario' },
+  { id: 'siempre',     label: 'Siempre (hasta cerrar)' },
+];
+
+const MENSAJES_MOCK: MensajeInformativo[] = [
+  {
+    id: 1,
+    imagen: null,
+    titulo: 'Nueva funcionalidad: Reservas online',
+    descripcion: 'Ahora puedes gestionar tus reservas directamente desde el portal. Sin papeles, sin esperas.',
+    topico: 'Novedades',
+    roles: ['inmobiliaria', 'broker'],
+    fechaInicio: '2025-08-01',
+    fechaFin: '2025-08-31',
+    vecesAMostrar: 'una-vez',
+    activo: true,
+  },
+  {
+    id: 2,
+    imagen: null,
+    titulo: 'Mantenimiento programado',
+    descripcion: 'El sábado 10 de agosto entre las 02:00 y 04:00 AM realizaremos mantenimiento. El portal estará temporalmente inactivo.',
+    topico: 'Mantenimiento',
+    roles: ['inmobiliaria', 'broker', 'personal'],
+    fechaInicio: '2025-08-08',
+    fechaFin: '2025-08-10',
+    vecesAMostrar: 'siempre',
+    activo: true,
+  },
+];
+
+// ─── MENSAJE POPUP PREVIEW ────────────────────────────────────────────────────
+
+function MensajePopupPreview({ titulo, descripcion, topico, imagen }: {
+  titulo: string; descripcion: string; topico: string; imagen: string | null;
+}) {
+  return (
+    <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ maxWidth: '360px', border: '1px solid #E5E5E5' }}>
+      {/* Header con gradiente */}
+      <div className="relative px-6 pt-6 pb-5" style={{ background: 'linear-gradient(135deg, #006B4E 0%, #003d2c 100%)' }}>
+        <button className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+          <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+        </button>
+        <div className="flex items-start gap-4">
+          <div className="flex-1 min-w-0 pr-2">
+            {topico && (
+              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold mb-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
+                {topico}
+              </span>
+            )}
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 700, color: '#FFFFFF', lineHeight: '1.3', marginBottom: '8px' }}>
+              {titulo || 'Título del mensaje'}
+            </h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.5' }}>
+              {descripcion || 'Descripción del mensaje informativo...'}
+            </p>
+          </div>
+          {/* Imagen preview */}
+          <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            {imagen ? (
+              <img src={imagen} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <ImageIcon className="w-8 h-8" style={{ color: 'rgba(255,255,255,0.3)' }} />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      {/* Footer */}
+      <div className="px-6 py-4 flex items-center justify-end gap-3" style={{ backgroundColor: '#FFFFFF' }}>
+        <button className="text-sm" style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+          No volver a mostrar
+        </button>
+        <button className="px-5 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
+          Ver más
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── MENSAJE EDITOR ───────────────────────────────────────────────────────────
+
+function MensajeEditor({ mensaje, onBack, onSave }: {
+  mensaje: MensajeInformativo | null;
+  onBack: () => void;
+  onSave: (data: Omit<MensajeInformativo, 'id'>) => void;
+}) {
+  const [titulo, setTitulo] = useState(mensaje?.titulo || '');
+  const [descripcion, setDescripcion] = useState(mensaje?.descripcion || '');
+  const [topico, setTopico] = useState(mensaje?.topico || '');
+  const [roles, setRoles] = useState<string[]>(mensaje?.roles || []);
+  const [fechaInicio, setFechaInicio] = useState(mensaje?.fechaInicio || '');
+  const [fechaFin, setFechaFin] = useState(mensaje?.fechaFin || '');
+  const [vecesAMostrar, setVecesAMostrar] = useState<MensajeInformativo['vecesAMostrar']>(mensaje?.vecesAMostrar || 'una-vez');
+  const [activo, setActivo] = useState(mensaje?.activo ?? true);
+  const [imagen, setImagen] = useState<string | null>(mensaje?.imagen || null);
+  const [topicoOpen, setTopicoOpen] = useState(false);
+  const topicoRef = useRef<HTMLDivElement>(null);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (topicoRef.current && !topicoRef.current.contains(e.target as Node)) setTopicoOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const toggleRol = (id: string) =>
+    setRoles(prev => prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]);
+
+  const canSave = titulo.trim() && descripcion.trim() && topico && roles.length > 0 && fechaInicio && fechaFin;
+
+  function handleSave() {
+    if (!canSave) return;
+    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio, fechaFin, vecesAMostrar, activo });
+    setSaved(true);
+    setTimeout(() => { setSaved(false); onBack(); }, 1200);
+  }
+
+  const labelStyle = { fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#374151' } as const;
+  const inputStyle = { border: '1.5px solid #E5E5E5', borderRadius: '10px', fontFamily: 'var(--font-body)', fontSize: '14px', color: '#0A0A0A', outline: 'none', backgroundColor: '#FAFAFA' } as const;
+
+  return (
+    <div className="p-4 md:p-8 max-w-5xl">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={onBack} className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}>
+          <ArrowLeft className="w-4 h-4" style={{ color: '#374151' }} />
+        </button>
+        <div>
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h3)', fontWeight: 500, color: '#0A0A0A' }}>
+            {mensaje ? 'Editar mensaje' : 'Nuevo mensaje informativo'}
+          </h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>
+            El mensaje aparecerá como popup según la configuración
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Formulario */}
+        <div className="space-y-5">
+
+          {/* Imagen */}
+          <div>
+            <label className="block mb-2" style={labelStyle}>Imagen</label>
+            {imagen ? (
+              <div className="relative rounded-xl overflow-hidden" style={{ height: '140px' }}>
+                <img src={imagen} alt="" className="w-full h-full object-cover" />
+                <button onClick={() => setImagen(null)} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setImagen('https://images.unsplash.com/photo-1609126917056-243a15e2e789?w=400&q=80')}
+                className="w-full flex flex-col items-center justify-center gap-2 rounded-xl transition-all"
+                style={{ height: '100px', border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}
+              >
+                <Upload className="w-5 h-5" style={{ color: '#9CA3AF' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6B7280' }}>Subir imagen (opcional)</span>
+              </button>
+            )}
+          </div>
+
+          {/* Título */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label style={labelStyle}>Título <span style={{ color: '#DC2626' }}>*</span></label>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{titulo.length}/80</span>
+            </div>
+            <input type="text" value={titulo} maxLength={80} onChange={e => setTitulo(e.target.value)}
+              placeholder="Ej: Nueva funcionalidad disponible"
+              className="w-full px-4 py-3"
+              style={inputStyle}
+              onFocus={e => e.target.style.borderColor = '#006B4E'}
+              onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+            />
+          </div>
+
+          {/* Descripción */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label style={labelStyle}>Descripción <span style={{ color: '#DC2626' }}>*</span></label>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: '#9CA3AF' }}>{descripcion.length}/200</span>
+            </div>
+            <textarea value={descripcion} maxLength={200} rows={3} onChange={e => setDescripcion(e.target.value)}
+              placeholder="Descripción breve que verá el usuario en el popup"
+              className="w-full px-4 py-3 resize-none"
+              style={{ ...inputStyle, lineHeight: '1.6' }}
+              onFocus={e => e.target.style.borderColor = '#006B4E'}
+              onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+            />
+          </div>
+
+          {/* Tópico */}
+          <div>
+            <label className="block mb-2" style={labelStyle}>Tópico <span style={{ color: '#DC2626' }}>*</span></label>
+            <div className="relative" ref={topicoRef}>
+              <button type="button" onClick={() => setTopicoOpen(p => !p)}
+                className="w-full flex items-center justify-between px-4 py-3 text-sm text-left"
+                style={{ ...inputStyle, cursor: 'pointer' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#006B4E'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E5E5E5'}
+              >
+                <span style={{ color: topico ? '#0A0A0A' : '#9CA3AF' }}>{topico || 'Seleccionar tópico'}</span>
+                <ChevronDown className="w-4 h-4" style={{ color: '#9CA3AF' }} />
+              </button>
+              {topicoOpen && (
+                <div className="absolute left-0 top-full mt-1 w-full rounded-xl shadow-lg z-50 overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+                  {TOPICOS.map(t => (
+                    <button key={t} type="button" onClick={() => { setTopico(t); setTopicoOpen(false); }}
+                      className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
+                      style={{ fontFamily: 'var(--font-body)', color: topico === t ? '#006B4E' : '#374151', backgroundColor: topico === t ? '#F0FDF4' : '#FFFFFF', fontWeight: topico === t ? 500 : 400 }}
+                      onMouseEnter={e => { if (topico !== t) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = topico === t ? '#F0FDF4' : '#FFFFFF'; }}
+                    >
+                      {t}
+                      {topico === t && <Check className="w-4 h-4" style={{ color: '#006B4E' }} />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Roles */}
+          <div>
+            <label className="block mb-3" style={labelStyle}>
+              Mostrar a <span style={{ color: '#DC2626' }}>*</span>
+              <span className="ml-2 font-normal" style={{ color: '#9CA3AF', fontSize: '12px' }}>Selecciona los perfiles que verán este mensaje</span>
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {ROLES_OPCIONES.map(rol => {
+                const checked = roles.includes(rol.id);
+                return (
+                  <button key={rol.id} type="button" onClick={() => toggleRol(rol.id)}
+                    className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm text-left transition-all"
+                    style={{ border: `1.5px solid ${checked ? '#006B4E' : '#E5E5E5'}`, backgroundColor: checked ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: checked ? '#065F46' : '#374151', fontWeight: checked ? 500 : 400 }}
+                  >
+                    <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0" style={{ backgroundColor: checked ? '#006B4E' : '#FFFFFF', border: `2px solid ${checked ? '#006B4E' : '#D1D5DB'}` }}>
+                      {checked && <Check className="w-2.5 h-2.5" style={{ color: '#FFFFFF' }} />}
+                    </div>
+                    {rol.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Período activo */}
+          <div>
+            <label className="block mb-3" style={labelStyle}>Período activo <span style={{ color: '#DC2626' }}>*</span></label>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Desde</label>
+                <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
+                  className="w-full px-3 py-2.5 text-sm" style={inputStyle}
+                  onFocus={e => e.target.style.borderColor = '#006B4E'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+              </div>
+              <div>
+                <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Hasta</label>
+                <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
+                  className="w-full px-3 py-2.5 text-sm" style={inputStyle}
+                  onFocus={e => e.target.style.borderColor = '#006B4E'}
+                  onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Veces a mostrar */}
+          <div>
+            <label className="block mb-3" style={labelStyle}>Cantidad de veces a mostrar</label>
+            <div className="space-y-2">
+              {VECES_OPCIONES.map(op => (
+                <button key={op.id} type="button" onClick={() => setVecesAMostrar(op.id)}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-all"
+                  style={{ border: `1.5px solid ${vecesAMostrar === op.id ? '#006B4E' : '#E5E5E5'}`, backgroundColor: vecesAMostrar === op.id ? '#F0FDF4' : '#FAFAFA', fontFamily: 'var(--font-body)', color: vecesAMostrar === op.id ? '#065F46' : '#374151' }}
+                >
+                  <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: `2px solid ${vecesAMostrar === op.id ? '#006B4E' : '#D1D5DB'}`, backgroundColor: vecesAMostrar === op.id ? '#006B4E' : '#FFFFFF' }}>
+                    {vecesAMostrar === op.id && <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#FFFFFF' }} />}
+                  </div>
+                  {op.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Activo */}
+          <div className="flex items-center justify-between px-4 py-3 rounded-xl" style={{ border: '1.5px solid #E5E5E5', backgroundColor: '#FAFAFA' }}>
+            <div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500, color: '#374151' }}>Mensaje activo</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Si está inactivo, no se mostrará a ningún usuario</p>
+            </div>
+            <button type="button" onClick={() => setActivo(p => !p)} className="flex-shrink-0">
+              <div className="w-11 h-6 rounded-full flex items-center px-0.5 transition-colors" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
+                <div className="w-5 h-5 rounded-full bg-white shadow transition-transform" style={{ transform: activo ? 'translateX(20px)' : 'translateX(0)' }} />
+              </div>
+            </button>
+          </div>
+
+          {/* CTA */}
+          <div className="flex gap-3 pt-2">
+            <button onClick={onBack} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
+              Cancelar
+            </button>
+            <button onClick={handleSave} disabled={!canSave || saved}
+              className="flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 transition-all"
+              style={{ backgroundColor: canSave && !saved ? '#006B4E' : '#E5E5E5', color: canSave && !saved ? '#FFFFFF' : '#9CA3AF', fontFamily: 'var(--font-body)', border: 'none', cursor: canSave && !saved ? 'pointer' : 'not-allowed' }}
+              onMouseEnter={e => { if (canSave && !saved) e.currentTarget.style.backgroundColor = '#01533E'; }}
+              onMouseLeave={e => { if (canSave && !saved) e.currentTarget.style.backgroundColor = '#006B4E'; }}
+            >
+              {saved ? <><CheckCircle className="w-4 h-4" /> Guardado</> : (mensaje ? 'Guardar cambios' : 'Publicar mensaje')}
+            </button>
+          </div>
+        </div>
+
+        {/* Preview sticky */}
+        <div className="lg:sticky lg:top-6 h-fit">
+          <p className="mb-3" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Vista previa del popup
+          </p>
+          <MensajePopupPreview titulo={titulo} descripcion={descripcion} topico={topico} imagen={imagen} />
+          <p className="mt-3" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+            Así verán el mensaje los usuarios según la configuración establecida
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '—';
+  const [y, m, d] = dateStr.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ─── MENSAJES INFORMATIVOS MODULE ─────────────────────────────────────────────
+
+function MensajesInformativosModule() {
+  const [mensajes, setMensajes] = useState<MensajeInformativo[]>(MENSAJES_MOCK);
+  const [vista, setVista] = useState<'list' | 'create' | MensajeInformativo>('list');
+  const [mensajeToDelete, setMensajeToDelete] = useState<MensajeInformativo | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [deleted, setDeleted] = useState(false);
+
+  function handleSave(data: Omit<MensajeInformativo, 'id'>) {
+    if (typeof vista === 'object') {
+      setMensajes(prev => prev.map(m => m.id === (vista as MensajeInformativo).id ? { ...m, ...data } : m));
+    } else {
+      setMensajes(prev => [{ id: Math.max(...prev.map(m => m.id), 0) + 1, ...data }, ...prev]);
+    }
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  }
+
+  function handleDelete() {
+    if (!mensajeToDelete) return;
+    setMensajes(prev => prev.filter(m => m.id !== mensajeToDelete.id));
+    setMensajeToDelete(null);
+    setDeleted(true);
+    setTimeout(() => setDeleted(false), 3000);
+  }
+
+  if (vista !== 'list') {
+    return (
+      <MensajeEditor
+        mensaje={typeof vista === 'object' ? vista : null}
+        onBack={() => setVista('list')}
+        onSave={handleSave}
+      />
+    );
+  }
+
+  const topicoColor: Record<string, { bg: string; text: string }> = {
+    'Novedades':              { bg: '#EFF6FF', text: '#1E40AF' },
+    'Mantenimiento':          { bg: '#FFF7ED', text: '#C2410C' },
+    'Actualización':          { bg: '#F0FDF4', text: '#065F46' },
+    'Oferta especial':        { bg: '#FDF4FF', text: '#7E22CE' },
+    'Información importante': { bg: '#FFF1F2', text: '#9F1239' },
+  };
+
+  return (
+    <div className="p-4 md:p-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+        <div>
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-medium)', color: '#0A0A0A', lineHeight: 'var(--line-height-heading)' }}>
+            Mensajes informativos
+          </h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', marginTop: '4px' }}>
+            Gestiona los mensajes popup que se muestran a los usuarios de la plataforma
+          </p>
+        </div>
+        <button onClick={() => setVista('create')}
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all flex-shrink-0"
+          style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', fontFamily: 'var(--font-body)', fontWeight: '500' }}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#01533E'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = '#006B4E'}
+        >
+          <Plus className="w-4 h-4" /> Nuevo mensaje
+        </button>
+      </div>
+
+      {/* Lista */}
+      {mensajes.length === 0 ? (
+        <div className="rounded-2xl py-16 flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0FDF4' }}>
+            <Bell className="w-7 h-7" style={{ color: '#006B4E' }} />
+          </div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 500, color: '#0A0A0A', marginBottom: '8px' }}>Sin mensajes</h3>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', maxWidth: '280px', lineHeight: '1.5' }}>
+            Crea tu primer mensaje informativo para notificar a tus usuarios
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {mensajes.map(msg => {
+            const colors = topicoColor[msg.topico] || { bg: '#F3F4F6', text: '#6B7280' };
+            return (
+              <div key={msg.id} className="rounded-xl p-5 flex gap-4 cursor-pointer transition-all"
+                style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}
+                onClick={() => setVista(msg)}
+                onMouseEnter={e => e.currentTarget.style.border = '1px solid #006B4E'}
+                onMouseLeave={e => e.currentTarget.style.border = '1px solid #E5E5E5'}
+              >
+                {/* Icono */}
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F0FDF4' }}>
+                  <Bell className="w-5 h-5" style={{ color: '#006B4E' }} />
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3 mb-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: '#111827' }}>{msg.titulo}</p>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: colors.bg, color: colors.text, fontFamily: 'var(--font-body)' }}>
+                        {msg.topico}
+                      </span>
+                    </div>
+                    <span className="flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: msg.activo ? '#DCFCE7' : '#F3F4F6', color: msg.activo ? '#166534' : '#6B7280', fontFamily: 'var(--font-body)' }}>
+                      {msg.activo ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </div>
+                  <p className="mb-2" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6B7280', lineHeight: '1.5' }}>{msg.descripcion}</p>
+                  <div className="flex items-center flex-wrap gap-3">
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                      📅 {formatDate(msg.fechaInicio)} → {formatDate(msg.fechaFin)}
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                      👁 {VECES_OPCIONES.find(v => v.id === msg.vecesAMostrar)?.label}
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                      👥 {msg.roles.map(r => ROLES_OPCIONES.find(ro => ro.id === r)?.label).join(', ')}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Acciones */}
+                <div className="flex items-center gap-1 flex-shrink-0" onClick={e => e.stopPropagation()}>
+                  <button title="Editar" onClick={() => setVista(msg)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#F5F5F5', color: '#737373' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F5F5F5'}><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button title={msg.activo ? 'Desactivar' : 'Activar'} onClick={() => setMensajes(prev => prev.map(m => m.id === msg.id ? { ...m, activo: !m.activo } : m))} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: msg.activo ? '#F0F5EB' : '#F5F5F5', color: msg.activo ? '#3D5E28' : '#A3A3A3' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = msg.activo ? '#E2EDCC' : '#E5E5E5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = msg.activo ? '#F0F5EB' : '#F5F5F5'}>
+                    {msg.activo ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                  <button title="Eliminar" onClick={() => setMensajeToDelete(msg)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#FEF2F2', color: '#EF4444' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#FEE2E2'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FEF2F2'}><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Modal eliminar */}
+      {mensajeToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setMensajeToDelete(null)}>
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FEE2E2' }}>
+                <Trash2 className="w-5 h-5" style={{ color: '#DC2626' }} />
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '16px', color: '#0A0A0A' }}>Eliminar mensaje</h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6B7280' }}>{mensajeToDelete.titulo}</p>
+              </div>
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#374151' }}>Esta acción no se puede deshacer.</p>
+            <div className="flex gap-3">
+              <button onClick={() => setMensajeToDelete(null)} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}>Cancelar</button>
+              <button onClick={handleDelete} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all" style={{ backgroundColor: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-body)' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>Eliminar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toasts */}
+      {saved && (
+        <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '280px' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#16A34A' }}>
+            <CheckCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+          </div>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500, color: '#FFFFFF' }}>Mensaje guardado correctamente</p>
+        </div>
+      )}
+      {deleted && (
+        <div className="fixed bottom-6 left-1/2 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl" style={{ transform: 'translateX(-50%)', backgroundColor: '#0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.28)', minWidth: '280px' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#737373' }}>
+            <Trash2 className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+          </div>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500, color: '#FFFFFF' }}>Mensaje eliminado</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const MAX_TITULO = 60;
 const MAX_DESC = 120;
@@ -16,12 +565,6 @@ interface BannerAdmin {
   imagen: string | null;
   activo: boolean;
   borrador: boolean;
-}
-
-function formatDate(d: string) {
-  if (!d) return '—';
-  const [y, m, day] = d.split('-');
-  return `${day}/${m}/${y}`;
 }
 
 const BG = '#002F23';
@@ -622,6 +1165,7 @@ function LimitModal({ onClose, onCreateDraft }: { onClose: () => void; onCreateD
 // ─── MÓDULO PRINCIPAL ─────────────────────────────────────────────────────────
 
 export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
+  const [tab, setTab] = useState<'banners' | 'mensajes'>('banners');
   const [banners, setBanners] = useState<BannerAdmin[]>(initialBanners);
   const [view, setView] = useState<'list' | 'create' | 'create-draft' | BannerAdmin>(autoOpenNew ? 'create' : 'list');
   const [bannerToDelete, setBannerToDelete] = useState<BannerAdmin | null>(null);
@@ -687,7 +1231,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
   };
   const handleDragEnd = () => { setDragIndex(null); setDragOverIndex(null); };
 
-  if (view !== 'list') {
+  if (tab === 'banners' && view !== 'list') {
     const activeBannersCount = typeof view === 'object'
       ? banners.filter(b => b.activo && b.id !== (view as BannerAdmin).id).length
       : banners.filter(b => b.activo).length;
@@ -703,7 +1247,49 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
     );
   }
 
+  // ── Tab selector ──────────────────────────────────────────────────────────────
+  const MODULE_TABS: { id: 'banners' | 'mensajes'; label: string; icon: React.ReactNode }[] = [
+    { id: 'banners',  label: 'Banners promocionales',  icon: <Megaphone className="w-4 h-4" /> },
+    { id: 'mensajes', label: 'Mensajes informativos',  icon: <Bell className="w-4 h-4" /> },
+  ];
+
+  if (tab === 'mensajes') {
+    return (
+      <div>
+        {/* Tabs */}
+        <div className="px-4 md:px-8 pt-4 md:pt-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
+          <div className="flex gap-1">
+            {MODULE_TABS.map(t => (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors"
+                style={{ borderRadius: '10px 10px 0 0', borderBottom: t.id === tab ? '2px solid #006B4E' : '2px solid transparent', fontFamily: 'var(--font-body)', color: t.id === tab ? '#006B4E' : '#737373', backgroundColor: t.id === tab ? '#F0FDF4' : 'transparent', fontWeight: t.id === tab ? 600 : 400 }}
+              >
+                {t.icon}{t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <MensajesInformativosModule />
+      </div>
+    );
+  }
+
   return (
+    <div>
+      {/* Tabs */}
+      <div className="px-4 md:px-8 pt-4 md:pt-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
+        <div className="flex gap-1">
+          {MODULE_TABS.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors"
+              style={{ borderRadius: '10px 10px 0 0', borderBottom: t.id === tab ? '2px solid #006B4E' : '2px solid transparent', fontFamily: 'var(--font-body)', color: t.id === tab ? '#006B4E' : '#737373', backgroundColor: t.id === tab ? '#F0FDF4' : 'transparent', fontWeight: t.id === tab ? 600 : 400 }}
+            >
+              {t.icon}{t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
     <div className="p-4 md:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
@@ -900,6 +1486,7 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#FFFFFF' }}>Banner eliminado</p>
         </div>
       )}
+    </div>
     </div>
   );
 }
