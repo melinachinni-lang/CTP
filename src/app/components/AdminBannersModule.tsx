@@ -34,7 +34,7 @@ const VECES_OPCIONES: { id: MensajeInformativo['vecesAMostrar']; label: string }
 const MENSAJES_MOCK: MensajeInformativo[] = [
   {
     id: 1,
-    imagen: null,
+    imagen: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80',
     titulo: 'Nueva funcionalidad: Reservas online',
     descripcion: 'Ahora puedes gestionar tus reservas directamente desde el portal. Sin papeles, sin esperas.',
     topico: 'Novedades',
@@ -46,7 +46,7 @@ const MENSAJES_MOCK: MensajeInformativo[] = [
   },
   {
     id: 2,
-    imagen: null,
+    imagen: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=80',
     titulo: 'Mantenimiento programado',
     descripcion: 'El sábado 10 de agosto entre las 02:00 y 04:00 AM realizaremos mantenimiento. El portal estará temporalmente inactivo.',
     topico: 'Mantenimiento',
@@ -1257,16 +1257,19 @@ export function AdminBannersModule({ autoOpenNew }: { autoOpenNew?: boolean }) {
     return (
       <div>
         {/* Tabs */}
-        <div className="px-4 md:px-8 pt-4 md:pt-6" style={{ borderBottom: '1px solid #E5E5E5' }}>
-          <div className="flex gap-1">
-            {MODULE_TABS.map(t => (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors"
-                style={{ borderRadius: '10px 10px 0 0', borderBottom: t.id === tab ? '2px solid #006B4E' : '2px solid transparent', fontFamily: 'var(--font-body)', color: t.id === tab ? '#006B4E' : '#737373', backgroundColor: t.id === tab ? '#F0FDF4' : 'transparent', fontWeight: t.id === tab ? 600 : 400 }}
-              >
-                {t.icon}{t.label}
-              </button>
-            ))}
+        <div className="px-4 md:px-8 pt-4 md:pt-6">
+          <div className="flex gap-1 p-1 rounded-2xl" style={{ backgroundColor: '#F3F4F6', display: 'inline-flex' }}>
+            {MODULE_TABS.map(t => {
+              const isActive = t.id === tab;
+              return (
+                <button key={t.id} onClick={() => setTab(t.id)}
+                  className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all whitespace-nowrap"
+                  style={{ fontFamily: 'var(--font-body)', borderRadius: '200px', backgroundColor: isActive ? '#FFFFFF' : 'transparent', color: isActive ? '#0A0A0A' : '#6B7280', boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+                >
+                  {t.icon}{t.label}
+                </button>
+              );
+            })}
           </div>
         </div>
         <MensajesInformativosModule />
