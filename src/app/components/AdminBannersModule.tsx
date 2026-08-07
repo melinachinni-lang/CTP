@@ -66,51 +66,47 @@ function MensajePopupPreview({ titulo, descripcion, topico, imagen, noMostrarOpc
   titulo: string; descripcion: string; topico: string; imagen: string | null; noMostrarOpcion?: boolean;
 }) {
   return (
-    <div className="w-full rounded-2xl overflow-hidden shadow-2xl" style={{ maxWidth: '440px', border: '1px solid #E5E5E5' }}>
-      {/* Header: gradiente izquierda + imagen derecha */}
-      <div className="flex relative" style={{ background: 'linear-gradient(135deg, #006B4E 0%, #003d2c 100%)', minHeight: '160px' }}>
-        {/* Botón cerrar */}
-        <button className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.18)' }}>
-          <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+    <div className="w-full rounded-2xl overflow-hidden shadow-2xl" style={{ maxWidth: '360px', border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF' }}>
+      {/* Hero image — ancho completo */}
+      <div className="relative" style={{ height: '200px', backgroundColor: '#E5E5E5' }}>
+        {imagen ? (
+          <img src={imagen} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2" style={{ backgroundColor: '#F3F4F6' }}>
+            <ImageIcon className="w-10 h-10" style={{ color: '#D1D5DB' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>Sin imagen</span>
+          </div>
+        )}
+        {/* Botón cerrar sobre la imagen */}
+        <button className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}>
+          <X className="w-4 h-4" style={{ color: '#FFFFFF' }} />
         </button>
-
-        {/* Contenido izquierdo: badge + título */}
-        <div className="flex-1 p-6 flex flex-col justify-center" style={{ minWidth: 0 }}>
-          {topico && (
-            <span className="inline-flex self-start px-2.5 py-0.5 rounded-full text-xs font-semibold mb-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>
-              {topico}
-            </span>
-          )}
-          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 700, color: '#FFFFFF', lineHeight: '1.3', wordBreak: 'break-word', overflowWrap: 'break-word', margin: 0, paddingRight: imagen ? '0' : '24px' }}>
-            {titulo || 'Título del mensaje'}
-          </h3>
-        </div>
-
-        {/* Imagen derecha: ocupa el alto completo del header */}
-        <div className="flex-shrink-0" style={{ width: '38%', maxWidth: '160px', minWidth: '100px' }}>
-          {imagen ? (
-            <img src={imagen} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}>
-              <ImageIcon className="w-8 h-8" style={{ color: 'rgba(255,255,255,0.22)' }} />
-            </div>
-          )}
-        </div>
       </div>
 
-      {/* Cuerpo: descripción en área blanca */}
-      <div className="px-6 pt-5 pb-4" style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Cuerpo: badge, título, descripción */}
+      <div className="px-5 pt-5 pb-4">
+        {topico && (
+          <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold mb-3" style={{ backgroundColor: '#DCFCE7', color: '#15803D', fontFamily: 'var(--font-body)' }}>
+            {topico}
+          </span>
+        )}
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 700, color: '#0A0A0A', lineHeight: '1.3', wordBreak: 'break-word', overflowWrap: 'break-word', margin: '0 0 10px 0' }}>
+          {titulo || 'Título del mensaje'}
+        </h3>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#525252', lineHeight: '1.6', wordBreak: 'break-word', overflowWrap: 'break-word', margin: 0 }}>
           {descripcion || 'Aquí aparecerá la descripción del mensaje informativo.'}
         </p>
       </div>
 
+      {/* Separador */}
+      <div style={{ height: '1px', backgroundColor: '#F3F4F6', margin: '0 20px' }} />
+
       {/* Footer: acciones */}
-      <div className="px-6 pb-5 flex items-center justify-between gap-3" style={{ backgroundColor: '#FFFFFF' }}>
-        <button className="text-sm" style={{ color: '#9CA3AF', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textDecorationColor: 'rgba(156,163,175,0.4)' }}>
+      <div className="px-5 py-4 flex items-center justify-between gap-3">
+        <button className="text-sm" style={{ color: '#9CA3AF', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
           No volver a mostrar
         </button>
-        <button className="px-6 py-2.5 rounded-full text-sm font-medium flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
+        <button className="px-5 py-2.5 rounded-full text-sm font-medium flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
           Entendido
         </button>
       </div>
