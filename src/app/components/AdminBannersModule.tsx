@@ -133,6 +133,8 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
   const [imagen, setImagen] = useState<string | null>(mensaje?.imagen || null);
   const [preview, setPreview] = useState(false);
   const [topicoOpen, setTopicoOpen] = useState(false);
+  const [fechaIndefinida, setFechaIndefinida] = useState(!mensaje?.fechaFin);
+  const [showFechaInicioTooltip, setShowFechaInicioTooltip] = useState(false);
   const [saved, setSaved] = useState(false);
   const topicoRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -157,11 +159,12 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
   const toggleRol = (id: string) =>
     setRoles(prev => prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]);
 
-  const canSave = titulo.trim() && descripcion.trim() && topico && roles.length > 0 && fechaInicio && fechaFin;
+  const canSave = titulo.trim() && descripcion.trim() && topico && roles.length > 0 && (activo || fechaInicio);
 
   function handleSave() {
     if (!canSave) return;
-    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio, fechaFin, vecesAMostrar, noMostrarOpcion, activo });
+    const hoy = new Date().toISOString().split('T')[0];
+    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio: activo ? hoy : fechaInicio, fechaFin: fechaIndefinida ? '' : fechaFin, vecesAMostrar, noMostrarOpcion, activo });
     setSaved(true);
     setTimeout(() => { setSaved(false); onBack(); }, 1200);
   }
@@ -326,27 +329,80 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
               </div>
             </div>
 
-            {/* Período activo */}
+            {/* Mostrar automáticamente */}
             <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '12px' }}>
-                Período activo <span style={{ color: '#EF4444' }}>*</span>
-              </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center justify-between">
                 <div>
-                  <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Desde</label>
-                  <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
-                    style={inputStyle}
-                    onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
-                    onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
-                  />
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Mostrar automáticamente</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: activo ? '#006B4E' : '#737373', marginTop: '2px' }}>
+                    {activo ? 'Se mostrará automáticamente a partir de hoy' : 'Se mostrará en la fecha de inicio que elijas'}
+                  </p>
                 </div>
+                <button onClick={() => { setActivo(v => !v); setShowFechaInicioTooltip(false); }}
+                  className="w-11 h-6 rounded-full transition-all relative flex-shrink-0"
+                  style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}
+                >
+                  <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ left: activo ? '22px' : '2px' }} />
+                </button>
+              </div>
+            </div>
+
+            {/* Fechas */}
+            <div className="rounded-2xl p-5" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Fecha inicio */}
                 <div>
-                  <label className="block mb-1.5" style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280' }}>Hasta</label>
-                  <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
-                    style={inputStyle}
-                    onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
-                    onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                    Fecha de inicio {!activo && <span style={{ color: '#EF4444' }}>*</span>}
+                  </label>
+                  <div className="relative">
+                    <input type="date"
+                      value={activo ? new Date().toISOString().split('T')[0] : fechaInicio}
+                      onChange={e => { if (!activo) setFechaInicio(e.target.value); }}
+                      readOnly={activo}
+                      style={{ ...inputStyle, ...(activo ? { backgroundColor: '#F3F4F6', color: '#9CA3AF', cursor: 'not-allowed', borderColor: '#E5E5E5' } : {}) }}
+                      onFocus={e => { if (!activo) e.target.style.borderColor = '#006B4E'; }}
+                      onBlur={e => { if (!activo) e.target.style.borderColor = '#E5E5E5'; }}
+                    />
+                    {activo && (
+                      <div className="absolute inset-0 cursor-not-allowed"
+                        onClick={() => { setShowFechaInicioTooltip(true); setTimeout(() => setShowFechaInicioTooltip(false), 3000); }}
+                      />
+                    )}
+                    {showFechaInicioTooltip && (
+                      <div className="absolute top-full left-0 mt-1.5 z-10 rounded-xl px-3 py-2 shadow-md" style={{ backgroundColor: '#FEF3C7', border: '1px solid #FDE68A', whiteSpace: 'nowrap' }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#92400E' }}>Con "Mostrar automáticamente" activo, la fecha de inicio es hoy</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* Fecha fin */}
+                <div>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
+                    Fecha de fin
+                  </label>
+                  <input type="date"
+                    value={fechaIndefinida ? '' : fechaFin}
+                    onChange={e => { setFechaFin(e.target.value); setFechaIndefinida(false); }}
+                    disabled={fechaIndefinida}
+                    style={{ ...inputStyle, ...(fechaIndefinida ? { backgroundColor: '#F3F4F6', color: '#9CA3AF', cursor: 'not-allowed', borderColor: '#E5E5E5' } : {}) }}
+                    onFocus={e => { if (!fechaIndefinida) e.target.style.borderColor = '#006B4E'; }}
+                    onBlur={e => { if (!fechaIndefinida) e.target.style.borderColor = '#E5E5E5'; }}
                   />
+                  <div className="relative" style={{ width: 'fit-content' }}>
+                    <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                      <input type="checkbox" checked={fechaIndefinida}
+                        onChange={e => { setFechaIndefinida(e.target.checked); if (e.target.checked) setFechaFin(''); }}
+                        style={{ width: '14px', height: '14px', accentColor: '#006B4E', cursor: 'pointer' }}
+                      />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: fechaIndefinida ? '#006B4E' : '#737373', fontWeight: fechaIndefinida ? 500 : 400 }}>Indefinido</span>
+                    </label>
+                    {fechaIndefinida && (
+                      <div className="absolute left-0 z-10 rounded-xl px-3 py-2 shadow-md" style={{ top: 'calc(100% + 6px)', backgroundColor: '#FEF3C7', border: '1px solid #FDE68A', whiteSpace: 'nowrap' }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#92400E' }}>Al elegir indefinido, deberás desactivarlo manualmente</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
