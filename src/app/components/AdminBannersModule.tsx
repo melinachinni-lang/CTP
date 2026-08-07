@@ -12,7 +12,7 @@ interface MensajeInformativo {
   roles: string[];
   fechaInicio: string;
   fechaFin: string;
-  vecesAMostrar: 'una-vez' | 'por-semana' | 'siempre';
+  vecesAMostrar: 'una-vez' | 'siempre';
   noMostrarOpcion: boolean;
   activo: boolean;
 }
@@ -27,9 +27,8 @@ const ROLES_OPCIONES = [
 ];
 
 const VECES_OPCIONES: { id: MensajeInformativo['vecesAMostrar']; label: string; desc: string }[] = [
-  { id: 'una-vez',    label: 'Una sola vez al ingresar',  desc: 'Se muestra una vez y no vuelve a aparecer' },
-  { id: 'por-semana', label: 'Una vez por semana',        desc: 'Aparece como máximo una vez por semana por usuario' },
-  { id: 'siempre',    label: 'Cada vez que ingresa',      desc: 'Se muestra en cada sesión durante el período activo' },
+  { id: 'una-vez',  label: 'Una sola vez al ingresar', desc: 'Se muestra una vez y no vuelve a aparecer' },
+  { id: 'siempre',  label: 'Cada vez que ingresa',     desc: 'Se muestra en cada sesión durante el período activo' },
 ];
 
 const MENSAJES_MOCK: MensajeInformativo[] = [
