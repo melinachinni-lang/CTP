@@ -216,7 +216,7 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
               <input ref={fileInputRef} type="file" accept="image/png,image/jpeg" style={{ display: 'none' }} onChange={handleFileChange} />
               {imagen ? (
                 <div className="rounded-xl overflow-hidden relative" style={{ border: '1px solid #E5E5E5' }}>
-                  <img src={imagen} alt="Preview" style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }} />
+                  <img src={imagen} alt="Preview" style={{ width: '100%', height: '140px', objectFit: 'cover', display: 'block' }} />
                   <button onClick={() => { setImagen(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#FFFFFF' }}>
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -225,15 +225,15 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
                   </button>
                 </div>
               ) : (
-                <div onClick={() => fileInputRef.current?.click()} className="rounded-xl flex flex-col items-center justify-center gap-2 py-10 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
-                    <Upload className="w-5 h-5" style={{ color: '#3D5E28' }} />
+                <div onClick={() => fileInputRef.current?.click()} className="rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-all" style={{ border: '2px dashed #D1D5DB', backgroundColor: '#FAFAFA', height: '120px' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006B4E'; e.currentTarget.style.backgroundColor = '#F0FDF4'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.backgroundColor = '#FAFAFA'; }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F0F5EB' }}>
+                    <Upload className="w-4 h-4" style={{ color: '#3D5E28' }} />
                   </div>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A' }}>Arrastra una imagen o haz clic para subir</p>
                 </div>
               )}
               <p className="mt-2.5" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#9CA3AF' }}>
-                Formatos aceptados: <strong style={{ color: '#6B7280' }}>PNG, JPG</strong> · Peso máximo: <strong style={{ color: '#6B7280' }}>2 MB</strong> · Dimensiones recomendadas: <strong style={{ color: '#6B7280' }}>800 × 500 px</strong>
+                Formatos aceptados: <strong style={{ color: '#6B7280' }}>PNG, JPG</strong> · Peso máximo: <strong style={{ color: '#6B7280' }}>2 MB</strong> · Dimensiones recomendadas: <strong style={{ color: '#6B7280' }}>1200 × 500 px</strong>
               </p>
             </div>
 
@@ -242,14 +242,14 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
               <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
                 Título <span style={{ color: '#EF4444' }}>*</span>
               </label>
-              <input type="text" value={titulo} maxLength={80} onChange={e => setTitulo(e.target.value)}
+              <input type="text" value={titulo} maxLength={60} onChange={e => setTitulo(e.target.value)}
                 placeholder="Ej: Nueva funcionalidad disponible"
                 style={inputStyle}
                 onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
                 onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
               />
               <div className="flex justify-end mt-1.5">
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: titulo.length >= 80 ? '#EF4444' : '#9CA3AF' }}>{titulo.length}/80</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: titulo.length >= 60 ? '#EF4444' : '#9CA3AF' }}>{titulo.length}/60</span>
               </div>
             </div>
 
@@ -258,14 +258,14 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
               <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: '500', color: '#0A0A0A', display: 'block', marginBottom: '6px' }}>
                 Descripción <span style={{ color: '#EF4444' }}>*</span>
               </label>
-              <textarea value={descripcion} maxLength={200} rows={3} onChange={e => setDescripcion(e.target.value)}
+              <textarea value={descripcion} maxLength={150} rows={3} onChange={e => setDescripcion(e.target.value)}
                 placeholder="Descripción breve que verá el usuario en el popup"
                 style={{ ...inputStyle, resize: 'none', lineHeight: '1.6' }}
                 onFocus={e => { e.target.style.borderColor = '#006B4E'; e.target.style.backgroundColor = '#FFFFFF'; }}
                 onBlur={e => { e.target.style.borderColor = '#E5E5E5'; e.target.style.backgroundColor = '#FAFAFA'; }}
               />
               <div className="flex justify-end mt-1.5">
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: descripcion.length >= 200 ? '#EF4444' : '#9CA3AF' }}>{descripcion.length}/200</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: descripcion.length >= 150 ? '#EF4444' : '#9CA3AF' }}>{descripcion.length}/150</span>
               </div>
             </div>
 
