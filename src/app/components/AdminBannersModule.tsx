@@ -100,11 +100,9 @@ function MensajePopupPreview({ titulo, descripcion, topico, imagen, noMostrarOpc
       </div>
       {/* Footer */}
       <div className="px-6 py-4 flex items-center justify-end gap-3" style={{ backgroundColor: '#FFFFFF' }}>
-        {noMostrarOpcion && (
-          <button className="text-sm" style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
-            No volver a mostrar
-          </button>
-        )}
+        <button className="text-sm" style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+          No volver a mostrar
+        </button>
         <button className="px-5 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
           Entendido
         </button>
@@ -163,7 +161,7 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
   function handleSave() {
     if (!canSave) return;
     const hoy = new Date().toISOString().split('T')[0];
-    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio: activo ? hoy : fechaInicio, fechaFin: fechaIndefinida ? '' : fechaFin, vecesAMostrar, noMostrarOpcion, activo });
+    onSave({ imagen, titulo, descripcion, topico, roles, fechaInicio: activo ? hoy : fechaInicio, fechaFin: fechaIndefinida ? '' : fechaFin, vecesAMostrar, noMostrarOpcion: true, activo: true });
     setSaved(true);
     setTimeout(() => { setSaved(false); onBack(); }, 1200);
   }
@@ -430,33 +428,6 @@ function MensajeEditor({ mensaje, onBack, onSave }: {
             </div>
 
             {/* No volver a mostrar */}
-            <div className="rounded-2xl p-5 flex items-start justify-between gap-4" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A', marginBottom: '4px' }}>Opción "No volver a mostrar"</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5' }}>
-                  Permite al usuario marcar que no quiere ver este mensaje nuevamente.<br />Se muestra como enlace en el popup.
-                </p>
-              </div>
-              <button type="button" onClick={() => setNoMostrarOpcion(p => !p)} className="flex-shrink-0 mt-0.5">
-                <div className="w-11 h-6 rounded-full flex items-center px-0.5 transition-colors" style={{ backgroundColor: noMostrarOpcion ? '#006B4E' : '#D1D5DB' }}>
-                  <div className="w-5 h-5 rounded-full bg-white shadow transition-transform" style={{ transform: noMostrarOpcion ? 'translateX(20px)' : 'translateX(0)' }} />
-                </div>
-              </button>
-            </div>
-
-            {/* Activo */}
-            <div className="rounded-2xl p-5 flex items-center justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>Mensaje activo</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF' }}>Si está inactivo, no se mostrará a ningún usuario</p>
-              </div>
-              <button type="button" onClick={() => setActivo(p => !p)} className="flex-shrink-0">
-                <div className="w-11 h-6 rounded-full flex items-center px-0.5 transition-colors" style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
-                  <div className="w-5 h-5 rounded-full bg-white shadow transition-transform" style={{ transform: activo ? 'translateX(20px)' : 'translateX(0)' }} />
-                </div>
-              </button>
-            </div>
-
             {/* CTAs */}
             <div className="flex gap-3 pt-2 pb-8">
               <button onClick={onBack} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
