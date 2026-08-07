@@ -66,44 +66,51 @@ function MensajePopupPreview({ titulo, descripcion, topico, imagen, noMostrarOpc
   titulo: string; descripcion: string; topico: string; imagen: string | null; noMostrarOpcion?: boolean;
 }) {
   return (
-    <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ maxWidth: '360px', border: '1px solid #E5E5E5' }}>
-      {/* Header con gradiente */}
-      <div className="relative px-6 pt-6 pb-5" style={{ background: 'linear-gradient(135deg, #006B4E 0%, #003d2c 100%)' }}>
-        <button className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+    <div className="w-full rounded-2xl overflow-hidden shadow-2xl" style={{ maxWidth: '440px', border: '1px solid #E5E5E5' }}>
+      {/* Header: gradiente izquierda + imagen derecha */}
+      <div className="flex relative" style={{ background: 'linear-gradient(135deg, #006B4E 0%, #003d2c 100%)', minHeight: '160px' }}>
+        {/* Botón cerrar */}
+        <button className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.18)' }}>
           <X className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
         </button>
-        <div className="flex items-start gap-4">
-          <div className="flex-1 min-w-0 pr-2">
-            {topico && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold mb-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}>
-                {topico}
-              </span>
-            )}
-            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 700, color: '#FFFFFF', lineHeight: '1.3', marginBottom: '8px' }}>
-              {titulo || 'Título del mensaje'}
-            </h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.5' }}>
-              {descripcion || 'Descripción del mensaje informativo...'}
-            </p>
-          </div>
-          {/* Imagen preview */}
-          <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
-            {imagen ? (
-              <img src={imagen} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <ImageIcon className="w-8 h-8" style={{ color: 'rgba(255,255,255,0.3)' }} />
-              </div>
-            )}
-          </div>
+
+        {/* Contenido izquierdo: badge + título */}
+        <div className="flex-1 p-6 flex flex-col justify-center" style={{ minWidth: 0 }}>
+          {topico && (
+            <span className="inline-flex self-start px-2.5 py-0.5 rounded-full text-xs font-semibold mb-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>
+              {topico}
+            </span>
+          )}
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 700, color: '#FFFFFF', lineHeight: '1.3', wordBreak: 'break-word', overflowWrap: 'break-word', margin: 0, paddingRight: imagen ? '0' : '24px' }}>
+            {titulo || 'Título del mensaje'}
+          </h3>
+        </div>
+
+        {/* Imagen derecha: ocupa el alto completo del header */}
+        <div className="flex-shrink-0" style={{ width: '38%', maxWidth: '160px', minWidth: '100px' }}>
+          {imagen ? (
+            <img src={imagen} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}>
+              <ImageIcon className="w-8 h-8" style={{ color: 'rgba(255,255,255,0.22)' }} />
+            </div>
+          )}
         </div>
       </div>
-      {/* Footer */}
-      <div className="px-6 py-4 flex items-center justify-end gap-3" style={{ backgroundColor: '#FFFFFF' }}>
-        <button className="text-sm" style={{ color: '#737373', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer' }}>
+
+      {/* Cuerpo: descripción en área blanca */}
+      <div className="px-6 pt-5 pb-4" style={{ backgroundColor: '#FFFFFF' }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#525252', lineHeight: '1.6', wordBreak: 'break-word', overflowWrap: 'break-word', margin: 0 }}>
+          {descripcion || 'Aquí aparecerá la descripción del mensaje informativo.'}
+        </p>
+      </div>
+
+      {/* Footer: acciones */}
+      <div className="px-6 pb-5 flex items-center justify-between gap-3" style={{ backgroundColor: '#FFFFFF' }}>
+        <button className="text-sm" style={{ color: '#9CA3AF', fontFamily: 'var(--font-body)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textDecorationColor: 'rgba(156,163,175,0.4)' }}>
           No volver a mostrar
         </button>
-        <button className="px-5 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
+        <button className="px-6 py-2.5 rounded-full text-sm font-medium flex-shrink-0" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', fontFamily: 'var(--font-body)', border: 'none', cursor: 'pointer' }}>
           Entendido
         </button>
       </div>
