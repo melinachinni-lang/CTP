@@ -397,21 +397,33 @@ function RechazarModal({ reserva, onClose, onConfirmar }: {
   );
 }
 
-// ─── Filtro estado dropdown ───────────────────────────────────────────────────
+// ─── Filtros genérico + específicos ──────────────────────────────────────────
 
 export type FiltroEstado = 'todas' | 'pendiente' | 'aprobada' | 'rechazada';
+export type FiltroFlujo  = 'todos' | 'mp' | 'transferencia';
 
-const FILTRO_OPCIONES: { id: FiltroEstado; label: string }[] = [
+const FILTRO_ESTADO_OPCIONES: { id: FiltroEstado; label: string }[] = [
   { id: 'todas',     label: 'Todos' },
   { id: 'pendiente', label: 'Pendiente' },
   { id: 'aprobada',  label: 'Aprobada' },
   { id: 'rechazada', label: 'Rechazada' },
 ];
 
-export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v: FiltroEstado) => void }) {
+const FILTRO_FLUJO_OPCIONES: { id: string; label: string }[] = [
+  { id: 'todos',         label: 'Todos' },
+  { id: 'mp',            label: 'Mercado Pago' },
+  { id: 'transferencia', label: 'Transferencia' },
+];
+
+function GenericFilterDropdown({ label, value, options, onChange, isDefault }: {
+  label: string;
+  value: string;
+  options: { id: string; label: string }[];
+  onChange: (v: string) => void;
+  isDefault: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const hasFilter = value !== 'todas';
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -427,9 +439,9 @@ export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onCha
         onClick={() => setOpen(o => !o)}
         className="flex items-center gap-2 px-3.5 py-2 transition-colors"
         style={{
-          border: `1px solid ${hasFilter ? '#006B4E' : '#E5E5E5'}`,
-          backgroundColor: hasFilter ? '#F0FAF5' : '#FFFFFF',
-          color: hasFilter ? '#006B4E' : '#374151',
+          border: `1px solid ${!isDefault ? '#006B4E' : '#E5E5E5'}`,
+          backgroundColor: !isDefault ? '#F0FAF5' : '#FFFFFF',
+          color: !isDefault ? '#006B4E' : '#374151',
           borderRadius: '8px',
           fontFamily: 'var(--font-body)',
           fontSize: 'var(--font-size-body-sm)',
@@ -438,14 +450,14 @@ export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onCha
         }}
       >
         <SlidersHorizontal className="w-3.5 h-3.5" />
-        Filtros
+        {label}
         <ChevronDown className="w-3.5 h-3.5" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
       </button>
 
       {open && (
         <div className="absolute right-0 top-full mt-1.5 rounded-xl overflow-hidden z-50"
-          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '160px' }}>
-          {FILTRO_OPCIONES.map(opcion => (
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '170px' }}>
+          {options.map(opcion => (
             <button
               key={opcion.id}
               onClick={() => { onChange(opcion.id); setOpen(false); }}
@@ -472,19 +484,34 @@ export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onCha
   );
 }
 
+export function FiltroDropdown({ value, onChange }: { value: FiltroEstado; onChange: (v: FiltroEstado) => void }) {
+  return (
+    <GenericFilterDropdown
+      label="Estados"
+      value={value}
+      options={FILTRO_ESTADO_OPCIONES}
+      onChange={v => onChange(v as FiltroEstado)}
+      isDefault={value === 'todas'}
+    />
+  );
+}
+
+export function FiltroDropdownTransaccion({ value, onChange }: { value: FiltroFlujo; onChange: (v: FiltroFlujo) => void }) {
+  return (
+    <GenericFilterDropdown
+      label="Transacción"
+      value={value}
+      options={FILTRO_FLUJO_OPCIONES}
+      onChange={v => onChange(v as FiltroFlujo)}
+      isDefault={value === 'todos'}
+    />
+  );
+}
+
 // ─── Vista principal ──────────────────────────────────────────────────────────
 
-type FiltroFlujo = 'todos' | 'mp' | 'transferencia';
-
-const FLUJO_CHIPS: { id: FiltroFlujo; label: string }[] = [
-  { id: 'todos',         label: 'Todos los flujos' },
-  { id: 'mp',            label: 'Mercado Pago' },
-  { id: 'transferencia', label: 'Transferencia' },
-];
-
-export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda?: string; filtroEstado?: FiltroEstado }) {
+export function ReservasAdminView({ busqueda, filtroEstado, filtroFlujo }: { busqueda?: string; filtroEstado?: FiltroEstado; filtroFlujo?: FiltroFlujo }) {
   const [reservas, setReservas] = useState<ParcelaReserva[]>(MOCK_RESERVAS);
-  const [filtroFlujo, setFiltroFlujo] = useState<FiltroFlujo>('todos');
   const [detalleAbierto, setDetalleAbierto] = useState<ParcelaReserva | null>(null);
   const [rechazarModal, setRechazarModal] = useState<ParcelaReserva | null>(null);
   const [toast, setToast] = useState<{ msg: string; tipo: 'exito' | 'error' } | null>(null);
@@ -517,49 +544,24 @@ export function ReservasAdminView({ busqueda, filtroEstado }: { busqueda?: strin
 
   const pendientesCount = reservas.filter(r => r.estado === 'pendiente').length;
 
-  const COL_HEADERS = ['Parcela', 'Comprador', 'Precio', 'Flujo', 'Estado', ''];
+  const COL_HEADERS = ['Parcela', 'Comprador', 'Precio', 'Transacción', 'Estado', ''];
   const COL_SPANS   = ['col-span-3', 'col-span-2', 'col-span-2', 'col-span-2', 'col-span-2', 'col-span-1'];
 
   return (
     <div className="pb-8 space-y-4">
 
-      {/* Filtros de flujo + contador pendientes */}
-      <div className="px-8 flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-2 flex-wrap">
-          {FLUJO_CHIPS.map(chip => {
-            const active = filtroFlujo === chip.id;
-            return (
-              <button key={chip.id} onClick={() => setFiltroFlujo(chip.id)}
-                className="flex items-center gap-1.5 transition-all"
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: '200px',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '13px',
-                  fontWeight: active ? 600 : 400,
-                  cursor: 'pointer',
-                  backgroundColor: active ? '#006B4E' : '#F9FAFB',
-                  color: active ? '#FFFFFF' : '#6B7280',
-                  border: `1px solid ${active ? '#006B4E' : '#E5E5E5'}`,
-                }}>
-                {chip.id === 'mp' && <CreditCard className="w-3 h-3" />}
-                {chip.id === 'transferencia' && <Building2 className="w-3 h-3" />}
-                {chip.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {pendientesCount > 0 && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+      {/* Contador pendientes */}
+      {pendientesCount > 0 && (
+        <div className="px-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
             style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
             <Clock className="w-3.5 h-3.5" style={{ color: '#D97706' }} />
             <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, color: '#92400E' }}>
               {pendientesCount} pendiente{pendientesCount > 1 ? 's' : ''} de validación
             </span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Tabla */}
       <div className="mx-8 rounded-xl overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
