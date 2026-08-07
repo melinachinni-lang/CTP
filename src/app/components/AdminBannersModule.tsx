@@ -20,7 +20,6 @@ interface MensajeInformativo {
 const TOPICOS = ['Novedades', 'Mantenimiento', 'Actualización', 'Oferta especial', 'Información importante'];
 
 const ROLES_OPCIONES = [
-  { id: 'admin',        label: 'Admin CTP' },
   { id: 'inmobiliaria', label: 'Inmobiliaria' },
   { id: 'broker',       label: 'Broker' },
   { id: 'personal',     label: 'Personal' },
