@@ -516,6 +516,8 @@ export function FiltroDropdownFecha({ desde, hasta, onChange }: {
   onChange: (desde: string, hasta: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [localDesde, setLocalDesde] = useState(desde);
+  const [localHasta, setLocalHasta] = useState(hasta);
   const ref = useRef<HTMLDivElement>(null);
   const hasFilter = !!(desde || hasta);
 
@@ -527,61 +529,92 @@ export function FiltroDropdownFecha({ desde, hasta, onChange }: {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  function formatLabel() {
-    if (!desde && !hasta) return 'Fecha';
-    const fmt = (s: string) => `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(0, 4)}`;
-    if (desde && hasta) return `${fmt(desde)} – ${fmt(hasta)}`;
-    if (desde) return `Desde ${fmt(desde)}`;
-    return `Hasta ${fmt(hasta)}`;
+  function handleOpen() {
+    setLocalDesde(desde);
+    setLocalHasta(hasta);
+    setOpen(o => !o);
+  }
+
+  function handleApply() {
+    onChange(localDesde, localHasta);
+    setOpen(false);
+  }
+
+  function handleClear() {
+    setLocalDesde(''); setLocalHasta('');
+    onChange('', '');
+    setOpen(false);
+  }
+
+  function fmtShort(s: string) {
+    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const [, m, d] = s.split('-');
+    return `${parseInt(d)} ${meses[parseInt(m) - 1]}`;
   }
 
   const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '7px 10px', borderRadius: '8px',
-    border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA',
-    fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A',
-    outline: 'none', cursor: 'pointer',
+    width: '100%', padding: '6px 10px', borderRadius: '8px',
+    border: '1px solid #E5E5E5', fontFamily: 'var(--font-body)',
+    fontSize: '13px', color: '#0A0A0A', outline: 'none',
   };
 
   return (
     <div ref={ref} className="relative">
       <button
-        onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 px-3.5 py-2 transition-colors"
+        onClick={handleOpen}
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl"
         style={{
           border: `1px solid ${hasFilter ? '#006B4E' : '#E5E5E5'}`,
-          backgroundColor: hasFilter ? '#F0FAF5' : '#FFFFFF',
+          backgroundColor: hasFilter ? '#F0F9F5' : '#FAFAFA',
           color: hasFilter ? '#006B4E' : '#374151',
-          borderRadius: '8px', fontFamily: 'var(--font-body)',
-          fontSize: 'var(--font-size-body-sm)', fontWeight: 500, cursor: 'pointer',
-          whiteSpace: 'nowrap',
+          fontFamily: 'var(--font-body)', fontSize: '13px',
+          fontWeight: hasFilter ? 600 : 400, cursor: 'pointer',
         }}
       >
-        <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
-        {formatLabel()}
-        <ChevronDown className="w-3.5 h-3.5 flex-shrink-0" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+        <Calendar className="w-3.5 h-3.5" />
+        {hasFilter ? `${desde ? fmtShort(desde) : '…'} – ${hasta ? fmtShort(hasta) : '…'}` : 'Rango'}
+        {hasFilter && (
+          <span onClick={e => { e.stopPropagation(); handleClear(); }}
+            className="ml-0.5 flex items-center" style={{ color: '#006B4E', lineHeight: 1 }}>
+            <X className="w-3 h-3" />
+          </span>
+        )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1.5 rounded-xl z-50 p-4 space-y-3"
-          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '220px' }}>
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#6B7280', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Desde</label>
-            <input type="date" value={desde} onChange={e => onChange(e.target.value, hasta)} style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#006B4E'}
-              onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+        <div className="absolute right-0 top-full mt-1 z-50 rounded-xl p-4"
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 4px 16px rgba(0,0,0,0.10)', minWidth: '240px' }}>
+          <p style={{ fontSize: '12px', fontWeight: 600, color: '#374151', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
+            Rango personalizado
+          </p>
+          <div className="flex flex-col gap-3 mb-4">
+            <div>
+              <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Desde</label>
+              <input type="date" value={localDesde} onChange={e => setLocalDesde(e.target.value)}
+                style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#006B4E'}
+                onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+            </div>
+            <div>
+              <label style={{ fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)', display: 'block', marginBottom: '4px' }}>Hasta</label>
+              <input type="date" value={localHasta} min={localDesde || undefined} onChange={e => setLocalHasta(e.target.value)}
+                style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#006B4E'}
+                onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+            </div>
           </div>
-          <div>
-            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#6B7280', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hasta</label>
-            <input type="date" value={hasta} min={desde || undefined} onChange={e => onChange(desde, e.target.value)} style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#006B4E'}
-              onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
-          </div>
-          {hasFilter && (
-            <button onClick={() => onChange('', '')}
-              style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-              Limpiar filtro
+          <div className="flex gap-2">
+            {hasFilter && (
+              <button onClick={handleClear}
+                style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#DC2626', borderRadius: '200px', border: '1px solid #FECACA', backgroundColor: '#FFF5F5', padding: '7px 0', cursor: 'pointer' }}>
+                Limpiar
+              </button>
+            )}
+            <button onClick={handleApply} disabled={!localDesde && !localHasta}
+              style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: '#FFFFFF', borderRadius: '200px', backgroundColor: (localDesde || localHasta) ? '#006B4E' : '#D1D5DB', padding: '7px 0', border: 'none', cursor: (localDesde || localHasta) ? 'pointer' : 'not-allowed' }}>
+              Aplicar
             </button>
-          )}
+          </div>
         </div>
       )}
     </div>
