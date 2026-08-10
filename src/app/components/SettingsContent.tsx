@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle, ChevronDown, Settings, Zap, Target, Activity, Clock, Power } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle, ChevronDown, Settings, Zap, Target, Activity, Clock, Power, Wrench } from 'lucide-react';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -1712,9 +1712,9 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
             {/* ── Sección 2: Mensaje global ─────────────────────────────────── */}
             {(() => {
               const tipoConfig = {
-                info:          { bg: '#EFF6FF', border: '#BFDBFE', icon: '💬', label: 'Informativo',   textColor: '#1E40AF' },
-                advertencia:   { bg: '#FFFBEB', border: '#FDE68A', icon: '⚠️', label: 'Advertencia',   textColor: '#92400E' },
-                mantenimiento: { bg: '#F5F5F5', border: '#D4D4D4', icon: '🔧', label: 'Mantenimiento', textColor: '#404040' },
+                info:          { bg: '#EFF6FF', border: '#BFDBFE', Icon: MessageCircle, label: 'Informativo',   textColor: '#1E40AF' },
+                advertencia:   { bg: '#FFFBEB', border: '#FDE68A', Icon: AlertTriangle,  label: 'Advertencia',   textColor: '#92400E' },
+                mantenimiento: { bg: '#F5F5F5', border: '#D4D4D4', Icon: Wrench,         label: 'Mantenimiento', textColor: '#404040' },
               };
               const cfg = tipoConfig[mensajeGlobalTipo];
               return (
@@ -1748,7 +1748,10 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                               backgroundColor: mensajeGlobalTipo === t ? tipoConfig[t].bg : '#FAFAFA',
                               color: mensajeGlobalTipo === t ? tipoConfig[t].textColor : '#525252',
                             }}>
-                            {tipoConfig[t].icon} {tipoConfig[t].label}
+                            <span className="inline-flex items-center gap-1.5">
+                              {(() => { const I = tipoConfig[t].Icon; return <I className="w-3.5 h-3.5" />; })()}
+                              {tipoConfig[t].label}
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -1805,7 +1808,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                       <div>
                         <p className="text-xs font-medium mb-2" style={{ color: '#525252' }}>Vista previa</p>
                         <div className="rounded-xl px-4 py-3 flex gap-3 items-start" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}` }}>
-                          <span className="text-base leading-none mt-0.5">{cfg.icon}</span>
+                          <cfg.Icon className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: cfg.textColor }} />
                           <div className="flex-1 min-w-0">
                             {mensajeGlobalTitulo && (
                               <p className="text-sm font-semibold leading-snug" style={{ color: cfg.textColor }}>{mensajeGlobalTitulo}</p>
