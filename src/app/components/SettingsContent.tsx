@@ -1900,7 +1900,41 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </div>
             </div>
 
-            {/* ── Sección 3: Scoring IA ─────────────────────────────────────── */}
+            {/* ── Sección 3: Roles y usuarios ──────────────────────────────── */}
+            <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Users className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Roles y usuarios</h3>
+              </div>
+              <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Distribución actual de usuarios por rol en la plataforma.</p>
+              <div className="space-y-2">
+                {[
+                  { rol: 'Admin CTP',          desc: 'Acceso total a configuración y gestión',          count: 3,   color: '#7C3AED', bg: '#F5F3FF' },
+                  { rol: 'Admin Inmobiliaria', desc: 'Gestión completa del perfil de su inmobiliaria', count: 28,  color: '#006B4E', bg: '#F0FAF5' },
+                  { rol: 'Broker',             desc: 'Gestión de leads y propiedades asignadas',        count: 134, color: '#525252', bg: '#F5F5F5' },
+                  { rol: 'Personal',           desc: 'Acceso al panel de búsqueda y reservas',          count: 892, color: '#525252', bg: '#F5F5F5' },
+                ].map(item => (
+                  <div key={item.rol} className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl" style={{ backgroundColor: '#FAFAFA' }}>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="px-2.5 py-1 rounded-lg text-xs font-semibold flex-shrink-0"
+                        style={{ backgroundColor: item.bg, color: item.color }}>
+                        {item.rol}
+                      </span>
+                      <span className="text-xs truncate" style={{ color: '#9CA3AF' }}>{item.desc}</span>
+                    </div>
+                    <span className="flex-shrink-0 text-sm font-semibold tabular-nums" style={{ color: '#0A0A0A' }}>
+                      {item.count.toLocaleString('es-CL')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t flex items-center justify-between" style={{ borderColor: '#F3F4F6' }}>
+                <span className="text-xs" style={{ color: '#9CA3AF' }}>Total de usuarios registrados</span>
+                <span className="text-sm font-bold" style={{ color: '#0A0A0A' }}>1.057</span>
+              </div>
+            </div>
+
+            {/* ── Sección 4: Scoring IA ─────────────────────────────────────── */}
             <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
               <div className="flex items-center gap-2 mb-1">
                 <Zap className="w-4 h-4" style={{ color: '#006B4E' }} />
@@ -1943,40 +1977,6 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* ── Sección 4: Roles y usuarios ──────────────────────────────── */}
-            <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
-              <div className="flex items-center gap-2 mb-1">
-                <Users className="w-4 h-4" style={{ color: '#006B4E' }} />
-                <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Roles y usuarios</h3>
-              </div>
-              <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Distribución actual de usuarios por rol en la plataforma.</p>
-              <div className="space-y-2">
-                {[
-                  { rol: 'Admin CTP',          desc: 'Acceso total a configuración y gestión',          count: 3,   color: '#7C3AED', bg: '#F5F3FF' },
-                  { rol: 'Admin Inmobiliaria', desc: 'Gestión completa del perfil de su inmobiliaria', count: 28,  color: '#006B4E', bg: '#F0FAF5' },
-                  { rol: 'Broker',             desc: 'Gestión de leads y propiedades asignadas',        count: 134, color: '#525252', bg: '#F5F5F5' },
-                  { rol: 'Personal',           desc: 'Acceso al panel de búsqueda y reservas',          count: 892, color: '#525252', bg: '#F5F5F5' },
-                ].map(item => (
-                  <div key={item.rol} className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl" style={{ backgroundColor: '#FAFAFA' }}>
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="px-2.5 py-1 rounded-lg text-xs font-semibold flex-shrink-0"
-                        style={{ backgroundColor: item.bg, color: item.color }}>
-                        {item.rol}
-                      </span>
-                      <span className="text-xs truncate" style={{ color: '#9CA3AF' }}>{item.desc}</span>
-                    </div>
-                    <span className="flex-shrink-0 text-sm font-semibold tabular-nums" style={{ color: '#0A0A0A' }}>
-                      {item.count.toLocaleString('es-CL')}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t flex items-center justify-between" style={{ borderColor: '#F3F4F6' }}>
-                <span className="text-xs" style={{ color: '#9CA3AF' }}>Total de usuarios registrados</span>
-                <span className="text-sm font-bold" style={{ color: '#0A0A0A' }}>1.057</span>
-              </div>
             </div>
 
             {/* ── Sección 5: Auditoría ──────────────────────────────────────── */}
