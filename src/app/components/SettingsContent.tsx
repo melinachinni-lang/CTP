@@ -148,6 +148,11 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [prioridadLeads, setPrioridadLeads] = useState('proyecto');
   const [diasInactivo, setDiasInactivo] = useState('30');
   const [sistemaSaved, setSistemaSaved] = useState(false);
+  const [mensajeGlobalActivo, setMensajeGlobalActivo] = useState(false);
+  const [mensajeGlobalTitulo, setMensajeGlobalTitulo] = useState('');
+  const [mensajeGlobalTexto, setMensajeGlobalTexto] = useState('');
+  const [mensajeGlobalTipo, setMensajeGlobalTipo] = useState<'info' | 'advertencia' | 'mantenimiento'>('info');
+  const [mensajeGlobalVisibilidad, setMensajeGlobalVisibilidad] = useState('todos');
 
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
@@ -1704,7 +1709,122 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               </div>
             </div>
 
-            {/* ── Sección 2: Reglas de negocio ─────────────────────────────── */}
+            {/* ── Sección 2: Mensaje global ─────────────────────────────────── */}
+            {(() => {
+              const tipoConfig = {
+                info:          { bg: '#EFF6FF', border: '#BFDBFE', icon: '💬', label: 'Informativo',   textColor: '#1E40AF' },
+                advertencia:   { bg: '#FFFBEB', border: '#FDE68A', icon: '⚠️', label: 'Advertencia',   textColor: '#92400E' },
+                mantenimiento: { bg: '#F5F5F5', border: '#D4D4D4', icon: '🔧', label: 'Mantenimiento', textColor: '#404040' },
+              };
+              const cfg = tipoConfig[mensajeGlobalTipo];
+              return (
+                <div className="rounded-2xl border overflow-hidden" style={{ borderColor: '#006B4E', backgroundColor: '#fff' }}>
+                  {/* Header diferenciado */}
+                  <div className="px-5 py-4 flex items-center justify-between" style={{ backgroundColor: '#F0FAF5', borderBottom: '1px solid #D1FAE5' }}>
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="w-4 h-4" style={{ color: '#006B4E' }} />
+                      <h3 className="font-semibold text-sm" style={{ color: '#006B4E' }}>Mensaje global</h3>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: '#DCFCE7', color: '#15803D' }}>Todos los usuarios</span>
+                    </div>
+                    <button
+                      onClick={() => setMensajeGlobalActivo(v => !v)}
+                      className="relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-200"
+                      style={{ backgroundColor: mensajeGlobalActivo ? '#006B4E' : '#D1D5DB' }}>
+                      <span className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+                        style={{ transform: mensajeGlobalActivo ? 'translateX(20px)' : 'translateX(0)' }} />
+                    </button>
+                  </div>
+
+                  <div className="px-5 pt-4 pb-5 space-y-4">
+                    {/* Tipo */}
+                    <div>
+                      <p className="text-xs font-medium mb-2" style={{ color: '#525252' }}>Tipo de mensaje</p>
+                      <div className="flex gap-2">
+                        {(['info', 'advertencia', 'mantenimiento'] as const).map(t => (
+                          <button key={t} onClick={() => setMensajeGlobalTipo(t)}
+                            className="flex-1 py-2 rounded-xl border text-xs font-medium transition-colors capitalize"
+                            style={{
+                              borderColor: mensajeGlobalTipo === t ? tipoConfig[t].border : '#E5E5E5',
+                              backgroundColor: mensajeGlobalTipo === t ? tipoConfig[t].bg : '#FAFAFA',
+                              color: mensajeGlobalTipo === t ? tipoConfig[t].textColor : '#525252',
+                            }}>
+                            {tipoConfig[t].icon} {tipoConfig[t].label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Título */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs font-medium" style={{ color: '#525252' }}>Título</p>
+                        <span className="text-xs" style={{ color: mensajeGlobalTitulo.length > 70 ? '#DC2626' : '#9CA3AF' }}>{mensajeGlobalTitulo.length}/80</span>
+                      </div>
+                      <input
+                        maxLength={80}
+                        value={mensajeGlobalTitulo}
+                        onChange={e => setMensajeGlobalTitulo(e.target.value)}
+                        placeholder="Ej: Mantenimiento programado el lunes 14 de agosto"
+                        className="w-full text-sm rounded-xl border px-3 py-2 outline-none"
+                        style={{ borderColor: '#E5E5E5', color: '#0A0A0A' }} />
+                    </div>
+
+                    {/* Mensaje */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs font-medium" style={{ color: '#525252' }}>Mensaje</p>
+                        <span className="text-xs" style={{ color: mensajeGlobalTexto.length > 180 ? '#DC2626' : '#9CA3AF' }}>{mensajeGlobalTexto.length}/200</span>
+                      </div>
+                      <textarea
+                        maxLength={200}
+                        rows={3}
+                        value={mensajeGlobalTexto}
+                        onChange={e => setMensajeGlobalTexto(e.target.value)}
+                        placeholder="Detallá brevemente el motivo o instrucciones para los usuarios..."
+                        className="w-full text-sm rounded-xl border px-3 py-2 outline-none resize-none"
+                        style={{ borderColor: '#E5E5E5', color: '#0A0A0A' }} />
+                    </div>
+
+                    {/* Visibilidad */}
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-medium" style={{ color: '#525252' }}>Visibilidad</p>
+                        <p className="text-xs" style={{ color: '#9CA3AF' }}>A quién se muestra este mensaje</p>
+                      </div>
+                      <select value={mensajeGlobalVisibilidad} onChange={e => setMensajeGlobalVisibilidad(e.target.value)}
+                        className="text-sm rounded-xl border px-3 py-1.5 outline-none"
+                        style={{ borderColor: '#E5E5E5', color: '#0A0A0A', backgroundColor: '#FAFAFA' }}>
+                        <option value="todos">Todos los usuarios</option>
+                        <option value="inmobiliarias">Inmobiliarias y brokers</option>
+                        <option value="admins">Solo administradores</option>
+                      </select>
+                    </div>
+
+                    {/* Preview */}
+                    {(mensajeGlobalTitulo || mensajeGlobalTexto) && (
+                      <div>
+                        <p className="text-xs font-medium mb-2" style={{ color: '#525252' }}>Vista previa</p>
+                        <div className="rounded-xl px-4 py-3 flex gap-3 items-start" style={{ backgroundColor: cfg.bg, border: `1px solid ${cfg.border}` }}>
+                          <span className="text-base leading-none mt-0.5">{cfg.icon}</span>
+                          <div className="flex-1 min-w-0">
+                            {mensajeGlobalTitulo && (
+                              <p className="text-sm font-semibold leading-snug" style={{ color: cfg.textColor }}>{mensajeGlobalTitulo}</p>
+                            )}
+                            {mensajeGlobalTexto && (
+                              <p className="text-xs mt-0.5" style={{ color: cfg.textColor, opacity: 0.85, lineHeight: '1.5' }}>{mensajeGlobalTexto}</p>
+                            )}
+                          </div>
+                          <button className="flex-shrink-0 text-xs" style={{ color: cfg.textColor, opacity: 0.6 }}>✕</button>
+                        </div>
+                        <p className="text-xs mt-1.5" style={{ color: '#9CA3AF' }}>Así verán el mensaje los usuarios en la plataforma.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ── Sección 3: Reglas de negocio ─────────────────────────────── */}
             <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-4 h-4" style={{ color: '#006B4E' }} />
