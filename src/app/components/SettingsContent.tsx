@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle, ChevronDown } from 'lucide-react';
+import { Building2, Bell, Globe, Shield, Upload, Eye, EyeOff, Check, User, LogOut, X, Plus, Monitor, Smartphone, Tablet, AlertTriangle, Award, Briefcase, Image, Star, Copy, BarChart2, Users, MapPin, Phone, Mail, ShieldCheck, FileText, BadgeCheck, Link2, Search, MoreHorizontal, MessageCircle, ChevronDown, Settings, Zap, Target, Activity, Clock, Power } from 'lucide-react';
 import { ContactosWhatsAppAdminView } from '@/app/components/ContactosWhatsAppAdminView';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ const BROKERS_MOCK = [
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }: { mode?: 'profile' | 'settings'; userType?: 'inmobiliaria' | 'broker' | 'personal' | 'ctp' }) {
-  const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security' | 'whatsapp'>(
+  const [activeTab, setActiveTab] = useState<'profile' | 'preferences' | 'users' | 'security' | 'whatsapp' | 'sistema'>(
     mode === 'profile' ? 'profile' : 'preferences'
   );
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'success'>('idle');
@@ -137,6 +137,17 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [newIdioma, setNewIdioma] = useState('');
   const [certificacionesBroker, setCertificacionesBroker] = useState(['Certificado CChC', 'Mediador Inmobiliario']);
   const [newCertificacionBroker, setNewCertificacionBroker] = useState('');
+
+  // — Sistema state (CTP only)
+  const [modulosActivos, setModulosActivos] = useState({ leads: true, publicaciones: true, asignacionAutomatica: false, mantenimiento: false });
+  const [confirmModulo, setConfirmModulo] = useState<null | { key: string; nombre: string }>(null);
+  const [iaActiva, setIaActiva] = useState(true);
+  const [scoringLevel, setScoringLevel] = useState<'conservador' | 'medio' | 'agresivo'>('medio');
+  const [reasignacionAuto, setReasignacionAuto] = useState(true);
+  const [horasReasignacion, setHorasReasignacion] = useState('24');
+  const [prioridadLeads, setPrioridadLeads] = useState('proyecto');
+  const [diasInactivo, setDiasInactivo] = useState('30');
+  const [sistemaSaved, setSistemaSaved] = useState(false);
 
   // — Preferencias state
   const [notifs, setNotifs] = useState({ newInquiry: true, statusChange: true, teamActivity: false, updates: true });
@@ -241,6 +252,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     { id: 'users',       label: 'Usuarios y permisos',  icon: User },
     ...((userType === 'inmobiliaria' || userType === 'broker') ? [{ id: 'whatsapp', label: 'Canales de contacto', icon: MessageCircle }] : []),
     { id: 'security',    label: 'Seguridad',             icon: Shield },
+    ...(userType === 'ctp' ? [{ id: 'sistema', label: 'Sistema', icon: Settings }] : []),
   ];
 
   return (
@@ -1610,6 +1622,246 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
         {/* ── Tab: WhatsApp ────────────────────────────────────────────────── */}
         {activeTab === 'whatsapp' && (userType === 'inmobiliaria' || userType === 'broker') && (
           <ContactosWhatsAppAdminView />
+        )}
+
+        {/* ── Tab: Sistema ─────────────────────────────────────────────────── */}
+        {activeTab === 'sistema' && userType === 'ctp' && (
+          <div className="space-y-5">
+
+            {/* Toast */}
+            {sistemaSaved && (
+              <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl shadow-lg text-sm font-medium"
+                style={{ backgroundColor: '#006B4E', color: '#fff' }}>
+                <Activity className="w-4 h-4" />
+                Configuración del sistema guardada
+              </div>
+            )}
+
+            {/* Modal confirmar desactivar módulo */}
+            {confirmModulo && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}>
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEF2F2' }}>
+                      <Power className="w-5 h-5" style={{ color: '#DC2626' }} />
+                    </div>
+                    <h3 className="font-semibold text-base" style={{ color: '#0A0A0A' }}>Desactivar módulo</h3>
+                  </div>
+                  <p className="text-sm mb-5" style={{ color: '#525252' }}>
+                    ¿Confirmas que quieres desactivar <strong>{confirmModulo.nombre}</strong>? Los usuarios dejarán de tener acceso a esta sección.
+                  </p>
+                  <div className="flex gap-3 justify-end">
+                    <button onClick={() => setConfirmModulo(null)}
+                      className="px-4 py-2 rounded-xl text-sm font-medium border" style={{ color: '#525252', borderColor: '#E5E5E5' }}>
+                      Cancelar
+                    </button>
+                    <button onClick={() => {
+                      setModulosActivos(prev => ({ ...prev, [confirmModulo.key]: false }));
+                      setConfirmModulo(null);
+                    }}
+                      className="px-4 py-2 rounded-xl text-sm font-medium" style={{ backgroundColor: '#DC2626', color: '#fff' }}>
+                      Desactivar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── Sección 1: Módulos del sistema ───────────────────────────── */}
+            <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Power className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Módulos del sistema</h3>
+              </div>
+              <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Activa o desactiva secciones de la plataforma para todos los usuarios.</p>
+              <div className="space-y-3">
+                {[
+                  { key: 'leads', nombre: 'Gestión de leads', desc: 'Panel de captación y seguimiento de clientes potenciales' },
+                  { key: 'publicaciones', nombre: 'Publicaciones', desc: 'Módulo de propiedades e inmuebles publicados' },
+                  { key: 'asignacionAutomatica', nombre: 'Asignación automática de leads', desc: 'Distribución inteligente de leads entre brokers disponibles' },
+                  { key: 'mantenimiento', nombre: 'Modo mantenimiento', desc: 'Bloquea el acceso a la plataforma temporalmente para todos los usuarios' },
+                ].map(mod => {
+                  const activo = modulosActivos[mod.key as keyof typeof modulosActivos];
+                  return (
+                    <div key={mod.key} className="flex items-center justify-between gap-4 py-3 border-b last:border-0" style={{ borderColor: '#F3F4F6' }}>
+                      <div>
+                        <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>{mod.nombre}</p>
+                        <p className="text-xs" style={{ color: '#9CA3AF' }}>{mod.desc}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (activo) { setConfirmModulo({ key: mod.key, nombre: mod.nombre }); }
+                          else { setModulosActivos(prev => ({ ...prev, [mod.key]: true })); }
+                        }}
+                        className="relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-200"
+                        style={{ backgroundColor: activo ? '#006B4E' : '#D1D5DB' }}>
+                        <span className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+                          style={{ transform: activo ? 'translateX(20px)' : 'translateX(0)' }} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ── Sección 2: Reglas de negocio ─────────────────────────────── */}
+            <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Target className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Reglas de negocio</h3>
+              </div>
+              <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Parámetros que definen el comportamiento operativo de la plataforma.</p>
+              <div className="space-y-4">
+
+                <div className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
+                  <div>
+                    <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Reasignación automática de leads</p>
+                    <p className="text-xs" style={{ color: '#9CA3AF' }}>Reasigna leads sin respuesta al siguiente broker disponible</p>
+                  </div>
+                  <button
+                    onClick={() => setReasignacionAuto(v => !v)}
+                    className="relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-200"
+                    style={{ backgroundColor: reasignacionAuto ? '#006B4E' : '#D1D5DB' }}>
+                    <span className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+                      style={{ transform: reasignacionAuto ? 'translateX(20px)' : 'translateX(0)' }} />
+                  </button>
+                </div>
+
+                {reasignacionAuto && (
+                  <div className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
+                    <div>
+                      <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Horas sin respuesta para reasignar</p>
+                      <p className="text-xs" style={{ color: '#9CA3AF' }}>Tiempo de espera antes de reasignar automáticamente</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number" min="1" max="168" value={horasReasignacion}
+                        onChange={e => setHorasReasignacion(e.target.value)}
+                        className="w-16 text-right text-sm rounded-xl border px-2 py-1.5 outline-none"
+                        style={{ borderColor: '#E5E5E5', color: '#0A0A0A' }} />
+                      <span className="text-xs" style={{ color: '#9CA3AF' }}>hs</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
+                  <div>
+                    <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Criterio de prioridad de leads</p>
+                    <p className="text-xs" style={{ color: '#9CA3AF' }}>Qué determina la prioridad de un lead en el pipeline</p>
+                  </div>
+                  <select value={prioridadLeads} onChange={e => setPrioridadLeads(e.target.value)}
+                    className="text-sm rounded-xl border px-3 py-1.5 outline-none"
+                    style={{ borderColor: '#E5E5E5', color: '#0A0A0A', backgroundColor: '#FAFAFA' }}>
+                    <option value="proyecto">Proyecto de interés</option>
+                    <option value="fecha">Fecha de ingreso</option>
+                    <option value="fuente">Fuente del lead</option>
+                    <option value="score">Score IA</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center justify-between gap-4 py-3" >
+                  <div>
+                    <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Días sin actividad para marcar lead inactivo</p>
+                    <p className="text-xs" style={{ color: '#9CA3AF' }}>Leads sin movimiento se marcan automáticamente como inactivos</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number" min="7" max="365" value={diasInactivo}
+                      onChange={e => setDiasInactivo(e.target.value)}
+                      className="w-16 text-right text-sm rounded-xl border px-2 py-1.5 outline-none"
+                      style={{ borderColor: '#E5E5E5', color: '#0A0A0A' }} />
+                    <span className="text-xs" style={{ color: '#9CA3AF' }}>días</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* ── Sección 3: Scoring IA ─────────────────────────────────────── */}
+            <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Scoring con IA</h3>
+              </div>
+              <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Configuración del motor de puntuación automática de leads.</p>
+
+              <div className="flex items-center justify-between gap-4 py-3 border-b mb-4" style={{ borderColor: '#F3F4F6' }}>
+                <div>
+                  <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Scoring automático activo</p>
+                  <p className="text-xs" style={{ color: '#9CA3AF' }}>El sistema asigna un puntaje 0–100 a cada lead según su perfil y comportamiento</p>
+                </div>
+                <button onClick={() => setIaActiva(v => !v)}
+                  className="relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-200"
+                  style={{ backgroundColor: iaActiva ? '#006B4E' : '#D1D5DB' }}>
+                  <span className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+                    style={{ transform: iaActiva ? 'translateX(20px)' : 'translateX(0)' }} />
+                </button>
+              </div>
+
+              {iaActiva && (
+                <div>
+                  <p className="text-xs font-medium mb-3" style={{ color: '#525252' }}>Nivel de agresividad del modelo</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    {([
+                      { value: 'conservador', label: 'Conservador', desc: 'Puntajes más bajos, menos falsos positivos' },
+                      { value: 'medio',       label: 'Equilibrado',  desc: 'Balance entre precisión y cobertura' },
+                      { value: 'agresivo',    label: 'Agresivo',     desc: 'Puntajes más altos, más leads destacados' },
+                    ] as const).map(opt => (
+                      <button key={opt.value} onClick={() => setScoringLevel(opt.value)}
+                        className="rounded-xl p-3 border text-left transition-colors"
+                        style={{
+                          borderColor: scoringLevel === opt.value ? '#006B4E' : '#E5E5E5',
+                          backgroundColor: scoringLevel === opt.value ? '#F0FAF5' : '#FAFAFA',
+                        }}>
+                        <p className="text-xs font-semibold mb-1" style={{ color: scoringLevel === opt.value ? '#006B4E' : '#0A0A0A' }}>{opt.label}</p>
+                        <p className="text-xs" style={{ color: '#9CA3AF', lineHeight: '1.4' }}>{opt.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Sección 4: Auditoría ──────────────────────────────────────── */}
+            <div className="rounded-2xl p-5 border" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <Activity className="w-4 h-4" style={{ color: '#006B4E' }} />
+                <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Auditoría de cambios</h3>
+              </div>
+              <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Últimas modificaciones realizadas en la configuración del sistema.</p>
+              <div className="space-y-0 divide-y" style={{ borderColor: '#F3F4F6' }}>
+                {[
+                  { quien: 'admin@ctp.cl',         accion: 'Activó asignación automática de leads',      fecha: '10 ago 2026, 11:42' },
+                  { quien: 'admin@ctp.cl',         accion: 'Cambió criterio de prioridad a "Proyecto"',  fecha: '09 ago 2026, 18:05' },
+                  { quien: 'superadmin@ctp.cl',    accion: 'Desactivó modo mantenimiento',               fecha: '08 ago 2026, 09:30' },
+                  { quien: 'superadmin@ctp.cl',    accion: 'Activó scoring IA (nivel: equilibrado)',     fecha: '05 ago 2026, 14:17' },
+                  { quien: 'admin@ctp.cl',         accion: 'Modificó días inactivo a 30 días',           fecha: '01 ago 2026, 10:00' },
+                ].map((log, i) => (
+                  <div key={i} className="py-3 flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-medium" style={{ color: '#0A0A0A' }}>{log.accion}</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#9CA3AF' }}>{log.quien}</p>
+                    </div>
+                    <span className="text-xs flex-shrink-0" style={{ color: '#9CA3AF' }}>{log.fecha}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Botón guardar */}
+            <div className="flex justify-end pb-4">
+              <button
+                onClick={() => {
+                  setSistemaSaved(true);
+                  setTimeout(() => setSistemaSaved(false), 3000);
+                }}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium"
+                style={{ backgroundColor: '#006B4E', color: '#fff' }}>
+                Guardar configuración
+              </button>
+            </div>
+
+          </div>
         )}
       </div>
 
