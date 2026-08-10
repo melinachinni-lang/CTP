@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SearchX, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, FileText, MapPin, DollarSign, User, Mail, Phone, Eye, AlertTriangle, Clock, CreditCard, Building2, Zap } from 'lucide-react';
+import { SearchX, ChevronRight, ChevronDown, SlidersHorizontal, X, CheckCircle, XCircle, FileText, MapPin, DollarSign, User, Mail, Phone, Eye, AlertTriangle, Clock, CreditCard, Building2, Zap, Calendar } from 'lucide-react';
 
 type FlujoPago = 'mp' | 'transferencia';
 type EstadoReserva = 'pendiente' | 'aprobada' | 'rechazada';
@@ -24,6 +24,7 @@ interface ParcelaReserva {
   };
   usuario: { nombre: string; email: string; telefono: string };
   fechaSolicitud: string;
+  fechaRaw: string;
   motivoRechazo?: string;
 }
 
@@ -40,7 +41,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     estado: 'aprobada',
     comprobante: { monto: '$45.000.000', fecha: '2026-04-25', referencia: '000123456789', archivo: 'comprobante_transferencia.pdf', mensaje: 'Transferí ayer al mediodía, quedo atento.' },
     usuario: { nombre: 'Sebastián Torres', email: 'sebastian.torres@gmail.com', telefono: '+56 9 8765 4321' },
-    fechaSolicitud: '25 Abr 2026',
+    fechaSolicitud: '25 Abr 2026', fechaRaw: '2026-04-25',
   },
   {
     id: 'res-2',
@@ -53,7 +54,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     estado: 'aprobada',
     comprobante: { monto: '$32.000.000', fecha: '2026-04-24', referencia: 'MP-8547291036', metodoPago: 'Tarjeta de crédito Visa' },
     usuario: { nombre: 'Valentina Morales', email: 'vmorales@outlook.com', telefono: '+56 9 6543 2109' },
-    fechaSolicitud: '24 Abr 2026',
+    fechaSolicitud: '24 Abr 2026', fechaRaw: '2026-04-24',
   },
   {
     id: 'res-3',
@@ -67,7 +68,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     estado: 'pendiente',
     comprobante: { monto: '$28.500.000', fecha: '2026-04-26', referencia: '000456123789', archivo: 'comprobante.pdf', mensaje: 'Transferí el monto exacto con referencia de la parcela.' },
     usuario: { nombre: 'Andrés Fuentes', email: 'afuentes@gmail.com', telefono: '+56 9 1234 5678' },
-    fechaSolicitud: '26 Abr 2026',
+    fechaSolicitud: '26 Abr 2026', fechaRaw: '2026-04-26',
   },
   {
     id: 'res-4',
@@ -80,7 +81,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     estado: 'aprobada',
     comprobante: { monto: '$120.000.000', fecha: '2026-04-18', referencia: 'MP-3614729850', metodoPago: 'Saldo Mercado Pago' },
     usuario: { nombre: 'Camila Reyes', email: 'camila.reyes@empresa.cl', telefono: '+56 9 9876 5432' },
-    fechaSolicitud: '18 Abr 2026',
+    fechaSolicitud: '18 Abr 2026', fechaRaw: '2026-04-18',
   },
   {
     id: 'res-5',
@@ -94,7 +95,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     estado: 'rechazada',
     comprobante: { monto: '$50.000.000', fecha: '2026-04-15', referencia: '000369258147', archivo: 'comprobante_parcial.pdf' },
     usuario: { nombre: 'Roberto Soto', email: 'rsoto@correo.cl', telefono: '+56 9 5555 4444' },
-    fechaSolicitud: '15 Abr 2026',
+    fechaSolicitud: '15 Abr 2026', fechaRaw: '2026-04-15',
     motivoRechazo: 'El monto transferido no corresponde al precio de la parcela.',
   },
   {
@@ -108,7 +109,7 @@ const MOCK_RESERVAS: ParcelaReserva[] = [
     estado: 'pendiente',
     comprobante: { monto: '$85.000.000', fecha: '2026-04-27', referencia: '000852741963', archivo: 'pago_reserva_arrayn.jpg' },
     usuario: { nombre: 'Felipe Muñoz', email: 'fmunoz@icloud.com', telefono: '+56 9 7777 8888' },
-    fechaSolicitud: '27 Abr 2026',
+    fechaSolicitud: '27 Abr 2026', fechaRaw: '2026-04-27',
   },
 ];
 
@@ -508,9 +509,88 @@ export function FiltroDropdownTransaccion({ value, onChange }: { value: FiltroFl
   );
 }
 
+// ─── Filtro fecha ─────────────────────────────────────────────────────────────
+
+export function FiltroDropdownFecha({ desde, hasta, onChange }: {
+  desde: string; hasta: string;
+  onChange: (desde: string, hasta: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const hasFilter = !!(desde || hasta);
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  function formatLabel() {
+    if (!desde && !hasta) return 'Fecha';
+    const fmt = (s: string) => `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(0, 4)}`;
+    if (desde && hasta) return `${fmt(desde)} – ${fmt(hasta)}`;
+    if (desde) return `Desde ${fmt(desde)}`;
+    return `Hasta ${fmt(hasta)}`;
+  }
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '7px 10px', borderRadius: '8px',
+    border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA',
+    fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A',
+    outline: 'none', cursor: 'pointer',
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-2 px-3.5 py-2 transition-colors"
+        style={{
+          border: `1px solid ${hasFilter ? '#006B4E' : '#E5E5E5'}`,
+          backgroundColor: hasFilter ? '#F0FAF5' : '#FFFFFF',
+          color: hasFilter ? '#006B4E' : '#374151',
+          borderRadius: '8px', fontFamily: 'var(--font-body)',
+          fontSize: 'var(--font-size-body-sm)', fontWeight: 500, cursor: 'pointer',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+        {formatLabel()}
+        <ChevronDown className="w-3.5 h-3.5 flex-shrink-0" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 rounded-xl z-50 p-4 space-y-3"
+          style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: '220px' }}>
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#6B7280', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Desde</label>
+            <input type="date" value={desde} onChange={e => onChange(e.target.value, hasta)} style={inputStyle}
+              onFocus={e => e.target.style.borderColor = '#006B4E'}
+              onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+          </div>
+          <div>
+            <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#6B7280', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hasta</label>
+            <input type="date" value={hasta} min={desde || undefined} onChange={e => onChange(desde, e.target.value)} style={inputStyle}
+              onFocus={e => e.target.style.borderColor = '#006B4E'}
+              onBlur={e => e.target.style.borderColor = '#E5E5E5'} />
+          </div>
+          {hasFilter && (
+            <button onClick={() => onChange('', '')}
+              style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+              Limpiar filtro
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Vista principal ──────────────────────────────────────────────────────────
 
-export function ReservasAdminView({ busqueda, filtroEstado, filtroFlujo }: { busqueda?: string; filtroEstado?: FiltroEstado; filtroFlujo?: FiltroFlujo }) {
+export function ReservasAdminView({ busqueda, filtroEstado, filtroFlujo, fechaDesde, fechaHasta }: { busqueda?: string; filtroEstado?: FiltroEstado; filtroFlujo?: FiltroFlujo; fechaDesde?: string; fechaHasta?: string }) {
   const [reservas, setReservas] = useState<ParcelaReserva[]>(MOCK_RESERVAS);
   const [detalleAbierto, setDetalleAbierto] = useState<ParcelaReserva | null>(null);
   const [rechazarModal, setRechazarModal] = useState<ParcelaReserva | null>(null);
@@ -534,13 +614,16 @@ export function ReservasAdminView({ busqueda, filtroEstado, filtroFlujo }: { bus
     showToast('Reserva rechazada');
   }
 
-  const filtradas = reservas.filter(r => {
-    const matchEstado = !filtroEstado || filtroEstado === 'todas' || r.estado === filtroEstado;
-    const matchFlujo = filtroFlujo === 'todos' || r.flujo === filtroFlujo;
-    const q = (busqueda || '').toLowerCase();
-    const matchBusqueda = !q || r.nombre.toLowerCase().includes(q) || (r.proyecto ?? '').toLowerCase().includes(q);
-    return matchEstado && matchFlujo && matchBusqueda;
-  });
+  const filtradas = reservas
+    .filter(r => {
+      const matchEstado = !filtroEstado || filtroEstado === 'todas' || r.estado === filtroEstado;
+      const matchFlujo = !filtroFlujo || filtroFlujo === 'todos' || r.flujo === filtroFlujo;
+      const q = (busqueda || '').toLowerCase();
+      const matchBusqueda = !q || r.nombre.toLowerCase().includes(q) || (r.proyecto ?? '').toLowerCase().includes(q);
+      const matchFecha = (!fechaDesde || r.fechaRaw >= fechaDesde) && (!fechaHasta || r.fechaRaw <= fechaHasta);
+      return matchEstado && matchFlujo && matchBusqueda && matchFecha;
+    })
+    .sort((a, b) => b.fechaRaw.localeCompare(a.fechaRaw));
 
   const pendientesCount = reservas.filter(r => r.estado === 'pendiente').length;
 

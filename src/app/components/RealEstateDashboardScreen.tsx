@@ -10,7 +10,7 @@ import { MyPublicationsView } from '@/app/components/MyPublicationsView';
 import { TeamContent } from '@/app/components/TeamContent';
 import { HelpContent } from '@/app/components/HelpContent';
 import { SettingsContent } from '@/app/components/SettingsContent';
-import { ReservasAdminView, FiltroDropdown, FiltroDropdownTransaccion, type FiltroEstado, type FiltroFlujo } from '@/app/components/ReservasAdminView';
+import { ReservasAdminView, FiltroDropdown, FiltroDropdownTransaccion, FiltroDropdownFecha, type FiltroEstado, type FiltroFlujo } from '@/app/components/ReservasAdminView';
 import { MontosReservaAdminView } from '@/app/components/MontosReservaAdminView';
 import { Tabs } from '@/app/components/Tabs';
 import { AsignacionesContent, InteraccionesContent } from '@/app/components/CTPAdminDashboard';
@@ -40,6 +40,8 @@ function ReservasSection() {
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('todas');
   const [filtroFlujo, setFiltroFlujo] = useState<FiltroFlujo>('todos');
+  const [fechaDesde, setFechaDesde] = useState('');
+  const [fechaHasta, setFechaHasta] = useState('');
 
   return (
     <div>
@@ -53,7 +55,7 @@ function ReservasSection() {
 
         {/* Tabs + buscador + filtro en la misma fila */}
         <div className="flex items-center justify-between">
-          <Tabs tabs={RESERVAS_TABS} activeTab={tab} onTabChange={(id) => { setTab(id as ReservasTab); setBusqueda(''); setFiltroEstado('todas'); setFiltroFlujo('todos'); }} />
+          <Tabs tabs={RESERVAS_TABS} activeTab={tab} onTabChange={(id) => { setTab(id as ReservasTab); setBusqueda(''); setFiltroEstado('todas'); setFiltroFlujo('todos'); setFechaDesde(''); setFechaHasta(''); }} />
           {tab === 'solicitudes' && (
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -73,12 +75,13 @@ function ReservasSection() {
               </div>
               <FiltroDropdown value={filtroEstado} onChange={setFiltroEstado} />
               <FiltroDropdownTransaccion value={filtroFlujo} onChange={setFiltroFlujo} />
+              <FiltroDropdownFecha desde={fechaDesde} hasta={fechaHasta} onChange={(d, h) => { setFechaDesde(d); setFechaHasta(h); }} />
             </div>
           )}
         </div>
       </div>
 
-      {tab === 'solicitudes' && <ReservasAdminView busqueda={busqueda} filtroEstado={filtroEstado} filtroFlujo={filtroFlujo} />}
+      {tab === 'solicitudes' && <ReservasAdminView busqueda={busqueda} filtroEstado={filtroEstado} filtroFlujo={filtroFlujo} fechaDesde={fechaDesde} fechaHasta={fechaHasta} />}
       {tab === 'valores' && (
         <div className="rounded-2xl overflow-hidden mx-8 mb-8" style={{ border: '1px solid #E5E5E5' }}>
           <MontosReservaAdminView />
