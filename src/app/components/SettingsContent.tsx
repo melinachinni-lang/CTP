@@ -1825,13 +1825,13 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                     </div>
 
                     {/* Visibilidad */}
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <p className="text-xs font-medium" style={{ color: '#525252' }}>Visibilidad</p>
                         <p className="text-xs" style={{ color: '#9CA3AF' }}>A quién se muestra este mensaje</p>
                       </div>
                       <select value={mensajeGlobalVisibilidad} onChange={e => setMensajeGlobalVisibilidad(e.target.value)}
-                        className="text-sm rounded-xl border px-3 py-1.5 outline-none"
+                        className="text-sm rounded-xl border px-3 py-1.5 outline-none w-full sm:w-auto"
                         style={{ borderColor: '#E5E5E5', color: '#0A0A0A', backgroundColor: '#FAFAFA' }}>
                         <option value="todos">Todos los usuarios</option>
                         <option value="inmobiliarias">Inmobiliarias y brokers</option>
@@ -1887,7 +1887,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 </div>
 
                 {reasignacionAuto && (
-                  <div className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
+                  <div className="flex flex-wrap items-center justify-between gap-3 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
                     <div>
                       <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Horas sin respuesta para reasignar</p>
                       <p className="text-xs" style={{ color: '#9CA3AF' }}>Tiempo de espera antes de reasignar automáticamente</p>
@@ -1903,13 +1903,13 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   </div>
                 )}
 
-                <div className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
+                <div className="flex flex-wrap items-start justify-between gap-3 py-3 border-b" style={{ borderColor: '#F3F4F6' }}>
                   <div>
                     <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Criterio de prioridad de leads</p>
                     <p className="text-xs" style={{ color: '#9CA3AF' }}>Qué determina la prioridad de un lead en el pipeline</p>
                   </div>
                   <select value={prioridadLeads} onChange={e => setPrioridadLeads(e.target.value)}
-                    className="text-sm rounded-xl border px-3 py-1.5 outline-none"
+                    className="text-sm rounded-xl border px-3 py-1.5 outline-none w-full sm:w-auto"
                     style={{ borderColor: '#E5E5E5', color: '#0A0A0A', backgroundColor: '#FAFAFA' }}>
                     <option value="proyecto">Proyecto de interés</option>
                     <option value="fecha">Fecha de ingreso</option>
@@ -1918,7 +1918,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                   </select>
                 </div>
 
-                <div className="flex items-center justify-between gap-4 py-3" >
+                <div className="flex flex-wrap items-center justify-between gap-3 py-3">
                   <div>
                     <p className="text-sm font-medium" style={{ color: '#0A0A0A' }}>Días sin actividad para marcar lead inactivo</p>
                     <p className="text-xs" style={{ color: '#9CA3AF' }}>Leads sin movimiento se marcan automáticamente como inactivos</p>
@@ -1956,7 +1956,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                         style={{ backgroundColor: item.bg, color: item.color }}>
                         {item.rol}
                       </span>
-                      <span className="text-xs truncate" style={{ color: '#9CA3AF' }}>{item.desc}</span>
+                      <span className="text-xs truncate hidden sm:block" style={{ color: '#9CA3AF' }}>{item.desc}</span>
                     </div>
                     <span className="flex-shrink-0 text-sm font-semibold tabular-nums" style={{ color: '#0A0A0A' }}>
                       {item.count.toLocaleString('es-CL')}
@@ -1994,7 +1994,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
               {iaActiva && (
                 <div>
                   <p className="text-xs font-medium mb-3" style={{ color: '#525252' }}>Nivel de agresividad del modelo</p>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     {([
                       { value: 'conservador', label: 'Conservador', desc: 'Puntajes más bajos, menos falsos positivos' },
                       { value: 'medio',       label: 'Equilibrado',  desc: 'Balance entre precisión y cobertura' },
