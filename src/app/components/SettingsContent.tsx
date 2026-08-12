@@ -148,6 +148,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
   const [prioridadLeads, setPrioridadLeads] = useState('proyecto');
   const [diasInactivo, setDiasInactivo] = useState('30');
   const [sistemaSaved, setSistemaSaved] = useState(false);
+  const [isLoadingSistema, setIsLoadingSistema] = useState(false);
   const [mensajeGlobalActivo, setMensajeGlobalActivo] = useState(false);
   const [mensajeGlobalTitulo, setMensajeGlobalTitulo] = useState('');
   const [mensajeGlobalTexto, setMensajeGlobalTexto] = useState('');
@@ -197,6 +198,14 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'sistema') {
+      setIsLoadingSistema(true);
+      const t = setTimeout(() => setIsLoadingSistema(false), 1400);
+      return () => clearTimeout(t);
+    }
+  }, [activeTab]);
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
 
@@ -1633,14 +1642,41 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
         {activeTab === 'sistema' && userType === 'ctp' && (
           <div className="space-y-5">
 
+            {/* Skeleton loader */}
+            {isLoadingSistema && (
+              <div className="space-y-5 animate-pulse">
+                {[120, 180, 160, 100, 140, 90].map((h, i) => (
+                  <div key={i} className="rounded-2xl border p-5" style={{ borderColor: '#E5E5E5', backgroundColor: '#fff' }}>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-4 h-4 rounded" style={{ backgroundColor: '#E5E5E5' }} />
+                      <div className="h-3.5 rounded-full w-32" style={{ backgroundColor: '#E5E5E5' }} />
+                    </div>
+                    <div className="space-y-3">
+                      {Array.from({ length: Math.floor(h / 40) + 1 }).map((_, j) => (
+                        <div key={j} className="flex items-center justify-between gap-4">
+                          <div className="flex-1 space-y-1.5">
+                            <div className="h-3 rounded-full" style={{ backgroundColor: '#E5E5E5', width: `${60 + (j % 3) * 15}%` }} />
+                            <div className="h-2.5 rounded-full" style={{ backgroundColor: '#F3F4F6', width: `${40 + (j % 2) * 20}%` }} />
+                          </div>
+                          <div className="w-11 h-6 rounded-full flex-shrink-0" style={{ backgroundColor: '#E5E5E5' }} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Toast */}
-            {sistemaSaved && (
+            {!isLoadingSistema && sistemaSaved && (
               <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl shadow-lg text-sm font-medium"
                 style={{ backgroundColor: '#006B4E', color: '#fff' }}>
                 <Activity className="w-4 h-4" />
                 Configuración del sistema guardada
               </div>
             )}
+
+            {!isLoadingSistema && (<>
 
             {/* Modal confirmar desactivar módulo */}
             {confirmModulo && (
@@ -1986,23 +2022,46 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Auditoría de cambios</h3>
               </div>
               <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>Últimas modificaciones realizadas en la configuración del sistema.</p>
-              <div className="space-y-0 divide-y" style={{ borderColor: '#F3F4F6' }}>
-                {[
-                  { quien: 'admin@ctp.cl',         accion: 'Activó asignación automática de leads',      fecha: '10 ago 2026, 11:42' },
-                  { quien: 'admin@ctp.cl',         accion: 'Cambió criterio de prioridad a "Proyecto"',  fecha: '09 ago 2026, 18:05' },
-                  { quien: 'superadmin@ctp.cl',    accion: 'Desactivó modo mantenimiento',               fecha: '08 ago 2026, 09:30' },
-                  { quien: 'superadmin@ctp.cl',    accion: 'Activó scoring IA (nivel: equilibrado)',     fecha: '05 ago 2026, 14:17' },
-                  { quien: 'admin@ctp.cl',         accion: 'Modificó días inactivo a 30 días',           fecha: '01 ago 2026, 10:00' },
-                ].map((log, i) => (
-                  <div key={i} className="py-3 flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-medium" style={{ color: '#0A0A0A' }}>{log.accion}</p>
-                      <p className="text-xs mt-0.5" style={{ color: '#9CA3AF' }}>{log.quien}</p>
+              {(() => {
+                const auditLogs = [
+                  { quien: 'admin@ctp.cl',      accion: 'Activó asignación automática de leads',     fecha: '10 ago 2026, 11:42', critico: false },
+                  { quien: 'admin@ctp.cl',      accion: 'Cambió criterio de prioridad a "Proyecto"', fecha: '09 ago 2026, 18:05', critico: false },
+                  { quien: 'superadmin@ctp.cl', accion: 'Desactivó modo mantenimiento',              fecha: '08 ago 2026, 09:30', critico: true  },
+                  { quien: 'superadmin@ctp.cl', accion: 'Activó scoring IA (nivel: equilibrado)',    fecha: '05 ago 2026, 14:17', critico: false },
+                  { quien: 'admin@ctp.cl',      accion: 'Modificó días inactivo a 30 días',          fecha: '01 ago 2026, 10:00', critico: false },
+                ];
+                if (auditLogs.length === 0) {
+                  return (
+                    <div className="flex flex-col items-center justify-center py-10 gap-3">
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F3F4F6' }}>
+                        <Activity className="w-5 h-5" style={{ color: '#D1D5DB' }} />
+                      </div>
+                      <p className="text-sm font-medium" style={{ color: '#525252' }}>Sin registros aún</p>
+                      <p className="text-xs text-center" style={{ color: '#9CA3AF', maxWidth: '220px' }}>
+                        Aquí aparecerán los cambios realizados en la configuración del sistema.
+                      </p>
                     </div>
-                    <span className="text-xs flex-shrink-0" style={{ color: '#9CA3AF' }}>{log.fecha}</span>
+                  );
+                }
+                return (
+                  <div className="divide-y" style={{ borderColor: '#F3F4F6' }}>
+                    {auditLogs.map((log, i) => (
+                      <div key={i} className="py-3 flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-2 min-w-0">
+                          {log.critico && (
+                            <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#DC2626' }} />
+                          )}
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium" style={{ color: log.critico ? '#DC2626' : '#0A0A0A' }}>{log.accion}</p>
+                            <p className="text-xs mt-0.5" style={{ color: '#9CA3AF' }}>{log.quien}</p>
+                          </div>
+                        </div>
+                        <span className="text-xs flex-shrink-0" style={{ color: '#9CA3AF' }}>{log.fecha}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </div>
 
             {/* Botón guardar */}
@@ -2017,6 +2076,8 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
                 Guardar configuración
               </button>
             </div>
+
+            </>)}
 
           </div>
         )}
