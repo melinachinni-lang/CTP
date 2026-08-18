@@ -1379,6 +1379,31 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                     {/* Separador */}
                     <div style={{ height: '1px', backgroundColor: '#E5E5E5' }} />
 
+                    {/* Financiamiento disponible */}
+                    {proyecto.financiamiento?.disponible && proyecto.financiamiento.planes.length > 0 && (
+                      <div>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                          Financiamiento disponible
+                        </p>
+                        <div className="flex flex-col gap-2">
+                          {proyecto.financiamiento.planes.map((plan, idx) => (
+                            <div key={idx} className="flex items-center justify-between px-3 py-2 rounded-lg" style={{ backgroundColor: '#F0FBF7', border: '1px solid #A7F3D0' }}>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
+                                Pie mín. ${plan.pieMinimoCLP.toLocaleString('es-CL')}
+                              </span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
+                                {plan.cuotas} cuotas
+                              </span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
+                                {plan.tasa}% anual
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ height: '1px', backgroundColor: '#E5E5E5', marginTop: '16px' }} />
+                      </div>
+                    )}
+
                     {/* Features grid con iconos */}
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
                       <div className="flex items-center gap-1.5">

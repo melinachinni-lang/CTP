@@ -31,6 +31,10 @@ export interface Parcela {
   documentos: Array<{ nombre: string; tipo: string; disponible: boolean }>;
   plusvalia?: Array<{ año: number; valor: number }>;
   historialPropiedad: 'Primer dueño' | 'Segundo dueño' | 'Tercer dueño' | 'Cuarto dueño';
+  financiamiento?: {
+    disponible: boolean;
+    planes: Array<{ pieMinimoCLP: number; cuotas: number; tasa: number }>;
+  };
 }
 
 export const PARCELAS_DATA: Parcela[] = [
@@ -100,7 +104,14 @@ export const PARCELAS_DATA: Parcela[] = [
       { año: 2023, valor: 42800000 },
       { año: 2024, valor: 45000000 }
     ],
-    historialPropiedad: 'Primer dueño'
+    historialPropiedad: 'Primer dueño',
+    financiamiento: {
+      disponible: true,
+      planes: [
+        { pieMinimoCLP: 9000000, cuotas: 120, tasa: 4.5 },
+        { pieMinimoCLP: 5000000, cuotas: 180, tasa: 5.9 }
+      ]
+    }
   },
   {
     id: 2,
@@ -237,7 +248,13 @@ export const PARCELAS_DATA: Parcela[] = [
       { año: 2023, valor: 89500000 },
       { año: 2024, valor: 95000000 }
     ],
-    historialPropiedad: 'Primer dueño'
+    historialPropiedad: 'Primer dueño',
+    financiamiento: {
+      disponible: true,
+      planes: [
+        { pieMinimoCLP: 19000000, cuotas: 96, tasa: 4.2 }
+      ]
+    }
   },
   {
     id: 4,
