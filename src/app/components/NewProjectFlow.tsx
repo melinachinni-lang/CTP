@@ -48,9 +48,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
     
     // Financiamiento
     hasFinancing: false,
-    financingTotalPrice: '',
-    financingPriceFrom: '',
-    financingDownPayment: '',
+    financingPlans: [] as Array<{ pieMinimoCLP: string; cuotas: string; tasa: string }>,
     
     // Paso 2: Características del terreno
     averageSurface: '',
@@ -98,6 +96,8 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
   
   const [plots, setPlots] = useState<PlotData[]>([]);
   const [searchPlot, setSearchPlot] = useState('');
+  const [newPlan, setNewPlan] = useState({ pieMinimoCLP: '', cuotas: '', tasa: '' });
+  const [showAddPlan, setShowAddPlan] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
   const [masterplanImagePreview, setMasterplanImagePreview] = useState<string>('');
@@ -902,65 +902,130 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                     </div>
                   </div>
 
-                  {/* Campos de financiamiento - Se muestran solo si hasFinancing es true */}
+                  {/* Planes de financiamiento */}
                   {formData.hasFinancing && (
-                    <>
-                      <div>
-                        <label style={{
-                          display: 'block',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-body-sm)',
-                          fontWeight: 'var(--font-weight-medium)',
-                          color: '#0A0A0A',
-                          marginBottom: '8px'
-                        }}>
-                          Precio total del proyecto
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.financingTotalPrice}
-                          onChange={(e) => handleInputChange('financingTotalPrice', e.target.value)}
-                          placeholder="Ej: 1125000000"
-                          className="w-full px-4 py-3 rounded-lg transition-all"
-                          style={{
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #DEDEDE',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            color: '#0A0A0A',
-                            outline: 'none'
-                          }}
-                        />
-                      </div>
+                    <div className="md:col-span-2 space-y-3">
+                      {/* Planes existentes */}
+                      {formData.financingPlans.length > 0 && (
+                        <div className="space-y-2">
+                          {formData.financingPlans.map((plan, idx) => (
+                            <div key={idx} className="flex items-center justify-between px-4 py-3 rounded-lg" style={{ backgroundColor: '#F0F7F0', border: '1px solid #C6DFC8' }}>
+                              <div className="flex items-center gap-4 flex-wrap">
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', fontWeight: 500 }}>
+                                  Plan {idx + 1}
+                                </span>
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151' }}>
+                                  Pie mín. ${parseInt(plan.pieMinimoCLP || '0').toLocaleString('es-CL')}
+                                </span>
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151' }}>
+                                  {plan.cuotas} cuotas
+                                </span>
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#374151' }}>
+                                  Tasa {plan.tasa}% anual
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => handleInputChange('financingPlans', formData.financingPlans.filter((_, i) => i !== idx))}
+                                className="p-1.5 rounded-md transition-colors"
+                                style={{ color: '#6B7280' }}
+                                onMouseEnter={e => e.currentTarget.style.color = '#DC2626'}
+                                onMouseLeave={e => e.currentTarget.style.color = '#6B7280'}
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
 
-                      <div>
-                        <label style={{
-                          display: 'block',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--font-size-body-sm)',
-                          fontWeight: 'var(--font-weight-medium)',
-                          color: '#0A0A0A',
-                          marginBottom: '8px'
-                        }}>
-                          Porcentaje de pie o monto inicial
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.financingDownPayment}
-                          onChange={(e) => handleInputChange('financingDownPayment', e.target.value)}
-                          placeholder="Ej: 20% o 9000000"
-                          className="w-full px-4 py-3 rounded-lg transition-all"
-                          style={{
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #DEDEDE',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--font-size-body-sm)',
-                            color: '#0A0A0A',
-                            outline: 'none'
-                          }}
-                        />
-                      </div>
-                    </>
+                      {/* Formulario nuevo plan */}
+                      {showAddPlan ? (
+                        <div className="p-4 rounded-lg space-y-3" style={{ backgroundColor: '#FAFAFA', border: '1px solid #DEDEDE' }}>
+                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
+                            Nuevo plan
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                              <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280', marginBottom: '4px' }}>
+                                Pie mínimo (CLP)
+                              </label>
+                              <input
+                                type="text"
+                                value={newPlan.pieMinimoCLP}
+                                onChange={e => setNewPlan({ ...newPlan, pieMinimoCLP: e.target.value })}
+                                placeholder="Ej: 9000000"
+                                className="w-full px-3 py-2 rounded-lg"
+                                style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none' }}
+                              />
+                            </div>
+                            <div>
+                              <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280', marginBottom: '4px' }}>
+                                Cantidad de cuotas
+                              </label>
+                              <input
+                                type="number"
+                                value={newPlan.cuotas}
+                                onChange={e => setNewPlan({ ...newPlan, cuotas: e.target.value })}
+                                placeholder="Ej: 120"
+                                className="w-full px-3 py-2 rounded-lg"
+                                style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none' }}
+                              />
+                            </div>
+                            <div>
+                              <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '12px', color: '#6B7280', marginBottom: '4px' }}>
+                                Tasa anual (%)
+                              </label>
+                              <input
+                                type="number"
+                                step="0.1"
+                                value={newPlan.tasa}
+                                onChange={e => setNewPlan({ ...newPlan, tasa: e.target.value })}
+                                placeholder="Ej: 4.5"
+                                className="w-full px-3 py-2 rounded-lg"
+                                style={{ backgroundColor: '#FFFFFF', border: '1px solid #DEDEDE', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#0A0A0A', outline: 'none' }}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                if (newPlan.pieMinimoCLP && newPlan.cuotas && newPlan.tasa) {
+                                  handleInputChange('financingPlans', [...formData.financingPlans, { ...newPlan }]);
+                                  setNewPlan({ pieMinimoCLP: '', cuotas: '', tasa: '' });
+                                  setShowAddPlan(false);
+                                }
+                              }}
+                              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                              style={{ backgroundColor: '#647E3F', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
+                            >
+                              Agregar plan
+                            </button>
+                            <button
+                              onClick={() => { setShowAddPlan(false); setNewPlan({ pieMinimoCLP: '', cuotas: '', tasa: '' }); }}
+                              className="px-4 py-2 rounded-lg text-sm transition-colors"
+                              style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setShowAddPlan(true)}
+                          className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors"
+                          style={{ backgroundColor: '#FFFFFF', border: '1.5px dashed #647E3F', color: '#647E3F', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
+                        >
+                          <Plus className="w-4 h-4" />
+                          Agregar plan de financiamiento
+                        </button>
+                      )}
+
+                      {formData.financingPlans.length === 0 && !showAddPlan && (
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
+                          Agrega al menos un plan con pie mínimo, cuotas y tasa.
+                        </p>
+                      )}
+                    </div>
                   )}
 
                   {/* Descripción */}
