@@ -1466,43 +1466,51 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         </div>
                       </div>
 
-                      {/* Monto de pie (%) */}
-                      <div className="space-y-2">
-                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                          Monto de pie
-                        </label>
-                        <select
-                          value={calcPiePct}
-                          onChange={e => setCalcPiePct(e.target.value)}
-                          className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                          style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                        >
-                          {[5, 10, 15, 20, 25, 30].map(p => (
-                            <option key={p} value={String(p)}>{p}%</option>
-                          ))}
-                        </select>
+                      {/* Monto de pie + Plazo en años — misma fila */}
+                      <div className="space-y-1">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                              Monto de pie
+                            </label>
+                            <div className="relative">
+                              <select
+                                value={calcPiePct}
+                                onChange={e => setCalcPiePct(e.target.value)}
+                                className="w-full appearance-none bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-8 py-2.5 rounded-[100px] focus:outline-none transition-colors cursor-pointer"
+                                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                              >
+                                {[5, 10, 15, 20, 25, 30].map(p => (
+                                  <option key={p} value={String(p)}>{p}%</option>
+                                ))}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                              Plazo en años
+                            </label>
+                            <div className="relative">
+                              <select
+                                value={calcPlazo}
+                                onChange={e => setCalcPlazo(e.target.value)}
+                                className="w-full appearance-none bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-8 py-2.5 rounded-[100px] focus:outline-none transition-colors cursor-pointer"
+                                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                              >
+                                {[5, 10, 15, 20, 25, 30].map(y => (
+                                  <option key={y} value={String(y)}>{y} años</option>
+                                ))}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                            </div>
+                          </div>
+                        </div>
                         {budget && (
                           <p style={{ fontSize: '12px', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-                            ≈ {formatCurrency(getBudgetCLP() * parseFloat(calcPiePct) / 100)} CLP
+                            Pie ≈ {formatCurrency(getBudgetCLP() * parseFloat(calcPiePct) / 100)} CLP
                           </p>
                         )}
-                      </div>
-
-                      {/* Plazo en años */}
-                      <div className="space-y-2">
-                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                          Plazo en años
-                        </label>
-                        <select
-                          value={calcPlazo}
-                          onChange={e => setCalcPlazo(e.target.value)}
-                          className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                          style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                        >
-                          {[5, 10, 15, 20, 25, 30].map(y => (
-                            <option key={y} value={String(y)}>{y} años</option>
-                          ))}
-                        </select>
                       </div>
 
                       {/* Zona */}
@@ -3242,43 +3250,51 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 </div>
               </div>
 
-              {/* Monto de pie (%) */}
-              <div className="space-y-2">
-                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                  Monto de pie
-                </label>
-                <select
-                  value={calcPiePct}
-                  onChange={e => setCalcPiePct(e.target.value)}
-                  className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                  style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                >
-                  {[5, 10, 15, 20, 25, 30].map(p => (
-                    <option key={p} value={String(p)}>{p}%</option>
-                  ))}
-                </select>
+              {/* Monto de pie + Plazo en años — misma fila */}
+              <div className="space-y-1">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                      Monto de pie
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={calcPiePct}
+                        onChange={e => setCalcPiePct(e.target.value)}
+                        className="w-full appearance-none bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-8 py-2.5 rounded-[100px] focus:outline-none transition-colors cursor-pointer"
+                        style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                      >
+                        {[5, 10, 15, 20, 25, 30].map(p => (
+                          <option key={p} value={String(p)}>{p}%</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                      Plazo en años
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={calcPlazo}
+                        onChange={e => setCalcPlazo(e.target.value)}
+                        className="w-full appearance-none bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black pl-4 pr-8 py-2.5 rounded-[100px] focus:outline-none transition-colors cursor-pointer"
+                        style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                      >
+                        {[5, 10, 15, 20, 25, 30].map(y => (
+                          <option key={y} value={String(y)}>{y} años</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
                 {budget && (
                   <p style={{ fontSize: '12px', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-                    ≈ {formatCurrency(getBudgetCLP() * parseFloat(calcPiePct) / 100)} CLP
+                    Pie ≈ {formatCurrency(getBudgetCLP() * parseFloat(calcPiePct) / 100)} CLP
                   </p>
                 )}
-              </div>
-
-              {/* Plazo en años */}
-              <div className="space-y-2">
-                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                  Plazo en años
-                </label>
-                <select
-                  value={calcPlazo}
-                  onChange={e => setCalcPlazo(e.target.value)}
-                  className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                  style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                >
-                  {[5, 10, 15, 20, 25, 30].map(y => (
-                    <option key={y} value={String(y)}>{y} años</option>
-                  ))}
-                </select>
               </div>
 
               {/* Zona */}
