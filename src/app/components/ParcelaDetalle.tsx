@@ -2760,30 +2760,6 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                       <OwnershipTooltip valor={parcela.historialPropiedad} />
                     </div>
 
-                    {/* Financiamiento disponible */}
-                    {parcela.financiamiento?.disponible && parcela.financiamiento.planes.length > 0 && (
-                      <div className="pt-4" style={{ borderTop: '1px solid #CDD8DE' }}>
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
-                          Financiamiento disponible
-                        </p>
-                        <div className="flex flex-col gap-2">
-                          {parcela.financiamiento.planes.map((plan, idx) => (
-                            <div key={idx} className="flex items-center justify-between px-3 py-2 rounded-lg" style={{ backgroundColor: '#F0FBF7', border: '1px solid #A7F3D0' }}>
-                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
-                                Pie mín. ${plan.pieMinimoCLP.toLocaleString('es-CL')}
-                              </span>
-                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
-                                {plan.cuotas} cuotas
-                              </span>
-                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
-                                {plan.tasa}% anual
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
                     {/* Características destacadas */}
                     <div className="grid grid-cols-2 gap-3 pt-4" style={{ borderTop: '1px solid #CDD8DE' }}>
                       {parcela.destacados.map((item, index) => (
@@ -2831,6 +2807,30 @@ export function ParcelaDetalle({ onNavigate, parcelaId, estadoCompraInicial, onE
                         </button>
                       ))}
                     </div>
+
+                    {/* Financiamiento disponible */}
+                    {parcela.financiamiento?.disponible && parcela.financiamiento.planes.length > 0 && (
+                      <div className="pt-4" style={{ borderTop: '1px solid #CDD8DE' }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                          Financiamiento disponible
+                        </p>
+                        <div className="flex flex-col gap-2">
+                          {parcela.financiamiento.planes.map((plan, idx) => (
+                            <div key={idx} className="flex items-center justify-between px-3 py-2 rounded-lg" style={{ backgroundColor: '#F0FBF7', border: '1px solid #A7F3D0' }}>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
+                                Pie mín. ${plan.pieMinimoCLP.toLocaleString('es-CL')}
+                              </span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
+                                {plan.cuotas} cuotas
+                              </span>
+                              <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#065F46' }}>
+                                {plan.tasa}% anual
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* CTA principal — varía según estado */}
                     {estadoCompra === 'disponible' && (
