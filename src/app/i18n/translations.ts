@@ -605,7 +605,7 @@ const es: Translations = {
     mainFilters: 'Filtros principales', moreFilters: 'Más filtros', calculator: 'Calculadora',
     featuredListings: 'Publicaciones destacadas', newListings: 'Nuevas publicaciones',
     calculatorTitle: 'Calcula tu presupuesto', calculatorSubtitle: 'Conoce qué parcela puedes comprar según tu capacidad',
-    budgetLabel: 'Presupuesto disponible', monthlyPayment: 'Cuota mensual aproximada', enterBudget: 'Ingresá tu presupuesto',
+    budgetLabel: 'Presupuesto disponible', monthlyPayment: 'Cuota mensual aproximada', enterBudget: 'Ingresa tu presupuesto',
     zoneLabel: 'Zona de interés', selectZone: 'Seleccionar zona',
     zoneAconcagua: 'Valle del Aconcagua', zoneCasablanca: 'Valle de Casablanca', zoneCordillera: 'Cordillera de Los Andes', zoneLitoral: 'Litoral Central', zoneValleCentral: 'Valle Central',
     typeAgrado: 'Agrado/Residencial', selectType: 'Seleccionar tipo', calculate: 'Calcular',
