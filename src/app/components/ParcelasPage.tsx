@@ -80,10 +80,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const [calcZone, setCalcZone] = useState('');
   const [calcParcelType, setCalcParcelType] = useState('');
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  // Estados filtro de financiamiento
+  // Estados calculadora financiera
+  const [calcCurrency, setCalcCurrency] = useState<'UF' | 'CLP'>('UF');
+  const [calcPiePct, setCalcPiePct] = useState('20');
+  const [calcPlazo, setCalcPlazo] = useState('25');
+  const [calcDFL2, setCalcDFL2] = useState(false);
+  // Filtro de financiamiento
   const [calcFinanciamiento, setCalcFinanciamiento] = useState<'todos' | 'con' | 'sin'>('todos');
-  const [calcPie, setCalcPie] = useState('');
-  const [calcCuotas, setCalcCuotas] = useState('');
   const [calcTasa, setCalcTasa] = useState('');
   const [filteredProyectos, setFilteredProyectos] = useState<ReturnType<typeof getAllProyectos>>([]);
   const [proyectosFiltrados, setProyectosFiltrados] = useState(false);
@@ -347,8 +350,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     };
 
     if (budget) {
-      const budgetNum = parseFloat(budget.replace(/\./g, '').replace(/,/g, '.'));
-      newActiveFilters.precioMax = `$${budgetNum.toLocaleString('es-CL')}`;
+      const budgetCLP = getBudgetCLP();
+      newActiveFilters.precioMax = calcCurrency === 'UF'
+        ? `${budget} UF`
+        : `$${budgetCLP.toLocaleString('es-CL')}`;
     }
     if (calcZone) newActiveFilters.ubicacion = calcZone;
     if (calcParcelType) newActiveFilters.tipos = [calcParcelType];
@@ -364,19 +369,18 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       resultado = resultado.filter(p => !p.financiamiento?.disponible);
     } else if (calcFinanciamiento === 'con') {
       resultado = resultado.filter(p => p.financiamiento?.disponible);
-      const pieNum   = calcPie    ? parseFloat(calcPie.replace(/\./g, ''))    : null;
-      const cuotasNum = calcCuotas ? parseInt(calcCuotas)                      : null;
-      const tasaNum  = calcTasa   ? parseFloat(calcTasa.replace(/,/g, '.'))   : null;
-      if (pieNum || cuotasNum || tasaNum) {
-        resultado = resultado.filter(p =>
-          (p.financiamiento?.planes ?? []).some(plan => {
-            const pieCumple    = pieNum    ? plan.pieMinimoCLP <= pieNum    : true;
-            const cuotasCumple = cuotasNum ? plan.cuotas >= cuotasNum       : true;
-            const tasaCumple   = tasaNum   ? plan.tasa <= tasaNum           : true;
-            return pieCumple && cuotasCumple && tasaCumple;
-          })
-        );
-      }
+      const budgetCLP = getBudgetCLP();
+      const pieNum = budgetCLP ? budgetCLP * parseFloat(calcPiePct) / 100 : null;
+      const cuotasNum = parseInt(calcPlazo) * 12;
+      const tasaNum  = calcTasa ? parseFloat(calcTasa.replace(/,/g, '.')) : null;
+      resultado = resultado.filter(p =>
+        (p.financiamiento?.planes ?? []).some(plan => {
+          const pieCumple    = pieNum    ? plan.pieMinimoCLP <= pieNum    : true;
+          const cuotasCumple = plan.cuotas >= cuotasNum;
+          const tasaCumple   = tasaNum   ? plan.tasa <= tasaNum           : true;
+          return pieCumple && cuotasCumple && tasaCumple;
+        })
+      );
     }
 
     setFilteredProyectos(resultado);
@@ -841,14 +845,22 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
     }).format(value);
   };
 
+  const UF_TO_CLP = 37500;
+
+  const getBudgetCLP = () => {
+    if (!budget) return 0;
+    const raw = parseFloat(budget.replace(/\./g, '').replace(/,/g, '.'));
+    return calcCurrency === 'UF' ? raw * UF_TO_CLP : raw;
+  };
+
   // Función para calcular cuota mensual
   const calculateMonthlyPayment = () => {
-    if (!budget) return 0;
-    const budgetValue = parseFloat(budget.replace(/\./g, '').replace(/,/g, '.'));
-    const pieValue = calcPie ? parseFloat(calcPie.replace(/\./g, '').replace(/,/g, '.')) : 0;
-    const financed = budgetValue - pieValue;
-    const annualRate = calcTasa ? parseFloat(calcTasa.replace(/,/g, '.')) / 100 : 0.05;
-    const months = calcCuotas ? parseInt(calcCuotas) : 240;
+    const budgetCLP = getBudgetCLP();
+    if (!budgetCLP) return 0;
+    const pieFraction = parseFloat(calcPiePct) / 100;
+    const financed = budgetCLP * (1 - pieFraction);
+    const annualRate = calcTasa ? parseFloat(calcTasa.replace(/,/g, '.')) / 100 : 0.045;
+    const months = parseInt(calcPlazo) * 12;
     if (financed <= 0 || months <= 0 || annualRate <= 0) return 0;
     const r = annualRate / 12;
     return financed * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
@@ -1415,82 +1427,93 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                     {/* Campos del estimador */}
                     <div className="space-y-4">
-                      {/* Presupuesto */}
+
+                      {/* Valor de la propiedad — selector UF/CLP + input */}
                       <div className="space-y-2">
-                        <label 
-                          className="block" 
-                          style={{ 
-                            color: '#0A0A0A',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 500
-                          }}
-                        >
+                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                           {t.explore.budgetLabel}
                         </label>
-                        <input
-                          type="text"
-                          value={budget}
-                          onChange={(e) => setBudget(e.target.value)}
-                          placeholder="Ej: 50.000.000"
-                          className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                          style={{ 
-                            color: '#0A0A0A', 
-                            fontFamily: 'Inter, sans-serif', 
-                            fontSize: '14px',
-                            fontWeight: 400
-                          }}
-                        />
+                        <div className="flex border-2 border-gray-200 hover:border-gray-300 rounded-[100px] overflow-hidden bg-white transition-colors focus-within:border-black">
+                          <select
+                            value={calcCurrency}
+                            onChange={e => setCalcCurrency(e.target.value as 'UF' | 'CLP')}
+                            className="bg-transparent border-0 pl-4 pr-1 py-2.5 focus:outline-none cursor-pointer"
+                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 600 }}
+                          >
+                            <option value="UF">UF</option>
+                            <option value="CLP">CLP</option>
+                          </select>
+                          <div style={{ width: '1px', backgroundColor: '#E5E7EB', margin: '8px 0' }} />
+                          <input
+                            type="text"
+                            value={budget}
+                            onChange={e => setBudget(e.target.value)}
+                            placeholder={calcCurrency === 'UF' ? 'Ej: 2.500' : 'Ej: 93.750.000'}
+                            className="flex-1 bg-transparent border-0 px-3 py-2.5 focus:outline-none"
+                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                          />
+                        </div>
                       </div>
 
-                      {/* Cuota aproximada */}
+                      {/* Cuota estimada */}
                       <div className="space-y-2">
-                        <label 
-                          className="block" 
-                          style={{ 
-                            color: '#0A0A0A',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 500
-                          }}
-                        >
+                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                           {t.explore.monthlyPayment}
                         </label>
-                        <div
-                          className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200"
-                          style={{
-                            color: budget ? '#0A0A0A' : '#a1a1a1',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 500
-                          }}
-                        >
+                        <div className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200"
+                          style={{ color: budget ? '#0A0A0A' : '#a1a1a1', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
                           {budget ? formatCurrency(calculateMonthlyPayment()) : t.explore.enterBudget}
                         </div>
                       </div>
 
+                      {/* Monto de pie (%) */}
+                      <div className="space-y-2">
+                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                          Monto de pie
+                        </label>
+                        <select
+                          value={calcPiePct}
+                          onChange={e => setCalcPiePct(e.target.value)}
+                          className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                          style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                        >
+                          {[5, 10, 15, 20, 25, 30].map(p => (
+                            <option key={p} value={String(p)}>{p}%</option>
+                          ))}
+                        </select>
+                        {budget && (
+                          <p style={{ fontSize: '12px', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                            ≈ {formatCurrency(getBudgetCLP() * parseFloat(calcPiePct) / 100)} CLP
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Plazo en años */}
+                      <div className="space-y-2">
+                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                          Plazo en años
+                        </label>
+                        <select
+                          value={calcPlazo}
+                          onChange={e => setCalcPlazo(e.target.value)}
+                          className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                          style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                        >
+                          {[5, 10, 15, 20, 25, 30].map(y => (
+                            <option key={y} value={String(y)}>{y} años</option>
+                          ))}
+                        </select>
+                      </div>
+
                       {/* Zona */}
                       <div className="dropdown-container relative space-y-2">
-                        <label 
-                          className="block" 
-                          style={{ 
-                            color: '#0A0A0A',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 500
-                          }}
-                        >
+                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                           {t.explore.zoneLabel}
                         </label>
                         <button
                           onClick={() => setOpenDropdown(openDropdown === 'calcZone' ? null : 'calcZone')}
                           className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                          style={{
-                            color: calcZone ? '#0A0A0A' : '#a1a1a1',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 400
-                          }}
+                          style={{ color: calcZone ? '#0A0A0A' : '#a1a1a1', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}
                         >
                           <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcZone || t.explore.selectZone}</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
@@ -1498,12 +1521,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         {openDropdown === 'calcZone' && (
                           <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
                             {[t.explore.zoneAconcagua, t.explore.zoneCasablanca, t.explore.zoneCordillera, t.explore.zoneLitoral, t.explore.zoneValleCentral].map((zona) => (
-                              <button
-                                key={zona}
-                                onClick={() => { setCalcZone(zona); setOpenDropdown(null); }}
+                              <button key={zona} onClick={() => { setCalcZone(zona); setOpenDropdown(null); }}
                                 className="w-full text-left px-4 py-2.5 hover:bg-gray-100 transition-colors"
-                                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                              >
+                                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}>
                                 {zona}
                               </button>
                             ))}
@@ -1513,26 +1533,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
                       {/* Tipo de parcela */}
                       <div className="dropdown-container relative space-y-2">
-                        <label 
-                          className="block" 
-                          style={{ 
-                            color: '#0A0A0A',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 500
-                          }}
-                        >
+                        <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                           {t.filters.parcelType}
                         </label>
                         <button
                           onClick={() => setOpenDropdown(openDropdown === 'calcParcelType' ? null : 'calcParcelType')}
                           className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                          style={{
-                            color: calcParcelType ? '#0A0A0A' : '#a1a1a1',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 400
-                          }}
+                          style={{ color: calcParcelType ? '#0A0A0A' : '#a1a1a1', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}
                         >
                           <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcParcelType || t.explore.selectType}</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
@@ -1540,12 +1547,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         {openDropdown === 'calcParcelType' && (
                           <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
                             {[t.filters.typeAgricultural, t.explore.typeAgrado, t.filters.typeForestry, t.filters.typeMixed].map((tipo) => (
-                              <button
-                                key={tipo}
-                                onClick={() => { setCalcParcelType(tipo); setOpenDropdown(null); }}
+                              <button key={tipo} onClick={() => { setCalcParcelType(tipo); setOpenDropdown(null); }}
                                 className="w-full text-left px-4 py-2.5 hover:bg-gray-100 transition-colors"
-                                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                              >
+                                style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}>
                                 {tipo}
                               </button>
                             ))}
@@ -1562,7 +1566,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       {/* Toggle con/sin financiamiento */}
                       <div className="space-y-2">
                         <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                          Financiamiento
+                          Filtrar proyectos
                         </label>
                         <div className="flex rounded-full p-0.5" style={{ backgroundColor: '#F3F4F6' }}>
                           {(['todos', 'con', 'sin'] as const).map(op => (
@@ -1575,34 +1579,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                                 color: calcFinanciamiento === op ? '#006B4E' : '#6B7280',
                                 boxShadow: calcFinanciamiento === op ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                               }}>
-                              {op === 'todos' ? 'Todos' : op === 'con' ? 'Con' : 'Sin'}
+                              {op === 'todos' ? 'Todos' : op === 'con' ? 'Con finan.' : 'Sin finan.'}
                             </button>
                           ))}
                         </div>
                       </div>
 
-                      {calcFinanciamiento === 'con' && (<>
-                        {/* Pie disponible */}
-                        <div className="space-y-2">
-                          <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                            Pie disponible (CLP)
-                          </label>
-                          <input type="text" value={calcPie} onChange={e => setCalcPie(e.target.value)}
-                            placeholder="Ej: 9.000.000"
-                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
-                        </div>
-                        {/* Cuotas */}
-                        <div className="space-y-2">
-                          <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                            Cantidad de cuotas
-                          </label>
-                          <input type="number" value={calcCuotas} onChange={e => setCalcCuotas(e.target.value)}
-                            placeholder="Ej: 120"
-                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
-                        </div>
-                        {/* Tasa */}
+                      {calcFinanciamiento === 'con' && (
                         <div className="space-y-2">
                           <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                             Tasa de interés anual (%)
@@ -1612,17 +1595,26 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                             className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
                             style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
                         </div>
-                      </>)}
+                      )}
+
+                      {/* DFL2 */}
+                      <label className="flex items-center gap-2.5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={calcDFL2}
+                          onChange={e => setCalcDFL2(e.target.checked)}
+                          className="w-4 h-4 rounded accent-[#006B4E] cursor-pointer"
+                        />
+                        <span style={{ color: '#374151', fontFamily: 'Inter, sans-serif', fontSize: '13px' }}>
+                          Califica como DFL2
+                        </span>
+                      </label>
 
                       {/* Botón Calcular */}
                       <button
                         onClick={handleCalculate}
                         className="w-full bg-[#006B4E] hover:bg-[#01533E] text-white py-3 rounded-[200px] transition-colors mt-2"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          fontWeight: 500
-                        }}
+                        style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}
                       >
                         {t.explore.calculate}
                       </button>
@@ -3211,82 +3203,93 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
             {/* Contenido del modal */}
             <div className="p-4 sm:p-6 space-y-4">
-              {/* Presupuesto */}
+
+              {/* Valor de la propiedad — selector UF/CLP + input */}
               <div className="space-y-2">
-                <label 
-                  className="block" 
-                  style={{ 
-                    color: '#0A0A0A',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 500
-                  }}
-                >
+                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                   {t.explore.budgetLabel}
                 </label>
-                <input
-                  type="text"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                  placeholder="Ej: 50.000.000"
-                  className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                  style={{ 
-                    color: '#0A0A0A', 
-                    fontFamily: 'Inter, sans-serif', 
-                    fontSize: '14px',
-                    fontWeight: 400
-                  }}
-                />
+                <div className="flex border-2 border-gray-200 hover:border-gray-300 rounded-[100px] overflow-hidden bg-white transition-colors focus-within:border-black">
+                  <select
+                    value={calcCurrency}
+                    onChange={e => setCalcCurrency(e.target.value as 'UF' | 'CLP')}
+                    className="bg-transparent border-0 pl-4 pr-1 py-2.5 focus:outline-none cursor-pointer"
+                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 600 }}
+                  >
+                    <option value="UF">UF</option>
+                    <option value="CLP">CLP</option>
+                  </select>
+                  <div style={{ width: '1px', backgroundColor: '#E5E7EB', margin: '8px 0' }} />
+                  <input
+                    type="text"
+                    value={budget}
+                    onChange={e => setBudget(e.target.value)}
+                    placeholder={calcCurrency === 'UF' ? 'Ej: 2.500' : 'Ej: 93.750.000'}
+                    className="flex-1 bg-transparent border-0 px-3 py-2.5 focus:outline-none"
+                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                  />
+                </div>
               </div>
 
-              {/* Cuota aproximada */}
+              {/* Cuota estimada */}
               <div className="space-y-2">
-                <label 
-                  className="block" 
-                  style={{ 
-                    color: '#0A0A0A',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 500
-                  }}
-                >
+                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                   {t.explore.monthlyPayment}
                 </label>
-                <div
-                  className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200"
-                  style={{
-                    color: budget ? '#0A0A0A' : '#a1a1a1',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 500
-                  }}
-                >
+                <div className="px-4 py-2.5 bg-gray-50 rounded-[100px] border-2 border-gray-200"
+                  style={{ color: budget ? '#0A0A0A' : '#a1a1a1', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}>
                   {budget ? formatCurrency(calculateMonthlyPayment()) : t.explore.enterBudget}
                 </div>
               </div>
 
+              {/* Monto de pie (%) */}
+              <div className="space-y-2">
+                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                  Monto de pie
+                </label>
+                <select
+                  value={calcPiePct}
+                  onChange={e => setCalcPiePct(e.target.value)}
+                  className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                  style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                >
+                  {[5, 10, 15, 20, 25, 30].map(p => (
+                    <option key={p} value={String(p)}>{p}%</option>
+                  ))}
+                </select>
+                {budget && (
+                  <p style={{ fontSize: '12px', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                    ≈ {formatCurrency(getBudgetCLP() * parseFloat(calcPiePct) / 100)} CLP
+                  </p>
+                )}
+              </div>
+
+              {/* Plazo en años */}
+              <div className="space-y-2">
+                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                  Plazo en años
+                </label>
+                <select
+                  value={calcPlazo}
+                  onChange={e => setCalcPlazo(e.target.value)}
+                  className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                  style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
+                >
+                  {[5, 10, 15, 20, 25, 30].map(y => (
+                    <option key={y} value={String(y)}>{y} años</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Zona */}
               <div className="dropdown-container relative space-y-2">
-                <label 
-                  className="block" 
-                  style={{ 
-                    color: '#0A0A0A',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 500
-                  }}
-                >
+                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                   {t.explore.zoneLabel}
                 </label>
                 <button
                   onClick={() => setOpenDropdown(openDropdown === 'calcZone' ? null : 'calcZone')}
                   className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                  style={{
-                    color: calcZone ? '#0A0A0A' : '#a1a1a1',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400
-                  }}
+                  style={{ color: calcZone ? '#0A0A0A' : '#a1a1a1', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}
                 >
                   <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcZone || t.explore.selectZone}</span>
                   <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
@@ -3294,15 +3297,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 {openDropdown === 'calcZone' && (
                   <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
                     {[t.explore.zoneAconcagua, t.explore.zoneCasablanca, t.explore.zoneCordillera, t.explore.zoneLitoral, t.explore.zoneValleCentral].map((zona) => (
-                      <button
-                        key={zona}
-                        onClick={() => {
-                          setCalcZone(zona);
-                          setOpenDropdown(null);
-                        }}
+                      <button key={zona} onClick={() => { setCalcZone(zona); setOpenDropdown(null); }}
                         className="w-full text-left px-4 py-2.5 hover:bg-gray-100 transition-colors"
-                        style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                      >
+                        style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}>
                         {zona}
                       </button>
                     ))}
@@ -3312,26 +3309,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
               {/* Tipo de parcela */}
               <div className="dropdown-container relative space-y-2">
-                <label 
-                  className="block" 
-                  style={{ 
-                    color: '#0A0A0A',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 500
-                  }}
-                >
+                <label className="block" style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
                   {t.filters.parcelType}
                 </label>
                 <button
                   onClick={() => setOpenDropdown(openDropdown === 'calcParcelType' ? null : 'calcParcelType')}
                   className="w-full text-left rounded-[100px] px-4 py-2.5 transition-colors flex items-center justify-between bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black focus:outline-none"
-                  style={{
-                    color: calcParcelType ? '#0A0A0A' : '#a1a1a1',
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400
-                  }}
+                  style={{ color: calcParcelType ? '#0A0A0A' : '#a1a1a1', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 400 }}
                 >
                   <span className="overflow-hidden text-ellipsis whitespace-nowrap">{calcParcelType || t.explore.selectType}</span>
                   <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
@@ -3339,15 +3323,9 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                 {openDropdown === 'calcParcelType' && (
                   <div className="absolute top-full left-0 mt-2 w-full bg-white border-2 border-gray-200 rounded-[12px] shadow-lg z-50 overflow-hidden">
                     {[t.filters.typeAgricultural, t.explore.typeAgrado, t.filters.typeForestry, t.filters.typeMixed].map((tipo) => (
-                      <button
-                        key={tipo}
-                        onClick={() => {
-                          setCalcParcelType(tipo);
-                          setOpenDropdown(null);
-                        }}
+                      <button key={tipo} onClick={() => { setCalcParcelType(tipo); setOpenDropdown(null); }}
                         className="w-full text-left px-4 py-2.5 hover:bg-gray-100 transition-colors"
-                        style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}
-                      >
+                        style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }}>
                         {tipo}
                       </button>
                     ))}
@@ -3364,7 +3342,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
               {/* Toggle con/sin financiamiento */}
               <div className="space-y-2">
                 <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
-                  Financiamiento
+                  Filtrar proyectos
                 </label>
                 <div className="flex rounded-full p-0.5" style={{ backgroundColor: '#F3F4F6' }}>
                   {(['todos', 'con', 'sin'] as const).map(op => (
@@ -3377,45 +3355,41 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         color: calcFinanciamiento === op ? '#006B4E' : '#6B7280',
                         boxShadow: calcFinanciamiento === op ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                       }}>
-                      {op === 'todos' ? 'Todos' : op === 'con' ? 'Con' : 'Sin'}
+                      {op === 'todos' ? 'Todos' : op === 'con' ? 'Con finan.' : 'Sin finan.'}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {calcFinanciamiento === 'con' && (<>
+              {calcFinanciamiento === 'con' && (
                 <div className="space-y-2">
-                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>Pie disponible (CLP)</label>
-                  <input type="text" value={calcPie} onChange={e => setCalcPie(e.target.value)} placeholder="Ej: 9.000.000"
-                    className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
-                </div>
-                <div className="space-y-2">
-                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>Cantidad de cuotas</label>
-                  <input type="number" value={calcCuotas} onChange={e => setCalcCuotas(e.target.value)} placeholder="Ej: 120"
-                    className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
-                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
-                </div>
-                <div className="space-y-2">
-                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>Tasa de interés anual (%)</label>
+                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                    Tasa de interés anual (%)
+                  </label>
                   <input type="text" value={calcTasa} onChange={e => setCalcTasa(e.target.value)} placeholder="Ej: 5"
                     className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
                     style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
                 </div>
-              </>)}
+              )}
+
+              {/* DFL2 */}
+              <label className="flex items-center gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={calcDFL2}
+                  onChange={e => setCalcDFL2(e.target.checked)}
+                  className="w-4 h-4 rounded accent-[#006B4E] cursor-pointer"
+                />
+                <span style={{ color: '#374151', fontFamily: 'Inter, sans-serif', fontSize: '13px' }}>
+                  Califica como DFL2
+                </span>
+              </label>
 
               {/* Botón Calcular */}
               <button
-                onClick={() => {
-                  handleCalculate();
-                  setIsMobileCalculatorOpen(false);
-                }}
+                onClick={() => { handleCalculate(); setIsMobileCalculatorOpen(false); }}
                 className="w-full bg-[#006B4E] hover:bg-[#01533E] text-white py-3 rounded-[200px] transition-colors mt-2"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 500
-                }}
+                style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500 }}
               >
                 {t.explore.calculate}
               </button>
