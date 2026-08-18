@@ -80,6 +80,13 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   const [calcZone, setCalcZone] = useState('');
   const [calcParcelType, setCalcParcelType] = useState('');
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  // Estados filtro de financiamiento
+  const [calcFinanciamiento, setCalcFinanciamiento] = useState<'todos' | 'con' | 'sin'>('todos');
+  const [calcPie, setCalcPie] = useState('');
+  const [calcCuotas, setCalcCuotas] = useState('');
+  const [calcTasa, setCalcTasa] = useState('');
+  const [filteredProyectos, setFilteredProyectos] = useState<ReturnType<typeof getAllProyectos>>([]);
+  const [proyectosFiltrados, setProyectosFiltrados] = useState(false);
   
   // Estado para filtros activos (chips)
   const [activeFilters, setActiveFilters] = useState<{
@@ -338,32 +345,46 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
       destacadas: false,
       nuevas: false
     };
-    
-    // Aplicar filtro de presupuesto (precio máximo)
+
     if (budget) {
       const budgetNum = parseFloat(budget.replace(/\./g, '').replace(/,/g, '.'));
       newActiveFilters.precioMax = `$${budgetNum.toLocaleString('es-CL')}`;
     }
-    
-    // Aplicar filtro de zona
-    if (calcZone) {
-      newActiveFilters.ubicacion = calcZone;
-    }
-    
-    // Aplicar filtro de tipo de parcela
-    if (calcParcelType) {
-      newActiveFilters.tipos = [calcParcelType];
-    }
-    
+    if (calcZone) newActiveFilters.ubicacion = calcZone;
+    if (calcParcelType) newActiveFilters.tipos = [calcParcelType];
+
     setActiveFilters(newActiveFilters);
     setFiltersApplied(true);
-    
-    // Scroll suave a la sección de resultados
+
+    // Filtrar proyectos por financiamiento
+    const todosProyectos = getAllProyectos();
+    let resultado = [...todosProyectos];
+
+    if (calcFinanciamiento === 'sin') {
+      resultado = resultado.filter(p => !p.financiamiento?.disponible);
+    } else if (calcFinanciamiento === 'con') {
+      resultado = resultado.filter(p => p.financiamiento?.disponible);
+      const pieNum   = calcPie    ? parseFloat(calcPie.replace(/\./g, ''))    : null;
+      const cuotasNum = calcCuotas ? parseInt(calcCuotas)                      : null;
+      const tasaNum  = calcTasa   ? parseFloat(calcTasa.replace(/,/g, '.'))   : null;
+      if (pieNum || cuotasNum || tasaNum) {
+        resultado = resultado.filter(p =>
+          (p.financiamiento?.planes ?? []).some(plan => {
+            const pieCumple    = pieNum    ? plan.pieMinimoCLP <= pieNum    : true;
+            const cuotasCumple = cuotasNum ? plan.cuotas >= cuotasNum       : true;
+            const tasaCumple   = tasaNum   ? plan.tasa <= tasaNum           : true;
+            return pieCumple && cuotasCumple && tasaCumple;
+          })
+        );
+      }
+    }
+
+    setFilteredProyectos(resultado);
+    setProyectosFiltrados(true);
+
     setTimeout(() => {
       const resultsSection = document.getElementById('results-section');
-      if (resultsSection) {
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   };
 
@@ -823,11 +844,14 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
   // Función para calcular cuota mensual
   const calculateMonthlyPayment = () => {
     if (!budget) return 0;
-    const budgetValue = parseFloat(budget);
-    const monthlyRate = 0.05 / 12; // 5% annual rate
-    const months = 240; // 20 years
-    const payment = budgetValue * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-    return payment;
+    const budgetValue = parseFloat(budget.replace(/\./g, '').replace(/,/g, '.'));
+    const pieValue = calcPie ? parseFloat(calcPie.replace(/\./g, '').replace(/,/g, '.')) : 0;
+    const financed = budgetValue - pieValue;
+    const annualRate = calcTasa ? parseFloat(calcTasa.replace(/,/g, '.')) / 100 : 0.05;
+    const months = calcCuotas ? parseInt(calcCuotas) : 240;
+    if (financed <= 0 || months <= 0 || annualRate <= 0) return 0;
+    const r = annualRate / 12;
+    return financed * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
   };
   
   const parcelas = getSortedParcelas();
@@ -1529,8 +1553,69 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                         )}
                       </div>
 
+                      {/* Separador financiamiento */}
+                      <div style={{ height: '1px', backgroundColor: '#F3F4F6', margin: '4px 0' }} />
+                      <p style={{ fontSize: '12px', fontWeight: 600, color: '#525252', fontFamily: 'Inter, sans-serif', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Financiamiento (proyectos)
+                      </p>
+
+                      {/* Toggle con/sin financiamiento */}
+                      <div className="space-y-2">
+                        <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                          Financiamiento
+                        </label>
+                        <div className="flex rounded-full p-0.5" style={{ backgroundColor: '#F3F4F6' }}>
+                          {(['todos', 'con', 'sin'] as const).map(op => (
+                            <button key={op} onClick={() => setCalcFinanciamiento(op)}
+                              className="flex-1 text-center rounded-full transition-colors"
+                              style={{
+                                fontSize: '12px', fontFamily: 'Inter, sans-serif', fontWeight: calcFinanciamiento === op ? 600 : 400,
+                                padding: '6px 4px',
+                                backgroundColor: calcFinanciamiento === op ? '#fff' : 'transparent',
+                                color: calcFinanciamiento === op ? '#006B4E' : '#6B7280',
+                                boxShadow: calcFinanciamiento === op ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                              }}>
+                              {op === 'todos' ? 'Todos' : op === 'con' ? 'Con' : 'Sin'}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {calcFinanciamiento === 'con' && (<>
+                        {/* Pie disponible */}
+                        <div className="space-y-2">
+                          <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                            Pie disponible (CLP)
+                          </label>
+                          <input type="text" value={calcPie} onChange={e => setCalcPie(e.target.value)}
+                            placeholder="Ej: 9.000.000"
+                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
+                        </div>
+                        {/* Cuotas */}
+                        <div className="space-y-2">
+                          <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                            Cantidad de cuotas
+                          </label>
+                          <input type="number" value={calcCuotas} onChange={e => setCalcCuotas(e.target.value)}
+                            placeholder="Ej: 120"
+                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
+                        </div>
+                        {/* Tasa */}
+                        <div className="space-y-2">
+                          <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                            Tasa de interés anual (%)
+                          </label>
+                          <input type="text" value={calcTasa} onChange={e => setCalcTasa(e.target.value)}
+                            placeholder="Ej: 5"
+                            className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                            style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
+                        </div>
+                      </>)}
+
                       {/* Botón Calcular */}
-                      <button 
+                      <button
                         onClick={handleCalculate}
                         className="w-full bg-[#006B4E] hover:bg-[#01533E] text-white py-3 rounded-[200px] transition-colors mt-2"
                         style={{
@@ -2516,7 +2601,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                           </div>
                         </div>
                       ))}
-                          {includeProjects && proyectos.map((item) => (
+                          {includeProjects && (proyectosFiltrados ? filteredProyectos : proyectos).map((item) => (
                             <div
                               key={`proyecto-${item.id}`}
                               onClick={() => onNavigate('proyecto-detalle', item.id)}
@@ -3269,6 +3354,55 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   </div>
                 )}
               </div>
+
+              {/* Separador financiamiento */}
+              <div style={{ height: '1px', backgroundColor: '#F3F4F6', margin: '4px 0' }} />
+              <p style={{ fontSize: '12px', fontWeight: 600, color: '#525252', fontFamily: 'Inter, sans-serif', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Financiamiento (proyectos)
+              </p>
+
+              {/* Toggle con/sin financiamiento */}
+              <div className="space-y-2">
+                <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>
+                  Financiamiento
+                </label>
+                <div className="flex rounded-full p-0.5" style={{ backgroundColor: '#F3F4F6' }}>
+                  {(['todos', 'con', 'sin'] as const).map(op => (
+                    <button key={op} onClick={() => setCalcFinanciamiento(op)}
+                      className="flex-1 text-center rounded-full transition-colors"
+                      style={{
+                        fontSize: '12px', fontFamily: 'Inter, sans-serif', fontWeight: calcFinanciamiento === op ? 600 : 400,
+                        padding: '6px 4px',
+                        backgroundColor: calcFinanciamiento === op ? '#fff' : 'transparent',
+                        color: calcFinanciamiento === op ? '#006B4E' : '#6B7280',
+                        boxShadow: calcFinanciamiento === op ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                      }}>
+                      {op === 'todos' ? 'Todos' : op === 'con' ? 'Con' : 'Sin'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {calcFinanciamiento === 'con' && (<>
+                <div className="space-y-2">
+                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>Pie disponible (CLP)</label>
+                  <input type="text" value={calcPie} onChange={e => setCalcPie(e.target.value)} placeholder="Ej: 9.000.000"
+                    className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
+                </div>
+                <div className="space-y-2">
+                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>Cantidad de cuotas</label>
+                  <input type="number" value={calcCuotas} onChange={e => setCalcCuotas(e.target.value)} placeholder="Ej: 120"
+                    className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
+                </div>
+                <div className="space-y-2">
+                  <label style={{ display: 'block', color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 500 }}>Tasa de interés anual (%)</label>
+                  <input type="text" value={calcTasa} onChange={e => setCalcTasa(e.target.value)} placeholder="Ej: 5"
+                    className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 focus:border-black px-4 py-2.5 rounded-[100px] focus:outline-none transition-colors"
+                    style={{ color: '#0A0A0A', fontFamily: 'Inter, sans-serif', fontSize: '14px' }} />
+                </div>
+              </>)}
 
               {/* Botón Calcular */}
               <button

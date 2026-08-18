@@ -90,6 +90,14 @@ export interface Proyecto {
       actividadesPrincipales: string[];
     };
   };
+  financiamiento?: {
+    disponible: boolean;
+    planes: Array<{
+      pieMinimoCLP: number;
+      cuotas: number;
+      tasa: number;
+    }>;
+  };
 }
 
 export const proyectosData: Proyecto[] = [
@@ -149,7 +157,14 @@ export const proyectosData: Proyecto[] = [
         precio: '$72.000.000',
         imagen: 'https://images.unsplash.com/photo-1654720227757-b1dacf6d181d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxha2UlMjBmb3Jlc3R8ZW58MXx8fHwxNzY5NDQ5MjIwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
       }
-    ]
+    ],
+    financiamiento: {
+      disponible: true,
+      planes: [
+        { pieMinimoCLP: 9_000_000, cuotas: 120, tasa: 4.5 },
+        { pieMinimoCLP: 5_000_000, cuotas: 180, tasa: 5.9 },
+      ]
+    }
   },
   {
     id: 2,
@@ -199,7 +214,13 @@ export const proyectosData: Proyecto[] = [
         precio: '$52.000.000',
         imagen: 'https://images.unsplash.com/photo-1627750168257-9a7d3965ef8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb3Jlc3QlMjBjYWJpbnMlMjBtb3VudGFpbnN8ZW58MXx8fHwxNzY5NDQ5MjIwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
       }
-    ]
+    ],
+    financiamiento: {
+      disponible: true,
+      planes: [
+        { pieMinimoCLP: 7_700_000, cuotas: 120, tasa: 4.9 },
+      ]
+    }
   },
   {
     id: 3,
@@ -249,7 +270,8 @@ export const proyectosData: Proyecto[] = [
         precio: '$42.000.000',
         imagen: 'https://images.unsplash.com/photo-1678483874574-0326c60e3f20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyYWwlMjBsYW5kJTIwdmFsbGV5fGVufDF8fHx8MTc2OTQ0OTIyMHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
       }
-    ]
+    ],
+    financiamiento: { disponible: false, planes: [] }
   },
   {
     id: 4,
@@ -306,7 +328,14 @@ export const proyectosData: Proyecto[] = [
         precio: '$95.000.000',
         imagen: 'https://images.unsplash.com/photo-1632168593163-62bbf63a1047?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWtlJTIwdmlldyUyMG1vdW50YWluc3xlbnwxfHx8fDE3NjkzOTQzNzJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
       }
-    ]
+    ],
+    financiamiento: {
+      disponible: true,
+      planes: [
+        { pieMinimoCLP: 10_400_000, cuotas: 96,  tasa: 4.2 },
+        { pieMinimoCLP: 8_000_000,  cuotas: 144, tasa: 5.0 },
+      ]
+    }
   },
   {
     id: 5,
@@ -341,7 +370,13 @@ export const proyectosData: Proyecto[] = [
     direccion: 'Camino al Volcán Km 45, San José de Maipo',
     coordenadas: { lat: -33.6446, lng: -70.3556 },
     imagenPanoramica: 'https://images.unsplash.com/photo-1623545848644-1a0730842621?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMHZhbGxleSUyMHJpdmVyfGVufDF8fHx8MTc2OTQ0OTIyMXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    parcelasDelProyecto: []
+    parcelasDelProyecto: [],
+    financiamiento: {
+      disponible: true,
+      planes: [
+        { pieMinimoCLP: 6_500_000, cuotas: 180, tasa: 5.5 },
+      ]
+    }
   },
   {
     id: 6,
@@ -391,7 +426,8 @@ export const proyectosData: Proyecto[] = [
         precio: '$62.000.000',
         imagen: 'https://images.unsplash.com/photo-1662419089740-da2a6365501d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb3Jlc3QlMjBuYXR1cmUlMjB0cmFpbHN8ZW58MXx8fHwxNzY5NDQ5MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
       }
-    ]
+    ],
+    financiamiento: { disponible: false, planes: [] }
   }
 ];
 
