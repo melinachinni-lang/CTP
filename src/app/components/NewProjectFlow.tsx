@@ -872,8 +872,13 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
 
                   {/* Financiamiento - Toggle */}
                   <div className="md:col-span-2">
-                    <div 
-                      onClick={() => handleInputChange('hasFinancing', !formData.hasFinancing)}
+                    <div
+                      onClick={() => {
+                        const next = !formData.hasFinancing;
+                        handleInputChange('hasFinancing', next);
+                        setShowAddPlan(next);
+                        if (!next) setNewPlan({ pieMinimoCLP: '', cuotas: '', tasa: '' });
+                      }}
                       className="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all"
                       style={{
                         backgroundColor: formData.hasFinancing ? '#E8F3E9' : '#FAFAFA',
@@ -905,7 +910,7 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                   {/* Planes de financiamiento */}
                   {formData.hasFinancing && (
                     <div className="md:col-span-2 space-y-3">
-                      {/* Planes existentes */}
+                      {/* Planes guardados */}
                       {formData.financingPlans.length > 0 && (
                         <div className="space-y-2">
                           {formData.financingPlans.map((plan, idx) => (
@@ -938,11 +943,11 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                         </div>
                       )}
 
-                      {/* Formulario nuevo plan */}
-                      {showAddPlan ? (
+                      {/* Formulario — aparece directo al activar o al clickar + */}
+                      {showAddPlan && (
                         <div className="p-4 rounded-lg space-y-3" style={{ backgroundColor: '#FAFAFA', border: '1px solid #DEDEDE' }}>
                           <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500, color: '#0A0A0A' }}>
-                            Nuevo plan
+                            Plan {formData.financingPlans.length + 1}
                           </p>
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
@@ -998,32 +1003,31 @@ export function NewProjectFlow({ onClose, onPublish, proyectoId }: NewProjectFlo
                               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                               style={{ backgroundColor: '#647E3F', color: '#FFFFFF', fontFamily: 'var(--font-body)' }}
                             >
-                              Agregar plan
+                              Guardar plan
                             </button>
-                            <button
-                              onClick={() => { setShowAddPlan(false); setNewPlan({ pieMinimoCLP: '', cuotas: '', tasa: '' }); }}
-                              className="px-4 py-2 rounded-lg text-sm transition-colors"
-                              style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
-                            >
-                              Cancelar
-                            </button>
+                            {formData.financingPlans.length > 0 && (
+                              <button
+                                onClick={() => { setShowAddPlan(false); setNewPlan({ pieMinimoCLP: '', cuotas: '', tasa: '' }); }}
+                                className="px-4 py-2 rounded-lg text-sm transition-colors"
+                                style={{ backgroundColor: '#F5F5F5', color: '#374151', fontFamily: 'var(--font-body)' }}
+                              >
+                                Cancelar
+                              </button>
+                            )}
                           </div>
                         </div>
-                      ) : (
-                        <button
-                          onClick={() => setShowAddPlan(true)}
-                          className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors"
-                          style={{ backgroundColor: '#FFFFFF', border: '1.5px dashed #647E3F', color: '#647E3F', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 500 }}
-                        >
-                          <Plus className="w-4 h-4" />
-                          Agregar plan de financiamiento
-                        </button>
                       )}
 
-                      {formData.financingPlans.length === 0 && !showAddPlan && (
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF' }}>
-                          Agrega al menos un plan con pie mínimo, cuotas y tasa.
-                        </p>
+                      {/* Botón + para agregar otro plan */}
+                      {!showAddPlan && formData.financingPlans.length > 0 && (
+                        <button
+                          onClick={() => setShowAddPlan(true)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors"
+                          style={{ color: '#647E3F', fontFamily: 'var(--font-body)', fontWeight: 500 }}
+                        >
+                          <Plus className="w-4 h-4" />
+                          Agregar otro plan
+                        </button>
                       )}
                     </div>
                   )}
