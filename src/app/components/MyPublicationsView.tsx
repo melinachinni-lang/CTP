@@ -39,7 +39,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
   const [showShareModal, setShowShareModal] = useState<Publication | null>(null);
   const [viewingPublicPublication, setViewingPublicPublication] = useState<Publication | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<'all' | PublicationStatus>('all');
+  const [filterStatus, setFilterStatus] = useState<'all' | PublicationStatus | 'denunciadas'>('all');
   const [activePublicationType, setActivePublicationType] = useState<'parcelas' | 'proyectos'>('parcelas');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [newlyPublishedId, setNewlyPublishedId] = useState<string | null>(null);
@@ -347,7 +347,9 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
 
   const filteredPublications = filterStatus === 'all'
     ? typeFilteredPublications
-    : typeFilteredPublications.filter(pub => pub.status === filterStatus);
+    : filterStatus === 'denunciadas'
+      ? typeFilteredPublications.filter(pub => pub.denunciada)
+      : typeFilteredPublications.filter(pub => pub.status === filterStatus);
 
   if (showWizard) {
     return (
@@ -826,28 +828,37 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
             Filtrar por:
           </span>
           {[
-            { id: 'all', label: 'Todas' },
-            { id: 'published', label: 'Publicadas' },
-            { id: 'draft', label: 'Borradores' },
-            { id: 'paused', label: 'Pausadas' },
-          ].map((filter) => (
-            <button
-              key={filter.id}
-              onClick={() => setFilterStatus(filter.id as any)}
-              className="px-4 py-2 rounded-full transition-colors"
-              style={{
-                backgroundColor: filterStatus === filter.id ? 'var(--foreground)' : 'var(--background)',
-                color: filterStatus === filter.id ? 'var(--background)' : '#737373',
-                border: '1px solid var(--border)',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--font-size-body-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                lineHeight: 'var(--line-height-ui)'
-              }}
-            >
-              {filter.label}
-            </button>
-          ))}
+            { id: 'all',          label: 'Todas' },
+            { id: 'published',    label: 'Publicadas' },
+            { id: 'draft',        label: 'Borradores' },
+            { id: 'paused',       label: 'Pausadas' },
+            { id: 'denunciadas',  label: 'Denunciadas' },
+          ].map((filter) => {
+            const isDenunciadas = filter.id === 'denunciadas';
+            const isActive = filterStatus === filter.id;
+            return (
+              <button
+                key={filter.id}
+                onClick={() => setFilterStatus(filter.id as any)}
+                className="px-4 py-2 rounded-full transition-colors"
+                style={{
+                  backgroundColor: isActive
+                    ? (isDenunciadas ? '#FEF9C3' : 'var(--foreground)')
+                    : 'var(--background)',
+                  color: isActive
+                    ? (isDenunciadas ? '#854D0E' : 'var(--background)')
+                    : (isDenunciadas ? '#B45309' : '#737373'),
+                  border: isDenunciadas ? '1px solid #FDE68A' : '1px solid var(--border)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--font-size-body-sm)',
+                  fontWeight: 'var(--font-weight-medium)',
+                  lineHeight: 'var(--line-height-ui)'
+                }}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
