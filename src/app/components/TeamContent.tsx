@@ -158,10 +158,10 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
               letterSpacing: 'var(--letter-spacing-normal)'
             }}
           >
-            Equipo CTP
+            Brokers
           </h1>
-          <p 
-            style={{ 
+          <p
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--font-size-body-base)',
               fontWeight: 'var(--font-weight-regular)',
@@ -170,7 +170,7 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
               letterSpacing: 'var(--letter-spacing-normal)'
             }}
           >
-            Gestiona los miembros de tu equipo
+            Administra los corredores de tu equipo y controla cuáles aparecen en tu perfil público
           </p>
         </div>
         <button
