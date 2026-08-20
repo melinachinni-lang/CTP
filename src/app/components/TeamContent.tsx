@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Eye, EyeOff, Edit, AlertCircle, X, UserPlus, Check, Mail, Send, UserRoundPlus } from 'lucide-react';
+import { User, Eye, EyeOff, Edit, AlertCircle, X, UserPlus, Check, Mail, Send, UserRoundPlus, Search, ChevronDown, SlidersHorizontal } from 'lucide-react';
 
 const ROLES_CONFIG: Record<string, { color: string; bg: string; permisos: { label: string; ok: boolean }[] }> = {
   Admin: {
@@ -61,6 +61,10 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
     setVisibilidades(prev => ({ ...prev, [id]: !prev[id] }));
     setActiveMenu(null);
   };
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [filterEstado, setFilterEstado] = React.useState<'todos' | 'activo' | 'inactivo'>('todos');
+  const [filterVisibilidad, setFilterVisibilidad] = React.useState<'todos' | 'visible' | 'oculto'>('todos');
+  const [filterDropdown, setFilterDropdown] = React.useState<'estado' | 'visibilidad' | null>(null);
   const [inviteEmail, setInviteEmail] = React.useState('');
   const [inviteName, setInviteName] = React.useState('');
   const [inviteRol, setInviteRol] = React.useState<'Admin' | 'Marketing' | 'Operaciones'>('Admin');
@@ -192,6 +196,79 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
         </button>
       </div>
 
+      {/* Search + Filtros */}
+      <div className="flex items-center gap-3" onClick={() => setFilterDropdown(null)}>
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+          <input
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Buscar broker..."
+            className="pl-9 pr-4 py-2 rounded-full"
+            style={{ border: '1.5px solid #E5E5E5', fontFamily: 'var(--font-body)', fontSize: '13px', color: '#0A0A0A', outline: 'none', backgroundColor: '#FFFFFF', width: '220px' }}
+            onFocus={e => e.target.style.borderColor = '#006B4E'}
+            onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+          />
+        </div>
+
+        {/* Filtro Estado */}
+        <div className="relative" onClick={e => e.stopPropagation()}>
+          <button
+            onClick={() => setFilterDropdown(filterDropdown === 'estado' ? null : 'estado')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full transition-colors"
+            style={{ border: `1.5px solid ${filterEstado !== 'todos' ? '#006B4E' : '#E5E5E5'}`, backgroundColor: filterEstado !== 'todos' ? '#F0FBF7' : '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: filterEstado !== 'todos' ? '#006B4E' : '#374151', fontWeight: 500 }}
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            Estado{filterEstado !== 'todos' ? `: ${filterEstado === 'activo' ? 'Activo' : 'Inactivo'}` : ''}
+            <ChevronDown className="w-4 h-4" />
+          </button>
+          {filterDropdown === 'estado' && (
+            <div className="absolute left-0 mt-2 w-44 bg-white rounded-2xl shadow-lg z-20 overflow-hidden" style={{ border: '1.5px solid #E5E5E5' }}>
+              {[{ val: 'todos', label: 'Todos' }, { val: 'activo', label: 'Activo' }, { val: 'inactivo', label: 'Inactivo' }].map(({ val, label }) => (
+                <button key={val} onClick={() => { setFilterEstado(val as typeof filterEstado); setFilterDropdown(null); }}
+                  className="w-full text-left px-4 py-2.5 transition-colors flex items-center justify-between"
+                  style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: filterEstado === val ? '#006B4E' : '#0A0A0A', backgroundColor: filterEstado === val ? '#F0FBF7' : 'transparent', fontWeight: filterEstado === val ? 600 : 400 }}
+                  onMouseEnter={e => { if (filterEstado !== val) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                  onMouseLeave={e => { if (filterEstado !== val) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                >
+                  {label}
+                  {filterEstado === val && <Check className="w-3.5 h-3.5" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Filtro Visibilidad */}
+        <div className="relative" onClick={e => e.stopPropagation()}>
+          <button
+            onClick={() => setFilterDropdown(filterDropdown === 'visibilidad' ? null : 'visibilidad')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full transition-colors"
+            style={{ border: `1.5px solid ${filterVisibilidad !== 'todos' ? '#006B4E' : '#E5E5E5'}`, backgroundColor: filterVisibilidad !== 'todos' ? '#F0FBF7' : '#FFFFFF', fontFamily: 'var(--font-body)', fontSize: '13px', color: filterVisibilidad !== 'todos' ? '#006B4E' : '#374151', fontWeight: 500 }}
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            Visibilidad{filterVisibilidad !== 'todos' ? `: ${filterVisibilidad === 'visible' ? 'Visible' : 'Oculto'}` : ''}
+            <ChevronDown className="w-4 h-4" />
+          </button>
+          {filterDropdown === 'visibilidad' && (
+            <div className="absolute left-0 mt-2 w-44 bg-white rounded-2xl shadow-lg z-20 overflow-hidden" style={{ border: '1.5px solid #E5E5E5' }}>
+              {[{ val: 'todos', label: 'Todos' }, { val: 'visible', label: 'Visible en perfil' }, { val: 'oculto', label: 'Oculto del perfil' }].map(({ val, label }) => (
+                <button key={val} onClick={() => { setFilterVisibilidad(val as typeof filterVisibilidad); setFilterDropdown(null); }}
+                  className="w-full text-left px-4 py-2.5 transition-colors flex items-center justify-between"
+                  style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: filterVisibilidad === val ? '#006B4E' : '#0A0A0A', backgroundColor: filterVisibilidad === val ? '#F0FBF7' : 'transparent', fontWeight: filterVisibilidad === val ? 600 : 400 }}
+                  onMouseEnter={e => { if (filterVisibilidad !== val) e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                  onMouseLeave={e => { if (filterVisibilidad !== val) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                >
+                  {label}
+                  {filterVisibilidad === val && <Check className="w-3.5 h-3.5" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Brokers Table */}
       <section className="bg-white border-2 border-gray-200 rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
         <div className="overflow-x-auto">
@@ -255,7 +332,12 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
               </tr>
             </thead>
             <tbody className="divide-y-2 divide-gray-200">
-              {brokers.map((b) => (
+              {brokers.filter(b => {
+                const matchSearch = b.nombre.toLowerCase().includes(searchQuery.toLowerCase()) || b.email.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchEstado = filterEstado === 'todos' || b.estado.toLowerCase() === filterEstado;
+                const matchVis = filterVisibilidad === 'todos' || (filterVisibilidad === 'visible' ? visibilidades[b.id] : !visibilidades[b.id]);
+                return matchSearch && matchEstado && matchVis;
+              }).map((b) => (
                 <tr key={b.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
