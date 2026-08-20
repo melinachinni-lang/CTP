@@ -1332,7 +1332,7 @@ export function SettingsContent({ mode = 'settings', userType = 'inmobiliaria' }
             </h2>
 
             {/* ── Sección: Brokers (solo inmobiliaria/broker) ── */}
-            {userType !== 'ctp' && <div className="space-y-4">
+            {false && <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: '#374151' }}>Brokers</p>
