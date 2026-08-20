@@ -244,7 +244,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
                             className="w-4 h-4 flex-shrink-0"
                             style={{ strokeWidth: isActive ? 2.5 : 1.8, color: isActive ? '#002F23' : (item.id === 'denuncias' ? '#FCD34D' : 'rgba(255,255,255,0.62)') }}
                           />
-                          <span>{item.label}</span>
+                          <span style={!isActive && item.id === 'denuncias' ? { color: '#E9B84A' } : undefined}>{item.label}</span>
                           {item.id === 'denuncias' && !isActive && (
                             <span className="ml-auto w-5 h-5 flex items-center justify-center rounded-full font-bold flex-shrink-0" style={{ backgroundColor: '#FCD34D', color: '#78350F', fontSize: '10px' }}>2</span>
                           )}
