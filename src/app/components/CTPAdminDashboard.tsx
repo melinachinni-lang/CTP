@@ -9,7 +9,7 @@ import {
   CheckCircle, Clock, AlertCircle, MoreHorizontal,
   Bookmark, UserCheck, type LucideIcon,
   UserPlus, ToggleLeft, ToggleRight, AlertTriangle, X, Check,
-  Download, Activity, Mail, Globe, Share2, Menu,
+  Download, Activity, Mail, Globe, Share2, Menu, Flag,
 } from 'lucide-react';
 import { ConsultasView } from '@/app/components/ConsultasView';
 import { ReservasAdminView } from '@/app/components/ReservasAdminView';
@@ -29,6 +29,7 @@ import { AdminRecursosModule } from '@/app/components/AdminRecursosModule';
 import { AdminRegionesView } from '@/app/components/AdminRegionesView';
 import { AdminVerificacionView } from '@/app/components/AdminVerificacionView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
+import { DenunciasAdminView } from '@/app/components/DenunciasAdminView';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -38,7 +39,7 @@ type NavSection =
   | 'asignaciones' | 'interacciones' | 'citas'
   | 'recursos' | 'banners' | 'whatsapp' | 'regiones'
   | 'configuracion'
-  | 'leads' | 'brokers' | 'pagos';
+  | 'leads' | 'brokers' | 'pagos' | 'denuncias';
 
 interface CTPAdminDashboardProps {
   onNavigate: (screen: string, data?: any) => void;
@@ -78,6 +79,7 @@ const NAV_GROUPS = [
       { id: 'verificacion' as NavSection,   label: 'Verificación',       icon: ShieldCheck },
       { id: 'regiones' as NavSection,      label: 'Regiones y Comunas', icon: MapPin },
       { id: 'configuracion' as NavSection, label: 'Configuración',      icon: Settings },
+      { id: 'denuncias' as NavSection,    label: 'Denuncias',           icon: Flag },
     ],
   },
 ];
@@ -220,7 +222,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
                           className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
                           style={{
                             backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                            color: isActive ? '#002F23' : 'rgba(255,255,255,0.62)',
+                            color: isActive ? '#002F23' : (item.id === 'denuncias' ? '#FCD34D' : 'rgba(255,255,255,0.62)'),
                             fontFamily: 'var(--font-body)',
                             fontWeight: isActive ? 600 : 400,
                             fontSize: '13px',
@@ -240,9 +242,12 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
                         >
                           <Icon
                             className="w-4 h-4 flex-shrink-0"
-                            style={{ strokeWidth: isActive ? 2.5 : 1.8, color: isActive ? '#002F23' : 'rgba(255,255,255,0.62)' }}
+                            style={{ strokeWidth: isActive ? 2.5 : 1.8, color: isActive ? '#002F23' : (item.id === 'denuncias' ? '#FCD34D' : 'rgba(255,255,255,0.62)') }}
                           />
                           <span>{item.label}</span>
+                          {item.id === 'denuncias' && !isActive && (
+                            <span className="ml-auto w-5 h-5 flex items-center justify-center rounded-full font-bold flex-shrink-0" style={{ backgroundColor: '#FCD34D', color: '#78350F', fontSize: '10px' }}>2</span>
+                          )}
                         </button>
                       );
                     })}
@@ -323,6 +328,7 @@ export function CTPAdminDashboard({ onNavigate }: CTPAdminDashboardProps) {
         {currentSection === 'leads'           && <CTPLeadsView autoFilterUnassigned={quickAction === 'leads-unassigned'} />}
         {currentSection === 'brokers'         && <CTPBrokersView />}
         {currentSection === 'pagos'           && <PagosInmobiliariasAdminView />}
+        {currentSection === 'denuncias'       && <DenunciasAdminView />}
       </div>
     </>
   );

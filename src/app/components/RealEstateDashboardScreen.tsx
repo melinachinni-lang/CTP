@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, UserCheck, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles } from 'lucide-react';
+import { Home, FileText, MessageCircle, TrendingUp, TrendingDown, Users, UserCheck, CreditCard, HelpCircle, Settings, User, Eye, ArrowUp, ArrowDown, ArrowUpRight, ArrowDownRight, Heart, Plus, Edit, Star, AlertCircle, CheckCircle, Zap, Award, Check, X, FolderOpen, Calendar, CalendarDays, MessageSquare, CalendarCheck, Phone, ChevronDown, Sparkles, Flag, AlertTriangle } from 'lucide-react';
 import { AdminInsightsModule } from '@/app/components/AdminInsightsModule';
 import { ChartRangePicker, type AppliedRange } from '@/app/components/ChartRangePicker';
 import { CalendariosView } from '@/app/components/CalendariosView';
@@ -16,6 +16,7 @@ import { Tabs } from '@/app/components/Tabs';
 import { AsignacionesContent, InteraccionesContent } from '@/app/components/CTPAdminDashboard';
 import { CitasAdminView } from '@/app/components/CitasAdminView';
 import { SugerenciasButton } from '@/app/components/SugerenciasButton';
+import { DenunciasInmobiliariaView } from '@/app/components/DenunciasInmobiliariaView';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DashboardRef } from '@/app/App';
 
@@ -149,7 +150,8 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         { id: 'profile',  label: 'Perfil',             icon: User        },
         { id: 'plan',     label: 'Plan y facturación',  icon: CreditCard  },
         { id: 'settings', label: 'Configuración',       icon: Settings    },
-        { id: 'help',     label: 'Ayuda',               icon: HelpCircle  },
+        { id: 'help',      label: 'Ayuda',               icon: HelpCircle  },
+        { id: 'denuncias', label: 'Denuncias',            icon: Flag        },
       ],
     },
   ];
@@ -221,7 +223,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all"
                             style={{
                               backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                              color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)',
+                              color: isActive ? '#002F23' : (item.id === 'denuncias' ? '#FCD34D' : 'rgba(255,255,255,0.65)'),
                               fontFamily: 'var(--font-body)',
                               fontWeight: isActive ? 600 : 400,
                               fontSize: '13px',
@@ -229,8 +231,11 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
                             onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; } }}
                             onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; } }}
                           >
-                            <Icon className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: isActive ? 2.5 : 1.8, color: isActive ? '#002F23' : 'rgba(255,255,255,0.65)' }} />
+                            <Icon className="w-4 h-4 flex-shrink-0" style={{ strokeWidth: isActive ? 2.5 : 1.8, color: isActive ? '#002F23' : (item.id === 'denuncias' ? '#FCD34D' : 'rgba(255,255,255,0.65)') }} />
                             <span>{item.label}</span>
+                            {item.id === 'denuncias' && !isActive && (
+                              <span className="ml-auto w-5 h-5 flex items-center justify-center rounded-full font-bold flex-shrink-0" style={{ backgroundColor: '#FCD34D', color: '#78350F', fontSize: '10px' }}>1</span>
+                            )}
                           </button>
                         );
                       })}
@@ -324,6 +329,7 @@ export const RealEstateDashboardScreen = React.forwardRef<DashboardRef, RealEsta
         {currentSection === 'team' && <TeamContent />}
         {currentSection === 'plan' && <PlanContent />}
         {currentSection === 'help' && <HelpContent />}
+        {currentSection === 'denuncias' && <DenunciasInmobiliariaView />}
         {currentSection === 'profile' && <SettingsContent mode="profile" userType="inmobiliaria" />}
         {currentSection === 'settings' && <SettingsContent mode="settings" userType="inmobiliaria" />}
       </div>

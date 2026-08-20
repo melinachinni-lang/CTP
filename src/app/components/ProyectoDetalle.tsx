@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/app/components/SiteFooter';
 import { useI18n } from '@/app/i18n/i18nContext';
 import React, { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet, Check, X, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, MapPin, Phone, Mail, ExternalLink, Droplets, Zap, Route, TreePine, Users, Building2, Shield, Mountain, Sprout, Eye, Waves, Expand, Download, FileText, ChevronDown, ChevronUp, Navigation, School, ShoppingBag, TrendingUp, MessageSquare, Package, Maximize2, Sparkles, Heart, Map, Info, ShoppingCart, Settings, FileCheck, Droplet, Check, X, CheckCircle2, AlertTriangle, CheckCircle } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPor } from '@/app/components/PublicadoPor';
 import { ContactModal } from '@/app/components/ContactModal';
@@ -1460,6 +1460,9 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
                   </div>
                 </div>
 
+                {/* Reportar publicación */}
+                <ReportarButton />
+
                 {/* Card de publicador - COMPONENTE UNIFICADO */}
                 <PublicadoPor
                   nombre={proyecto.publicadoPor}
@@ -1570,5 +1573,86 @@ export function ProyectoDetalle({ onNavigate, proyectoId }: ProyectoDetalleProps
 
       <SiteFooter onNavigate={onNavigate} />
     </div>
+  );
+}
+
+function ReportarButton() {
+  const [open, setOpen] = React.useState(false);
+  const [descripcion, setDescripcion] = React.useState('');
+  const [enviado, setEnviado] = React.useState(false);
+
+  const handleEnviar = () => {
+    setEnviado(true);
+    setTimeout(() => { setOpen(false); setEnviado(false); setDescripcion(''); }, 2500);
+  };
+
+  return (
+    <>
+      <div className="pt-1 pb-2 flex justify-center">
+        <button
+          onClick={() => setOpen(true)}
+          style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#9CA3AF', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: '4px 8px' }}
+          onMouseEnter={e => e.currentTarget.style.color = '#EF4444'}
+          onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}
+        >
+          Reportar publicación
+        </button>
+      </div>
+
+      {open && (
+        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-4" onClick={() => setOpen(false)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            {enviado ? (
+              <div className="p-8 flex flex-col items-center gap-3">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#DCFCE7' }}>
+                  <CheckCircle className="w-6 h-6" style={{ color: '#166534' }} />
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '15px', color: '#0A0A0A' }}>Reporte enviado</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#6B6B6B', textAlign: 'center' }}>Nuestro equipo revisará tu reporte e informará el resultado.</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 600, color: '#0A0A0A' }}>Reportar publicación</h3>
+                  <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+                    <X className="w-4 h-4" style={{ color: '#6B7280' }} />
+                  </button>
+                </div>
+                <div className="p-5 space-y-4">
+                  <div className="p-3 rounded-xl" style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A' }}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <AlertTriangle className="w-3.5 h-3.5" style={{ color: '#D97706' }} />
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#92400E' }}>Uso indebido de material gráfico</p>
+                    </div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#92400E' }}>Reporta si las imágenes o material de esta publicación son tuyos y fueron usados sin autorización.</p>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 600, color: '#374151' }}>Descripción</label>
+                    <textarea value={descripcion} onChange={e => setDescripcion(e.target.value)} rows={4}
+                      placeholder="Describe por qué estás reportando esta publicación..."
+                      className="w-full px-3 py-2.5 rounded-xl text-sm resize-none"
+                      style={{ border: '1px solid #E5E5E5', backgroundColor: '#FAFAFA', color: '#0A0A0A', outline: 'none', fontFamily: 'var(--font-body)', lineHeight: 1.5 }}
+                      onFocus={e => e.target.style.borderColor = '#D97706'}
+                      onBlur={e => e.target.style.borderColor = '#E5E5E5'}
+                    />
+                  </div>
+                </div>
+                <div className="p-5 border-t border-gray-100 flex gap-3">
+                  <button onClick={() => setOpen(false)} className="flex-1 py-2.5 rounded-full text-sm transition-colors"
+                    style={{ backgroundColor: '#F3F4F6', color: '#374151', fontFamily: 'var(--font-body)' }}>
+                    Cancelar
+                  </button>
+                  <button onClick={handleEnviar} disabled={!descripcion.trim()} className="flex-1 py-2.5 rounded-full text-sm font-medium transition-all"
+                    style={{ backgroundColor: descripcion.trim() ? '#EF4444' : '#FCA5A5', color: '#FFFFFF', fontFamily: 'var(--font-body)', cursor: descripcion.trim() ? 'pointer' : 'not-allowed' }}>
+                    Enviar reporte
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

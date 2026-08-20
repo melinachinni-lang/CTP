@@ -12,6 +12,7 @@ interface Publication extends PublicationData {
   lastEdited: string;
   views?: number;
   inquiries?: number;
+  denunciada?: boolean;
 }
 
 interface MyPublicationsViewProps {
@@ -96,6 +97,7 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
       lastEdited: '2025-03-15',
       views: 234,
       inquiries: 12,
+      denunciada: true,
     },
     ...((userType === 'inmobiliaria' || userType === 'broker') ? [{
       id: 'pub-project-1',
@@ -1147,14 +1149,21 @@ export function MyPublicationsView({ userType, userId, onNavigate, onNavigateToS
                   {/* Content */}
                   <div className="p-5 space-y-3">
                     {/* Title */}
-                    <h4 className="text-foreground" style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}>
-                      {pub.title || 'Sin título'}
-                    </h4>
+                    <div className="flex items-start gap-2">
+                      <h4 className="text-foreground flex-1" style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}>
+                        {pub.title || 'Sin título'}
+                      </h4>
+                      {pub.denunciada && (
+                        <span className="flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#FEF9C3', color: '#854D0E', border: '1px solid #FDE68A', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap', marginTop: '2px' }}>
+                          Denunciada
+                        </span>
+                      )}
+                    </div>
 
                     {/* Location */}
                     <div className="flex items-center gap-2">
