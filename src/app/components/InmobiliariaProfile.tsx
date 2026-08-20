@@ -189,53 +189,59 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
       { nombre: 'Valentina Soto', rol: 'Especialista en Marketing', imagen: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGJ1c2luZXNzfGVufDF8fHx8MTc2OTYwODg3Nnww&ixlib=rb-4.1.0&q=80&w=1080' }
     ],
     brokers: [
-      { 
-        nombre: 'María González', 
-        rol: 'Broker Senior', 
+      {
+        nombre: 'María González',
+        rol: 'Broker Senior',
         imagen: 'https://images.unsplash.com/photo-1581065178047-8ee15951ede6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMHdvbWFuJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzY5NTc1Mzk1fDA&ixlib=rb-4.1.0&q=80&w=1080',
         zona: 'Aysén y Los Lagos',
         parcelasActivas: 12,
-        estado: 'Activo'
+        estado: 'Activo',
+        visibleEnPerfil: true
       },
-      { 
-        nombre: 'Carlos Ramírez', 
-        rol: 'Asesor Comercial', 
+      {
+        nombre: 'Carlos Ramírez',
+        rol: 'Asesor Comercial',
         imagen: 'https://images.unsplash.com/photo-1629507208649-70919ca33793?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG1hbiUyMHBvcnRyYWl0fGVufDF8fHx8MTc2OTYwODg3Nnww&ixlib=rb-4.1.0&q=80&w=1080',
         zona: 'Patagonia',
         parcelasActivas: 8,
-        estado: 'Activo'
+        estado: 'Activo',
+        visibleEnPerfil: true
       },
-      { 
-        nombre: 'Ana Silva', 
-        rol: 'Broker', 
+      {
+        nombre: 'Ana Silva',
+        rol: 'Broker',
         imagen: 'https://images.unsplash.com/photo-1758518729459-235dcaadc611?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzc3dvbWFuJTIwaGVhZHNob3R8ZW58MXx8fHwxNzY5NTA3NDM2fDA&ixlib=rb-4.1.0&q=80&w=1080',
         zona: 'Los Lagos',
         parcelasActivas: 15,
-        estado: 'Activo'
+        estado: 'Activo',
+        visibleEnPerfil: true
       },
-      { 
-        nombre: 'Roberto Fernández', 
-        rol: 'Asesor Comercial', 
+      {
+        nombre: 'Roberto Fernández',
+        rol: 'Asesor Comercial',
         imagen: 'https://images.unsplash.com/photo-1568585105565-e372998a195d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzc21hbiUyMGhlYWRzaG90fGVufDF8fHx8MTc2OTU5NjgyNHww&ixlib=rb-4.1.0&q=80&w=1080',
         zona: 'Aysén',
         parcelasActivas: 10,
-        estado: 'Activo'
+        estado: 'Activo',
+        visibleEnPerfil: false
       },
-      { 
-        nombre: 'Patricia Morales', 
-        rol: 'Broker', 
+      {
+        nombre: 'Patricia Morales',
+        rol: 'Broker',
         imagen: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGhlYWRzaG90fGVufDF8fHx8MTc2OTYwODg3Nnww&ixlib=rb-4.1.0&q=80&w=1080',
         zona: 'Patagonia Sur',
         parcelasActivas: 6,
-        estado: 'Activo'
+        estado: 'Activo',
+        visibleEnPerfil: true
       },
-      { 
-        nombre: 'Javier Torres', 
-        rol: 'Asesor Comercial', 
+      {
+        nombre: 'Javier Torres',
+        rol: 'Asesor Comercial',
         imagen: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBtYW4lMjBoZWFkc2hvdHxlbnwxfHx8fDE3Njk2MDg4NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
         zona: 'Los Lagos Norte',
         parcelasActivas: 9,
-        estado: 'Activo'
+        estado: 'Activo',
+        visibleEnPerfil: false
       }
     ],
     servicios: [
@@ -920,20 +926,20 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
 
             {!isLoading && activeTab === 'brokers' && (
               <div>
-                <h2 style={{ 
+                <h2 style={{
                   marginBottom: '2rem',
                   fontFamily: 'var(--font-heading)',
                   fontSize: 'var(--font-size-h2)',
                   fontWeight: 'var(--font-weight-regular)',
                   color: 'var(--foreground)'
                 }}>
-                  Brokers ({profileData.brokers.length})
+                  Brokers ({profileData.brokers.filter(b => b.visibleEnPerfil).length})
                 </h2>
 
-                {profileData.brokers.length === 0 ? (
+                {profileData.brokers.filter(b => b.visibleEnPerfil).length === 0 ? (
                   <div className="text-center py-12">
-                    <p style={{ 
-                      fontSize: 'var(--font-size-body-base)', 
+                    <p style={{
+                      fontSize: 'var(--font-size-body-base)',
                       color: '#737373',
                       fontFamily: 'var(--font-body)'
                     }}>
@@ -942,7 +948,7 @@ export function InmobiliariaProfile({ onNavigate, inmobiliariaName }: Inmobiliar
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {profileData.brokers.map((broker, index) => (
+                    {profileData.brokers.filter(b => b.visibleEnPerfil).map((broker, index) => (
                       <div 
                         key={index} 
                         className="bg-white rounded-xl border p-6 hover:shadow-md transition-all duration-300" 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Eye, Edit, AlertCircle, X, UserPlus, Check, Mail, Send, UserRoundPlus } from 'lucide-react';
+import { User, Eye, EyeOff, Edit, AlertCircle, X, UserPlus, Check, Mail, Send, UserRoundPlus } from 'lucide-react';
 
 const ROLES_CONFIG: Record<string, { color: string; bg: string; permisos: { label: string; ok: boolean }[] }> = {
   Admin: {
@@ -56,6 +56,11 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
     if (autoOpenInvite) setShowAddModal(true);
   }, []);
   const [activeMenu, setActiveMenu] = React.useState<number | null>(null);
+  const [visibilidades, setVisibilidades] = React.useState<Record<number, boolean>>({ 1: true, 2: true, 3: true, 4: false });
+  const toggleVisibilidad = (id: number) => {
+    setVisibilidades(prev => ({ ...prev, [id]: !prev[id] }));
+    setActiveMenu(null);
+  };
   const [inviteEmail, setInviteEmail] = React.useState('');
   const [inviteName, setInviteName] = React.useState('');
   const [inviteRol, setInviteRol] = React.useState<'Admin' | 'Marketing' | 'Operaciones'>('Admin');
@@ -273,8 +278,8 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
                         >
                           {b.nombre}
                         </div>
-                        <div 
-                          style={{ 
+                        <div
+                          style={{
                             fontFamily: 'var(--font-body)',
                             fontSize: '14px',
                             fontWeight: 'var(--font-weight-regular)',
@@ -283,6 +288,17 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
                           }}
                         >
                           {b.email}
+                        </div>
+                        <div className="flex items-center gap-1 mt-1">
+                          {visibilidades[b.id] ? (
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ backgroundColor: '#F0FBF7', border: '1px solid #A7F3D0', fontSize: '11px', color: '#065F46', fontFamily: 'var(--font-body)' }}>
+                              <Eye className="w-3 h-3" /> Visible en perfil
+                            </span>
+                          ) : (
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ backgroundColor: '#F5F5F5', border: '1px solid #E5E5E5', fontSize: '11px', color: '#9CA3AF', fontFamily: 'var(--font-body)' }}>
+                              <EyeOff className="w-3 h-3" /> Oculto del perfil
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -402,8 +418,22 @@ export function TeamContent({ autoOpenInvite }: { autoOpenInvite?: boolean }) {
                               Editar rol
                             </button>
                             <button
+                              onClick={() => toggleVisibilidad(b.id)}
+                              className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-2"
+                              style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: '14px',
+                                fontWeight: 'var(--font-weight-regular)',
+                                color: '#0A0A0A',
+                                lineHeight: 'var(--line-height-body)'
+                              }}
+                            >
+                              {visibilidades[b.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                              {visibilidades[b.id] ? 'Ocultar del perfil' : 'Mostrar en perfil'}
+                            </button>
+                            <button
                               className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-2 border-t-2 border-gray-200"
-                              style={{ 
+                              style={{
                                 fontFamily: 'var(--font-body)',
                                 fontSize: '14px',
                                 fontWeight: 'var(--font-weight-regular)',
