@@ -866,8 +866,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
               
               {/* Buscador Mobile/Tablet - Inline con selects nativos (igual a ParcelasPage) */}
               <div className="lg:hidden relative bg-white p-4 sm:p-6 w-full rounded-[20px] sm:rounded-[24px] border border-gray-100 transition-all duration-300 mx-auto max-w-3xl" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1)' }}>
-                <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.14), -2px -2px 5px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)'}>
-                  <Share2 className="w-4 h-4" style={{ color: '#525252' }} />
+                <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9), 0 0 0 0 rgba(0,107,78,0)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
+                  <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
                 </button>
                 <div className="flex flex-wrap items-end gap-3 sm:gap-4">
                   {/* Select Ubicación */}
@@ -1022,8 +1022,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   overflow: openDropdown ? 'visible' : 'hidden'
                 }}
               >
-                <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.14), -2px -2px 5px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)'}>
-                  <Share2 className="w-4 h-4" style={{ color: '#525252' }} />
+                <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9), 0 0 0 0 rgba(0,107,78,0)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
+                  <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
                 </button>
                 <div className="flex items-end gap-2 flex-wrap lg:flex-nowrap">
                   {/* Dropdown Ubicación */}

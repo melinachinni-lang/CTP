@@ -1035,8 +1035,8 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
             {/* Buscador Unificado */}
             <div className="mb-8 sm:mb-10 md:mb-12 relative bg-white p-4 sm:p-6 md:p-8 w-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[20px] sm:rounded-[24px] border-2 border-gray-200 transition-all duration-300">
-              <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.14), -2px -2px 5px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)'}>
-                <Share2 className="w-4 h-4" style={{ color: '#525252' }} />
+              <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
+                <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
               </button>
               {/* Fila principal de búsqueda */}
               <div className="flex flex-wrap items-end gap-3 sm:gap-4">
