@@ -1035,11 +1035,6 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
 
             {/* Buscador Unificado */}
             <div className="mb-8 sm:mb-10 md:mb-12 bg-white p-4 sm:p-6 md:p-8 w-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[20px] sm:rounded-[24px] border-2 border-gray-200 transition-all duration-300">
-              <div className="flex justify-end mb-2">
-                <button className="w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
-                  <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
-                </button>
-              </div>
               {/* Fila principal de búsqueda */}
               <div className="flex flex-wrap items-end gap-3 sm:gap-4">
                 <div className="space-y-2.5 w-full md:w-auto">
@@ -1153,29 +1148,43 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   </div>
                 </div>
 
-                {/* Switch Incluir proyectos */}
-                <div className="space-y-2.5 w-full md:w-auto">
-                  <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
-                  <div 
-                    onClick={() => setIncludeProjects(!includeProjects)}
-                    className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
-                  >
+                {/* Switch Incluir proyectos + Compartir */}
+                <div className="flex items-end justify-between w-full gap-4">
+                  <div className="space-y-2.5">
+                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
                     <div
-                      className="relative w-11 h-6 rounded-full transition-all duration-200"
-                      style={{
-                        backgroundColor: includeProjects ? '#647E3F' : '#E5E5E5'
-                      }}
+                      onClick={() => setIncludeProjects(!includeProjects)}
+                      className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
                     >
                       <div
-                        className="absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-200 shadow-sm"
+                        className="relative w-11 h-6 rounded-full transition-all duration-200"
                         style={{
-                          left: includeProjects ? '24px' : '4px'
+                          backgroundColor: includeProjects ? '#647E3F' : '#E5E5E5'
                         }}
-                      />
+                      >
+                        <div
+                          className="absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-200 shadow-sm"
+                          style={{
+                            left: includeProjects ? '24px' : '4px'
+                          }}
+                        />
+                      </div>
+                      <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
+                        {includeProjects ? t.filters.yes : t.filters.no}
+                      </span>
                     </div>
-                    <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
-                      {includeProjects ? t.filters.yes : t.filters.no}
-                    </span>
+                  </div>
+                  <div className="space-y-2.5 flex flex-col items-center">
+                    <label className="block text-gray-700 text-sm" style={{ fontWeight: 'var(--font-weight-medium)' }}>Compartir</label>
+                    <button
+                      className="w-9 h-9 rounded-full flex items-center justify-center transition-all"
+                      style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }}
+                      title="Compartir búsqueda"
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'}
+                      onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}
+                    >
+                      <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
+                    </button>
                   </div>
                 </div>
 
