@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { showAiOverlay, hideAiOverlay } from '../utils/aiOverlay';
-import { ChevronDown, ChevronUp, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale, AlertCircle, RefreshCw } from 'lucide-react';
+import { ChevronDown, ChevronUp, Expand, FileCheck, Pickaxe, DoorOpen, PenLine, X, Home, ChevronLeft, ChevronRight, Sparkles, Trees, Waves, TrendingUp, Car, Zap, MapPin, SlidersHorizontal, Calculator, Menu, List, Map as MapIcon, Scale, AlertCircle, RefreshCw, Share2 } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
 import { VendedorCaptacionSection } from '@/app/components/VendedorCaptacionSection';
@@ -1034,7 +1034,10 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
             </div>
 
             {/* Buscador Unificado */}
-            <div className="mb-8 sm:mb-10 md:mb-12 bg-white p-4 sm:p-6 md:p-8 w-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[20px] sm:rounded-[24px] border-2 border-gray-200 transition-all duration-300">
+            <div className="mb-8 sm:mb-10 md:mb-12 relative bg-white p-4 sm:p-6 md:p-8 w-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[20px] sm:rounded-[24px] border-2 border-gray-200 transition-all duration-300">
+              <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.14), -2px -2px 5px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.12), -3px -3px 8px rgba(255,255,255,0.9)'}>
+                <Share2 className="w-4 h-4" style={{ color: '#525252' }} />
+              </button>
               {/* Fila principal de búsqueda */}
               <div className="flex flex-wrap items-end gap-3 sm:gap-4">
                 <div className="space-y-2.5 w-full md:w-auto">
