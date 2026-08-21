@@ -1024,11 +1024,9 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   overflow: openDropdown ? 'visible' : 'hidden'
                 }}
               >
-                <div className="flex justify-end mb-2">
-                  <button className="w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
-                    <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
-                  </button>
-                </div>
+                <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
+                  <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
+                </button>
                 <div className="flex items-end gap-2 flex-wrap lg:flex-nowrap">
                   {/* Dropdown Ubicación */}
                   <div className="space-y-2.5 relative dropdown-container">
