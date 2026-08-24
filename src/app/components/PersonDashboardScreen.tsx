@@ -2561,42 +2561,48 @@ function PlanContent() {
       id: 'plata',
       name: 'Plata',
       price: '$35.000',
-      description: 'Para vendedores con mayor volumen',
+      description: '60 días de exposición con alta visibilidad',
       features: [
-        { name: 'Hasta 30 parcelas publicadas', included: true },
-        { name: '5 publicaciones destacadas', included: true },
-        { name: 'Visibilidad alta', included: true },
-        { name: 'Estadísticas avanzadas', included: true },
-        { name: 'Soporte prioritario', included: true },
-        { name: 'Panel de equipo y brokers', included: true },
-        { name: 'Asesor comercial dedicado', included: false },
+        { name: '1 parcela publicada', included: true },
+        { name: '60 días de duración', included: true },
+        { name: 'Alcance Alto en el portal', included: true },
+        { name: 'Hasta 15 fotografías', included: true },
+        { name: '1 video / recorrido con dron', included: true },
+        { name: 'Mapa interactivo + polígono (KMZ)', included: true },
+        { name: 'Simulador de financiamiento', included: true },
+        { name: 'Contacto directo por WhatsApp', included: true },
+        { name: 'Aparece en Home', included: false },
       ]
     },
     {
       id: 'oro',
       name: 'Oro',
       price: '$50.000',
-      description: 'Máxima exposición y herramientas',
+      description: 'Máxima exposición, 90 días y todos los beneficios',
       features: [
-        { name: 'Publicaciones ilimitadas', included: true },
-        { name: '15 publicaciones destacadas', included: true },
-        { name: 'Visibilidad premium', included: true },
-        { name: 'Estadísticas completas + exportación', included: true },
-        { name: 'Soporte 24/7', included: true },
-        { name: 'Panel completo de equipo y brokers', included: true },
-        { name: 'Asesor comercial dedicado', included: true },
+        { name: '1 parcela publicada', included: true },
+        { name: '90 días de duración', included: true },
+        { name: 'Alcance Máximo en el portal', included: true },
+        { name: 'Hasta 30 fotografías', included: true },
+        { name: 'Video / recorrido con dron', included: true },
+        { name: 'Mapa interactivo + polígono (KMZ)', included: true },
+        { name: 'Simulador de financiamiento', included: true },
+        { name: 'Contacto directo por WhatsApp', included: true },
+        { name: 'Aparece en Home', included: true },
       ]
     }
   ];
 
   const currentFeatures = [
-    { name: '1 parcela publicada activa', included: true },
-    { name: 'Publicaciones destacadas (pago único)', included: true },
-    { name: 'Visibilidad estándar', included: true },
-    { name: 'Estadísticas básicas', included: true },
-    { name: 'Soporte por email', included: true },
-    { name: 'Panel de equipo y brokers', included: false },
-    { name: 'Asesor comercial dedicado', included: false },
+    { name: '1 parcela publicada', included: true },
+    { name: '30 días de duración', included: true },
+    { name: 'Alcance Bajo en el portal', included: true },
+    { name: 'Hasta 5 fotografías', included: true },
+    { name: 'Video / recorrido con dron', included: false },
+    { name: 'Mapa interactivo + polígono (KMZ)', included: false },
+    { name: 'Simulador de financiamiento', included: false },
+    { name: 'Contacto directo por WhatsApp', included: false },
+    { name: 'Aparece en Home', included: false },
   ];
 
   const pendingPlanData = plans.find(p => p.id === pendingPlan);
@@ -2650,7 +2656,7 @@ function PlanContent() {
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Tu plan actual</span>
             </div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>{currentPlan ? `Plan ${plans.find(p => p.id === currentPlan)?.name ?? ''}` : 'Plan Gratis'}</h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>{currentPlan ? `Perfil: Personal · ${plans.find(p => p.id === currentPlan)?.price ?? ''}/mes` : 'Perfil: Personal · $0/mes'}</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>{currentPlan ? `Perfil: Personal · ${plans.find(p => p.id === currentPlan)?.price ?? ''} pago único` : 'Perfil: Personal · Sin costo'}</p>
           </div>
           {planCancelled ? (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#FEF3C7' }}>
@@ -2684,8 +2690,8 @@ function PlanContent() {
         <div className="space-y-5">
           {(() => {
             const used = 1;
-            const isUnlimited = currentPlan === 'oro';
-            const limit = currentPlan === 'plata' ? 30 : isUnlimited ? null : 1;
+            const isUnlimited = false;
+            const limit = 1;
             const pct = isUnlimited ? 5 : Math.round((used / (limit as number)) * 100);
             const barColor = isUnlimited ? '#006B4E' : pct >= 100 ? '#DC2626' : pct >= 80 ? '#F59E0B' : '#006B4E';
             return (
@@ -2722,7 +2728,7 @@ function PlanContent() {
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '10px' }}>{plan.description}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '22px', color: '#0A0A0A' }}>{plan.price}</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>/mes</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>pago único</span>
                 </div>
               </div>
               <div className="flex-1 space-y-3 mb-6">
