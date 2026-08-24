@@ -2518,7 +2518,7 @@ function PlanContent() {
   const [paymentError, setPaymentError] = React.useState(false);
   const [processingPayment, setProcessingPayment] = React.useState(false);
   const [simulatePaymentError, setSimulatePaymentError] = React.useState(false);
-  const [currentPlan, setCurrentPlan] = React.useState<string | null>(null);
+  const [currentPlan, setCurrentPlan] = React.useState<string>('gratis');
   const [invoices, setInvoices] = React.useState<{ id: string; date: string; reason: string; reasonType: string; amount: string }[]>([]);
 
   const handleCancelPlan = () => {
@@ -2558,6 +2558,23 @@ function PlanContent() {
 
   const plans = [
     {
+      id: 'gratis',
+      name: 'Gratis',
+      price: '$0',
+      description: 'Para publicar tu parcela sin costo',
+      features: [
+        { name: '1 parcela publicada', included: true },
+        { name: '30 días de duración', included: true },
+        { name: 'Alcance Bajo en el portal', included: true },
+        { name: 'Hasta 5 fotografías', included: true },
+        { name: 'Video / recorrido con dron', included: false },
+        { name: 'Mapa interactivo + polígono (KMZ)', included: false },
+        { name: 'Simulador de financiamiento', included: false },
+        { name: 'Contacto directo por WhatsApp', included: false },
+        { name: 'Publicación destacada en Home', included: false },
+      ]
+    },
+    {
       id: 'plata',
       name: 'Plata',
       price: '$35.000',
@@ -2593,17 +2610,13 @@ function PlanContent() {
     }
   ];
 
-  const currentFeatures = [
-    { name: '1 parcela publicada', included: true },
-    { name: '30 días de duración', included: true },
-    { name: 'Alcance Bajo en el portal', included: true },
-    { name: 'Hasta 5 fotografías', included: true },
-    { name: 'Video / recorrido con dron', included: false },
-    { name: 'Mapa interactivo + polígono (KMZ)', included: false },
-    { name: 'Simulador de financiamiento', included: false },
-    { name: 'Contacto directo por WhatsApp', included: false },
-    { name: 'Aparece en Home', included: false },
-  ];
+  const currentPlanData = plans.find(p => p.id === currentPlan);
+
+  const usageLimits: Record<string, Array<{ label: string; used: number; limit: number }>> = {
+    gratis: [{ label: 'Publicaciones activas', used: 1, limit: 1 }],
+    plata:  [{ label: 'Publicaciones activas', used: 1, limit: 1 }],
+    oro:    [{ label: 'Publicaciones activas', used: 1, limit: 1 }],
+  };
 
   const pendingPlanData = plans.find(p => p.id === pendingPlan);
 
@@ -2655,8 +2668,8 @@ function PlanContent() {
               <Award className="w-6 h-6" style={{ color: '#FFFFFF' }} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Tu plan actual</span>
             </div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>{currentPlan ? `Plan ${plans.find(p => p.id === currentPlan)?.name ?? ''}` : 'Plan Gratis'}</h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>{currentPlan ? `Perfil: Personal · ${plans.find(p => p.id === currentPlan)?.price ?? ''} pago único` : 'Perfil: Personal · Sin costo'}</p>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h2)', fontWeight: 'var(--font-weight-semibold)', lineHeight: 'var(--line-height-heading)', color: '#FFFFFF' }}>Plan {currentPlanData?.name}</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-base)', color: '#C3C3C3', marginTop: '8px' }}>Perfil: Personal{currentPlan !== 'gratis' ? ` · ${currentPlanData?.price} pago único` : ' · Sin costo'}</p>
           </div>
           {planCancelled ? (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full self-start" style={{ backgroundColor: '#FEF3C7' }}>
@@ -2675,7 +2688,7 @@ function PlanContent() {
       <section className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h4)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Beneficios de tu plan</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {currentFeatures.map((feature, index) => (
+          {(currentPlanData?.features ?? []).map((feature, index) => (
             <div key={index} className="flex items-start gap-3">
               <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: feature.included ? 'rgba(100, 126, 63, 0.1)' : '#FAFAFA', marginTop: '2px' }}>
                 {feature.included ? <Check className="w-3.5 h-3.5" style={{ color: '#647E3F' }} /> : <X className="w-3.5 h-3.5" style={{ color: '#C3C3C3' }} />}
@@ -2688,34 +2701,38 @@ function PlanContent() {
       <section className="rounded-2xl p-6 md:p-8" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E5' }}>
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Uso del plan</h3>
         <div className="space-y-5">
-          {(() => {
-            const used = 1;
-            const isUnlimited = false;
-            const limit = 1;
-            const pct = isUnlimited ? 5 : Math.round((used / (limit as number)) * 100);
-            const barColor = isUnlimited ? '#006B4E' : pct >= 100 ? '#DC2626' : pct >= 80 ? '#F59E0B' : '#006B4E';
+          {(usageLimits[currentPlan] || []).map(({ label, used, limit }) => {
+            const pct = limit === -1 ? 0 : Math.round((used / limit) * 100);
+            const barColor = pct >= 100 ? '#DC2626' : pct >= 80 ? '#F59E0B' : '#006B4E';
             return (
-              <div>
+              <div key={label}>
                 <div className="flex items-center justify-between" style={{ marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>Publicaciones activas</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: !isUnlimited && pct >= 100 ? '#DC2626' : '#0A0A0A' }}>
-                    {isUnlimited ? `${used} · Sin límite` : `${used} de ${limit}`}
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: 'var(--foreground)' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: limit === -1 ? '#006B4E' : pct >= 100 ? '#DC2626' : '#0A0A0A' }}>
+                    {limit === -1 ? 'Ilimitado' : `${used} de ${limit}`}
                   </span>
                 </div>
-                <div className="w-full rounded-full" style={{ height: '6px', backgroundColor: '#F0F0F0' }}>
-                  <div className="rounded-full" style={{ height: '6px', width: `${Math.min(pct, 100)}%`, backgroundColor: barColor }} />
-                </div>
-                {!isUnlimited && pct >= 100 && (
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626', marginTop: '4px' }}>Límite alcanzado · actualiza tu plan para publicar más</p>
+                {limit !== -1 ? (
+                  <div className="w-full rounded-full" style={{ height: '6px', backgroundColor: '#F0F0F0' }}>
+                    <div className="rounded-full" style={{ height: '6px', width: `${Math.min(pct, 100)}%`, backgroundColor: barColor }} />
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: '#006B4E' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373' }}>Sin límite en tu plan actual</span>
+                  </div>
+                )}
+                {pct >= 100 && limit !== -1 && (
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#DC2626', marginTop: '4px' }}>Límite alcanzado · considera actualizar tu plan</p>
                 )}
               </div>
             );
-          })()}
+          })}
         </div>
       </section>
       <section id="person-compara-planes">
         <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '24px' }}>Compara planes</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const isActive = plan.id === currentPlan;
             return (
@@ -2728,7 +2745,7 @@ function PlanContent() {
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373', lineHeight: '1.5', marginBottom: '10px' }}>{plan.description}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '22px', color: '#0A0A0A' }}>{plan.price}</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>pago único</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#737373' }}>{plan.id === 'gratis' ? 'gratis' : 'pago único'}</span>
                 </div>
               </div>
               <div className="flex-1 space-y-3 mb-6">
@@ -2740,8 +2757,8 @@ function PlanContent() {
                 ))}
               </div>
               {isActive ? (
-                <div className="w-full py-2.5 px-6 text-center" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '2px solid #BBF7D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}>Plan contratado</div>
-              ) : (
+                <div className="w-full py-2.5 px-6 text-center" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '2px solid #BBF7D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}>Plan activo</div>
+              ) : plan.id === 'gratis' ? null : (
                 <button onClick={() => { setPendingPlan(plan.id); setShowUpgradeModal(true); }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: '#006B4E', color: '#FFFFFF', border: 'none', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#01533E'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#006B4E'; }}>Contratar plan</button>
               )}
             </div>
