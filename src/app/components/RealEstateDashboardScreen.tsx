@@ -757,7 +757,7 @@ function PlanContent() {
             const isActive = plan.id === currentPlan;
             const isHigher = currentPlan === 'bronce' && (plan.id === 'plata' || plan.id === 'oro') || currentPlan === 'plata' && plan.id === 'oro';
             return (
-              <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: isActive ? '2px solid #0A0A0A' : '1px solid #E5E5E5', boxShadow: isActive ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+              <div key={plan.id} className="rounded-2xl p-6 flex flex-col" style={{ backgroundColor: '#FFFFFF', border: isActive ? '2px solid #006B4E' : '1px solid #E5E5E5', boxShadow: isActive ? '0 0 0 4px rgba(0,107,78,0.08)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
                 <div className="mb-6">
                   {isActive && (<div className="flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full inline-flex" style={{ backgroundColor: '#0A0A0A' }}><Star className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} /><span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Plan actual</span></div>)}
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', lineHeight: 'var(--line-height-heading)', color: 'var(--foreground)', marginBottom: '4px' }}>{plan.name}</h4>
@@ -775,7 +775,11 @@ function PlanContent() {
                     </div>
                   ))}
                 </div>
-                <button disabled={isActive} onClick={() => { if (!isActive) { setPendingPlan(plan.id); setShowUpgradeModal(true); } }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: isActive ? '#F5F5F5' : isHigher ? '#006B4E' : '#FFFFFF', color: isActive ? '#A3A3A3' : isHigher ? '#FFFFFF' : 'var(--foreground)', border: isActive ? '2px solid #E5E5E5' : isHigher ? 'none' : '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: isActive ? 'not-allowed' : 'pointer' }} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#01533E' : '#FAFAFA'; }} onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; }}>{isActive ? 'Plan activo' : 'Contratar plan'}</button>
+                {isActive ? (
+                  <div className="w-full py-2.5 px-6 text-center" style={{ backgroundColor: '#F0FDF4', color: '#166534', border: '2px solid #BBF7D0', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)' }}>Plan activo</div>
+                ) : (
+                  <button onClick={() => { setPendingPlan(plan.id); setShowUpgradeModal(true); }} className="w-full py-2.5 px-6 transition-all" style={{ backgroundColor: isHigher ? '#006B4E' : '#FFFFFF', color: isHigher ? '#FFFFFF' : 'var(--foreground)', border: isHigher ? 'none' : '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', letterSpacing: 'var(--letter-spacing-wide)', lineHeight: 'var(--line-height-ui)', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = isHigher ? '#01533E' : '#FAFAFA'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = isHigher ? '#006B4E' : '#FFFFFF'; }}>Contratar plan</button>
+                )}
               </div>
             );
           })}
