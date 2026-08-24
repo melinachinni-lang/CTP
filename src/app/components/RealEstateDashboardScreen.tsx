@@ -525,7 +525,6 @@ function PlanContent() {
         { name: 'Integración con Google Sheet', included: true },
         { name: 'Avisos destacados', included: false },
         { name: 'Publicación destacada en Home', included: false },
-        { name: 'Verificado', included: false },
       ]
     },
     {
@@ -546,7 +545,6 @@ function PlanContent() {
         { name: 'Landing inmobiliaria', included: true },
         { name: 'Estadísticas y reportería', included: true },
         { name: 'Integración con Google Sheet', included: true },
-        { name: 'Verificado', included: false },
       ]
     },
     {
@@ -565,7 +563,6 @@ function PlanContent() {
         { name: 'Avisos destacados ilimitados', included: true },
         { name: 'Publicaciones destacadas en Home (fijo/preferente)', included: true },
         { name: 'Landing inmobiliaria', included: true },
-        { name: 'Verificado', included: true },
         { name: 'Estadísticas y reportería', included: true },
         { name: 'Integración con Google Sheet', included: true },
       ]

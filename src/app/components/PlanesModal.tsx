@@ -43,8 +43,8 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
       precioAnual: 6000000,
       destacado: false,
       caracteristicas: en
-        ? ['Unlimited listings', 'Maximum reach on the portal', 'Permanent listing validity', 'Up to 30 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', 'Unlimited featured listings', 'Fixed / preferred Home placement', 'Real estate landing page', 'Verified badge', 'Analytics & reporting', 'Google Sheet integration']
-        : ['Publicaciones ilimitadas', 'Alcance Máximo en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', 'Avisos destacados ilimitados', 'Publicaciones destacadas en Home (fijo/preferente)', 'Landing inmobiliaria', 'Verificado', 'Estadísticas y reportería', 'Integración con Google Sheet'],
+        ? ['Unlimited listings', 'Maximum reach on the portal', 'Permanent listing validity', 'Up to 30 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', 'Unlimited featured listings', 'Fixed / preferred Home placement', 'Real estate landing page', 'Analytics & reporting', 'Google Sheet integration']
+        : ['Publicaciones ilimitadas', 'Alcance Máximo en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', 'Avisos destacados ilimitados', 'Publicaciones destacadas en Home (fijo/preferente)', 'Landing inmobiliaria', 'Estadísticas y reportería', 'Integración con Google Sheet'],
     },
   ];
 
