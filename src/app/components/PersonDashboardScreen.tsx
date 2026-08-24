@@ -2571,7 +2571,7 @@ function PlanContent() {
         { name: 'Mapa interactivo + polígono (KMZ)', included: true },
         { name: 'Simulador de financiamiento', included: true },
         { name: 'Contacto directo por WhatsApp', included: true },
-        { name: 'Aparece en Home', included: false },
+        { name: 'Publicación destacada en Home', included: false },
       ]
     },
     {
@@ -2588,7 +2588,7 @@ function PlanContent() {
         { name: 'Mapa interactivo + polígono (KMZ)', included: true },
         { name: 'Simulador de financiamiento', included: true },
         { name: 'Contacto directo por WhatsApp', included: true },
-        { name: 'Aparece en Home', included: true },
+        { name: '1 publicación destacada en Home', included: true },
       ]
     }
   ];

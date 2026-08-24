@@ -28,7 +28,7 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
         { incluido: true, texto: 'Mapa + polígono (KMZ)' },
         { incluido: true, texto: 'Simulador de financiamiento' },
         { incluido: false, texto: 'Video / dron por aviso' },
-        { incluido: false, texto: 'Aparece en Home' },
+        { incluido: false, texto: 'Publicación destacada en Home' },
         { incluido: false, texto: 'Ejecutivo de cuenta' }
       ]
     },
@@ -46,7 +46,7 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
         { incluido: true, texto: 'Video / dron por aviso' },
         { incluido: true, texto: 'Mapa + polígono (KMZ)' },
         { incluido: true, texto: 'Simulador de financiamiento' },
-        { incluido: true, texto: '3 avisos en Home / mes' },
+        { incluido: true, texto: '3 publicaciones destacadas en Home / mes' },
         { incluido: false, texto: 'Ejecutivo de cuenta' }
       ]
     },
@@ -64,7 +64,7 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
         { incluido: true, texto: 'Video / dron por aviso' },
         { incluido: true, texto: 'Mapa + polígono (KMZ)' },
         { incluido: true, texto: 'Simulador de financiamiento' },
-        { incluido: true, texto: '10 avisos en Home / mes' },
+        { incluido: true, texto: '10 publicaciones destacadas en Home / mes' },
         { incluido: true, texto: 'Ejecutivo de cuenta' }
       ]
     }

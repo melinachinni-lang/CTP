@@ -34,7 +34,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
       destacado: true,
       caracteristicas: en
         ? ['Up to 30 parcels or projects', 'High reach on the portal', 'Permanent listing validity', 'Up to 30 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', '10 featured listings / month', 'Rotating Home placement', 'Real estate landing page', 'Analytics & reporting', 'Google Sheet integration']
-        : ['Hasta 30 parcelas o proyectos activos', 'Alcance Alto en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', '10 avisos destacados / mes', 'Home rotativo', 'Landing inmobiliaria', 'Estadísticas y reportería', 'Integración con Google Sheet'],
+        : ['Hasta 30 parcelas o proyectos activos', 'Alcance Alto en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', '10 avisos destacados / mes', 'Publicaciones destacadas en Home (rotativo)', 'Landing inmobiliaria', 'Estadísticas y reportería', 'Integración con Google Sheet'],
     },
     {
       nombre: en ? 'Gold' : 'Oro',
@@ -44,7 +44,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
       destacado: false,
       caracteristicas: en
         ? ['Unlimited listings', 'Maximum reach on the portal', 'Permanent listing validity', 'Up to 30 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', 'Unlimited featured listings', 'Fixed / preferred Home placement', 'Real estate landing page', 'Verified badge', 'Analytics & reporting', 'Google Sheet integration']
-        : ['Publicaciones ilimitadas', 'Alcance Máximo en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', 'Avisos destacados ilimitados', 'Home fijo / preferente', 'Landing inmobiliaria', 'Verificado', 'Estadísticas y reportería', 'Integración con Google Sheet'],
+        : ['Publicaciones ilimitadas', 'Alcance Máximo en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', 'Avisos destacados ilimitados', 'Publicaciones destacadas en Home (fijo/preferente)', 'Landing inmobiliaria', 'Verificado', 'Estadísticas y reportería', 'Integración con Google Sheet'],
     },
   ];
 

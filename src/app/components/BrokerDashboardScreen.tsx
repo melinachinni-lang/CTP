@@ -1147,7 +1147,7 @@ function PlanContent() {
         { name: 'Mapa + polígono (KMZ)', included: true },
         { name: 'Simulador de financiamiento', included: true },
         { name: 'Video / dron por aviso', included: false },
-        { name: 'Aparece en Home', included: false },
+        { name: 'Publicación destacada en Home', included: false },
         { name: 'Ejecutivo de cuenta', included: false },
       ]
     },
@@ -1164,7 +1164,7 @@ function PlanContent() {
         { name: 'Video / dron por aviso', included: true },
         { name: 'Mapa + polígono (KMZ)', included: true },
         { name: 'Simulador de financiamiento', included: true },
-        { name: '3 avisos en Home / mes', included: true },
+        { name: '3 publicaciones destacadas en Home / mes', included: true },
         { name: 'Ejecutivo de cuenta', included: false },
       ]
     },
@@ -1181,7 +1181,7 @@ function PlanContent() {
         { name: 'Video / dron por aviso', included: true },
         { name: 'Mapa + polígono (KMZ)', included: true },
         { name: 'Simulador de financiamiento', included: true },
-        { name: '10 avisos en Home / mes', included: true },
+        { name: '10 publicaciones destacadas en Home / mes', included: true },
         { name: 'Ejecutivo de cuenta', included: true },
       ]
     }
