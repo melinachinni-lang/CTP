@@ -18,33 +18,33 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
   const planes = [
     {
       nombre: en ? 'Bronze' : 'Bronce',
-      descripcion: en ? 'Ideal for agencies just starting out' : 'Ideal para inmobiliarias que inician',
+      descripcion: en ? 'Up to 10 active listings with permanent validity' : 'Hasta 10 publicaciones activas con vigencia permanente',
       precioMensual: 150000,
       precioAnual: 1500000,
       destacado: false,
       caracteristicas: en
-        ? ['Up to 10 published parcels', '2 featured listings', 'Standard visibility', 'Basic analytics', 'Email support']
-        : ['Hasta 10 parcelas publicadas', '2 publicaciones destacadas', 'Visibilidad estándar', 'Estadísticas básicas', 'Soporte por email'],
+        ? ['Up to 10 parcels or projects', 'Medium reach on the portal', 'Permanent listing validity', 'Up to 15 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', 'Real estate landing page', 'Analytics & reporting', 'Google Sheet integration']
+        : ['Hasta 10 parcelas o proyectos activos', 'Alcance Medio en el portal', 'Vigencia permanente del aviso', 'Hasta 15 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', 'Landing inmobiliaria', 'Estadísticas y reportería', 'Integración con Google Sheet'],
     },
     {
       nombre: en ? 'Silver' : 'Plata',
-      descripcion: en ? 'For growing real estate agencies' : 'Para inmobiliarias en crecimiento',
+      descripcion: en ? 'Up to 30 listings with high visibility' : 'Hasta 30 publicaciones con alta visibilidad',
       precioMensual: 300000,
       precioAnual: 3000000,
       destacado: true,
       caracteristicas: en
-        ? ['Up to 30 published parcels', '5 featured listings', 'High visibility', 'Advanced analytics', 'Priority support', 'Team and brokers panel']
-        : ['Hasta 30 parcelas publicadas', '5 publicaciones destacadas', 'Visibilidad alta', 'Estadísticas avanzadas', 'Soporte prioritario', 'Panel de equipo y brokers'],
+        ? ['Up to 30 parcels or projects', 'High reach on the portal', 'Permanent listing validity', 'Up to 30 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', '10 featured listings / month', 'Rotating Home placement', 'Real estate landing page', 'Analytics & reporting', 'Google Sheet integration']
+        : ['Hasta 30 parcelas o proyectos activos', 'Alcance Alto en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', '10 avisos destacados / mes', 'Home rotativo', 'Landing inmobiliaria', 'Estadísticas y reportería', 'Integración con Google Sheet'],
     },
     {
       nombre: en ? 'Gold' : 'Oro',
-      descripcion: en ? 'Maximum exposure for companies' : 'Máxima exposición para empresas',
+      descripcion: en ? 'Unlimited listings and maximum exposure' : 'Publicaciones ilimitadas y máxima exposición',
       precioMensual: 600000,
       precioAnual: 6000000,
       destacado: false,
       caracteristicas: en
-        ? ['Unlimited listings', '15 featured listings', 'Premium visibility', 'Full analytics + export', '24/7 support', 'Full team and brokers panel', 'Dedicated commercial advisor']
-        : ['Publicaciones ilimitadas', '15 publicaciones destacadas', 'Visibilidad premium', 'Estadísticas completas + exportación', 'Soporte 24/7', 'Panel completo de equipo y brokers', 'Asesor comercial dedicado'],
+        ? ['Unlimited listings', 'Maximum reach on the portal', 'Permanent listing validity', 'Up to 30 photos per listing', 'Video / drone per listing', 'Map + polygon (KMZ)', 'Financing simulator', 'Unlimited featured listings', 'Fixed / preferred Home placement', 'Real estate landing page', 'Verified badge', 'Analytics & reporting', 'Google Sheet integration']
+        : ['Publicaciones ilimitadas', 'Alcance Máximo en el portal', 'Vigencia permanente del aviso', 'Hasta 30 fotografías por aviso', 'Video / dron por aviso', 'Mapa + polígono (KMZ)', 'Simulador de financiamiento', 'Avisos destacados ilimitados', 'Home fijo / preferente', 'Landing inmobiliaria', 'Verificado', 'Estadísticas y reportería', 'Integración con Google Sheet'],
     },
   ];
 

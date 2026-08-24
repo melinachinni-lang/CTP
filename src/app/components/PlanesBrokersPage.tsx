@@ -16,50 +16,56 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
   const planes = [
     {
       nombre: 'Bronce',
-      descripcion: 'Para brokers que están comenzando',
+      descripcion: 'Desde 5 publicaciones, ideal para comenzar',
       precioMensual: 3000,
       precioAnual: 30000,
       destacado: false,
       caracteristicas: [
-        { incluido: true, texto: 'Hasta 5 propiedades activas' },
-        { incluido: true, texto: 'Perfil profesional público' },
-        { incluido: true, texto: 'Visibilidad estándar' },
-        { incluido: true, texto: 'Estadísticas básicas' },
-        { incluido: true, texto: 'Soporte por email' },
-        { incluido: false, texto: 'Publicaciones destacadas' },
-        { incluido: false, texto: 'Asesor comercial dedicado' }
+        { incluido: true, texto: 'Mínimo 5 publicaciones activas' },
+        { incluido: true, texto: '30 días de duración por aviso' },
+        { incluido: true, texto: 'Alcance Bajo en el portal' },
+        { incluido: true, texto: 'Hasta 8 fotografías por aviso' },
+        { incluido: true, texto: 'Mapa + polígono (KMZ)' },
+        { incluido: true, texto: 'Simulador de financiamiento' },
+        { incluido: false, texto: 'Video / dron por aviso' },
+        { incluido: false, texto: 'Aparece en Home' },
+        { incluido: false, texto: 'Ejecutivo de cuenta' }
       ]
     },
     {
       nombre: 'Plata',
-      descripcion: 'Para brokers activos en crecimiento',
+      descripcion: 'Desde 10 publicaciones con alta visibilidad',
       precioMensual: 4000,
       precioAnual: 40000,
       destacado: true,
       caracteristicas: [
-        { incluido: true, texto: 'Hasta 20 propiedades activas' },
-        { incluido: true, texto: 'Perfil profesional destacado' },
-        { incluido: true, texto: 'Visibilidad alta' },
-        { incluido: true, texto: 'Estadísticas avanzadas' },
-        { incluido: true, texto: 'Soporte prioritario' },
-        { incluido: true, texto: '3 publicaciones destacadas' },
-        { incluido: false, texto: 'Asesor comercial dedicado' }
+        { incluido: true, texto: 'Mínimo 10 publicaciones activas' },
+        { incluido: true, texto: '60 días de duración por aviso' },
+        { incluido: true, texto: 'Alcance Alto en el portal' },
+        { incluido: true, texto: 'Hasta 15 fotografías por aviso' },
+        { incluido: true, texto: 'Video / dron por aviso' },
+        { incluido: true, texto: 'Mapa + polígono (KMZ)' },
+        { incluido: true, texto: 'Simulador de financiamiento' },
+        { incluido: true, texto: '3 avisos en Home / mes' },
+        { incluido: false, texto: 'Ejecutivo de cuenta' }
       ]
     },
     {
       nombre: 'Oro',
-      descripcion: 'Máxima exposición para top brokers',
+      descripcion: 'Desde 25 publicaciones, máxima exposición',
       precioMensual: 5000,
       precioAnual: 50000,
       destacado: false,
       caracteristicas: [
-        { incluido: true, texto: 'Propiedades ilimitadas' },
-        { incluido: true, texto: 'Perfil verificado y premium' },
-        { incluido: true, texto: 'Visibilidad premium' },
-        { incluido: true, texto: 'Estadísticas completas + exportación' },
-        { incluido: true, texto: 'Soporte 24/7' },
-        { incluido: true, texto: '10 publicaciones destacadas' },
-        { incluido: true, texto: 'Asesor comercial dedicado' }
+        { incluido: true, texto: 'Mínimo 25 publicaciones activas' },
+        { incluido: true, texto: '90 días de duración por aviso' },
+        { incluido: true, texto: 'Alcance Máximo en el portal' },
+        { incluido: true, texto: 'Hasta 30 fotografías por aviso' },
+        { incluido: true, texto: 'Video / dron por aviso' },
+        { incluido: true, texto: 'Mapa + polígono (KMZ)' },
+        { incluido: true, texto: 'Simulador de financiamiento' },
+        { incluido: true, texto: '10 avisos en Home / mes' },
+        { incluido: true, texto: 'Ejecutivo de cuenta' }
       ]
     }
   ];
