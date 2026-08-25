@@ -103,7 +103,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
                     className="ml-2 px-2 py-0.5 rounded-full text-xs"
                     style={{ backgroundColor: 'rgba(0,107,78,0.1)', color: '#006B4E', fontWeight: 600 }}
                   >
-                    -15%
+                    2 meses gratis
                   </span>
                 )}
               </button>
@@ -144,7 +144,7 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
                 <span style={{ color: '#6B6B6B', fontSize: '13px' }}>{en ? '/mo' : '/mes'}</span>
                 {periodo === 'annual' && (
                   <div style={{ color: '#006B4E', fontSize: '12px', marginTop: '2px' }}>
-                    {fmt(plan.precioAnual)} {en ? 'per year' : 'al año'}
+                    {fmt(plan.precioAnual)} {en ? 'per year · pay 10, get 12' : 'al año · pagas 10 meses, publicas 12'}
                   </div>
                 )}
               </div>
