@@ -563,6 +563,7 @@ function PlanContent() {
         { name: 'Avisos destacados ilimitados', included: true },
         { name: 'Publicaciones destacadas en Home (fijo/preferente)', included: true },
         { name: 'Landing inmobiliaria', included: true },
+        { name: 'Verificado', included: true },
         { name: 'Estadísticas y reportería', included: true },
         { name: 'Integración con Google Sheet', included: true },
       ]
@@ -573,16 +574,15 @@ function PlanContent() {
 
   const usageLimits: Record<string, Array<{ label: string; used: number; limit: number }>> = {
     bronce: [
-      { label: 'Parcelas publicadas',       used: 7,  limit: 10 },
-      { label: 'Publicaciones destacadas',  used: 2,  limit: 2  },
+      { label: 'Parcelas publicadas', used: 7, limit: 10 },
     ],
     plata: [
-      { label: 'Parcelas publicadas',       used: 18, limit: 30 },
-      { label: 'Publicaciones destacadas',  used: 3,  limit: 5  },
+      { label: 'Parcelas publicadas',      used: 18, limit: 30 },
+      { label: 'Avisos destacados / mes',  used: 3,  limit: 10 },
     ],
     oro: [
-      { label: 'Parcelas publicadas',       used: 47, limit: -1 },
-      { label: 'Publicaciones destacadas',  used: 9,  limit: 15 },
+      { label: 'Parcelas publicadas',      used: 47, limit: -1 },
+      { label: 'Avisos destacados / mes',  used: 9,  limit: -1 },
     ],
   };
 
