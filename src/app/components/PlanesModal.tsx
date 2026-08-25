@@ -43,8 +43,8 @@ export function PlanesModal({ onClose, onNavigatePlanes }: PlanesModalProps) {
       precioAnual: 6000000,
       destacado: false,
       caracteristicas: en
-        ? ['Unlimited listings', 'Maximum visibility on the portal', 'Listings never expire', 'Up to 30 photos per listing', 'Video or drone tour per listing', 'Interactive map with land boundaries', 'Integrated financing simulator', 'Unlimited featured listings', 'Fixed & preferred placement on portal home page', 'Exclusive landing page for your agency', 'Verified badge on your profile', 'Visit analytics & reporting', 'Google Sheet export']
-        : ['Publicaciones ilimitadas', 'Máxima visibilidad en el portal', 'Aviso sin vencimiento', 'Hasta 30 fotografías por aviso', 'Video o recorrido con dron', 'Mapa interactivo con delimitación del terreno', 'Simulador de financiamiento integrado', 'Avisos destacados sin límite', 'Lugar fijo en portada del portal (preferente)', 'Landing page exclusiva para tu inmobiliaria', 'Sello Verificado en tu perfil', 'Estadísticas de visitas y reportería', 'Exportación a Google Sheet'],
+        ? ['Unlimited listings', 'Maximum visibility on the portal', 'Listings never expire', 'Up to 30 photos per listing', 'Video or drone tour per listing', 'Interactive map with land boundaries', 'Integrated financing simulator', 'Unlimited featured listings', 'Fixed & preferred placement on portal home page', 'Exclusive landing page for your agency', 'Visit analytics & reporting', 'Google Sheet export']
+        : ['Publicaciones ilimitadas', 'Máxima visibilidad en el portal', 'Aviso sin vencimiento', 'Hasta 30 fotografías por aviso', 'Video o recorrido con dron', 'Mapa interactivo con delimitación del terreno', 'Simulador de financiamiento integrado', 'Avisos destacados sin límite', 'Lugar fijo en portada del portal (preferente)', 'Landing page exclusiva para tu inmobiliaria', 'Estadísticas de visitas y reportería', 'Exportación a Google Sheet'],
     },
   ];
 

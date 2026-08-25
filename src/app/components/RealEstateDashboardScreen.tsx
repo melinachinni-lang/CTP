@@ -563,7 +563,6 @@ function PlanContent() {
         { name: 'Avisos destacados sin límite', included: true },
         { name: 'Lugar fijo en portada del portal (preferente)', included: true },
         { name: 'Landing page exclusiva para tu inmobiliaria', included: true },
-        { name: 'Sello Verificado en tu perfil', included: true },
         { name: 'Estadísticas de visitas y reportería', included: true },
         { name: 'Exportación a Google Sheet', included: true },
       ]

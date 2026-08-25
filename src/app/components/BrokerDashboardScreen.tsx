@@ -1141,7 +1141,6 @@ function PlanContent() {
       description: 'Desde 5 publicaciones, ideal para comenzar',
       features: [
         { name: 'Mínimo 5 publicaciones activas', included: true },
-        { name: '30 días de duración por aviso', included: true },
         { name: 'Alcance Bajo en el portal', included: true },
         { name: 'Hasta 8 fotografías por aviso', included: true },
         { name: 'Mapa + polígono (KMZ)', included: true },
@@ -1158,7 +1157,6 @@ function PlanContent() {
       description: 'Desde 10 publicaciones con alta visibilidad',
       features: [
         { name: 'Mínimo 10 publicaciones activas', included: true },
-        { name: '60 días de duración por aviso', included: true },
         { name: 'Alcance Alto en el portal', included: true },
         { name: 'Hasta 15 fotografías por aviso', included: true },
         { name: 'Video / dron por aviso', included: true },
@@ -1175,7 +1173,6 @@ function PlanContent() {
       description: 'Desde 25 publicaciones, máxima exposición',
       features: [
         { name: 'Mínimo 25 publicaciones activas', included: true },
-        { name: '90 días de duración por aviso', included: true },
         { name: 'Alcance Máximo en el portal', included: true },
         { name: 'Hasta 30 fotografías por aviso', included: true },
         { name: 'Video / dron por aviso', included: true },
