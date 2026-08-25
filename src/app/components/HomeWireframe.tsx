@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { showAiOverlay, hideAiOverlay } from '../utils/aiOverlay';
 import { motion, useMotionValue, useTransform, animate } from 'motion/react';
 import Slider from 'react-slick';
-import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart, Scale, Share2 } from 'lucide-react';
+import { FileCheck, Pickaxe, Expand, PenLine, DoorOpen, X, ChevronDown, Sparkles, Trees, Waves, Home, TrendingUp, Car, Zap, ChevronLeft, ChevronRight, Search, Users, CheckCircle, CloudOff, Mail, Phone, Clock, Heart, Scale } from 'lucide-react';
 import { useI18n } from '@/app/i18n/i18nContext';
 import LanguageCurrencySelector from '@/app/components/LanguageCurrencySelector';
 import { PublicadoPorCompact } from '@/app/components/PublicadoPorCompact';
