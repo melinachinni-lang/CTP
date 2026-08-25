@@ -2814,7 +2814,7 @@ function PlanContent() {
                 Plan {pendingPlanData.name}
               </h3>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>
-                {pendingPlanData.price}/mes · {pendingPlanData.description}
+                {pendingPlanData.price} · pago único · {pendingPlanData.description}
               </p>
             </div>
             <div className="rounded-xl p-4 mb-6 space-y-2" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0' }}>
