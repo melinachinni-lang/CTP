@@ -2548,7 +2548,7 @@ function PlanContent() {
       setPendingPlan(null);
       setShowUpgradeModal(false);
       setShowPaymentModal(false);
-      setPaymentMethod(null);
+      setPaymentMethod('mercadopago');
       setProcessingPayment(false);
       setSimulatePaymentError(false);
       setPaymentError(false);
@@ -2837,7 +2837,7 @@ function PlanContent() {
         </div>
       )}
       {showPaymentModal && pendingPlanData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod('mercadopago'); setBillingPeriod('monthly'); }}>
           <div className="bg-white rounded-2xl p-8 max-w-md w-full my-4 max-h-[90vh] overflow-y-auto" style={{ border: '1px solid #E5E5E5', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
@@ -2875,7 +2875,7 @@ function PlanContent() {
               </div>
             )}
             <div className="flex gap-3">
-              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod(null); setBillingPeriod('monthly'); setPaymentError(false); setProcessingPayment(false); setSimulatePaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
+              <button onClick={() => { setShowPaymentModal(false); setPendingPlan(null); setPaymentMethod('mercadopago'); setBillingPeriod('monthly'); setPaymentError(false); setProcessingPayment(false); setSimulatePaymentError(false); }} className="flex-1 px-6 py-3 transition-all" style={{ backgroundColor: '#FFFFFF', color: 'var(--foreground)', border: '2px solid #DEDEDE', borderRadius: '200px', fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 'var(--font-weight-medium)', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5F5F5'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancelar</button>
               <button
                 onClick={() => {
                   const isRetry = paymentError;
