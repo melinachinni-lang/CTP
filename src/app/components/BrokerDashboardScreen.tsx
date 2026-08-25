@@ -1140,7 +1140,7 @@ function PlanContent() {
       price: '$3.000',
       description: 'Desde 5 publicaciones, ideal para comenzar',
       features: [
-        { name: 'Desde 5 publicaciones activas', included: true },
+        { name: '5 publicaciones activas como mínimo', included: true },
         { name: 'Visibilidad básica en el portal', included: true },
         { name: 'Hasta 8 fotografías por aviso', included: true },
         { name: 'Mapa interactivo con delimitación del terreno', included: true },
@@ -1156,7 +1156,7 @@ function PlanContent() {
       price: '$4.000',
       description: 'Desde 10 publicaciones con alta visibilidad',
       features: [
-        { name: 'Desde 10 publicaciones activas', included: true },
+        { name: '10 publicaciones activas como mínimo', included: true },
         { name: 'Alta visibilidad en el portal', included: true },
         { name: 'Hasta 15 fotografías por aviso', included: true },
         { name: 'Video o recorrido con dron', included: true },
@@ -1172,7 +1172,7 @@ function PlanContent() {
       price: '$5.000',
       description: 'Desde 25 publicaciones, máxima exposición',
       features: [
-        { name: 'Desde 25 publicaciones activas', included: true },
+        { name: '25 publicaciones activas como mínimo', included: true },
         { name: 'Máxima visibilidad en el portal', included: true },
         { name: 'Hasta 30 fotografías por aviso', included: true },
         { name: 'Video o recorrido con dron', included: true },
