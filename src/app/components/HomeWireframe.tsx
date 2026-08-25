@@ -984,7 +984,6 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         </span>
                       </div>
                     </div>
-                  </div>
 
                   {/* Botón Buscar */}
                   <div className="space-y-2.5 w-full md:w-auto">
