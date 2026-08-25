@@ -1174,8 +1174,7 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                       </span>
                     </div>
                   </div>
-                  <button className="h-[40px] bg-[#efefef] hover:bg-[#dedede] text-gray-800 px-[14px] text-sm font-medium rounded-[200px] transition-colors flex items-center gap-2 whitespace-nowrap">
-                    Compartir
+                  <button className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => (e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)')}>
                     <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
                   </button>
                 </div>
