@@ -2563,7 +2563,7 @@ function PlanContent() {
       price: '$0',
       description: 'Para publicar tu parcela sin costo',
       features: [
-        { name: '1 publicación disponible', included: true },
+        { name: 'Publica hasta 1 parcela', included: true },
         { name: 'Alcance Bajo en el portal', included: true },
         { name: 'Hasta 5 fotografías', included: true },
         { name: 'Video / recorrido con dron', included: false },
@@ -2579,7 +2579,7 @@ function PlanContent() {
       price: '$35.000',
       description: '60 días de exposición con alta visibilidad',
       features: [
-        { name: '1 publicación disponible', included: true },
+        { name: 'Publica hasta 1 parcela', included: true },
         { name: 'Alcance Alto en el portal', included: true },
         { name: 'Hasta 15 fotografías', included: true },
         { name: '1 video / recorrido con dron', included: true },
@@ -2595,7 +2595,7 @@ function PlanContent() {
       price: '$50.000',
       description: 'Máxima exposición, 90 días y todos los beneficios',
       features: [
-        { name: '1 publicación disponible', included: true },
+        { name: 'Publica hasta 1 parcela', included: true },
         { name: 'Alcance Máximo en el portal', included: true },
         { name: 'Hasta 30 fotografías', included: true },
         { name: 'Video / recorrido con dron', included: true },
