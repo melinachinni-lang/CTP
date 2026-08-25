@@ -21,14 +21,14 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
       precioAnual: 30000,
       destacado: false,
       caracteristicas: [
-        { incluido: true, texto: 'Mínimo 5 publicaciones activas' },
-        { incluido: true, texto: 'Alcance Bajo en el portal' },
+        { incluido: true, texto: 'Desde 5 publicaciones activas' },
+        { incluido: true, texto: 'Visibilidad básica en el portal' },
         { incluido: true, texto: 'Hasta 8 fotografías por aviso' },
-        { incluido: true, texto: 'Mapa + polígono (KMZ)' },
-        { incluido: true, texto: 'Simulador de financiamiento' },
-        { incluido: false, texto: 'Video / dron por aviso' },
+        { incluido: true, texto: 'Mapa interactivo con delimitación del terreno' },
+        { incluido: true, texto: 'Simulador de financiamiento integrado' },
+        { incluido: false, texto: 'Video o recorrido con dron' },
         { incluido: false, texto: 'Publicación destacada en Home' },
-        { incluido: false, texto: 'Ejecutivo de cuenta' }
+        { incluido: false, texto: 'Ejecutivo de cuenta dedicado' }
       ]
     },
     {
@@ -38,14 +38,14 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
       precioAnual: 40000,
       destacado: true,
       caracteristicas: [
-        { incluido: true, texto: 'Mínimo 10 publicaciones activas' },
-        { incluido: true, texto: 'Alcance Alto en el portal' },
+        { incluido: true, texto: 'Desde 10 publicaciones activas' },
+        { incluido: true, texto: 'Alta visibilidad en el portal' },
         { incluido: true, texto: 'Hasta 15 fotografías por aviso' },
-        { incluido: true, texto: 'Video / dron por aviso' },
-        { incluido: true, texto: 'Mapa + polígono (KMZ)' },
-        { incluido: true, texto: 'Simulador de financiamiento' },
-        { incluido: true, texto: '3 publicaciones destacadas en Home / mes' },
-        { incluido: false, texto: 'Ejecutivo de cuenta' }
+        { incluido: true, texto: 'Video o recorrido con dron' },
+        { incluido: true, texto: 'Mapa interactivo con delimitación del terreno' },
+        { incluido: true, texto: 'Simulador de financiamiento integrado' },
+        { incluido: true, texto: '3 publicaciones destacadas en Home al mes' },
+        { incluido: false, texto: 'Ejecutivo de cuenta dedicado' }
       ]
     },
     {
@@ -55,14 +55,14 @@ export function PlanesBrokersPage({ onNavigate, isLoggedIn = false, currentUser,
       precioAnual: 50000,
       destacado: false,
       caracteristicas: [
-        { incluido: true, texto: 'Mínimo 25 publicaciones activas' },
-        { incluido: true, texto: 'Alcance Máximo en el portal' },
+        { incluido: true, texto: 'Desde 25 publicaciones activas' },
+        { incluido: true, texto: 'Máxima visibilidad en el portal' },
         { incluido: true, texto: 'Hasta 30 fotografías por aviso' },
-        { incluido: true, texto: 'Video / dron por aviso' },
-        { incluido: true, texto: 'Mapa + polígono (KMZ)' },
-        { incluido: true, texto: 'Simulador de financiamiento' },
-        { incluido: true, texto: '10 publicaciones destacadas en Home / mes' },
-        { incluido: true, texto: 'Ejecutivo de cuenta' }
+        { incluido: true, texto: 'Video o recorrido con dron' },
+        { incluido: true, texto: 'Mapa interactivo con delimitación del terreno' },
+        { incluido: true, texto: 'Simulador de financiamiento integrado' },
+        { incluido: true, texto: '10 publicaciones destacadas en Home al mes' },
+        { incluido: true, texto: 'Ejecutivo de cuenta dedicado' }
       ]
     }
   ];

@@ -1140,14 +1140,14 @@ function PlanContent() {
       price: '$3.000',
       description: 'Desde 5 publicaciones, ideal para comenzar',
       features: [
-        { name: 'Mínimo 5 publicaciones activas', included: true },
-        { name: 'Alcance Bajo en el portal', included: true },
+        { name: 'Desde 5 publicaciones activas', included: true },
+        { name: 'Visibilidad básica en el portal', included: true },
         { name: 'Hasta 8 fotografías por aviso', included: true },
-        { name: 'Mapa + polígono (KMZ)', included: true },
-        { name: 'Simulador de financiamiento', included: true },
-        { name: 'Video / dron por aviso', included: false },
+        { name: 'Mapa interactivo con delimitación del terreno', included: true },
+        { name: 'Simulador de financiamiento integrado', included: true },
+        { name: 'Video o recorrido con dron', included: false },
         { name: 'Publicación destacada en Home', included: false },
-        { name: 'Ejecutivo de cuenta', included: false },
+        { name: 'Ejecutivo de cuenta dedicado', included: false },
       ]
     },
     {
@@ -1156,14 +1156,14 @@ function PlanContent() {
       price: '$4.000',
       description: 'Desde 10 publicaciones con alta visibilidad',
       features: [
-        { name: 'Mínimo 10 publicaciones activas', included: true },
-        { name: 'Alcance Alto en el portal', included: true },
+        { name: 'Desde 10 publicaciones activas', included: true },
+        { name: 'Alta visibilidad en el portal', included: true },
         { name: 'Hasta 15 fotografías por aviso', included: true },
-        { name: 'Video / dron por aviso', included: true },
-        { name: 'Mapa + polígono (KMZ)', included: true },
-        { name: 'Simulador de financiamiento', included: true },
-        { name: '3 publicaciones destacadas en Home / mes', included: true },
-        { name: 'Ejecutivo de cuenta', included: false },
+        { name: 'Video o recorrido con dron', included: true },
+        { name: 'Mapa interactivo con delimitación del terreno', included: true },
+        { name: 'Simulador de financiamiento integrado', included: true },
+        { name: '3 publicaciones destacadas en Home al mes', included: true },
+        { name: 'Ejecutivo de cuenta dedicado', included: false },
       ]
     },
     {
@@ -1172,14 +1172,14 @@ function PlanContent() {
       price: '$5.000',
       description: 'Desde 25 publicaciones, máxima exposición',
       features: [
-        { name: 'Mínimo 25 publicaciones activas', included: true },
-        { name: 'Alcance Máximo en el portal', included: true },
+        { name: 'Desde 25 publicaciones activas', included: true },
+        { name: 'Máxima visibilidad en el portal', included: true },
         { name: 'Hasta 30 fotografías por aviso', included: true },
-        { name: 'Video / dron por aviso', included: true },
-        { name: 'Mapa + polígono (KMZ)', included: true },
-        { name: 'Simulador de financiamiento', included: true },
-        { name: '10 publicaciones destacadas en Home / mes', included: true },
-        { name: 'Ejecutivo de cuenta', included: true },
+        { name: 'Video o recorrido con dron', included: true },
+        { name: 'Mapa interactivo con delimitación del terreno', included: true },
+        { name: 'Simulador de financiamiento integrado', included: true },
+        { name: '10 publicaciones destacadas en Home al mes', included: true },
+        { name: 'Ejecutivo de cuenta dedicado', included: true },
       ]
     }
   ];
