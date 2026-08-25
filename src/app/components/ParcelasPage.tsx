@@ -1148,35 +1148,30 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                   </div>
                 </div>
 
-                {/* Switch Incluir proyectos + Compartir */}
-                <div className="flex items-end justify-between w-full gap-4">
-                  <div className="space-y-2.5">
-                    <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
+                {/* Switch Incluir proyectos */}
+                <div className="space-y-2.5">
+                  <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
+                  <div
+                    onClick={() => setIncludeProjects(!includeProjects)}
+                    className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
+                  >
                     <div
-                      onClick={() => setIncludeProjects(!includeProjects)}
-                      className="flex items-center gap-2 cursor-pointer h-[40px] px-3"
+                      className="relative w-11 h-6 rounded-full transition-all duration-200"
+                      style={{
+                        backgroundColor: includeProjects ? '#647E3F' : '#E5E5E5'
+                      }}
                     >
                       <div
-                        className="relative w-11 h-6 rounded-full transition-all duration-200"
+                        className="absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-200 shadow-sm"
                         style={{
-                          backgroundColor: includeProjects ? '#647E3F' : '#E5E5E5'
+                          left: includeProjects ? '24px' : '4px'
                         }}
-                      >
-                        <div
-                          className="absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-200 shadow-sm"
-                          style={{
-                            left: includeProjects ? '24px' : '4px'
-                          }}
-                        />
-                      </div>
-                      <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
-                        {includeProjects ? t.filters.yes : t.filters.no}
-                      </span>
+                      />
                     </div>
+                    <span className="text-sm text-gray-700" style={{ fontWeight: 400, lineHeight: '1.5' }}>
+                      {includeProjects ? t.filters.yes : t.filters.no}
+                    </span>
                   </div>
-                  <button className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => (e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)')}>
-                    <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
-                  </button>
                 </div>
 
                 <div className="space-y-2.5 w-full md:w-auto">
@@ -1219,6 +1214,19 @@ export function ParcelasPage({ onNavigate, initialFilters, parcelaEstados, saved
                     {aiInterpretedQuery && (
                       <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#A8D97F' }} />
                     )}
+                  </button>
+                </div>
+
+                <div className="space-y-2.5 w-auto">
+                  <div className="h-[20px] hidden md:block"></div>
+                  <button
+                    className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
+                    style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }}
+                    title="Compartir búsqueda"
+                    onMouseEnter={e => (e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)')}
+                    onMouseLeave={e => (e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)')}
+                  >
+                    <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
                   </button>
                 </div>
               </div>
