@@ -959,9 +959,8 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                     </div>
                   </div>
 
-                  {/* Switch Incluir proyectos + Compartir */}
-                  <div className="flex items-end justify-between w-full gap-4">
-                    <div className="space-y-2.5">
+                  {/* Switch Incluir proyectos */}
+                  <div className="space-y-2.5">
                       <label className="block text-left pl-3 text-gray-700" style={{ fontWeight: 'var(--font-weight-medium)' }}>{t.explore.includeProjects}</label>
                       <div
                         onClick={() => setIncludeProjects(!includeProjects)}
@@ -985,10 +984,6 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                         </span>
                       </div>
                     </div>
-                    <button className="h-[40px] bg-[#efefef] hover:bg-[#dedede] text-gray-800 px-[14px] text-sm font-medium rounded-[200px] transition-colors flex items-center gap-2 whitespace-nowrap">
-                      Compartir
-                      <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
-                    </button>
                   </div>
 
                   {/* Botón Buscar */}
@@ -1025,9 +1020,6 @@ export function HomeWireframe({ onNavigate, isLoggedIn = false, currentUser, onL
                   overflow: openDropdown ? 'visible' : 'hidden'
                 }}
               >
-                <button className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all" style={{ backgroundColor: '#F0F0F0', boxShadow: '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)' }} title="Compartir búsqueda" onMouseEnter={e => e.currentTarget.style.boxShadow = '2px 2px 6px rgba(0,107,78,0.18), -2px -2px 6px rgba(255,255,255,0.9)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.1), -3px -3px 8px rgba(255,255,255,0.9)'}>
-                  <Share2 className="w-4 h-4" style={{ color: '#006B4E' }} />
-                </button>
                 <div className="flex items-end gap-2 flex-wrap lg:flex-nowrap">
                   {/* Dropdown Ubicación */}
                   <div className="space-y-2.5 relative dropdown-container">
