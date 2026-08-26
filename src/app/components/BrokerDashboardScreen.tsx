@@ -1115,6 +1115,12 @@ function PlanContent() {
   const [showPaymentModal, setShowPaymentModal] = React.useState(false);
   const [paymentMethod, setPaymentMethod] = React.useState<'mercadopago' | null>('mercadopago');
   const [billingPeriod, setBillingPeriod] = React.useState<'monthly' | 'annual'>('monthly');
+  const [publicacionesCount, setPublicacionesCount] = React.useState(5);
+  const planMinimums: Record<string, number> = { bronce: 5, plata: 10, oro: 25 };
+
+  React.useEffect(() => {
+    if (pendingPlan) setPublicacionesCount(planMinimums[pendingPlan] ?? 5);
+  }, [pendingPlan]);
   const [invoiceRange, setInvoiceRange] = React.useState<{ from: string; to: string } | null>(null);
   const [showRangoDropdown, setShowRangoDropdown] = React.useState(false);
   const [rangoFrom, setRangoFrom] = React.useState('');
@@ -1254,7 +1260,8 @@ function PlanContent() {
   ) || [];
 
   const formatCLP = (num: number) => '$' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  const monthlyAmount = pendingPlanData ? parseInt(pendingPlanData.price.replace('$', '').replace(/\./g, '')) : 0;
+  const pricePerPub = pendingPlanData ? parseInt(pendingPlanData.price.replace('$', '').replace(/\./g, '')) : 0;
+  const monthlyAmount = pricePerPub * publicacionesCount;
   const annualTotalAmount = monthlyAmount * 10;
   const annualMonthlyAmount = Math.round(annualTotalAmount / 12);
 
@@ -1567,7 +1574,7 @@ function PlanContent() {
               </div>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-h3)', color: 'var(--foreground)', lineHeight: 'var(--line-height-heading)', marginBottom: '4px' }}>Plan {pendingPlanData.name}</h3>
               {billingPeriod === 'monthly' ? (
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{pendingPlanData.price}/mes</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>{formatCLP(monthlyAmount)}/mes · {pendingPlanData.price}/publicación</p>
               ) : (
                 <div>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: 'var(--foreground)' }}>{formatCLP(annualMonthlyAmount)}/mes</p>
@@ -1582,6 +1589,36 @@ function PlanContent() {
                 <span style={{ backgroundColor: billingPeriod === 'annual' ? '#16A34A' : '#DCFCE7', color: billingPeriod === 'annual' ? '#FFFFFF' : '#16A34A', fontSize: '11px', fontWeight: 700, padding: '2px 6px', borderRadius: '100px', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap' }}>2 meses gratis</span>
               </button>
             </div>
+
+            {/* Selector de cantidad de publicaciones */}
+            <div className="rounded-xl p-4 mb-6" style={{ backgroundColor: '#FAFAFA', border: '1px solid #E5E5E5' }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 600, color: 'var(--foreground)' }}>Publicaciones activas</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-xs)', color: '#737373', marginTop: '2px' }}>Mínimo {planMinimums[pendingPlan ?? ''] ?? 5} · {pendingPlanData.price}/publicación</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setPublicacionesCount(c => Math.max(planMinimums[pendingPlan ?? ''] ?? 5, c - 1))}
+                    className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                    style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #E5E5E5', color: '#0A0A0A', fontSize: '18px', lineHeight: 1, cursor: 'pointer', fontWeight: 300 }}
+                  >−</button>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: 'var(--foreground)', minWidth: '28px', textAlign: 'center' }}>{publicacionesCount}</span>
+                  <button
+                    onClick={() => setPublicacionesCount(c => c + 1)}
+                    className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                    style={{ backgroundColor: '#006B4E', border: 'none', color: '#FFFFFF', fontSize: '18px', lineHeight: 1, cursor: 'pointer', fontWeight: 300 }}
+                  >+</button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: '1px solid #E5E5E5' }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', color: '#737373' }}>Total</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--font-size-body-sm)', fontWeight: 700, color: 'var(--foreground)' }}>
+                  {billingPeriod === 'monthly' ? `${formatCLP(monthlyAmount)}/mes` : `${formatCLP(annualMonthlyAmount)}/mes · ${formatCLP(annualTotalAmount)}/año`}
+                </span>
+              </div>
+            </div>
+
             <div className="mb-6">
               <div className="w-full p-4 rounded-xl flex items-center gap-3" style={{ border: '2px solid #009EE3', backgroundColor: '#EFF9FF' }}>
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#BAE6FD' }}>
